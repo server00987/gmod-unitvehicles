@@ -1,0 +1,16 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/prop_metalspikes_01/prop_metalspikes_01_d"
+	"$phong" 1
+	"$phongboost" "1.5"
+	"$phongalbedotint" "1"
+	"$phongexponent"	"5"
+	"$phongtint"	"[0.05 0.05 0.05]"
+
+
+
+
+	"$phongfresnelranges"	"[0.3 1 4]"
+	"$phongdisablehalflambert" "1"
+	"$phongexponenttexture" "models/unitvehiclesprops/policesmallcone/green"
+}

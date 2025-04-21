@@ -1,0 +1,5 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/policespikes/D4_90_61_29"
+$nocull 1
+}

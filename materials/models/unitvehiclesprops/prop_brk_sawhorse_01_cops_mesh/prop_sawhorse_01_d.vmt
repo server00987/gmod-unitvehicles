@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/prop_brk_sawhorse_01_cops_mesh/prop_sawhorse_01_d"
+	"$bumpmap" "models/unitvehiclesprops/prop_brk_sawhorse_01_cops_mesh/prop_sawhorse_01_n"
+	"$phong" 1
+	"$phongboost" "1.5"
+	"$phongalbedotint" "1"
+	"$phongexponent"	"5"
+	"$phongtint"	"[0.05 0.05 0.05]"
+
+
+
+
+	"$phongfresnelranges"	"[0.3 1 4]"
+	"$phongdisablehalflambert" "1"
+	"$phongexponenttexture" "models/unitvehiclesprops/policesmallcone/green"
+}

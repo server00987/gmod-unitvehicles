@@ -1,0 +1,5 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/stunmineprojectile/wpn_stunmine_d"
+$nocull 1
+}

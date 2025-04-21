@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/policesmallcone/prop_cones_small_d"
+	"$bumpmap" "models/unitvehiclesprops/policesmallcone/prop_cones_small_n"
+	"$phong" 1
+	"$phongboost" "1.5"
+	"$phongalbedotint" "1"
+	"$phongexponent"	"5"
+	"$phongtint"	"[0.05 0.05 0.05]"
+
+
+
+
+	"$phongfresnelranges"	"[0.3 1 4]"
+	"$phongdisablehalflambert" "1"
+	"$phongexponenttexture" "models/unitvehiclesprops/policesmallcone/green"
+}
