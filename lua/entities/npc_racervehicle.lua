@@ -1,0 +1,485 @@
+list.Set("NPC", "npc_racervehicle", {
+	Name = "Racer Vehicle",
+	Class = "npc_racervehicle",
+	Category = "Unit Vehicles (Hostile)"
+})
+AddCSLuaFile("npc_racervehicle.lua")
+include("entities/uvapi.lua")
+
+ENT.Base = "base_entity"
+ENT.Type = "ai"
+
+ENT.PrintName = "RacerVehicle"
+ENT.Author = "Razor"
+ENT.Contact = "Romeo"
+ENT.Purpose = "It ain't over until I say it's over."
+ENT.Instruction = "Spawn on/under the vehicle until it shows a spawn effect."
+ENT.Spawnable = false
+ENT.Modelname = "models/props_lab/huladoll.mdl"
+
+local dvd = DecentVehicleDestination
+
+if SERVER then	
+	--Setting ConVars.
+	local DetectionRange = GetConVar("unitvehicle_detectionrange")
+	local RacerPursuitTech = GetConVar("unitvehicle_racerpursuittech")
+	
+	function ENT:OnRemove()
+		--By undoing, driving, diving in water, or getting stuck, and the vehicle is remaining.
+		if IsValid(self.v) and self.v:IsVehicle() then
+			self.v.RacerVehicle = nil
+			if self.v.IsScar then --If the vehicle is SCAR.
+				self.v.HasDriver = self.v.BaseClass.HasDriver --Restore some functions.
+				self.v.SpecialThink = self.v.BaseClass.SpecialThink
+				if not self.v:HasDriver() then --If there's no driver, stop the engine.
+					self.v:TurnOffCar()
+					self.v:HandBrakeOn()
+					self.v:GoNeutral()
+					self.v:NotTurning()
+				end
+			elseif self.v.IsSimfphyscar then --The vehicle is Simfphys Vehicle.
+				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
+				if not IsValid(self.v:GetDriver()) then --If there's no driver, stop the engine.
+					self.v:StopEngine()
+				end
+				self.v.PressedKeys = self.v.PressedKeys or {} --Reset key states.
+				self.v.PressedKeys["Shift"] = false
+				self.v.PressedKeys["Space"] = true
+				if self.v.uvbusted then
+					local randomno = math.random(1, 2)
+					if randomno == 1 then
+						self.v.PressedKeys["Space"] = false
+					end
+				end
+			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
+				isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
+				isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
+				--self.v:StartEngine(false) --Reset states.
+				--self:UVHandbrakeOn()
+				self.v:SetThrottle(0)
+				--self.v:SetSteering(0, 0)
+				self:SetELS(false)
+			elseif self.v.IsGlideVehicle then
+				self.v:TurnOff()
+				self.v:TriggerInput("Throttle", 0)
+				if self.v.uvbusted then
+					local randomno = math.random(1, 4)
+					if randomno == 1 then
+						self.v:TriggerInput("Handbrake", 0)
+						self.v:TriggerInput("Brake", 0)
+					elseif randomno == 2 then
+						self.v:TriggerInput("Handbrake", 1)
+						self.v:TriggerInput("Brake", 0)
+					elseif randomno == 3 then
+						self.v:TriggerInput("Handbrake", 0)
+						self.v:TriggerInput("Brake", 1)
+					elseif randomno == 4 then
+						self.v:TriggerInput("Handbrake", 1)
+						self.v:TriggerInput("Brake", 1)
+					end
+				else
+					self.v:TriggerInput("Handbrake", 1)
+					self.v:TriggerInput("Brake", 0)
+				end
+			end
+			
+			local e = EffectData()
+			e:SetEntity(self.v)
+			util.Effect("entity_remove", e) --Perform an effect.
+			
+		end
+		
+	end
+
+	function ENT:StraightToRace(point)
+		if !self.v or !self.e then
+			return
+		end
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
+		return tobool(tr)
+	end
+
+	function ENT:Stop()
+		if self.v.IsScar then
+			self.v:GoNeutral()
+			self.v:NotTurning()
+			self.v:HandBrakeOn()
+		elseif self.v.IsSimfphyscar then
+			--self.v:SetActive(true)
+			--self.v:StartEngine()
+			self.v.PressedKeys = self.v.PressedKeys or {}
+			self.v.PressedKeys["W"] = false
+			self.v.PressedKeys["A"] = false
+			self.v.PressedKeys["S"] = false
+			self.v.PressedKeys["D"] = false
+			self.v.PressedKeys["Shift"] = false
+			self.v.PressedKeys["Space"] = true
+		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) then
+			self.v:SetThrottle(0)
+			self.v:SetSteering(0, 0)
+			if self.v:GetVelocity():LengthSqr() < 10000 then 
+				self.v:SetHandbrake(true)
+			else 
+				self.v:SetHandbrake(false)
+			end
+		elseif self.v.IsGlideVehicle then
+			self.v:TriggerInput("Handbrake", 1)
+			self.v:TriggerInput("Throttle", 0)
+			self.v:TriggerInput("Brake", 0)
+			self.v:TriggerInput("Steer", 0)
+		end
+		self.moving = CurTime()
+	end
+
+	function ENT:FindRace()
+
+		if next(dvd.Waypoints) == nil then
+			return
+		end
+
+		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		if Waypoint.Neighbors then --Keep going straight
+			self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+		else
+			self.PatrolWaypoint = Waypoint
+		end
+
+	end
+
+	function ENT:Race()
+
+		self:FindRace()
+
+		if next(dvd.Waypoints) == nil then
+			return
+		end
+
+		if self.PatrolWaypoint then
+
+			if !self.racing then
+				self.racing = true
+			end
+
+			--Set handbrake
+			if self.v.IsScar then
+				self.v:HandBrakeOff()
+			elseif self.v.IsSimfphyscar then
+				--self.v:SetActive(true)
+				--self.v:StartEngine()
+				self.v.PressedKeys = self.v.PressedKeys or {}
+				self.v.PressedKeys["Space"] = false
+			elseif isfunction(self.v.SetHandbrake) then
+				self.v:SetHandbrake(false)
+			end
+			
+			--Racing techniques
+			local WaypointPos = self.PatrolWaypoint["Target"]
+			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
+			local dist = WaypointPos - self.v:WorldSpaceCenter()
+			local vect = dist:GetNormalized()
+			local vectdot = vect:Dot(self.v:GetVelocity())
+			local throttle = dist:Dot(forward) > 0 and 1 or -1
+			local right = vect:Cross(forward)
+			local steer_amount = right:Length()
+			local steer = right.z > 0 and steer_amount or -steer_amount
+			local speedlimitmph = self.PatrolWaypoint["SpeedLimit"]
+			self.Speeding = speedlimitmph^2
+
+			--Unique racing techniques
+			if self.stuck then
+				steer = 0
+				throttle = throttle * -1
+			end --Getting unstuck
+			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
+				throttle = 0
+			end --Slow down
+			if self.v.IsSimfphyscar and self.v:GetVelocity():LengthSqr() > 10000 then
+				if istable(self.v.Wheels) then
+					for i = 1, table.Count( self.v.Wheels ) do
+						local Wheel = self.v.Wheels[ i ]
+						if !Wheel then return end
+						if Wheel:GetGripLoss() > 0 then
+							throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+						end
+					end
+				end
+			end
+			if dist:Dot(forward) < 0 and !self.stuck then
+				if vectdot > 0 then
+					if right.z > 0 then 
+						steer = -1 
+					else 
+						steer = 1 
+					end
+				end
+			end --K turn
+
+			--Set throttle
+			if self.v.IsScar then
+				if throttle > 0 then
+					self.v:GoForward(throttle)
+				else
+					self.v:GoBack(-throttle)
+				end
+			elseif self.v.IsSimfphyscar then
+				--self.v:SetActive(true)
+				--self.v:StartEngine()
+				self.v.PressedKeys = self.v.PressedKeys or {}
+				self.v.PressedKeys["Shift"] = false
+				self.v.PressedKeys["joystick_throttle"] = throttle
+				self.v.PressedKeys["joystick_brake"] = throttle * -1
+			elseif self.v.IsGlideVehicle then
+				self.v:TriggerInput("Handbrake", 0)
+				self.v:TriggerInput("Throttle", throttle)
+				self.v:TriggerInput("Brake", throttle * -1)
+			elseif isfunction(self.v.SetThrottle) and !self.v.IsGlideVehicle then
+				self.v:SetThrottle(throttle)
+			end
+			if self.v.IsScar then
+				if steer > 0 then
+					self.v:TurnRight(steer)
+				elseif steer < 0 then
+					self.v:TurnLeft(-steer)
+				else
+					self.v:NotTurning()
+				end
+			elseif self.v.IsSimfphyscar then
+				--self.v:SetActive(true)
+				--self.v:StartEngine()
+				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
+			elseif self.v.IsGlideVehicle then
+				steer = steer * 2 --Attempt to make steering more sensitive.
+				self.v:TriggerInput("Steer", steer)
+			elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+				self.v:SetSteering(steer, 0)
+			end
+
+			--Resetting
+			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
+				self.moving = CurTime()
+			end
+			if self.stuck then 
+				self.moving = CurTime()
+			end
+
+			local timeout = 1
+			if timeout and timeout > 0 then
+				if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
+					self.stuck = true
+					self.moving = CurTime()
+					timer.Simple(2, function() if IsValid(self.v) then self.stuck = nil self.PatrolWaypoint = nil end end)
+				end
+			end
+			
+		else
+			self:Stop()
+		end
+		
+		--Pursuit Tech
+		if self.v.PursuitTech == "ESF" and !self.v.uvesfdeployed then --ESF
+			UVAIRacerDeployWeapon(self.v)
+		end
+		if self.v.PursuitTech == "Stunmine" and !self.v.minelaid then --MINE
+			UVAIRacerDeployWeapon(self.v)
+		end
+		--[[if self.v.PursuitTech == "Jammer" and !self.v.jammerdeployed then --JAMMER
+			UVAIRacerDeployWeapon(self.v)
+		end]]
+		if self.v.PursuitTech == "Spikestrip" and !self.v.spikestripdeployed then --SPIKESTRIP
+			UVAIRacerDeployWeapon(self.v)
+		end
+		
+	end
+	
+	function ENT:Think()
+		self:SetPos(self.v:GetPos() + Vector(0,0,50))
+		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
+		if not GetConVar("ai_ignoreplayers"):GetBool() then
+			self:Race()
+		else
+			self:Stop()
+		end
+	end
+
+	function ENT:Initialize()
+		self:SetNoDraw(true)
+		self:SetMoveType(MOVETYPE_NONE)
+		self:SetModel(self.Modelname)
+		self:SetHealth(-1)
+
+		self.moving = CurTime()
+
+		timer.Simple(3, function()
+			if IsValid(self.v) then
+				if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 
+					self.v:VC_setRunningLights(true)
+				end
+			end
+		end)
+
+		--Pick up a vehicle in the given sphere.
+		if self.vehicle then
+			local v = self.vehicle
+			if v.IsScar then --If it's a SCAR.
+				if not v:HasDriver() then --If driver's seat is empty.
+					self.v = v
+					v.RacerVehicle = self
+					v.HasDriver = function() return true end --SCAR script assumes there's a driver.
+					v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
+					v:StartCar()
+				end
+			elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
+				if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
+					self.v = v
+					v.RacerVehicle = self
+					v:SetActive(true)
+					v:StartEngine()
+					if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+						v:SetLightsEnabled(true)
+					end
+					if GetConVar("unitvehicle_autohealth"):GetBool() then
+						v:SetMaxHealth(math.huge)
+						v:SetCurHealth(math.huge)
+					end
+				end
+			elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+				if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
+					self.v = v
+					v.RacerVehicle = self
+					v:EnableEngine(true)
+					v:StartEngine(true)
+					if GetConVar("unitvehicle_autohealth"):GetBool() then
+						if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
+							v:VC_repairFull_Admin()
+							if !v:VC_hasGodMode() then
+								v:VC_setGodMode(true)
+							end
+						end
+					end
+				end
+			elseif v.IsGlideVehicle then --Glide
+				if not IsValid(v:GetDriver()) then
+					self.v = v
+					v.RacerVehicle = self
+					v:SetEngineState(2)
+					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+						v:SetHeadlightState(1)
+					end
+				end
+			end
+		else
+			local distance = DetectionRange:GetFloat()
+			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
+				if v:IsVehicle() then
+					if v.IsScar then --If it's a SCAR.
+						if not v:HasDriver() then --If driver's seat is empty.
+							self.v = v
+							v.RacerVehicle = self
+							v.HasDriver = function() return true end --SCAR script assumes there's a driver.
+							v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
+							v:StartCar()
+						end
+					elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
+						if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
+							self.v = v
+							v.RacerVehicle = self
+							v:SetActive(true)
+							v:StartEngine()
+							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+								v:SetLightsEnabled(true)
+							end
+							if GetConVar("unitvehicle_autohealth"):GetBool() then
+								v:SetMaxHealth(math.huge)
+								v:SetCurHealth(math.huge)
+							end
+						end
+					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
+							self.v = v
+							v.RacerVehicle = self
+							v:EnableEngine(true)
+							v:StartEngine(true)
+							if GetConVar("unitvehicle_autohealth"):GetBool() then
+								if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
+									v:VC_repairFull_Admin()
+									if !v:VC_hasGodMode() then
+										v:VC_setGodMode(true)
+									end
+								end
+							end
+						end
+					elseif v.IsGlideVehicle then --Glide
+						if not IsValid(v:GetDriver()) then
+							self.v = v
+							v.RacerVehicle = self
+							v:TurnOn()
+							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+								v:SetHeadlightState(1)
+							end
+						end
+					end
+				end
+			end
+		end
+	
+		if not IsValid(self.v) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Racer Vehicle.
+		local e = EffectData()
+		e:SetEntity(self.v)
+		util.Effect("propspawn", e) --Perform a spawn effect.
+		self.v:EmitSound( "beams/beamstart5.wav" )
+
+		local pttable = {
+			--"EMP",
+			"ESF",
+			"Jammer",
+			"Shockwave",
+			"Spikestrip",
+			"Stunmine",
+		}
+
+		if RacerPursuitTech:GetBool() then
+			self.v.PursuitTech = pttable[math.random(#pttable)]
+		end
+		
+		if !self.uvscripted then
+			if next(dvd.Waypoints) == nil then
+				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned!" )
+			else
+				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned! (DV Waypoints detected!)" )
+			end
+		end
+		
+		local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.
+		if not isvector(max) then min, max = self.v:GetModelBounds() end --If getting hit box bounds is failed, get model bounds instead.
+		if not isvector(max) then max = vector_up * math.random(80, 200) end --If even getting model bounds is failed, set a random value.
+		
+		local tr = util.TraceHull({start = self.v:GetPos() + vector_up * max.z, 
+			endpos = self.v:GetPos(), ignoreworld = true,
+			mins = Vector(-16, -16, -1), maxs = Vector(16, 16, 1)})
+		self.CollisionHeight = tr.HitPos.z - self.v:GetPos().z
+		if self.CollisionHeight < 10 then self.CollisionHeight = max.z end
+		self.v:DeleteOnRemove(self)
+		
+	end
+else --if CLIENT
+	function ENT:Initialize()
+		self:SetNoDraw(true)
+		self:SetMoveType(MOVETYPE_NONE)
+		self:SetModel(self.Modelname)
+	end
+end --if SERVER
+
+--For Half Life Renaissance Reconstructed
+function ENT:GetNoTarget()
+	return false
+end
+
+--For Simfphys Vehicles
+function ENT:GetInfoNum(key, default)
+	if key == "cl_simfphys_ctenable" then return 1 --returns the default value
+	elseif key == "cl_simfphys_ctmul" then return 0.7 --because there's a little weird code in
+	elseif key == "cl_simfphys_ctang" then return 15 --Simfphys:PlayerSteerVehicle()
+	elseif isnumber(default) then return default end
+	return 0
+end
