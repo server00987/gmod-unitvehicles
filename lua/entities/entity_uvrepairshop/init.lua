@@ -100,13 +100,21 @@ function ENT:Repair(vehicle)
 		end
 	end
 	if vehicle.IsGlideVehicle then
-		if vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
-
 		if vehicle.uvrepaircooldown then
 			UVRepairCooldown()
 			return
 		end
 
+		local repaired = false
+
+		for _, v in pairs(vehicle.wheels) do
+			if IsValid(v) and v.bursted then
+				repaired = true
+				v:_restore()
+			end
+		end
+
+		if !repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
 		vehicle:Repair()
 	end
 

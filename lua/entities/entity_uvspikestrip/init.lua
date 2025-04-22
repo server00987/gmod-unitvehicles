@@ -134,6 +134,14 @@ function ENT:DoUpdate()
 			local og_forwardtractionmax = j.params.forwardTractionMax
 			local og_sidetractionmax = j.params.sideTractionMax
 
+			function j:_restore() -- temp func
+				j.bursted = false
+				j.params.forwardTractionMax = og_forwardtractionmax
+				j.params.sideTractionMax = og_sidetractionmax
+				j:Repair()
+				timer.Remove("uvspiked"..j:EntIndex())
+			end
+
 			if dist < 50 then
 				hit = true
 				j.bursted = true
@@ -150,9 +158,9 @@ function ENT:DoUpdate()
 
 				j:SetRadius( radius )
 				constraint.NoCollide(j,self.Entity,0,0)
-
-				timer.Simple(GetConVar("unitvehicle_spikestripduration"):GetFloat(), function() 
-					if IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
+				print(j:EntIndex())
+				timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
+					if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
 						if array[1].wrecked then return end
 						j.bursted = false
 						j.params.forwardTractionMax = og_forwardtractionmax

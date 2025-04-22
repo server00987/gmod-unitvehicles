@@ -2104,7 +2104,7 @@ function UVCheckIfBeingBusted(enemy)
 	if !enemyph then return end
 
 	--Stunt jump
-	if !uvenemyescaping then
+	if !uvenemyescaping and uvtargeting then
 		if !enemy.UVStuntJump then
 			local onground = util.QuickTrace(enemy:GetPos(), -vector_up * 500, {enemy})
 			if !onground.Hit then
