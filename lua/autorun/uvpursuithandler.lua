@@ -172,7 +172,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 				UVSoundLoop = source
 				source:SetVolume(PursuitVolume:GetFloat())
 			else
-				UVSoundSource = sourceq
+				UVSoundSource = source
 			end
 			source:EnableLooping(Loop)
 			source:Play()
