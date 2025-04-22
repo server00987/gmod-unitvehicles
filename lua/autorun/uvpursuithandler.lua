@@ -4,6 +4,7 @@ local dvd = DecentVehicleDestination
 
 --Sound--
 local UVSoundSource
+local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
@@ -99,7 +100,7 @@ function UVSoundBusted()
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/busted/*", "GAME" )
 	if soundtable != nil then
-		UVPlaySound("uvpursuitmusic/"..theme.."/busted/"..soundtable[math.random(1, #soundtable)], false)
+		UVPlaySound("uvpursuitmusic/"..theme.."/busted/"..soundtable[math.random(1, #soundtable)], false, true)
 	end
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -113,9 +114,9 @@ function UVSoundEscaped()
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-	if UVSoundSource then
-		UVSoundSource:Stop()
-		UVSoundSource = nil
+	if UVSoundLoop then
+		UVSoundLoop:Stop()
+		UVSoundLoop = nil
 	end
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/escaped/*", "GAME" )
@@ -147,11 +148,17 @@ end
 -- 		UVStopSound()
 -- 	end)
 -- end
-function UVPlaySound( FileName, Loop )
+function UVPlaySound( FileName, Loop, StopLoop )
 	if !PlayMusic:GetBool() then return end
 	if UVLoadedSounds then
 		if UVLoadedSounds == FileName then return end
 		--Entity(1):StopSound(UVLoadedSounds)
+		if Loop or StopLoop then
+			if UVSoundLoop then
+				UVSoundLoop:Stop()
+				UVSoundLoop = nil
+			end
+		end
 		if UVSoundSource then
 			UVSoundSource:Stop()
 			UVSoundSource = nil
@@ -161,7 +168,12 @@ function UVPlaySound( FileName, Loop )
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
 	sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
 		if IsValid(source) then
-			UVSoundSource = source
+			if Loop then
+				UVSoundLoop = source
+				source:SetVolume(PursuitVolume:GetFloat())
+			else
+				UVSoundSource = sourceq
+			end
 			source:EnableLooping(Loop)
 			source:Play()
 		end
@@ -445,6 +457,7 @@ if SERVER then
 	util.AddNetworkString( "UVHUDTimeStopped" )
 	util.AddNetworkString( "UVHUDStopPursuit" )
 	
+	util.AddNetworkString( "UVHUDUpdateBusting" )
 	util.AddNetworkString( "UVHUDBusting" )
 	util.AddNetworkString( "UVHUDStopBusting" )
 	util.AddNetworkString( "UVHUDStopBustingTimeLeft" )
@@ -1744,6 +1757,7 @@ else --HUD/Options
 	TargetVehicleType = CreateClientConVar("unitvehicle_targetvehicletype", 1, true, false, "Unit Vehicles: 1 = All vehicles are targeted. 2 = Decent Vehicles are targeted only. 3 = Other vehicles besides Decent Vehicles are targeted.")
 	DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
+	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
 	NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
 	SpawnCooldown = CreateClientConVar("unitvehicle_spawncooldown", 30, true, false, "Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
@@ -2203,6 +2217,13 @@ else --HUD/Options
 		UVSoundEscaped()
 		
 	end)
+	net.Receive("UVHUDUpdateBusting", function()
+		local ent = net.ReadEntity()
+		local progress = net.ReadFloat()
+
+		ent.uvbustingprogress = progress
+	end)
+
 	
 	net.Receive("UVHUDBusting", function()
 		
@@ -2768,9 +2789,9 @@ else --HUD/Options
 				draw.DrawText( UVNotification, "UVFont",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
 		else
-			if UVSoundSource and CurTime() - outofpursuit > 15 then
-				UVSoundSource:Stop()
-				UVSoundSource = nil
+			if UVSoundLoop then
+				UVSoundLoop:Stop()
+				UVSoundLoop = nil
 			end
 		end
 		
@@ -3175,7 +3196,7 @@ else --HUD/Options
 			local textX = (MinX + MaxX) / 2
 			local textY = MinY - 20
 			cam.Start2D()
-			draw.DrawText(enemycallsign..((ent.beingbusted and " (BEING BUSTED)") or "").."\n"..math.Round(distInMeters).." m", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
+			draw.DrawText(enemycallsign..((ent.beingbusted and " (BEING BUSTED " .. math.Clamp(math.floor(((ent.uvbustingprogress / BustedTimer:GetInt()) * 100) + .5), 0, 100) .. "%)") or "").."\n"..math.Round(distInMeters).." m", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
 			cam.End2D()
 		end
 	end
@@ -3513,6 +3534,23 @@ else --HUD/Options
 			end
 			panel:CheckBox("Random Heat Level Songs", "unitvehicle_pursuitthemeplayrandomheat")
 			panel:ControlHelp("Random Heat Level songs from your selected Pursuit Theme will play instead.")
+			local volume_theme = panel:NumSlider("Volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
+			panel:ControlHelp("Sets the volume of the pursuit theme. (Local)")
+
+			volume_theme.OnValueChanged = function( self, value )
+				if value == 0 then
+					volume_theme:SetText("Volume: MUTE")
+				elseif value == 2 then
+					volume_theme:SetText("Volume: MAX")
+				else
+					volume_theme:SetText("Volume: "..math.floor(math.Round(value*100) + .5).."%")
+				end
+
+				if UVSoundLoop then
+					UVSoundLoop:SetVolume( value )
+				end
+			end
+
 			
 			panel:Help("——— Pursuit ———")
 			panel:CheckBox("Auto Health", "unitvehicle_autohealth")
