@@ -394,7 +394,7 @@ if SERVER then
 			self.v.PressedKeys["Space"] = true
 			self.v.PressedKeys["joystick_throttle"] = 0
 			self.v.PressedKeys["joystick_brake"] = 0
-		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) then
+		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 			self.v:SetThrottle(0)
 			self.v:SetSteering(0, 0)
 			self.v:SetHandbrake(true)
@@ -587,7 +587,7 @@ if SERVER then
 				self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Space"] = false
-			elseif isfunction(self.v.SetHandbrake) then
+			elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 				self.v:SetHandbrake(false)
 			elseif self.v.IsGlideVehicle then
 				self.v:TriggerInput("Handbrake", 0)
@@ -842,7 +842,7 @@ if SERVER then
 			self.v:StartEngine()
 			self.v.PressedKeys = self.v.PressedKeys or {}
 			self.v.PressedKeys["Space"] = false
-		elseif isfunction(self.v.SetHandbrake) then
+		elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 			self.v:SetHandbrake(false)
 		end
 	end
@@ -853,7 +853,7 @@ if SERVER then
 		elseif self.v.IsSimfphyscar then
 			self.v.PressedKeys = self.v.PressedKeys or {}
 			self.v.PressedKeys["Space"] = true
-		elseif isfunction(self.v.SetHandbrake) then
+		elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 			self.v:SetHandbrake(true)
 		elseif self.v.IsGlideVehicle then
 			self.v:TriggerInput("Handbrake", 1)
@@ -1119,7 +1119,7 @@ if SERVER then
 				self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Space"] = false
-			elseif isfunction(self.v.SetHandbrake) then
+			elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 				self.v:SetHandbrake(false)
 			elseif self.v.IsGlideVehicle then
 				self.v:TriggerInput("Handbrake", 0)

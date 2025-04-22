@@ -519,6 +519,7 @@ if SERVER then
 		uvwantedtabledriver = {}
 		uvplayerunittableplayers = {}
 		uvjammerdeployed = nil
+		uvpreinfractioncount = 0
 		if next(uvloadedpursuitbreakers) != nil then
 			for k, v in pairs(uvloadedpursuitbreakers) do
 				net.Start("UVTriggerPursuitBreaker")

@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
---[[References (* = not used yet)
+--[[References (* = not used, yet)
 TEN-CODE
 10-1: Receiving poorly
 10-2: Receiving well
@@ -214,14 +214,19 @@ if SERVER then
 		]]
 		
 		if parameters == 1 then --No voice restriction
+
+			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+
+			if next(basedirectories) == nil then return 5 end
+			local basedirectory = basedirectories[math.random(1, #basedirectories)]
 			
 			soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
 			if next(soundtable) == nil then return 5 end
 			local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
 			
-			local soundtable2 = file.Find( "sound/chatter/!call/chirpgeneric/*", "GAME" )
+			local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
 			if next(soundtable2) == nil then return 5 end
-			local soundfile2 = "chatter/!call/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
+			local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
 			
 			-- if uvchatterplaying and parameters != 2 then
 			-- 	Entity(1):StopSound(uvchatterplaying)
@@ -339,28 +344,33 @@ if SERVER then
 			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
 			
 		elseif parameters == 6 then --Call
+
+			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+
+			if next(basedirectories) == nil then return 5 end
+			local basedirectory = basedirectories[math.random(1, #basedirectories)]
 			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
+			soundtable = file.Find( "sound/chatter/!call/"..basedirectory.."/"..chattertype.."/*", "GAME" )
 			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
+			local soundfile = "chatter/!call/"..basedirectory.."/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
 			local soundduration = SoundDuration(soundfile)
 			
 			local soundfile2 = "chatter/!emergency/copresponse.mp3"
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			local soundtable3 = file.Find( "sound/chatter/!call/addressgroup/*", "GAME" )
+			local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME" )
 			if next(soundtable3) == nil then return 5 end
-			local soundfile3 = "chatter/!call/addressgroup/"..soundtable3[math.random(1, #soundtable3)]
+			local soundfile3 = "chatter/!call/"..basedirectory.."/addressgroup/"..soundtable3[math.random(1, #soundtable3)]
 			local soundduration3 = SoundDuration(soundfile3)
 			
-			local soundtable4 = file.Find( "sound/chatter/!call/d_location/*", "GAME" )
+			local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
 			if next(soundtable4) == nil then return 5 end
-			local soundfile4 = "chatter/!call/d_location/"..soundtable4[math.random(1, #soundtable4)]
+			local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
 			local soundduration4 = SoundDuration(soundfile4)
 			
-			local soundtable5 = file.Find( "sound/chatter/!call/unitrequest/*", "GAME" )
+			local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME" )
 			if next(soundtable5) == nil then return 5 end
-			local soundfile5 = "chatter/!call/unitrequest/"..soundtable5[math.random(1, #soundtable5)]
+			local soundfile5 = "chatter/!call/"..basedirectory.."/unitrequest/"..soundtable5[math.random(1, #soundtable5)]
 			local soundduration5 = SoundDuration(soundfile5)
 			
 			-- if uvchatterplaying and parameters != 2 then
@@ -411,23 +421,28 @@ if SERVER then
 			return UVDelayChatter((soundduration+soundduration2+soundduration3+soundduration4+soundduration5+math.random(1,2)))
 			
 		elseif parameters == 7 then --Losing
+
+			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+
+			if next(basedirectories) == nil then return 5 end
+			local basedirectory = basedirectories[math.random(1, #basedirectories)]
 			
 			local soundfile2 = "chatter/!emergency/copresponse.mp3"
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			local soundtable3 = file.Find( "sound/chatter/!call/dispbreakaway/*", "GAME" )
+			local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME" )
 			if next(soundtable3) == nil then return 5 end
-			local soundfile3 = "chatter/!call/dispbreakaway/"..soundtable3[math.random(1, #soundtable3)]
+			local soundfile3 = "chatter/!call/"..basedirectory.."/dispbreakaway/"..soundtable3[math.random(1, #soundtable3)]
 			local soundduration3 = SoundDuration(soundfile3)
 			
-			local soundtable4 = file.Find( "sound/chatter/!call/d_location/*", "GAME" )
+			local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
 			if next(soundtable4) == nil then return 5 end
-			local soundfile4 = "chatter/!call/d_location/"..soundtable4[math.random(1, #soundtable4)]
+			local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
 			local soundduration4 = SoundDuration(soundfile4)
 			
-			local soundtable5 = file.Find( "sound/chatter/!call/quadrant/*", "GAME" )
+			local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME" )
 			if next(soundtable5) == nil then return 5 end
-			local soundfile5 = "chatter/!call/quadrant/"..soundtable5[math.random(1, #soundtable5)]
+			local soundfile5 = "chatter/!call/"..basedirectory.."/quadrant/"..soundtable5[math.random(1, #soundtable5)]
 			local soundduration5 = SoundDuration(soundfile5)
 			
 			if !uvenemyescaping then return end
@@ -504,13 +519,18 @@ if SERVER then
 			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
 			
 		end
+
+		local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+
+		if next(basedirectories) == nil then return 5 end
+		local basedirectory = basedirectories[math.random(1, #basedirectories)]
 		
 		soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
 		if next(soundtable) == nil then return 5 end
 		local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-		local soundtable2 = file.Find( "sound/chatter/!call/chirpgeneric/*", "GAME" )
+		local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
 		if next(soundtable2) == nil then return 5 end
-		local soundfile2 = "chatter/!call/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
+		local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
 		-- if uvchatterplaying and parameters != 2 then
 		-- 	Entity(1):StopSound(uvchatterplaying)
 		-- end
@@ -571,6 +591,8 @@ if SERVER then
 	end
 	
 	function UVTextChatter(unit, args, ...) -- ... = directory to array with text/variables, since some entries are dictionaries
+		if !GetConVar("unitvehicle_chattertext"):GetBool() then return end
+
 		local format_arg_list = {}
 		
 		local sub_dir_count = select('#', ...)
@@ -1137,8 +1159,14 @@ if SERVER then
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			if #uvwantedtablevehicle > 1 then
 				return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemultipleenemies", 8)
-			else			
-				return UVSoundChatter(self, self.voice, "pursuitstartacknowledge", 8)
+			else
+				if uvheatlevel < 2 then
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledge", 8)
+				elseif uvheatlevel < 5 then
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemed", 8)
+				else
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgehigh", 8)
+				end
 			end
 		end
 		UVDelayChatter()
@@ -2009,7 +2037,12 @@ if SERVER then
 	function UVChatterAirInitialize(self)
 		if UVChatterDelayed then return end
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airinitialize")
+			local randomno = math.random(1,2)
+			if randomno == 1 then
+				UVSoundChatter(self, self.voice, "airinitialize")
+			else
+				UVSoundChatter(self, self.voice, "airinitialize", 1)
+			end
 		end
 		UVDelayChatter()
 		
@@ -3331,6 +3364,27 @@ if SERVER then
 			UVTextChatter(self, args, 'PursuitStartWanted', 'UVSpecial')
 		elseif self.v.UVCommander then
 			UVTextChatter(self, args, 'PursuitStartWanted', 'UVCommander')
+		end
+	end
+
+	function UVChatterStuntJump(self)
+		if UVChatterDelayed then return end
+		if !GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "stuntjump")
+		end
+	end
+
+	function UVChatterStuntRoll(self)
+		if UVChatterDelayed then return end
+		if !GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "stuntroll")
+		end
+	end
+
+	function UVChatterStuntSpin(self)
+		if UVChatterDelayed then return end
+		if !GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "stuntspin")
 		end
 	end
 	

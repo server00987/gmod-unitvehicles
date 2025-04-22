@@ -115,7 +115,7 @@ if SERVER then
 			self.v.PressedKeys["D"] = false
 			self.v.PressedKeys["Shift"] = false
 			self.v.PressedKeys["Space"] = true
-		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) then
+		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 			self.v:SetThrottle(0)
 			self.v:SetSteering(0, 0)
 			if self.v:GetVelocity():LengthSqr() < 10000 then 
@@ -169,7 +169,7 @@ if SERVER then
 				--self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Space"] = false
-			elseif isfunction(self.v.SetHandbrake) then
+			elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
 				self.v:SetHandbrake(false)
 			end
 			

@@ -2094,6 +2094,67 @@ function UVCheckIfBeingBusted(enemy)
 		UVBustEnemy(closestunit, enemy)
 	end
 
+	local enemyph = enemy:GetPhysicsObject()
+	if !enemyph then return end
+
+	--Stunt jump
+	if !enemy.UVStuntJump then
+		local onground = util.QuickTrace(enemy:GetPos(), -vector_up * 500, {enemy})
+		if !onground.Hit then
+			enemy.UVStuntJump = true
+			timer.Simple(10, function()
+				enemy.UVStuntJump = nil
+			end)
+			local randomno = math.random(1,2)
+			local airunits = ents.FindByClass("uvair")
+			if next(airunits) ~= nil and randomno == 1 then
+				local random_entry = math.random(#airunits)	
+				local unit = airunits[random_entry]
+				UVChatterStuntJump(unit)
+			else
+				UVChatterStuntJump(closestunit)
+			end
+		end
+	end
+
+	--Stunt roll
+	if !enemy.UVStuntRoll then
+		if enemyph:GetAngles().z > 90 and enemyph:GetAngles().z < 270 and enemy:GetVelocity():LengthSqr() < 10000 then
+			enemy.UVStuntRoll = true
+			timer.Simple(10, function()
+				enemy.UVStuntRoll = nil
+			end)
+			local randomno = math.random(1,2)
+			local airunits = ents.FindByClass("uvair")
+			if next(airunits) ~= nil and randomno == 1 then
+				local random_entry = math.random(#airunits)	
+				local unit = airunits[random_entry]
+				UVChatterStuntRoll(unit)
+			else
+				UVChatterStuntRoll(closestunit)
+			end
+		end
+	end
+	
+	--Stunt roll
+	if !enemy.UVStuntSpin then
+		if enemyph:GetAngleVelocity().y > 180 then
+			enemy.UVStuntSpin = true
+			timer.Simple(10, function()
+				enemy.UVStuntSpin = nil
+			end)
+			local randomno = math.random(1,2)
+			local airunits = ents.FindByClass("uvair")
+			if next(airunits) ~= nil and randomno == 1 then
+				local random_entry = math.random(#airunits)	
+				local unit = airunits[random_entry]
+				UVChatterStuntSpin(unit)
+			else
+				UVChatterStuntSpin(closestunit)
+			end
+		end
+	end
+
 end
 
 function UVCheckIfWrecked(enemy)

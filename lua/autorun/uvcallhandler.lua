@@ -113,6 +113,8 @@ if SERVER then
     function UVCallInitiate(suspectvehicle, type)
         if !GetConVar("unitvehicle_callresponse"):GetBool() or uvcalllocation or uvtargeting or uvcallexists then return end
 
+        uvpreinfractioncount = 0
+
         uvcallexists = true
 
         local calllocation = suspectvehicle:GetPos()+Vector(0,0,50)

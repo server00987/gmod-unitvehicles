@@ -140,7 +140,7 @@ function ENT:DoUpdate()
 				j.params.forwardTractionMax = og_forwardtractionmax * .1
 				j.params.sideTractionMax = og_sidetractionmax * .1
 
-				j:EmitSound("gadgets/spikestrip/tirereinflatesound.wav")
+				j:EmitSound("glide/wheels/blowout.wav")
 
 				local radius = j.params.radius * 0.8
 
