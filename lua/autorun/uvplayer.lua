@@ -10,154 +10,154 @@ if SERVER then
     util.AddNetworkString( "UVWeaponJammerEnable" )
     util.AddNetworkString( "UVWeaponJammerDisable" )
 
-    hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
-        if key != KEY_T then return end
-        if CLIENT and not IsFirstTimePredicted() then
-            return
-        end
-        if table.HasValue(uvplayerunittableplayers, driver) then --UNIT VEHICLES
-            for k, car in pairs(uvplayerunittablevehicle) do
-                if UVGetDriver(car) != driver or car.wrecked then continue end
-                if uvjammerdeployed and !car.exemptfromjammer then
-                    continue
-                end
-                if car.PursuitTech == "Spikestrip" then --SPIKESTRIP
-                    if !car.spikestripdeployed then
-                        car.spikestripdeployed = true
-                        UVDeploySpikeStrip(car)
-                        timer.Simple(0.5, function()
-                            if IsValid(car) and car.uvupgraded and (!uvjammerdeployed or car.exemptfromjammer) then
-                                UVDeploySpikeStrip(car)
-                            end
-                        end)
-                        driver:PrintMessage( HUD_PRINTCENTER, "Spike strip deployed!")
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVUnitPTDuration:GetInt(), function()
-                            if IsValid(car) and car.spikestripdeployed and !car.wrecked then
-                                car.spikestripdeployed = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                elseif car.PursuitTech == "ESF" then --ESF
-                    if !car.uvesfdeployed then
-                        car.uvesfdeployed = true
-                        UVDeployESF(car)
-                        driver:PrintMessage( HUD_PRINTCENTER, "ESF deployed!")
-                        car:EmitSound("gadgets/esf/start.wav")
-                        car:EmitSound("gadgets/esf/onloop.wav")
-                        timer.Simple(UVUnitPTESFDuration:GetInt(), function()
-                            UVDeactivateESF(car)
-                        end)
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVUnitPTDuration:GetInt(), function()
-                            if IsValid(car) and car.uvesfdeployed and !car.wrecked then
-                                car.uvesfdeployed = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                elseif car.PursuitTech == "Killswitch" then --KILLSWITCH
-                    if !car.uvkillswitchdeployed then
-                        car.uvkillswitchdeployed = true
-                        UVDeployKillSwitch(car)
-                    end
-                elseif car.PursuitTech == "EMP" then --EMP
+    -- hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
+    --     if key != KEY_T then return end
+    --     if CLIENT and not IsFirstTimePredicted() then
+    --         return
+    --     end
+    --     if table.HasValue(uvplayerunittableplayers, driver) then --UNIT VEHICLES
+    --         for k, car in pairs(uvplayerunittablevehicle) do
+    --             if UVGetDriver(car) != driver or car.wrecked then continue end
+    --             if uvjammerdeployed and !car.exemptfromjammer then
+    --                 continue
+    --             end
+    --             if car.PursuitTech == "Spikestrip" then --SPIKESTRIP
+    --                 if !car.spikestripdeployed then
+    --                     car.spikestripdeployed = true
+    --                     UVDeploySpikeStrip(car)
+    --                     timer.Simple(0.5, function()
+    --                         if IsValid(car) and car.uvupgraded and (!uvjammerdeployed or car.exemptfromjammer) then
+    --                             UVDeploySpikeStrip(car)
+    --                         end
+    --                     end)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "Spike strip deployed!")
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVUnitPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.spikestripdeployed and !car.wrecked then
+    --                             car.spikestripdeployed = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             elseif car.PursuitTech == "ESF" then --ESF
+    --                 if !car.uvesfdeployed then
+    --                     car.uvesfdeployed = true
+    --                     UVDeployESF(car)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "ESF deployed!")
+    --                     car:EmitSound("gadgets/esf/start.wav")
+    --                     car:EmitSound("gadgets/esf/onloop.wav")
+    --                     timer.Simple(UVUnitPTESFDuration:GetInt(), function()
+    --                         UVDeactivateESF(car)
+    --                     end)
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVUnitPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.uvesfdeployed and !car.wrecked then
+    --                             car.uvesfdeployed = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             elseif car.PursuitTech == "Killswitch" then --KILLSWITCH
+    --                 if !car.uvkillswitchdeployed then
+    --                     car.uvkillswitchdeployed = true
+    --                     UVDeployKillSwitch(car)
+    --                 end
+    --             elseif car.PursuitTech == "EMP" then --EMP
 
-                end
-            end
-        elseif next(uvrvwithpursuittech) != nil then --RACER VEHICLES
-            for k, car in pairs(uvrvwithpursuittech) do
-                if UVGetDriver(car) != driver then continue end
-                if uvjammerdeployed and !car.exemptfromjammer then
-                    continue
-                end
-                if car.PursuitTech == "Shockwave" then --SHOCKWAVE
-                    if !car.shockwavecooldown then
-                        car.shockwavecooldown = true
-                        driver:PrintMessage( HUD_PRINTCENTER, "Shockwave deployed!")
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVPTPTDuration:GetInt(), function()
-                            if IsValid(car) and car.shockwavecooldown then
-                                car.shockwavecooldown = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                        UVDeployShockwave(car)
-                    end
-                elseif car.PursuitTech == "ESF" then --ESF
-                    if !car.uvesfdeployed then
-                        car.uvesfdeployed = true
-                        UVDeployESF(car)
-                        driver:PrintMessage( HUD_PRINTCENTER, "ESF deployed!")
-                        car:EmitSound("gadgets/esf/start.wav")
-                        car:EmitSound("gadgets/esf/onloop.wav")
-                        timer.Simple(UVPTESFDuration:GetInt(), function()
-                            UVDeactivateESF(car)
-                        end)
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVPTPTDuration:GetInt(), function()
-                            if IsValid(car) and car.uvesfdeployed and !car.wrecked then
-                                car.uvesfdeployed = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                elseif car.PursuitTech == "Stunmine" then --MINE
-                    if !car.minelaid then
-                        car.minelaid = true
-                        UVDeployStunmine(car)
-                        driver:PrintMessage( HUD_PRINTCENTER, "Stunmine laid!")
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVPTPTDuration:GetInt(), function()
-                            if IsValid(car) and car.minelaid then
-                                car.minelaid = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                elseif car.PursuitTech == "Jammer" then --JAMMER
-                    if !car.jammerdeployed then
-                        car.jammerdeployed = true
-                        UVDeployJammer(car)
-                        driver:PrintMessage( HUD_PRINTCENTER, "Jammer deployed!")
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVPTPTDuration:GetInt(), function()
-                            if car.jammerdeployed then
-                                car.jammerdeployed = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                elseif car.PursuitTech == "Spikestrip" then --SPIKESTRIP
-                    if !car.spikestripdeployed then
-                        car.spikestripdeployed = true
-                        UVDeploySpikeStrip(car, true)
-                        timer.Simple(0.5, function()
-                            if IsValid(car) and (!uvjammerdeployed or car.exemptfromjammer) then
-                                UVDeploySpikeStrip(car, true)
-                            end
-                        end)
-                        driver:PrintMessage( HUD_PRINTCENTER, "Spike strip deployed!")
-                        car.PursuitTechStatus = "Reloading"
-                        timer.Simple(UVPTPTDuration:GetInt(), function()
-                            if IsValid(car) and car.spikestripdeployed and !car.wrecked then
-                                car.spikestripdeployed = nil
-                                car:EmitSound("buttons/button4.wav")
-                                car.PursuitTechStatus = "Ready"
-                            end
-                        end)
-                    end
-                end
-            end
-        end
-    end)
+    --             end
+    --         end
+    --     elseif next(uvrvwithpursuittech) != nil then --RACER VEHICLES
+    --         for k, car in pairs(uvrvwithpursuittech) do
+    --             if UVGetDriver(car) != driver then continue end
+    --             if uvjammerdeployed and !car.exemptfromjammer then
+    --                 continue
+    --             end
+    --             if car.PursuitTech == "Shockwave" then --SHOCKWAVE
+    --                 if !car.shockwavecooldown then
+    --                     car.shockwavecooldown = true
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "Shockwave deployed!")
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVPTPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.shockwavecooldown then
+    --                             car.shockwavecooldown = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                     UVDeployShockwave(car)
+    --                 end
+    --             elseif car.PursuitTech == "ESF" then --ESF
+    --                 if !car.uvesfdeployed then
+    --                     car.uvesfdeployed = true
+    --                     UVDeployESF(car)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "ESF deployed!")
+    --                     car:EmitSound("gadgets/esf/start.wav")
+    --                     car:EmitSound("gadgets/esf/onloop.wav")
+    --                     timer.Simple(UVPTESFDuration:GetInt(), function()
+    --                         UVDeactivateESF(car)
+    --                     end)
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVPTPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.uvesfdeployed and !car.wrecked then
+    --                             car.uvesfdeployed = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             elseif car.PursuitTech == "Stunmine" then --MINE
+    --                 if !car.minelaid then
+    --                     car.minelaid = true
+    --                     UVDeployStunmine(car)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "Stunmine laid!")
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVPTPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.minelaid then
+    --                             car.minelaid = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             elseif car.PursuitTech == "Jammer" then --JAMMER
+    --                 if !car.jammerdeployed then
+    --                     car.jammerdeployed = true
+    --                     UVDeployJammer(car)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "Jammer deployed!")
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVPTPTDuration:GetInt(), function()
+    --                         if car.jammerdeployed then
+    --                             car.jammerdeployed = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             elseif car.PursuitTech == "Spikestrip" then --SPIKESTRIP
+    --                 if !car.spikestripdeployed then
+    --                     car.spikestripdeployed = true
+    --                     UVDeploySpikeStrip(car, true)
+    --                     timer.Simple(0.5, function()
+    --                         if IsValid(car) and (!uvjammerdeployed or car.exemptfromjammer) then
+    --                             UVDeploySpikeStrip(car, true)
+    --                         end
+    --                     end)
+    --                     driver:PrintMessage( HUD_PRINTCENTER, "Spike strip deployed!")
+    --                     car.PursuitTechStatus = "Reloading"
+    --                     timer.Simple(UVPTPTDuration:GetInt(), function()
+    --                         if IsValid(car) and car.spikestripdeployed and !car.wrecked then
+    --                             car.spikestripdeployed = nil
+    --                             car:EmitSound("buttons/button4.wav")
+    --                             car.PursuitTechStatus = "Ready"
+    --                         end
+    --                     end)
+    --                 end
+    --             end
+    --         end
+    --     end
+    -- end)
 
     function UVAIRacerDeployWeapon(car)
         if car.RacerVehicle and (!uvjammerdeployed or car.exemptfromjammer) then

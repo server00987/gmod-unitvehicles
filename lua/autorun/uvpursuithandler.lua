@@ -408,6 +408,12 @@ if SERVER then
 	UVPTShockwavePower = CreateConVar("unitvehicle_pursuittech_shockwavepower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTSpikeStripDuration = CreateConVar("unitvehicle_pursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTStunMinePower = CreateConVar("unitvehicle_pursuittech_stunminepower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+	UVPTESFMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTJammerMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_jammer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTShockwaveMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
 	
 	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -415,6 +421,10 @@ if SERVER then
 	UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+	UVUnitPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+	UVUnitPTKillSwitchMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
 	
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPBCooldown = CreateConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -960,10 +970,13 @@ if SERVER then
 				if UVGetDriver(car):IsPlayer() then
 					local driver = UVGetDriver(car)
 					if car.PursuitTech then
-						local status = car.PursuitTechStatus or "Ready"
-						net.Start( "UVHUDPursuitTech" )
-						net.WriteString(car.PursuitTech)
-						net.WriteString(status)
+						-- local status = car.PursuitTechStatus or "Ready"
+						-- net.Start( "UVHUDPursuitTech" )
+						-- net.WriteString(car.PursuitTech)
+						-- net.WriteString(status)
+						-- net.Send(driver)
+						net.Start("UVHUDPursuitTech")
+						net.WriteTable(car.PursuitTech)
 						net.Send(driver)
 					end
 					if !table.HasValue(uvplayerunittableplayers, driver) then
@@ -1118,10 +1131,12 @@ if SERVER then
 				if !IsValid(car) or !UVGetDriver(car):IsPlayer() then continue end
 				local driver = UVGetDriver(car)
 				if car.PursuitTech then
-					local status = car.PursuitTechStatus or "Ready"
-					net.Start( "UVHUDPursuitTech" )
-					net.WriteString(car.PursuitTech)
-					net.WriteString(status)
+					net.Start( 'UVHUDPursuitTech' )
+					net.WriteTable(car.PursuitTech)
+					-- local status = car.PursuitTechStatus or "Ready"
+					-- net.Start( "UVHUDPursuitTech" )
+					-- net.WriteString(car.PursuitTech)
+					-- net.WriteString(status)
 					net.Send(driver)
 				end
 			end
@@ -2418,11 +2433,20 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDPursuitTech", function()
-		local PursuitTech = net.ReadString()
-		local Status = net.ReadString()
-		UVHUDPursuitTech = true
-		UVHUDPursuitTechName = PursuitTech
-		UVHUDPursuitTechStatus = Status
+		-- local PursuitTech = net.ReadString()
+		-- local Status = net.ReadString()
+
+		for i, v in pairs(net.ReadTable()) do
+			if type(v) == "table" then
+				-- UVHUDPursuitTech = v[1]
+				-- UVHUDPursuitTechName = v[2]
+				-- UVHUDPursuitTechStatus = v[3]
+				print(v.Tech, v.Ammo)
+			end
+		end
+		-- UVHUDPursuitTech = true
+		-- UVHUDPursuitTechName = PursuitTech
+		-- UVHUDPursuitTechStatus = Status
 	end)
 	
 	net.Receive("UVHUDScanner", function()

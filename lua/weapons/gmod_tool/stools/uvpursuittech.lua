@@ -12,7 +12,21 @@ local pttable = {
 	"Stunmine",
 }
 
+local pursuit_tech_list = {
+	["EMP"] = {
+		""
+	},
+	["ESF"] = "Electromagnetic Field",
+	["Jammer"] = "Jammer",
+	["Shockwave"] = "Shockwave",
+	["Spikestrip"] = "Spike Strip",
+	["Stunmine"] = "Stun Mine",
+}
+
+local slots = 2
+
 TOOL.ClientConVar[ "pursuittech" ] = pttable[1]
+TOOL.ClientConVar[ "slot" ] = 1
 
 TOOL.ClientConVar["ptduration"] = 60
 
@@ -49,26 +63,68 @@ function TOOL:LeftClick( trace )
 
 		if ( !CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
-			if car.PursuitTech then
-				if car.PursuitTech == ptselected then
-					self:GetOwner():ChatPrint(ptselected.." has ALREADY been applied to your "..UVGetVehicleMakeAndModel(car).."!")
-					return false
-				end
-				self:GetOwner():ChatPrint(car.PursuitTech.." applied to your "..UVGetVehicleMakeAndModel(car).." has been changed to "..ptselected.."!")
-			else
-				self:GetOwner():ChatPrint(ptselected.." applied to your "..UVGetVehicleMakeAndModel(car).."!")
+			local slot = self:GetClientNumber("slot") or 1
+			
+			if !car.PursuitTech then
+				car.PursuitTech = {}
 			end
-			car.PursuitTech = ptselected
+
+			local sel_k, sel_v
+
+			for k,v in pairs(car.PursuitTech) do
+				if v.Tech == ptselected then
+					sel_k, sel_v = k, v
+					break
+				end
+			end
+
+			self:GetOwner():ChatPrint(
+				sel_v
+				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..slot..")"
+				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..slot..")"
+			)
+
+			car.PursuitTech[slot] = {
+				Tech = ptselected,
+				Ammo = GetConVar("unitvehicle_pursuittech_maxammo_"..string.lower(ptselected)):GetInt(),
+				Upgraded = false
+			}
+
 			local effect = EffectData()
 			effect:SetEntity(car)
 			util.Effect("phys_freeze", effect)
+
 			table.insert(uvrvwithpursuittech, car)
+
 			car:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
 				if table.HasValue(uvrvwithpursuittech, car) then
 					table.RemoveByValue(uvrvwithpursuittech, car)
 				end
 			end)
+
 			return true
+
+			-- local ptselected = self:GetClientInfo("pursuittech")
+			-- if car.PursuitTech then
+			-- 	if car.PursuitTech == ptselected then
+			-- 		self:GetOwner():ChatPrint(ptselected.." has ALREADY been applied to your "..UVGetVehicleMakeAndModel(car).."!")
+			-- 		return false
+			-- 	end
+			-- 	self:GetOwner():ChatPrint(car.PursuitTech.." applied to your "..UVGetVehicleMakeAndModel(car).." has been changed to "..ptselected.."!")
+			-- else
+			-- 	self:GetOwner():ChatPrint(ptselected.." applied to your "..UVGetVehicleMakeAndModel(car).."!")
+			-- end
+			-- car.PursuitTech = ptselected
+			-- local effect = EffectData()
+			-- effect:SetEntity(car)
+			-- util.Effect("phys_freeze", effect)
+			-- table.insert(uvrvwithpursuittech, car)
+			-- car:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
+			-- 	if table.HasValue(uvrvwithpursuittech, car) then
+			-- 		table.RemoveByValue(uvrvwithpursuittech, car)
+			-- 	end
+			-- end)
+			-- return true
 		end
 
 		return false
@@ -97,6 +153,17 @@ function TOOL:RightClick(trace)
 	end
 
 	return false
+end
+
+function TOOL:Reload()
+	if CLIENT then return end
+	
+	local old_slot = self:GetClientNumber("slot")
+	local new_slot = old_slot + 1
+	if new_slot > slots then new_slot = 1 end
+
+	self:GetOwner():ConCommand("uvpursuittech_slot "..new_slot)
+	self:GetOwner():ChatPrint("Selected slot: "..new_slot)
 end
 
 if CLIENT then
@@ -264,6 +331,7 @@ if CLIENT then
 	function TOOL:DrawToolScreen(width, height)
 
 		local ptselected = self:GetClientInfo("pursuittech")
+		local slot = self:GetClientNumber("slot")
 
 		surface.SetDrawColor( Color( 0, 0, 0) )
 		surface.DrawRect( 0, 0, width, height )
@@ -273,6 +341,7 @@ if CLIENT then
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
 		draw.SimpleText( ptselected, "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( 'Slot: '..slot, "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 
