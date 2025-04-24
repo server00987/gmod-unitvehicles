@@ -12,16 +12,16 @@ local keybind_requests = {}
 --IsSettingKeybind = 1
 
 hook.Add( "PlayerButtonDown", "PlayerButtonDownWikiExample2", function( ply, button )
-	if CLIENT and not IsFirstTimePredicted() then
-		return
-	end
-
-   -- print(button, IsSettingKeybind)
-
-	if keybind_requests[ply] then
+    if CLIENT and not IsFirstTimePredicted() then
+        return
+    end
+    
+    -- print(button, IsSettingKeybind)
+    
+    if keybind_requests[ply] then
         local slot = keybind_requests[ply]
         keybind_requests[ply] = nil
-        print("AAAA", CurTime())
+        
         net.Start("UVGetNewKeybind")
         net.WriteInt(slot, 9)
         net.WriteInt(button, 9)
@@ -33,7 +33,7 @@ if SERVER then
     
     util.AddNetworkString('UVGetNewKeybind')
     util.AddNetworkString('UVPTKeybindRequest')
-
+    
     util.AddNetworkString( "UVPTUse" )
     
     util.AddNetworkString( "UVWeaponESFEnable" )
@@ -41,12 +41,11 @@ if SERVER then
     
     util.AddNetworkString( "UVWeaponJammerEnable" )
     util.AddNetworkString( "UVWeaponJammerDisable" )
-
+    
     net.Receive( "UVPTKeybindRequest", function( len, ply )
         local slot = net.ReadInt( 3 )
         
         if !slot then return end
-        print('Done', CurTime())
         keybind_requests[ply] = slot
         
         --print(keybind, slot)
@@ -60,8 +59,6 @@ if SERVER then
     net.Receive( "UVPTUse", function( len, ply )
         --local car = net.ReadEntity()
         local slot = net.ReadInt( 3 )
-
-        print('HELLO', slot, CurTime())
         
         -- if !car or !car:IsValid() then return end
         -- if !ply or !ply:IsValid() then return end
@@ -76,14 +73,13 @@ if SERVER then
         elseif next(uvrvwithpursuittech) != nil then --RACER VEHICLES
             for k, car in pairs(uvrvwithpursuittech) do
                 if UVGetDriver(car) != ply then continue end
-                print('I reached this!')
                 UVDeployWeapon( car, slot )
             end
         end
         
         --UVDeployWeapon( car, slot )
     end)
-
+    
     -- hook.Add("PlayerButtonDown", "UVDeployWeapon", function( driver, key )
     --     if CLIENT and not IsFirstTimePredicted() then
     --        return
@@ -387,7 +383,7 @@ if SERVER then
         local driver = car:GetDriver()
         
         if pursuit_tech.Tech == "Shockwave" then --SHOCKWAVE
-            local Cooldown = UVPTShockwaveCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             if IsValid(driver) then
@@ -412,7 +408,7 @@ if SERVER then
             --     UVDeployShockwave(car)
             -- end
         elseif pursuit_tech.Tech == "ESF" then --ESF
-            local Cooldown = UVPTESFCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             car:RemoveCallOnRemove("uvesf"..car:EntIndex())
             
@@ -455,7 +451,7 @@ if SERVER then
             --     end)
             -- end
         elseif pursuit_tech.Tech == "Stunmine" then --MINE
-            local Cooldown = UVPTStunMineCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             UVDeployStunmine(car)
@@ -481,7 +477,7 @@ if SERVER then
             --     end)
             -- end
         elseif pursuit_tech.Tech == "Jammer" then --JAMMER
-            local Cooldown = UVPTJammerCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             UVDeployJammer(car)
@@ -508,7 +504,7 @@ if SERVER then
             --     end)
             -- end
         elseif pursuit_tech.Tech == "Spikestrip" then --SPIKESTRIP
-            local Cooldown = UVPTSpikeStripCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             UVDeploySpikeStrip(car, !car.UnitVehicle)
@@ -545,7 +541,7 @@ if SERVER then
             --     end)
             -- end
         elseif pursuit_tech.Tech == 'Repair Kit' then
-            local Cooldown = (car.UnitVehicle and UVUnitPTRepairKitCooldown:GetInt()) or UVPTRepairKitCooldown:GetInt()
+            local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             local repaired = UVDeployRepairKit(car)
@@ -557,6 +553,18 @@ if SERVER then
                 if IsValid(driver) then
                     driver:PrintMessage( HUD_PRINTCENTER, "Repair Kit deployed!")
                 end
+            end
+        elseif pursuit_tech.Tech == 'Killswitch' then
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            -- if !car.spikestripdeployed then
+            --car.spikestripdeployed = true
+            
+            local result = UVDeployKillSwitch(car)
+
+            if result then
+                pursuit_tech.LastUsed = CurTime()
+                pursuit_tech.Ammo = pursuit_tech.Ammo - 1
             end
         end
     end
@@ -935,12 +943,15 @@ if SERVER then
                         end
                     end
                 end)
+                return true
             else
                 car.uvkillswitchdeployed = nil
                 car.uvkillswitchingtarget = nil
                 if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
                     UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Get close to an enemy to killswitch them!")
                 end
+
+                return false
             end
             
         else
@@ -949,6 +960,8 @@ if SERVER then
             if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
                 UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "There's no enemies to killswitch!")
             end
+
+            return false
         end
     end
     

@@ -1782,6 +1782,7 @@ if SERVER then
 		else
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
+				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
 				if v:IsVehicle() then
 					if v.IsScar then --If it's a SCAR.
 						if not v:HasDriver() then --If driver's seat is empty.

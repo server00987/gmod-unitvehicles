@@ -57,8 +57,24 @@ function ENT:Repair(vehicle)
 		return
 	end
 
+	local ptrefilled = false
+
+	if vehicle.PursuitTech then
+		for k, v in pairs(vehicle.PursuitTech) do
+			local max_ammo = GetConVar('unitvehicle_'..((vehicle.UnitVehicle and 'unitpursuittech') or 'pursuittech')..'_maxammo_'..string.lower(string.gsub(v.Tech, " ", ""))):GetInt()
+			if v.Ammo < max_ammo then
+				if vehicle.uvrepaircooldown then
+					UVRepairCooldown()
+					return
+				end
+				ptrefilled = true
+				v.Ammo = max_ammo
+			end
+		end
+	end
+
 	if vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
-		if vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
+		if !ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
 
 		if vehicle.uvrepaircooldown then
 			UVRepairCooldown()
@@ -68,7 +84,7 @@ function ENT:Repair(vehicle)
 		vehicle:VC_repairFull_Admin()
 	end
 	if vehicle.IsSimfphyscar then
-		if vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
+		if !ptrefilled and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
 
 		if vehicle.uvrepaircooldown then
 			UVRepairCooldown()
@@ -114,7 +130,7 @@ function ENT:Repair(vehicle)
 			end
 		end
 
-		if !repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
+		if !ptrefilled and !repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
 		vehicle:Repair()
 	end
 

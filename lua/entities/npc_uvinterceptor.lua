@@ -1446,6 +1446,23 @@ if SERVER then
 						if self.v.uvkillswitching then
 							UVKillSwitchCheck(self.v)
 						end
+					elseif v.Tech == 'Repair Kit' then
+						if self.v.IsGlideVehicle then
+							if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
+								UVDeployWeapon(self.v, k)
+								continue
+							end
+						elseif self.v.IsSimfphyscar then
+							if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
+								UVDeployWeapon(self.v, k)
+								continue
+							end
+						elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
+							if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+								UVDeployWeapon(self.v, k)
+								continue
+							end
+						end
 					end
 				end
 			end
@@ -1936,6 +1953,7 @@ if SERVER then
 		else
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
+				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
 				if v:IsVehicle() then
 					if v.IsScar then --If it's a SCAR.
 						if not v:HasDriver() then --If driver's seat is empty.

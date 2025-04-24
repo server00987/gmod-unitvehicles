@@ -278,8 +278,26 @@ if SERVER then
 		
 		--Pursuit Tech
 		for k, v in pairs(self.v.PursuitTech) do
-			if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' then
+			if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
 				UVDeployWeapon(self.v, k)
+			end
+			if v.Tech == "Repair Kit" then
+				if self.v.IsGlideVehicle then
+					if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+				elseif self.v.IsSimfphyscar then
+					if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+				elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
+					if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+				end
 			end
 		end
 

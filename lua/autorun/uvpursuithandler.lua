@@ -8,7 +8,7 @@ local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
-local PT_Replacement_Strings = {
+PT_Replacement_Strings = {
 	['ESF'] = 'ESF',
 	['Killswitch'] = 'KILLSW',
 	['Jammer'] = 'JAM',
@@ -16,6 +16,11 @@ local PT_Replacement_Strings = {
 	['Stunmine'] = 'MINE',
 	['Spikestrip'] = 'SPIKE',
 	['Repair Kit'] = 'REPAIR'
+}
+
+PT_Slots_Replacement_Strings = {
+	[1] = 'Right',
+	[2] = 'Left'
 }
 
 --Sound spam check--
@@ -292,6 +297,8 @@ if SERVER then
 	UVUPursuitTech_ESF = CreateConVar("unitvehicle_unit_pursuittech_esf", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	UVUPursuitTech_Spikestrip = CreateConVar("unitvehicle_unit_pursuittech_spikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
 	UVUPursuitTech_Killswitch = CreateConVar("unitvehicle_unit_pursuittech_killswitch", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
+	UVUPursuitTech_RepairKit = CreateConVar("unitvehicle_unit_pursuittech_repairkit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
+
 	
 	UVUHelicopterModel = CreateConVar("unitvehicle_unit_helicoptermodel", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback")
 	UVUHelicopterBarrels = CreateConVar("unitvehicle_unit_helicopterbarrels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Barrels\n0 = No Barrels")
@@ -1841,7 +1848,7 @@ else --HUD/Options
 	UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	UVUPursuitTech_Spikestrip = CreateClientConVar("unitvehicle_unit_pursuittech_spikestrip", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
 	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_killswitch", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
-	
+	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_repairkit", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
 	
 	UVUHelicopterModel = CreateClientConVar("unitvehicle_unit_helicoptermodel", 1, true, false, "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback")
 	UVUHelicopterBarrels = CreateClientConVar("unitvehicle_unit_helicopterbarrels", 1, true, false, "1 = Barrels\n0 = No Barrels")
@@ -2030,7 +2037,7 @@ else --HUD/Options
 
 		if convar then
 			convar:SetInt(key)
-			KeyBindButtons[slot]:SetText("Slot "..slot.." - "..string.upper(input.GetKeyName(key)))
+			KeyBindButtons[slot]:SetText("Slot "..(PT_Slots_Replacement_Strings[slot] or '?').." - "..string.upper(input.GetKeyName(key)))
 		end
 
 		IsSettingKeybind = false
@@ -3743,8 +3750,8 @@ else --HUD/Options
 			panel:Help("Keybinds")
 
 			KeyBindButtons = {}
-			KeyBindButtons[1] = panel:Button("Slot 1 - "..input.GetKeyName(UVPTKeybindSlot1:GetInt()), "uv_keybinds", '1')
-			KeyBindButtons[2] = panel:Button("Slot 2 - "..input.GetKeyName(UVPTKeybindSlot2:GetInt()), "uv_keybinds", '2')
+			KeyBindButtons[1] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[1] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
+			KeyBindButtons[2] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[2] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
 
 			panel:CheckBox("Racer Pursuit Tech", "unitvehicle_racerpursuittech")
 			panel:ControlHelp("Racers will spawn with Pursuit Tech.")

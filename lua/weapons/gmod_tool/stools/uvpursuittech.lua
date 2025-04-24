@@ -97,8 +97,8 @@ function TOOL:LeftClick( trace )
 
 			self:GetOwner():ChatPrint(
 				sel_v
-				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..slot..")"
-				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..slot..")"
+				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
+				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
 			)
 
 			local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
@@ -185,7 +185,7 @@ function TOOL:Reload()
 	if new_slot > slots then new_slot = 1 end
 
 	self:GetOwner():ConCommand("uvpursuittech_slot "..new_slot)
-	self:GetOwner():ChatPrint("Selected slot: "..new_slot)
+	self:GetOwner():ChatPrint("Selected slot: "..(PT_Slots_Replacement_Strings[new_slot] or new_slot))
 end
 
 if CLIENT then
@@ -495,7 +495,7 @@ if CLIENT then
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
 		draw.SimpleText( ptselected, "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( 'Slot: '..slot, "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( 'Slot: '..(PT_Slots_Replacement_Strings[slot] or slot), "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 
