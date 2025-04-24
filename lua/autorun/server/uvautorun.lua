@@ -2006,11 +2006,19 @@ function UVCheckIfBeingBusted(enemy)
 		enemy.uvbustingprogress = enemy.uvbustinglastprogress2 + (CurTime() - enemy.uvbustinglastprogress)
 		if enemy.uvbustingprogress >= (btimeout-1) and !enemy.nearbust then
 			enemy.nearbust = true
-			if enemy.PursuitTech == "Shockwave" then --SHOCKWAVE
-				if !enemy.shockwavecooldown then
-					UVAIRacerDeployWeapon(enemy)
+			if enemy.PursuitTech then
+				for k, v in pairs(enemy.PursuitTech) do
+					if v.Tech == 'Shockwave' then
+						UVDeployWeapon( enemy, k )
+					end
 				end
 			end
+			-- if enemy.PursuitTech == "Shockwave" then --SHOCKWAVE
+			-- 	if !enemy.shockwavecooldown then
+			-- 		UVAIRacerDeployWeapon(enemy)
+			-- 	end
+			-- end
+
 			if Chatter:GetBool() and IsValid(closestunit) and uvtargeting then
 				local randomno = math.random(1,2)
 				local airunits = ents.FindByClass("uvair")

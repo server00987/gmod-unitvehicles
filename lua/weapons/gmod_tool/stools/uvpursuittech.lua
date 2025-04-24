@@ -5,6 +5,7 @@ TOOL.ConfigName		=	""
 
 local pttable = {
 	--"EMP",
+	"Repair Kit",
 	"ESF",
 	"Jammer",
 	"Shockwave",
@@ -12,16 +13,14 @@ local pttable = {
 	"Stunmine",
 }
 
-local pursuit_tech_list = {
-	["EMP"] = {
-		""
-	},
-	["ESF"] = "Electromagnetic Field",
-	["Jammer"] = "Jammer",
-	["Shockwave"] = "Shockwave",
-	["Spikestrip"] = "Spike Strip",
-	["Stunmine"] = "Stun Mine",
-}
+-- local pursuit_tech_list = {
+-- 	["ESF"] = "Electromagnetic Field",
+-- 	["Repair Kit"] = "Electromagnetic Field",
+-- 	["Jammer"] = "Jammer",
+-- 	["Shockwave"] = "Shockwave",
+-- 	["Spikestrip"] = "Spike Strip",
+-- 	["Stunmine"] = "Stun Mine",
+-- }
 
 local slots = 2
 
@@ -29,6 +28,22 @@ TOOL.ClientConVar[ "pursuittech" ] = pttable[1]
 TOOL.ClientConVar[ "slot" ] = 1
 
 TOOL.ClientConVar["ptduration"] = 60
+
+-- ammo
+TOOL.ClientConVar['maxammo_esf'] = 5
+TOOL.ClientConVar['maxammo_jammer'] = 5
+TOOL.ClientConVar['maxammo_shockwave'] = 5
+TOOL.ClientConVar['maxammo_spikestrip'] = 5
+TOOL.ClientConVar['maxammo_stunmine'] = 5
+TOOL.ClientConVar['maxammo_repairkit'] = 5
+
+-- cooldowns
+TOOL.ClientConVar['cooldown_esf'] = 5
+TOOL.ClientConVar['cooldown_jammer'] = 5
+TOOL.ClientConVar['cooldown_shockwave'] = 5
+TOOL.ClientConVar['cooldown_spikestrip'] = 5
+TOOL.ClientConVar['cooldown_stunmine'] = 5
+TOOL.ClientConVar['cooldown_repairkit'] = 5
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 2000000
@@ -63,6 +78,7 @@ function TOOL:LeftClick( trace )
 
 		if ( !CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
+			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
 			local slot = self:GetClientNumber("slot") or 1
 			
 			if !car.PursuitTech then
@@ -85,10 +101,13 @@ function TOOL:LeftClick( trace )
 				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..slot..")"
 			)
 
+			local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
+			ammo_count = ammo_count > 0 and ammo_count or math.huge
+
 			car.PursuitTech[slot] = {
 				Tech = ptselected,
-				Ammo = GetConVar("unitvehicle_pursuittech_maxammo_"..string.lower(ptselected)):GetInt(),
-				Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..string.lower(ptselected)):GetInt(),
+				Ammo = ammo_count,
+				Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
 				LastUsed = 0,
 				Upgraded = false
 			}
@@ -200,6 +219,14 @@ if CLIENT then
 			RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetInt())
 
+			for _, v in pairs(pttable) do
+				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
+				convar_table['unitvehicle_pursuittech_maxammo_'..sanitized_pt] = GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt()
+				convar_table['unitvehicle_pursuittech_cooldown_'..sanitized_pt] = GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt()
+				RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
+				RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
+			end
+
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
@@ -263,6 +290,22 @@ if CLIENT then
 		esfpower:SetConVar("uvpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
 
+		local esfcooldown = vgui.Create("DNumSlider")
+		esfcooldown:SetMin(0)
+		esfcooldown:SetMax(120)
+		esfcooldown:SetDecimals(0)
+		esfcooldown:SetText("ESF Cooldown")
+		esfcooldown:SetConVar("uvpursuittech_cooldown_esf")
+		CPanel:AddItem(esfcooldown)
+
+		local esfammo = vgui.Create("DNumSlider")
+		esfammo:SetMin(0)
+		esfammo:SetMax(120)
+		esfammo:SetDecimals(0)
+		esfammo:SetText("ESF Ammo")
+		esfammo:SetConVar("uvpursuittech_maxammo_esf")
+		CPanel:AddItem(esfammo)
+
 		CPanel:AddControl("Label", {
 			Text = "——— Jammer ———",
 		})
@@ -278,6 +321,22 @@ if CLIENT then
 		jammerduration:SetText("Jammer Duration")
 		jammerduration:SetConVar("uvpursuittech_jammerduration")
 		CPanel:AddItem(jammerduration)
+
+		local jammercooldown = vgui.Create("DNumSlider")
+		jammercooldown:SetMin(0)
+		jammercooldown:SetMax(120)
+		jammercooldown:SetDecimals(0)
+		jammercooldown:SetText("Jammer Cooldown")
+		jammercooldown:SetConVar("uvpursuittech_cooldown_jammer")
+		CPanel:AddItem(jammercooldown)
+
+		local jammerammo = vgui.Create("DNumSlider")
+		jammerammo:SetMin(0)
+		jammerammo:SetMax(120)
+		jammerammo:SetDecimals(0)
+		jammerammo:SetText("Jammer Ammo")
+		jammerammo:SetConVar("uvpursuittech_maxammo_jammer")
+		CPanel:AddItem(jammerammo)
 
 		CPanel:AddControl("Label", {
 			Text = "——— Shockwave ———",
@@ -295,6 +354,22 @@ if CLIENT then
 		shockwavepower:SetConVar("uvpursuittech_shockwavepower")
 		CPanel:AddItem(shockwavepower)
 
+		local shockwavecooldown = vgui.Create("DNumSlider")
+		shockwavecooldown:SetMin(0)
+		shockwavecooldown:SetMax(120)
+		shockwavecooldown:SetDecimals(0)
+		shockwavecooldown:SetText("Shockwave Cooldown")
+		shockwavecooldown:SetConVar("uvpursuittech_cooldown_shockwave")
+		CPanel:AddItem(shockwavecooldown)
+
+		local shockwaveammo = vgui.Create("DNumSlider")
+		shockwaveammo:SetMin(0)
+		shockwaveammo:SetMax(120)
+		shockwaveammo:SetDecimals(0)
+		shockwaveammo:SetText("Shockwave Ammo")
+		shockwaveammo:SetConVar("uvpursuittech_maxammo_shockwave")
+		CPanel:AddItem(shockwaveammo)
+
 		CPanel:AddControl("Label", {
 			Text = "——— Spikes Strips ———",
 		})
@@ -310,6 +385,22 @@ if CLIENT then
 		spikestripduration:SetText("Spike Strip Duration")
 		spikestripduration:SetConVar("uvpursuittech_spikestripduration")
 		CPanel:AddItem(spikestripduration)
+
+		local spikestripcooldown = vgui.Create("DNumSlider")
+		spikestripcooldown:SetMin(0)
+		spikestripcooldown:SetMax(120)
+		spikestripcooldown:SetDecimals(0)
+		spikestripcooldown:SetText("Spike Strip Cooldown")
+		spikestripcooldown:SetConVar("uvpursuittech_cooldown_spikestrip")
+		CPanel:AddItem(spikestripcooldown)
+
+		local spikestripammo = vgui.Create("DNumSlider")
+		spikestripammo:SetMin(0)
+		spikestripammo:SetMax(120)
+		spikestripammo:SetDecimals(0)
+		spikestripammo:SetText("Spike Strip Ammo")
+		spikestripammo:SetConVar("uvpursuittech_maxammo_spikestrip")
+		CPanel:AddItem(spikestripammo)
 
 		CPanel:AddControl("Label", {
 			Text = "——— Stun Mine ———",
@@ -327,6 +418,46 @@ if CLIENT then
 		stunminepower:SetConVar("uvpursuittech_stunminepower")
 		CPanel:AddItem(stunminepower)
 
+		local stunminecooldown = vgui.Create("DNumSlider")
+		stunminecooldown:SetMin(0)
+		stunminecooldown:SetMax(120)
+		stunminecooldown:SetDecimals(0)
+		stunminecooldown:SetText("Stun Mine Cooldown")
+		stunminecooldown:SetConVar("uvpursuittech_cooldown_stunmine")
+		CPanel:AddItem(stunminecooldown)
+
+		local stunmineammo = vgui.Create("DNumSlider")
+		stunmineammo:SetMin(0)
+		stunmineammo:SetMax(120)
+		stunmineammo:SetDecimals(0)
+		stunmineammo:SetText("Stun Mine Ammo")
+		stunmineammo:SetConVar("uvpursuittech_maxammo_stunmine")
+		CPanel:AddItem(stunmineammo)
+		
+
+		CPanel:AddControl("Label", {
+			Text = "——— Repair Kit ———",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "- Repair Kit deploys an onboard repair system that activates a rapid field-fix for your vehicle. Designed with emergency response and tactical mobility in mind, the Auto-Repair Module restores your vehicle’s structural integrity using built-in self-sealing components and reinforced hydraulic systems.",
+		})
+
+		local repairkitcooldown = vgui.Create("DNumSlider")
+		repairkitcooldown:SetMin(0)
+		repairkitcooldown:SetMax(120)
+		repairkitcooldown:SetDecimals(0)
+		repairkitcooldown:SetText("Repair Kit Cooldown")
+		repairkitcooldown:SetConVar("uvpursuittech_cooldown_repairkit")
+		CPanel:AddItem(repairkitcooldown)
+
+		local repairkitammo = vgui.Create("DNumSlider")
+		repairkitammo:SetMin(0)
+		repairkitammo:SetMax(120)
+		repairkitammo:SetDecimals(0)
+		repairkitammo:SetText("Repair Kit Ammo")
+		repairkitammo:SetConVar("uvpursuittech_maxammo_repairkit")
+		CPanel:AddItem(repairkitammo)
 	end
 	
 	local toolicon = Material( "hud/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )

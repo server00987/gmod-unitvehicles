@@ -7,6 +7,7 @@ local pttable = {
 	"ESF",
 	"Spikestrip",
 	"Killswitch",
+	"Repair Kit"
 }
 
 local slots = 2
@@ -15,6 +16,18 @@ TOOL.ClientConVar[ "pursuittech" ] = pttable[1]
 TOOL.ClientConVar[ "slot" ] = 1
 
 TOOL.ClientConVar["ptduration"] = 20
+
+--ammo
+TOOL.ClientConVar["maxammo_esf"] = 5
+TOOL.ClientConVar["maxammo_spikestrip"] = 5
+TOOL.ClientConVar["maxammo_killswitch"] = 5
+TOOL.ClientConVar["maxammo_repairkit"] = 5
+
+--cooldowns
+TOOL.ClientConVar["cooldown_esf"] = 5
+TOOL.ClientConVar["cooldown_spikestrip"] = 5
+TOOL.ClientConVar["cooldown_killswitch"] = 5
+TOOL.ClientConVar["cooldown_repairkit"] = 5
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 2000000
@@ -48,6 +61,7 @@ function TOOL:LeftClick( trace )
 
 		if ( !CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
+			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
 			local slot = self:GetClientNumber("slot") or 1
 			
 			if !car.PursuitTech then
@@ -69,11 +83,14 @@ function TOOL:LeftClick( trace )
 				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..slot..")"
 				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..slot..")"
 			)
+			
+			local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+			ammo_count = ammo_count > 0 and ammo_count or math.huge
 
 			car.PursuitTech[slot] = {
 				Tech = ptselected,
-				Ammo = GetConVar("unitvehicle_unitpursuittech_maxammo_"..string.lower(ptselected)):GetInt(),
-				Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..string.lower(ptselected)):GetInt(),
+				Ammo = ammo_count,
+				Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
 				LastUsed = 0,
 				Upgraded = false
 			}
@@ -181,6 +198,14 @@ if CLIENT then
 			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetInt())
 
+			for _, v in pairs(pttable) do
+				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
+				convar_table['unitvehicle_unitpursuittech_maxammo_'..sanitized_pt] = GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt()
+				convar_table['unitvehicle_unitpursuittech_cooldown_'..sanitized_pt] = GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt()
+				RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
+				RunConsoleCommand("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
+			end
+
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
@@ -244,6 +269,24 @@ if CLIENT then
 		esfpower:SetConVar("uvunitpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
 
+		local esfcooldown = vgui.Create("DNumSlider")
+		esfcooldown:SetMin(0)
+		esfcooldown:SetMax(120)
+		esfcooldown:SetDecimals(0)
+		esfcooldown:SetText("ESF Cooldown")
+		esfcooldown:SetTooltip("Cooldown time before the ESF can be used again.")
+		esfcooldown:SetConVar("uvunitpursuittech_cooldown_esf")
+		CPanel:AddItem(esfcooldown)
+
+		local esfammo = vgui.Create("DNumSlider")
+		esfammo:SetMin(0)
+		esfammo:SetMax(120)
+		esfammo:SetDecimals(0)
+		esfammo:SetText("ESF Ammo")
+		esfammo:SetTooltip("Number of times the ESF can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		esfammo:SetConVar("uvunitpursuittech_maxammo_esf")
+		CPanel:AddItem(esfammo)
+
 		CPanel:AddControl("Label", {
 			Text = "——— Spikes Strips ———",
 		})
@@ -259,6 +302,24 @@ if CLIENT then
 		spikestripduration:SetText("Spike Strip Duration")
 		spikestripduration:SetConVar("uvunitpursuittech_spikestripduration")
 		CPanel:AddItem(spikestripduration)
+
+		local spikestripcooldown = vgui.Create("DNumSlider")
+		spikestripcooldown:SetMin(0)
+		spikestripcooldown:SetMax(120)
+		spikestripcooldown:SetDecimals(0)
+		spikestripcooldown:SetText("Spike Strip Cooldown")
+		spikestripcooldown:SetTooltip("Cooldown time before the Spike Strip can be used again.")
+		spikestripcooldown:SetConVar("uvunitpursuittech_cooldown_spikestrip")
+		CPanel:AddItem(spikestripcooldown)
+
+		local spikestripammo = vgui.Create("DNumSlider")
+		spikestripammo:SetMin(0)
+		spikestripammo:SetMax(120)
+		spikestripammo:SetDecimals(0)
+		spikestripammo:SetText("Spike Strip Ammo")
+		spikestripammo:SetTooltip("Number of times the Spike Strip can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		spikestripammo:SetConVar("uvunitpursuittech_maxammo_spikestrip")
+		CPanel:AddItem(spikestripammo)
 
 		CPanel:AddControl("Label", {
 			Text = "——— Killswitch ———",
@@ -283,6 +344,50 @@ if CLIENT then
 		killswitchdisableduration:SetText("KS Disable Duration")
 		killswitchdisableduration:SetConVar("uvunitpursuittech_killswitchdisableduration")
 		CPanel:AddItem(killswitchdisableduration)
+
+		local killswitchcooldown = vgui.Create("DNumSlider")
+		killswitchcooldown:SetMin(0)
+		killswitchcooldown:SetMax(120)
+		killswitchcooldown:SetDecimals(0)
+		killswitchcooldown:SetText("KS Cooldown")
+		killswitchcooldown:SetTooltip("Cooldown time before the Killswitch can be used again.")
+		killswitchcooldown:SetConVar("uvunitpursuittech_cooldown_killswitch")
+		CPanel:AddItem(killswitchcooldown)
+
+		local killswitchammo = vgui.Create("DNumSlider")
+		killswitchammo:SetMin(0)
+		killswitchammo:SetMax(120)
+		killswitchammo:SetDecimals(0)
+		killswitchammo:SetText("KS Ammo")
+		killswitchammo:SetTooltip("Number of times the Killswitch can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		killswitchammo:SetConVar("uvunitpursuittech_maxammo_killswitch")
+		CPanel:AddItem(killswitchammo)
+
+		CPanel:AddControl("Header", {
+			Description = "——— Repair Kit ———",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "- Repair Kit deploys an onboard repair system that activates a rapid field-fix for your vehicle. Designed with emergency response and tactical mobility in mind, the Auto-Repair Module restores your vehicle’s structural integrity using built-in self-sealing components and reinforced hydraulic systems.",
+		})
+
+		local repairkitcooldown = vgui.Create("DNumSlider")
+		repairkitcooldown:SetMin(0)
+		repairkitcooldown:SetMax(120)
+		repairkitcooldown:SetDecimals(0)
+		repairkitcooldown:SetText("Repair Kit Cooldown")
+		repairkitcooldown:SetTooltip("Cooldown time before the Repair Kit can be used again.")
+		repairkitcooldown:SetConVar("uvunitpursuittech_cooldown_repairkit")
+		CPanel:AddItem(repairkitcooldown)
+
+		local repairkitammo = vgui.Create("DNumSlider")
+		repairkitammo:SetMin(0)
+		repairkitammo:SetMax(120)
+		repairkitammo:SetDecimals(0)
+		repairkitammo:SetText("Repair Kit Ammo")
+		repairkitammo:SetTooltip("Number of times the Repair Kit can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		repairkitammo:SetConVar("uvunitpursuittech_maxammo_repairkit")
+		CPanel:AddItem(repairkitammo)
 
 	end
 	

@@ -164,13 +164,13 @@ end
 
 --(Player, boolean)
 function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderrespawn, posspecified, angles, disperse)
-
+	
 	if !ply then
 		ply = Entity(1)
 	end
-
+	
 	local uvnextclasstospawn
-
+	
 	local enemylocation
 	local suspect = ply
 	if next(uvwantedtablevehicle) ~= nil then
@@ -181,9 +181,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	else
 		enemylocation = (suspect:GetPos()+Vector(0,0,50))
 	end
-
+	
 	local suspectvelocity = suspect:GetVelocity()
-
+	
 	if next(dvd.Waypoints) == nil then
 		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
 		return
@@ -240,7 +240,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			uvspawnpointangles = Angle(0,math.random(0,360),0)
 		end
 	end
-
+	
 	if uvtargeting then
 		if !rhinoattack then
 			local mathangle = math.random(1,2)
@@ -251,14 +251,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			uvspawnpointangles = suspect:GetVelocity():Angle()
 		end
 	end
-
+	
 	if posspecified then
 		uvspawnpoint = posspecified
 	end
 	if angles then
 		uvspawnpointangles = angles
 	end
-
+	
 	if helicopter then
 		local modeltable = {
 			"models/nfs_mwpolhel/nfs_mwpolhel.mdl",
@@ -267,7 +267,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
 			"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
 		}
-
+		
 		local heli = ents.Create("uvair")
 		heli.Model = modeltable[math.random(#modeltable)]
 		heli:SetPos(uvspawnpoint +Vector(0,0,1000))
@@ -276,9 +276,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		heli:SetTarget(suspect)
 		return
 	end
-
+	
 	local vehiclebase = UVUVehicleBase:GetInt()
-
+	
 	--FIND UNITS
 	local givenunitstable
 	local givenclasses = {
@@ -289,16 +289,16 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		"npc_uvspecial",
 		"npc_uvcommander",
 	}
-
+	
 	local availableunitstable = {}
 	local availableclasses = {}
-
+	
 	if uvheatlevel < 1 then
 		uvheatlevel = 1
 	elseif uvheatlevel > 6 then
 		uvheatlevel = 6
 	end
-
+	
 	local appliedunits
 	if rhinoattack then
 		if uvheatlevel == 1 then
@@ -479,56 +479,56 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			uvnextclasstospawn = availableclasses[randomclassunit]
 		end
 	end
-
+	
 	if !isstring(appliedunits) then
 		PrintMessage( HUD_PRINTTALK, "There's currently no assigned Units to spawn. Use the Unit Manager tool to assign Units at that particular Heat Level!")
 		return
 	end
-
+	
 	local availableunits = {}
 	local availableunit
 	local UNITMEMORY = {}
-
+	
 	if vehiclebase == 3 then --Glide
 		local saved_vehicles = file.Find("unitvehicles/glide/units/*.json", "DATA")
-
+		
 		for k, v in pairs(saved_vehicles) do
 			local match = string.find( appliedunits, v )
 			if match then
 				table.insert(availableunits, v)
 			end
 		end
-	
+		
 		if next(availableunits) == nil then
 			if !string.match(appliedunits, "^%s*$") then
 				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Unit that is NOT in the database. Unit name(s) to cross-check: "..appliedunits)
 			end
 			return
 		end
-	
+		
 		availableunit = availableunits[math.random(1, #availableunits)]
-
+		
 		if commanderrespawn then
 			availableunit = commanderrespawn
 			uvnextclasstospawn = "npc_uvcommander"
 		end
-	
+		
 		local JSONData = file.Read( "unitvehicles/glide/units/"..availableunit, "DATA" )
 		
 		UVTOOLMemory = util.JSONToTable(JSONData, true)
-
+		
 		local pos = uvspawnpoint+Vector( 0, 0, 50 )
-    	local ang = uvspawnpointangles
-
+		local ang = uvspawnpointangles
+		
 		duplicator.SetLocalPos( pos )
 		duplicator.SetLocalAng( ang )
-
+		
 		local Ents = duplicator.Paste( ply, UVTOOLMemory.Entities, UVTOOLMemory.Constraints )
 		local Ent = Ents[next(Ents)]
-
+		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
-
+		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 		if rhinoattack then
 			Ent.uvclasstospawnon = "npc_uvspecial"
@@ -536,8 +536,10 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then
 			
 			if UVUPursuitTech:GetBool() then
-				local pool = {}
+				Ent.PursuitTech = {}
 
+				local pool = {}
+				
 				if UVUPursuitTech_ESF:GetBool() then
 					table.insert(pool, "ESF")
 				end
@@ -547,12 +549,39 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
-
-				Ent.PursuitTech = (#pool > 0 and pool[math.random(1, #pool)]) or nil
+				if UVUPursuitTech_RepairKit:GetBool() then
+					table.insert(pool, "Repair Kit")
+				end
+				
+				for i=1,2,1 do
+					if #pool > 0 then
+						local selected_pt = pool[math.random(1, #pool)]
+						local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+						
+						local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+						ammo_count = ammo_count > 0 and ammo_count or math.huge
+						
+						Ent.PursuitTech[i] = {
+							Tech = selected_pt,
+							Ammo = ammo_count,
+							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
+							LastUsed = 0,
+							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
+						}
+	
+						for i, v in pairs(pool) do
+							if v == selected_pt then
+								table.remove(pool, i)
+							end
+						end
+					end
+				end
+				--Ent.PursuitTech = (#pool > 0 and pool[math.random(1, #pool)]) or nil
 			end
-			if Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander" then
-				Ent.uvupgraded = true
-			end
+			
+			-- if Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander" then
+			-- 	Ent.uvupgraded = true
+			-- end
 		end
 		
 		if Ent.uvclasstospawnon == "npc_uvcommander" and UVUOneCommander:GetInt() == 1 then
@@ -562,20 +591,20 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			Ent.uvlasthealth = uvcommanderlasthealth
 			Ent.uvlastenginehealth = uvcommanderlastenginehealth
 		end
-
+		
 		Ent:CallOnRemove( "UVGlideVehicleRemoved", function(car)
 			if table.HasValue(uvcommanders, car) then
 				table.RemoveByValue(uvcommanders, car)
 			end
 		end)
-
+		
 		if posspecified then
 			Ent.roadblocking = true
 		end
 		if disperse then
 			Ent.disperse = true
 		end
-
+		
 		if playercontrolled then
 			timer.Simple(0.5, function()
 				Ent.UnitVehicle = ply
@@ -586,34 +615,34 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		else
 			table.insert(uvsimfphysvehicleinitializing, Ent)
 		end
-
+		
 	elseif vehiclebase == 2 then --simfphys
-	
+		
 		local saved_vehicles = file.Find("unitvehicles/simfphys/units/*.txt", "DATA")
-
+		
 		for k, v in pairs(saved_vehicles) do
 			local match = string.find( appliedunits, v )
 			if match then
 				table.insert(availableunits, v)
 			end
 		end
-	
+		
 		if next(availableunits) == nil then
 			if !string.match(appliedunits, "^%s*$") then
 				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Unit that is NOT in the database. Unit name(s) to cross-check: "..appliedunits)
 			end
 			return
 		end
-	
+		
 		availableunit = availableunits[math.random(1, #availableunits)]
-
+		
 		if commanderrespawn then
 			availableunit = commanderrespawn
 			uvnextclasstospawn = "npc_uvcommander"
 		end
-	
+		
 		local DataString = file.Read( "unitvehicles/simfphys/units/"..availableunit, "DATA" )
-					
+		
 		local words = string.Explode( "", DataString )
 		local shit = {}
 		
@@ -622,7 +651,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		end
 		
 		local Data = string.Explode( "#", string.Implode("",shit) )
-			
+		
 		for _,v in pairs(Data) do
 			local Var = string.Explode( "=", v )
 			local name = Var[1]
@@ -641,11 +670,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				end
 			end
 		end
-
+		
 		if not istable(UNITMEMORY) then return end
-
+		
 		local Ent
-	
+		
 		local vname = UNITMEMORY.SpawnName
 		local VehicleList = list.Get( "simfphys_vehicles" )
 		local vehicle = VehicleList[ vname ]
@@ -663,90 +692,90 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
-
+		
 		if not IsValid( Ent ) then return end
-
+		
 		timer.Simple( 0.5, function()
 			if not IsValid(Ent) then return end
-
+			
 			local tsc = string.Explode( ",", UNITMEMORY.TireSmokeColor )
 			Ent:SetTireSmokeColor( Vector( tonumber(tsc[1]), tonumber(tsc[2]), tonumber(tsc[3]) ) )
-
+			
 			Ent.Turbocharged = tobool( UNITMEMORY.HasTurbo )
 			Ent.Supercharged = tobool( UNITMEMORY.HasBlower )
-
+			
 			Ent:SetEngineSoundPreset( math.Clamp( tonumber( UNITMEMORY.SoundPreset ), -1, 23) )
 			Ent:SetMaxTorque( math.Clamp( tonumber( UNITMEMORY.PeakTorque ), 20, 1000) )
 			Ent:SetDifferentialGear( math.Clamp( tonumber( UNITMEMORY.FinalGear ),0.2, 6 ) )
-
+			
 			Ent:SetSteerSpeed( math.Clamp( tonumber( UNITMEMORY.SteerSpeed ), 1, 16 ) )
 			Ent:SetFastSteerAngle( math.Clamp( tonumber( UNITMEMORY.SteerAngFast ), 0, 1) )
 			Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( UNITMEMORY.SteerFadeSpeed ), 1, 5000 ) )
-
+			
 			Ent:SetEfficiency( math.Clamp( tonumber( UNITMEMORY.Efficiency ) ,0.2,4) )
 			Ent:SetMaxTraction( math.Clamp( tonumber( UNITMEMORY.MaxTraction ) , 5,1000) )
 			Ent:SetTractionBias( math.Clamp( tonumber( UNITMEMORY.GripOffset ),-0.99,0.99) )
 			Ent:SetPowerDistribution( math.Clamp( tonumber( UNITMEMORY.PowerDistribution ) ,-1,1) )
-
+			
 			Ent:SetBackFire( tobool( UNITMEMORY.HasBackfire ) )
 			Ent:SetDoNotStall( tobool( UNITMEMORY.DoesntStall ) )
-
+			
 			Ent:SetIdleRPM( math.Clamp( tonumber( UNITMEMORY.IdleRPM ),1,25000) )
 			Ent:SetLimitRPM( math.Clamp( tonumber( UNITMEMORY.MaxRPM ),4,25000) )
 			Ent:SetRevlimiter( tobool( UNITMEMORY.HasRevLimiter ) )
 			Ent:SetPowerBandEnd( math.Clamp( tonumber( UNITMEMORY.PowerEnd ), 3, 25000) )
 			Ent:SetPowerBandStart( math.Clamp( tonumber( UNITMEMORY.PowerStart ) ,2 ,25000) )
-
+			
 			Ent:SetTurboCharged( Ent.Turbocharged )
 			Ent:SetSuperCharged( Ent.Supercharged )
 			Ent:SetBrakePower( math.Clamp( tonumber( UNITMEMORY.BrakePower ), 0.1, 500) )
-
+			
 			Ent:SetSoundoverride( UNITMEMORY.SoundOverride or "" )
-
+			
 			Ent:SetLights_List( Ent.LightsTable or "no_lights" )
-
+			
 			Ent:SetBulletProofTires(true)
-
+			
 			Ent.snd_horn = UNITMEMORY.HornSound
-
+			
 			Ent.snd_blowoff = UNITMEMORY.snd_blowoff
 			Ent.snd_spool = UNITMEMORY.snd_spool
 			Ent.snd_bloweron = UNITMEMORY.snd_bloweron
 			Ent.snd_bloweroff = UNITMEMORY.snd_bloweroff
-
+			
 			Ent:SetBackfireSound( UNITMEMORY.backfiresound or "" )
-
+			
 			local Gears = {}
 			local Data = string.Explode( ",", UNITMEMORY.Gears  )
 			for i = 1, table.Count( Data ) do 
 				local gRatio = tonumber( Data[i] )
-
+				
 				if isnumber( gRatio ) then
 					if i == 1 then
 						Gears[i] = math.Clamp( gRatio, -5, -0.001)
-
+						
 					elseif i == 2 then
 						Gears[i] = 0
-
+						
 					else
 						Gears[i] = math.Clamp( gRatio, 0.001, 5)
 					end
 				end
 			end
 			Ent.Gears = Gears
-
+			
 			if istable( UNITMEMORY.SubMaterials ) then
 				for i = 0, table.Count( UNITMEMORY.SubMaterials ) do
 					Ent:SetSubMaterial( i, UNITMEMORY.SubMaterials[i] )
 				end
 			end
-
+			
 			if UNITMEMORY.FrontDampingOverride and UNITMEMORY.FrontConstantOverride and UNITMEMORY.RearDampingOverride and UNITMEMORY.RearConstantOverride then
 				Ent.FrontDampingOverride = tonumber( UNITMEMORY.FrontDampingOverride )
 				Ent.FrontConstantOverride = tonumber( UNITMEMORY.FrontConstantOverride )
 				Ent.RearDampingOverride = tonumber( UNITMEMORY.RearDampingOverride )
 				Ent.RearConstantOverride = tonumber( UNITMEMORY.RearConstantOverride )
-
+				
 				local data = {
 					[1] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
 					[2] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
@@ -755,7 +784,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 					[5] = {Ent.RearConstantOverride,Ent.RearDampingOverride},
 					[6] = {Ent.RearConstantOverride,Ent.RearDampingOverride}
 				}
-
+				
 				local elastics = Ent.Elastics
 				if elastics then
 					for i = 1, table.Count( elastics ) do
@@ -779,49 +808,49 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 					end
 				end
 			end
-		
+			
 			Ent:SetFrontSuspensionHeight( tonumber( UNITMEMORY.FrontHeight ) )
 			Ent:SetRearSuspensionHeight( tonumber( UNITMEMORY.RearHeight ) )
-
+			
 			local groups = string.Explode( ",", UNITMEMORY.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
-
+			
 			Ent:SetSkin( UNITMEMORY.Skin )
-
+			
 			local c = string.Explode( ",", UNITMEMORY.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-
+			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 			Ent:SetColor( Color )
-
+			
 			local data = {
 				Color = Color,
 				RenderMode = 0,
 				RenderFX = 0
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
-
+			
 			if Ent.CustomWheels then
 				if Ent.GhostWheels then
 					if not IsValid( Ent ) then return end
 					if UNITMEMORY.WheelTool_Foffset and UNITMEMORY.WheelTool_Roffset then
 						SetWheelOffset( Ent, UNITMEMORY.WheelTool_Foffset, UNITMEMORY.WheelTool_Roffset )
 					end
-
+					
 					if not UNITMEMORY.FrontWheelOverride and not UNITMEMORY.RearWheelOverride then return end
-
+					
 					local front_model = UNITMEMORY.FrontWheelOverride or vehicle.Members.CustomWheelModel
 					local front_angle = GetAngleFromSpawnlist(front_model)
-
+					
 					local camber = UNITMEMORY.Camber or 0
 					local rear_model = UNITMEMORY.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
 					local rear_angle = GetAngleFromSpawnlist(rear_model)
-
+					
 					if not front_model or not rear_model or not front_angle or not rear_angle then return end
-
+					
 					if ValidateModel( front_model ) and ValidateModel( rear_model ) then 
 						Ent.Camber = camber
 						ApplyWheel(Ent, {front_model,front_angle,rear_model,rear_angle,camber})
@@ -831,17 +860,17 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				end
 			end
 		end)
-
-
+		
+		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 		if rhinoattack then
 			Ent.uvclasstospawnon = "npc_uvspecial"
 			Ent.rhino = true
 		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then
-
+			
 			if UVUPursuitTech:GetBool() then
 				local pool = {}
-
+				
 				if UVUPursuitTech_ESF:GetBool() then
 					table.insert(pool, "ESF")
 				end
@@ -851,7 +880,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
-
+				
 				Ent.PursuitTech = (#pool > 0 and pool[math.random(1, #pool)]) or nil
 			end
 			if Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander" then
@@ -865,7 +894,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			Ent.unitscript = availableunit
 			Ent.uvlasthealth = uvcommanderlasthealth
 		end
-
+		
 		if playercontrolled then
 			timer.Simple(0.5, function()
 				Ent.UnitVehicle = ply
@@ -876,7 +905,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		else
 			table.insert(uvsimfphysvehicleinitializing, Ent)
 		end
-
+		
 		Ent:CallOnRemove( "UVSimfphysVehicleRemoved", function(car)
 			if table.HasValue(uvsimfphysvehicleinitializing, car) then
 				table.RemoveByValue(uvsimfphysvehicleinitializing, car)
@@ -891,28 +920,28 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				Ent:Remove()
 			end
 		end)
-
+		
 		if posspecified then
 			Ent.roadblocking = true
 		end
 		if disperse then
 			Ent.disperse = true
 		end
-
+		
 	elseif vehiclebase == 1 then --Default Vehicle Base
-
+		
 		if !class then
 			PrintMessage( HUD_PRINTTALK, "Please set the Vehicle Base to simfphys or Glide in the Unit Manager Tool settings!")
 			return
 		end
-
+		
 		local vehicles = list.Get("Vehicles")
 		local lst = vehicles[class]
 		if !lst then
 			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
 			return
 		end
-
+		
 		car = ents.Create("prop_vehicle_jeep")
 		car.VehicleTable = lst
 		car:SetModel(lst.Model) 
@@ -924,24 +953,24 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		car:Activate()
 		local vehicle = car
 		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
-
+		
 		if rhinoattack then
 			car.rhino = true
 		end
-
+		
 		uv = ents.Create(uvnextclasstospawn) 
 		uv:SetPos(car:GetPos())
 		uv.uvscripted = true
 		uv.vehicle = car
 		uv:Spawn()
 		uv:Activate()
-
+		
 		timer.Simple(1, function() 
 			if IsValid(car) and !IsValid(uv) then
 				car:Remove()
 			end
 		end)
-
+		
 		if posspecified then
 			car.roadblocking = true
 		end
@@ -952,21 +981,21 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
 		RunConsoleCommand("unitvehicle_unit_vehiclebase", 1)
 	end
-
+	
 end
 
 function UVAutoSpawnRacer(ply)
-
+	
 	if !ply then
 		ply = Entity(1)
 	end
-
+	
 	local uvnextclasstospawn
-
+	
 	local enemylocation
 	local suspect = ply
 	enemylocation = (suspect:GetPos()+Vector(0,0,50))
-
+	
 	if next(dvd.Waypoints) == nil then
 		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
 		return
@@ -997,19 +1026,19 @@ function UVAutoSpawnRacer(ply)
 			uvspawnpointangles = Angle(0,math.random(0,360),0)
 		end
 	end
-
+	
 	local vehiclebase = 2
-
+	
 	if vehiclebase == 3 then --Glide
 		local pos = uvspawnpoint+Vector( 0, 0, 50 )
-    	local ang = uvspawnpointangles
-
-    	local Ent = Glide.VehicleFactory( ply, {
-    	    Pos = pos,
-    	    Angle = ang,
-    	    Class = "gtav_police_cruiser",
-    	} )
-
+		local ang = uvspawnpointangles
+		
+		local Ent = Glide.VehicleFactory( ply, {
+			Pos = pos,
+			Angle = ang,
+			Class = "gtav_police_cruiser",
+		} )
+		
 		timer.Simple(0.5, function() 
 			if IsValid(Ent) then
 				local uv = ents.Create("npc_uvpatrol") 
@@ -1023,17 +1052,17 @@ function UVAutoSpawnRacer(ply)
 			end
 		end)
 	elseif vehiclebase == 2 then --simfphys
-
+		
 		local RACERMEMORY = {}
 		local racertable = file.Find("saved_vehicles/*.txt", "DATA")
-
+		
 		if !racertable then
 			PrintMessage( HUD_PRINTTALK, "There's no saved vehicles on the simfphys duplicator to spawn!")
 			return
 		end
-	
+		
 		local DataString = file.Read( "saved_vehicles/"..racertable[math.random(#racertable)], "DATA" )
-					
+		
 		local words = string.Explode( "", DataString )
 		local shit = {}
 		
@@ -1042,7 +1071,7 @@ function UVAutoSpawnRacer(ply)
 		end
 		
 		local Data = string.Explode( "#", string.Implode("",shit) )
-			
+		
 		for _,v in pairs(Data) do
 			local Var = string.Explode( "=", v )
 			local name = Var[1]
@@ -1061,11 +1090,11 @@ function UVAutoSpawnRacer(ply)
 				end
 			end
 		end
-
+		
 		if not istable(RACERMEMORY) then return end
-
+		
 		local Ent
-	
+		
 		local vname = RACERMEMORY.SpawnName
 		local VehicleList = list.Get( "simfphys_vehicles" )
 		local vehicle = VehicleList[ vname ]
@@ -1083,90 +1112,90 @@ function UVAutoSpawnRacer(ply)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
-
+		
 		if not IsValid( Ent ) then return end
-
+		
 		timer.Simple( 0.5, function()
 			if not IsValid(Ent) then return end
-
+			
 			local tsc = string.Explode( ",", RACERMEMORY.TireSmokeColor )
 			Ent:SetTireSmokeColor( Vector( tonumber(tsc[1]), tonumber(tsc[2]), tonumber(tsc[3]) ) )
-
+			
 			Ent.Turbocharged = tobool( RACERMEMORY.HasTurbo )
 			Ent.Supercharged = tobool( RACERMEMORY.HasBlower )
-
+			
 			Ent:SetEngineSoundPreset( math.Clamp( tonumber( RACERMEMORY.SoundPreset ), -1, 23) )
 			Ent:SetMaxTorque( math.Clamp( tonumber( RACERMEMORY.PeakTorque ), 20, 1000) )
 			Ent:SetDifferentialGear( math.Clamp( tonumber( RACERMEMORY.FinalGear ),0.2, 6 ) )
-
+			
 			Ent:SetSteerSpeed( math.Clamp( tonumber( RACERMEMORY.SteerSpeed ), 1, 16 ) )
 			Ent:SetFastSteerAngle( math.Clamp( tonumber( RACERMEMORY.SteerAngFast ), 0, 1) )
 			Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( RACERMEMORY.SteerFadeSpeed ), 1, 5000 ) )
-
+			
 			Ent:SetEfficiency( math.Clamp( tonumber( RACERMEMORY.Efficiency ) ,0.2,4) )
 			Ent:SetMaxTraction( math.Clamp( tonumber( RACERMEMORY.MaxTraction ) , 5,1000) )
 			Ent:SetTractionBias( math.Clamp( tonumber( RACERMEMORY.GripOffset ),-0.99,0.99) )
 			Ent:SetPowerDistribution( math.Clamp( tonumber( RACERMEMORY.PowerDistribution ) ,-1,1) )
-
+			
 			Ent:SetBackFire( tobool( RACERMEMORY.HasBackfire ) )
 			Ent:SetDoNotStall( tobool( RACERMEMORY.DoesntStall ) )
-
+			
 			Ent:SetIdleRPM( math.Clamp( tonumber( RACERMEMORY.IdleRPM ),1,25000) )
 			Ent:SetLimitRPM( math.Clamp( tonumber( RACERMEMORY.MaxRPM ),4,25000) )
 			Ent:SetRevlimiter( tobool( RACERMEMORY.HasRevLimiter ) )
 			Ent:SetPowerBandEnd( math.Clamp( tonumber( RACERMEMORY.PowerEnd ), 3, 25000) )
 			Ent:SetPowerBandStart( math.Clamp( tonumber( RACERMEMORY.PowerStart ) ,2 ,25000) )
-
+			
 			Ent:SetTurboCharged( Ent.Turbocharged )
 			Ent:SetSuperCharged( Ent.Supercharged )
 			Ent:SetBrakePower( math.Clamp( tonumber( RACERMEMORY.BrakePower ), 0.1, 500) )
-
+			
 			Ent:SetSoundoverride( RACERMEMORY.SoundOverride or "" )
-
+			
 			Ent:SetLights_List( Ent.LightsTable or "no_lights" )
-
+			
 			Ent:SetBulletProofTires(true)
-
+			
 			Ent.snd_horn = RACERMEMORY.HornSound
-
+			
 			Ent.snd_blowoff = RACERMEMORY.snd_blowoff
 			Ent.snd_spool = RACERMEMORY.snd_spool
 			Ent.snd_bloweron = RACERMEMORY.snd_bloweron
 			Ent.snd_bloweroff = RACERMEMORY.snd_bloweroff
-
+			
 			Ent:SetBackfireSound( RACERMEMORY.backfiresound or "" )
-
+			
 			local Gears = {}
 			local Data = string.Explode( ",", RACERMEMORY.Gears  )
 			for i = 1, table.Count( Data ) do 
 				local gRatio = tonumber( Data[i] )
-
+				
 				if isnumber( gRatio ) then
 					if i == 1 then
 						Gears[i] = math.Clamp( gRatio, -5, -0.001)
-
+						
 					elseif i == 2 then
 						Gears[i] = 0
-
+						
 					else
 						Gears[i] = math.Clamp( gRatio, 0.001, 5)
 					end
 				end
 			end
 			Ent.Gears = Gears
-
+			
 			if istable( RACERMEMORY.SubMaterials ) then
 				for i = 0, table.Count( RACERMEMORY.SubMaterials ) do
 					Ent:SetSubMaterial( i, RACERMEMORY.SubMaterials[i] )
 				end
 			end
-
+			
 			if RACERMEMORY.FrontDampingOverride and RACERMEMORY.FrontConstantOverride and RACERMEMORY.RearDampingOverride and RACERMEMORY.RearConstantOverride then
 				Ent.FrontDampingOverride = tonumber( RACERMEMORY.FrontDampingOverride )
 				Ent.FrontConstantOverride = tonumber( RACERMEMORY.FrontConstantOverride )
 				Ent.RearDampingOverride = tonumber( RACERMEMORY.RearDampingOverride )
 				Ent.RearConstantOverride = tonumber( RACERMEMORY.RearConstantOverride )
-
+				
 				local data = {
 					[1] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
 					[2] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
@@ -1175,7 +1204,7 @@ function UVAutoSpawnRacer(ply)
 					[5] = {Ent.RearConstantOverride,Ent.RearDampingOverride},
 					[6] = {Ent.RearConstantOverride,Ent.RearDampingOverride}
 				}
-
+				
 				local elastics = Ent.Elastics
 				if elastics then
 					for i = 1, table.Count( elastics ) do
@@ -1199,49 +1228,49 @@ function UVAutoSpawnRacer(ply)
 					end
 				end
 			end
-		
+			
 			Ent:SetFrontSuspensionHeight( tonumber( RACERMEMORY.FrontHeight ) )
 			Ent:SetRearSuspensionHeight( tonumber( RACERMEMORY.RearHeight ) )
-
+			
 			local groups = string.Explode( ",", RACERMEMORY.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
-
+			
 			Ent:SetSkin( RACERMEMORY.Skin )
-
+			
 			local c = string.Explode( ",", RACERMEMORY.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-
+			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 			Ent:SetColor( Color )
-
+			
 			local data = {
 				Color = Color,
 				RenderMode = 0,
 				RenderFX = 0
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
-
+			
 			if Ent.CustomWheels then
 				if Ent.GhostWheels then
 					if not IsValid( Ent ) then return end
 					if RACERMEMORY.WheelTool_Foffset and RACERMEMORY.WheelTool_Roffset then
 						SetWheelOffset( Ent, RACERMEMORY.WheelTool_Foffset, RACERMEMORY.WheelTool_Roffset )
 					end
-
+					
 					if not RACERMEMORY.FrontWheelOverride and not RACERMEMORY.RearWheelOverride then return end
-
+					
 					local front_model = RACERMEMORY.FrontWheelOverride or vehicle.Members.CustomWheelModel
 					local front_angle = GetAngleFromSpawnlist(front_model)
-
+					
 					local camber = RACERMEMORY.Camber or 0
 					local rear_model = RACERMEMORY.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
 					local rear_angle = GetAngleFromSpawnlist(rear_model)
-
+					
 					if not front_model or not rear_model or not front_angle or not rear_angle then return end
-
+					
 					if ValidateModel( front_model ) and ValidateModel( rear_model ) then 
 						Ent.Camber = camber
 						ApplyWheel(Ent, {front_model,front_angle,rear_model,rear_angle,camber})
@@ -1251,12 +1280,12 @@ function UVAutoSpawnRacer(ply)
 				end
 			end
 		end)
-
-
+		
+		
 		Ent.uvclasstospawnon = "npc_racervehicle"
-
+		
 		table.insert(uvsimfphysvehicleinitializing, Ent)
-
+		
 		Ent:CallOnRemove( "UVSimfphysVehicleRemoved", function(car)
 			if table.HasValue(uvsimfphysvehicleinitializing, car) then
 				table.RemoveByValue(uvsimfphysvehicleinitializing, car)
@@ -1273,21 +1302,21 @@ function UVAutoSpawnRacer(ply)
 				UVAddToWantedListVehicle(Ent)
 			end
 		end)
-
+		
 	elseif vehiclebase == 1 then --Default Vehicle Base
-
+		
 		if !class then
 			PrintMessage( HUD_PRINTTALK, "Please set the Vehicle Base to simfphys or Glide in the Unit Manager Tool settings!")
 			return
 		end
-
+		
 		local vehicles = list.Get("Vehicles")
 		local lst = vehicles[class]
 		if !lst then
 			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
 			return
 		end
-
+		
 		car = ents.Create("prop_vehicle_jeep")
 		car.VehicleTable = lst
 		car:SetModel(lst.Model) 
@@ -1299,24 +1328,24 @@ function UVAutoSpawnRacer(ply)
 		car:Activate()
 		local vehicle = car
 		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
-
+		
 		if rhinoattack then
 			car.rhino = true
 		end
-
+		
 		uv = ents.Create(uvnextclasstospawn) 
 		uv:SetPos(car:GetPos())
 		uv.uvscripted = true
 		uv.vehicle = car
 		uv:Spawn()
 		uv:Activate()
-
+		
 		timer.Simple(1, function() 
 			if IsValid(car) and !IsValid(uv) then
 				car:Remove()
 			end
 		end)
-
+		
 		if posspecified then
 			car.roadblocking = true
 		end
