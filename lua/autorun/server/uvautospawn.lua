@@ -537,7 +537,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			
 			if UVUPursuitTech:GetBool() then
 				Ent.PursuitTech = {}
-
+				
 				local pool = {}
 				
 				if UVUPursuitTech_ESF:GetBool() then
@@ -568,7 +568,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 							LastUsed = 0,
 							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
 						}
-	
+						
 						for i, v in pairs(pool) do
 							if v == selected_pt then
 								table.remove(pool, i)
@@ -869,6 +869,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then
 			
 			if UVUPursuitTech:GetBool() then
+				Ent.PursuitTech = {}
+				
 				local pool = {}
 				
 				if UVUPursuitTech_ESF:GetBool() then
@@ -880,11 +882,33 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
+				if UVUPursuitTech_RepairKit:GetBool() then
+					table.insert(pool, "Repair Kit")
+				end
 				
-				Ent.PursuitTech = (#pool > 0 and pool[math.random(1, #pool)]) or nil
-			end
-			if Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander" then
-				Ent.uvupgraded = true
+				for i=1,2,1 do
+					if #pool > 0 then
+						local selected_pt = pool[math.random(1, #pool)]
+						local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+						
+						local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+						ammo_count = ammo_count > 0 and ammo_count or math.huge
+						
+						Ent.PursuitTech[i] = {
+							Tech = selected_pt,
+							Ammo = ammo_count,
+							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
+							LastUsed = 0,
+							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
+						}
+						
+						for i, v in pairs(pool) do
+							if v == selected_pt then
+								table.remove(pool, i)
+							end
+						end
+					end
+				end
 			end
 		end
 		

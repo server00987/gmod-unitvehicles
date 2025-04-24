@@ -31,6 +31,7 @@ TOOL.ClientConVar["cooldown_repairkit"] = 5
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["spikestripduration"] = 60
 TOOL.ClientConVar["killswitchlockontime"] = 3
 TOOL.ClientConVar["killswitchdisableduration"] = 2.5
@@ -187,6 +188,7 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_ptduration'] = GetConVar("uvunitpursuittech_ptduration"):GetInt()
 			convar_table['unitvehicle_unitpursuittech_esfduration'] = GetConVar("uvunitpursuittech_esfduration"):GetInt()
 			convar_table['unitvehicle_unitpursuittech_esfpower'] = GetConVar("uvunitpursuittech_esfpower"):GetInt()
+			convar_table['unitvehicle_unitpursuittech_esfdamage'] = GetConVar("uvunitpursuittech_esfdamage"):GetInt()
 			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetInt()
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetInt()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetInt()
@@ -194,13 +196,13 @@ if CLIENT then
 			RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetInt())
+			RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetInt())
 			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetInt())
 
 			for _, v in pairs(pttable) do
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
-				print('unitvehicle_unitpursuittech_maxammo_'..sanitized_pt)
 				convar_table['unitvehicle_unitpursuittech_maxammo_'..sanitized_pt] = GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt()
 				convar_table['unitvehicle_unitpursuittech_cooldown_'..sanitized_pt] = GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt()
 				RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt())
@@ -225,18 +227,6 @@ if CLIENT then
 			},
 			CVars = table.GetKeys(conVarsDefault)
 		})
-
-		CPanel:AddControl("Label", {
-			Text = "/// Only ONE Pursuit Tech can be equipped to a single vehicle at any point! ///\n/// Special and Commander Units have UPGRADED Pursuit Tech! ///\n",
-		})
-
-		local ptduration = vgui.Create("DNumSlider")
-		ptduration:SetMin(1)
-		ptduration:SetMax(100)
-		ptduration:SetDecimals(0)
-		ptduration:SetText("PT Cooldown Duration")
-		ptduration:SetConVar("uvunitpursuittech_ptduration")
-		CPanel:AddItem(ptduration)
 
 		--[[CPanel:AddControl("Label", {
 			Text = "——— EMP ———",
@@ -269,6 +259,15 @@ if CLIENT then
 		esfpower:SetText("ESF Power")
 		esfpower:SetConVar("uvunitpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
+
+		local esfdamage = vgui.Create("DNumSlider")
+		esfdamage:SetMin(0)
+		esfdamage:SetMax(1)
+		esfdamage:SetDecimals(1)
+		esfdamage:SetText("ESF Damage")
+		esfdamage:SetTooltip("Damage dealt (1 = Full damage, 0 = No damage)")
+		esfdamage:SetConVar("uvunitpursuittech_esfdamage")
+		CPanel:AddItem(esfdamage)
 
 		local esfcooldown = vgui.Create("DNumSlider")
 		esfcooldown:SetMin(0)

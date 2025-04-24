@@ -47,10 +47,13 @@ TOOL.ClientConVar['cooldown_repairkit'] = 5
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["jammerduration"] = 10
 TOOL.ClientConVar["shockwavepower"] = 2000000
+TOOL.ClientConVar["shockwavedamage"] = 0.1
 TOOL.ClientConVar["spikestripduration"] = 60
 TOOL.ClientConVar["stunminepower"] = 2000000
+TOOL.ClientConVar["stunminedamage"] = 0.1
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -206,18 +209,25 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_ptduration'] = GetConVar("uvpursuittech_ptduration"):GetInt()
 			convar_table['unitvehicle_pursuittech_esfduration'] = GetConVar("uvpursuittech_esfduration"):GetInt()
 			convar_table['unitvehicle_pursuittech_esfpower'] = GetConVar("uvpursuittech_esfpower"):GetInt()
+			convar_table['unitvehicle_pursuittech_esfdamage'] = GetConVar("uvpursuittech_esfdamage"):GetInt()
 			convar_table['unitvehicle_pursuittech_jammerduration'] = GetConVar("uvpursuittech_jammerduration"):GetInt()
 			convar_table['unitvehicle_pursuittech_shockwavepower'] = GetConVar("uvpursuittech_shockwavepower"):GetInt()
+			convar_table['unitvehicle_pursuittech_shockwavedamage'] = GetConVar("uvpursuittech_shockwavedamage"):GetInt()
 			convar_table['unitvehicle_pursuittech_spikestripduration'] = GetConVar("uvpursuittech_spikestripduration"):GetInt()
 			convar_table['unitvehicle_pursuittech_stunminepower'] = GetConVar("uvpursuittech_stunminepower"):GetInt()
+			convar_table['unitvehicle_pursuittech_stunminedamage'] = GetConVar("uvpursuittech_stunminedamage"):GetInt()
 
 			RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetInt())
+			RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetInt())
+			RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetInt())
 			RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetInt())
+			RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetInt())
+			
 
 			for _, v in pairs(pttable) do
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
@@ -245,18 +255,6 @@ if CLIENT then
 			},
 			CVars = table.GetKeys(conVarsDefault)
 		})
-
-		CPanel:AddControl("Label", {
-			Text = "/// Only ONE Pursuit Tech can be equipped to a single vehicle at any point! ///\n",
-		})
-
-		local ptduration = vgui.Create("DNumSlider")
-		ptduration:SetMin(1)
-		ptduration:SetMax(100)
-		ptduration:SetDecimals(0)
-		ptduration:SetText("PT Cooldown Duration")
-		ptduration:SetConVar("uvpursuittech_ptduration")
-		CPanel:AddItem(ptduration)
 
 		--[[CPanel:AddControl("Label", {
 			Text = "——— EMP ———",
@@ -289,6 +287,15 @@ if CLIENT then
 		esfpower:SetText("ESF Power")
 		esfpower:SetConVar("uvpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
+
+		local esfdamage = vgui.Create("DNumSlider")
+		esfdamage:SetMin(0)
+		esfdamage:SetMax(1)
+		esfdamage:SetDecimals(1)
+		esfdamage:SetText("ESF Damage")
+		esfdamage:SetConVar("uvpursuittech_esfdamage")
+		esfdamage:SetTooltip("Damage dealt (1 = Full damage)")
+		CPanel:AddItem(esfdamage)
 
 		local esfcooldown = vgui.Create("DNumSlider")
 		esfcooldown:SetMin(0)
@@ -374,6 +381,15 @@ if CLIENT then
 		shockwavepower:SetConVar("uvpursuittech_shockwavepower")
 		CPanel:AddItem(shockwavepower)
 
+		local shockwavedamage = vgui.Create("DNumSlider")
+		shockwavedamage:SetMin(0)
+		shockwavedamage:SetMax(1)
+		shockwavedamage:SetDecimals(1)
+		shockwavedamage:SetText("Shockwave Damage")
+		shockwavedamage:SetTooltip("Damage dealt (1 = Full damage)")
+		shockwavedamage:SetConVar("uvpursuittech_shockwavedamage")
+		CPanel:AddItem(shockwavedamage)
+
 		local shockwavecooldown = vgui.Create("DNumSlider")
 		shockwavecooldown:SetMin(0)
 		shockwavecooldown:SetMax(120)
@@ -437,6 +453,15 @@ if CLIENT then
 		stunminepower:SetText("Stun Mine Power")
 		stunminepower:SetConVar("uvpursuittech_stunminepower")
 		CPanel:AddItem(stunminepower)
+
+		local stunminedamage = vgui.Create("DNumSlider")
+		stunminedamage:SetMin(0)
+		stunminedamage:SetMax(1)
+		stunminedamage:SetDecimals(1)
+		stunminedamage:SetText("Stun Mine Damage")
+		stunminedamage:SetTooltip("Damage dealt (1 = Full damage)")
+		stunminedamage:SetConVar("uvpursuittech_stunminedamage")
+		CPanel:AddItem(stunminedamage)
 
 		local stunminecooldown = vgui.Create("DNumSlider")
 		stunminecooldown:SetMin(0)

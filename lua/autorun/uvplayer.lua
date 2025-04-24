@@ -1029,6 +1029,7 @@ if SERVER then
                 local vectordifference = object:WorldSpaceCenter() - carpos
                 local angle = vectordifference:Angle()
                 local power = UVPTShockwavePower:GetInt()
+                local damage = UVPTShockwaveDamage:GetInt()
                 local force = power * (1 - (vectordifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 object.rammed = true
@@ -1043,12 +1044,12 @@ if SERVER then
                     if object.IsSimfphyscar then
                         if object.UnitVehicle or object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool() then
                             local MaxHealth = object:GetMaxHealth()
-                            local damage = MaxHealth*0.4
+                            local damage = MaxHealth*damage
                             object:ApplyDamage( damage, DMG_GENERIC )
                         end
                     elseif object.IsGlideVehicle then
                         if object.UnitVehicle or object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool() then
-                            object:SetEngineHealth( object:GetEngineHealth() - 0.4 )
+                            object:SetEngineHealth( object:GetEngineHealth() - damage )
                             object:UpdateHealthOutputs()
                         end
                     elseif object:GetClass() == "prop_vehicle_jeep" then

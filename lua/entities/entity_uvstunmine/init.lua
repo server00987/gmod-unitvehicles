@@ -105,6 +105,7 @@ function ENT:UVStunmineHit()
             local vectordifference = object:WorldSpaceCenter() - entpos
             local angle = vectordifference:Angle()
 			local power = UVPTStunMinePower:GetInt()
+			local damage = UVPTStunMineDamage:GetInt()
             local force = power * (1 - (vectordifference:Length()/1000))
             objectphys:ApplyForceCenter(angle:Forward()*force)
             object.rammed = true
@@ -119,12 +120,12 @@ function ENT:UVStunmineHit()
                 if object.IsSimfphyscar then
 					if object.UnitVehicle or object.UVWanted and !AutoHealth:GetBool() then
                         local MaxHealth = object:GetMaxHealth()
-                        local damage = MaxHealth*0.4
+                        local damage = MaxHealth*damage
                         object:ApplyDamage( damage, DMG_GENERIC )
                     end
                 elseif object.IsGlideVehicle then
 					if object.UnitVehicle or object.UVWanted and !AutoHealth:GetBool() then
-						object:SetEngineHealth( object:GetEngineHealth() - 0.4 )
+						object:SetEngineHealth( object:GetEngineHealth() - damage )
 						object:UpdateHealthOutputs()
 					end
                 elseif object:GetClass() == "prop_vehicle_jeep" then
