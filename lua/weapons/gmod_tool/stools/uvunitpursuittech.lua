@@ -287,6 +287,16 @@ if CLIENT then
 		esfammo:SetConVar("uvunitpursuittech_maxammo_esf")
 		CPanel:AddItem(esfammo)
 
+		esfduration.OnValueChanged = function(self, value)
+			local cooldown_value = GetConVar("uvunitpursuittech_cooldown_esf"):GetInt()
+
+			if value > cooldown_value then
+				esfcooldown:SetValue(value)
+			end
+
+			esfcooldown:SetMin(value)
+		end
+
 		CPanel:AddControl("Label", {
 			Text = "——— Spikes Strips ———",
 		})
@@ -320,6 +330,17 @@ if CLIENT then
 		spikestripammo:SetTooltip("Number of times the Spike Strip can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
 		spikestripammo:SetConVar("uvunitpursuittech_maxammo_spikestrip")
 		CPanel:AddItem(spikestripammo)
+
+		-- spikestripduration.OnValueChanged = function(self, value)
+		-- 	local cooldown_value = GetConVar("uvunitpursuittech_cooldown_spikestrip"):GetInt()
+
+		-- 	if value > cooldown_value then
+		-- 		spikestripcooldown:SetValue(value)
+		-- 	end
+
+		-- 	spikestripcooldown:SetMin(value)
+		-- 	spikestripcooldown:SetMax(120)
+		-- end
 
 		CPanel:AddControl("Label", {
 			Text = "——— Killswitch ———",
@@ -362,6 +383,16 @@ if CLIENT then
 		killswitchammo:SetTooltip("Number of times the Killswitch can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
 		killswitchammo:SetConVar("uvunitpursuittech_maxammo_killswitch")
 		CPanel:AddItem(killswitchammo)
+
+		killswitchlockontime.OnValueChanged = function(self, value)
+			local cooldown_value = GetConVar("uvunitpursuittech_cooldown_killswitch"):GetInt()
+
+			if value > cooldown_value then
+				killswitchcooldown:SetValue(value)
+			end
+
+			killswitchcooldown:SetMin(value)
+		end
 
 		CPanel:AddControl("Header", {
 			Description = "——— Repair Kit ———",

@@ -306,6 +306,16 @@ if CLIENT then
 		esfammo:SetConVar("uvpursuittech_maxammo_esf")
 		CPanel:AddItem(esfammo)
 
+		esfduration.OnValueChanged = function(self, value)
+			local cooldown_value = GetConVar("uvpursuittech_cooldown_esf"):GetInt()
+
+			if value > cooldown_value then
+				esfcooldown:SetValue(value)
+			end
+
+			esfcooldown:SetMin(value)
+		end
+
 		CPanel:AddControl("Label", {
 			Text = "——— Jammer ———",
 		})
@@ -337,6 +347,16 @@ if CLIENT then
 		jammerammo:SetText("Jammer Ammo")
 		jammerammo:SetConVar("uvpursuittech_maxammo_jammer")
 		CPanel:AddItem(jammerammo)
+
+		jammerduration.OnValueChanged = function(self, value)
+			local cooldown_value = GetConVar("uvpursuittech_cooldown_jammer"):GetInt()
+
+			if value > cooldown_value then
+				jammercooldown:SetValue(value)
+			end
+
+			jammercooldown:SetMin(value)
+		end
 
 		CPanel:AddControl("Label", {
 			Text = "——— Shockwave ———",

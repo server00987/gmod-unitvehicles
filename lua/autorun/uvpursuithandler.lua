@@ -1777,11 +1777,21 @@ if SERVER then
 else --HUD/Options
 	--local PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "nfsmostwanted", false, false, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
 	local displaying_busted = false 
-	
+	local IsSettingKeybind = false
+	-- hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
+	-- 	print("PlayerButtonDown", driver, key)
+	-- end )
 	-- surface.SetFont( "Default" )
 	-- surface.SetTextColor( 255, 255, 255 )
 	-- surface.SetTextPos( 128, 128 ) 
 	-- surface.DrawText( "Hello World" )
+
+	-- hook.Add("PlayerButtonDown", "UVDeployWeapon", function( driver, key )
+    --     if CLIENT and not IsFirstTimePredicted() then
+    --        return
+    --     end
+    --     print(key)
+    -- end)
 	
 	hook.Add('HUDPaint', 'Hi', function()
 		if displaying_busted then
@@ -1950,6 +1960,15 @@ else --HUD/Options
 	UVUCooldownTimer6 = CreateClientConVar("unitvehicle_unit_cooldowntimer6", 20, true, false)
 	UVURoadblocks6 = CreateClientConVar("unitvehicle_unit_roadblocks6", 0, true, false)
 	UVUHelicopters6 = CreateClientConVar("unitvehicle_unit_helicopters6", 0, true, false)
+
+	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
+	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
+
+	-- for i, v in pairs({UVPTKeybindSlot1, UVPTKeybindSlot2}) do
+	-- 	cvars.AddChangeCallback(v:GetName(), function( convar, old, new )
+	-- 		KeyBindButtons[tonumber(slot)]:SetText("Slot "..i.." - "..string.upper(input.GetKeyName(GetConVar("unitvehicle_pursuittech_keybindslot_"..slot):GetInt())))
+	-- 	end)
+	-- end
 	
 	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
 	UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
@@ -2002,6 +2021,20 @@ else --HUD/Options
 		["unitvehicle_racerpursuittech"] = 'integer',
 		['unitvehicle_spawncooldown'] = 'integer'
 	}
+
+	net.Receive('UVGetNewKeybind', function()
+		--if IsSettingKeybind then return end
+		local slot = net.ReadInt(9)
+		local key = net.ReadInt(9)
+		local convar = GetConVar("unitvehicle_pursuittech_keybindslot_"..slot)
+
+		if convar then
+			convar:SetInt(key)
+			KeyBindButtons[slot]:SetText("Slot "..slot.." - "..string.upper(input.GetKeyName(key)))
+		end
+
+		IsSettingKeybind = false
+	end)
 	
 	net.Receive('UVGetSettings_Local', function()
 		local array = net.ReadTable()
@@ -2011,7 +2044,9 @@ else --HUD/Options
 			if not valid then continue end
 			RunConsoleCommand(key, value)
 		end
-	end)	
+	end)
+
+	
 	
 	-- net.Start("UVGetSettings")
 	-- net.SendToServer()
@@ -2061,6 +2096,62 @@ else --HUD/Options
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
+
+	concommand.Add("uv_keybinds", function( ply, cmd, slot )
+		if IsSettingKeybind then
+			notification.AddLegacy( "You are already setting a keybind!", NOTIFY_ERROR, 5 )
+			return
+		end
+
+		local slot = slot[1]
+
+		-- local df = vgui.Create( "DFrame" )	-- The name of the panel, we don't have to parent it
+		-- df:Center()				-- Set the position to 100x by 100y 
+		-- df:SetSize( 200, 100 )				-- Set the size to 300x by 200y
+		-- df:SetTitle( "Keybind" )		-- Set the title in the top left to 'Derma Frame'
+		-- df:SetContentAlignment( 5 )			-- Set the content alignment to the center
+		-- df:SetFocusTopLevel(true)
+		-- df:MakePopup()						-- Make the frame take user's input
+		-- df:SetKeyboardInputEnabled ( false )
+		-- df:SetMouseInputEnabled( false )		-- Make the frame take mouse input
+		-- df:SetDeleteOnClose( false )
+
+		-- -- Center DLabel
+		-- local Panel = vgui.Create( "DLabel", df )	-- Create a panel inside the frame
+		-- Panel:Dock(FILL)				-- Set the position to 100x by 100y
+		-- Panel:SetSize( 200, 100 )				-- Set the size to 300x by 200y
+		-- Panel:SetPos( 0, 0 )				-- Set the position to 100x by 100y
+		-- Panel:SetTextColor( Color( 255, 255, 255) )	-- Set the text color to white
+		-- Panel:SetContentAlignment(5)
+		-- --Panel:MouseCapture( )
+
+		-- df.OnClose = function()
+		-- 	if IsSettingKeybind == slot then
+		-- 		cvars.RemoveChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot)
+		-- 		IsSettingKeybind = nil
+		-- 	end
+		-- end
+
+		--Panel:SetText('Current key: '..input.GetKeyName(GetConVar('unitvehicle_pursuittech_keybindslot_'..slot):GetInt())..'\nPress a key to bind to slot ' .. slot)
+		-- timer.Create("UVKeybindTimer", 0.1, 1, function()
+		-- 	print('hi')
+		-- 	IsSettingKeybind = slot
+		-- end)
+		net.Start("UVPTKeybindRequest")
+		net.WriteInt(slot, 3)
+		net.SendToServer()
+
+		IsSettingKeybind = slot
+
+		KeyBindButtons[tonumber(slot)]:SetText('PRESS A KEY NOW!')
+
+		-- cvars.AddChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot, function( convar, old, new )
+		-- 	if IsSettingKeybind == slot then
+		-- 		cvars.RemoveChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot)
+		-- 		KeyBindButtons[tonumber(slot)]:SetText("Slot 1 - "..input.GetKeyName(GetConVar("unitvehicle_pursuittech_keybindslot_"..slot):GetInt()))
+		-- 	end
+		-- end)
+	end)
 	
 	concommand.Add("uv_local_update_settings", function( ply )
 		if !ply:IsSuperAdmin() then
@@ -2631,6 +2722,8 @@ else --HUD/Options
 	outofpursuit = 0
 	
 	hook.Add( "HUDPaint", "UVHUD", function() --HUD
+
+		--print(LocalPlayer():KeyPressed(30))
 		
 		local w = ScrW()
 		local h = ScrH()
@@ -3022,7 +3115,14 @@ else --HUD/Options
 				-- end
 				for i=1, 2, 1 do
 					if UVHUDPursuitTech[i] then
+						local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
 						
+						if input.IsKeyDown(var) then
+							net.Start("UVPTUse")
+							net.WriteInt(i, 3)
+							net.SendToServer()
+						end
+
 						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
 							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
 							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
@@ -3634,6 +3734,18 @@ else --HUD/Options
 			panel:ControlHelp("Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
 			panel:CheckBox("Racer Tags", "unitvehicle_racertags")
 			panel:ControlHelp("Racers will have their own tags which you can see as a cop during pursuits.")
+			
+			panel:Help("——— Pursuit Tech ———")
+			panel:ControlHelp("Set your Pursuit Tech slot keybinds here.")
+			
+			-- put slots in a row
+			--local dpanel = panel:ControlPanel("uv_keybinds")
+			panel:Help("Keybinds")
+
+			KeyBindButtons = {}
+			KeyBindButtons[1] = panel:Button("Slot 1 - "..input.GetKeyName(UVPTKeybindSlot1:GetInt()), "uv_keybinds", '1')
+			KeyBindButtons[2] = panel:Button("Slot 2 - "..input.GetKeyName(UVPTKeybindSlot2:GetInt()), "uv_keybinds", '2')
+
 			panel:CheckBox("Racer Pursuit Tech", "unitvehicle_racerpursuittech")
 			panel:ControlHelp("Racers will spawn with Pursuit Tech.")
 			
@@ -3683,6 +3795,15 @@ else --HUD/Options
 			panel:Button( "Show Wanted Table (in console)", "uv_wantedtable")
 			
 		end)
+
+		-- spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVKeybinds", "Keybinds", "", "", function(panel)
+			
+		-- 	local Button1 = vgui.Create("DButton")
+		-- 	local Button2 = vgui.Create("DButton")
+			
+		-- 	-- make them in line]
+
+		-- end)
 	end)
 	
 end
