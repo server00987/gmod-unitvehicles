@@ -8,6 +8,15 @@ local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
+local PT_Replacement_Strings = {
+	['ESF'] = 'ESF',
+	['Killswitch'] = 'KILLSW',
+	['Jammer'] = 'JAM',
+	['Shockwave'] = 'SHWAV',
+	['Stunmine'] = 'MINE',
+	['Spikestrip'] = 'SPIKE',
+}
+
 --Sound spam check--
 
 function UVDelaySound()
@@ -414,6 +423,12 @@ if SERVER then
 	UVPTShockwaveMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
 	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
 	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+
+	UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTShockwaveCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
 	
 	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -425,6 +440,10 @@ if SERVER then
 	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
 	UVUnitPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
 	UVUnitPTKillSwitchMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+
+	UVUnitPTESFCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+	UVUnitPTSpikeStripCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+	UVUnitPTKillSwitchCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
 	
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPBCooldown = CreateConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -2435,16 +2454,17 @@ else --HUD/Options
 	net.Receive("UVHUDPursuitTech", function()
 		-- local PursuitTech = net.ReadString()
 		-- local Status = net.ReadString()
+		local PursuitTable = net.ReadTable()
 
-		for i, v in pairs(net.ReadTable()) do
-			if type(v) == "table" then
-				-- UVHUDPursuitTech = v[1]
-				-- UVHUDPursuitTechName = v[2]
-				-- UVHUDPursuitTechStatus = v[3]
-				print(v.Tech, v.Ammo)
-			end
-		end
-		-- UVHUDPursuitTech = true
+		-- for i, v in pairs(net.ReadTable()) do
+		-- 	if type(v) == "table" then
+		-- 		-- UVHUDPursuitTech = v[1]
+		-- 		-- UVHUDPursuitTechName = v[2]
+		-- 		-- UVHUDPursuitTechStatus = v[3]
+		-- 		print(v.Tech, v.Ammo)
+		-- 	end
+		-- end
+		UVHUDPursuitTech = PursuitTable
 		-- UVHUDPursuitTechName = PursuitTech
 		-- UVHUDPursuitTechStatus = Status
 	end)
@@ -2993,28 +3013,45 @@ else --HUD/Options
 		end
 		if UVHUDPursuitTech then
 			if !uvclientjammed then
-				local timeout
-				if UVHUDCopMode then
-					timeout = UVUnitPTDuration:GetInt()
-				else
-					timeout = UVPTPTDuration:GetInt()
-				end
-				local status = UVHUDPursuitTechStatus
-				if status == "Reloading" then
-					if !UVHUDPursuitTechReloading then
-						UVHUDPursuitTechReloading = CurTime()
-					elseif CurTime() - UVHUDPursuitTechReloading >= timeout then
-						status = "Ready"
-						UVHUDPursuitTechReloading = nil
+				-- for i, v in pairs(UVHUDPursuitTech) do
+				-- 	draw.DrawText( v.Tech.."\n"..v.Ammo, "UVFont4",w/1.3+((i -1)*.3), h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+				-- end
+				for i=1, 2, 1 do
+					if UVHUDPursuitTech[i] then
+						
+						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
+							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
+						else
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
+						end
+						--draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+					else
+						draw.DrawText( "-", "UVFont4",w/(1.3+((i -1)*.1)), h-56, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
 					end
-					if UVHUDPursuitTechReloading then
-						status = math.Round((CurTime()-(UVHUDPursuitTechReloading+timeout))*-1)
-					end
-					draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
-				else
-					UVHUDPursuitTechReloading = nil
-					draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 				end
+				-- local timeout
+				-- if UVHUDCopMode then
+				-- 	timeout = UVUnitPTDuration:GetInt()
+				-- else
+				-- 	timeout = UVPTPTDuration:GetInt()
+				-- end
+				-- local status = UVHUDPursuitTechStatus
+				-- if status == "Reloading" then
+				-- 	if !UVHUDPursuitTechReloading then
+				-- 		UVHUDPursuitTechReloading = CurTime()
+				-- 	elseif CurTime() - UVHUDPursuitTechReloading >= timeout then
+				-- 		status = "Ready"
+				-- 		UVHUDPursuitTechReloading = nil
+				-- 	end
+				-- 	if UVHUDPursuitTechReloading then
+				-- 		status = math.Round((CurTime()-(UVHUDPursuitTechReloading+timeout))*-1)
+				-- 	end
+				-- 	draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
+				-- else
+				-- 	UVHUDPursuitTechReloading = nil
+				-- 	draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+				-- end
 			else
 				draw.DrawText( "JAMMED", "UVFont4",w/1.3, h-56, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 			end

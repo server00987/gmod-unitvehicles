@@ -74,6 +74,7 @@ function TOOL:LeftClick( trace )
 			for k,v in pairs(car.PursuitTech) do
 				if v.Tech == ptselected then
 					sel_k, sel_v = k, v
+					car.PursuitTech[k] = nil
 					break
 				end
 			end
@@ -87,6 +88,8 @@ function TOOL:LeftClick( trace )
 			car.PursuitTech[slot] = {
 				Tech = ptselected,
 				Ammo = GetConVar("unitvehicle_pursuittech_maxammo_"..string.lower(ptselected)):GetInt(),
+				Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..string.lower(ptselected)):GetInt(),
+				LastUsed = 0,
 				Upgraded = false
 			}
 
