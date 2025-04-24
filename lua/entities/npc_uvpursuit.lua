@@ -1383,8 +1383,6 @@ if SERVER then
 		
 		if self.v.PursuitTech then
 			for i, v in pairs(self.v.PursuitTech) do
-				if v.Ammo <= 0 then continue end
-				
 				if v.Tech == 'Spikestrip' then
 					if uvcalm or uvenemyescaping then
 						self.deploying = CurTime() 
