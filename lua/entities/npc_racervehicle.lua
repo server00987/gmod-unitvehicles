@@ -466,7 +466,7 @@ if SERVER then
 					Tech = selected_pt,
 					Ammo = ammo_count,
 					Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
-					LastUsed = 0,
+					LastUsed = -math.huge,
 					Upgraded = false
 				}
 			end

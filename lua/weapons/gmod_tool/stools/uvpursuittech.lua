@@ -111,7 +111,7 @@ function TOOL:LeftClick( trace )
 				Tech = ptselected,
 				Ammo = ammo_count,
 				Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
-				LastUsed = 0,
+				LastUsed = -math.huge,
 				Upgraded = false
 			}
 

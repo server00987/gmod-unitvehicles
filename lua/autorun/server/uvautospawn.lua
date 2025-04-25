@@ -565,7 +565,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 							Tech = selected_pt,
 							Ammo = ammo_count,
 							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
-							LastUsed = 0,
+							LastUsed = -math.huge,
 							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
 						}
 						
@@ -898,7 +898,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 							Tech = selected_pt,
 							Ammo = ammo_count,
 							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
-							LastUsed = 0,
+							LastUsed = -math.huge,
 							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
 						}
 						
