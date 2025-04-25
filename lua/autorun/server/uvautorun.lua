@@ -2036,7 +2036,6 @@ function UVCheckIfBeingBusted(enemy)
 		end
 
 		if enemy.PursuitTech and !(enemy:GetDriver() and enemy:GetDriver():IsPlayer()) and enemy.randomptuse < enemy.uvbustingprogress then
-			print('hey')
 			for k, v in pairs(enemy.PursuitTech) do
 				if v.Tech == 'Shockwave' then
 					UVDeployWeapon( enemy, k )
