@@ -504,7 +504,14 @@ end
 
 function ENT:SetHorn(on)
 	if on == self:GetHorn() then return end
-	if self.v.IsScar then
+	if self.v.IsGlideVehicle then
+		if !self.v.CanSwitchSiren then return end
+		if on then
+			self.v:TriggerInput("Horn", 1)
+		else
+			self.v:TriggerInput("Horn", 0)
+		end
+	elseif self.v.IsScar then
 		if on then
 			self.v:HornOn()
 		else
