@@ -52,13 +52,10 @@ if SERVER then
 					end
 				end
 			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
-				isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
-				isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
+			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
 				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
-				--self.v:StartEngine(false) --Reset states.
-				--self:UVHandbrakeOn()
 				self.v:SetThrottle(0)
-				--self.v:SetSteering(0, 0)
 				self:SetELS(false)
 			elseif self.v.IsGlideVehicle then
 				self.v:TurnOff()
@@ -91,7 +88,7 @@ if SERVER then
 		end
 		
 	end
-
+	
 	function ENT:StraightToRace(point)
 		if !self.v or !self.e then
 			return
@@ -99,15 +96,13 @@ if SERVER then
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
 		return tobool(tr)
 	end
-
+	
 	function ENT:Stop()
 		if self.v.IsScar then
 			self.v:GoNeutral()
 			self.v:NotTurning()
 			self.v:HandBrakeOn()
 		elseif self.v.IsSimfphyscar then
-			--self.v:SetActive(true)
-			--self.v:StartEngine()
 			self.v.PressedKeys = self.v.PressedKeys or {}
 			self.v.PressedKeys["W"] = false
 			self.v.PressedKeys["A"] = false
@@ -131,36 +126,36 @@ if SERVER then
 		end
 		self.moving = CurTime()
 	end
-
+	
 	function ENT:FindRace()
-
+		
 		if next(dvd.Waypoints) == nil then
 			return
 		end
-
+		
 		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 		if Waypoint.Neighbors then --Keep going straight
 			self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
 		else
 			self.PatrolWaypoint = Waypoint
 		end
-
+		
 	end
-
+	
 	function ENT:Race()
-
+		
 		self:FindRace()
-
+		
 		if next(dvd.Waypoints) == nil then
 			return
 		end
-
+		
 		if self.PatrolWaypoint then
-
+			
 			if !self.racing then
 				self.racing = true
 			end
-
+			
 			--Set handbrake
 			if self.v.IsScar then
 				self.v:HandBrakeOff()
@@ -185,7 +180,7 @@ if SERVER then
 			local steer = right.z > 0 and steer_amount or -steer_amount
 			local speedlimitmph = self.PatrolWaypoint["SpeedLimit"]
 			self.Speeding = speedlimitmph^2
-
+			
 			--Unique racing techniques
 			if self.stuck then
 				steer = 0
@@ -214,7 +209,7 @@ if SERVER then
 					end
 				end
 			end --K turn
-
+			
 			--Set throttle
 			if self.v.IsScar then
 				if throttle > 0 then
@@ -223,8 +218,6 @@ if SERVER then
 					self.v:GoBack(-throttle)
 				end
 			elseif self.v.IsSimfphyscar then
-				--self.v:SetActive(true)
-				--self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Shift"] = false
 				self.v.PressedKeys["joystick_throttle"] = throttle
@@ -245,8 +238,6 @@ if SERVER then
 					self.v:NotTurning()
 				end
 			elseif self.v.IsSimfphyscar then
-				--self.v:SetActive(true)
-				--self.v:StartEngine()
 				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif self.v.IsGlideVehicle then
 				steer = steer * 2 --Attempt to make steering more sensitive.
@@ -254,7 +245,7 @@ if SERVER then
 			elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
 				self.v:SetSteering(steer, 0)
 			end
-
+			
 			--Resetting
 			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
 				self.moving = CurTime()
@@ -262,7 +253,7 @@ if SERVER then
 			if self.stuck then 
 				self.moving = CurTime()
 			end
-
+			
 			local timeout = 1
 			if timeout and timeout > 0 then
 				if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
@@ -277,19 +268,31 @@ if SERVER then
 		end
 		
 		--Pursuit Tech
-		if self.v.PursuitTech == "ESF" and !self.v.uvesfdeployed then --ESF
-			UVAIRacerDeployWeapon(self.v)
-		end
-		if self.v.PursuitTech == "Stunmine" and !self.v.minelaid then --MINE
-			UVAIRacerDeployWeapon(self.v)
-		end
-		--[[if self.v.PursuitTech == "Jammer" and !self.v.jammerdeployed then --JAMMER
-			UVAIRacerDeployWeapon(self.v)
-		end]]
-		if self.v.PursuitTech == "Spikestrip" and !self.v.spikestripdeployed then --SPIKESTRIP
-			UVAIRacerDeployWeapon(self.v)
-		end
-		
+		if self.v.PursuitTech then
+			for k, v in pairs(self.v.PursuitTech) do
+				if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
+					UVDeployWeapon(self.v, k)
+				end
+				if v.Tech == "Repair Kit" then
+					if self.v.IsGlideVehicle then
+						if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
+					elseif self.v.IsSimfphyscar then
+						if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
+					elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
+						if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
+					end
+				end
+			end
+		end	
 	end
 	
 	function ENT:Think()
@@ -301,15 +304,15 @@ if SERVER then
 			self:Stop()
 		end
 	end
-
+	
 	function ENT:Initialize()
 		self:SetNoDraw(true)
 		self:SetMoveType(MOVETYPE_NONE)
 		self:SetModel(self.Modelname)
 		self:SetHealth(-1)
-
+		
 		self.moving = CurTime()
-
+		
 		timer.Simple(3, function()
 			if IsValid(self.v) then
 				if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 
@@ -317,7 +320,7 @@ if SERVER then
 				end
 			end
 		end)
-
+		
 		--Pick up a vehicle in the given sphere.
 		if self.vehicle then
 			local v = self.vehicle
@@ -371,6 +374,7 @@ if SERVER then
 		else
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
+				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
 				if v:IsVehicle() then
 					if v.IsScar then --If it's a SCAR.
 						if not v:HasDriver() then --If driver's seat is empty.
@@ -422,13 +426,13 @@ if SERVER then
 				end
 			end
 		end
-	
+		
 		if not IsValid(self.v) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Racer Vehicle.
 		local e = EffectData()
 		e:SetEntity(self.v)
 		util.Effect("propspawn", e) --Perform a spawn effect.
 		self.v:EmitSound( "beams/beamstart5.wav" )
-
+		
 		local pttable = {
 			--"EMP",
 			"ESF",
@@ -436,10 +440,36 @@ if SERVER then
 			"Shockwave",
 			"Spikestrip",
 			"Stunmine",
+			"Repair Kit",
 		}
-
+		
 		if RacerPursuitTech:GetBool() then
-			self.v.PursuitTech = pttable[math.random(#pttable)]
+			if not self.v.PursuitTech then self.v.PursuitTech = {} end
+
+			for i=1, 2, 1 do
+				local selected_pt = pttable[math.random(#pttable)]
+				local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+				local sel_k, sel_v
+				
+				for k,v in pairs(self.v.PursuitTech) do
+					if v.Tech == selected_pt then
+						sel_k, sel_v = k, v
+						self.v.PursuitTech[k] = nil
+						break
+					end
+				end
+
+				local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
+				ammo_count = ammo_count > 0 and ammo_count or math.huge
+				
+				self.v.PursuitTech[i] = {
+					Tech = selected_pt,
+					Ammo = ammo_count,
+					Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
+					LastUsed = -math.huge,
+					Upgraded = false
+				}
+			end
 		end
 		
 		if !self.uvscripted then
@@ -455,20 +485,20 @@ if SERVER then
 		if not isvector(max) then max = vector_up * math.random(80, 200) end --If even getting model bounds is failed, set a random value.
 		
 		local tr = util.TraceHull({start = self.v:GetPos() + vector_up * max.z, 
-			endpos = self.v:GetPos(), ignoreworld = true,
-			mins = Vector(-16, -16, -1), maxs = Vector(16, 16, 1)})
+		endpos = self.v:GetPos(), ignoreworld = true,
+		mins = Vector(-16, -16, -1), maxs = Vector(16, 16, 1)})
 		self.CollisionHeight = tr.HitPos.z - self.v:GetPos().z
 		if self.CollisionHeight < 10 then self.CollisionHeight = max.z end
 		self.v:DeleteOnRemove(self)
 		
 	end
-else --if CLIENT
+else
 	function ENT:Initialize()
 		self:SetNoDraw(true)
 		self:SetMoveType(MOVETYPE_NONE)
 		self:SetModel(self.Modelname)
 	end
-end --if SERVER
+end
 
 --For Half Life Renaissance Reconstructed
 function ENT:GetNoTarget()

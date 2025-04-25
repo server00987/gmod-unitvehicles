@@ -369,7 +369,6 @@ function ENT:PhysicsUpdate()
 			end
 		end
 		
-		--if !self.Owner or self.Owner==NULL then self:Remove() return end
 		if !IsValid(self:GetTarget()) and self.Owner!=game.GetWorld() then self:SetTarget(self.Owner) end
 		
 		local closetotar = self.CloseToTarget
@@ -780,10 +779,6 @@ function ENT:Explode()
 		uvcombobounty = uvcombobounty + 1
 	end
 end
-
---function ENT:PhysicsCollide(data, phys)
---	if self.Downed then self:Explode() end
---end
 
 function ENT:StartTouch(prop)
 	if self.damagecooldown or self.engaging or self.crashing or self.disengaging then return end

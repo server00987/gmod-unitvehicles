@@ -15,7 +15,6 @@ function ENT:Initialize()
 		self.Entity:SetAngles(self.Entity:GetAngles()+Angle(0,90,0))
 	else
 		self.Entity:SetModel("models/unitvehiclesprops/prop_metalspikes_01/metalspikes.mdl")
-		--self.Entity:SetModel("models/unitvehiclesprops/policespikes/police_spike.mdl")
 	end
 	self.Entity:PhysicsInit(SOLID_VPHYSICS)
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS)
@@ -148,6 +147,10 @@ function ENT:DoUpdate()
 				j.params.forwardTractionMax = og_forwardtractionmax * .1
 				j.params.sideTractionMax = og_sidetractionmax * .1
 
+				local e = EffectData()
+				e:SetEntity(j.Entity)
+				util.Effect("entity_remove", e)
+
 				j:EmitSound("glide/wheels/blowout.wav")
 
 				local radius = j.params.radius * 0.8
@@ -158,7 +161,7 @@ function ENT:DoUpdate()
 
 				j:SetRadius( radius )
 				constraint.NoCollide(j,self.Entity,0,0)
-				print(j:EntIndex())
+
 				timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
 					if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
 						if array[1].wrecked then return end

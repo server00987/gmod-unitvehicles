@@ -33,6 +33,7 @@ TOOL.ClientConVar["pursuittech"] = 1
 TOOL.ClientConVar["pursuittech_esf"] = 1
 TOOL.ClientConVar["pursuittech_spikestrip"] = 1
 TOOL.ClientConVar["pursuittech_killswitch"] = 1
+TOOL.ClientConVar["pursuittech_repairkit"] = 1
 
 TOOL.ClientConVar["bountypatrol"] = 1000
 TOOL.ClientConVar["bountysupport"] = 5000
@@ -1031,6 +1032,13 @@ if CLIENT then
 		pursuittech_killswitch:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with killswitch.")
 		pursuittech_killswitch:SetValue(GetConVar("uvunitmanager_pursuittech_killswitch"):GetInt())
 		CPanel:AddItem(pursuittech_killswitch)
+
+		local pursuittech_repairkit = vgui.Create("DCheckBoxLabel")
+		pursuittech_repairkit:SetText("Repair Kit")
+		pursuittech_repairkit:SetConVar("uvunitmanager_pursuittech_repairkit")
+		pursuittech_repairkit:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with repair kits.")
+		pursuittech_repairkit:SetValue(GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
+		CPanel:AddItem(pursuittech_repairkit)
 
 		CPanel:AddControl("Label", {
 			Text = "——— ONE COMMANDER ———",

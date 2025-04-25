@@ -8,6 +8,21 @@ local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
+PT_Replacement_Strings = {
+	['ESF'] = 'ESF',
+	['Killswitch'] = 'KILLSW',
+	['Jammer'] = 'JAM',
+	['Shockwave'] = 'SHWAV',
+	['Stunmine'] = 'MINE',
+	['Spikestrip'] = 'SPIKE',
+	['Repair Kit'] = 'REPAIR'
+}
+
+PT_Slots_Replacement_Strings = {
+	[1] = 'Right',
+	[2] = 'Left'
+}
+
 --Sound spam check--
 
 function UVDelaySound()
@@ -282,6 +297,8 @@ if SERVER then
 	UVUPursuitTech_ESF = CreateConVar("unitvehicle_unit_pursuittech_esf", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	UVUPursuitTech_Spikestrip = CreateConVar("unitvehicle_unit_pursuittech_spikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
 	UVUPursuitTech_Killswitch = CreateConVar("unitvehicle_unit_pursuittech_killswitch", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
+	UVUPursuitTech_RepairKit = CreateConVar("unitvehicle_unit_pursuittech_repairkit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
+
 	
 	UVUHelicopterModel = CreateConVar("unitvehicle_unit_helicoptermodel", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback")
 	UVUHelicopterBarrels = CreateConVar("unitvehicle_unit_helicopterbarrels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Barrels\n0 = No Barrels")
@@ -404,17 +421,46 @@ if SERVER then
 	UVPTPTDuration = CreateConVar("unitvehicle_pursuittech_ptduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTESFDuration = CreateConVar("unitvehicle_pursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTESFPower = CreateConVar("unitvehicle_pursuittech_esfpower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	UVPTESFDamage = CreateConVar("unitvehicle_pursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTJammerDuration = CreateConVar("unitvehicle_pursuittech_jammerduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTShockwavePower = CreateConVar("unitvehicle_pursuittech_shockwavepower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	UVPTShockwaveDamage = CreateConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTSpikeStripDuration = CreateConVar("unitvehicle_pursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPTStunMinePower = CreateConVar("unitvehicle_pursuittech_stunminepower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	UVPTStunMineDamage = CreateConVar("unitvehicle_pursuittech_stunminedamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+
+	UVPTESFMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTJammerMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_jammer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTShockwaveMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+	UVPTRepairKitMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+
+	UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTShockwaveCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+	UVPTRepairKitCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
 	
 	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTESFPower = CreateConVar("unitvehicle_unitpursuittech_esfpower", 2000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	UVUnitPTESFDamage = CreateConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+	UVUnitPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+	UVUnitPTKillSwitchMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+	UVUnitPTRepairKitMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+
+	UVUnitPTESFCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+	UVUnitPTSpikeStripCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+	UVUnitPTRepairKitCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+	UVUnitPTKillSwitchCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
 	
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPBCooldown = CreateConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -960,10 +1006,13 @@ if SERVER then
 				if UVGetDriver(car):IsPlayer() then
 					local driver = UVGetDriver(car)
 					if car.PursuitTech then
-						local status = car.PursuitTechStatus or "Ready"
-						net.Start( "UVHUDPursuitTech" )
-						net.WriteString(car.PursuitTech)
-						net.WriteString(status)
+						-- local status = car.PursuitTechStatus or "Ready"
+						-- net.Start( "UVHUDPursuitTech" )
+						-- net.WriteString(car.PursuitTech)
+						-- net.WriteString(status)
+						-- net.Send(driver)
+						net.Start("UVHUDPursuitTech")
+						net.WriteTable(car.PursuitTech)
 						net.Send(driver)
 					end
 					if !table.HasValue(uvplayerunittableplayers, driver) then
@@ -1118,10 +1167,12 @@ if SERVER then
 				if !IsValid(car) or !UVGetDriver(car):IsPlayer() then continue end
 				local driver = UVGetDriver(car)
 				if car.PursuitTech then
-					local status = car.PursuitTechStatus or "Ready"
-					net.Start( "UVHUDPursuitTech" )
-					net.WriteString(car.PursuitTech)
-					net.WriteString(status)
+					net.Start( 'UVHUDPursuitTech' )
+					net.WriteTable(car.PursuitTech)
+					-- local status = car.PursuitTechStatus or "Ready"
+					-- net.Start( "UVHUDPursuitTech" )
+					-- net.WriteString(car.PursuitTech)
+					-- net.WriteString(status)
 					net.Send(driver)
 				end
 			end
@@ -1738,11 +1789,21 @@ if SERVER then
 else --HUD/Options
 	--local PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "nfsmostwanted", false, false, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
 	local displaying_busted = false 
-	
+	local IsSettingKeybind = false
+	-- hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
+	-- 	print("PlayerButtonDown", driver, key)
+	-- end )
 	-- surface.SetFont( "Default" )
 	-- surface.SetTextColor( 255, 255, 255 )
 	-- surface.SetTextPos( 128, 128 ) 
 	-- surface.DrawText( "Hello World" )
+
+	-- hook.Add("PlayerButtonDown", "UVDeployWeapon", function( driver, key )
+    --     if CLIENT and not IsFirstTimePredicted() then
+    --        return
+    --     end
+    --     print(key)
+    -- end)
 	
 	hook.Add('HUDPaint', 'Hi', function()
 		if displaying_busted then
@@ -1792,7 +1853,7 @@ else --HUD/Options
 	UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	UVUPursuitTech_Spikestrip = CreateClientConVar("unitvehicle_unit_pursuittech_spikestrip", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
 	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_killswitch", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
-	
+	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_repairkit", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
 	
 	UVUHelicopterModel = CreateClientConVar("unitvehicle_unit_helicoptermodel", 1, true, false, "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback")
 	UVUHelicopterBarrels = CreateClientConVar("unitvehicle_unit_helicopterbarrels", 1, true, false, "1 = Barrels\n0 = No Barrels")
@@ -1911,18 +1972,27 @@ else --HUD/Options
 	UVUCooldownTimer6 = CreateClientConVar("unitvehicle_unit_cooldowntimer6", 20, true, false)
 	UVURoadblocks6 = CreateClientConVar("unitvehicle_unit_roadblocks6", 0, true, false)
 	UVUHelicopters6 = CreateClientConVar("unitvehicle_unit_helicopters6", 0, true, false)
+
+	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
+	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
 	
 	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
 	UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
 	UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 2000000, true, false)
+	UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
+
 	UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
 	UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 2000000, true, false)
+	UVPTShockwaveDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, true, false)
 	UVPTSpikeStripDuration = CreateClientConVar("unitvehicle_pursuittech_spikestripduration", 60, true, false)
 	UVPTStunMinePower = CreateClientConVar("unitvehicle_pursuittech_stunminepower", 2000000, true, false)
+	UVPTStunMineDamage = CreateClientConVar("unitvehicle_pursuittech_stunminedamage", 0.1, true, false)
+
 	
 	UVUnitPTDuration = CreateClientConVar("unitvehicle_unitpursuittech_ptduration", 20, true, false)
 	UVUnitPTESFDuration = CreateClientConVar("unitvehicle_unitpursuittech_esfduration", 10, true, false)
 	UVUnitPTESFPower = CreateClientConVar("unitvehicle_unitpursuittech_esfpower", 2000000, true, false)
+	UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
 	UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
 	UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
 	UVUnitPTKillSwitchDisableDuration = CreateClientConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, true, false)
@@ -1963,6 +2033,20 @@ else --HUD/Options
 		["unitvehicle_racerpursuittech"] = 'integer',
 		['unitvehicle_spawncooldown'] = 'integer'
 	}
+
+	net.Receive('UVGetNewKeybind', function()
+		--if IsSettingKeybind then return end
+		local slot = net.ReadInt(9)
+		local key = net.ReadInt(9)
+		local convar = GetConVar("unitvehicle_pursuittech_keybindslot_"..slot)
+
+		if convar then
+			convar:SetInt(key)
+			KeyBindButtons[slot]:SetText("Slot "..(PT_Slots_Replacement_Strings[slot] or '?').." - "..string.upper(input.GetKeyName(key)))
+		end
+
+		IsSettingKeybind = false
+	end)
 	
 	net.Receive('UVGetSettings_Local', function()
 		local array = net.ReadTable()
@@ -1972,43 +2056,7 @@ else --HUD/Options
 			if not valid then continue end
 			RunConsoleCommand(key, value)
 		end
-	end)	
-	
-	-- net.Start("UVGetSettings")
-	-- net.SendToServer()
-	
-	-- local local_convars = {
-	-- 	["unitvehicle_heatlevels_local"] = 'integer',
-	-- 	["unitvehicle_pursuittheme_local"] = 'string',
-	-- 	["unitvehicle_targetvehicletype_local"] = 'integer',
-	-- 	["unitvehicle_detectionrange_local"] = 'integer',
-	-- 	["unitvehicle_playmusic_local"] = 'integer',
-	-- 	["unitvehicle_neverevade_local"] = 'integer',
-	-- 	["unitvehicle_bustedtimer_local"] = 'integer',
-	-- 	["unitvehicle_canwreck_local"] = 'integer',
-	-- 	["unitvehicle_chatter_local"] = 'integer',
-	-- 	["unitvehicle_speedlimit_local"] = 'integer',
-	-- 	["unitvehicle_autohealth_local"] = 'integer',
-	-- 	["unitvehicle_minheatlevel_local"] = 'integer',
-	-- 	["unitvehicle_maxheatlevel_local"] = 'integer',
-	-- 	["unitvehicle_spikestripduration_local"] = 'integer',
-	-- 	["unitvehicle_pathfinding_local"] = 'integer',
-	-- 	["unitvehicle_vcmodelspriority_local"] = 'integer',
-	-- 	["unitvehicle_callresponse_local"] = 'integer',
-	-- 	["unitvehicle_chattertext_local"] = 'integer',
-	-- 	["unitvehicle_enableheadlights_local"] = 'integer',
-	-- 	["unitvehicle_relentless_local"] = 'integer',
-	-- 	["unitvehicle_spawnmainunits_local"] = 'integer',
-	-- 	["unitvehicle_dvwaypointspriority_local"] = 'integer',
-	-- 	["unitvehicle_pursuitthemeplayrandomheat_local"] = 'integer',
-	-- 	["unitvehicle_repaircooldown_local"] = 'integer',
-	-- 	["unitvehicle_repairrange_local"] = 'integer',
-	-- 	["unitvehicle_racertags_local"] = 'integer'
-	-- }
-	
-	-- for name, tayp in pairs(local_convars) do
-	-- 	CreateClientConVar(name.."_local", GetConVar(name):GetString())
-	-- end
+	end)
 	
 	unitvehicles = true
 	
@@ -2022,6 +2070,22 @@ else --HUD/Options
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
+
+	concommand.Add("uv_keybinds", function( ply, cmd, slot )
+		if IsSettingKeybind then
+			notification.AddLegacy( "You are already setting a keybind!", NOTIFY_ERROR, 5 )
+			return
+		end
+
+		local slot = slot[1]
+
+		net.Start("UVPTKeybindRequest")
+		net.WriteInt(slot, 3)
+		net.SendToServer()
+
+		IsSettingKeybind = slot
+		KeyBindButtons[tonumber(slot)]:SetText('PRESS A KEY NOW!')
+	end)
 	
 	concommand.Add("uv_local_update_settings", function( ply )
 		if !ply:IsSuperAdmin() then
@@ -2418,11 +2482,8 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDPursuitTech", function()
-		local PursuitTech = net.ReadString()
-		local Status = net.ReadString()
-		UVHUDPursuitTech = true
-		UVHUDPursuitTechName = PursuitTech
-		UVHUDPursuitTechStatus = Status
+		local PursuitTable = net.ReadTable()
+		UVHUDPursuitTech = PursuitTable
 	end)
 	
 	net.Receive("UVHUDScanner", function()
@@ -2612,7 +2673,6 @@ else --HUD/Options
 			}
 			draw.NoTexture()
 			surface.DrawPoly( element2 )
-			--surface.DrawRect( w/3,h/1.1+28+12,w/3+12, 100 )
 			surface.SetDrawColor( 0, 0, 0, 200)
 			surface.SetFont( "UVFont2" )
 			surface.SetTextColor(255,255,255)
@@ -2795,26 +2855,6 @@ else --HUD/Options
 			end
 		end
 		
-		-- if UVHUDDisplayEvading then
-		-- 	if !EvadingProgress or EvadingProgress == 0 then
-		-- 		EvadingProgress = CurTime()
-		-- 	end
-		-- 	draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-		-- 	draw.DrawText( "EVADING", "UVFont",w/2,h/1.05, Color( 0, 255, 0), TEXT_ALIGN_CENTER )
-		-- 	surface.SetDrawColor( 0, 0, 0, 200)
-		-- 	surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
-		-- 	surface.SetDrawColor(Color( 0, 255, 0))
-		-- 	surface.DrawRect(w/3,h/1.1,12,40)
-		-- 	surface.DrawRect(w*2/3,h/1.1,12,40)
-		-- 	surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-		-- 	surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
-		-- 	surface.SetDrawColor(Color( 0, 255, 0))
-		-- 	local T = math.Clamp((UnitsChasing)*(w/3-20),0,w/3-20)
-		-- 	surface.DrawRect(w/3+16,h/1.1+16,T,8)
-		-- else
-		-- 	BustingProgress = 0
-		-- end
-		
 		if UVHUDDisplayBusting and !UVHUDDisplayCooldown then
 			if !BustingProgress or BustingProgress == 0 then
 				BustingProgress = CurTime()
@@ -2883,15 +2923,6 @@ else --HUD/Options
 					end
 				end
 			end
-			-- else
-			-- 	if next(UVHUDWantedSuspects) != nil then
-			-- 		for _, ent in pairs(UVHUDWantedSuspects) do
-			-- 			if ent.displayedonhud then
-			-- 				local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
-			-- 				curblip.alpha = 0
-			-- 			end
-			-- 		end
-			-- 	end
 		end
 		
 		if UVHUDRoadblocks then
@@ -2962,34 +2993,31 @@ else --HUD/Options
 			surface.DrawRect(w/2-28, h/10-28, 56, 56 )
 			drawCircle( w/2, h/10, 14, 50 )
 		end
-		
 		--Pursuit Tech
 		if !localPlayer:InVehicle() then
 			UVHUDPursuitTech = nil
 		end
 		if UVHUDPursuitTech then
 			if !uvclientjammed then
-				local timeout
-				if UVHUDCopMode then
-					timeout = UVUnitPTDuration:GetInt()
-				else
-					timeout = UVPTPTDuration:GetInt()
-				end
-				local status = UVHUDPursuitTechStatus
-				if status == "Reloading" then
-					if !UVHUDPursuitTechReloading then
-						UVHUDPursuitTechReloading = CurTime()
-					elseif CurTime() - UVHUDPursuitTechReloading >= timeout then
-						status = "Ready"
-						UVHUDPursuitTechReloading = nil
+				for i=1, 2, 1 do
+					if UVHUDPursuitTech[i] then
+						local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
+						
+						if input.IsKeyDown(var) then
+							net.Start("UVPTUse")
+							net.WriteInt(i, 3)
+							net.SendToServer()
+						end
+
+						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
+							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
+						else
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
+						end
+					else
+						draw.DrawText( "-", "UVFont4",w/(1.3+((i -1)*.1)), h-56, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
 					end
-					if UVHUDPursuitTechReloading then
-						status = math.Round((CurTime()-(UVHUDPursuitTechReloading+timeout))*-1)
-					end
-					draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
-				else
-					UVHUDPursuitTechReloading = nil
-					draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 				end
 			else
 				draw.DrawText( "JAMMED", "UVFont4",w/1.3, h-56, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
@@ -3386,7 +3414,7 @@ else --HUD/Options
 		ResultPanel.Paint = function(self, w, h)
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
 			draw.SimpleText("/// BUSTED ///", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("All suspects has been busted!", "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("All suspects have been busted!", "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 			draw.SimpleText("TIME: "..time, "UVFont6", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 			draw.SimpleText("BOUNTY: "..bounty, "UVFont6", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 			draw.SimpleText("UNITS DEPLOYED: "..deploys, "UVFont6", 500, 240, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
@@ -3569,6 +3597,18 @@ else --HUD/Options
 			panel:ControlHelp("Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
 			panel:CheckBox("Racer Tags", "unitvehicle_racertags")
 			panel:ControlHelp("Racers will have their own tags which you can see as a cop during pursuits.")
+			
+			panel:Help("——— Pursuit Tech ———")
+			panel:ControlHelp("Set your Pursuit Tech slot keybinds here.")
+			
+			-- put slots in a row
+			--local dpanel = panel:ControlPanel("uv_keybinds")
+			panel:Help("Keybinds")
+
+			KeyBindButtons = {}
+			KeyBindButtons[1] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[1] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
+			KeyBindButtons[2] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[2] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
+
 			panel:CheckBox("Racer Pursuit Tech", "unitvehicle_racerpursuittech")
 			panel:ControlHelp("Racers will spawn with Pursuit Tech.")
 			

@@ -113,6 +113,8 @@ Wrecker: Tow truck
 ]]
 
 if SERVER then
+
+	timer.Simple(1, function() print(IsSettingKeybind) end)
 	
 	util.AddNetworkString('UV_Chatter')
 	util.AddNetworkString('UV_Sound')
@@ -191,12 +193,6 @@ if SERVER then
 			local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			return 5
@@ -228,16 +224,8 @@ if SERVER then
 			if next(soundtable2) == nil then return 5 end
 			local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
 			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
 			UVRelayToClients(soundfile2, parameters, true)
 			UVRelayToClients(soundfile, parameters, false)
-			
-			--uvchatterplaying = soundfile
 			
 			return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
 			
@@ -263,20 +251,9 @@ if SERVER then
 			local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile
 				UVRelayToClients(soundfile, parameters, true)
 			end)
 			
@@ -292,20 +269,9 @@ if SERVER then
 			local soundfile2 = "chatter/!emergency/copresponse.mp3"
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile
 				UVRelayToClients(soundfile, parameters, true)
 			end)
 			
@@ -323,20 +289,9 @@ if SERVER then
 			local soundfile2 = "chatter/!identify/"..voice.."/"..soundtable2[math.random(1, #soundtable2)]
 			local soundduration2 = SoundDuration(soundfile2)
 			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile
 				UVRelayToClients(soundfile, parameters, true)
 				
 			end)
@@ -372,45 +327,19 @@ if SERVER then
 			if next(soundtable5) == nil then return 5 end
 			local soundfile5 = "chatter/!call/"..basedirectory.."/unitrequest/"..soundtable5[math.random(1, #soundtable5)]
 			local soundduration5 = SoundDuration(soundfile5)
-			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
+
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile3, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile3
 				UVRelayToClients(soundfile3, parameters, true)
 				
 				timer.Simple(soundduration3, function()
-					-- if uvchatterplaying and parameters != 2 then
-					-- 	Entity(1):StopSound(uvchatterplaying)
-					-- end
-					-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-					-- uvchatterplaying = soundfile
 					UVRelayToClients(soundfile, parameters, true)
 					
 					timer.Simple(soundduration, function()
-						-- if uvchatterplaying and parameters != 2 then
-						-- 	Entity(1):StopSound(uvchatterplaying)
-						-- end
-						-- Entity(1):EmitSound(soundfile4, 75, 100, 1, CHAN_STATIC)
-						-- uvchatterplaying = soundfile4
 						UVRelayToClients(soundfile4, parameters, true)
 						
 						timer.Simple(soundduration4, function()
-							-- if uvchatterplaying and parameters != 2 then
-							-- 	Entity(1):StopSound(uvchatterplaying)
-							-- end
-							-- Entity(1):EmitSound(soundfile5, 75, 100, 1, CHAN_STATIC)
-							-- uvchatterplaying = soundfile5
 							UVRelayToClients(soundfile5, parameters, true)
 							
 						end)
@@ -446,38 +375,18 @@ if SERVER then
 			local soundduration5 = SoundDuration(soundfile5)
 			
 			if !uvenemyescaping then return end
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
 				if !uvenemyescaping then return end
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile3, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile3
 				UVRelayToClients(soundfile3, parameters, true)
 				
 				timer.Simple(soundduration3, function()
 					if !uvenemyescaping then return end
-					-- if uvchatterplaying and parameters != 2 then
-					-- 	Entity(1):StopSound(uvchatterplaying)
-					-- end
-					-- Entity(1):EmitSound(soundfile4, 75, 100, 1, CHAN_STATIC)
-					-- uvchatterplaying = soundfile4
 					UVRelayToClients(soundfile4, parameters, true)
 					
 					timer.Simple(soundduration4, function()
 						if !uvenemyescaping then return end
-						-- if uvchatterplaying and parameters != 2 then
-						-- 	Entity(1):StopSound(uvchatterplaying)
-						-- end
-						-- Entity(1):EmitSound(soundfile5, 75, 100, 1, CHAN_STATIC)
-						-- uvchatterplaying = soundfile5
 						UVRelayToClients(soundfile5, parameters, true)
 						
 					end)
@@ -495,23 +404,9 @@ if SERVER then
 			
 			local soundfile2 = "chatter/!emergency/copresponse.mp3"
 			local soundduration2 = SoundDuration(soundfile2)
-			
-			-- uvchatterplaying = soundfile
-			
-			-- if uvchatterplaying and parameters != 2 then
-			-- 	Entity(1):StopSound(uvchatterplaying)
-			-- end
-			
-			-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-			-- uvchatterplaying = soundfile2
 			UVRelayToClients(soundfile2, parameters, true)
 			
 			timer.Simple(soundduration2, function()
-				-- if uvchatterplaying and parameters != 2 then
-				-- 	Entity(1):StopSound(uvchatterplaying)
-				-- end
-				-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-				-- uvchatterplaying = soundfile
 				UVRelayToClients(soundfile, parameters, true)
 				
 			end)
@@ -531,13 +426,6 @@ if SERVER then
 		local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
 		if next(soundtable2) == nil then return 5 end
 		local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
-		-- if uvchatterplaying and parameters != 2 then
-		-- 	Entity(1):StopSound(uvchatterplaying)
-		-- end
-		-- Entity(1):EmitSound(soundfile2, 75, 100, 1, CHAN_STATIC)
-		-- Entity(1):EmitSound(soundfile, 75, 100, 1, CHAN_STATIC)
-		
-		-- uvchatterplaying = soundfile
 		UVRelayToClients(soundfile2, parameters, true)
 		UVRelayToClients(soundfile, parameters, false)
 		
@@ -557,21 +445,8 @@ if SERVER then
 	-- 	unit.callsign = UNIT_SECONDARYCALLSIGN
 	-- 	color = UNIT_SUSPECTCOLOR
 	-- 	model = UNIT_SUSPECTMAKE
-	function _getFormatParam(param, unit, args)
-		
-		-- local variable_list = {
-		-- 	['UNIT_CALLSIGN'] = (unit and unit.callsign) or nil,
-		-- 	['UNIT_SUSPECTMODEL'] = args.suspectmodel,
-		-- 	['UNIT_CLASSES'] = uvclassname[math.random(1, #uvclassname)],
-		-- 	['MAP_GET'] = game.GetMap(),
-		-- 	['MATH_RANDOM19'] = math.random(1,9),
-		-- 	['MATH_RANDOMUNIT'] = math.random(1,1000),
-		-- 	['MATH_BACKUPTIMELEFT'] = string.NiceTime(uvresourcepointstimerleft),
-		-- 	['UNIT_SECONDARYCALLSIGN'] = args.altcallsign,
-		-- 	['UNIT_SUSPECTCOLOR'] = args.suspectcolor,
-		-- 	['UNIT_SUSPECTMAKE'] = args.suspectmake,
-		-- }
 
+	function _getFormatParam(param, unit, args)
 		local variable_list = {
 			['UNIT_CALLSIGN'] = {(unit and unit.callsign) or 'Unit', Color(53, 134, 255)},
 			['UNIT_SUSPECTMODEL'] = {args.suspectmodel, Color(255, 54, 54)},
@@ -586,8 +461,6 @@ if SERVER then
 		}
 		
 		return variable_list[param]
-		
-		--local sub_dir_count = select('#', ...)
 	end
 	
 	function UVTextChatter(unit, args, ...) -- ... = directory to array with text/variables, since some entries are dictionaries
@@ -614,10 +487,6 @@ if SERVER then
 
 		if !option then return end
 		
-		-- for _, var in pairs(option.variables) do
-		-- 	table.insert(format_var_list, _getFormatParam(var, unit, args))
-		-- end
-		
 		local txt = string.Split(option.text, "%s")
 		local array = {}
 		
@@ -629,7 +498,6 @@ if SERVER then
 			local entry = _getFormatParam(v, unit, args)
 
 			local color = entry[2]
-			--local text = string.Replace(entry.text, v, var_list[v][1])
 			for _, v in pairs({txt[i], color, entry[1], Color(242,242,242)}) do
 				table.insert(array, v)
 			end
@@ -638,9 +506,7 @@ if SERVER then
 				for _, v in pairs({txt[#txt], color}) do
 					table.insert(array, v)
 				end
-				-- table.insert(array, {txt[#txt], Color(255,255,255), txt[#txt], Color(255,255,255)})
 			end
-			--table.insert(array, {txt[i], color, var_list[v][1], Color(255,255,255)})
 		end
 
 		if #option.variables <  1 then
@@ -652,7 +518,6 @@ if SERVER then
 		net.Start('UV_Text')
 		net.WriteTable(array)
 		net.Broadcast()
-		--PrintMessage(HUD_PRINTTALK, string.format(option.text, unpack( format_var_list )))
 	end
 	
 	--UV old chatter goes here--
