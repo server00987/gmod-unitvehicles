@@ -324,6 +324,7 @@ if SERVER then
 		--Pick up a vehicle in the given sphere.
 		if self.vehicle then
 			local v = self.vehicle
+			if v.RacerVehicle then return end --If it's already a Racer Vehicle, don't pick it up.
 			if v.IsScar then --If it's a SCAR.
 				if not v:HasDriver() then --If driver's seat is empty.
 					self.v = v
@@ -375,6 +376,7 @@ if SERVER then
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
 				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
+				if v.RacerVehicle then continue end
 				if v:IsVehicle() then
 					if v.IsScar then --If it's a SCAR.
 						if not v:HasDriver() then --If driver's seat is empty.
@@ -383,6 +385,7 @@ if SERVER then
 							v.HasDriver = function() return true end --SCAR script assumes there's a driver.
 							v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
 							v:StartCar()
+							break
 						end
 					elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
 						if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
@@ -397,6 +400,7 @@ if SERVER then
 								v:SetMaxHealth(math.huge)
 								v:SetCurHealth(math.huge)
 							end
+							break
 						end
 					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
 						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
@@ -412,6 +416,7 @@ if SERVER then
 									end
 								end
 							end
+							break
 						end
 					elseif v.IsGlideVehicle then --Glide
 						if not IsValid(v:GetDriver()) then
@@ -421,6 +426,7 @@ if SERVER then
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
+							break
 						end
 					end
 				end

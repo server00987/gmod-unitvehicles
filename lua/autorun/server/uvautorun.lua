@@ -700,10 +700,10 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				local damage
 				if car.UnitVehicle then
 					power = UVUnitPTESFPower:GetInt()
-					damage = UVUnitPTESFDamage:GetInt()
+					damage = UVUnitPTESFDamage:GetFloat()
 				else
 					power = UVPTESFPower:GetInt()
-					damage = UVPTESFDamage:GetInt()
+					damage = UVPTESFDamage:GetFloat()
 				end
 				if car.uvupgraded or car.UVWanted then -- unused
 					power = power * 2
@@ -2017,19 +2017,13 @@ function UVCheckIfBeingBusted(enemy)
 		end
 		if !enemy.uvbustingincrease then
 			enemy.uvbustingincrease = true
+			enemy.randomptuse = math.random(1, BustedTimer:GetFloat() * .7)
 			enemy.uvbustinglastprogress = CurTime()
 			enemy.uvbustinglastprogress2 = enemy.uvbustingprogress
 		end
 		enemy.uvbustingprogress = enemy.uvbustinglastprogress2 + (CurTime() - enemy.uvbustinglastprogress)
 		if enemy.uvbustingprogress >= (btimeout-1) and !enemy.nearbust then
 			enemy.nearbust = true
-			if enemy.PursuitTech then
-				for k, v in pairs(enemy.PursuitTech) do
-					if v.Tech == 'Shockwave' then
-						UVDeployWeapon( enemy, k )
-					end
-				end
-			end
 			-- if enemy.PursuitTech == "Shockwave" then --SHOCKWAVE
 			-- 	if !enemy.shockwavecooldown then
 			-- 		UVAIRacerDeployWeapon(enemy)
@@ -2045,6 +2039,14 @@ function UVCheckIfBeingBusted(enemy)
 					UVSoundChatter(unit, unit.voice, "airarrest", 2)
 				else
 					UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
+				end
+			end
+		end
+
+		if enemy.PursuitTech and !(enemy:GetDriver() and enemy:GetDriver():IsPlayer()) and enemy.randomptuse < enemy.uvbustingprogress then
+			for k, v in pairs(enemy.PursuitTech) do
+				if v.Tech == 'Shockwave' then
+					UVDeployWeapon( enemy, k )
 				end
 			end
 		end

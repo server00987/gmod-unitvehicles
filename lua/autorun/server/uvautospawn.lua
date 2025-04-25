@@ -578,12 +578,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 						end
 					end
 				end
-				--Ent.PursuitTech = (#pool > 0 and pool[math.random(1, #pool)]) or nil
 			end
-			
-			-- if Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander" then
-			-- 	Ent.uvupgraded = true
-			-- end
 		end
 		
 		if Ent.uvclasstospawnon == "npc_uvcommander" and UVUOneCommander:GetInt() == 1 then

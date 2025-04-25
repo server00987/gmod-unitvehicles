@@ -105,7 +105,7 @@ function ENT:UVStunmineHit()
             local vectordifference = object:WorldSpaceCenter() - entpos
             local angle = vectordifference:Angle()
 			local power = UVPTStunMinePower:GetInt()
-			local damage = UVPTStunMineDamage:GetInt()
+			local damage = UVPTStunMineDamage:GetFloat()
             local force = power * (1 - (vectordifference:Length()/1000))
             objectphys:ApplyForceCenter(angle:Forward()*force)
             object.rammed = true

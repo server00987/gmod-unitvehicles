@@ -1787,29 +1787,8 @@ if SERVER then
 	end)
 	
 else --HUD/Options
-	--local PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "nfsmostwanted", false, false, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
 	local displaying_busted = false 
 	local IsSettingKeybind = false
-	-- hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
-	-- 	print("PlayerButtonDown", driver, key)
-	-- end )
-	-- surface.SetFont( "Default" )
-	-- surface.SetTextColor( 255, 255, 255 )
-	-- surface.SetTextPos( 128, 128 ) 
-	-- surface.DrawText( "Hello World" )
-
-	-- hook.Add("PlayerButtonDown", "UVDeployWeapon", function( driver, key )
-    --     if CLIENT and not IsFirstTimePredicted() then
-    --        return
-    --     end
-    --     print(key)
-    -- end)
-	
-	hook.Add('HUDPaint', 'Hi', function()
-		if displaying_busted then
-			draw.DrawText('BUSTED', 'CloseCaption_BoldItalic', ScrW() * .5, ScrH() * .25, Color(255,0,0), TEXT_ALIGN_CENTER)
-		end
-	end)
 	
 	--hook.Run('HUDArrest')
 	
@@ -1853,7 +1832,7 @@ else --HUD/Options
 	UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	UVUPursuitTech_Spikestrip = CreateClientConVar("unitvehicle_unit_pursuittech_spikestrip", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
 	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_killswitch", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
-	UVUPursuitTech_Killswitch = CreateClientConVar("unitvehicle_unit_pursuittech_repairkit", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
+	UVUPursuitTech_RepairKit = CreateClientConVar("unitvehicle_unit_pursuittech_repairkit", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
 	
 	UVUHelicopterModel = CreateClientConVar("unitvehicle_unit_helicoptermodel", 1, true, false, "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback")
 	UVUHelicopterBarrels = CreateClientConVar("unitvehicle_unit_helicopterbarrels", 1, true, false, "1 = Barrels\n0 = No Barrels")
@@ -3011,16 +2990,16 @@ else --HUD/Options
 
 						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
 							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
 						else
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
 						end
 					else
-						draw.DrawText( "-", "UVFont4",w/(1.3+((i -1)*.1)), h-56, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
+						draw.DrawText( "-", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
 					end
 				end
 			else
-				draw.DrawText( "JAMMED", "UVFont4",w/1.3, h-56, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+				draw.DrawText( "JAMMED", "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 			end
 		end
 		

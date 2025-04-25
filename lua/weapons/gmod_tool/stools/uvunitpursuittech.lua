@@ -44,6 +44,7 @@ if CLIENT then
 		{ name = "info"},
 		{ name = "left" },
 		{ name = "right" },
+		{ name = "reload" }
 	}
 
 	language.Add("tool.uvunitpursuittech.name", "Unit Pursuit Tech")
@@ -51,6 +52,7 @@ if CLIENT then
 	language.Add("tool.uvunitpursuittech.0", "Looking for more options? Find it under the options tab" )
 	language.Add("tool.uvunitpursuittech.left", "Apply the Pursuit Tech to the your Unit vehicle. Don't have a Unit vehicle? Create one using the Unit Manager!" )
 	language.Add("tool.uvunitpursuittech.right", "Change Pursuit Tech" )
+	language.Add("tool.uvunitpursuittech.reload", "Select Pursuit Tech slot" )
 
 end
 

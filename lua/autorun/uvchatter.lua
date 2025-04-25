@@ -113,8 +113,6 @@ Wrecker: Tow truck
 ]]
 
 if SERVER then
-
-	timer.Simple(1, function() print(IsSettingKeybind) end)
 	
 	util.AddNetworkString('UV_Chatter')
 	util.AddNetworkString('UV_Sound')
