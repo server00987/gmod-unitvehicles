@@ -3011,16 +3011,16 @@ else --HUD/Options
 
 						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
 							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
 						else
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
+							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
 						end
 					else
-						draw.DrawText( "-", "UVFont4",w/(1.3+((i -1)*.1)), h-56, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
+						draw.DrawText( "-", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
 					end
 				end
 			else
-				draw.DrawText( "JAMMED", "UVFont4",w/1.3, h-56, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+				draw.DrawText( "JAMMED", "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 			end
 		end
 		
