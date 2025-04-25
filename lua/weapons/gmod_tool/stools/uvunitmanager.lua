@@ -735,6 +735,8 @@ if CLIENT then
 			convar_table['unitvehicle_unit_pursuittech_esf'] = GetConVar('uvunitmanager_pursuittech_esf'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_spikestrip'] = GetConVar('uvunitmanager_pursuittech_spikestrip'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_killswitch'] = GetConVar('uvunitmanager_pursuittech_killswitch'):GetInt()
+			convar_table['unitvehicle_unit_pursuittech_repairkit'] = GetConVar('uvunitmanager_pursuittech_repairkit'):GetInt()
+
 
 			
 			convar_table['unitvehicle_unit_helicoptermodel'] = GetConVar('uvunitmanager_helicoptermodel'):GetString()
@@ -787,6 +789,7 @@ if CLIENT then
 			RunConsoleCommand("unitvehicle_unit_pursuittech_esf", GetConVar("uvunitmanager_pursuittech_esf"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_pursuittech_spikestrip", GetConVar("uvunitmanager_pursuittech_spikestrip"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_pursuittech_killswitch", GetConVar("uvunitmanager_pursuittech_killswitch"):GetInt())
+			RunConsoleCommand("unitvehicle_unit_pursuittech_repairkit", GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_onecommander", GetConVar("uvunitmanager_onecommander"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_onecommanderhealth", GetConVar("uvunitmanager_onecommanderhealth"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_helicoptermodel", GetConVar("uvunitmanager_helicoptermodel"):GetString())
