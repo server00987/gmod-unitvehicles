@@ -671,10 +671,14 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 	
 	local RealTime = RealTime
 	local DamageInfo = DamageInfo
+	local GetWorld = game.GetWorld
 
 	local Clamp = math.Clamp
 	local RandomInt = math.random
 	local PlaySoundSet = Glide.PlaySoundSet
+
+	local cvarCollision = GetConVar( "glide_physics_damage_multiplier" )
+	local cvarWorldCollision = GetConVar( "glide_world_physics_damage_multiplier" )
 
 	local cvarCollision = GetConVar( "glide_physics_damage_multiplier" )
 	if ( glidevehicle.IsGlideVehicle ) then
@@ -900,65 +904,69 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
     		end
 
 			if coldata.TheirSurfaceProps == 76 then -- default_silent
-        		return
-    		end
+				return
+			end
 		
-    		local velocityChange = coldata.OurNewVelocity - coldata.OurOldVelocity
-    		local surfaceNormal = coldata.HitNormal
+			local velocityChange = coldata.OurNewVelocity - coldata.OurOldVelocity
+			local surfaceNormal = coldata.HitNormal
 		
-    		local speed = velocityChange:Length()
-    		if speed < 30 then return end
+			local speed = velocityChange:Length()
+			if speed < 30 then return end
 		
-    		if car.FallOnCollision then
-    		    car:PhysicsCollideFall( speed, coldata )
-    		end
+			if car.FallOnCollision then
+				car:PhysicsCollideFall( speed, coldata )
+			end
 		
-    		local ent = coldata.HitEntity
-    		local isPlayer = IsValid( ent ) and ent:IsPlayer()
-    		local t = RealTime()
+			local ent = coldata.HitEntity
+			local isPlayer = IsValid( ent ) and ent:IsPlayer()
+			local t = RealTime()
 		
-    		if isPlayer then
-    		    -- Don't let players make loud sounds
-    		    speed = 100
-			
-    		elseif t > car.collisionShakeCooldown then
-    		    car.collisionShakeCooldown = t + 0.5
-    		    Glide.SendViewPunch( car:GetAllPlayers(), Clamp( speed / 1000, 0, 1 ) * 3 )
-    		end
+			if isPlayer then
+				-- Don't let players make loud sounds
+				speed = 100
 		
-    		local eff = EffectData()
-    		eff:SetOrigin( coldata.HitPos )
-    		eff:SetScale( math.min( speed * 0.02, 6 ) * car.CollisionParticleSize )
-    		eff:SetNormal( surfaceNormal )
-    		util.Effect( "glide_metal_impact", eff )
+			elseif t > car.collisionShakeCooldown then
+				car.collisionShakeCooldown = t + 0.5
+				Glide.SendViewPunch( car:GetAllPlayers(), Clamp( speed / 1000, 0, 1 ) * 3 )
+			end
 		
-    		local isHardHit = speed > 300
+			local eff = EffectData()
+			eff:SetOrigin( coldata.HitPos )
+			eff:SetScale( math.min( speed * 0.02, 6 ) * car.CollisionParticleSize )
+			eff:SetNormal( surfaceNormal )
+			util.Effect( "glide_metal_impact", eff )
 		
-    		PlaySoundSet( "Glide.Collision.VehicleHard", car, speed / 400, nil, isHardHit and 80 or 75 )
+			local isHardHit = speed > 300
 		
-    		if isHardHit then
-    		    PlaySoundSet( "Glide.Collision.VehicleSoft", car, speed / 400, nil, isHardHit and 80 or 75 )
-			
-    		    if car.IsHeavyVehicle then
-    		        car:EmitSound( "physics/metal/metal_barrel_impact_hard5.wav", 90, RandomInt( 70, 90 ), 1 )
-    		    end
-			
-    		elseif isPlayer then
-    		    PlaySoundSet( "Glide.Collision.VehicleHard", ent, speed / 1000, RandomInt( 90, 130 ) )
-			
-    		elseif surfaceNormal:Dot( -coldata.HitSpeed:GetNormalized() ) < 0.5 then
-    		    PlaySoundSet( "Glide.Collision.VehicleScrape", car, 0.4 )
-    		end
+			PlaySoundSet( "Glide.Collision.VehicleHard", car, speed / 400, nil, isHardHit and 80 or 75 )
 		
-    		if not isPlayer and isHardHit then
-    		    local dmg = DamageInfo()
-    		    dmg:SetAttacker( ent )
-    		    dmg:SetInflictor( car )
-    		    dmg:SetDamage( ( speed / 10 ) * car.CollisionDamageMultiplier * cvarCollision:GetFloat() )
-    		    dmg:SetDamageType( 1 ) -- DMG_CRUSH
-    		    dmg:SetDamagePosition( coldata.HitPos )
-    		    car:TakeDamageInfo( dmg )
-    		end
+			if isHardHit then
+				PlaySoundSet( "Glide.Collision.VehicleSoft", car, speed / 400, nil, isHardHit and 80 or 75 )
+		
+				if car.IsHeavyVehicle then
+					car:EmitSound( "physics/metal/metal_barrel_impact_hard5.wav", 90, RandomInt( 70, 90 ), 1 )
+				end
+		
+			elseif isPlayer then
+				PlaySoundSet( "Glide.Collision.VehicleHard", ent, speed / 1000, RandomInt( 90, 130 ) )
+		
+			elseif surfaceNormal:Dot( -coldata.HitSpeed:GetNormalized() ) < 0.5 then
+				PlaySoundSet( "Glide.Collision.VehicleScrape", car, 0.4 )
+			end
+		
+			if not isPlayer and isHardHit then
+				-- `ent:IsWorld` is returning `false` on "Entity [0][worldspawn]",
+				-- so I'm comparing against `game.GetWorld` instead.
+				local multiplier = ent == GetWorld() and cvarWorldCollision:GetFloat() or cvarCollision:GetFloat()
+		
+				local dmg = DamageInfo()
+				dmg:SetAttacker( ent )
+				dmg:SetInflictor( car )
+				dmg:SetDamage( ( speed / 10 ) * car.CollisionDamageMultiplier * multiplier )
+				dmg:SetDamageType( 1 ) -- DMG_CRUSH
+				dmg:SetDamagePosition( coldata.HitPos )
+				car:TakeDamageInfo( dmg )
+			end
 		end
 	end
 
