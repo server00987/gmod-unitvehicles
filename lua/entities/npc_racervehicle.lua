@@ -55,10 +55,7 @@ if SERVER then
 			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
 			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
 				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
-				--self.v:StartEngine(false) --Reset states.
-				--self:UVHandbrakeOn()
 				self.v:SetThrottle(0)
-				--self.v:SetSteering(0, 0)
 				self:SetELS(false)
 			elseif self.v.IsGlideVehicle then
 				self.v:TurnOff()
@@ -106,8 +103,6 @@ if SERVER then
 			self.v:NotTurning()
 			self.v:HandBrakeOn()
 		elseif self.v.IsSimfphyscar then
-			--self.v:SetActive(true)
-			--self.v:StartEngine()
 			self.v.PressedKeys = self.v.PressedKeys or {}
 			self.v.PressedKeys["W"] = false
 			self.v.PressedKeys["A"] = false
@@ -223,8 +218,6 @@ if SERVER then
 					self.v:GoBack(-throttle)
 				end
 			elseif self.v.IsSimfphyscar then
-				--self.v:SetActive(true)
-				--self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Shift"] = false
 				self.v.PressedKeys["joystick_throttle"] = throttle
@@ -245,8 +238,6 @@ if SERVER then
 					self.v:NotTurning()
 				end
 			elseif self.v.IsSimfphyscar then
-				--self.v:SetActive(true)
-				--self.v:StartEngine()
 				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif self.v.IsGlideVehicle then
 				steer = steer * 2 --Attempt to make steering more sensitive.
@@ -277,43 +268,31 @@ if SERVER then
 		end
 		
 		--Pursuit Tech
-		for k, v in pairs(self.v.PursuitTech) do
-			if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
-				UVDeployWeapon(self.v, k)
-			end
-			if v.Tech == "Repair Kit" then
-				if self.v.IsGlideVehicle then
-					if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
-						UVDeployWeapon(self.v, k)
-						continue
-					end
-				elseif self.v.IsSimfphyscar then
-					if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
-						UVDeployWeapon(self.v, k)
-						continue
-					end
-				elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
-					if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
-						UVDeployWeapon(self.v, k)
-						continue
+		if self.v.PursuitTech then
+			for k, v in pairs(self.v.PursuitTech) do
+				if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
+					UVDeployWeapon(self.v, k)
+				end
+				if v.Tech == "Repair Kit" then
+					if self.v.IsGlideVehicle then
+						if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
+					elseif self.v.IsSimfphyscar then
+						if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
+					elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
+						if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+							UVDeployWeapon(self.v, k)
+							continue
+						end
 					end
 				end
 			end
-		end
-
-		-- if self.v.PursuitTech == "ESF" and !self.v.uvesfdeployed then --ESF
-		-- 	UVAIRacerDeployWeapon(self.v)
-		-- end
-		-- if self.v.PursuitTech == "Stunmine" and !self.v.minelaid then --MINE
-		-- 	UVAIRacerDeployWeapon(self.v)
-		-- end
-		-- --[[if self.v.PursuitTech == "Jammer" and !self.v.jammerdeployed then --JAMMER
-		-- 	UVAIRacerDeployWeapon(self.v)
-		-- end]]
-		-- if self.v.PursuitTech == "Spikestrip" and !self.v.spikestripdeployed then --SPIKESTRIP
-		-- 	UVAIRacerDeployWeapon(self.v)
-		-- end
-		
+		end	
 	end
 	
 	function ENT:Think()
@@ -491,15 +470,6 @@ if SERVER then
 					Upgraded = false
 				}
 			end
-			
-			-- self.v.PursuitTech = {
-			-- 	Tech = selected_pt,
-			-- 	Ammo = GetConVar("unitvehicle_unitpursuittech_maxammo_"..string.lower(selected_pt)):GetInt(),
-			-- 	Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..string.lower(selected_pt)):GetInt(),
-			-- 	LastUsed = 0,
-			-- 	Upgraded = false
-			-- }
-			--self.v.PursuitTech = pttable[math.random(#pttable)]
 		end
 		
 		if !self.uvscripted then
@@ -522,13 +492,13 @@ if SERVER then
 		self.v:DeleteOnRemove(self)
 		
 	end
-else --if CLIENT
+else
 	function ENT:Initialize()
 		self:SetNoDraw(true)
 		self:SetMoveType(MOVETYPE_NONE)
 		self:SetModel(self.Modelname)
 	end
-end --if SERVER
+end
 
 --For Half Life Renaissance Reconstructed
 function ENT:GetNoTarget()

@@ -109,28 +109,6 @@ function TOOL:LeftClick( trace )
 			end)
 
 			return true
-
-			-- local ptselected = self:GetClientInfo("pursuittech")
-			-- if car.PursuitTech then
-			-- 	if car.PursuitTech == ptselected then
-			-- 		self:GetOwner():ChatPrint(ptselected.." has ALREADY been applied to your "..UVGetVehicleMakeAndModel(car).."!")
-			-- 		return false
-			-- 	end
-			-- 	self:GetOwner():ChatPrint(car.PursuitTech.." applied to your "..UVGetVehicleMakeAndModel(car).." has been changed to "..ptselected.."!")
-			-- else
-			-- 	self:GetOwner():ChatPrint(ptselected.." applied to your "..UVGetVehicleMakeAndModel(car).."!")
-			-- end
-			-- car.PursuitTech = ptselected
-			-- local effect = EffectData()
-			-- effect:SetEntity(car)
-			-- util.Effect("phys_freeze", effect)
-			-- table.insert(uvrvwithpursuittech, car)
-			-- car:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
-			-- 	if table.HasValue(uvrvwithpursuittech, car) then
-			-- 		table.RemoveByValue(uvrvwithpursuittech, car)
-			-- 	end
-			-- end)
-			-- return true
 		end
 
 	end

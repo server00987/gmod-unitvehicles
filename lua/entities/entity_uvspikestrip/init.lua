@@ -15,7 +15,6 @@ function ENT:Initialize()
 		self.Entity:SetAngles(self.Entity:GetAngles()+Angle(0,90,0))
 	else
 		self.Entity:SetModel("models/unitvehiclesprops/prop_metalspikes_01/metalspikes.mdl")
-		--self.Entity:SetModel("models/unitvehiclesprops/policespikes/police_spike.mdl")
 	end
 	self.Entity:PhysicsInit(SOLID_VPHYSICS)
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS)

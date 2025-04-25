@@ -1975,12 +1975,6 @@ else --HUD/Options
 
 	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
 	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
-
-	-- for i, v in pairs({UVPTKeybindSlot1, UVPTKeybindSlot2}) do
-	-- 	cvars.AddChangeCallback(v:GetName(), function( convar, old, new )
-	-- 		KeyBindButtons[tonumber(slot)]:SetText("Slot "..i.." - "..string.upper(input.GetKeyName(GetConVar("unitvehicle_pursuittech_keybindslot_"..slot):GetInt())))
-	-- 	end)
-	-- end
 	
 	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
 	UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
@@ -2063,44 +2057,6 @@ else --HUD/Options
 			RunConsoleCommand(key, value)
 		end
 	end)
-
-	
-	
-	-- net.Start("UVGetSettings")
-	-- net.SendToServer()
-	
-	-- local local_convars = {
-	-- 	["unitvehicle_heatlevels_local"] = 'integer',
-	-- 	["unitvehicle_pursuittheme_local"] = 'string',
-	-- 	["unitvehicle_targetvehicletype_local"] = 'integer',
-	-- 	["unitvehicle_detectionrange_local"] = 'integer',
-	-- 	["unitvehicle_playmusic_local"] = 'integer',
-	-- 	["unitvehicle_neverevade_local"] = 'integer',
-	-- 	["unitvehicle_bustedtimer_local"] = 'integer',
-	-- 	["unitvehicle_canwreck_local"] = 'integer',
-	-- 	["unitvehicle_chatter_local"] = 'integer',
-	-- 	["unitvehicle_speedlimit_local"] = 'integer',
-	-- 	["unitvehicle_autohealth_local"] = 'integer',
-	-- 	["unitvehicle_minheatlevel_local"] = 'integer',
-	-- 	["unitvehicle_maxheatlevel_local"] = 'integer',
-	-- 	["unitvehicle_spikestripduration_local"] = 'integer',
-	-- 	["unitvehicle_pathfinding_local"] = 'integer',
-	-- 	["unitvehicle_vcmodelspriority_local"] = 'integer',
-	-- 	["unitvehicle_callresponse_local"] = 'integer',
-	-- 	["unitvehicle_chattertext_local"] = 'integer',
-	-- 	["unitvehicle_enableheadlights_local"] = 'integer',
-	-- 	["unitvehicle_relentless_local"] = 'integer',
-	-- 	["unitvehicle_spawnmainunits_local"] = 'integer',
-	-- 	["unitvehicle_dvwaypointspriority_local"] = 'integer',
-	-- 	["unitvehicle_pursuitthemeplayrandomheat_local"] = 'integer',
-	-- 	["unitvehicle_repaircooldown_local"] = 'integer',
-	-- 	["unitvehicle_repairrange_local"] = 'integer',
-	-- 	["unitvehicle_racertags_local"] = 'integer'
-	-- }
-	
-	-- for name, tayp in pairs(local_convars) do
-	-- 	CreateClientConVar(name.."_local", GetConVar(name):GetString())
-	-- end
 	
 	unitvehicles = true
 	
@@ -2123,52 +2079,12 @@ else --HUD/Options
 
 		local slot = slot[1]
 
-		-- local df = vgui.Create( "DFrame" )	-- The name of the panel, we don't have to parent it
-		-- df:Center()				-- Set the position to 100x by 100y 
-		-- df:SetSize( 200, 100 )				-- Set the size to 300x by 200y
-		-- df:SetTitle( "Keybind" )		-- Set the title in the top left to 'Derma Frame'
-		-- df:SetContentAlignment( 5 )			-- Set the content alignment to the center
-		-- df:SetFocusTopLevel(true)
-		-- df:MakePopup()						-- Make the frame take user's input
-		-- df:SetKeyboardInputEnabled ( false )
-		-- df:SetMouseInputEnabled( false )		-- Make the frame take mouse input
-		-- df:SetDeleteOnClose( false )
-
-		-- -- Center DLabel
-		-- local Panel = vgui.Create( "DLabel", df )	-- Create a panel inside the frame
-		-- Panel:Dock(FILL)				-- Set the position to 100x by 100y
-		-- Panel:SetSize( 200, 100 )				-- Set the size to 300x by 200y
-		-- Panel:SetPos( 0, 0 )				-- Set the position to 100x by 100y
-		-- Panel:SetTextColor( Color( 255, 255, 255) )	-- Set the text color to white
-		-- Panel:SetContentAlignment(5)
-		-- --Panel:MouseCapture( )
-
-		-- df.OnClose = function()
-		-- 	if IsSettingKeybind == slot then
-		-- 		cvars.RemoveChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot)
-		-- 		IsSettingKeybind = nil
-		-- 	end
-		-- end
-
-		--Panel:SetText('Current key: '..input.GetKeyName(GetConVar('unitvehicle_pursuittech_keybindslot_'..slot):GetInt())..'\nPress a key to bind to slot ' .. slot)
-		-- timer.Create("UVKeybindTimer", 0.1, 1, function()
-		-- 	print('hi')
-		-- 	IsSettingKeybind = slot
-		-- end)
 		net.Start("UVPTKeybindRequest")
 		net.WriteInt(slot, 3)
 		net.SendToServer()
 
 		IsSettingKeybind = slot
-
 		KeyBindButtons[tonumber(slot)]:SetText('PRESS A KEY NOW!')
-
-		-- cvars.AddChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot, function( convar, old, new )
-		-- 	if IsSettingKeybind == slot then
-		-- 		cvars.RemoveChangeCallback("unitvehicle_pursuittech_keybindslot_"..slot)
-		-- 		KeyBindButtons[tonumber(slot)]:SetText("Slot 1 - "..input.GetKeyName(GetConVar("unitvehicle_pursuittech_keybindslot_"..slot):GetInt()))
-		-- 	end
-		-- end)
 	end)
 	
 	concommand.Add("uv_local_update_settings", function( ply )
@@ -2566,21 +2482,8 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDPursuitTech", function()
-		-- local PursuitTech = net.ReadString()
-		-- local Status = net.ReadString()
 		local PursuitTable = net.ReadTable()
-
-		-- for i, v in pairs(net.ReadTable()) do
-		-- 	if type(v) == "table" then
-		-- 		-- UVHUDPursuitTech = v[1]
-		-- 		-- UVHUDPursuitTechName = v[2]
-		-- 		-- UVHUDPursuitTechStatus = v[3]
-		-- 		print(v.Tech, v.Ammo)
-		-- 	end
-		-- end
 		UVHUDPursuitTech = PursuitTable
-		-- UVHUDPursuitTechName = PursuitTech
-		-- UVHUDPursuitTechStatus = Status
 	end)
 	
 	net.Receive("UVHUDScanner", function()
@@ -2740,8 +2643,6 @@ else --HUD/Options
 	outofpursuit = 0
 	
 	hook.Add( "HUDPaint", "UVHUD", function() --HUD
-
-		--print(LocalPlayer():KeyPressed(30))
 		
 		local w = ScrW()
 		local h = ScrH()
@@ -2772,7 +2673,6 @@ else --HUD/Options
 			}
 			draw.NoTexture()
 			surface.DrawPoly( element2 )
-			--surface.DrawRect( w/3,h/1.1+28+12,w/3+12, 100 )
 			surface.SetDrawColor( 0, 0, 0, 200)
 			surface.SetFont( "UVFont2" )
 			surface.SetTextColor(255,255,255)
@@ -2955,26 +2855,6 @@ else --HUD/Options
 			end
 		end
 		
-		-- if UVHUDDisplayEvading then
-		-- 	if !EvadingProgress or EvadingProgress == 0 then
-		-- 		EvadingProgress = CurTime()
-		-- 	end
-		-- 	draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-		-- 	draw.DrawText( "EVADING", "UVFont",w/2,h/1.05, Color( 0, 255, 0), TEXT_ALIGN_CENTER )
-		-- 	surface.SetDrawColor( 0, 0, 0, 200)
-		-- 	surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
-		-- 	surface.SetDrawColor(Color( 0, 255, 0))
-		-- 	surface.DrawRect(w/3,h/1.1,12,40)
-		-- 	surface.DrawRect(w*2/3,h/1.1,12,40)
-		-- 	surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-		-- 	surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
-		-- 	surface.SetDrawColor(Color( 0, 255, 0))
-		-- 	local T = math.Clamp((UnitsChasing)*(w/3-20),0,w/3-20)
-		-- 	surface.DrawRect(w/3+16,h/1.1+16,T,8)
-		-- else
-		-- 	BustingProgress = 0
-		-- end
-		
 		if UVHUDDisplayBusting and !UVHUDDisplayCooldown then
 			if !BustingProgress or BustingProgress == 0 then
 				BustingProgress = CurTime()
@@ -3043,15 +2923,6 @@ else --HUD/Options
 					end
 				end
 			end
-			-- else
-			-- 	if next(UVHUDWantedSuspects) != nil then
-			-- 		for _, ent in pairs(UVHUDWantedSuspects) do
-			-- 			if ent.displayedonhud then
-			-- 				local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
-			-- 				curblip.alpha = 0
-			-- 			end
-			-- 		end
-			-- 	end
 		end
 		
 		if UVHUDRoadblocks then
@@ -3128,9 +2999,6 @@ else --HUD/Options
 		end
 		if UVHUDPursuitTech then
 			if !uvclientjammed then
-				-- for i, v in pairs(UVHUDPursuitTech) do
-				-- 	draw.DrawText( v.Tech.."\n"..v.Ammo, "UVFont4",w/1.3+((i -1)*.3), h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
-				-- end
 				for i=1, 2, 1 do
 					if UVHUDPursuitTech[i] then
 						local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
@@ -3147,33 +3015,10 @@ else --HUD/Options
 						else
 							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
 						end
-						--draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.3+((i -1)*.07)), h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 					else
 						draw.DrawText( "-", "UVFont4",w/(1.3+((i -1)*.1)), h-56, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
 					end
 				end
-				-- local timeout
-				-- if UVHUDCopMode then
-				-- 	timeout = UVUnitPTDuration:GetInt()
-				-- else
-				-- 	timeout = UVPTPTDuration:GetInt()
-				-- end
-				-- local status = UVHUDPursuitTechStatus
-				-- if status == "Reloading" then
-				-- 	if !UVHUDPursuitTechReloading then
-				-- 		UVHUDPursuitTechReloading = CurTime()
-				-- 	elseif CurTime() - UVHUDPursuitTechReloading >= timeout then
-				-- 		status = "Ready"
-				-- 		UVHUDPursuitTechReloading = nil
-				-- 	end
-				-- 	if UVHUDPursuitTechReloading then
-				-- 		status = math.Round((CurTime()-(UVHUDPursuitTechReloading+timeout))*-1)
-				-- 	end
-				-- 	draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
-				-- else
-				-- 	UVHUDPursuitTechReloading = nil
-				-- 	draw.DrawText( UVHUDPursuitTechName.."\n"..status, "UVFont4",w/1.3, h-56, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
-				-- end
 			else
 				draw.DrawText( "JAMMED", "UVFont4",w/1.3, h-56, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 			end
@@ -3813,15 +3658,6 @@ else --HUD/Options
 			panel:Button( "Show Wanted Table (in console)", "uv_wantedtable")
 			
 		end)
-
-		-- spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVKeybinds", "Keybinds", "", "", function(panel)
-			
-		-- 	local Button1 = vgui.Create("DButton")
-		-- 	local Button2 = vgui.Create("DButton")
-			
-		-- 	-- make them in line]
-
-		-- end)
 	end)
 	
 end
