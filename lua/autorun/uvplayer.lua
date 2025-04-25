@@ -510,7 +510,7 @@ if SERVER then
                 local vectordifference = object:WorldSpaceCenter() - carpos
                 local angle = vectordifference:Angle()
                 local power = UVPTShockwavePower:GetInt()
-                local damage = UVPTShockwaveDamage:GetInt()
+                local damage = UVPTShockwaveDamage:GetFloat()
                 local force = power * (1 - (vectordifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 object.rammed = true

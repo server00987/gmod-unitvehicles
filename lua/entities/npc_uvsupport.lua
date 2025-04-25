@@ -1739,6 +1739,7 @@ if SERVER then
 		--Pick up a vehicle in the given sphere.
 		if self.vehicle then
 			local v = self.vehicle
+			if v.UnitVehicle then return end
 			if v.IsScar then --If it's a SCAR.
 				if not v:HasDriver() then --If driver's seat is empty.
 					self.v = v
@@ -1783,6 +1784,7 @@ if SERVER then
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
 				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
+				if v.UnitVehicle then continue end
 				if v:IsVehicle() then
 					if v.IsScar then --If it's a SCAR.
 						if not v:HasDriver() then --If driver's seat is empty.

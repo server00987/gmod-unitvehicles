@@ -26,8 +26,7 @@ function ENT:Think()
 		if !IsValid(v) or 
 		v.uvrepairdelayed or 
 		v.wrecked or 
-		(!v:GetClass() == "prop_vehicle_jeep" and !v.IsSimfphyscar and !v.IsGlideVehicle) or 
-		(table.HasValue(uvwantedtablevehicle, v) and AutoHealth:GetBool()) then 
+		(!v:GetClass() == "prop_vehicle_jeep" and !v.IsSimfphyscar and !v.IsGlideVehicle) then 
 			continue 
 		end
 		self:Repair(v)
