@@ -165,21 +165,21 @@ if CLIENT then
 
 			local convar_table = {}
 
-			convar_table['unitvehicle_unitpursuittech_ptduration'] = GetConVar("uvunitpursuittech_ptduration"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_esfduration'] = GetConVar("uvunitpursuittech_esfduration"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_esfpower'] = GetConVar("uvunitpursuittech_esfpower"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_esfdamage'] = GetConVar("uvunitpursuittech_esfdamage"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetInt()
-			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetInt()
+			convar_table['unitvehicle_unitpursuittech_ptduration'] = GetConVar("uvunitpursuittech_ptduration"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_esfduration'] = GetConVar("uvunitpursuittech_esfduration"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_esfpower'] = GetConVar("uvunitpursuittech_esfpower"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_esfdamage'] = GetConVar("uvunitpursuittech_esfdamage"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
 
-			RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetInt())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetInt())
+			RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat())
+			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat())
 
 			for _, v in pairs(pttable) do
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))

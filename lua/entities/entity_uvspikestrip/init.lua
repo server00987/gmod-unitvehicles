@@ -205,8 +205,6 @@ function ENT:StartTouch( ent )
 			end
 			local ogwheelpos = ent.GhostEnt:GetLocalPos()
 			ent:SetDamaged(true)
-			local phmass = math.Round(ent:GetPhysicsObject():GetMass())
-			uvbounty = uvbounty+phmass
 			timer.Simple(GetConVar("unitvehicle_spikestripduration"):GetFloat(), function() 
 				if IsValid(car) and IsValid(ent) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
 					if car.wrecked then return end

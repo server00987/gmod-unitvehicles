@@ -529,7 +529,7 @@ if SERVER then
                             object:ApplyDamage( damage, DMG_GENERIC )
                         end
                     elseif object.IsGlideVehicle then
-                        if object.UnitVehicle or object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool() then
+                        if object.UnitVehicle or (object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool()) or !(object.UnitVehicle and object.UVWanted) then
                             object:SetEngineHealth( object:GetEngineHealth() - damage )
                             object:UpdateHealthOutputs()
                         end

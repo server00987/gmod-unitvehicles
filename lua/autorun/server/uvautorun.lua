@@ -726,14 +726,12 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						enemycallsign = enemydriver:GetName()
 					end
 				end
-				print(object:GetEngineHealth())
-				if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) then
+				if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
 					if object.IsSimfphyscar then
 						local MaxHealth = object:GetMaxHealth()
 						local damage = MaxHealth * damage--0.4
 						object:ApplyDamage( damage, DMG_GENERIC )
 					elseif object.IsGlideVehicle then
-						print(object:GetEngineHealth())
 						object:SetEngineHealth( object:GetEngineHealth() - damage )--0.4
     					object:UpdateHealthOutputs()
 					elseif object:GetClass() == "prop_vehicle_jeep" then
@@ -988,10 +986,10 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		local damage
 		if car.UnitVehicle then
 			power = UVUnitPTESFPower:GetInt()
-			damage = UVUnitPTESFDamage:GetInt()
+			damage = UVUnitPTESFDamage:GetFloat()
 		else
 			power = UVPTESFPower:GetInt()
-			damage = UVPTESFDamage:GetInt()
+			damage = UVPTESFDamage:GetFloat()
 		end
 		if car.uvupgraded or car.UVWanted then
 			power = power * 2
@@ -1013,7 +1011,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				enemycallsign = enemydriver:GetName()
 			end
 		end
-		if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) then
+		if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
 			if object.IsSimfphyscar then
 				local MaxHealth = object:GetMaxHealth()
 				local damage = MaxHealth*damage

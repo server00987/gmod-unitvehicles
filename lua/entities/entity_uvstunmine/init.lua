@@ -114,20 +114,14 @@ function ENT:UVStunmineHit()
                     object.rammed = nil
                 end
             end)
-            if object.UnitVehicle then
-				local phmass = math.Round(objectphys:GetMass())
-				uvbounty = uvbounty+phmass
+            if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
                 if object.IsSimfphyscar then
-					if object.UnitVehicle or object.UVWanted and !AutoHealth:GetBool() then
-                        local MaxHealth = object:GetMaxHealth()
-                        local damage = MaxHealth*damage
-                        object:ApplyDamage( damage, DMG_GENERIC )
-                    end
+					local MaxHealth = object:GetMaxHealth()
+                    local damage = MaxHealth*damage
+                    object:ApplyDamage( damage, DMG_GENERIC )
                 elseif object.IsGlideVehicle then
-					if object.UnitVehicle or object.UVWanted and !AutoHealth:GetBool() then
-						object:SetEngineHealth( object:GetEngineHealth() - damage )
-						object:UpdateHealthOutputs()
-					end
+					object:SetEngineHealth( object:GetEngineHealth() - damage )
+					object:UpdateHealthOutputs()
                 elseif object:GetClass() == "prop_vehicle_jeep" then
 
                 end
