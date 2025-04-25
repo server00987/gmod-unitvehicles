@@ -528,6 +528,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
+
+		if !IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableunit.."' is missing!") return end
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 		if rhinoattack then
