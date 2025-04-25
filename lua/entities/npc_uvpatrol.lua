@@ -1654,7 +1654,6 @@ if SERVER then
 			if IsValid(self.v) then 
 				if self.v.IsGlideVehicle then
 					self.v:AddCallback("PhysicsCollide", function(ent, coldata)
-						print("yeah")
 					end)
 				elseif self.v:GetClass() == "prop_vehicle_jeep" then
 					self.v:AddCallback("PhysicsCollide", function(ent, coldata)

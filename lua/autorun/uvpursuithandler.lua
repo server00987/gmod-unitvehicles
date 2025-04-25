@@ -1787,29 +1787,8 @@ if SERVER then
 	end)
 	
 else --HUD/Options
-	--local PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "nfsmostwanted", false, false, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
 	local displaying_busted = false 
 	local IsSettingKeybind = false
-	-- hook.Add( "PlayerButtonDown", "UVDeployWeapon", function( driver, key )
-	-- 	print("PlayerButtonDown", driver, key)
-	-- end )
-	-- surface.SetFont( "Default" )
-	-- surface.SetTextColor( 255, 255, 255 )
-	-- surface.SetTextPos( 128, 128 ) 
-	-- surface.DrawText( "Hello World" )
-
-	-- hook.Add("PlayerButtonDown", "UVDeployWeapon", function( driver, key )
-    --     if CLIENT and not IsFirstTimePredicted() then
-    --        return
-    --     end
-    --     print(key)
-    -- end)
-	
-	hook.Add('HUDPaint', 'Hi', function()
-		if displaying_busted then
-			draw.DrawText('BUSTED', 'CloseCaption_BoldItalic', ScrW() * .5, ScrH() * .25, Color(255,0,0), TEXT_ALIGN_CENTER)
-		end
-	end)
 	
 	--hook.Run('HUDArrest')
 	
