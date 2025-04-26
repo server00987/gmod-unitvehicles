@@ -1624,6 +1624,9 @@ function UVBustEnemy(self, enemy)
 			end)
 			wreck:SetEngineHealth(0)
 			wreck.UnflipForce = 0
+			if wreck:GetVelocity():LengthSqr() > 250000 then
+				UVGlideDetachWheels(wreck)
+			end
 		elseif enemy.IsSimfphyscar then
 			local wreck = enemy
 			timer.Simple(despawntime, function()
@@ -1632,29 +1635,11 @@ function UVBustEnemy(self, enemy)
 				end
 			end)
 			if enemy:GetVelocity():LengthSqr() > 250000 then
-				local wheelmathchance = 1
-				if wheelmathchance == math.random(1,2) then
-					if istable(wreck.Wheels) then
-						local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+				for i = 1, #wreck.Wheels do
+					local wheelmathchance = math.random(1,2)
+					local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+					if wheelmathchance == 1 then
 						constraint.RemoveAll(Wheel)
-					end
-					if wheelmathchance == math.random(1,2) then
-						if istable(wreck.Wheels) then
-							local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-							constraint.RemoveAll(Wheel)
-						end
-						if wheelmathchance == math.random(1,2) then
-							if istable(wreck.Wheels) then
-								local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-								constraint.RemoveAll(Wheel)
-							end
-							if wheelmathchance == math.random(1,2) then
-								if istable(wreck.Wheels) then
-									local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-									constraint.RemoveAll(Wheel)
-								end
-							end
-						end
 					end
 				end
 			end
@@ -2340,6 +2325,9 @@ function UVPlayerWreck(vehicle)
 		wreck:SetEngineHealth(0)
 		wreck:UpdateHealthOutputs()
 		wreck.UnflipForce = 0
+		if wreck:GetVelocity():LengthSqr() > 250000 then
+			UVGlideDetachWheels(wreck)
+		end
 	elseif vehicle.IsSimfphyscar then
 		local wreck = vehicle
 		timer.Simple(despawntime, function()
@@ -2348,29 +2336,11 @@ function UVPlayerWreck(vehicle)
 			end
 		end)
 		if vehicle:GetVelocity():LengthSqr() > 250000 then
-			local wheelmathchance = 1
-			if wheelmathchance == math.random(1,2) then
-				if istable(wreck.Wheels) then
-					local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+			for i = 1, #wreck.Wheels do
+				local wheelmathchance = math.random(1,2)
+				local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+				if wheelmathchance == 1 then
 					constraint.RemoveAll(Wheel)
-				end
-				if wheelmathchance == math.random(1,2) then
-					if istable(wreck.Wheels) then
-						local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-						constraint.RemoveAll(Wheel)
-					end
-					if wheelmathchance == math.random(1,2) then
-						if istable(wreck.Wheels) then
-							local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-							constraint.RemoveAll(Wheel)
-						end
-						if wheelmathchance == math.random(1,2) then
-							if istable(wreck.Wheels) then
-								local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-								constraint.RemoveAll(Wheel)
-							end
-						end
-					end
 				end
 			end
 		end
@@ -2497,4 +2467,59 @@ function UVNavigateNavmesh(self, vectors)
 		self.NavigateBlind = true
 		return --Unable to get route
 	end
+end
+
+function UVGlideDetachWheels(vehicle)
+	timer.Simple(0, function()
+		if !IsValid(vehicle) or !vehicle.wheels then return end
+
+		for i = 1, #vehicle.wheels do
+			local wheelmathchance = math.random(1,2)
+			local wheel = vehicle.wheels[math.random(1, #vehicle.wheels)]
+
+			if wheelmathchance == 1 then
+				local wheelmodel = wheel:GetModel()
+				local wheelpos = wheel:GetPos()
+				local wheelang = wheel:GetAngles()
+				local wheelcolor = wheel:GetColor()
+				local wheelmat = wheel:GetMaterial()
+				local wheelvelocity = wheel:GetVelocity()
+
+				local wheelphys = vehicle:GetPhysicsObject() --Wheels don't have a physics object
+				local wheelangvel = wheelphys:GetAngleVelocity()
+
+				table.RemoveByValue(vehicle.wheels, wheel)
+				wheel:Remove()
+
+				local wreckedwheel = ents.Create("prop_physics")
+				wreckedwheel:SetModel(wheelmodel)
+				wreckedwheel:SetPos(wheelpos)
+				wreckedwheel:SetAngles(wheelang)
+				wreckedwheel:SetColor(wheelcolor)
+				wreckedwheel:SetMaterial(wheelmat)
+				wreckedwheel:SetVelocity(wheelvelocity)
+				wreckedwheel:Spawn()
+
+				local wreckedwheelphys = wreckedwheel:GetPhysicsObject()
+				wreckedwheelphys:SetVelocity(wheelvelocity)
+				wreckedwheelphys:SetAngleVelocity(wheelangvel)
+
+				timer.Simple(60, function()
+					if IsValid(wreckedwheel) then
+						wreckedwheel:Remove()
+					end
+				end)
+
+				continue
+
+			else
+				
+				break
+
+			end
+
+		end
+
+	end)
+	
 end

@@ -259,6 +259,9 @@ if SERVER then
 				if wreck.CanSwitchHeadlights then
 					wreck:SetHeadlightState(0)
 				end
+				if wreck:GetVelocity():LengthSqr() > 250000 then
+					UVGlideDetachWheels(wreck)
+				end
 			elseif self.v.IsSimfphyscar then
 				local wreck = self.v
 				timer.Simple(despawntime, function()
@@ -266,30 +269,12 @@ if SERVER then
 						SafeRemoveEntity(wreck)
 					end
 				end)
-				if self.v:GetVelocity():LengthSqr() > 250000 then
-					local wheelmathchance = 1
-					if wheelmathchance == math.random(1,2) then
-						if istable(wreck.Wheels) then
-							local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+				if wreck:GetVelocity():LengthSqr() > 250000 then
+					for i = 1, #wreck.Wheels do
+						local wheelmathchance = math.random(1,2)
+						local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
+						if wheelmathchance == 1 then
 							constraint.RemoveAll(Wheel)
-						end
-						if wheelmathchance == math.random(1,2) then
-							if istable(wreck.Wheels) then
-								local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-								constraint.RemoveAll(Wheel)
-							end
-							if wheelmathchance == math.random(1,2) then
-								if istable(wreck.Wheels) then
-									local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-									constraint.RemoveAll(Wheel)
-								end
-								if wheelmathchance == math.random(1,2) then
-									if istable(wreck.Wheels) then
-										local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
-										constraint.RemoveAll(Wheel)
-									end
-								end
-							end
 						end
 					end
 				end
@@ -314,7 +299,7 @@ if SERVER then
 				local phwreck = wreck:GetPhysicsObject()
 				phwreck:SetMass(self.mass)
 				phwreck:SetVelocity(self.v:GetPhysicsObject():GetVelocity())
-				if self.v:GetVelocity():LengthSqr() > 250000 then 
+				if wreck:GetVelocity():LengthSqr() > 250000 then 
 				wreck:Ignite(30)
 				local e = EffectData()
 				e:SetOrigin(wreck:GetPos())
@@ -336,7 +321,7 @@ if SERVER then
 				end)
 				if wreck:LookupAttachment("vehicle_engine") > 0 then
 					ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-					if self.v:GetVelocity():LengthSqr() > 250000 then 
+					if wreck:GetVelocity():LengthSqr() > 250000 then 
 						ParticleEffectAttach("env_fire_small", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
 					end
 				end
