@@ -15,8 +15,10 @@ local dvd = DecentVehicleDestination
 
 if SERVER then
 
+    util.AddNetworkString( "UVHUDWanted" )
+
     hook.Add("Think", "UVCheckForCalls", function()
-        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() then --or uvtargeting or uvcalllocation or uvcallexists
+        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcalllocation or uvcallexists then
             if uvcalllocation and uvtargeting then --Remove the call, allow for new calls to come in
                 uvcalllocation = nil
             end
@@ -50,7 +52,7 @@ if SERVER then
                                 if !object.UnitVehicle then
                                     if !object:IsWorld() then
                                         if object:IsVehicle() then --Hit And Run
-                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
                                                 uvpreinfractioncount = uvpreinfractioncount + 1
                                                 uvpreinfractioncountcooldown = CurTime()
                                                 if uvpreinfractioncount >= 10 then
@@ -58,7 +60,7 @@ if SERVER then
                                                 end
                                             end
                                         else --Damage to Property
-                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
                                                 uvpreinfractioncount = uvpreinfractioncount + 1
                                                 uvpreinfractioncountcooldown = CurTime()
                                                 if uvpreinfractioncount >= 10 then
@@ -101,7 +103,7 @@ if SERVER then
             speedlimit = (GetConVar("unitvehicle_speedlimit"):GetFloat()*17.6)^2
         end
 
-        if speed > (speedlimit+30976) and !uvpresencemode then
+        if speed > (speedlimit+30976) then
             uvpreinfractioncount = uvpreinfractioncount + 1
             if uvpreinfractioncount >= 10 then
                 UVCallInitiate(suspect, 1)
@@ -160,7 +162,7 @@ if SERVER then
                 UVCallReportDescription(suspectvehicle, calllocation)
             else
                 UVCallRespond(suspectvehicle, true) --No questions asked
-                --uvcalllocation = calllocation
+                uvcalllocation = calllocation
             end
         end)
 
@@ -193,7 +195,7 @@ if SERVER then
                 end
                 timer.Simple(timecheck2, function()
                     UVCallRespond(suspectvehicle)
-                    --uvcalllocation = calllocation
+                    uvcalllocation = calllocation
                 end)
             else --Unknown description
                 if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
@@ -204,7 +206,7 @@ if SERVER then
                 end
                 timer.Simple(timecheck2, function()
                     UVCallRespond(suspectvehicle)
-                    --uvcalllocation = calllocation
+                    uvcalllocation = calllocation
                 end)
             end
         end)
@@ -231,5 +233,27 @@ if SERVER then
         end
 
     end
+
+else
+    
+    net.Receive("UVHUDWanted", function()
+        local soundfiles = file.Find("sound/ui/pursuit/wanted/*", "GAME" )
+        if !soundfiles or #soundfiles == 0 then return end
+        surface.PlaySound("ui/pursuit/wanted/"..soundfiles[math.random(1, #soundfiles)])
+
+        if Glide then
+            local text = [[<color=255,0,0>You are now wanted by the Unit Vehicles!</color>]]
+
+            Glide.Notify( {
+                text = text,
+                icon = "hud/MILESTONE_PURSUIT.png",
+                sound = "glide/ui/phone_notify.wav",
+                lifetime = 10
+            } )
+        else
+            chat.AddText(Color(255,0,0), "You are now wanted by the Unit Vehicles!")
+        end
+
+    end)
 
 end

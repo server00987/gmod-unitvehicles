@@ -878,7 +878,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
     		    if !object:IsWorld() then
 					local ctimeout = 1
     		        if object:IsVehicle() then --Hit And Run
-    		            if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+    		            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
     		                uvpreinfractioncount = uvpreinfractioncount + 1
     		                uvpreinfractioncountcooldown = CurTime()
     		                if uvpreinfractioncount >= 10 then
@@ -888,7 +888,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
     		                end
     		            end
     		        else --Damage to Property
-    		            if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+    		            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
     		                uvpreinfractioncount = uvpreinfractioncount + 1
     		                uvpreinfractioncountcooldown = CurTime()
     		                if uvpreinfractioncount >= 10 then
@@ -1161,7 +1161,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
         if !object:IsWorld() then
 			local ctimeout = 1
             if object:IsVehicle() then --Hit And Run
-                if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+                if CurTime() > uvpreinfractioncountcooldown + ctimeout then
                     uvpreinfractioncount = uvpreinfractioncount + 1
                     uvpreinfractioncountcooldown = CurTime()
                     if uvpreinfractioncount >= 10 then
@@ -1171,7 +1171,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
                     end
                 end
             else --Damage to Property
-                if CurTime() > uvpreinfractioncountcooldown + ctimeout and !uvpresencemode then
+                if CurTime() > uvpreinfractioncountcooldown + ctimeout then
                     uvpreinfractioncount = uvpreinfractioncount + 1
                     uvpreinfractioncountcooldown = CurTime()
                     if uvpreinfractioncount >= 10 then
@@ -1198,13 +1198,17 @@ function UVAddToWantedListVehicle(vehicle)
 	if !vehicle.UVWanted then
 		vehicle.UVWanted = vehicle
 	end
+	local driver = UVGetDriver(vehicle)
 	if !table.HasValue(uvwantedtablevehicle, vehicle) then
 		table.insert(uvwantedtablevehicle, vehicle)
+		if driver:IsPlayer() and !table.HasValue(uvwantedtabledriver, driver) then
+			UVAddToWantedListDriver(driver)
+		end
 		if AutoHealth:GetBool() then
-			if UVGetDriver(vehicle):IsPlayer() then
-				if UVGetDriver(vehicle):GetMaxHealth() == 100 then
-					UVGetDriver(vehicle):SetHealth(vehicle:GetPhysicsObject():GetMass())
-					UVGetDriver(vehicle):SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
+			if driver:IsPlayer() then
+				if driver:GetMaxHealth() == 100 then
+					driver:SetHealth(vehicle:GetPhysicsObject():GetMass())
+					driver:SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
 				end
 			end
 			if vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
@@ -1293,6 +1297,7 @@ function UVAddToWantedListVehicle(vehicle)
 end
 
 function UVAddToWantedListDriver(driver)
+	if !IsValid(driver) or !driver:IsPlayer() then return end
 	if table.HasValue(uvplayerunittableplayers, driver) then
 		table.RemoveByValue(uvplayerunittableplayers, driver)
 		net.Start( "UVHUDStopCopMode" )
@@ -1305,6 +1310,8 @@ function UVAddToWantedListDriver(driver)
 				table.RemoveByValue(uvwantedtabledriver, driver)
 			end
 		end)
+		net.Start( "UVHUDWanted" )
+		net.Send(driver)
 	end
 end
 
@@ -2478,14 +2485,15 @@ function UVGlideDetachWheels(vehicle)
 			local wheel = vehicle.wheels[math.random(1, #vehicle.wheels)]
 
 			if wheelmathchance == 1 then
+				local wheelphys = vehicle:GetPhysicsObject() --Wheels don't have a physics object
+
 				local wheelmodel = wheel:GetModel()
 				local wheelpos = wheel:GetPos()
 				local wheelang = wheel:GetAngles()
 				local wheelcolor = wheel:GetColor()
 				local wheelmat = wheel:GetMaterial()
-				local wheelvelocity = wheel:GetVelocity()
 
-				local wheelphys = vehicle:GetPhysicsObject() --Wheels don't have a physics object
+				local wheelvelocity = wheelphys:GetVelocity()
 				local wheelangvel = wheelphys:GetAngleVelocity()
 
 				table.RemoveByValue(vehicle.wheels, wheel)
