@@ -2928,7 +2928,7 @@ else --HUD/Options
 			local enemypos = localPlayer:GetPos()
 			local closestdistancetounit = UVHUDScannerPos:DistToSqr(enemypos)
 			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.DrawRect(w/2-28, h/10-28, 56, 56 )
+			drawCircle( w/2, h/10, 30, 50 )
 			local beepfrequency = math.Clamp(math.sqrt(closestdistancetounit/100000000),0.1,1)
 			if beepfrequency >= 1 then
 				surface.SetDrawColor( 0, 0, 0, 200)
