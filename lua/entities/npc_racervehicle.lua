@@ -449,7 +449,7 @@ if SERVER then
 			"Repair Kit",
 		}
 		
-		if RacerPursuitTech:GetBool() then
+		if RacerPursuitTech:GetBool() and uvtargeting then
 			if not self.v.PursuitTech then self.v.PursuitTech = {} end
 
 			for i=1, 2, 1 do
