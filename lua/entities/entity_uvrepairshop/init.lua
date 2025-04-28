@@ -72,15 +72,28 @@ function ENT:Repair(vehicle)
 		end
 	end
 
-	if vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
-		if !ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
+	if vehicle:GetClass() == "prop_vehicle_jeep" then
+		if vcmod_main then
+			if !ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
 
-		if vehicle.uvrepaircooldown then
-			UVRepairCooldown()
-			return
+			if vehicle.uvrepaircooldown then
+				UVRepairCooldown()
+				return
+			end
+
+			vehicle:VC_repairFull_Admin()
+		else
+			if !ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
+
+			if vehicle.uvrepaircooldown then
+				UVRepairCooldown()
+				return
+			end
+
+			local mass = vehicle:GetPhysicsObject():GetMass()
+			vehicle:SetMaxHealth(mass)
+			vehicle:SetHealth(mass)
 		end
-
-		vehicle:VC_repairFull_Admin()
 	end
 	if vehicle.IsSimfphyscar then
 		if !ptrefilled and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end

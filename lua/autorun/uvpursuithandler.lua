@@ -935,7 +935,7 @@ if SERVER then
 		
 		if next(uvsimfphysvehicleinitializing) != nil then
 			for k, car in pairs(uvsimfphysvehicleinitializing) do
-				if IsValid(car) and ((isfunction(car.IsInitialized) and car:IsInitialized()) or car.IsGlideVehicle) then
+				if IsValid(car) and ((isfunction(car.IsInitialized) and car:IsInitialized()) or car.IsGlideVehicle or car:GetClass() == "prop_vehicle_jeep") then
 					if car.uvclasstospawnon == "npc_uvpatrol" then
 						car.playerbounty = UVUBountyPatrol:GetInt()
 					elseif car.uvclasstospawnon == "npc_uvsupport" then
@@ -957,6 +957,13 @@ if SERVER then
 							car:SetChassisHealth( health )
 							car:SetEngineHealth( enginehealth )
 							car:UpdateHealthOutputs()
+						elseif car:GetClass() == "prop_vehicle_jeep" then
+							if vcmod_main then
+								car:VC_setHealthMax(UVUOneCommanderHealth:GetInt())
+								car:VC_setHealth(health)
+							else
+								car:SetHealth(health)
+							end
 						end
 						table.insert(uvcommanders, car)
 						uvcommanderrespawning = nil
@@ -2504,6 +2511,9 @@ else --HUD/Options
 				color = Color( 150, 0, 0),
 				alpha = 0
 			} )
+			if unit:GetClass() == "prop_vehicle_jeep" then
+				blip.icon = "hud/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+			end
 			local created = false
 			local flashwhite = false
 			timer.Simple(0.1, function()
@@ -2738,6 +2748,9 @@ else --HUD/Options
 						local enginehealth = UVHUDCommander:GetEngineHealth()
 						UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth()*enginehealth
 						UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+					elseif vcmod_main then
+						UVHUDCommanderLastHealth = UVUOneCommanderHealth:GetInt()*(UVHUDCommander:VC_getHealth()/100) --vcmod returns % health clientside
+						UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
 					end
 					UVRenderCommander(UVHUDCommander)
 				end
@@ -2890,6 +2903,9 @@ else --HUD/Options
 							scale = 1.4,
 							color = Color( 255, 191, 0),
 						} )
+						if ent:GetClass() == "prop_vehicle_jeep" then
+							blip.icon = "hud/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+						end
 					end
 					if ent.displayedonhud then
 						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())

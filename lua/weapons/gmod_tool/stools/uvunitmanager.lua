@@ -496,12 +496,43 @@ if CLIENT then
 				elseif UVTOOLMemory.VehicleBase == "base_glide_car" or UVTOOLMemory.VehicleBase == "base_glide_motorcycle" then
 					local jsondata = util.TableToJSON(UVTOOLMemory)
 					file.Write("unitvehicles/glide/units/"..Name..".json", jsondata )
+				elseif UVTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
+					local DataString = ""
+					
+					for k,v in pairs(UVTOOLMemory) do
+						if k == "SubMaterials" then
+							local mats = ""
+							local first = true
+							for k, v in pairs( v ) do
+								if first then
+									first = false
+									mats = mats..v
+								else
+									mats = mats..","..v
+								end
+							end
+							DataString = DataString..k.."="..mats.."#"
+						else
+							DataString = DataString..k.."="..tostring( v ).."#"
+						end
+					end
+
+					local words = string.Explode( "", DataString )
+					local shit = {}
+
+					for k, v in pairs( words ) do
+						shit[k] =  string.char( string.byte( v ) + 20 )
+					end
+
+					file.Write("unitvehicles/prop_vehicle_jeep/units/"..Name..".txt", string.Implode("",shit) )
 				end
 				
 				UVUnitManagerScrollPanel:Clear()
 				UVUnitManagerScrollPanelGlide:Clear()
+				UVUnitManagerScrollPanelJeep:Clear()
 				UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
 				UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
+				UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
 				UnitAdjust:Close()
 				if AssignToHeatLevel then
 					if UnitClass == "1: Patrol" then
@@ -688,6 +719,84 @@ if CLIENT then
         			if !JSONData then return end
 
         			UVTOOLMemory = util.JSONToTable(JSONData, true)
+					
+					net.Start("UVUnitManagerGetUnitInfo")
+						net.WriteTable( UVTOOLMemory )
+					net.SendToServer()
+				end
+			end
+			
+			index = index + 1
+			highlight = not highlight
+		end
+	end
+
+	function UVUnitManagerGetSavesJeep( panel )
+		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/units/*.txt", "DATA")
+		local index = 0
+		local highlight = false
+		local offset = 22
+		
+		for k,v in pairs(saved_vehicles) do
+			local printname = v
+
+			if not selecteditem then
+				selecteditem = printname
+			end
+			
+			local Button = vgui.Create( "DButton", panel )
+			Button:SetText( printname )
+			Button:SetTextColor( Color( 255, 255, 255 ) )
+			Button:SetPos( 0,index * offset)
+			Button:SetSize( 280, offset )
+			Button.highlight = highlight
+			Button.printname = printname
+			Button.Paint = function( self, w, h )
+				
+				local c_selected = Color( 128, 185, 128, 255 )
+				local c_normal = self.highlight and Color( 108, 111, 114, 200 ) or Color( 77, 80, 82, 200 )
+				local c_hovered = Color( 41, 128, 185, 255 )
+				local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
+				
+				draw.RoundedBox( 5, 1, 1, w - 2, h - 1, c_ )
+			end
+			Button.DoClick = function( self )
+				selecteditem = self.printname
+				if isstring(selecteditem) then
+
+					SetClipboardText(selecteditem)
+					
+					local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/units/"..selecteditem, "DATA" )
+					
+					local words = string.Explode( "", DataString )
+					local shit = {}
+					
+					for k, v in pairs( words ) do
+						shit[k] =  string.char( string.byte( v ) - 20 )
+					end
+					
+					local Data = string.Explode( "#", string.Implode("",shit) )
+					
+					table.Empty( UVTOOLMemory )
+					
+					for _,v in pairs(Data) do
+						local Var = string.Explode( "=", v )
+						local name = Var[1]
+						local variable = Var[2]
+						
+						if name and variable then
+							if name == "SubMaterials" then
+								UVTOOLMemory[name] = {}
+								
+								local submats = string.Explode( ",", variable )
+								for i = 0, (table.Count( submats ) - 1) do
+									UVTOOLMemory[name][i] = submats[i+1]
+								end
+							else
+								UVTOOLMemory[name] = variable
+							end
+						end
+					end
 					
 					net.Start("UVUnitManagerGetUnitInfo")
 						net.WriteTable( UVTOOLMemory )
@@ -975,6 +1084,71 @@ if CLIENT then
 			UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
 		end
 		CPanel:AddItem(DeleteGlide)
+
+		CPanel:AddControl("Label", {
+			Text = "——— GLOBAL PROP_VEHICLE_JEEP UNITS ———\n\n- Empty? Right click a vehicle to start creating a new Unit.",
+		})
+
+		local FrameJeep = vgui.Create( "DFrame" )
+		FrameJeep:SetSize( 280, 320 )
+		FrameJeep:SetTitle( "" )
+		FrameJeep:SetVisible( true )
+		FrameJeep:ShowCloseButton( false )
+		FrameJeep:SetDraggable( false )
+		FrameJeep.Paint = function( self, w, h )
+			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
+			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
+		end
+		CPanel:AddItem(FrameJeep)
+
+		UVUnitManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
+		UVUnitManagerScrollPanelJeep:SetSize( 280, 320 )
+		UVUnitManagerScrollPanelJeep:SetPos( 0, 0 )
+		
+		UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
+
+		local AssignmentJeep = vgui.Create( "DButton", CPanel )
+		AssignmentJeep:SetText( "Get Unit Assignment" )
+		AssignmentJeep:SetSize( 280, 20 )
+		AssignmentJeep.DoClick = function( self )
+			if isstring(selecteditem) then
+				net.Start("UVUnitManagerGetUnitAssignment")
+				net.WriteString(selecteditem)
+				net.SendToServer()
+			end
+		end
+		CPanel:AddItem(AssignmentJeep)
+
+		local RefreshJeep = vgui.Create( "DButton", CPanel )
+		RefreshJeep:SetText( "Refresh" )
+		RefreshJeep:SetSize( 280, 20 )
+		RefreshJeep.DoClick = function( self )
+			UVUnitManagerScrollPanelJeep:Clear()
+			selecteditem = nil
+			UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
+			notification.AddLegacy( "Unit(s) refreshed!", NOTIFY_UNDO, 5 )
+			surface.PlaySound( "buttons/button15.wav" )
+		end
+		CPanel:AddItem(RefreshJeep)
+
+		local DeleteJeep = vgui.Create( "DButton", CPanel )
+		DeleteJeep:SetText( "Delete" )
+		DeleteJeep:SetSize( 280, 20 )
+		DeleteJeep.DoClick = function( self )
+			
+			if isstring(selecteditem) then
+				if file.Delete( "unitvehicles/prop_vehicle_jeep/units/"..selecteditem ) then
+					notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+					surface.PlaySound( "buttons/button15.wav" )
+					Msg( "Unit "..selecteditem.." has been deleted!\n" )
+				end
+			end
+			
+			UVUnitManagerScrollPanelJeep:Clear()
+			selecteditem = nil
+			UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
+		end
+		CPanel:AddItem(DeleteJeep)
 
 		CPanel:AddControl("Label", {
 			Text = "——— VEHICLE BASE ———",
@@ -1486,7 +1660,7 @@ function TOOL:RightClick(trace)
 		ply.UVTOOLMemory = {}
 	end
 
-	if ent.IsSimfphyscar or ent.IsGlideVehicle then
+	if ent.IsSimfphyscar or ent.IsGlideVehicle or ent:GetClass() == "prop_vehicle_jeep" then
 		if not IsValid(ent) then 
 			table.Empty( ply.UVTOOLMemory )
 
@@ -1712,6 +1886,74 @@ function TOOL:LeftClick( trace )
 		UVAddToPlayerUnitListVehicle(Ent)
 
 		return true
+
+	elseif ply.UVTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
+		local class = ply.UVTOOLMemory.SpawnName
+		local vehicles = list.Get("Vehicles")
+		local lst = vehicles[class]
+		if !lst then
+			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
+			return
+		end
+
+		local Ent = ents.Create("prop_vehicle_jeep")
+		Ent.VehicleTable = lst
+		Ent:SetModel(lst.Model) 
+		Ent:SetPos(trace.HitPos)
+
+		local SpawnAng = self:GetOwner():EyeAngles()
+		SpawnAng.pitch = 0
+		SpawnAng.yaw = SpawnAng.yaw + 90
+		SpawnAng.roll = 0
+		Ent:SetAngles(SpawnAng)
+
+		Ent:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
+		Ent:SetVehicleClass( class )
+		Ent:Spawn()
+		Ent:Activate()
+
+		local vehicle = Ent
+		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
+
+		if istable( ply.UVTOOLMemory.SubMaterials ) then
+			for i = 0, table.Count( ply.UVTOOLMemory.SubMaterials ) do
+				Ent:SetSubMaterial( i, ply.UVTOOLMemory.SubMaterials[i] )
+			end
+		end
+
+		local groups = string.Explode( ",", ply.UVTOOLMemory.BodyGroups)
+		for i = 1, table.Count( groups ) do
+			Ent:SetBodygroup(i, tonumber(groups[i]) )
+		end
+		
+		Ent:SetSkin( ply.UVTOOLMemory.Skin )
+		
+		local c = string.Explode( ",", ply.UVTOOLMemory.Color )
+		local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+		
+		local dot = Color.r * Color.g * Color.b * Color.a
+		Ent.OldColor = dot
+		Ent:SetColor( Color )
+		
+		local data = {
+			Color = Color,
+			RenderMode = 0,
+			RenderFX = 0
+		}
+		duplicator.StoreEntityModifier( Ent, "colour", data )
+
+		undo.Create( "Vehicle" )
+			undo.SetPlayer( ply )
+			undo.AddEntity( Ent )
+			undo.SetCustomUndoText( "Undone " .. class )
+		undo.Finish( "Vehicle (" .. tostring( class ) .. ")" )
+
+		Ent.UnitVehicle = ply
+		Ent.callsign = ply:Nick()
+		UVAddToPlayerUnitListVehicle(Ent)
+
+		return true
+
 	end
 	
 	local vname = ply.UVTOOLMemory.SpawnName
@@ -2118,6 +2360,32 @@ function TOOL:GetVehicleData( ent, ply )
 
 		ply.UVTOOLMemory.Entities[next(ply.UVTOOLMemory.Entities)].Angle = Angle(0,180,0)
 		ply.UVTOOLMemory.Entities[next(ply.UVTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+
+	elseif ent:GetClass() == "prop_vehicle_jeep" then
+		ply.UVTOOLMemory.VehicleBase = ent:GetClass()
+		ply.UVTOOLMemory.SpawnName = ent:GetVehicleClass()
+
+		if !ply.UVTOOLMemory.SpawnName then 
+			print("This vehicle dosen't have a vehicle class set" )
+			return 
+		end
+
+		local c = ent:GetColor()
+		ply.UVTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
+
+		local bodygroups = {}
+		for k,v in pairs(ent:GetBodyGroups()) do
+			bodygroups[k] = ent:GetBodygroup( k ) 
+		end
+
+		ply.UVTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
+
+		ply.UVTOOLMemory.Skin = ent:GetSkin()
+
+		ply.UVTOOLMemory.SubMaterials = {}
+		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
+			ply.UVTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
+		end
 	end
 	
 	if not IsValid( ply ) then return end

@@ -118,7 +118,7 @@ if SERVER then
 			net.Start("UVHUDRemoveUV")
 			net.WriteInt(self.v:EntIndex(), 32)
 			net.Broadcast()
-			if (self.uvscripted and !self.wrecked) or (self.wrecked and self.v:GetClass() == "prop_vehicle_jeep") then
+			if (self.uvscripted and !self.wrecked) then
 				SafeRemoveEntity(self.v)
 			end
 
@@ -281,34 +281,8 @@ if SERVER then
 				wreck:SetCurHealth(0)
 				wreck:SetLightsEnabled(false)
 			elseif self.v:GetClass() == "prop_vehicle_jeep" then
-				local wreck = ents.Create("prop_physics")
-				wreck:SetModel(self.v:GetModel())
-				wreck:SetPos(self.v:GetPos())
-				wreck:SetAngles(self.v:GetPhysicsObject():GetAngles())
-				wreck:SetColor(self.v:GetColor())
-				wreck:SetSkin(self.v:GetSkin())
-				for k, v in pairs(self.v:GetMaterials()) do
-					wreck:SetSubMaterial( k, self.v:GetSubMaterial( k ) )
-				end
-				wreck:Spawn()
-				wreck:GetPhysicsObject():EnableMotion(true)
-				for k,v in pairs(self.v:GetBodyGroups()) do
-					wreck:SetBodygroup(k, self.v:GetBodygroup(k))
-				end
-				wreck:EmitSound( "vehicles/v8/vehicle_rollover2.wav" )
-				local phwreck = wreck:GetPhysicsObject()
-				phwreck:SetMass(self.mass)
-				phwreck:SetVelocity(self.v:GetPhysicsObject():GetVelocity())
-				if wreck:GetVelocity():LengthSqr() > 250000 then 
-				wreck:Ignite(30)
-				local e = EffectData()
-				e:SetOrigin(wreck:GetPos())
-				e:SetMagnitude(1)
-				e:SetScale(1)
-				e:SetFlags(0)
-				util.Effect("Explosion", e)
-				util.BlastDamage(self,self,self:GetPos(),500,50)
-				end
+				local wreck = self.v
+				wreck:EmitSound( "vehicles/v8/vehicle_rollover"..math.random(1,2)..".wav" )
 				wreck:AddCallback("PhysicsCollide", function(ent, coldata)
 					local ouroldvel = coldata.OurOldVelocity:Length()
 					local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
@@ -321,9 +295,6 @@ if SERVER then
 				end)
 				if wreck:LookupAttachment("vehicle_engine") > 0 then
 					ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-					if wreck:GetVelocity():LengthSqr() > 250000 then 
-						ParticleEffectAttach("env_fire_small", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-					end
 				end
 				local e = EffectData()
 				e:SetEntity(wreck)
@@ -675,7 +646,11 @@ if SERVER then
 				end
 			end --K turn
 			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (self.v:GetVelocity():LengthSqr()*2) and self.v:GetVelocity():LengthSqr() > 774400 then
-				throttle = -1
+				if self.v:GetClass() == "prop_vehicle_jeep" then
+					throttle = 0
+				else
+					throttle = -1
+				end
 			end --Slow down
 			local turn = self:ObstaclesNearbySide()
 			if turn then
@@ -862,9 +837,6 @@ if SERVER then
 			elseif !vcmod_main then
 				if self.v:Health() <= self.v:GetMaxHealth()/4 then 
 					self.damaged = true
-					if !vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and self.v:LookupAttachment("vehicle_engine") > 0 then
-						ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, self.v, self.v:LookupAttachment("vehicle_engine"))
-					end
 					if Chatter:GetBool() and self.v.rammed then
 						UVChatterDamaged(self)
 					end
@@ -1634,78 +1606,7 @@ if SERVER then
 		--uverespawn = self:GetPos()
 		self.Speeding = (SpeedLimit:GetFloat()*17.6)^2 --MPH to in/s^2
 		timer.Simple(1, function() 
-			if IsValid(self.v) then 
-				if self.v:GetClass() == "prop_vehicle_jeep" then
-					self.v:AddCallback("PhysicsCollide", function(ent, coldata)
-						if !IsValid(self) then return end
-						local object = coldata.HitEntity
-						if (!uvtargeting and UVPassConVarFilter(object) or uvtargeting and object.UVWanted) then
-							if self.v.rammed then
-								self.v.rammed = nil
-							end
-							self.v.rammed = true
-							timer.Simple(5, function() 
-								if IsValid(self) then 
-									self.v.rammed = nil
-								end 
-							end)
-						end
-						if object.UVWanted and !self.tagged then
-							self.tagged = true
-							uvtags = uvtags + 1
-						end
-						local ouroldvel = coldata.OurOldVelocity:Length()
-						local ournewvel = coldata.OurNewVelocity:Length()
-						local resultvel = ouroldvel
-						if ouroldvel > ournewvel then --slowed
-							resultvel = ouroldvel - ournewvel
-						else --sped up
-							resultvel = ournewvel - ouroldvel
-						end
-						if coldata.HitEntity:IsNPC() or coldata.HitEntity:IsPlayer() then return end
-						local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
-						dot = math.abs(dot) / 2
-						local dmg = resultvel * dot
-						if dmg < 1 or self.toofar or !CanWreck:GetBool() then
-							return
-						end
-						if dmg >= 100 and object.UVWanted then
-							if Chatter:GetBool() then
-								if coldata.TheirOldVelocity:Length() > ouroldvel then
-									UVChatterRammed(self)
-								else
-									UVChatterRammedEnemy(self)
-								end
-							end
-							if !self.ramming then
-								self.ramming = true
-								if Photon and isfunction(self.v.ELS_ManualSiren) then
-									self.v:ELS_ManualSiren(true)
-								end
-							end
-							timer.Simple(math.random(1,5), function()
-								if self.v and self.ramming then
-									self.ramming = nil
-									if Photon and isfunction(self.v.ELS_ManualSiren) then
-										self.v:ELS_ManualSiren(false)
-									end
-									self:SetELSSiren(true)
-								end
-							end)
-						end
-						if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then return end
-						if self.v then 
-							self.v:SetHealth(self.v:Health()-dmg)
-						end
-						local e = EffectData()
-						e:SetOrigin(coldata.HitPos)
-						if self.v:Health() <= (self.v:GetMaxHealth()/4) then
-							util.Effect("cball_explode", e)
-						else
-							util.Effect("StunstickImpact", e)
-						end
-					end)
-				end
+			if IsValid(self.v) then
 				timer.Simple(2, function()
 					if IsValid(self.v) then
 						if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 

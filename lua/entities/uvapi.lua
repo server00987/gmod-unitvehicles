@@ -526,9 +526,6 @@ function ENT:SetHorn(on)
 			self.v:StopSound(self.v.snd_horn)
 			self.v.honking = nil
 		end
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
-	and isfunction(self.v.ELS_Horn) then
-		self.v:ELS_Horn(on)
 	elseif vcmod_main
 	and isfunction(self.v.VC_getStates)
 	and isfunction(self.v.VC_setStates) then

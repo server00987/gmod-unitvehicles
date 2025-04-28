@@ -950,11 +950,62 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		end
 		
 	elseif vehiclebase == 1 then --Default Vehicle Base
+		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/units/*.txt", "DATA")
 		
-		if !class then
-			PrintMessage( HUD_PRINTTALK, "Please set the Vehicle Base to simfphys or Glide in the Unit Manager Tool settings!")
+		for k, v in pairs(saved_vehicles) do
+			local match = string.find( appliedunits, v )
+			if match then
+				table.insert(availableunits, v)
+			end
+		end
+		
+		if next(availableunits) == nil then
+			if !string.match(appliedunits, "^%s*$") then
+				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Unit that is NOT in the database. Unit name(s) to cross-check: "..appliedunits)
+			end
 			return
 		end
+		
+		availableunit = availableunits[math.random(1, #availableunits)]
+		
+		if commanderrespawn then
+			availableunit = commanderrespawn
+			uvnextclasstospawn = "npc_uvcommander"
+		end
+
+		local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/units/"..availableunit, "DATA" )
+		
+		local words = string.Explode( "", DataString )
+		local shit = {}
+		
+		for k, v in pairs( words ) do
+			shit[k] =  string.char( string.byte( v ) - 20 )
+		end
+		
+		local Data = string.Explode( "#", string.Implode("",shit) )
+		
+		for _,v in pairs(Data) do
+			local Var = string.Explode( "=", v )
+			local name = Var[1]
+			local variable = Var[2]
+			
+			if name and variable then
+				if name == "SubMaterials" then
+					UNITMEMORY[name] = {}
+					
+					local submats = string.Explode( ",", variable )
+					for i = 0, (table.Count( submats ) - 1) do
+						UNITMEMORY[name][i] = submats[i+1]
+					end
+				else
+					UNITMEMORY[name] = variable
+				end
+			end
+		end
+		
+		if not istable(UNITMEMORY) then return end
+				
+		local class = UNITMEMORY.SpawnName
 		
 		local vehicles = list.Get("Vehicles")
 		local lst = vehicles[class]
@@ -962,42 +1013,133 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
 			return
 		end
+
+		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
 		
-		car = ents.Create("prop_vehicle_jeep")
-		car.VehicleTable = lst
-		car:SetModel(lst.Model) 
-		car:SetPos(uvspawnpoint+Vector(0,0,50))
-		car:SetAngles(uvspawnpointangles)
-		car:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
-		car:SetVehicleClass( class )
-		car:Spawn()
-		car:Activate()
-		local vehicle = car
+		local Ent = ents.Create("prop_vehicle_jeep")
+		Ent.VehicleTable = lst
+		Ent:SetModel(lst.Model) 
+		Ent:SetPos(uvspawnpoint+Vector(0,0,50))
+		Ent:SetAngles(uvspawnpointangles)
+		Ent:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
+		Ent:SetVehicleClass( class )
+		Ent:Spawn()
+		Ent:Activate()
+		local vehicle = Ent
 		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
+
+		if istable( UNITMEMORY.SubMaterials ) then
+			for i = 0, table.Count( UNITMEMORY.SubMaterials ) do
+				Ent:SetSubMaterial( i, UNITMEMORY.SubMaterials[i] )
+			end
+		end
+
+		timer.Simple(1, function()
+			if !IsValid(Ent) then return end
+			local groups = string.Explode( ",", UNITMEMORY.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+
+			Ent:SetSkin( UNITMEMORY.Skin )
+
+			local c = string.Explode( ",", UNITMEMORY.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end)
 		
+		Ent.uvclasstospawnon = uvnextclasstospawn
 		if rhinoattack then
-			car.rhino = true
+			Ent.uvclasstospawnon = "npc_uvspecial"
+			Ent.rhino = true
+		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then
+			
+			if UVUPursuitTech:GetBool() then
+				Ent.PursuitTech = {}
+				
+				local pool = {}
+				
+				if UVUPursuitTech_ESF:GetBool() then
+					table.insert(pool, "ESF")
+				end
+				if UVUPursuitTech_Spikestrip:GetBool() then
+					table.insert(pool, "Spikestrip")
+				end
+				if UVUPursuitTech_Killswitch:GetBool() then
+					table.insert(pool, "Killswitch")
+				end
+				if UVUPursuitTech_RepairKit:GetBool() then
+					table.insert(pool, "Repair Kit")
+				end
+				
+				for i=1,2,1 do
+					if #pool > 0 then
+						local selected_pt = pool[math.random(1, #pool)]
+						local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+						
+						local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+						ammo_count = ammo_count > 0 and ammo_count or math.huge
+						
+						Ent.PursuitTech[i] = {
+							Tech = selected_pt,
+							Ammo = ammo_count,
+							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
+							LastUsed = -math.huge,
+							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
+						}
+						
+						for i, v in pairs(pool) do
+							if v == selected_pt then
+								table.remove(pool, i)
+							end
+						end
+					end
+				end
+			end
 		end
 		
-		uv = ents.Create(uvnextclasstospawn) 
-		uv:SetPos(car:GetPos())
-		uv.uvscripted = true
-		uv.vehicle = car
-		uv:Spawn()
-		uv:Activate()
+		if Ent.uvclasstospawnon == "npc_uvcommander" and UVUOneCommander:GetInt() == 1 then
+			uvonecommanderdeployed = true
+			table.insert(uvcommanders, Ent)
+			Ent.unitscript = availableunit
+			Ent.uvlasthealth = uvcommanderlasthealth
+			Ent.uvlastenginehealth = uvcommanderlastenginehealth
+		end
 		
-		timer.Simple(1, function() 
-			if IsValid(car) and !IsValid(uv) then
-				car:Remove()
+		Ent:CallOnRemove( "UVGlideVehicleRemoved", function(car)
+			if table.HasValue(uvcommanders, car) then
+				table.RemoveByValue(uvcommanders, car)
 			end
 		end)
 		
 		if posspecified then
-			car.roadblocking = true
+			Ent.roadblocking = true
 		end
 		if disperse then
-			car.disperse = true
+			Ent.disperse = true
 		end
+		
+		if playercontrolled then
+			timer.Simple(0.5, function()
+				Ent.UnitVehicle = ply
+				Ent.callsign = ply:GetName()
+				UVAddToPlayerUnitListVehicle(Ent)
+				table.insert(uvsimfphysvehicleinitializing, Ent)
+			end)
+		else
+			table.insert(uvsimfphysvehicleinitializing, Ent)
+		end
+
 	else
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
 		RunConsoleCommand("unitvehicle_unit_vehiclebase", 1)
@@ -1051,27 +1193,7 @@ function UVAutoSpawnRacer(ply)
 	local vehiclebase = 2
 	
 	if vehiclebase == 3 then --Glide
-		local pos = uvspawnpoint+Vector( 0, 0, 50 )
-		local ang = uvspawnpointangles
 		
-		local Ent = Glide.VehicleFactory( ply, {
-			Pos = pos,
-			Angle = ang,
-			Class = "gtav_police_cruiser",
-		} )
-		
-		timer.Simple(0.5, function() 
-			if IsValid(Ent) then
-				local uv = ents.Create("npc_uvpatrol") 
-				uv:SetPos(Ent:GetPos())
-				uv.uvscripted = true
-				uv.vehicle = Ent
-				uv:Spawn()
-				uv:Activate()
-			else
-				Ent:Remove()
-			end
-		end)
 	elseif vehiclebase == 2 then --simfphys
 		
 		local RACERMEMORY = {}
@@ -1326,53 +1448,6 @@ function UVAutoSpawnRacer(ply)
 		
 	elseif vehiclebase == 1 then --Default Vehicle Base
 		
-		if !class then
-			PrintMessage( HUD_PRINTTALK, "Please set the Vehicle Base to simfphys or Glide in the Unit Manager Tool settings!")
-			return
-		end
-		
-		local vehicles = list.Get("Vehicles")
-		local lst = vehicles[class]
-		if !lst then
-			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
-			return
-		end
-		
-		car = ents.Create("prop_vehicle_jeep")
-		car.VehicleTable = lst
-		car:SetModel(lst.Model) 
-		car:SetPos(uvspawnpoint+Vector(0,0,50))
-		car:SetAngles(uvspawnpointangles)
-		car:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
-		car:SetVehicleClass( class )
-		car:Spawn()
-		car:Activate()
-		local vehicle = car
-		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
-		
-		if rhinoattack then
-			car.rhino = true
-		end
-		
-		uv = ents.Create(uvnextclasstospawn) 
-		uv:SetPos(car:GetPos())
-		uv.uvscripted = true
-		uv.vehicle = car
-		uv:Spawn()
-		uv:Activate()
-		
-		timer.Simple(1, function() 
-			if IsValid(car) and !IsValid(uv) then
-				car:Remove()
-			end
-		end)
-		
-		if posspecified then
-			car.roadblocking = true
-		end
-		if disperse then
-			car.disperse = true
-		end
 	else
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
 		RunConsoleCommand("unitvehicle_unit_vehiclebase", 1)

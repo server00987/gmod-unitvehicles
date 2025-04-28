@@ -1194,6 +1194,234 @@ hook.Add( "simfphysOnDestroyed", "UVExplosionSimfphys", function(car, gib)
 	end
 end)
 
+hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
+	if !vehicle:GetClass() == "prop_vehicle_jeep" then return end
+	vehicle:AddCallback("PhysicsCollide", function(car, coldata)
+		if !IsValid(car) or car:GetClass() != "prop_vehicle_jeep" then return end
+		local object = coldata.HitEntity
+		local ouroldvel = coldata.OurOldVelocity:Length()
+		local ournewvel = coldata.OurNewVelocity:Length()
+		local resultvel = ouroldvel
+		if ouroldvel > ournewvel then --slowed
+			resultvel = ouroldvel - ournewvel
+		else --sped up
+			resultvel = ournewvel - ouroldvel
+		end
+		local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
+		dot = math.abs(dot) / 2
+		local dmg = resultvel * dot
+		if !AutoHealth:GetBool() then --DAMAGE
+			if !car.healthset then
+				local mass = vehicle:GetPhysicsObject():GetMass()
+				vehicle:SetMaxHealth(mass)
+				vehicle:SetHealth(mass)
+				car.healthset = true
+			end
+			if !vcmod_main and dmg >= 10 and car.healthset then
+				car:SetHealth(car:Health()-dmg)
+				local e = EffectData()
+				e:SetOrigin(coldata.HitPos)
+				if car:Health() <= (car:GetMaxHealth()/4) then
+					util.Effect("cball_explode", e)
+				else
+					util.Effect("StunstickImpact", e)
+				end
+				if car:Health() <= car:GetMaxHealth()/4 and !car.jeepdamaged then 
+					car.jeepdamaged = true
+					if car:LookupAttachment("vehicle_engine") > 0 then
+						ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
+					end
+				end
+			end
+		end
+		if car.esfon and object:IsVehicle() and !(object.UnitVehicle and car.UnitVehicle) then --ESF
+			local enemyvehicle = object
+			local enemycallsign
+			if object.UnitVehicle then
+				enemycallsign = object.UnitVehicle.callsign or "Unit "..object:EntIndex()
+			else
+				enemycallsign = "Racer "..enemyvehicle:EntIndex()
+			end
+			local enemydriver = UVGetDriver(enemyvehicle)
+			local power
+			local damage
+			if car.UnitVehicle then
+				power = UVUnitPTESFPower:GetInt()
+				damage = UVUnitPTESFDamage:GetFloat()
+			else
+				power = UVPTESFPower:GetInt()
+				damage = UVPTESFDamage:GetFloat()
+			end
+			if car.uvupgraded or car.UVWanted then
+				power = power * 2
+			end
+			local carpos = car:WorldSpaceCenter()
+			local enemyvehiclephys = enemyvehicle:GetPhysicsObject()
+			local vectordifference = enemyvehicle:WorldSpaceCenter() - carpos
+			local angle = vectordifference:Angle()
+			local force = power * (1 - (vectordifference:Length()/1000))
+			enemyvehiclephys:ApplyForceCenter(angle:Forward()*force)
+			enemyvehicle.rammed = true
+			timer.Simple(5, function()
+				if IsValid(enemyvehicle) then
+					enemyvehicle.rammed = nil
+				end
+			end)
+			if enemydriver then
+				if enemydriver:IsPlayer() then
+					enemycallsign = enemydriver:GetName()
+				end
+			end
+			if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
+				if object.IsSimfphyscar then
+					local MaxHealth = object:GetMaxHealth()
+					local damage = MaxHealth*damage
+					object:ApplyDamage( damage, DMG_GENERIC )
+				elseif object.IsGlideVehicle then
+					object:SetEngineHealth( object:GetEngineHealth() - damage )
+    				object:UpdateHealthOutputs()
+				elseif object:GetClass() == "prop_vehicle_jeep" then
+
+				end
+			end
+			if isfunction(enemyvehicle.GetDriver) and IsValid(UVGetDriver(enemyvehicle)) and UVGetDriver(enemyvehicle):IsPlayer() then 
+				UVGetDriver(enemyvehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
+			end
+			if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+				UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemycallsign.."!")
+			end
+			local e = EffectData()
+			e:SetEntity(enemyvehicle)
+			util.Effect("entity_remove", e)
+			enemyvehicle:EmitSound("gadgets/esf/impact.wav")
+			car.uvesfhit = true
+			UVDeactivateESF(car)
+			if car.UnitVehicle then
+				UVChatterKillswitchHit(car.UnitVehicle)
+			end
+		end
+		if car.UVWanted then --SUSPECT
+			if object:IsWorld() or object.DecentVehicle then --Crashed into world
+				if dmg >= 100 and !uvenemyescaping and uvtargeting then
+					if object:IsWorld() then
+						if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
+							local units = ents.FindByClass("npc_uv*")
+							local random_entry = math.random(#units)	
+							local unit = units[random_entry]
+							if !IsValid(unit.e) then return end
+							UVChatterEnemyCrashed(unit)
+						end
+					elseif object.DecentVehicle then
+						if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
+							local units = ents.FindByClass("npc_uv*")
+							local random_entry = math.random(#units)	
+							local unit = units[random_entry]
+							if !IsValid(unit.e) then return end
+							UVChatterHitTraffic(unit)
+						end
+					end
+				end
+			end
+			if object.UVRoadblock and !object.UVRoadblock.RoadBlockHit then --Crashed into roadblock
+				object.UVRoadblock.RoadBlockHit = true
+				if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
+					local units = ents.FindByClass("npc_uv*")
+					local random_entry = math.random(#units)	
+					local unit = units[random_entry]
+					if IsValid(unit.e) then 
+						UVChatterRoadblockHit(unit) 
+					end
+				end
+			end
+		elseif car.UnitVehicle then --UNIT NPC
+			local classmultiplier = 1
+			local NPC = car.UnitVehicle
+			if NPC:IsNPC() then
+				if car.uvclasstospawnon == "npc_uvsupport" then
+					classmultiplier = 2
+				elseif car.uvclasstospawnon == "npc_uvpursuit" then
+					classmultiplier = 3
+				elseif car.uvclasstospawnon == "npc_uvinterceptor" then
+					classmultiplier = 4
+				elseif car.uvclasstospawnon == "npc_uvspecial" then
+					classmultiplier = 5
+				elseif car.uvclasstospawnon == "npc_uvcommander" then
+					classmultiplier = 6
+				end
+				if (!uvtargeting and UVPassConVarFilter(object) or uvtargeting and object.UVWanted) then
+					if car.rammed then
+						car.rammed = nil
+					end
+					car.rammed = true
+					timer.Simple(5, function() 
+						if IsValid(NPC) then 
+							car.rammed = nil
+						end 
+					end)
+				end
+				if object.UVWanted and !car.tagged then
+					car.tagged = true
+					uvtags = uvtags + 1
+					if car.rhino and !car.rhinohit then
+						car.rhinohit = true
+						if Chatter:GetBool() and uvtargeting then
+							UVSoundChatter(NPC, NPC.voice, "rhinohit", 1)
+						end
+					end
+				end
+				if dmg >= 100 and object.UVWanted then
+					if Chatter:GetBool() then
+						if coldata.TheirOldVelocity:Length() > ouroldvel then
+							UVChatterRammed(NPC)
+							UVDeactivateKillSwitch(car)
+						else
+							UVChatterRammedEnemy(NPC)
+						end
+					end
+					if !NPC.ramming then
+						NPC.ramming = true
+						NPC:SetHorn(true)
+					end
+					timer.Simple(math.random(1,5), function()
+						if !NPC then return end
+						if NPC.ramming then
+							NPC.ramming = nil
+							NPC:SetHorn(false)
+							NPC:SetELSSiren(true)
+						end
+					end)
+				end
+			elseif !uvtargeting and !uvenemyescaped and !uvenemybusted and table.HasValue(uvpotentialsuspects, object) then
+				uvtargeting = true
+			end
+		end
+		if !object.UnitVehicle and !object:IsWorld() then --CALL HANDLER
+			local ctimeout = 1
+			if object:IsVehicle() then --Hit And Run
+				if CurTime() > uvpreinfractioncountcooldown + ctimeout then
+					uvpreinfractioncount = uvpreinfractioncount + 1
+					uvpreinfractioncountcooldown = CurTime()
+					if uvpreinfractioncount >= 10 then
+						if UVPassConVarFilter(car) then
+							UVCallInitiate(car, 3)
+						end
+					end
+				end
+			else --Damage to Property
+				if CurTime() > uvpreinfractioncountcooldown + ctimeout then
+					uvpreinfractioncount = uvpreinfractioncount + 1
+					uvpreinfractioncountcooldown = CurTime()
+					if uvpreinfractioncount >= 10 then
+						if UVPassConVarFilter(car) then
+							UVCallInitiate(car, 2)
+						end
+					end
+				end
+			end
+		end
+	end)
+end)
+
 function UVAddToWantedListVehicle(vehicle)
 	if !vehicle.UVWanted then
 		vehicle.UVWanted = vehicle
@@ -1204,13 +1432,13 @@ function UVAddToWantedListVehicle(vehicle)
 		if driver:IsPlayer() and !table.HasValue(uvwantedtabledriver, driver) then
 			UVAddToWantedListDriver(driver)
 		end
-		if AutoHealth:GetBool() then
-			if driver:IsPlayer() then
-				if driver:GetMaxHealth() == 100 then
-					driver:SetHealth(vehicle:GetPhysicsObject():GetMass())
-					driver:SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
-				end
+		if driver:IsPlayer() then
+			if driver:GetMaxHealth() == 100 then
+				driver:SetHealth(vehicle:GetPhysicsObject():GetMass())
+				driver:SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
 			end
+		end
+		if AutoHealth:GetBool() then
 			if vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
 				vehicle:VC_repairFull_Admin()
 				if !vehicle:VC_hasGodMode() then
@@ -1244,55 +1472,6 @@ function UVAddToWantedListVehicle(vehicle)
 				table.RemoveByValue(uvwantedtablevehicle, ent)
 			end
 		end)
-		if vehicle:GetClass() == "prop_vehicle_jeep" then
-			vehicle:AddCallback("PhysicsCollide", function(ent, coldata)
-				if !IsValid(vehicle) then return end
-				local object = coldata.HitEntity
-				if object:IsWorld() or object.DecentVehicle then --Crashed into world
-					local ouroldvel = coldata.OurOldVelocity:Length()
-					local ournewvel = coldata.OurNewVelocity:Length()
-					local resultvel = ouroldvel
-					if ouroldvel > ournewvel then --slowed
-						resultvel = ouroldvel - ournewvel
-					else --sped up
-						resultvel = ournewvel - ouroldvel
-					end
-					local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
-					dot = math.abs(dot) / 2
-					local dmg = resultvel * dot
-					if dmg >= 100 then
-						if object:IsWorld() then
-							if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
-								local units = ents.FindByClass("npc_uv*")
-								local random_entry = math.random(#units)	
-								local unit = units[random_entry]
-								if !IsValid(unit.e) then return end
-								UVChatterEnemyCrashed(unit)
-							end
-						elseif object.DecentVehicle then
-							if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
-								local units = ents.FindByClass("npc_uv*")
-								local random_entry = math.random(#units)	
-								local unit = units[random_entry]
-								if !IsValid(unit.e) then return end
-								UVChatterHitTraffic(unit)
-							end
-						end
-					end
-				end
-				if object.UVRoadblock and !object.UVRoadblock.RoadBlockHit then --Crashed into roadblock
-					object.UVRoadblock.RoadBlockHit = true
-					if Chatter:GetBool() and uvtargeting and next(ents.FindByClass("npc_uv*")) ~= nil then
-						local units = ents.FindByClass("npc_uv*")
-						local random_entry = math.random(#units)	
-						local unit = units[random_entry]
-						if IsValid(unit.e) then 
-							UVChatterRoadblockHit(unit) 
-						end
-					end
-				end
-			end)
-		end
 	end
 end
 
@@ -1322,10 +1501,15 @@ function UVAddToPlayerUnitListVehicle(vehicle, ply)
 	net.Broadcast()
 
 	if !table.HasValue(uvplayerunittablevehicle, vehicle) then
-		table.insert(uvplayerunittablevehicle, vehicle)
 		if vehicle.IsSimfphyscar then
 			vehicle:SetBulletProofTires(true)
 		end
+		if vehicle:GetClass() == "prop_vehicle_jeep" then
+			local mass = vehicle:GetPhysicsObject():GetMass()
+			vehicle:SetMaxHealth(mass)
+			vehicle:SetHealth(mass)
+		end
+		table.insert(uvplayerunittablevehicle, vehicle)
 		vehicle:CallOnRemove( "UVPlayerUnitVehicleRemoved", function(ent)
 			if table.HasValue(uvplayerunittablevehicle, ent) then
 				table.RemoveByValue(uvplayerunittablevehicle, ent)
@@ -1656,34 +1840,9 @@ function UVBustEnemy(self, enemy)
 			wreck.emson = false
 			wreck:SetEMSEnabled( false )
 		elseif enemy:GetClass() == "prop_vehicle_jeep" then
-			local wreck = ents.Create("prop_physics")
-			wreck:SetModel(enemy:GetModel())
-			wreck:SetPos(enemy:GetPos())
-			wreck:SetAngles(enemy:GetPhysicsObject():GetAngles())
-			wreck:SetColor(enemy:GetColor())
-			wreck:SetSkin(enemy:GetSkin())
-			for k, v in pairs(enemy:GetMaterials()) do
-				wreck:SetSubMaterial( k, enemy:GetSubMaterial( k ) )
-			end
-			wreck:Spawn()
-			wreck:GetPhysicsObject():EnableMotion(true)
-			for k,v in pairs(self.v:GetBodyGroups()) do
-				wreck:SetBodygroup(k, self.v:GetBodygroup(k))
-			end
-			wreck:EmitSound( "physics/metal/metal_large_debris2.wav" )
-			local phwreck = wreck:GetPhysicsObject()
-			phwreck:SetMass(enemy.mass)
-			phwreck:SetVelocity(enemy:GetPhysicsObject():GetVelocity())
-			if enemy:GetVelocity():LengthSqr() > 250000 then 
-			wreck:Ignite(30)
-			local e = EffectData()
-			e:SetOrigin(wreck:GetPos())
-			e:SetMagnitude(1)
-			e:SetScale(1)
-			e:SetFlags(0)
-			util.Effect("Explosion", e)
-			util.BlastDamage(enemy,enemy,enemy:GetPos(),500,50)
-			end
+			local wreck = enemy
+			wreck:StartEngine(false)
+			wreck:EmitSound( "vehicles/v8/vehicle_rollover"..math.random(1,2)..".wav" )
 			wreck:AddCallback("PhysicsCollide", function(ent, coldata)
 				local ouroldvel = coldata.OurOldVelocity:Length()
 				local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
@@ -1696,9 +1855,6 @@ function UVBustEnemy(self, enemy)
 			end)
 			if wreck:LookupAttachment("vehicle_engine") > 0 then
 				ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-				if enemy:GetVelocity():LengthSqr() > 250000 then 
-					ParticleEffectAttach("env_fire_small", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-				end
 			end
 			local e = EffectData()
 			e:SetEntity(wreck)
@@ -2113,7 +2269,7 @@ function UVCheckIfBeingBusted(enemy)
 	net.Broadcast()
 
 
-	if UVCheckIfWrecked(enemy) or !enemy.uvbusted and enemy:WaterLevel() > 2 or isfunction(enemy.GetDriver) and IsValid(UVGetDriver(enemy)) and UVGetDriver(enemy):Health() <= 0 then --Bust conditions.
+	if UVCheckIfWrecked(enemy) or !enemy.uvbusted and enemy:WaterLevel() > 2 or IsValid(UVGetDriver(enemy)) and UVGetDriver(enemy):Health() <= 0 then --Bust conditions.
 		UVBustEnemy(closestunit, enemy)
 	end
 
@@ -2123,7 +2279,7 @@ function UVCheckIfBeingBusted(enemy)
 	--Stunt jump
 	if !uvenemyescaping and uvtargeting then
 		if !enemy.UVStuntJump then
-			local onground = util.QuickTrace(enemy:GetPos(), -vector_up * 500, {enemy})
+			local onground = util.QuickTrace(enemy:WorldSpaceCenter(), -vector_up * 500, {enemy})
 			if !onground.Hit then
 				enemy.UVStuntJump = true
 				timer.Simple(10, function()
@@ -2191,9 +2347,12 @@ function UVCheckIfWrecked(enemy)
 		return enemy:GetCurHealth() <= 0 or enemy:OnFire() or enemy.destroyed
 	elseif enemy.IsGlideVehicle then
 		return enemy:GetEngineHealth() <= 0 or enemy:GetIsEngineOnFire()
-	elseif isfunction(enemy.VC_GetHealth) then
+	elseif vcmod_main and isfunction(enemy.VC_GetHealth) then
 		local health = enemy:VC_GetHealth(false)
 		return isnumber(health) and health <= 0
+	elseif enemy:GetClass() == "prop_vehicle_jeep" then
+		local health = enemy:Health()
+		return health < 0 --Unless set, health is 0
 	end
 end
 
@@ -2357,34 +2516,8 @@ function UVPlayerWreck(vehicle)
 		wreck.emson = false
 		wreck:SetEMSEnabled( false )
 	elseif vehicle:GetClass() == "prop_vehicle_jeep" then
-		local wreck = ents.Create("prop_physics")
-		wreck:SetModel(vehicle:GetModel())
-		wreck:SetPos(vehicle:GetPos())
-		wreck:SetAngles(vehicle:GetPhysicsObject():GetAngles())
-		wreck:SetColor(vehicle:GetColor())
-		wreck:SetSkin(vehicle:GetSkin())
-		for k, v in pairs(vehicle:GetMaterials()) do
-			wreck:SetSubMaterial( k, vehicle:GetSubMaterial( k ) )
-		end
-		wreck:Spawn()
-		wreck:GetPhysicsObject():EnableMotion(true)
-		for k,v in pairs(self.v:GetBodyGroups()) do
-			wreck:SetBodygroup(k, self.v:GetBodygroup(k))
-		end
-		wreck:EmitSound( "physics/metal/metal_large_debris2.wav" )
-		local phwreck = wreck:GetPhysicsObject()
-		phwreck:SetMass(vehicle.mass)
-		phwreck:SetVelocity(vehicle:GetPhysicsObject():GetVelocity())
-		if vehicle:GetVelocity():LengthSqr() > 250000 then 
-		wreck:Ignite(30)
-		local e = EffectData()
-		e:SetOrigin(wreck:GetPos())
-		e:SetMagnitude(1)
-		e:SetScale(1)
-		e:SetFlags(0)
-		util.Effect("Explosion", e)
-		util.BlastDamage(vehicle,vehicle,vehicle:GetPos(),500,50)
-		end
+		local wreck = vehicle
+		wreck:EmitSound( "vehicles/v8/vehicle_rollover"..math.random(1,2)..".wav" )
 		wreck:AddCallback("PhysicsCollide", function(ent, coldata)
 			local ouroldvel = coldata.OurOldVelocity:Length()
 			local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
@@ -2397,9 +2530,6 @@ function UVPlayerWreck(vehicle)
 		end)
 		if wreck:LookupAttachment("vehicle_engine") > 0 then
 			ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-			if vehicle:GetVelocity():LengthSqr() > 250000 then 
-				ParticleEffectAttach("env_fire_small", PATTACH_POINT_FOLLOW, wreck, wreck:LookupAttachment("vehicle_engine"))
-			end
 		end
 		local e = EffectData()
 		e:SetEntity(wreck)

@@ -37,42 +37,13 @@ if SERVER then
 
         if CurTime() > uvtimetocheckforpotentialsuspects + timeout then --Check for potential suspects
             for _, ent in ents.Iterator() do
-                if UVPassConVarFilter(ent) then
-                    if !table.HasValue(uvpotentialsuspects, ent) then
-                        table.insert(uvpotentialsuspects, ent)
-                        ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
-                            if table.HasValue(uvpotentialsuspects, vehicle) then
-                                table.RemoveByValue(uvpotentialsuspects, vehicle)
-                            end
-                        end)
-                        if ent:GetClass() == "prop_vehicle_jeep" then
-                            ent:AddCallback("PhysicsCollide", function(ent, coldata)
-                                if !IsValid(ent) then return end
-                                local object = coldata.HitEntity
-                                if !object.UnitVehicle then
-                                    if !object:IsWorld() then
-                                        if object:IsVehicle() then --Hit And Run
-                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
-                                                uvpreinfractioncount = uvpreinfractioncount + 1
-                                                uvpreinfractioncountcooldown = CurTime()
-                                                if uvpreinfractioncount >= 10 then
-                                                    UVCallInitiate(ent, 3)
-                                                end
-                                            end
-                                        else --Damage to Property
-                                            if CurTime() > uvpreinfractioncountcooldown + ctimeout then
-                                                uvpreinfractioncount = uvpreinfractioncount + 1
-                                                uvpreinfractioncountcooldown = CurTime()
-                                                if uvpreinfractioncount >= 10 then
-                                                    UVCallInitiate(ent, 2)
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end)
+                if UVPassConVarFilter(ent) and !table.HasValue(uvpotentialsuspects, ent) then
+                    table.insert(uvpotentialsuspects, ent)
+                    ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
+                        if table.HasValue(uvpotentialsuspects, vehicle) then
+                            table.RemoveByValue(uvpotentialsuspects, vehicle)
                         end
-                    end
+                    end)
                 end
             end
             UVCheckForSpeeders()
