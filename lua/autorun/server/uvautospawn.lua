@@ -1113,7 +1113,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			table.insert(uvcommanders, Ent)
 			Ent.unitscript = availableunit
 			Ent.uvlasthealth = uvcommanderlasthealth
-			Ent.uvlastenginehealth = uvcommanderlastenginehealth
 		end
 		
 		Ent:CallOnRemove( "UVGlideVehicleRemoved", function(car)

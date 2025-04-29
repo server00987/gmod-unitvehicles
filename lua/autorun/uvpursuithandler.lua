@@ -962,6 +962,7 @@ if SERVER then
 								car:VC_setHealthMax(UVUOneCommanderHealth:GetInt())
 								car:VC_setHealth(health)
 							else
+								car:SetMaxHealth(UVUOneCommanderHealth:GetInt())
 								car:SetHealth(health)
 							end
 						end
@@ -2750,6 +2751,9 @@ else --HUD/Options
 						UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
 					elseif vcmod_main then
 						UVHUDCommanderLastHealth = UVUOneCommanderHealth:GetInt()*(UVHUDCommander:VC_getHealth()/100) --vcmod returns % health clientside
+						UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+					else
+						UVHUDCommanderLastHealth = UVHUDCommander:Health()
 						UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
 					end
 					UVRenderCommander(UVHUDCommander)

@@ -853,7 +853,7 @@ if SERVER then
 
 		--Flipping/crash
 		if self.v and !self.wrecked and !self.spawned and
-		(self.v:Health() <= 0 and self.v:GetClass() == "prop_vehicle_jeep" or --No health 
+		(self.v:Health() < 0 and self.v:GetClass() == "prop_vehicle_jeep" or --No health 
 		self.v:GetPhysicsObject():GetAngles().z > 90 and self.v:GetPhysicsObject():GetAngles().z < 270 and (self.v.rammed or self.v:GetVelocity():LengthSqr() < 10000 and self.stuck) or --Flipped
 		self.v:WaterLevel() > 2 or --Underwater
 		self:IsOnFire()) or --On fire
@@ -1616,10 +1616,6 @@ if SERVER then
 						end
 					end
 				end)
-				if self.v:GetClass() == "prop_vehicle_jeep" then
-					self.v:SetMaxHealth(self.mass)
-					self.v:SetHealth(self.mass)
-				end
 				self.spawned = nil
 			end 
 		end)

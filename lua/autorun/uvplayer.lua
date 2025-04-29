@@ -216,11 +216,18 @@ if SERVER then
     function UVDeployRepairKit(car)
         local is_repaired = false
         
-        if vcmod_main and car:GetClass() == "prop_vehicle_jeep" then
-            if car:VC_getHealthMax() == car:VC_getHealth() then return end
-            is_repaired = true
-            car:EmitSound('ui/pursuit/repair.wav')
-            car:VC_repairFull_Admin()
+        if car:GetClass() == "prop_vehicle_jeep" then
+            if vcmod_main then
+                if car:VC_getHealthMax() == car:VC_getHealth() then return end
+                is_repaired = true
+                car:EmitSound('ui/pursuit/repair.wav')
+                car:VC_repairFull_Admin()
+            else
+                local mass = vehicle:GetPhysicsObject():GetMass()
+			    vehicle:SetMaxHealth(mass)
+			    vehicle:SetHealth(mass)
+			    vehicle:StopParticles()
+            end
         end
         if car.IsSimfphyscar then
             if car:GetCurHealth() == car:GetMaxHealth() then return end

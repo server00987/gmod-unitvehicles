@@ -93,6 +93,7 @@ function ENT:Repair(vehicle)
 			local mass = vehicle:GetPhysicsObject():GetMass()
 			vehicle:SetMaxHealth(mass)
 			vehicle:SetHealth(mass)
+			vehicle:StopParticles()
 		end
 	end
 	if vehicle.IsSimfphyscar then

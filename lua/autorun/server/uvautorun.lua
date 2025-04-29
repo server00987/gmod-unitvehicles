@@ -1210,14 +1210,20 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 		local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
 		dot = math.abs(dot) / 2
 		local dmg = resultvel * dot
-		if !AutoHealth:GetBool() then --DAMAGE
+		if car.UnitVehicle or (car.UVWanted and !AutoHealth:GetBool()) then --DAMAGE
 			if !car.healthset then
-				local mass = vehicle:GetPhysicsObject():GetMass()
-				vehicle:SetMaxHealth(mass)
-				vehicle:SetHealth(mass)
+				if car.uvclasstospawnon == "npc_uvcommander" or car.UVCommander then
+					local health = car.uvlasthealth or UVUOneCommanderHealth:GetInt()
+					car:SetMaxHealth(UVUOneCommanderHealth:GetInt())
+					car:SetHealth(health)
+				else
+					local mass = vehicle:GetPhysicsObject():GetMass()
+					vehicle:SetMaxHealth(mass)
+					vehicle:SetHealth(mass)
+				end
 				car.healthset = true
 			end
-			if !vcmod_main and dmg >= 10 and car.healthset then
+			if !vcmod_main and dmg >= 10 then
 				car:SetHealth(car:Health()-dmg)
 				local e = EffectData()
 				e:SetOrigin(coldata.HitPos)
