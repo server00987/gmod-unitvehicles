@@ -371,9 +371,6 @@ if SERVER then
                         if car.uvkillswitching and !car.uvkillswitchingtarget.enginedisabledbyuv then
                             car.uvkillswitching = nil
                             local kstime = UVUnitPTKillSwitchDisableDuration:GetInt()
-                            if car.uvupgraded then
-                                kstime = kstime * 2
-                            end
                             local enemyvehicle = car.uvkillswitchingtarget
                             local enemycallsign = "Racer "..enemyvehicle:EntIndex()
                             local enemydriver = UVGetDriver(enemyvehicle)

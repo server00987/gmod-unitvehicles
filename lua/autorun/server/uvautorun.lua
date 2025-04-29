@@ -705,10 +705,6 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 					power = UVPTESFPower:GetInt()
 					damage = UVPTESFDamage:GetFloat()
 				end
-				if car.uvupgraded or car.UVWanted then -- unused
-					power = power * 2
-					damage = damage * 2
-				end
 				local carpos = car:WorldSpaceCenter()
 				local enemyvehiclephys = enemyvehicle:GetPhysicsObject()
 				local vectordifference = enemyvehicle:WorldSpaceCenter() - carpos
@@ -991,9 +987,6 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 			power = UVPTESFPower:GetInt()
 			damage = UVPTESFDamage:GetFloat()
 		end
-		if car.uvupgraded or car.UVWanted then
-			power = power * 2
-		end
 		local carpos = car:WorldSpaceCenter()
 		local enemyvehiclephys = enemyvehicle:GetPhysicsObject()
 		local vectordifference = enemyvehicle:WorldSpaceCenter() - carpos
@@ -1257,9 +1250,6 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			else
 				power = UVPTESFPower:GetInt()
 				damage = UVPTESFDamage:GetFloat()
-			end
-			if car.uvupgraded or car.UVWanted then
-				power = power * 2
 			end
 			local carpos = car:WorldSpaceCenter()
 			local enemyvehiclephys = enemyvehicle:GetPhysicsObject()
