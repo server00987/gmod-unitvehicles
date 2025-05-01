@@ -515,7 +515,6 @@ if SERVER then
                 local angle = vectordifference:Angle()
                 local power = UVPTShockwavePower:GetFloat()
                 local damage = UVPTShockwaveDamage:GetFloat()
-                print(damage)
                 local force = power * (1 - (vectordifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 object.rammed = true
