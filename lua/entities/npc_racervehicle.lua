@@ -268,7 +268,7 @@ if SERVER then
 		end
 		
 		--Pursuit Tech
-		if self.v.PursuitTech then
+		if self.v.PursuitTech and uvtargeting then
 			for k, v in pairs(self.v.PursuitTech) do
 				if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
 					UVDeployWeapon(self.v, k)
@@ -449,7 +449,7 @@ if SERVER then
 			"Repair Kit",
 		}
 		
-		if RacerPursuitTech:GetBool() and uvtargeting then
+		if RacerPursuitTech:GetBool() then
 			if not self.v.PursuitTech then self.v.PursuitTech = {} end
 
 			for i=1, 2, 1 do

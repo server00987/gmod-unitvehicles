@@ -63,7 +63,7 @@ if SERVER then
     end)
     
     function UVDeployWeapon(car, slot)
-        if uvjammerdeployed and !car.exemptfromjammer then return end
+        if uvjammerdeployed and !car.jammerexempt then return end
         if !car.PursuitTech then return end
         
         local pursuit_tech = car.PursuitTech[slot]
@@ -513,8 +513,9 @@ if SERVER then
                 local objectphys = object:GetPhysicsObject()
                 local vectordifference = object:WorldSpaceCenter() - carpos
                 local angle = vectordifference:Angle()
-                local power = UVPTShockwavePower:GetInt()
+                local power = UVPTShockwavePower:GetFloat()
                 local damage = UVPTShockwaveDamage:GetFloat()
+                print(damage)
                 local force = power * (1 - (vectordifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 object.rammed = true
