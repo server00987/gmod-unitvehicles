@@ -1380,53 +1380,53 @@ if SERVER then
 			local botimeout = 10
 			if botimeout then
 				if CurTime() > self.bountytimer + botimeout then
-				self.bountytimer = CurTime()
-				local aggressive = math.random(0,1)
-				if aggressive == 0 then
-					self.driveinfront = nil
-				else
-					self.driveinfront = true
-				end
-				local MathAggressive = math.random(1,10) 
-				if MathAggressive == 1 then
-					if !self.aggressive and uvtargeting then
-						self.aggressive = true
-						if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
-							UVChatterAggressive(self) 
+					self.bountytimer = CurTime()
+					local aggressive = math.random(0,1)
+					if aggressive == 0 then
+						self.driveinfront = nil
+					else
+						self.driveinfront = true
+					end
+					local MathAggressive = math.random(1,10) 
+					if MathAggressive == 1 then
+						if !self.aggressive and uvtargeting then
+							self.aggressive = true
+							if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
+								UVChatterAggressive(self) 
+							end
+						else
+							self.aggressive = nil
+							if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
+								UVChatterPassive(self) 
+							end
+						end
+					elseif MathAggressive == 2 then
+						if Chatter:GetBool() and HeatLevels:GetBool() and IsValid(self.v) and not uvcalm and #uvunitschasing == 1 then
+							UVChatterRequestBackup(self)
+						end
+					elseif MathAggressive == 3 then
+						if Chatter:GetBool() and IsValid(self.v) and not uvcalm then
+							UVChatterRequestSitrep(self)
 						end
 					else
-						self.aggressive = nil
-						if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
-							UVChatterPassive(self) 
+						local MathAggressive2 = math.random(1,10)
+						if Chatter:GetBool() and MathAggressive2 == 1 then
+							UVChatterRequestDisengage(self)
 						end
 					end
-				elseif MathAggressive == 2 then
-					if Chatter:GetBool() and HeatLevels:GetBool() and IsValid(self.v) and not uvcalm and #uvunitschasing == 1 then
-						UVChatterRequestBackup(self)
+					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
+						self.edriver = UVGetDriver(self.e)
+						UVAddToWantedListDriver(self.edriver)
+						else
+						self.edriver = nil
 					end
-				elseif MathAggressive == 3 then
-					if Chatter:GetBool() and IsValid(self.v) and not uvcalm then
-						UVChatterRequestSitrep(self)
+					local MathSiren = math.random(1,100)
+					if MathSiren < 30 then
+						self:SetELSSiren(true)
 					end
-				else
-					local MathAggressive2 = math.random(1,100)
-					if Chatter:GetBool() and MathAggressive2 == 1 then
-						UVChatterRequestDisengage(self)
+					if Chatter:GetBool() and IsValid(self.v) and self.e:GetVelocity():LengthSqr() > 100000 and self:StraightToTarget(self.e) and MathAggressive != 1 then
+						UVChatterCloseToEnemy(self) 
 					end
-				end
-				if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
-					self.edriver = UVGetDriver(self.e)
-					UVAddToWantedListDriver(self.edriver)
-					else
-					self.edriver = nil
-				end
-				local MathSiren = math.random(1,100)
-				if MathSiren < 30 then
-					self:SetELSSiren(true)
-				end
-				if Chatter:GetBool() and IsValid(self.v) and self.e:GetVelocity():LengthSqr() > 100000 and self:StraightToTarget(self.e) and MathAggressive != 1 then
-					UVChatterCloseToEnemy(self) 
-				end
 				end
 			end
 

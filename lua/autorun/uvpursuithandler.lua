@@ -2145,6 +2145,13 @@ else --HUD/Options
 		size = (math.Round(ScrH()*0.0462962963)),
 		weight = 500,
 	})
+
+	surface.CreateFont("UVFont7", {
+		font = "VCR OSD Mono",
+		size = (math.Round(ScrH()*0.1)),
+		weight = 500,
+		shadow = true,
+	})
 	
 	net.Receive("UVHUDPursuit", function()
 		

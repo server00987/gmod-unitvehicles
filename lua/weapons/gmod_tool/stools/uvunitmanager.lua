@@ -1863,6 +1863,11 @@ function TOOL:LeftClick( trace )
 		local Ents = duplicator.Paste( self:GetOwner(), ply.UVTOOLMemory.Entities, ply.UVTOOLMemory.Constraints )
 		local Ent = Ents[next(Ents)]
 
+		if !IsValid( Ent ) then 
+			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVTOOLMemory.SpawnName .." dosen't seem to be installed!" )
+			return 
+		end
+
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
 

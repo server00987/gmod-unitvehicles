@@ -1494,14 +1494,14 @@ if SERVER then
 						end
 					elseif MathAggressive == 2 then
 						if Chatter:GetBool() and HeatLevels:GetBool() and IsValid(self.v) and not uvcalm and #uvunitschasing == 1 then
-							UVChatterRequestBackup(self) 
+							UVChatterRequestBackup(self)
 						end
 					elseif MathAggressive == 3 then
 						if Chatter:GetBool() and IsValid(self.v) and not uvcalm then
 							UVChatterRequestSitrep(self)
 						end
 					else
-						local MathAggressive2 = math.random(1,100)
+						local MathAggressive2 = math.random(1,10)
 						if Chatter:GetBool() and MathAggressive2 == 1 then
 							UVChatterRequestDisengage(self)
 						end
@@ -1509,7 +1509,7 @@ if SERVER then
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
 						self.edriver = UVGetDriver(self.e)
 						UVAddToWantedListDriver(self.edriver)
-					else
+						else
 						self.edriver = nil
 					end
 					local MathSiren = math.random(1,100)

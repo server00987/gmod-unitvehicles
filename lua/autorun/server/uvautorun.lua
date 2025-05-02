@@ -2542,6 +2542,20 @@ function UVPlayerWreck(vehicle)
 	uvcombobounty = uvcombobounty + 1
 end
 
+function UVGetVehicle(driver)
+	if !IsValid(driver) then return false end
+
+	local seat = driver:GetVehicle()
+	if !IsValid(seat) then return false end
+
+	if seat.IsSimfphyscar or seat:GetClass() == "prop_vehicle_jeep" then
+		return seat
+	else
+		return seat:GetParent()
+	end
+
+end
+
 function UVGetDriver(vehicle)
 	if !IsValid(vehicle) then return false end
 

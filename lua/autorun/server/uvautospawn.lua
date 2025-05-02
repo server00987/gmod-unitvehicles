@@ -177,9 +177,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		local suspects = uvwantedtablevehicle
 		local random_entry = math.random(#suspects)	
 		suspect = suspects[random_entry]
-		enemylocation = (suspect:GetPos()+Vector(0,0,50))
+		enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	else
-		enemylocation = (suspect:GetPos()+Vector(0,0,50))
+		enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	end
 	
 	local suspectvelocity = suspect:GetVelocity()
@@ -681,7 +681,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			return false 
 		end
 		
-		local SpawnPos = uvspawnpoint + Vector(0,0,50) + (vehicle.SpawnOffset or Vector(0,0,0))
+		local SpawnPos = uvspawnpoint + (vector_up * 50) + (vehicle.SpawnOffset or vector_origin)
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
@@ -1019,7 +1019,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		local Ent = ents.Create("prop_vehicle_jeep")
 		Ent.VehicleTable = lst
 		Ent:SetModel(lst.Model) 
-		Ent:SetPos(uvspawnpoint+Vector(0,0,50))
+		Ent:SetPos(uvspawnpoint+ (vector_up * 50))
 		Ent:SetAngles(uvspawnpointangles)
 		Ent:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
 		Ent:SetVehicleClass( class )
@@ -1156,7 +1156,7 @@ function UVAutoSpawnRacer(ply)
 	
 	local enemylocation
 	local suspect = ply
-	enemylocation = (suspect:GetPos()+Vector(0,0,50))
+	enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	
 	if next(dvd.Waypoints) == nil then
 		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
@@ -1246,7 +1246,7 @@ function UVAutoSpawnRacer(ply)
 			return false 
 		end
 		
-		local SpawnPos = uvspawnpoint + Vector(0,0,50) + (vehicle.SpawnOffset or Vector(0,0,0))
+		local SpawnPos = uvspawnpoint + (vector_up * 50) + (vehicle.SpawnOffset or vector_origin)
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
@@ -1451,4 +1451,591 @@ function UVAutoSpawnRacer(ply)
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
 		RunConsoleCommand("unitvehicle_unit_vehiclebase", 1)
 	end
+end
+
+--RACE FUNCTIONS
+
+local function GetVehicleData( ent )
+	if !ent:IsValid() then return end
+	local Memory = {}
+	
+	if ent.IsSimfphyscar then
+		Memory.VehicleBase = ent:GetClass()
+		Memory.SpawnName = ent:GetSpawn_List()
+		Memory.SteerSpeed = ent:GetSteerSpeed()
+		Memory.SteerFadeSpeed = ent:GetFastSteerConeFadeSpeed()
+		Memory.SteerAngFast = ent:GetFastSteerAngle()
+		Memory.SoundPreset = ent:GetEngineSoundPreset()
+		Memory.IdleRPM = ent:GetIdleRPM()
+		Memory.MaxRPM = ent:GetLimitRPM()
+		Memory.PowerStart = ent:GetPowerBandStart()
+		Memory.PowerEnd = ent:GetPowerBandEnd()
+		Memory.PeakTorque = ent:GetMaxTorque()
+		Memory.HasTurbo = ent:GetTurboCharged()
+		Memory.HasBlower = ent:GetSuperCharged()
+		Memory.HasRevLimiter = ent:GetRevlimiter()
+		Memory.HasBulletProofTires = ent:GetBulletProofTires()
+		Memory.MaxTraction = ent:GetMaxTraction()
+		Memory.GripOffset = ent:GetTractionBias()
+		Memory.BrakePower = ent:GetBrakePower()
+		Memory.PowerDistribution = ent:GetPowerDistribution()
+		Memory.Efficiency = ent:GetEfficiency()
+		Memory.HornSound = ent.snd_horn
+		Memory.HasBackfire = ent:GetBackFire()
+		Memory.DoesntStall = ent:GetDoNotStall()
+		Memory.SoundOverride = ent:GetSoundoverride()
+		
+		Memory.FrontHeight = ent:GetFrontSuspensionHeight()
+		Memory.RearHeight = ent:GetRearSuspensionHeight()
+		
+		Memory.Camber = ent.Camber or 0
+		
+		if ent.FrontDampingOverride and ent.FrontConstantOverride and ent.RearDampingOverride and ent.RearConstantOverride then
+			Memory.FrontDampingOverride = ent.FrontDampingOverride
+			Memory.FrontConstantOverride = ent.FrontConstantOverride
+			Memory.RearDampingOverride = ent.RearDampingOverride
+			Memory.RearConstantOverride = ent.RearConstantOverride
+		end
+
+		if ent.CustomWheels then
+			if ent.GhostWheels then
+				if IsValid(ent.GhostWheels[1]) then
+					Memory.FrontWheelOverride = ent.GhostWheels[1]:GetModel()
+				elseif IsValid(ent.GhostWheels[2]) then
+					Memory.FrontWheelOverride = ent.GhostWheels[2]:GetModel()
+				end
+
+				if IsValid(ent.GhostWheels[3]) then
+					Memory.RearWheelOverride = ent.GhostWheels[3]:GetModel()
+				elseif IsValid(ent.GhostWheels[4]) then
+					Memory.RearWheelOverride = ent.GhostWheels[4]:GetModel()
+				end
+			end
+		end
+
+		local tsc = ent:GetTireSmokeColor()
+		Memory.TireSmokeColor = tsc.r..","..tsc.g..","..tsc.b
+
+		local Gears = ""
+		for _,v in pairs(ent.Gears) do
+			Gears = Gears..v..","
+		end
+
+		local c = ent:GetColor()
+		Memory.Color = c.r..","..c.g..","..c.b..","..c.a
+
+		local bodygroups = {}
+		for k,v in pairs(ent:GetBodyGroups()) do
+			bodygroups[k] = ent:GetBodygroup( k ) 
+		end
+
+		Memory.BodyGroups = string.Implode( ",", bodygroups)
+
+		Memory.Skin = ent:GetSkin()
+
+		Memory.Gears = Gears
+		Memory.FinalGear = ent:GetDifferentialGear()
+
+		if ent.WheelTool_Foffset then
+			Memory.WheelTool_Foffset = ent.WheelTool_Foffset
+		end
+
+		if ent.WheelTool_Roffset then
+			Memory.WheelTool_Roffset = ent.WheelTool_Roffset
+		end
+
+		if ent.snd_blowoff then
+			Memory.snd_blowoff = ent.snd_blowoff
+		end
+
+		if ent.snd_spool then
+			Memory.snd_spool = ent.snd_spool
+		end
+
+		if ent.snd_bloweron then
+			Memory.snd_bloweron = ent.snd_bloweron
+		end
+
+		if ent.snd_bloweroff then
+			Memory.snd_bloweroff = ent.snd_bloweroff
+		end
+
+		Memory.backfiresound = ent:GetBackfireSound()
+
+		Memory.SubMaterials = {}
+		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
+			Memory.SubMaterials[i] = ent:GetSubMaterial( i )
+		end
+	elseif ent.IsGlideVehicle then
+		local pos = ent:GetPos()
+		duplicator.SetLocalPos( pos )
+
+		Memory = duplicator.Copy( ent )
+
+		duplicator.SetLocalPos( vector_origin )
+		duplicator.SetLocalAng( angle_zero )
+
+		if ( !Memory ) then return false end
+		
+		local Key = "VehicleBase"
+		Memory[Key] = ent.Base
+		local Key2 = "SpawnName"
+		Memory[Key2] = ent:GetClass()
+		Memory.Mins = Vector(Memory.Mins.x,Memory.Mins.y,0)
+
+		Memory.Entities[next(Memory.Entities)].Angle = Angle(0,180,0)
+		Memory.Entities[next(Memory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+
+	elseif ent:GetClass() == "prop_vehicle_jeep" then
+		Memory.VehicleBase = ent:GetClass()
+		Memory.SpawnName = ent:GetVehicleClass()
+
+		if !Memory.SpawnName then 
+			print("This vehicle dosen't have a vehicle class set" )
+			return 
+		end
+
+		local c = ent:GetColor()
+		Memory.Color = c.r..","..c.g..","..c.b..","..c.a
+
+		local bodygroups = {}
+		for k,v in pairs(ent:GetBodyGroups()) do
+			bodygroups[k] = ent:GetBodygroup( k ) 
+		end
+
+		Memory.BodyGroups = string.Implode( ",", bodygroups)
+
+		Memory.Skin = ent:GetSkin()
+
+		Memory.SubMaterials = {}
+		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
+			Memory.SubMaterials[i] = ent:GetSubMaterial( i )
+		end
+	end
+	
+	return Memory
+
+end
+
+function UVMoveToGridSlot( ply, aienabled )
+	local entrantvehicle = UVGetVehicle(ply)
+
+	if !IsValid(entrantvehicle) then 
+		PrintMessage( HUD_PRINTTALK, "Enter a vehicle to take part in the race!")
+		return 
+	end
+
+	local Memory = GetVehicleData( entrantvehicle )
+	if !Memory then return end
+
+	local spawns = ents.FindByClass("uvrace_spawn")
+	local spawn
+	if next(spawns) == nil then
+		PrintMessage( HUD_PRINTTALK, "No race spawn points found!")
+		return
+	else
+		--Look for a spawn point that has the lowest GridSlot value and claim it
+		local lowestGridSlot = math.huge
+		for k, v in pairs(spawns) do
+			if v:GetGridSlot() < lowestGridSlot and !v.claimed then
+				lowestGridSlot = v:GetGridSlot()
+				spawn = v
+			end
+		end
+	end
+
+	local pos = spawn:GetPos()
+	local ang = spawn:GetAngles()
+
+	local Ent
+
+	if Memory.VehicleBase == "gmod_sent_vehicle_fphysics_base" then
+		local vname = Memory.SpawnName
+		local Update = false
+		local VehicleList = list.Get( "simfphys_vehicles" )
+		local vehicle = VehicleList[ vname ]
+		
+		if not vehicle then return false end
+		
+		local SpawnPos = pos + (vector_up * 25) + (vehicle.SpawnOffset or vector_origin)
+		
+		local SpawnAng = ang
+		SpawnAng.pitch = 0
+		SpawnAng.yaw = SpawnAng.yaw + 180 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		SpawnAng.roll = 0
+		
+		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
+
+		if not IsValid( Ent ) then return end
+
+		undo.Create( "Vehicle" )
+			undo.SetPlayer( ply )
+			undo.AddEntity( Ent )
+			undo.SetCustomUndoText( "Undone " .. vehicle.Name )
+		undo.Finish( "Vehicle (" .. tostring( vehicle.Name ) .. ")" )
+
+		ply:AddCleanup( "vehicles", Ent )
+
+		timer.Simple( 0.5, function()
+			if not IsValid(Ent) then return end
+
+			local tsc = string.Explode( ",", Memory.TireSmokeColor )
+			Ent:SetTireSmokeColor( Vector( tonumber(tsc[1]), tonumber(tsc[2]), tonumber(tsc[3]) ) )
+
+			Ent.Turbocharged = tobool( Memory.HasTurbo )
+			Ent.Supercharged = tobool( Memory.HasBlower )
+
+			Ent:SetEngineSoundPreset( math.Clamp( tonumber( Memory.SoundPreset ), -1, 23) )
+			Ent:SetMaxTorque( math.Clamp( tonumber( Memory.PeakTorque ), 20, 1000) )
+			Ent:SetDifferentialGear( math.Clamp( tonumber( Memory.FinalGear ),0.2, 6 ) )
+
+			Ent:SetSteerSpeed( math.Clamp( tonumber( Memory.SteerSpeed ), 1, 16 ) )
+			Ent:SetFastSteerAngle( math.Clamp( tonumber( Memory.SteerAngFast ), 0, 1) )
+			Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( Memory.SteerFadeSpeed ), 1, 5000 ) )
+
+			Ent:SetEfficiency( math.Clamp( tonumber( Memory.Efficiency ) ,0.2,4) )
+			Ent:SetMaxTraction( math.Clamp( tonumber( Memory.MaxTraction ) , 5,1000) )
+			Ent:SetTractionBias( math.Clamp( tonumber( Memory.GripOffset ),-0.99,0.99) )
+			Ent:SetPowerDistribution( math.Clamp( tonumber( Memory.PowerDistribution ) ,-1,1) )
+
+			Ent:SetBackFire( tobool( Memory.HasBackfire ) )
+			Ent:SetDoNotStall( tobool( Memory.DoesntStall ) )
+
+			Ent:SetIdleRPM( math.Clamp( tonumber( Memory.IdleRPM ),1,25000) )
+			Ent:SetLimitRPM( math.Clamp( tonumber( Memory.MaxRPM ),4,25000) )
+			Ent:SetRevlimiter( tobool( Memory.HasRevLimiter ) )
+			Ent:SetPowerBandEnd( math.Clamp( tonumber( Memory.PowerEnd ), 3, 25000) )
+			Ent:SetPowerBandStart( math.Clamp( tonumber( Memory.PowerStart ) ,2 ,25000) )
+
+			Ent:SetTurboCharged( Ent.Turbocharged )
+			Ent:SetSuperCharged( Ent.Supercharged )
+			Ent:SetBrakePower( math.Clamp( tonumber( Memory.BrakePower ), 0.1, 500) )
+
+			Ent:SetSoundoverride( Memory.SoundOverride or "" )
+
+			Ent:SetLights_List( Ent.LightsTable or "no_lights" )
+
+			Ent:SetBulletProofTires(true)
+
+			Ent.snd_horn = Memory.HornSound
+
+			Ent.snd_blowoff = Memory.snd_blowoff
+			Ent.snd_spool = Memory.snd_spool
+			Ent.snd_bloweron = Memory.snd_bloweron
+			Ent.snd_bloweroff = Memory.snd_bloweroff
+
+			Ent:SetBackfireSound( Memory.backfiresound or "" )
+
+			local Gears = {}
+			local Data = string.Explode( ",", Memory.Gears  )
+			for i = 1, table.Count( Data ) do 
+				local gRatio = tonumber( Data[i] )
+
+				if isnumber( gRatio ) then
+					if i == 1 then
+						Gears[i] = math.Clamp( gRatio, -5, -0.001)
+
+					elseif i == 2 then
+						Gears[i] = 0
+
+					else
+						Gears[i] = math.Clamp( gRatio, 0.001, 5)
+					end
+				end
+			end
+			Ent.Gears = Gears
+
+			if istable( Memory.SubMaterials ) then
+				for i = 0, table.Count( Memory.SubMaterials ) do
+					Ent:SetSubMaterial( i, Memory.SubMaterials[i] )
+				end
+			end
+
+			if Memory.FrontDampingOverride and Memory.FrontConstantOverride and Memory.RearDampingOverride and Memory.RearConstantOverride then
+				Ent.FrontDampingOverride = tonumber( Memory.FrontDampingOverride )
+				Ent.FrontConstantOverride = tonumber( Memory.FrontConstantOverride )
+				Ent.RearDampingOverride = tonumber( Memory.RearDampingOverride )
+				Ent.RearConstantOverride = tonumber( Memory.RearConstantOverride )
+
+				local data = {
+					[1] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
+					[2] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
+					[3] = {Ent.RearConstantOverride,Ent.RearDampingOverride},
+					[4] = {Ent.RearConstantOverride,Ent.RearDampingOverride},
+					[5] = {Ent.RearConstantOverride,Ent.RearDampingOverride},
+					[6] = {Ent.RearConstantOverride,Ent.RearDampingOverride}
+				}
+
+				local elastics = Ent.Elastics
+				if elastics then
+					for i = 1, table.Count( elastics ) do
+						local elastic = elastics[i]
+						if Ent.StrengthenSuspension == true then
+							if IsValid( elastic ) then
+								elastic:Fire( "SetSpringConstant", data[i][1] * 0.5, 0 )
+								elastic:Fire( "SetSpringDamping", data[i][2] * 0.5, 0 )
+							end
+							local elastic2 = elastics[i * 10]
+							if IsValid( elastic2 ) then
+								elastic2:Fire( "SetSpringConstant", data[i][1] * 0.5, 0 )
+								elastic2:Fire( "SetSpringDamping", data[i][2] * 0.5, 0 )
+							end
+						else
+							if IsValid( elastic ) then
+								elastic:Fire( "SetSpringConstant", data[i][1], 0 )
+								elastic:Fire( "SetSpringDamping", data[i][2], 0 )
+							end
+						end
+					end
+				end
+			end
+		
+			Ent:SetFrontSuspensionHeight( tonumber( Memory.FrontHeight ) )
+			Ent:SetRearSuspensionHeight( tonumber( Memory.RearHeight ) )
+
+			local groups = string.Explode( ",", Memory.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+
+			Ent:SetSkin( Memory.Skin )
+
+			local c = string.Explode( ",", Memory.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+
+			if Update then
+				local PhysObj = Ent:GetPhysicsObject()
+				if not IsValid( PhysObj ) then return end
+
+				local freezeWhenDone = PhysObj:IsMotionEnabled()
+				local freezeWheels = {}
+				PhysObj:EnableMotion( false )
+				Ent:SetNotSolid( true )
+
+				local ResetPos = Ent:GetPos()
+				local ResetAng = Ent:GetAngles()
+
+				Ent:SetPos( ResetPos + Vector(0,0,30) )
+				Ent:SetAngles( Angle(0,ResetAng.y,0) )
+
+				for i = 1, table.Count( Ent.Wheels ) do
+					local Wheel = Ent.Wheels[ i ]
+					if IsValid( Wheel ) then
+						local wPObj = Wheel:GetPhysicsObject()
+
+						if IsValid( wPObj ) then
+							freezeWheels[ i ] = {}
+							freezeWheels[ i ].dofreeze = wPObj:IsMotionEnabled()
+							freezeWheels[ i ].pos = Wheel:GetPos()
+							freezeWheels[ i ].ang = Wheel:GetAngles()
+							Wheel:SetNotSolid( true )
+							wPObj:EnableMotion( true ) 
+							wPObj:Wake() 
+						end
+					end
+				end
+
+				timer.Simple( 0.5, function()
+					if not IsValid( Ent ) then return end
+					if not IsValid( PhysObj ) then return end
+
+					PhysObj:EnableMotion( freezeWhenDone )
+					Ent:SetNotSolid( false )
+					Ent:SetPos( ResetPos )
+					Ent:SetAngles( ResetAng )
+				
+					for i = 1, table.Count( freezeWheels ) do
+						local Wheel = Ent.Wheels[ i ]
+						if IsValid( Wheel ) then
+							local wPObj = Wheel:GetPhysicsObject()
+
+							Wheel:SetNotSolid( false )
+
+							if IsValid( wPObj ) then
+								wPObj:EnableMotion( freezeWheels[i].dofreeze ) 
+							end
+
+							Wheel:SetPos( freezeWheels[ i ].pos )
+							Wheel:SetAngles( freezeWheels[ i ].ang )
+						end
+					end
+				end)
+			end
+
+			if Ent.CustomWheels then
+				if Ent.GhostWheels then
+					timer.Simple( Update and 0.25 or 0, function()
+						if not IsValid( Ent ) then return end
+						if Memory.WheelTool_Foffset and Memory.WheelTool_Roffset then
+							SetWheelOffset( Ent, Memory.WheelTool_Foffset, Memory.WheelTool_Roffset )
+						end
+
+						if not Memory.FrontWheelOverride and not Memory.RearWheelOverride then return end
+
+						local front_model = Memory.FrontWheelOverride or vehicle.Members.CustomWheelModel
+						local front_angle = GetAngleFromSpawnlist(front_model)
+
+						local camber = Memory.Camber or 0
+						local rear_model = Memory.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
+						local rear_angle = GetAngleFromSpawnlist(rear_model)
+
+						if not front_model or not rear_model or not front_angle or not rear_angle then return end
+
+						if ValidateModel( front_model ) and ValidateModel( rear_model ) then 
+							Ent.Camber = camber
+							ApplyWheel(Ent, {front_model,front_angle,rear_model,rear_angle,camber})
+						else
+							ply:PrintMessage( HUD_PRINTTALK, "selected wheel does not exist on the server")
+						end
+					end)
+				end
+			end
+		end)
+
+	elseif Memory.VehicleBase == "base_glide_car" or Memory.VehicleBase == "base_glide_motorcycle" then
+		local SpawnCenter = pos + (vector_up * 25)
+		SpawnCenter.z = SpawnCenter.z - Memory.Mins.z
+
+		duplicator.SetLocalPos( SpawnCenter )
+		duplicator.SetLocalAng( Angle( 0, ang.yaw, 0 ) )
+
+		local Ents = duplicator.Paste( ply, Memory.Entities, Memory.Constraints )
+		Ent = Ents[next(Ents)]
+
+		if !IsValid( Ent ) then 
+			PrintMessage( HUD_PRINTTALK, "The vehicle ".. Memory.SpawnName .." dosen't seem to be installed!" )
+			return 
+		end
+
+		duplicator.SetLocalPos( vector_origin )
+		duplicator.SetLocalAng( angle_zero )
+
+		undo.Create( "Duplicator" )
+
+			for k, ent in pairs( Ents ) do
+				undo.AddEntity( ent )
+			end
+
+			for k, ent in pairs( Ents )	do
+				ply:AddCleanup( "duplicates", ent )
+			end
+
+			undo.SetPlayer( ply )
+			undo.SetCustomUndoText( "Undone Glide" )
+
+		undo.Finish( "Undo (" .. tostring( table.Count( Ents ) ) ..  ")" )
+
+	elseif Memory.VehicleBase == "prop_vehicle_jeep" then
+		local class = Memory.SpawnName
+		local vehicles = list.Get("Vehicles")
+		local lst = vehicles[class]
+		if !lst then
+			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
+			return
+		end
+
+		Ent = ents.Create("prop_vehicle_jeep")
+		Ent.VehicleTable = lst
+		Ent:SetModel(lst.Model) 
+		Ent:SetPos(pos + (vector_up * 25))
+
+		local SpawnAng = ang
+		SpawnAng.pitch = 0
+		SpawnAng.yaw = SpawnAng.yaw + 90
+		SpawnAng.roll = 0
+		Ent:SetAngles(SpawnAng)
+
+		Ent:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
+		Ent:SetVehicleClass( class )
+		Ent:Spawn()
+		Ent:Activate()
+
+		local vehicle = Ent
+		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
+
+		if istable( Memory.SubMaterials ) then
+			for i = 0, table.Count( Memory.SubMaterials ) do
+				Ent:SetSubMaterial( i, Memory.SubMaterials[i] )
+			end
+		end
+
+		local groups = string.Explode( ",", Memory.BodyGroups)
+		for i = 1, table.Count( groups ) do
+			Ent:SetBodygroup(i, tonumber(groups[i]) )
+		end
+		
+		Ent:SetSkin( Memory.Skin )
+		
+		local c = string.Explode( ",", Memory.Color )
+		local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+		
+		local dot = Color.r * Color.g * Color.b * Color.a
+		Ent.OldColor = dot
+		Ent:SetColor( Color )
+		
+		local data = {
+			Color = Color,
+			RenderMode = 0,
+			RenderFX = 0
+		}
+		duplicator.StoreEntityModifier( Ent, "colour", data )
+
+		undo.Create( "Vehicle" )
+			undo.SetPlayer( ply )
+			undo.AddEntity( Ent )
+			undo.SetCustomUndoText( "Undone " .. class )
+		undo.Finish( "Vehicle (" .. tostring( class ) .. ")" )
+
+	end
+
+	spawn.claimed = true
+	entrantvehicle:Remove()
+
+	if aienabled then 
+		Ent.uvclasstospawnon = "npc_racervehicle"
+	else
+		ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
+	end
+
+	timer.Simple( 1, function()
+		if IsValid(Ent) then
+			Ent:GetPhysicsObject():EnableMotion( false )
+			if aienabled then 
+				local uv = ents.Create(Ent.uvclasstospawnon)
+				uv:SetPos(Ent:GetPos())
+				uv.uvscripted = true
+				uv.vehicle = Ent
+				uv:Spawn()
+				uv:Activate()
+				ply = uv
+			else
+				if Ent.IsSimfphyscar then
+					ply:EnterVehicle( Ent.DriverSeat )
+				elseif Ent.IsGlideVehicle then
+					local seat = Ent.seats[1]
+					if IsValid(seat) then
+						ply:EnterVehicle(seat)
+					end
+				elseif Ent:GetClass() == "prop_vehicle_jeep" then
+					ply:EnterVehicle(Ent)
+				end
+			end
+		end
+	end)
+
+	UVRaceAddParticipant( Ent, ply )
+
+	return Ent
+
 end

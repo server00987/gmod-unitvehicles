@@ -1,0 +1,439 @@
+TOOL.Category = "Unit Vehicles"
+TOOL.Name = "Race Manager"
+TOOL.Command = nil
+TOOL.ConfigName = ""
+
+cleanup.Register("uvrace_ents")
+
+local MAX_TRACE_LENGTH = math.sqrt(3) * 2 * 16384
+local checkpointTable = {}
+local pos1, selectedCP
+local secondClick = false
+
+if SERVER then
+	if game.SinglePlayer() then
+		util.AddNetworkString("UVRace_UpdatePos")
+		util.AddNetworkString("UVRace_SelectID")
+		util.AddNetworkString("UVRace_SetID")
+	end
+
+	local function KillCheckpoints()
+		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killcps", KillCheckpoints)
+
+	local function KillSpawns()
+		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killspawns", KillSpawns)
+
+	local function KillAll()
+		for _, ent in ipairs(ents.FindByClass("uvrace_*")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killall", KillAll)
+
+	local function StopRace(ply, cmd, args)
+
+		UVRaceEnd()
+
+	end
+	concommand.Add("uvrace_stop", UnTestMap)
+
+	local function AddHooks()
+
+	end
+
+	local function StartRaceSolo(ply, cmd, args)
+
+		if !IsValid( UVMoveToGridSlot( ply ) ) then return end
+
+		UVRaceMakeCheckpoints()
+
+		AddHooks()
+	end
+	concommand.Add("uvrace_startsolo", StartRaceSolo)
+
+	local function StartRaceInvite(ply, cmd, args)
+
+
+		
+	end
+	concommand.Add("uvrace_startinvite", StartRaceInvite)
+
+	local function ImportExportText(name, export, ply)
+		local nick = ply:Nick():lower():Replace(" ", "_")
+
+		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
+
+		local str = export and "Exported UV Race positions to " .. filename or "Imported UV Race positions from " .. filename
+		ply:ChatPrint(str)
+	end
+
+	local function Import(ply, cmd, args)
+		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1]
+		if !file.Exists(filename, "DATA") then return end
+
+		local entList = file.Read(filename, "DATA"):Split("\n")
+
+		UVRaceEnd()
+
+		--Delete all checkpoints and spawns
+		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			ent:Remove()
+		end
+		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			ent:Remove()
+		end
+
+		undo.Create("UVRaceEnt")
+		undo.SetPlayer(ply)
+
+		for _, data in ipairs(entList) do
+			local params = data:Split(" ")
+
+			local cid = tonumber(params[1])
+			if cid then
+				local check = ents.Create("uvrace_checkpoint")
+
+				local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+				local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
+
+				local pos = Vector(posx, posy, posz)
+				check:SetPos(pos)
+				check:SetMaxPos(Vector(mx, my, mz))
+				check:SetID(cid)
+				check:Spawn()
+
+				undo.AddEntity(check)
+				ply:AddCleanup("uvrace_ents", check)
+			elseif params[1] == "spawn" then
+				local spawn = ents.Create("uvrace_spawn")
+
+				local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+				spawn:SetPos(Vector(posx, posy, posz))
+
+				local angy = tonumber(params[5])
+				spawn:SetAngles(Angle(0, angy, 0))
+
+				spawn:SetGridSlot(tonumber(params[6]))
+
+				spawn:Spawn()
+
+				undo.AddEntity(spawn)
+				ply:AddCleanup("uvrace_ents", spawn)
+			end
+
+		end
+
+		undo.Finish()
+
+		local tname = args[1]:Split(".")[2]
+
+		ImportExportText(tname, false, ply)
+	end
+	concommand.Add("uvrace_import", Import)
+
+	local blacklist = {
+		["uvrace_checkpoint"] = true,
+		["uvrace_brushpoint"] = true,
+		["uvrace_spawn"] = true,
+	}
+
+	local function Export(ply, cmd, args)
+		local plynick = Entity(1):Nick()
+
+		local str = "name " .. args[1] .. " '" .. plynick .. "'\n"
+
+		local nick = plynick:lower():Replace(" ", "_")
+		local name = args[1]:lower():Replace(" ", "_")
+
+		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
+
+		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. "\n"
+		end
+
+		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			str = str .. "spawn " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetAngles().y) .. " " .. tostring(ent:GetGridSlot()) .. "\n"
+		end
+
+		file.CreateDir("unitvehicles/races/" .. game.GetMap())
+		file.Write(filename, str)
+
+		ImportExportText(name, true, ply)
+	end
+	concommand.Add("uvrace_export", Export)
+
+	local function SetID()
+		local ent = net.ReadEntity()
+		local id = net.ReadUInt(7)
+
+		ent:SetID(id)
+		UVRaceCheckFinishLine()
+	end
+	net.Receive("UVRace_SetID", SetID)
+elseif CLIENT then
+	language.Add("tool.uvracemanager.name", "Race Manager")
+	language.Add("tool.uvracemanager.desc", "Create UV Race checkpoints.")
+	language.Add("tool.uvracemanager.0", "Left click to spawn checkpoint. Right click to edit checkpoint. Reload to create spawn.")
+	language.Add("Cleanup_uvrace_ents", "UV Race Spawns")
+	language.Add("Undone_UVRaceEnt", "Undone UV Race entity")
+
+	CreateClientConVar("unitvehicle_racetheme", "1")
+
+	local ang0 = Angle(0, 0, 0)
+	local vec0 = Vector(0, 0, 0)
+
+	local col_white = Color(255, 255, 255)
+	local col_blue = Color(0, 0, 255, 200)
+
+	function TOOL:DrawHUD()
+		local ply = self:GetOwner()
+
+		local startpos = ply:EyePos()
+
+		local tr = util.TraceLine({
+			start = startpos,
+			endpos = startpos + (ply:GetAimVector() * MAX_TRACE_LENGTH),
+			filter = ply
+		})
+
+		if !tr.Hit then return end
+
+		local hp = tr.HitPos
+
+		cam.Start3D()
+		render.SetColorMaterial()
+
+		if pos1 then
+			render.DrawBox(pos1, ang0, vec0, hp - pos1, col_blue)
+		end
+
+		render.DrawLine(hp + Vector(0, 10, 0), hp - Vector(0, 10, 0), col_white)
+		render.DrawLine(hp + Vector(10, 0, 0), hp - Vector(10, 0, 0), col_white)
+		render.DrawLine(hp + Vector(0, 0, 10), hp - Vector(0, 0, 10), col_white)
+
+		cam.End3D()
+	end
+
+	local function Count()
+		local cpIDTbl = {}
+
+		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			local index = cpIDTbl[ent:GetID()]
+			if !index then cpIDTbl[ent:GetID()] = 1 continue end
+
+			cpIDTbl[ent:GetID()] = index + 1
+		end
+
+		for id, count in pairs(cpIDTbl) do
+			local str = count > 1 and "There are " .. count .. " checkpoints with ID " .. id or "There is " .. count .. " checkpoint with ID " .. id
+			chat.AddText(str)
+		end
+
+		chat.AddText("There are " .. #ents.FindByClass("uvrace_spawn") .. " grid slots.")
+	end
+	concommand.Add("uvrace_count", Count)
+
+	local function UpdatePos()
+		local ispos2 = net.ReadBool()
+		local pos = net.ReadVector()
+
+		if ispos2 then
+			table.insert(checkpointTable, {pos1 = pos1, pos2 = pos, id = #checkpointTable})
+			pos1 = nil
+		else
+			pos1 = pos
+		end
+	end
+	net.Receive("UVRace_UpdatePos", UpdatePos)
+
+	local function SelectID()
+		local ent = net.ReadEntity()
+
+		selectedCP = ent
+
+		local cpID = ent:GetID()
+
+		Derma_StringRequest("Set ID", "Set a new ID. Start at 1. Must be in order. Use the same ID for branching checkpoints.", cpID, function(text)
+			local id = tonumber(text)
+			selectedCP:SetID(id)
+
+			net.Start("UVRace_SetID")
+				net.WriteEntity(selectedCP)
+				net.WriteUInt(id, 7)
+			net.SendToServer()
+		end, nil, "Set", "Cancel")
+	end
+	net.Receive("UVRace_SelectID", SelectID)
+
+	local function QueryImport()
+		local w = ScrW()
+		local h = ScrH()
+
+		local dframe = vgui.Create("DFrame")
+		dframe:SetSize(w / 8, h / 4)
+		dframe:SetPos((w / 2) - ((w / 8) / 2), (h / 2) - ((h / 4) / 2))
+		dframe:SetTitle("Import")
+		dframe:MakePopup()
+
+		local dlist = vgui.Create("DScrollPanel", dframe)
+		dlist:Dock(FILL)
+
+		for _, item in ipairs(file.Find("unitvehicles/races/" .. game.GetMap() .. "/*", "DATA")) do
+			local dbutton = dlist:Add("DButton")
+
+			local name = file.Read("unitvehicles/races/" .. game.GetMap() .. "/" .. item, "DATA"):Split("\n")[1]
+			local params = name:Split(" ")
+			local nick = name:match("'.*$"):Replace("'", "")
+
+			dbutton:SetText(params[2] .. " by " .. nick)
+			dbutton:Dock(TOP)
+			dbutton:DockMargin(0, 0, 0, 5)
+
+			function dbutton:DoClick()
+				RunConsoleCommand("uvrace_import", item)
+				dframe:Close()
+			end
+		end
+	end
+	concommand.Add("uvrace_queryimport", QueryImport)
+
+	local function QueryExport()
+		Derma_StringRequest("Export", "What will this race be called?", cpID, function(txt)
+			RunConsoleCommand("uvrace_export", txt)
+		end, nil, "Export", "Cancel")
+	end
+	concommand.Add("uvrace_queryexport", QueryExport)
+end
+
+
+function TOOL:LeftClick(trace)
+	if !trace.Hit then return end
+	local ply = self:GetOwner()
+
+	local pos
+
+	if secondClick then
+		pos = trace.HitPos
+
+		if game.SinglePlayer() or SERVER then
+			local cPoint = ents.Create("uvrace_checkpoint")
+			cPoint:SetPos(pos1)
+			cPoint:SetMaxPos(pos)
+			cPoint:Spawn()
+
+			undo.Create("UVRaceEnt")
+			undo.AddEntity(cPoint)
+			undo.SetPlayer(ply)
+			undo.Finish()
+
+			ply:AddCleanup("uvrace_ents", cPoint)
+		end
+
+		-- table.insert(checkpointTable, {pos1 = pos1, pos2 = pos, id = #checkpointTable})
+		pos1 = nil
+	else
+		pos1 = trace.HitPos
+		pos = pos1
+	end
+
+	if game.SinglePlayer() then
+		net.Start("UVRace_UpdatePos")
+			net.WriteBool(secondClick)
+			net.WriteVector(pos)
+		net.Send(ply)
+	end
+
+	pos = nil
+	secondClick = !secondClick
+
+	return true
+end
+
+function TOOL:RightClick()
+	local ply = self:GetOwner()
+	local startpos = ply:EyePos()
+
+	local tr = util.TraceLine({
+		start = startpos,
+		endpos = startpos + (ply:GetAimVector() * MAX_TRACE_LENGTH),
+		filter = ply
+	})
+
+	local ent = tr.Entity
+	if ent:GetClass() != "uvrace_checkpoint" then return end
+
+	selectedCP = ent
+
+	if game.SinglePlayer() then
+		net.Start("UVRace_SelectID")
+			net.WriteEntity(ent)
+		net.Send(self:GetOwner())
+	elseif CLIENT then
+		Derma_StringRequest("Set ID", "Set a new ID.", ent:GetID(), function(text)
+			ent:SetID(tonumber(text))
+		end, nil, "Set", "Cancel")
+	end
+
+	return true
+end
+
+function TOOL:Reload( trace )
+	if !trace.Hit then return end
+	local hp = trace.HitPos
+	local ply = self:GetOwner()
+
+	if game.SinglePlayer() or SERVER then
+		local spawn = ents.Create("uvrace_spawn")
+		spawn:SetPos(hp)
+		spawn:SetAngles(Angle(0, ply:EyeAngles().y, 0))
+		spawn:Spawn()
+
+		undo.Create("UVRaceEnt")
+		undo.AddEntity(spawn)
+		undo.SetPlayer(ply)
+		undo.Finish()
+
+		ply:AddCleanup("uvrace_ents", spawn)
+	end
+
+	return true
+end
+
+function TOOL.BuildCPanel(panel)
+	panel:AddControl("Header", { Text = "tool.uvracemanager.name", Description = language.GetPhrase("tool.uvracemanager.desc")})
+	panel:AddControl("Button", {Label = "Get Race Info", Command = "uvrace_count", Text = "Get Race Info"})
+
+	panel:AddControl("Label", {Text = "Save/Load Race", Description = "Save/Load Race"})
+	panel:AddControl("Button",  { Label	= "Load Race", Command = "uvrace_queryimport", Text = "Load Race"})
+	panel:AddControl("Button",  { Label	= "Save Race", Command = "uvrace_queryexport", Text = "Save Race"})
+
+	panel:AddControl("Label", {Text = "Remove", Description = "Remove placements"})
+	panel:AddControl("Button", {Label = "Remove all checkpoints", Command = "uvrace_killcps", Text = "Remove all checkpoint placements"})
+	panel:AddControl("Button", {Label = "Remove all spawns", Command = "uvrace_killspawns", Text = "Remove all spawn placements"})
+	panel:AddControl("Button", {Label = "Remove all spawns and checkpoints", Command = "uvrace_killall", Text = "Remove all UV Race spawns and checkpoints"})
+
+	panel:AddControl("Label", {Text = "Race", Description = "Race"})
+	panel:AddControl("Button", {Label = "Start Solo", Command = "uvrace_startsolo", Text = "Start the race solo"})
+	panel:AddControl("Button", {Label = "Invite Racers", Command = "uvrace_startinvite", Text = "Invite racers"})
+	panel:AddControl("Button", {Label = "Stop Race", Command = "uvrace_stop", Text = "Stop the race"})
+
+	panel:AddControl("Label", {Text = "Options", Description = "Options"})
+	panel:NumSlider("Laps", "unitvehicle_racelaps", 1, 100, 0)
+
+	local racetheme, label = panel:ComboBox( "Race Theme", "unitvehicle_racetheme" )
+	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
+	if folders != nil then
+		for k, v in pairs(folders) do
+			racetheme:AddChoice( v )
+		end
+	end
+end
+
