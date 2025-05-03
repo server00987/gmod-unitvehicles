@@ -15,8 +15,12 @@ if SERVER then
 		self:SetSolid(SOLID_NONE)
 		self:SetModel(self.Model)
 		self:DrawShadow(false)
-		local spawns = ents.FindByClass("uvrace_spawn")
-		self:SetGridSlot(#spawns)
+		
+		local spawns = self:GetGridSlot() > 0 or ents.FindByClass("uvrace_spawn")
+		if istable(spawns) then
+			self:SetGridSlot(#spawns)
+		end
+
 	end
 end
 
