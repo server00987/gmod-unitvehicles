@@ -132,7 +132,9 @@ if SERVER then
         local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
         if #checkpoints == 0 then
             PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
-            return 
+            return
+        elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
+            UVRaceLaps:SetInt( 1 )
         end
 
         local spawns = ents.FindByClass( "uvrace_spawn" )
