@@ -126,19 +126,91 @@ if SERVER then
 		end
 		self.moving = CurTime()
 	end
-	
-	function ENT:FindRace()
-		
-		if next(dvd.Waypoints) == nil then
+
+	function ENT:CanSeeGoal(target)
+		if !self.v or !target then
 			return
 		end
-		
-		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-		if Waypoint.Neighbors then --Keep going straight
-			self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_OPAQUE, filter = {self, self.v}}).Fraction==1
+		return tobool(tr)
+	end
+	
+	function ENT:FindRace()
+		if self.v.uvraceparticipant and UVRaceInEffect then
+			if !UVRaceInProgress then return nil end
+			local current_checkp = self.v.currentcheckpoint
+			local selected_point = null
+
+			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
+				if v:GetID() == current_checkp then
+					selected_point = v
+					break
+					-- self.PatrolWaypoint = {
+					-- 	['Target'] = (v:GetPos1()+v:GetPos2())/2,
+					-- 	['SpeedLimit'] = math.huge
+					-- }
+				end
+			end
+
+			if selected_point then
+				-- local pos1 = selected_point:GetPos1()
+				-- local pos2 = selected_point:GetPos2()
+
+				-- local lowest_y = math.min(pos1.y, pos2.y)
+
+				-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
+				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
+				local target = selected_point.target_point
+				local cansee = self:CanSeeGoal(target)
+				
+				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
+				-- Further tests may be needed to determine which one is better
+				if cansee then
+					self.PatrolWaypoint = {
+						['Target'] = target,
+						['SpeedLimit'] = 10000 -- hard set for now
+					}
+				else
+					-- Must utilize dvs
+					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
+					
+					if #waypoints > 0 then
+						self.PatrolWaypoint = {
+							['Target'] = waypoints[1].Target,
+							['SpeedLimit'] = waypoints[1].SpeedLimit
+						}
+					end
+				end
+			end
+
+
 		else
-			self.PatrolWaypoint = Waypoint
+			if next(dvd.Waypoints) == nil then
+				return
+			end
+		
+			local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+			if Waypoint.Neighbors then --Keep going straight
+				self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+			else
+				self.PatrolWaypoint = Waypoint
+			end
 		end
+
+		-- if next(dvd.Waypoints) == nil then
+		-- 	return
+		-- end
+		
+		-- local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		-- if Waypoint.Neighbors then --Keep going straight
+		-- 	self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+		-- else
+		-- 	self.PatrolWaypoint = Waypoint
+		-- end
+
+		-- self.PatrolWaypoint = {}
+		-- self.PatrolWaypoint["Target"] = Entity(1):GetPos()
+		-- self.PatrolWaypoint["SpeedLimit"] = math.huge
 		
 	end
 	
@@ -298,6 +370,18 @@ if SERVER then
 	function ENT:Think()
 		self:SetPos(self.v:GetPos() + Vector(0,0,50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
+
+		if self.v then
+			if self.v.raceinvited then
+				if !table.HasValue(UVRaceCurrentParticipants, self.v) then
+					UVRaceAddParticipant( self.v, nil, true )
+					return
+				end
+				self.v.raceinvited = false
+				timer.Remove('RaceInviteExpire'..v:EntIndex())
+			end
+		end
+
 		if not GetConVar("ai_ignoreplayers"):GetBool() then
 			self:Race()
 		else

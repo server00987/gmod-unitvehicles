@@ -13,6 +13,16 @@ if SERVER then
 	function ENT:Initialize()
 		self:SetSolid(SOLID_BBOX)
 		self:SetCollisionBoundsWS(self:GetPos1(), self:GetPos2())
+		
+		local pos1 = self:GetPos1()
+		local pos2 = self:GetPos2()
+
+		local lowest_y = math.min(pos1.y, pos2.y)
+
+		local target = (pos2 + pos1) / 2
+
+		self.target_point = target
+
 		self:DrawShadow(false)
 	end
 
@@ -32,7 +42,6 @@ if SERVER then
 	end
 
 	function ENT:StartTouch(vehicle)
-
 		if !vehicle.uvraceparticipant then return end
 
 		local driver = vehicle.racedriver
@@ -49,12 +58,12 @@ if SERVER then
 				vehicle.lastlaptime = CurTime()
 				vehicle.currentcheckpoint = 1
 
-				if driver:IsPlayer() then
+				if IsValid(driver) and driver:IsPlayer() then
 					net.Start("uvrace_lapcomplete")
 					net.WriteFloat(laptime)
 					net.Send(driver)
 				end
-				UVCheckLapTime( driver, laptime )
+				UVCheckLapTime( vehicle, laptime )
 				
 				if vehicle.currentlap == UVRaceLaps:GetInt() then --Completed race
 					vehicle.currentlap = 1
@@ -65,7 +74,7 @@ if SERVER then
 
 			end
 
-			if driver:IsPlayer() then
+			if IsValid(driver) and driver:IsPlayer() then
 				net.Start("uvrace_checkpointcomplete")
 				net.Send(driver)
 			end

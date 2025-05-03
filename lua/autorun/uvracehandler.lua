@@ -76,10 +76,21 @@ if SERVER then
     end
 
     -- Use vehicles as participants
-    function UVRaceAddParticipant( vehicle, driver )
+    function UVRaceAddParticipant( vehicle, driver, sendmsg )
         table.insert( UVRaceCurrentParticipants, vehicle )
+
+        vehicle.raceinvited = false
+        timer.Remove('RaceInviteExpire'..vehicle:EntIndex())
+
+        local driver = UVGetDriver(vehicle)
+        local is_player 
+
         vehicle.uvraceparticipant = true
         vehicle.racedriver = driver
+
+        if sendmsg then
+            PrintMessage( HUD_PRINTTALK, ((IsValid(driver) and driver:GetName()) or "Racer "..vehicle:EntIndex()).. " has joined the race!" )
+        end
         
         vehicle:CallOnRemove( "uvrace_participantremoved", function( ent )
             local driver = UVGetDriver( vehicle )
@@ -107,19 +118,19 @@ if SERVER then
 
     function UVRaceStart() --Start procedure
         if #UVRaceCurrentParticipants == 0 then
-            PrintMessage( "No participants found!" )
+            PrintMessage( HUD_PRINTTALK, "No participants found!" )
             return 
         end
 
         local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
         if #checkpoints == 0 then
-            PrintMessage( "No checkpoints found!" )
+            PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
             return 
         end
 
         local spawns = ents.FindByClass( "uvrace_spawn" )
         if #spawns == 0 then
-            PrintMessage( "No spawns found!" )
+            PrintMessage( HUD_PRINTTALK, "No spawns found!" )
             return 
         end
 
@@ -165,6 +176,7 @@ if SERVER then
     
     function UVRaceEnd()
         uvbestlaptime = nil
+        UVRaceInEffect = nil
         UVRaceInProgress = nil
         UVRaceCurrentParticipants = {}
         for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
@@ -172,40 +184,57 @@ if SERVER then
 		end
     end
 
-    function UVCheckLapTime( driver, time )
+    function UVCheckLapTime( vehicle, time )
         if !uvbestlaptime then
             uvbestlaptime = time
             local timedifference = 0
-            if driver:IsPlayer() then
-                net.Start( "uvrace_announcebestlaptime" )
-                    net.WriteFloat( time )
-                    net.WriteString( driver:Nick() )
-                    net.WriteFloat( timedifference )
-                net.Broadcast()
-            elseif driver:IsNPC() then
-                net.Start( "uvrace_announcebestlaptime" )
-                    net.WriteFloat( time )
-                    net.WriteString( "Racer ".. driver:EntIndex() )
-                    net.WriteFloat( timedifference )
-                net.Broadcast()
-            end
+
+            local driver = UVGetDriver(vehicle)
+            local name = (IsValid(driver) and driver:GetName())
+
+            -- if driver:IsPlayer() then
+            --     net.Start( "uvrace_announcebestlaptime" )
+            --         net.WriteFloat( time )
+            --         net.WriteString( driver:Nick() )
+            --         net.WriteFloat( timedifference )
+            --     net.Broadcast()
+            -- elseif driver:IsNPC() then
+            --     net.Start( "uvrace_announcebestlaptime" )
+            --         net.WriteFloat( time )
+            --         net.WriteString( "Racer ".. driver:EntIndex() )
+            --         net.WriteFloat( timedifference )
+            --     net.Broadcast()
+            -- end
+
+            net.Start("uvrace_announcebestlaptime")
+            net.WriteFloat( time )
+            net.WriteString( ((IsValid(driver) and driver:GetName()) or "Racer " .. vehicle:EntIndex()) )
+            net.WriteFloat( timedifference )
+            net.Broadcast()
+
         else
             if time < uvbestlaptime then
                 local timedifference = uvbestlaptime - time
                 uvbestlaptime = time
-                if driver:IsPlayer() then
-                    net.Start( "uvrace_announcebestlaptime" )
-                        net.WriteFloat( time )
-                        net.WriteString( driver:Nick() )
-                        net.WriteFloat( timedifference )
-                    net.Broadcast()
-                elseif driver:IsNPC() then
-                    net.Start( "uvrace_announcebestlaptime" )
-                        net.WriteFloat( time )
-                        net.WriteString( "Racer ".. driver:EntIndex() )
-                        net.WriteFloat( timedifference )
-                    net.Broadcast()
-                end
+                -- if driver:IsPlayer() then
+                --     net.Start( "uvrace_announcebestlaptime" )
+                --         net.WriteFloat( time )
+                --         net.WriteString( driver:Nick() )
+                --         net.WriteFloat( timedifference )
+                --     net.Broadcast()
+                -- elseif driver:IsNPC() then
+                --     net.Start( "uvrace_announcebestlaptime" )
+                --         net.WriteFloat( time )
+                --         net.WriteString( "Racer ".. driver:EntIndex() )
+                --         net.WriteFloat( timedifference )
+                --     net.Broadcast()
+                -- end
+
+                net.Start("uvrace_announcebestlaptime")
+                net.WriteFloat( time )
+                net.WriteString( ((IsValid(driver) and driver:GetName()) or "Racer " .. vehicle:EntIndex()) )
+                net.WriteFloat( timedifference )
+                net.Broadcast()
             end
         end
     end
@@ -223,6 +252,8 @@ if SERVER then
         else 
             UVRaceTime = CurTime() - UVRaceStartTime
         end
+
+        if UVRacePrep then return end
 
         if next( UVRaceCurrentParticipants ) != nil then
             local pos = 0
@@ -260,7 +291,7 @@ if SERVER then
 
                 end
             end
-        else
+        elseif !UVRacePrep then
             UVRaceEnd()
             net.Start( "uvrace_end" )
             net.Broadcast()

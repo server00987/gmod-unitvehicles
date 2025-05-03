@@ -1617,16 +1617,23 @@ local function GetVehicleData( ent )
 
 end
 
-function UVMoveToGridSlot( ply, aienabled )
-	local entrantvehicle = UVGetVehicle(ply)
+function UVMoveToGridSlot( vehicle, aienabled )
+	local entrantvehicle = vehicle
 
-	if !IsValid(entrantvehicle) then 
-		PrintMessage( HUD_PRINTTALK, "Enter a vehicle to take part in the race!")
-		return 
-	end
+	-- if !IsValid(entrantvehicle) then 
+	-- 	PrintMessage( HUD_PRINTTALK, "Enter a vehicle to take part in the race!")
+	-- 	return 
+	-- end
 
-	local Memory = GetVehicleData( entrantvehicle )
-	if !Memory then return end
+	-- local Memory = GetVehicleData( entrantvehicle )
+	-- if !Memory then return end
+
+	local Memory = GetVehicleData( vehicle )
+
+	local driver = vehicle:GetDriver()
+	local ply = (IsValid(driver) and driver) or Entity(1)
+
+	print(vehicle, ply)
 
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
@@ -2031,10 +2038,15 @@ function UVMoveToGridSlot( ply, aienabled )
 					ply:EnterVehicle(Ent)
 				end
 			end
+
+			-- Because Glide vehicles must be re-spawned to have their position/angle applied, we must re-add the vehicle as a participant
+			-- This unfortunately also causes EntIndex to change, assigning a different callsign to the racer... separate problem
+
+			if Ent.IsGlideVehicle then
+				UVRaceAddParticipant( Ent )
+			end
 		end
 	end)
-
-	UVRaceAddParticipant( Ent, ply )
 
 	return Ent
 

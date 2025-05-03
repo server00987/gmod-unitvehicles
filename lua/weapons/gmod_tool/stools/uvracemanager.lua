@@ -59,10 +59,63 @@ if SERVER then
 	end
 	concommand.Add("uvrace_startsolo", StartRaceSolo)
 
+	local function StartRace(ply, cmd, args)
+
+		-- if !IsValid( UVMoveToGridSlot( ply ) ) then return end
+		if UVRaceInEffect then return end
+
+		UVRacePrep = true
+		UVRaceInEffect = true
+
+		for _, v in ents.Iterator() do
+			if table.HasValue(UVRaceCurrentParticipants, v) then continue end
+			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle then continue end
+
+			local driver = v:GetDriver()
+			local is_player = IsValid(driver) and driver:IsPlayer()
+
+			if is_player and driver == ply then
+				UVRaceAddParticipant( v, nil, true )
+			end
+		end
+		
+		for _, v in pairs(table.Copy(UVRaceCurrentParticipants)) do
+			local driver = v:GetDriver()
+
+			UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
+		end
+		
+		timer.Simple(2, function()
+			UVRaceMakeCheckpoints()
+			UVRacePrep = false
+		end)
+
+		//UVRacePrep = false
+
+		AddHooks()
+	end
+	concommand.Add("uvrace_startrace", StartRace)
+
 	local function StartRaceInvite(ply, cmd, args)
 
+		for _, v in ents.Iterator() do
+			if table.HasValue(UVRaceCurrentParticipants, v) then continue end
+			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle then continue end
 
-		
+			local driver = v:GetDriver()
+			local is_player = IsValid(driver) and driver:IsPlayer()
+
+			if v.RacerVehicle or (is_player and driver ~= ply) then
+				PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or "Racer "..v:EntIndex()) )
+
+				v.raceinvited = true
+				v.lastraceinv = CurTime()
+
+				timer.Create('RaceInviteExpire'..v:EntIndex(), 10, 1, function()
+					v.raceinvited = false
+				end)
+			end
+		end		
 	end
 	concommand.Add("uvrace_startinvite", StartRaceInvite)
 
@@ -422,6 +475,7 @@ function TOOL.BuildCPanel(panel)
 
 	panel:AddControl("Label", {Text = "Race", Description = "Race"})
 	panel:AddControl("Button", {Label = "Start Solo", Command = "uvrace_startsolo", Text = "Start the race solo"})
+	panel:AddControl("Button", {Label = "Start Race", Command = "uvrace_startrace", Text = "Start the race with other racers"})
 	panel:AddControl("Button", {Label = "Invite Racers", Command = "uvrace_startinvite", Text = "Invite racers"})
 	panel:AddControl("Button", {Label = "Stop Race", Command = "uvrace_stop", Text = "Stop the race"})
 

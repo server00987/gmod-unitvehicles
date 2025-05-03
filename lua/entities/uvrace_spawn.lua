@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "base_anim"
 ENT.Type = "anim"
 
-ENT.Model = "models/unitvehiclesprops/uvarrow/uvarrow.mdl"
+ENT.Model = "models/unitvehiclesprops/uvarrow/uvarrow2.mdl"
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Vector", 0, "MaxPos")
