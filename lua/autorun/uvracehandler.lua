@@ -33,10 +33,17 @@ if SERVER then
     function UVRaceCheckFinishLine()
         local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
         local highestid = 0
+        
         for _, checkpoint in pairs( checkpoints ) do
             local id = checkpoint:GetID() or 0
             if id > highestid then
                 highestid = id --Highest ID is the finish line
+            end
+        end
+
+        for _, checkpoint in pairs( checkpoints ) do --Recheck all checkpoints just to be sure
+            local id = checkpoint:GetID() or 0
+            if id == highestid then
                 checkpoint:SetFinishLine( true )
             else
                 checkpoint:SetFinishLine( false )
