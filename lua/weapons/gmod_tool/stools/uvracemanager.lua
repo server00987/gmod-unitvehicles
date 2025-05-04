@@ -82,7 +82,8 @@ if SERVER then
 		for _, v in pairs(table.Copy(UVRaceCurrentParticipants)) do
 			local driver = v:GetDriver()
 
-			UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
+			local ent = UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
+			if !ent then return end
 		end
 
 		//UVRaceMakeCheckpoints()

@@ -1638,8 +1638,9 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
 	if next(spawns) == nil then
+		UVRaceEnd()
 		PrintMessage( HUD_PRINTTALK, "No race spawn points found!")
-		return
+		return nil
 	else
 		--Look for a spawn point that has the lowest GridSlot value and claim it
 		local lowestGridSlot = math.huge
