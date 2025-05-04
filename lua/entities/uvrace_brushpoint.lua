@@ -44,19 +44,31 @@ if SERVER then
 	function ENT:StartTouch(vehicle)
 		if !vehicle.uvraceparticipant then return end
 
-		local driver = vehicle.racedriver
-
+		local driver = vehicle:GetDriver()//vehicle.racedriver
+	
 		self:SetupGlobals(vehicle, vehicle)
 
-		if vehicle.currentcheckpoint == self:GetID() then --Checkpoint passed
+		if !UVRaceTable or !UVRaceTable['Participants'] then return end
+		if !UVRaceTable['Participants'][vehicle] then return end
 
-			vehicle.currentcheckpoint = vehicle.currentcheckpoint + 1
+		local vehicle_array = UVRaceTable['Participants'][vehicle]
 
-			if vehicle.currentcheckpoint > GetGlobalInt("uvrace_checkpoints") then -- Lap completed
+		local last_checkpoint = #vehicle_array['Checkpoints']
+		local next_checkpoint = last_checkpoint + 1
 
-				local laptime = CurTime() - vehicle.lastlaptime
-				vehicle.lastlaptime = CurTime()
-				vehicle.currentcheckpoint = 1
+		local checkp_id = self:GetID()
+
+		if next_checkpoint == checkp_id then --Checkpoint passed
+
+			vehicle_array['Checkpoints'][checkp_id] = CurTime()
+
+			if #vehicle_array['Checkpoints'] >= GetGlobalInt("uvrace_checkpoints") then -- Lap completed
+
+				local laptime = CurTime() - vehicle_array['LastLapTime']
+				vehicle_array['LastLapTime'] = CurTime()
+
+				table.Empty(vehicle_array['Checkpoints'])				
+				--vehicle.currentcheckpoint = 1
 
 				if IsValid(driver) and driver:IsPlayer() then
 					net.Start("uvrace_lapcomplete")
@@ -65,11 +77,17 @@ if SERVER then
 				end
 				UVCheckLapTime( vehicle, laptime )
 				
-				if vehicle.currentlap == UVRaceLaps:GetInt() then --Completed race
-					vehicle.currentlap = 1
-					UVRaceRemoveParticipant( vehicle )
+				if vehicle_array['Lap'] == UVRaceLaps:GetInt() then --Completed race
+					vehicle_array['Lap'] = 1
+					vehicle_array['Finished'] = true
+
+					vehicle.racefinished = true
+					vehicle.uvraceparticipant = false
+					
+					UVRaceRemoveParticipant( vehicle, 'Finished' )
 				else
-					vehicle.currentlap = vehicle.currentlap + 1
+					vehicle_array['Lap'] = vehicle_array['Lap'] +1
+					--vehicle.currentlap = vehicle.currentlap + 1
 				end
 
 			end

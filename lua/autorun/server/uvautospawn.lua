@@ -1668,7 +1668,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		
 		local SpawnAng = ang
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = SpawnAng.yaw + 180 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		SpawnAng.yaw = SpawnAng.yaw + 90 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
@@ -2042,7 +2042,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 			-- Because Glide vehicles must be re-spawned to have their position/angle applied, we must re-add the vehicle as a participant
 			-- This unfortunately also causes EntIndex to change, assigning a different callsign to the racer... separate problem
 
-			if Ent.IsGlideVehicle then
+			if Ent.IsGlideVehicle or Ent.IsSimfphyscar then
 				UVRaceAddParticipant( Ent )
 			end
 		end

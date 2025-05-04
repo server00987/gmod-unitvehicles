@@ -55,7 +55,7 @@ if SERVER then
             end
         elseif next(uvrvwithpursuittech) != nil then --RACER VEHICLES
             for k, car in pairs(uvrvwithpursuittech) do
-                if UVGetDriver(car) != ply then continue end
+                if UVGetDriver(car) != ply or car.wrecked or car.uvbusted then continue end
                 UVDeployWeapon( car, slot )
             end
         end

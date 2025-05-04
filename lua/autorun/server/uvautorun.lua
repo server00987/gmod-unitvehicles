@@ -1727,6 +1727,11 @@ function UVBustEnemy(self, enemy)
 	end
 	enemy.uvbusted = true
 	enemy.uvbustingprogress = 0
+	-- if UVRaceTable['Participants'] then
+	-- 	if UVRaceTable['Participants'][enemy] then
+	-- 		UVRaceTable['Participants'][enemy].Busted = true
+	-- 	end
+	-- end
 	if enemy.RacerVehicle then
 		enemy.RacerVehicle:Remove()
 	end

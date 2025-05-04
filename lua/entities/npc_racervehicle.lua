@@ -136,10 +136,13 @@ if SERVER then
 	end
 	
 	function ENT:FindRace()
-		if self.v.uvraceparticipant and UVRaceInEffect then
+		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
 			if !UVRaceInProgress then return nil end
-			local current_checkp = self.v.currentcheckpoint
-			local selected_point = null
+			
+			local array = UVRaceTable['Participants'][self.v]
+
+			local current_checkp = #array.Checkpoints + 1
+			local selected_point = nil
 
 			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
 				if v:GetID() == current_checkp then
@@ -168,13 +171,13 @@ if SERVER then
 				if cansee then
 					self.PatrolWaypoint = {
 						['Target'] = target,
-						['SpeedLimit'] = 10000 -- hard set for now
+						['SpeedLimit'] = math.huge -- hard set for now
 					}
 				else
 					-- Must utilize dvs
 					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
 					
-					if #waypoints > 0 then
+					if IsValid(waypoints) and waypoints > 0 then
 						self.PatrolWaypoint = {
 							['Target'] = waypoints[1].Target,
 							['SpeedLimit'] = waypoints[1].SpeedLimit

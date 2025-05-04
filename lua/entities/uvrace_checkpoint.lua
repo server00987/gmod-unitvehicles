@@ -97,14 +97,16 @@ if CLIENT then
 		elseif UVHUDRace then
 			
 			--Show current checkpoint and the checkpoint after that
-			local currentcheckpoint = UVHUDRaceCurrentCheckpoint or 1
-			local nextcheckpoint = UVHUDRaceCurrentCheckpoint + 1
+			local currentcheckpoint = UVHUDRaceCurrentCheckpoint + 1
+			local nextcheckpoint = currentcheckpoint + 1 
 
 			if nextcheckpoint > GetGlobalInt("uvrace_checkpoints") then
 				nextcheckpoint = 1
 			end
 
-			if id != currentcheckpoint and id != nextcheckpoint or id == 0 then return end
+			--print(nextcheckpoint)
+			//print(id, currentcheckpoint, nextcheckpoint)
+			if (id != currentcheckpoint and id != nextcheckpoint) or id == 0 then return end//or id == 0 then return end
 			
 			cam.Start3D()
 

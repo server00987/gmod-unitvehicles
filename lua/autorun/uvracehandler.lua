@@ -16,9 +16,299 @@ function UVDisplayTimeRace(time) -- include milliseconds in the string
 	return timestring
 end
 
+-- Calculating differences between the checkpoints the other racer DOES NOT have, but the player does
+-- function UVFormLeaderboard(racers)
+--     local lPr = LocalPlayer()
+--     local sorted_table = {}
+
+--     local lVehicle = nil
+--     local lArray = nil
+
+--     for vehicle, array in pairs(racers) do
+--         if vehicle:GetDriver() == lPr then lVehicle, lArray = vehicle, array end
+--         table.insert(sorted_table, {
+--             vehicle = vehicle,
+--             array = array
+--         })
+--     end
+
+--     local lCheckpointCount = #lArray.Checkpoints
+
+--     function UVFormLeaderboard(racers)
+--     local lPr = LocalPlayer()
+--     local sorted_table = {}
+
+--     local lVehicle = nil
+--     local lArray = nil
+
+--     for vehicle, array in pairs(racers) do
+--         if vehicle:GetDriver() == lPr then lVehicle, lArray = vehicle, array end
+--         table.insert(sorted_table, {
+--             vehicle = vehicle,
+--             array = array
+--         })
+--     end
+
+--     local lCheckpointCount = #lArray.Checkpoints
+
+--     -- Calculate differences between checkpoints
+
+--     for _, v in pairs(sorted_table) do
+--         local driver = v.vehicle:GetDriver()
+--         local is_local_player = IsValid(driver) and driver == lPr
+--         if is_local_player then continue end
+
+--         local racerCheckpoints = v.array.Checkpoints or {}
+--         local racerCount = #racerCheckpoints
+--         local checkpointDiff = lCheckpointCount - racerCount
+--         local totalTimeDiff = 0
+
+--         if checkpointDiff ~= 0 then
+--             -- Determine who is ahead and who is behind
+--             local aheadCheckpoints = (checkpointDiff > 0) and lArray.Checkpoints or racerCheckpoints
+--             local behindCheckpoints = (aheadCheckpoints == lArray.Checkpoints) and racerCheckpoints or lArray.Checkpoints
+--             local aheadCount = #aheadCheckpoints
+--             local behindCount = #behindCheckpoints
+
+--             -- Sum time deltas for the missing checkpoints
+--             for i = 1, math.abs(checkpointDiff) do
+--                 local idx = behindCount + i
+--                 local timeNow = aheadCheckpoints[idx]
+--                 local timePrev = aheadCheckpoints[idx - 1] or timeNow
+--                 if timeNow then
+--                     totalTimeDiff = totalTimeDiff + (timeNow - timePrev)
+--                 end
+--             end
+
+--             -- Make positive if local player is behind, negative if ahead
+--             if checkpointDiff > 0 then
+--                 totalTimeDiff = -totalTimeDiff
+--             end
+--         else
+--             -- Same checkpoint count, use last checkpoint time difference
+--             local localTime = lArray.Checkpoints[lCheckpointCount] or 0
+--             local otherTime = racerCheckpoints[racerCount] or 0
+--             totalTimeDiff = localTime - otherTime
+--         end
+
+--     -- totalTimeDiff now accurately reflects relative time position
+--         local sign = (totalTimeDiff >= 0) and "+" or "-"
+--         local diffStr = string.format(" (%s%.3f)", sign, math.abs(totalTimeDiff))
+--         print(diffStr)
+--     -- Use diffStr in your leaderboard line
+--     end
+-- end
+
+--     -- Calculate differences between checkpoints
+-- end
+
+local UVSortedRacers = {}
+
+function UVFormLeaderboard(racers)
+    local lPr = LocalPlayer()
+    local sorted_table = {}
+    local lVehicle, lArray = nil, nil
+
+    for vehicle, array in pairs(racers) do
+        if IsValid(vehicle) and vehicle:GetDriver() == lPr then
+            lVehicle = vehicle
+            lArray = array
+        end
+
+        table.insert(sorted_table, {
+            vehicle = vehicle,
+            array = array
+        })
+    end
+
+    if not lArray then return "You are not in a race vehicle." end
+
+    local lCheckpointCount = #lArray.Checkpoints
+    local leaderboardLines = {}
+
+    -- Sort by: lap > checkpoints > checkpoint time
+    -- table.sort(sorted_table, function(a, b)
+    --     local aData, bData = a.array, b.array
+    --     if aData.Lap ~= bData.Lap then
+    --         return aData.Lap > bData.Lap
+    --     end
+
+    --     local aCP, bCP = #aData.Checkpoints, #bData.Checkpoints
+    --     if aCP ~= bCP then
+    --         return aCP > bCP
+    --     end
+
+    --     local aTime = aData.Checkpoints[aCP] or 0
+    --     local bTime = bData.Checkpoints[bCP] or 0
+    --     return aTime < bTime
+    -- end)
+    table.sort(sorted_table, function(a, b)
+        local aData, bData = a.array, b.array
+        -- if aData.Finished and not bData.Finished then
+        --     return true
+        -- elseif not aData.Finished and bData.Finished then
+        --     return false
+        -- end
+        local function getStatusPriority(data)
+            if data.Disqualified or data.Busted then return 3 end
+            if data.Finished then return 1 end
+            return 2 -- Actively racing
+        end
+
+        local aPriority = getStatusPriority(aData)
+        local bPriority = getStatusPriority(bData)
+
+        if aPriority ~= bPriority then
+            return aPriority < bPriority -- Lower number = higher priority
+        end
+
+        if aData.Lap ~= bData.Lap then
+            return aData.Lap > bData.Lap
+        end
+
+        local aCP, bCP = #aData.Checkpoints, #bData.Checkpoints
+        if aCP ~= bCP then
+            return aCP > bCP
+        end
+
+        local aTime = aData.Checkpoints[aCP] or 0
+        local bTime = bData.Checkpoints[bCP] or 0
+        return aTime < bTime
+    end)
+
+    for i, v in ipairs(sorted_table) do
+        local vehicle = v.vehicle
+
+        if !IsValid(vehicle) then
+            local line = string.format("%d. %s", i, v.array.Name)
+            line = line .. '  [DNF]'
+
+            table.insert(leaderboardLines, line)
+            continue
+        end
+
+        local array = v.array
+        local driver = vehicle:GetDriver()
+        local is_local_player = IsValid(driver) and driver == lPr
+        local name = array.Name or "Racer"
+
+        local line = string.format("%d. %s", i, name)
+
+        if not is_local_player then
+            local racerCPs = array.Checkpoints or {}
+            local racerCount = #racerCPs
+            local checkpointDiff = lCheckpointCount - racerCount
+            local totalTimeDiff = 0
+
+            if checkpointDiff ~= 0 then
+                local aheadCPs = (checkpointDiff > 0) and lArray.Checkpoints or racerCPs
+                local behindCPs = (aheadCPs == lArray.Checkpoints) and racerCPs or lArray.Checkpoints
+                local behindCount = #behindCPs
+
+                for j = 1, math.abs(checkpointDiff) do
+                    local idx = behindCount + j
+                    local timeNow = aheadCPs[idx]
+                    local timePrev = aheadCPs[idx - 1] or timeNow
+                    if timeNow then
+                        totalTimeDiff = totalTimeDiff + (timeNow - timePrev)
+                    end
+                end
+
+                if checkpointDiff > 0 then
+                    totalTimeDiff = -totalTimeDiff
+                end
+            else
+                local localTime = lArray.Checkpoints[lCheckpointCount] or 0
+                local otherTime = racerCPs[racerCount] or 0
+                totalTimeDiff = localTime - otherTime
+            end
+
+            local sign = (totalTimeDiff >= 0) and "+" or "-"
+
+            local str = "???"
+
+            if v.array.Finished then
+                str = '  [FINISHED]'
+            elseif v.array.Disqualified then
+                str = '  [DNF]'
+            elseif v.array.Busted then
+                str = '  [BUSTED]'
+            else
+                str = string.format("  (%s%.3f)", sign, math.abs(totalTimeDiff))
+            end
+
+            line = line .. str
+        end
+
+        table.insert(leaderboardLines, line)
+    end
+
+    //UVSortedRacers = sorted_table
+
+    return sorted_table, table.concat(leaderboardLines, "\n")
+end
+
+function UVOrderPositions(racers)
+    local sortedRacers = {}
+
+    -- Build a sortable list from the racer table
+    for ent, data in pairs(racers) do
+        local checkpoints = data.Checkpoints or {}
+        local lastCheckpointTime = 0
+
+        -- Get the most recent checkpoint time
+        for _, time in pairs(checkpoints) do
+            if time > lastCheckpointTime then
+                lastCheckpointTime = time
+            end
+        end
+
+        table.insert(sortedRacers, {
+            Entity = ent,
+            Lap = data.Lap or 0,
+            CheckpointCount = table.Count(checkpoints),
+            LastCheckpointTime = lastCheckpointTime,
+            Finished = data.Finished,
+            Disqualified = data.Disqualified
+        })
+    end
+
+    -- Sort racers
+    table.sort(sortedRacers, function(a, b)
+        if a.Disqualified and not b.Disqualified then return false end
+        if b.Disqualified and not a.Disqualified then return true end
+
+        if a.Finished and not b.Finished then return true end
+        if b.Finished and not a.Finished then return false end
+
+        if a.Lap ~= b.Lap then
+            return a.Lap > b.Lap
+        end
+
+        if a.CheckpointCount ~= b.CheckpointCount then
+            return a.CheckpointCount > b.CheckpointCount
+        end
+
+        return a.LastCheckpointTime < b.LastCheckpointTime
+    end)
+
+    -- Assign positions
+    for pos, data in ipairs(sortedRacers) do
+        if IsValid(data.Entity) then
+            racers[data.Entity].Position = pos
+        end
+    end
+end
+
+-- function UVGetRacerCount(Participants)
+--     for vehicle, _ in pairs(Participants) do
+--     end
+-- end
+
 if SERVER then
     UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
 
+    UVRaceTable = {}
     UVRaceCurrentParticipants = {}
     UVRaceStartTime = CurTime()
 
@@ -28,15 +318,23 @@ if SERVER then
     util.AddNetworkString( "uvrace_checkpointcomplete" )
     util.AddNetworkString( "uvrace_lapcomplete" )
     util.AddNetworkString( "uvrace_info" )
+    util.AddNetworkString( "uvrace_invite" )
     util.AddNetworkString( "uvrace_announcebestlaptime" )
 
     function UVRaceCheckFinishLine()
         local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
         local highestid = 0
+
         for _, checkpoint in pairs( checkpoints ) do
             local id = checkpoint:GetID() or 0
             if id > highestid then
                 highestid = id --Highest ID is the finish line
+            end
+        end
+
+        for _, checkpoint in pairs( checkpoints ) do --Recheck all checkpoints just to be sure
+            local id = checkpoint:GetID() or 0
+            if id == highestid then
                 checkpoint:SetFinishLine( true )
             else
                 checkpoint:SetFinishLine( false )
@@ -64,7 +362,7 @@ if SERVER then
 			check:Spawn()
 		end
 
-        timer.Simple(1, function()
+        timer.Simple(2, function()
             UVRaceStart()
         end)
 	end
@@ -84,7 +382,8 @@ if SERVER then
 
         local driver = UVGetDriver(vehicle)
         local is_player 
-
+        
+        vehicle.racefinished = false
         vehicle.uvraceparticipant = true
         vehicle.racedriver = driver
 
@@ -94,17 +393,26 @@ if SERVER then
         
         vehicle:CallOnRemove( "uvrace_participantremoved", function( ent )
             local driver = UVGetDriver( vehicle )
-            UVRaceRemoveParticipant( ent, driver )
+            UVRaceRemoveParticipant( ent, 'Disqualified' )
         end )
     end
 
-    function UVRaceRemoveParticipant( vehicle, ply )
+    function UVRaceRemoveParticipant( vehicle, reason )
         if table.HasValue( UVRaceCurrentParticipants, vehicle ) then
             table.RemoveByValue( UVRaceCurrentParticipants, vehicle )
-            local driver = UVGetDriver( vehicle ) or ply
-            if driver:IsPlayer() then
+            local driver = UVGetDriver( vehicle )
+            if IsValid(driver) and driver:IsPlayer() then
                 net.Start( "uvrace_end" )             
                 net.Send( driver )
+            end
+        end
+
+        if UVRaceTable.Participants then
+            if UVRaceTable.Participants and UVRaceTable.Participants[ vehicle ] then
+                //UVRaceTable.Participants [ vehicle ] = nil
+                if IsValid(reason) then
+                    UVRaceTable.Participants [ vehicle ] [ reason ] = true
+                end
             end
         end
 
@@ -125,7 +433,9 @@ if SERVER then
         local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
         if #checkpoints == 0 then
             PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
-            return 
+            return
+        elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
+            UVRaceLaps:SetInt( 1 )
         end
 
         local spawns = ents.FindByClass( "uvrace_spawn" )
@@ -134,12 +444,38 @@ if SERVER then
             return 
         end
 
+        table.Empty(UVRaceTable)
+
+        UVRaceTable['Participants'] = {}
+        UVRaceTable['Info'] = {
+            ['Laps'] = UVRaceLaps:GetInt(),
+            ['Racers'] = 0,
+            ['Time'] = 0
+        }
+
         local time = 7
-        for _, vehicle in pairs( UVRaceCurrentParticipants ) do
-            local driver = UVGetDriver( vehicle )
-            net.Start( "uvrace_start" )
+        for i, vehicle in pairs( UVRaceCurrentParticipants ) do
+            local driver = vehicle:GetDriver()
+            print(driver)
+            
+            UVRaceTable['Participants'][vehicle] = {
+                ['Lap'] = 1,
+                ['Position'] = i,
+                ['Name'] = (IsValid(driver) and driver:GetName()) or "Racer "..vehicle:EntIndex(),
+                --['Laps'] = {},
+                --['BestLapTime'] = CurTime(),
+                ['LastLapTime'] = CurTime(),
+                ['Finished'] = false,
+                ['Disqualified'] = false,
+                ['Busted'] = false,
+                ['Checkpoints'] = {}
+            }
+
+            if IsValid(driver) and driver:IsPlayer() then
+                net.Start( "uvrace_start" )
                 net.WriteInt( time, 11 )
-            net.Send( driver )
+                net.Send( driver )
+            end
         end
 
         timer.Create( "uvrace_start", 1, 7, function()
@@ -178,7 +514,10 @@ if SERVER then
         uvbestlaptime = nil
         UVRaceInEffect = nil
         UVRaceInProgress = nil
-        UVRaceCurrentParticipants = {}
+        
+        table.Empty(UVRaceTable)
+        table.Empty(UVRaceCurrentParticipants)
+
         for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
 			ent:Remove()
 		end
@@ -253,44 +592,64 @@ if SERVER then
             UVRaceTime = CurTime() - UVRaceStartTime
         end
 
+        if !UVRaceInEffect then return end
         if UVRacePrep then return end
 
         if next( UVRaceCurrentParticipants ) != nil then
             local pos = 0
+            local player_table = {}
+            --local network_table = {}
+
+            //UVOrderPositions(UVRaceTable['Participants'])
+            UVRaceTable['Info']['Time'] = UVRaceTime
+
             for _, vehicle in pairs( UVRaceCurrentParticipants ) do
-                pos = pos + 1
+               --pos = pos + 1
                 if IsValid( vehicle ) then
-                    if !vehicle.currentcheckpoint then
-                        vehicle.currentcheckpoint = 1
-                    end
-                    if !vehicle.currentlap then
-                        vehicle.currentlap = 1
-                    end
-                    if !vehicle.lastlaptime then
-                        vehicle.lastlaptime = CurTime()
-                    end
-                    if !vehicle.bestlaptime then
-                        vehicle.bestlaptime = CurTime()
-                    end
+                    -- if !vehicle.currentcheckpoint then
+                    --     vehicle.currentcheckpoint = 1
+                    -- end
+                    -- if !vehicle.currentlap then
+                    --     vehicle.currentlap = 1
+                    -- end
+                    -- if !vehicle.lastlaptime then
+                    --     vehicle.lastlaptime = CurTime()
+                    -- end
+                    -- if !vehicle.bestlaptime then
+                    --     vehicle.bestlaptime = CurTime()
+                    -- end
 
                     local driver = UVGetDriver( vehicle )
                     if IsValid( driver ) then
-                        net.Start( "uvrace_info" )
-                            net.WriteInt( vehicle.currentcheckpoint, 11 )
-                            net.WriteInt( vehicle.currentlap, 11 )
-                            net.WriteInt( pos, 11 )
-                            net.WriteInt( UVRaceLaps:GetInt(), 11 )
-                            net.WriteFloat( UVRaceTime )
-                            net.WriteInt( #UVRaceCurrentParticipants, 11 )
-                        net.Send( driver )
+                        table.insert(player_table, driver)
+                        -- net.Start( "uvrace_info" )
+                        --     net.WriteInt( vehicle.currentcheckpoint, 11 )
+                        --     net.WriteInt( vehicle.currentlap, 11 )
+                        --     net.WriteInt( pos, 11 )
+                        --     net.WriteInt( UVRaceLaps:GetInt(), 11 )
+                        --     net.WriteFloat( UVRaceTime )
+                        --     net.WriteInt( #UVRaceCurrentParticipants, 11 )
+                        -- net.Send( driver )
                     end
 
-                    if vehicle.wrecked or vehicle.uvbusted then
-                        UVRaceRemoveParticipant( vehicle )
+                    -- if vehicle.wrecked or vehicle.uvbusted then
+                    --     UVRaceRemoveParticipant( vehicle )
+                    -- end
+                    if vehicle.uvbusted then
+                        UVRaceTable['Participants'][vehicle].Busted = true
+                        UVRaceRemoveParticipant( vehicle, 'Busted' )
                     end
 
                 end
             end
+
+            for _, player in pairs ( player_table ) do
+                net.Start( "uvrace_info" )
+                net.WriteTable( UVRaceTable )
+                net.Send( player )
+            end
+
+
         elseif !UVRacePrep then
             UVRaceEnd()
             net.Start( "uvrace_end" )
@@ -338,12 +697,31 @@ else
     end)
 
     net.Receive( "uvrace_info", function()
-        UVHUDRaceCurrentCheckpoint = net.ReadInt( 11 )
-        UVHUDRaceCurrentLap = net.ReadInt( 11 )
-        UVHUDRaceCurrentPos = net.ReadInt( 11 )
-        UVHUDRaceLaps = net.ReadInt( 11 )
-        UVHUDRaceTime = UVDisplayTimeRace( net.ReadFloat() )
-        UVHUDRaceCurrentParticipants = net.ReadInt( 11 )
+        -- UVHUDRaceCurrentCheckpoint = net.ReadInt( 11 )
+        -- UVHUDRaceCurrentLap = net.ReadInt( 11 )
+        -- UVHUDRaceCurrentPos = net.ReadInt( 11 )
+        -- UVHUDRaceLaps = net.ReadInt( 11 )
+        -- UVHUDRaceTime = UVDisplayTimeRace( net.ReadFloat() )
+        -- UVHUDRaceCurrentParticipants = net.ReadInt( 11 )
+
+        UVHUDRaceInfo = net.ReadTable()
+
+        UVHUDRaceTime = UVDisplayTimeRace( UVHUDRaceInfo['Info']['Time'] )
+        UVHUDRaceLaps = UVHUDRaceInfo['Info']['Laps']
+        UVHUDRaceRacerCount = UVHUDRaceInfo['Info']['Racers']
+
+        for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
+            if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
+                my_vehicle, my_array = vehicle, array
+                break
+            end
+        end
+
+        if my_array then
+            UVHUDRaceCurrentCheckpoint = #my_array['Checkpoints']
+            UVHUDRaceCurrentPos = my_array['Position']
+        end
+
         if !UVHUDRace then
             UVHUDRace = true
             UVHUDRaceCheckpoints = GetGlobalInt( "uvrace_checkpoints" )
@@ -354,6 +732,14 @@ else
         end
     end)
 
+    net.Receive( "uvrace_invite", function()
+        local response = net.ReadBool()
+
+        -- if response then
+        --     UVRaceAddParticipant()
+        -- end
+    end)
+
     net.Receive( "uvrace_end", function()
         if UVHUDRace then 
             local theme = GetConVar("unitvehicle_racetheme"):GetString()
@@ -362,13 +748,14 @@ else
         end
 
         UVHUDRace = false
-        UVHUDRaceCurrentCheckpoint = 1
-        UVHUDRaceCurrentLap = 1
-        UVHUDRaceCurrentPos = 1
-        UVHUDRaceLaps = 1
-        UVHUDLastLapTime = nil
-        UVHUDBestLapTime = nil
-        UVHUDRaceTime = UVDisplayTimeRace(0)
+        UVHUDRaceInfo = nil
+        -- UVHUDRaceCurrentCheckpoint = 1
+        -- UVHUDRaceCurrentLap = 1
+        -- UVHUDRaceCurrentPos = 1
+        -- UVHUDRaceLaps = 1
+        -- UVHUDLastLapTime = nil
+        -- UVHUDBestLapTime = nil
+        -- UVHUDRaceTime = UVDisplayTimeRace(0)
     end)
 
     net.Receive( "uvrace_checkpointcomplete", function()
@@ -442,10 +829,22 @@ else
         end
 
         if !UVHUDRace then return end
+        if !UVHUDRaceInfo then return end
 
         if UVHUDRaceStart then
             draw.DrawText( UVHUDRaceStart, "UVFont7", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
+
+        local my_vehicle, my_array = nil, nil
+
+        for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
+            if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
+                my_vehicle, my_array = vehicle, array
+                break
+            end
+        end
+
+        if !my_vehicle then return end
 
         local element1 = {
             { x = 0, y = h/7 },
@@ -457,14 +856,37 @@ else
         draw.NoTexture()
         surface.DrawPoly( element1 )
 
+        local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo['Participants'])
+
+        UVHUDRaceCurrentParticipants = 0
+
+        for i, v in ipairs(sorted_table) do
+            UVHUDRaceCurrentParticipants = UVHUDRaceCurrentParticipants +1
+            if v.vehicle == my_vehicle then
+                UVHUDRaceCurrentPos = i
+            end
+        end
+
         draw.DrawText( 
-            "Time: " .. UVHUDRaceTime .. "\nCheck: " .. UVHUDRaceCurrentCheckpoint .. "/" .. UVHUDRaceCheckpoints .. (UVHUDRaceLaps > 1 and "\nLap: ".. UVHUDRaceCurrentLap .. "/" .. UVHUDRaceLaps or "") .. "\nPos: " .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants, 
+            "Time: " 
+            .. UVHUDRaceTime .. 
+            "\nCheck: " 
+            .. UVHUDRaceCurrentCheckpoint .. 
+            "/" .. UVHUDRaceCheckpoints 
+            .. (UVHUDRaceLaps > 1 and "\nLap: ".. UVHUDRaceCurrentLap .. "/" .. UVHUDRaceLaps or "") .. 
+            "\nPos: " 
+            .. UVHUDRaceCurrentPos .. 
+            "/" 
+            .. UVHUDRaceCurrentParticipants .. "\n\n"
+            .. string_array,
             "UVFont", 
             0, 
             h/7, 
             Color( 255, 255, 255), 
             TEXT_ALIGN_LEFT 
         )
+
+        print(UVFormLeaderboard(UVHUDRaceInfo['Participants']))
 
     end)
 
