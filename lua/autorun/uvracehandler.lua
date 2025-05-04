@@ -898,17 +898,17 @@ else
         )
 
         -- String array -> {Color, string}
+
+        local racer_count = #string_array
         
-        for i=1, #string_array, 1 do
+        for i=1, racer_count, 1 do
             local entry = string_array[i]
 
-            //print(h/(3- (i * .1)))
-            print(entry[1])
             draw.DrawText( 
                 entry[2],
                 "UVFont4", 
                 0, 
-                h/(3- (i * .15)), 
+                (h/3) + i *  ((racer_count > 5 and 20) or 28), 
                 entry[1], 
                 TEXT_ALIGN_LEFT 
             )
