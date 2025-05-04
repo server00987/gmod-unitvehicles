@@ -43,6 +43,7 @@ if SERVER then
 
 	function ENT:StartTouch(vehicle)
 		if !vehicle.uvraceparticipant then return end
+		if vehicle.uvbusted then return end
 
 		local driver = vehicle:GetDriver()//vehicle.racedriver
 	
@@ -83,6 +84,21 @@ if SERVER then
 
 					vehicle.racefinished = true
 					vehicle.uvraceparticipant = false
+
+					local place = 1
+
+					for veh, array in pairs(UVRaceTable['Participants']) do
+						if vehicle == veh then continue end
+						if array.Finished then
+							place = place +1
+						end
+					end
+
+					net.Start("uvrace_racecomplete")
+					net.WriteString(vehicle_array.Name)
+					net.WriteInt(place, 32)
+					net.WriteFloat(CurTime() - vehicle.racestart)
+					net.Broadcast()
 					
 					UVRaceRemoveParticipant( vehicle, 'Finished' )
 				else

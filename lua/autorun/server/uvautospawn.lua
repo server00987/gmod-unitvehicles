@@ -1668,7 +1668,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		
 		local SpawnAng = ang
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = SpawnAng.yaw + 90 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		SpawnAng.yaw = SpawnAng.yaw  + 90 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )

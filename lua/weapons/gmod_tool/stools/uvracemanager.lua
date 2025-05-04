@@ -90,7 +90,7 @@ if SERVER then
 
 		if ready_drivers <= 0 then return end
 
-		//UVRaceMakeCheckpoints()
+		UVRaceMakeCheckpoints()
 		
 		timer.Simple(2, function()
 			//UVRaceMakeCheckpoints()
@@ -108,22 +108,27 @@ if SERVER then
 
 		for _, v in ents.Iterator() do
 			if table.HasValue(UVRaceCurrentParticipants, v) then continue end
-			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle then continue end
+			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle or v.uvbusted then continue end
 
 			local driver = v:GetDriver()
 			local is_player = IsValid(driver) and driver:IsPlayer()
 
-			if v.RacerVehicle or (is_player and driver ~= ply) then
+			if !v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
 				PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or "Racer "..v:EntIndex()) )
 
-				if is_player then
-					v.racer = driver
-				else
-					v.racer = nil
-				end
+				-- if is_player then
+				-- 	v.racer = driver
+				-- else
+				-- 	v.racer = nil
+				-- end
 
 				v.raceinvited = true
 				v.lastraceinv = CurTime()
+
+				if is_player then
+					net.Start( 'uvrace_invite' )
+					net.Send(driver)
+				end
 
 				timer.Create('RaceInviteExpire'..v:EntIndex(), 10, 1, function()
 					v.racer = nil
