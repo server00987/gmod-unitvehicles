@@ -336,12 +336,6 @@ if SERVER then
         for _, checkpoint in pairs( checkpoints ) do --Recheck all checkpoints just to be sure
             local id = checkpoint:GetID() or 0
             if id == highestid then
-            end
-        end
-
-        for _, checkpoint in pairs( checkpoints ) do --Recheck all checkpoints just to be sure
-            local id = checkpoint:GetID() or 0
-            if id == highestid then
                 checkpoint:SetFinishLine( true )
             else
                 checkpoint:SetFinishLine( false )
@@ -442,9 +436,6 @@ if SERVER then
         if #checkpoints == 0 then
             UVRaceEnd()
             PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
-            return
-        elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
-            UVRaceLaps:SetInt( 1 )
             return
         elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
             UVRaceLaps:SetInt( 1 )
