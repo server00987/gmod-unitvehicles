@@ -433,12 +433,14 @@ if SERVER then
 
     function UVRaceStart() --Start procedure
         if #UVRaceCurrentParticipants == 0 then
+            UVRaceEnd()
             PrintMessage( HUD_PRINTTALK, "No participants found!" )
             return 
         end
 
         local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
         if #checkpoints == 0 then
+            UVRaceEnd()
             PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
             return
         elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
@@ -450,6 +452,7 @@ if SERVER then
 
         local spawns = ents.FindByClass( "uvrace_spawn" )
         if #spawns == 0 then
+            UVRaceEnd()
             PrintMessage( HUD_PRINTTALK, "No spawns found!" )
             return 
         end
@@ -466,7 +469,6 @@ if SERVER then
         local time = 7
         for i, vehicle in pairs( UVRaceCurrentParticipants ) do
             local driver = vehicle:GetDriver()
-            print(driver)
             
             UVRaceTable['Participants'][vehicle] = {
                 ['Lap'] = 1,

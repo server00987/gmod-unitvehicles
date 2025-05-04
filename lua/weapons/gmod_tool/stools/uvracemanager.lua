@@ -85,7 +85,7 @@ if SERVER then
 			UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
 		end
 
-		UVRaceMakeCheckpoints()
+		//UVRaceMakeCheckpoints()
 		
 		timer.Simple(2, function()
 			//UVRaceMakeCheckpoints()
