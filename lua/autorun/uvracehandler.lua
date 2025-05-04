@@ -328,14 +328,9 @@ if SERVER then
     end
 
     function UVRaceRemoveParticipant( vehicle, reason )
-        print('WHAT HAPPEN')
-        
         if UVRaceTable.Participants then
             if UVRaceTable.Participants and UVRaceTable.Participants[ vehicle ] then
-                print("Bye", reason, vehicle)
-                //UVRaceTable.Participants [ vehicle ] = nil
                 if reason then
-                    print("Hi", reason, vehicle)
                     UVRaceTable.Participants [vehicle][reason] = true
                 end
             end

@@ -390,6 +390,9 @@ if SERVER then
 		else
 			self:Stop()
 		end
+
+		self:NextThink( CurTime() )
+		return true
 	end
 	
 	function ENT:Initialize()
