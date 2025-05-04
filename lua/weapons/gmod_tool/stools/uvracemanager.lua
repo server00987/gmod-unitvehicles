@@ -78,13 +78,17 @@ if SERVER then
 				UVRaceAddParticipant( v, nil, true )
 			end
 		end
+
+		local ready_drivers = 0
 		
 		for _, v in pairs(table.Copy(UVRaceCurrentParticipants)) do
 			local driver = v:GetDriver()
 
 			local ent = UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
-			if !ent then return end
+			if ent then ready_drivers = ready_drivers + 1 end
 		end
+
+		if ready_drivers <= 0 then return end
 
 		//UVRaceMakeCheckpoints()
 		
