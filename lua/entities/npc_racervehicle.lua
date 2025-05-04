@@ -175,12 +175,11 @@ if SERVER then
 						['Target'] = target,
 						['SpeedLimit'] = (nearest_waypoint and nearest_waypoint.SpeedLimit ^ 2) or math.huge
 					}
-					print(self.PatrolWaypoint.SpeedLimit)
 				else
 					-- Must utilize dvs
 					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
-					
-					if IsValid(waypoints) and waypoints > 0 then
+
+					if waypoints and #waypoints > 0 then
 						self.PatrolWaypoint = waypoints[1]
 					else
 						self.PatrolWaypoint = nearest_waypoint
