@@ -2150,7 +2150,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airunits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airunits)	
 					local unit = airunits[random_entry]
-					UVChatterAirBusting(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterAirBusting(unit)
+					else
+						UVChatterBusting(closestunit)
+					end
 				else
 					UVChatterBusting(closestunit)
 				end
@@ -2228,7 +2232,11 @@ function UVCheckIfBeingBusted(enemy)
 					if next(airunits) ~= nil and randomno == 1 then
 						local random_entry = math.random(#airunits)	
 						local unit = airunits[random_entry]
-						UVChatterAirBustEvaded(unit)
+						if unit:GetTarget() == enemy then
+							UVChatterAirBustEvaded(unit)
+						else
+							UVChatterBustEvaded(closestunit)
+						end
 					else
 						UVChatterBustEvaded(closestunit)
 					end

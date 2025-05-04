@@ -567,6 +567,7 @@ if SERVER then
 	end
 	
 	function UVChatterArrestAcknowledge(self)
+		if #uvwantedtablevehicle > 0 then return end
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "arrestacknowledge", 1)
 		end
@@ -1794,6 +1795,7 @@ if SERVER then
 	end
 	
 	function UVChatterAirBusting(self)
+		if UVChatterDelayed then return end
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "airbusting")
 		end
@@ -1824,6 +1826,7 @@ if SERVER then
 	end
 	
 	function UVChatterAirBustEvaded(self)
+		if UVChatterDelayed then return end
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "airbustevaded")
 		end
@@ -2075,6 +2078,8 @@ if SERVER then
 	end
 	
 	function UVChatterEnemyCrashed(unit)
+		if UVChatterDelayed then return end
+		UVDelayChatter()
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			local airrandomno = math.random(1, 2)
 			local airunits = ents.FindByClass("uvair")
@@ -3232,6 +3237,7 @@ if SERVER then
 
 	function UVChatterStuntJump(self)
 		if UVChatterDelayed then return end
+		UVDelayChatter()
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "stuntjump")
 		end
@@ -3239,6 +3245,7 @@ if SERVER then
 
 	function UVChatterStuntRoll(self)
 		if UVChatterDelayed then return end
+		UVDelayChatter()
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "stuntroll")
 		end
@@ -3246,6 +3253,7 @@ if SERVER then
 
 	function UVChatterStuntSpin(self)
 		if UVChatterDelayed then return end
+		UVDelayChatter()
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "stuntspin")
 		end
