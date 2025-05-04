@@ -870,11 +870,19 @@ else
             "\nPos: " 
             .. UVHUDRaceCurrentPos .. 
             "/" 
-            .. UVHUDRaceCurrentParticipants .. "\n\n"
-            .. string_array,
+            .. UVHUDRaceCurrentParticipants,
             "UVFont", 
             0, 
             h/7, 
+            Color( 255, 255, 255), 
+            TEXT_ALIGN_LEFT 
+        )
+
+        draw.DrawText( 
+            string_array,
+            "UVFont4", 
+            0, 
+            h/3, 
             Color( 255, 255, 255), 
             TEXT_ALIGN_LEFT 
         )
