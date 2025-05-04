@@ -700,6 +700,7 @@ else
 		
 		function Yes:DoClick()
 			ResultPanel:Close()
+            timer.Remove("RaceInvite")
 
 			net.Start("uvrace_invite")
             net.WriteBool(true)
@@ -708,11 +709,14 @@ else
 
 		function No:DoClick()
 			ResultPanel:Close()
+            timer.Remove("RaceInvite")
 
             net.Start("uvrace_invite")
             net.WriteBool(false)
 			net.SendToServer()
 		end
+
+        timer.Create( "RaceInvite", 10, 1 function() ResultPanel:Clone() end )
     end)
 
     net.Receive( "uvrace_end", function()
