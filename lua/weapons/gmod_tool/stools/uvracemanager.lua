@@ -235,7 +235,7 @@ if SERVER then
 
 	local function SetID()
 		local ent = net.ReadEntity()
-		local id = net.ReadUInt(7)
+		local id = net.ReadUInt(16)
 
 		ent:SetID(id)
 		UVRaceCheckFinishLine()
@@ -330,7 +330,7 @@ elseif CLIENT then
 
 			net.Start("UVRace_SetID")
 				net.WriteEntity(selectedCP)
-				net.WriteUInt(id, 7)
+				net.WriteUInt(id, 16)
 			net.SendToServer()
 		end, nil, "Set", "Cancel")
 	end

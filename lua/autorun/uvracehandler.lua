@@ -325,10 +325,17 @@ if SERVER then
         local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
         local highestid = 0
 
+        
         for _, checkpoint in pairs( checkpoints ) do
             local id = checkpoint:GetID() or 0
             if id > highestid then
                 highestid = id --Highest ID is the finish line
+            end
+        end
+
+        for _, checkpoint in pairs( checkpoints ) do --Recheck all checkpoints just to be sure
+            local id = checkpoint:GetID() or 0
+            if id == highestid then
             end
         end
 
@@ -433,6 +440,9 @@ if SERVER then
         local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
         if #checkpoints == 0 then
             PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
+            return
+        elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
+            UVRaceLaps:SetInt( 1 )
             return
         elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
             UVRaceLaps:SetInt( 1 )
