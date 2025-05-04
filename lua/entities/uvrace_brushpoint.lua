@@ -76,7 +76,7 @@ if SERVER then
 					net.WriteFloat(laptime)
 					net.Send(driver)
 				end
-				UVCheckLapTime( vehicle, laptime )
+				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
 				if vehicle_array['Lap'] == UVRaceLaps:GetInt() then --Completed race
 					vehicle_array['Lap'] = 1

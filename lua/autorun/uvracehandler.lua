@@ -456,15 +456,23 @@ if SERVER then
         for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
 			ent:Remove()
 		end
+
+        for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			ent:Remove()
+		end
+
+        for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			ent:Remove()
+		end
     end
 
-    function UVCheckLapTime( vehicle, time )
+    function UVCheckLapTime( vehicle, name, time )
         if !uvbestlaptime then
             uvbestlaptime = time
             local timedifference = 0
 
             local driver = UVGetDriver(vehicle)
-            local name = (IsValid(driver) and driver:GetName())
+            //local name = (IsValid(driver) and driver:GetName())
 
             -- if driver:IsPlayer() then
             --     net.Start( "uvrace_announcebestlaptime" )
@@ -482,7 +490,7 @@ if SERVER then
 
             net.Start("uvrace_announcebestlaptime")
             net.WriteFloat( time )
-            net.WriteString( ((IsValid(driver) and driver:GetName()) or "Racer " .. vehicle:EntIndex()) )
+            net.WriteString( name )
             net.WriteFloat( timedifference )
             net.Broadcast()
 
@@ -663,21 +671,21 @@ else
 
         UVHUDRaceInfo = net.ReadTable()
 
-        UVHUDRaceTime = UVDisplayTimeRace( UVHUDRaceInfo['Info']['Time'] )
-        UVHUDRaceLaps = UVHUDRaceInfo['Info']['Laps']
-        UVHUDRaceRacerCount = UVHUDRaceInfo['Info']['Racers']
+        -- UVHUDRaceTime = UVDisplayTimeRace( UVHUDRaceInfo['Info']['Time'] )
+        -- UVHUDRaceLaps = UVHUDRaceInfo['Info']['Laps']
+        -- UVHUDRaceRacerCount = UVHUDRaceInfo['Info']['Racers']
 
-        for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
-            if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
-                my_vehicle, my_array = vehicle, array
-                break
-            end
-        end
+        -- for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
+        --     if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
+        --         my_vehicle, my_array = vehicle, array
+        --         break
+        --     end
+        -- end
 
-        if my_array then
-            UVHUDRaceCurrentCheckpoint = #my_array['Checkpoints']
-            UVHUDRaceCurrentPos = my_array['Position']
-        end
+        -- if my_array then
+        --     UVHUDRaceCurrentCheckpoint = #my_array['Checkpoints']
+        --     UVHUDRaceCurrentPos = my_array['Position']
+        -- end
 
         if !UVHUDRace then
             UVHUDRace = true
@@ -879,13 +887,18 @@ else
             end
         end
 
+        local checkpoint_count = #my_array['Checkpoints']
+
+        -- used by checkpoint entities
+        UVHUDRaceCurrentCheckpoint = checkpoint_count
+
         draw.DrawText( 
             "Time: " 
-            .. UVHUDRaceTime .. 
+            .. UVDisplayTimeRace( UVHUDRaceInfo.Info.Time ) .. 
             "\nCheck: " 
-            .. UVHUDRaceCurrentCheckpoint .. 
-            "/" .. UVHUDRaceCheckpoints 
-            .. (UVHUDRaceLaps > 1 and "\nLap: ".. UVHUDRaceCurrentLap .. "/" .. UVHUDRaceLaps or "") .. 
+            .. checkpoint_count .. 
+            "/" .. GetGlobalInt( "uvrace_checkpoints" ) 
+            .. (UVHUDRaceInfo.Info.Laps > 1 and "\nLap: ".. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps or "") .. 
             "\nPos: " 
             .. UVHUDRaceCurrentPos .. 
             "/" 

@@ -41,9 +41,11 @@ if SERVER then
 	local function StopRace(ply, cmd, args)
 
 		UVRaceEnd()
+        net.Start( "uvrace_end" )
+        net.Broadcast()
 
 	end
-	concommand.Add("uvrace_stop", UnTestMap)
+	concommand.Add("uvrace_stop", StopRace)
 
 	local function AddHooks()
 

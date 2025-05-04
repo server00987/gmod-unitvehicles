@@ -550,10 +550,18 @@ if SERVER then
 	
 	util.AddNetworkString( "UVHUDTimeTillNextHeat" )
 	
-	--Enemies can't exit the vehicle during pursuits
+	--Enemies can't exit the vehicle during pursuits or races
 	hook.Add("CanExitVehicle", "UVExitingVehicleWhlistInPursuit", function( veh, ply)
-		return (!uvtargeting)
+		local vehicle_entity = veh:GetParent()
+
+		if uvtargeting then return false end
+		if (IsValid(vehicle_entity) and vehicle_entity.uvraceparticipant) or veh.uvraceparticipant then return false end
+		//return (!uvtargeting)
 	end)
+
+	-- hook.Add("CanExitVehicle", "UVExitingVehicleWhlistInRace", function( veh, ply)
+	-- 	return (!veh.uvraceparticipant)
+	-- end)
 	
 	--Damage to UVs
 	hook.Add( "EntityTakeDamage", "UVDamage", function( target, dmginfo )

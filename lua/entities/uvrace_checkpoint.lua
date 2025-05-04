@@ -96,6 +96,7 @@ if CLIENT then
 
 		elseif UVHUDRace then
 			
+			if !UVHUDRaceCurrentCheckpoint then return end
 			--Show current checkpoint and the checkpoint after that
 			local currentcheckpoint = UVHUDRaceCurrentCheckpoint + 1
 			local nextcheckpoint = currentcheckpoint + 1 

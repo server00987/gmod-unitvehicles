@@ -1627,6 +1627,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 
 	-- local Memory = GetVehicleData( entrantvehicle )
 	-- if !Memory then return end
+	local PT = (vehicle.PursuitTech and table.Copy(vehicle.PursuitTech))
 
 	local Memory = GetVehicleData( vehicle )
 
@@ -2012,6 +2013,18 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	else
 		ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
 	end
+
+	if PT then
+		Ent.PursuitTech = PT
+	end
+
+	table.insert(uvrvwithpursuittech, Ent)
+
+	Ent:CallOnRemove( "UVRVWithPursuitTechRemoved", function(Ent)
+		if table.HasValue(uvrvwithpursuittech, Ent) then
+			table.RemoveByValue(uvrvwithpursuittech, Ent)
+		end
+	end)
 
 	UVRaceAddParticipant( Ent )
 

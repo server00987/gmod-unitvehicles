@@ -165,23 +165,25 @@ if SERVER then
 				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
 				local target = selected_point.target_point
 				local cansee = self:CanSeeGoal(target)
+
+				local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 				
 				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
 				-- Further tests may be needed to determine which one is better
 				if cansee then
 					self.PatrolWaypoint = {
 						['Target'] = target,
-						['SpeedLimit'] = math.huge -- hard set for now
+						['SpeedLimit'] = (nearest_waypoint and nearest_waypoint.SpeedLimit ^ 2) or math.huge
 					}
+					print(self.PatrolWaypoint.SpeedLimit)
 				else
 					-- Must utilize dvs
 					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
 					
 					if IsValid(waypoints) and waypoints > 0 then
-						self.PatrolWaypoint = {
-							['Target'] = waypoints[1].Target,
-							['SpeedLimit'] = waypoints[1].SpeedLimit
-						}
+						self.PatrolWaypoint = waypoints[1]
+					else
+						self.PatrolWaypoint = nearest_waypoint
 					end
 				end
 			end
@@ -543,31 +545,41 @@ if SERVER then
 		}
 		
 		if RacerPursuitTech:GetBool() then
-			if not self.v.PursuitTech then self.v.PursuitTech = {} end
+			if not self.v.PursuitTech then
+				self.v.PursuitTech = {}
 
-			for i=1, 2, 1 do
-				local selected_pt = pttable[math.random(#pttable)]
-				local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
-				local sel_k, sel_v
+				for i=1, 2, 1 do
+					local selected_pt = pttable[math.random(#pttable)]
+					local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+					local sel_k, sel_v
 				
-				for k,v in pairs(self.v.PursuitTech) do
-					if v.Tech == selected_pt then
-						sel_k, sel_v = k, v
-						self.v.PursuitTech[k] = nil
-						break
+					for k,v in pairs(self.v.PursuitTech) do
+						if v.Tech == selected_pt then
+							sel_k, sel_v = k, v
+							self.v.PursuitTech[k] = nil
+							break
+						end
 					end
+
+					local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
+					ammo_count = ammo_count > 0 and ammo_count or math.huge
+				
+					self.v.PursuitTech[i] = {
+						Tech = selected_pt,
+						Ammo = ammo_count,
+						Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
+						LastUsed = -math.huge,
+						Upgraded = false
+					}
 				end
 
-				local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
-				ammo_count = ammo_count > 0 and ammo_count or math.huge
-				
-				self.v.PursuitTech[i] = {
-					Tech = selected_pt,
-					Ammo = ammo_count,
-					Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
-					LastUsed = -math.huge,
-					Upgraded = false
-				}
+				table.insert(uvrvwithpursuittech, self.v)
+
+				self.v:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
+					if table.HasValue(uvrvwithpursuittech, car) then
+						table.RemoveByValue(uvrvwithpursuittech, car)
+					end
+				end)
 			end
 		end
 		
