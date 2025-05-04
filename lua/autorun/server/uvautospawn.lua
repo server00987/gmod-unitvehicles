@@ -1638,7 +1638,6 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
 	if next(spawns) == nil then
-		UVRaceEnd()
 		PrintMessage( HUD_PRINTTALK, "No race spawn points found!")
 		return nil
 	else
