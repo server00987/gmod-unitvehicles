@@ -7,6 +7,12 @@ local PlaceStrings = {
     [4] = {Color(27,147,0), "%sth"}
 }
 
+local LBColors = {
+    ["LocalPlayer"] = Color(255,221,0),
+    ["Others"] = Color(255,255,255),
+    ["Disqualified"] = Color(255,255,255,133)
+}
+
 function UVDisplayTimeRace(time) -- include milliseconds in the string
 	local formattedtime = string.FormattedTime( time )
 
@@ -102,7 +108,9 @@ function UVFormLeaderboard(racers)
             local line = string.format("%d. %s", i, v.array.Name)
             line = line .. '  [DNF]'
 
-            table.insert(leaderboardLines, line)
+            local selected_color = LBColors.Disqualified
+
+            table.insert(leaderboardLines, {selected_color, line})
             continue
         end
 
@@ -158,13 +166,23 @@ function UVFormLeaderboard(racers)
 
             line = line .. str
         end
+        
+        local selected_color = nil
 
-        table.insert(leaderboardLines, line)
+        if is_local_player then
+            selected_color = LBColors.LocalPlayer
+        elseif array.Disqualified or array.Busted then
+            selected_color = LBColors.Disqualified
+        else
+            selected_color = LBColors.Others
+        end
+        
+        table.insert(leaderboardLines, {selected_color, line})
     end
 
     //UVSortedRacers = sorted_table
 
-    return sorted_table, table.concat(leaderboardLines, "\n")
+    return sorted_table, leaderboardLines
 end
 
 function UVOrderPositions(racers)
@@ -310,11 +328,15 @@ if SERVER then
     end
 
     function UVRaceRemoveParticipant( vehicle, reason )
+        print('WHAT HAPPEN')
+        
         if UVRaceTable.Participants then
             if UVRaceTable.Participants and UVRaceTable.Participants[ vehicle ] then
+                print("Bye", reason, vehicle)
                 //UVRaceTable.Participants [ vehicle ] = nil
-                if IsValid(reason) then
-                    UVRaceTable.Participants [ vehicle ] [ reason ] = true
+                if reason then
+                    print("Hi", reason, vehicle)
+                    UVRaceTable.Participants [vehicle][reason] = true
                 end
             end
         end
@@ -556,11 +578,13 @@ if SERVER then
                     if vehicle.uvbusted then
                         --UVRaceTable['Participants'][vehicle].Busted = true
                         UVRaceRemoveParticipant( vehicle, 'Busted' )
+                        continue
                     end
 
                     -- Damage check
                     if UVCheckIfWrecked(vehicle) then
                         UVRaceRemoveParticipant( vehicle, 'Disqualified' )
+                        continue
                     end
 
                 end
@@ -878,14 +902,31 @@ else
             TEXT_ALIGN_LEFT 
         )
 
-        draw.DrawText( 
-            string_array,
-            "UVFont4", 
-            0, 
-            h/3, 
-            Color( 255, 255, 255), 
-            TEXT_ALIGN_LEFT 
-        )
+        -- String array -> {Color, string}
+        
+        for i=1, #string_array, 1 do
+            local entry = string_array[i]
+
+            //print(h/(3- (i * .1)))
+            print(entry[1])
+            draw.DrawText( 
+                entry[2],
+                "UVFont4", 
+                0, 
+                h/(3- (i * .15)), 
+                entry[1], 
+                TEXT_ALIGN_LEFT 
+            )
+        end
+
+        -- draw.DrawText( 
+        --     string_array,
+        --     "UVFont4", 
+        --     0, 
+        --     h/3, 
+        --     Color( 255, 255, 255), 
+        --     TEXT_ALIGN_LEFT 
+        -- )
 
     end)
 

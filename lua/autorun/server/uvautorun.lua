@@ -2348,20 +2348,20 @@ function UVCheckIfBeingBusted(enemy)
 end
 
 function UVCheckIfWrecked(enemy)
-	if !IsValid(enemy) or AutoHealth:GetBool() then return end
+	if !IsValid(enemy) then return end //or AutoHealth:GetBool()
 	if enemy:IsFlagSet(FL_DISSOLVING) then return true end
 	if enemy.IsScar then
 		return enemy:IsDestroyed()
 	elseif enemy.IsSimfphyscar then
-		return enemy:GetCurHealth() <= 0 or enemy:OnFire() or enemy.destroyed
+		return enemy:GetCurHealth() <= 0 or enemy:OnFire() or enemy.destroyed or enemy:WaterLevel() > 2
 	elseif enemy.IsGlideVehicle then
 		return enemy:GetEngineHealth() <= 0 or enemy:GetIsEngineOnFire()
 	elseif vcmod_main and isfunction(enemy.VC_GetHealth) then
 		local health = enemy:VC_GetHealth(false)
-		return isnumber(health) and health <= 0
+		return (isnumber(health) and health <= 0) or enemy:WaterLevel() > 2
 	elseif enemy:GetClass() == "prop_vehicle_jeep" then
 		local health = enemy:Health()
-		return health < 0 --Unless set, health is 0
+		return health < 0 or enemy:WaterLevel() > 2 --Unless set, health is 0
 	end
 end
 

@@ -1633,8 +1633,6 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	local driver = vehicle:GetDriver()
 	local ply = (IsValid(driver) and driver) or Entity(1)
 
-	print(vehicle, ply)
-
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
 	if next(spawns) == nil then
@@ -2015,6 +2013,8 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
 	end
 
+	UVRaceAddParticipant( Ent )
+
 	timer.Simple( 1, function()
 		if IsValid(Ent) then
 			Ent:GetPhysicsObject():EnableMotion( false )
@@ -2037,13 +2037,6 @@ function UVMoveToGridSlot( vehicle, aienabled )
 				elseif Ent:GetClass() == "prop_vehicle_jeep" then
 					ply:EnterVehicle(Ent)
 				end
-			end
-
-			-- Because Glide vehicles must be re-spawned to have their position/angle applied, we must re-add the vehicle as a participant
-			-- This unfortunately also causes EntIndex to change, assigning a different callsign to the racer... separate problem
-
-			if Ent.IsGlideVehicle or Ent.IsSimfphyscar then
-				UVRaceAddParticipant( Ent )
 			end
 		end
 	end)
