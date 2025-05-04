@@ -1251,7 +1251,7 @@ if SERVER then
 				if uvcalm and edist:Length2DSqr() < 250000 then
 					throttle = 0
 				end --No ramming
-				if self.v.IsSimfphyscar or self.v.IsGlideVehicle then
+				if self.v.IsSimfphyscar or self.v.IsGlideVehicle and !Relentless:GetBool() then
 					if !self.formationpoint and eedist:LengthSqr() < 6250000 and (self.v:GetVelocity():LengthSqr()/2) > self.e:GetVelocity():LengthSqr() and self.e:GetVelocity():LengthSqr() > 100000 then
 						throttle = -1
 					end --Slow down when enemy slows down
