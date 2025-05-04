@@ -310,21 +310,21 @@ if SERVER then
     end
 
     function UVRaceRemoveParticipant( vehicle, reason )
-        if table.HasValue( UVRaceCurrentParticipants, vehicle ) then
-            table.RemoveByValue( UVRaceCurrentParticipants, vehicle )
-            local driver = UVGetDriver( vehicle )
-            if IsValid(driver) and driver:IsPlayer() then
-                net.Start( "uvrace_end" )             
-                net.Send( driver )
-            end
-        end
-
         if UVRaceTable.Participants then
             if UVRaceTable.Participants and UVRaceTable.Participants[ vehicle ] then
                 //UVRaceTable.Participants [ vehicle ] = nil
                 if IsValid(reason) then
                     UVRaceTable.Participants [ vehicle ] [ reason ] = true
                 end
+            end
+        end
+
+        if table.HasValue( UVRaceCurrentParticipants, vehicle ) then
+            table.RemoveByValue( UVRaceCurrentParticipants, vehicle )
+            local driver = UVGetDriver( vehicle )
+            if IsValid(driver) and driver:IsPlayer() then
+                net.Start( "uvrace_end" )             
+                net.Send( driver )
             end
         end
 
@@ -554,8 +554,13 @@ if SERVER then
                     --     UVRaceRemoveParticipant( vehicle )
                     -- end
                     if vehicle.uvbusted then
-                        UVRaceTable['Participants'][vehicle].Busted = true
+                        --UVRaceTable['Participants'][vehicle].Busted = true
                         UVRaceRemoveParticipant( vehicle, 'Busted' )
+                    end
+
+                    -- Damage check
+                    if UVCheckIfWrecked(vehicle) then
+                        UVRaceRemoveParticipant( vehicle, 'Disqualified' )
                     end
 
                 end
@@ -716,7 +721,7 @@ else
 			net.SendToServer()
 		end
 
-        timer.Create( "RaceInvite", 10, 1 function() ResultPanel:Clone() end )
+        timer.Create( "RaceInvite", 10, 1, function() ResultPanel:Close() end )
     end)
 
     net.Receive( "uvrace_end", function()
