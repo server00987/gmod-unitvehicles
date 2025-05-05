@@ -262,6 +262,14 @@ if SERVER then
 				steer = 0
 				throttle = throttle * -1
 			end --Getting unstuck
+			
+			local velocity = self.v:GetVelocity():GetNormalized()
+			local angle_diff = math.deg(math.acos(math.Clamp(velocity:Dot(vect), -1, 1)))
+
+			if angle_diff > 45 then
+				throttle = throttle * 0.5 -- Slow down on turn
+			end
+
 			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
 				throttle = 0
 			end --Slow down
