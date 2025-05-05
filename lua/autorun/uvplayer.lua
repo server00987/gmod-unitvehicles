@@ -372,7 +372,7 @@ if SERVER then
                             car.uvkillswitching = nil
                             local kstime = UVUnitPTKillSwitchDisableDuration:GetInt()
                             local enemyvehicle = car.uvkillswitchingtarget
-                            local enemycallsign = "Racer "..enemyvehicle:EntIndex()
+                            local enemycallsign = enemyvehicle.racer or "Racer "..enemyvehicle:EntIndex()
                             local enemydriver = UVGetDriver(enemyvehicle)
                             
                             if enemydriver:IsPlayer() then

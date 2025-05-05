@@ -541,6 +541,10 @@ if SERVER then
 		util.Effect("propspawn", e) --Perform a spawn effect.
 		self.v:EmitSound( "beams/beamstart5.wav" )
 		
+		if !self.v.racer and UVNames then
+			self.v.racer = UVNames.Racers[math.random(1, #UVNames.Racers)]
+		end
+		
 		local pttable = {
 			--"EMP",
 			"ESF",

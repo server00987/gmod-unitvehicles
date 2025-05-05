@@ -116,7 +116,7 @@ if SERVER then
 			local is_player = IsValid(driver) and driver:IsPlayer()
 
 			if !v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
-				PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or "Racer "..v:EntIndex()) )
+				PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex())) )
 
 				-- if is_player then
 				-- 	v.racer = driver
@@ -133,7 +133,7 @@ if SERVER then
 				end
 
 				timer.Create('RaceInviteExpire'..v:EntIndex(), 10, 1, function()
-					v.racer = nil
+					//v.racer = nil
 					v.raceinvited = false
 				end)
 			end

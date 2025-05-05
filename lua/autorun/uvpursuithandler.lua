@@ -549,6 +549,8 @@ if SERVER then
 	util.AddNetworkString( "UVHUDRemoveUV" )
 	
 	util.AddNetworkString( "UVHUDTimeTillNextHeat" )
+
+	util.AddNetworkString( "UVUpdateRacerName" )
 	
 	--Enemies can't exit the vehicle during pursuits or races
 	hook.Add("CanExitVehicle", "UVExitingVehicleWhlistInPursuit", function( veh, ply)
@@ -1398,6 +1400,15 @@ if SERVER then
 		--Never evade option
 		if NeverEvade:GetBool() and uvtargeting then
 			uvlosing = CurTime()
+		end
+
+		for _, v in pairs(uvwantedtablevehicle) do
+			if v.racer then
+				net.Start( "UVUpdateRacerName" )
+				net.WriteEntity( v )
+				net.WriteString( v.racer )
+				net.Broadcast()
+			end
 		end
 		
 		net.Start( "UVHUDWantedSuspects" )
@@ -3206,7 +3217,7 @@ else --HUD/Options
 			if !UVHUDDisplayPursuit then return end
 			if UVHUDCopMode and (UVHUDDisplayCooldown or tonumber(UVUnitsChasing) <= 0) then return end
 			
-			local enemycallsign = "Racer "..ent:EntIndex()
+			local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
 			local enemydriver = ent:GetDriver()
 			if enemydriver:IsPlayer() then
 				enemycallsign = enemydriver:GetName()
@@ -3440,6 +3451,13 @@ else --HUD/Options
 		
 		function OK:DoClick() ResultPanel:Close() end
 		
+	end)
+
+	net.Receive( "UVUpdateRacerName" , function()
+		local racer_vehicle = net.ReadEntity()
+		local racer_name = net.ReadString()
+
+		racer_vehicle.racer = racer_name
 	end)
 	
 	net.Receive('UV_Sound', function()

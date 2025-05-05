@@ -1634,6 +1634,8 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	local driver = vehicle:GetDriver()
 	local ply = (IsValid(driver) and driver) or Entity(1)
 
+	local racer_name = vehicle.racer or "Racer "..vehicle:EntIndex()
+
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
 	if next(spawns) == nil then
@@ -2007,6 +2009,8 @@ function UVMoveToGridSlot( vehicle, aienabled )
 
 	spawn.claimed = true
 	entrantvehicle:Remove()
+
+	Ent.racer = racer_name
 
 	if aienabled then 
 		Ent.uvclasstospawnon = "npc_racervehicle"

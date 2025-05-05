@@ -320,7 +320,7 @@ if SERVER then
         vehicle.racedriver = driver
 
         if sendmsg then
-            PrintMessage( HUD_PRINTTALK, ((IsValid(driver) and driver:GetName()) or "Racer "..vehicle:EntIndex()).. " has joined the race!" )
+            PrintMessage( HUD_PRINTTALK, ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())).. " has joined the race!" )
         end
         
         vehicle:CallOnRemove( "uvrace_participantremoved", function( ent )
@@ -396,7 +396,7 @@ if SERVER then
             UVRaceTable['Participants'][vehicle] = {
                 ['Lap'] = 1,
                 ['Position'] = i,
-                ['Name'] = (IsValid(driver) and driver:GetName()) or "Racer "..vehicle:EntIndex(),
+                ['Name'] = ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())),
                 --['Laps'] = {},
                 --['BestLapTime'] = CurTime(),
                 ['LastLapTime'] = CurTime(),

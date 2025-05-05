@@ -72,6 +72,10 @@ local UVUHelicopters6 = GetConVar("unitvehicle_unit_helicopters6")
 
 local dvd = DecentVehicleDestination
 
+file.AsyncRead('unitvehicles/names/Names.json', 'DATA', function( _, _, status, data )
+	UVNames = util.JSONToTable(data)
+end, true)
+
 timer.Simple(5, function()
 	if !DecentVehicleDestination then
 		PrintMessage( HUD_PRINTTALK, "/// Unit Vehicles requires Decent Vehicles to be installed! /// https://steamcommunity.com/sharedfiles/filedetails/?id=1587455087")
@@ -693,7 +697,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				if object.UnitVehicle then
 					enemycallsign = object.UnitVehicle.callsign or "Unit "..object:EntIndex()
 				else
-					enemycallsign = "Racer "..enemyvehicle:EntIndex()
+					enemycallsign = object.racer or "Racer "..enemyvehicle:EntIndex()
 				end
 				local enemydriver = UVGetDriver(enemyvehicle)
 				local power
@@ -975,7 +979,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		if object.UnitVehicle then
 			enemycallsign = object.UnitVehicle.callsign or "Unit "..object:EntIndex()
 		else
-			enemycallsign = "Racer "..enemyvehicle:EntIndex()
+			enemycallsign = enemyvehicle.racer or "Racer "..enemyvehicle:EntIndex()
 		end
 		local enemydriver = UVGetDriver(enemyvehicle)
 		local power
@@ -1239,7 +1243,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			if object.UnitVehicle then
 				enemycallsign = object.UnitVehicle.callsign or "Unit "..object:EntIndex()
 			else
-				enemycallsign = "Racer "..enemyvehicle:EntIndex()
+				enemycallsign = object.racer or "Racer "..enemyvehicle:EntIndex()
 			end
 			local enemydriver = UVGetDriver(enemyvehicle)
 			local power
@@ -1794,7 +1798,7 @@ function UVBustEnemy(self, enemy)
 			else
 				net.Start('UVBusted')
 				net.WriteTable({
-					['Racer'] = "Racer "..enemy:EntIndex(),
+					['Racer'] = enemy.racer or "Racer "..enemy:EntIndex(),
 					['Cop'] = self.callsign
 				})
 				net.Broadcast()
