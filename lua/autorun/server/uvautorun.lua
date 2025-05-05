@@ -465,7 +465,7 @@ function UVUpdateHeatLevel()
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
 				UVDeployRoadblock(unit) --ROADBLOCK
-			elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable then
+			elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable and CurTime() - uvhelicooldown > 120 then
 				UVAutoSpawn(ply, nil, true) --HELICOPTER
 			elseif SpawnMainUnits:GetBool() then
 				UVAutoSpawn(ply) --NORMAL

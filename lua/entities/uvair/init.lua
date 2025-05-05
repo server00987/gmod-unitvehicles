@@ -247,6 +247,8 @@ function ENT:Think()
 
 		end
 	end
+
+	uvhelicooldown = CurTime()
 	
 	if self.Downed then
 		if table.HasValue(uvunitschasing, self) then

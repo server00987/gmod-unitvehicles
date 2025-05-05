@@ -54,6 +54,8 @@ if SERVER then
 
 		local vehicle_array = UVRaceTable['Participants'][vehicle]
 
+		if vehicle_array.Disqualified or vehicle_array.Busted then return end
+
 		local last_checkpoint = #vehicle_array['Checkpoints']
 		local next_checkpoint = last_checkpoint + 1
 
@@ -63,19 +65,30 @@ if SERVER then
 
 			vehicle_array['Checkpoints'][checkp_id] = CurTime()
 
+			net.Start("uvrace_checkpointcomplete")
+			net.WriteEntity(vehicle)
+			net.WriteInt(checkp_id, 11)
+			net.WriteFloat(vehicle_array['Checkpoints'][checkp_id])
+			net.Broadcast()
+			
+			-- local participant = net.ReadEntity()
+			-- local checkpoint = net.ReadInt(11)
+			-- local time = net.ReadInt(32)
+
 			if #vehicle_array['Checkpoints'] >= GetGlobalInt("uvrace_checkpoints") then -- Lap completed
 
 				local laptime = CurTime() - vehicle_array['LastLapTime']
 				vehicle_array['LastLapTime'] = CurTime()
 
-				table.Empty(vehicle_array['Checkpoints'])		
+				table.Empty(vehicle_array['Checkpoints'])
 				--vehicle.currentcheckpoint = 1
 
-				if IsValid(driver) and driver:IsPlayer() then
-					net.Start("uvrace_lapcomplete")
-					net.WriteFloat(laptime)
-					net.Send(driver)
-				end
+				//if IsValid(driver) and driver:IsPlayer() then
+				net.Start("uvrace_lapcomplete")
+				net.WriteEntity(vehicle)
+				net.WriteFloat(laptime)
+				net.Broadcast()
+				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
 				if vehicle_array['Lap'] == UVRaceLaps:GetInt() then --Completed race
@@ -95,7 +108,8 @@ if SERVER then
 					end
 
 					net.Start("uvrace_racecomplete")
-					net.WriteString(vehicle_array.Name)
+					net.WriteEntity(vehicle)
+					//net.WriteString(vehicle_array.Name)
 					net.WriteInt(place, 32)
 					net.WriteFloat(CurTime() - vehicle.racestart)
 					net.Broadcast()
@@ -108,10 +122,10 @@ if SERVER then
 
 			end
 
-			if IsValid(driver) and driver:IsPlayer() then
-				net.Start("uvrace_checkpointcomplete")
-				net.Send(driver)
-			end
+			-- if IsValid(driver) and driver:IsPlayer() then
+			-- 	net.Start("uvrace_checkpointcomplete")
+			-- 	net.Send(driver)
+			-- end
 
 		end
 

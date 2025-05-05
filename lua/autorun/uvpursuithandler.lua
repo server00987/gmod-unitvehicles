@@ -552,6 +552,8 @@ if SERVER then
 
 	util.AddNetworkString( "UVUpdateRacerName" )
 	
+	//util.AddNetworkString( "UVUpdateSuspectVisibility" )
+	
 	--Enemies can't exit the vehicle during pursuits or races
 	hook.Add("CanExitVehicle", "UVExitingVehicleWhlistInPursuit", function( veh, ply)
 		local vehicle_entity = veh:GetParent()
@@ -608,6 +610,9 @@ if SERVER then
 	hook.Add("Think", "UVServerThink", function()
 		
 		--Some figures
+		if !uvhelicooldown then
+			uvhelicooldown = -math.huge
+		end
 		if !uvcooldowntimer then
 			uvcooldowntimer = 20
 		end
@@ -1003,6 +1008,8 @@ if SERVER then
 				end
 			end
 		end
+
+		//local visible_suspects = {}
 		
 		--Player-controlled Unit Vehicles
 		if next(uvplayerunittablevehicle) != nil then
@@ -1090,6 +1097,18 @@ if SERVER then
 					if distance < closestdistancetosuspect then
 						closestdistancetosuspect, closestsuspect = distance, w
 					end
+					-- local last_visible_value = w.inunitview
+					-- if UVVisualOnTarget(car, w) then
+					-- 	if !table.HasValue(visible_suspects, w) then
+					-- 		w.inunitview = true
+					-- 		table.insert()
+					-- 	end
+					-- else
+					-- 	w.inunitview = false 
+					-- end
+					-- if last_visible_value ~= w.inunitview then
+						
+					-- end
 				end
 				
 				if IsValid(closestsuspect) then
