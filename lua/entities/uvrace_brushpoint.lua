@@ -68,7 +68,7 @@ if SERVER then
 				local laptime = CurTime() - vehicle_array['LastLapTime']
 				vehicle_array['LastLapTime'] = CurTime()
 
-				table.Empty(vehicle_array['Checkpoints'])				
+				table.Empty(vehicle_array['Checkpoints'])		
 				--vehicle.currentcheckpoint = 1
 
 				if IsValid(driver) and driver:IsPlayer() then

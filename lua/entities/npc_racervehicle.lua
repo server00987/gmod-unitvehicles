@@ -180,7 +180,7 @@ if SERVER then
 					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
 
 					if waypoints and #waypoints > 0 then
-						self.PatrolWaypoint = waypoints[1]
+						self.PatrolWaypoint = waypoints[2]
 					else
 						self.PatrolWaypoint = nearest_waypoint
 					end
@@ -316,7 +316,7 @@ if SERVER then
 			elseif self.v.IsSimfphyscar then
 				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif self.v.IsGlideVehicle then
-				steer = steer * 2 --Attempt to make steering more sensitive.
+				steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.
 				self.v:TriggerInput("Steer", steer)
 			elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
 				self.v:SetSteering(steer, 0)
