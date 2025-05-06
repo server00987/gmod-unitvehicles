@@ -707,6 +707,8 @@ else
         UVHUDRaceLaps = UVHUDRaceInfo['Info']['Laps']
         UVHUDRaceRacerCount = UVHUDRaceInfo['Info']['Racers']
 
+        local my_vehicle, my_array
+
         for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
             if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
                 my_vehicle, my_array = vehicle, array
@@ -717,6 +719,8 @@ else
         if my_array then
             UVHUDRaceCurrentCheckpoint = #my_array['Checkpoints']
             UVHUDRaceCurrentPos = my_array['Position']
+        else
+            UVHUDRaceCurrentCheckpoint = nil
         end
 
         if !UVHUDRace then

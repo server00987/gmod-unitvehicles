@@ -318,45 +318,52 @@ if SERVER then
 			self.Speeding = speedlimitmph^2
 			
 			--Unique racing techniques
-			if self.stuck then
-				steer = 0
-				throttle = throttle * -1
-			end --Getting unstuck
 
-			local velocity = self.v:GetVelocity():GetNormalized()
+			if self.v.uvraceparticipant then
+				local velocity = self.v:GetVelocity():GetNormalized()
 
-			local vect_sanitized = vect --* Vector(1, 0, 1)
-			local velo_sanitized = velocity --* Vector(1, 0, 1)
-			
-			local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
+				local vect_sanitized = vect --* Vector(1, 0, 1)
+				local velo_sanitized = velocity --* Vector(1, 0, 1)
+				
+				local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
+	
+				local maxDist = 1000
+				local distSqr = dist:LengthSqr()
+				local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
+	
+				angle_diff = angle_diff * distanceFactor
+	
+				local misalignment = math.Clamp(angle_diff / 90, -1, 1)
+				throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
+				
+				if angle_diff < 10 then
+					throttle = 1
+				end
 
-			local maxDist = 750
-			local distSqr = dist:LengthSqr()
-			local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
-
-			angle_diff = angle_diff * distanceFactor
-
-			local misalignment = math.Clamp(angle_diff / 90, -1, 1)
-			throttle = throttle * (1 - 1.5 * misalignment) -- 1 - 0.5 * misalignment
-			
-			if angle_diff < 10 then
-				throttle = 1
+				-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
+				-- 	throttle = -1
+				-- end
+				-- if angle_diff > 25 then
+				-- 	throttle = throttle * 0.5
+				-- end
+				//local dist_len = dist:LengthSqr()
+				-- print("Distance:",dist_len)
+				-- print("Angle Difference:",angle_diff)	
 			end
-			-- if angle_diff > 25 then
-			-- 	throttle = throttle * 0.5
-			-- end
-			//local dist_len = dist:LengthSqr()
-			-- print("Distance:",dist_len)
-			-- print("Angle Difference:",angle_diff)
 
 			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
 				throttle = 0
 			end
 
-			-- slow it down for tight corners if we are going too fast
-			if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
-				throttle = -1
-			end
+			if self.stuck then
+				steer = 0
+				throttle = throttle * -1
+			end --Getting unstuck
+
+			-- -- slow it down for tight corners if we are going too fast
+			-- if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
+			-- 	throttle = -1
+			-- end
 
 			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
 
