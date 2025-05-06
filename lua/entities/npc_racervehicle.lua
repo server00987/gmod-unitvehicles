@@ -23,6 +23,41 @@ if SERVER then
 	--Setting ConVars.
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local RacerPursuitTech = GetConVar("unitvehicle_racerpursuittech")
+
+	-- function GetClosestPoint(ent, pos)
+	-- 	local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
+	-- 	local localPos = ent:WorldToLocal(pos)
+		
+	-- 	-- Clamp each coordinate
+	-- 	local clamped = Vector(
+	-- 		math.Clamp(localPos.x, mins.x, maxs.x),
+	-- 		math.Clamp(localPos.y, mins.y, maxs.y),
+	-- 		math.Clamp(localPos.z, mins.z, maxs.z)
+	-- 	)
+		
+	-- 	return ent:LocalToWorld(clamped)
+	-- end
+	function GetClosestPoint(ent, pos, margin)
+		if not IsValid(ent) then return nil end
+	
+		margin = margin or 1 -- How far to stay away from the edge (in source units)
+	
+		local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
+		local localPos = ent:WorldToLocal(pos)
+	
+		-- Shrink bounds inward by margin
+		local paddedMins = Vector(mins.x + margin, mins.y + margin, mins.z + margin)
+		local paddedMaxs = Vector(maxs.x - margin, maxs.y - margin, maxs.z - margin)
+	
+		-- Clamp to the smaller, inset box
+		local clamped = Vector(
+			math.Clamp(localPos.x, paddedMins.x, paddedMaxs.x),
+			math.Clamp(localPos.y, paddedMins.y, paddedMaxs.y),
+			math.Clamp(localPos.z, paddedMins.z, paddedMaxs.z)
+		)
+	
+		return ent:LocalToWorld(clamped)
+	end
 	
 	function ENT:OnRemove()
 		--By undoing, driving, diving in water, or getting stuck, and the vehicle is remaining.
@@ -167,12 +202,15 @@ if SERVER then
 
 				-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
 				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
-				local target = selected_point.target_point
+				//local target = selected_point.target_point
+				local target = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
 				local cansee = self:CanSeeGoal(target)
 
 				local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 
-				local velocity = self.v:GetVelocity():GetNormalized()
+				local velocity = self.v:GetVelocity()
+				//print(velocity:LengthSqr())
+				local normalized_velocity = velocity:GetNormalized()
 
 				local tolerance = 750
 				local dotThreshold = 0.5
@@ -184,8 +222,9 @@ if SERVER then
 					local dot = forward:Dot(toCheckpoint)
 					local dist = self.v:WorldSpaceCenter():Distance(target)
 			
-					if dist < tolerance and dot > dotThreshold then
-						target = next_point.target_point
+					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() < 50000 then
+						//target = next_point.target_point
+						target = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 200)
 					end
 				end
 				
@@ -283,17 +322,44 @@ if SERVER then
 				steer = 0
 				throttle = throttle * -1
 			end --Getting unstuck
-			
-			local velocity = self.v:GetVelocity():GetNormalized()
-			local angle_diff = math.deg(math.acos(math.Clamp(velocity:Dot(vect), -1, 1)))
 
-			if angle_diff > 45 then
-				throttle = throttle * 0.5 -- Slow down on turn
-			end
+			local velocity = self.v:GetVelocity():GetNormalized()
+
+			local vect_sanitized = vect --* Vector(1, 0, 1)
+			local velo_sanitized = velocity --* Vector(1, 0, 1)
+			
+			local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
+
+			local maxDist = 1000
+			local distSqr = dist:LengthSqr()
+			local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
+
+			angle_diff = angle_diff * distanceFactor
+
+			print(angle_diff)
+
+			//print(angle_diff)
+
+			-- if angle_diff > 25 then
+			-- 	throttle = throttle * 0.5
+			-- end
+			//local dist_len = dist:LengthSqr()
+			-- print("Distance:",dist_len)
+			-- print("Angle Difference:",angle_diff)
+			local misalignment = math.Clamp(angle_diff / 90, -1, 1)
+			throttle = throttle * (1 - 1.5 * misalignment) -- 1 - 0.5 * misalignment
 
 			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
 				throttle = 0
-			end --Slow down
+			end
+
+			-- slow it down for tight corners if we are going too fast
+			if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
+				throttle = -1
+			end
+
+			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
+
 			if self.v.IsSimfphyscar and self.v:GetVelocity():LengthSqr() > 10000 then
 				if istable(self.v.Wheels) then
 					for i = 1, table.Count( self.v.Wheels ) do
