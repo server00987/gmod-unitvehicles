@@ -3095,7 +3095,7 @@ else --HUD/Options
 			end
 		elseif UVHUDDisplayCooldown and !UVHUDCopMode then
 			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.DrawRect(w/2-28, h/10-28, 56, 56 )
+			drawCircle( w/2, h/10, 30, 50 )
 			drawCircle( w/2, h/10, 14, 50 )
 		end
 		--Pursuit Tech
