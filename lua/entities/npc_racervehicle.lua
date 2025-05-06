@@ -222,7 +222,7 @@ if SERVER then
 					local dot = forward:Dot(toCheckpoint)
 					local dist = self.v:WorldSpaceCenter():Distance(target)
 			
-					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() < 50000 then
+					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
 						//target = next_point.target_point
 						target = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 200)
 					end
@@ -336,16 +336,18 @@ if SERVER then
 
 			angle_diff = angle_diff * distanceFactor
 
-			//print(angle_diff)
-
+			local misalignment = math.Clamp(angle_diff / 90, -1, 1)
+			throttle = throttle * (1 - 1.5 * misalignment) -- 1 - 0.5 * misalignment
+			
+			if angle_diff < 10 then
+				throttle = 1
+			end
 			-- if angle_diff > 25 then
 			-- 	throttle = throttle * 0.5
 			-- end
 			//local dist_len = dist:LengthSqr()
 			-- print("Distance:",dist_len)
 			-- print("Angle Difference:",angle_diff)
-			local misalignment = math.Clamp(angle_diff / 45, -1, 1)
-			throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
 
 			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
 				throttle = 0
