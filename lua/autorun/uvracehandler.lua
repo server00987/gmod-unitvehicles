@@ -790,6 +790,7 @@ else
 
         UVHUDRace = false
         UVHUDRaceInfo = nil
+        UVHUDRaceStart = nil
         -- UVHUDRaceCurrentCheckpoint = 1
         -- UVHUDRaceCurrentLap = 1
         -- UVHUDRaceCurrentPos = 1
