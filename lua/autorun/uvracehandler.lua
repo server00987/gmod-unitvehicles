@@ -947,7 +947,7 @@ else
             end
         end
         //print(my_vehicle, my_array)
-        if !my_vehicle then return end
+        if !my_vehicle then UVHUDRaceCurrentCheckpoint = nil; return end
 
         local element1 = {
             { x = 0, y = h/7 },
