@@ -172,7 +172,7 @@ if SERVER then
 	
 	function ENT:FindRace()
 		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
-			if !UVRaceInProgress then return nil end
+			if !UVRaceInProgress then self.stuck = false; return nil end
 			
 			local array = UVRaceTable['Participants'][self.v]
 
@@ -330,13 +330,11 @@ if SERVER then
 			
 			local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
 
-			local maxDist = 1000
+			local maxDist = 750
 			local distSqr = dist:LengthSqr()
 			local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
 
 			angle_diff = angle_diff * distanceFactor
-
-			print(angle_diff)
 
 			//print(angle_diff)
 
@@ -346,8 +344,8 @@ if SERVER then
 			//local dist_len = dist:LengthSqr()
 			-- print("Distance:",dist_len)
 			-- print("Angle Difference:",angle_diff)
-			local misalignment = math.Clamp(angle_diff / 90, -1, 1)
-			throttle = throttle * (1 - 1.5 * misalignment) -- 1 - 0.5 * misalignment
+			local misalignment = math.Clamp(angle_diff / 45, -1, 1)
+			throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
 
 			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
 				throttle = 0
