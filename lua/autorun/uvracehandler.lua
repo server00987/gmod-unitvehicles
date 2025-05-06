@@ -391,6 +391,8 @@ if SERVER then
             return 
         end
 
+        RunConsoleCommand("ai_ignoreplayers", "0") --AI Racers don't move when this is enabled
+
         table.Empty(UVRaceTable)
 
         UVRaceTable['Participants'] = {}
