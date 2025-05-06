@@ -56,6 +56,11 @@ function ENT:Repair(vehicle)
 		return
 	end
 
+	if vehicle.uvrepaircooldown then
+		UVRepairCooldown()
+		return
+	end
+
 	local ptrefilled = false
 
 	if vehicle.PursuitTech then
@@ -76,19 +81,19 @@ function ENT:Repair(vehicle)
 		if vcmod_main then
 			if !ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
 
-			if vehicle.uvrepaircooldown then
-				UVRepairCooldown()
-				return
-			end
+			-- if vehicle.uvrepaircooldown then
+			-- 	UVRepairCooldown()
+			-- 	return
+			-- end
 
 			vehicle:VC_repairFull_Admin()
 		else
 			if !ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
 
-			if vehicle.uvrepaircooldown then
-				UVRepairCooldown()
-				return
-			end
+			-- if vehicle.uvrepaircooldown then
+			-- 	UVRepairCooldown()
+			-- 	return
+			-- end
 
 			local mass = vehicle:GetPhysicsObject():GetMass()
 			vehicle:SetMaxHealth(mass)
@@ -96,13 +101,25 @@ function ENT:Repair(vehicle)
 			vehicle:StopParticles()
 		end
 	end
-	if vehicle.IsSimfphyscar then
-		if !ptrefilled and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
+	if vehicle.IsSimfphyscar then	
+		-- if vehicle.uvrepaircooldown then
+		-- 	UVRepairCooldown()
+		-- 	return
+		-- end
 
-		if vehicle.uvrepaircooldown then
-			UVRepairCooldown()
-			return
+		local repaired_tires = false 
+
+		if istable(vehicle.Wheels) then
+			for i = 1, table.Count( vehicle.Wheels ) do
+				local Wheel = vehicle.Wheels[ i ]
+				if IsValid(Wheel) and Wheel:GetDamaged() then
+					repaired_tires = true
+					Wheel:SetDamaged( false )
+				end
+			end
 		end
+
+		if !ptrefilled and !repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
 
 		vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
 		vehicle:SetCurHealth(vehicle:GetMaxHealth())
@@ -119,20 +136,20 @@ function ENT:Repair(vehicle)
 		
 		vehicle:OnRepaired()
 				
-		if istable(vehicle.Wheels) then
-			for i = 1, table.Count( vehicle.Wheels ) do
-				local Wheel = vehicle.Wheels[ i ]
-				if IsValid(Wheel) then
-					Wheel:SetDamaged( false )
-				end
-			end
-		end
+		-- if istable(vehicle.Wheels) then
+		-- 	for i = 1, table.Count( vehicle.Wheels ) do
+		-- 		local Wheel = vehicle.Wheels[ i ]
+		-- 		if IsValid(Wheel) then
+		-- 			Wheel:SetDamaged( false )
+		-- 		end
+		-- 	end
+		-- end
 	end
 	if vehicle.IsGlideVehicle then
-		if vehicle.uvrepaircooldown then
-			UVRepairCooldown()
-			return
-		end
+		-- if vehicle.uvrepaircooldown then
+		-- 	UVRepairCooldown()
+		-- 	return
+		-- end
 
 		local repaired = false
 
