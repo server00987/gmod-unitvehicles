@@ -142,16 +142,20 @@ if SERVER then
 			local array = UVRaceTable['Participants'][self.v]
 
 			local current_checkp = #array.Checkpoints + 1
+			local next_checkp = #array.Checkpoints + 2
 			local selected_point = nil
+			local next_point
 
 			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
 				if v:GetID() == current_checkp then
 					selected_point = v
-					break
 					-- self.PatrolWaypoint = {
 					-- 	['Target'] = (v:GetPos1()+v:GetPos2())/2,
 					-- 	['SpeedLimit'] = math.huge
 					-- }
+				end
+				if v:GetID() == next_checkp then
+					next_point = v
 				end
 			end
 
@@ -167,6 +171,23 @@ if SERVER then
 				local cansee = self:CanSeeGoal(target)
 
 				local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+
+				local velocity = self.v:GetVelocity():GetNormalized()
+
+				local tolerance = 750
+				local dotThreshold = 0.5
+
+				if next_point then
+					local toCheckpoint = (target - self.v:WorldSpaceCenter()):GetNormalized()
+					local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
+			
+					local dot = forward:Dot(toCheckpoint)
+					local dist = self.v:WorldSpaceCenter():Distance(target)
+			
+					if dist < tolerance and dot > dotThreshold then
+						target = next_point.target_point
+					end
+				end
 				
 				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
 				-- Further tests may be needed to determine which one is better
