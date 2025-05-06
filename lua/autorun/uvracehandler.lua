@@ -352,10 +352,10 @@ if SERVER then
         if table.HasValue( UVRaceCurrentParticipants, vehicle ) then
             table.RemoveByValue( UVRaceCurrentParticipants, vehicle )
             local driver = UVGetDriver( vehicle )
-            if IsValid(driver) and driver:IsPlayer() then
-                net.Start( "uvrace_end" )             
-                net.Send( driver )
-            end
+            -- if IsValid(driver) and driver:IsPlayer() then
+            --     net.Start( "uvrace_end" )             
+            --     net.Send( driver )
+            -- end
         end
 
         vehicle:GetPhysicsObject():EnableMotion( true )
@@ -870,19 +870,21 @@ else
             end
         end
 
+        local address = ((IsValid(participant) and participant:GetDriver() == LocalPlayer() and 'Your') or (UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] and UVHUDRaceInfo['Participants'][participant].Name.."'s"))
+
         if UVHUDLastLapTime == nil then
-            chat.AddText(Color(255, 255, 255), "Your first lap: ", Color(0, 255, 0), UVDisplayTimeRace(time))
+            chat.AddText(Color(255, 255, 255), address.." first lap: ", Color(0, 255, 0), UVDisplayTimeRace(time))
             UVHUDLastLapTime = time
             UVHUDBestLapTime = time
         else
             if time < UVHUDBestLapTime then
                 local timedifference = UVHUDBestLapTime - time
-                chat.AddText(Color(255, 255, 255), "Your best lap: ", Color(0, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
+                chat.AddText(Color(255, 255, 255), address.." best lap: ", Color(0, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
                 UVHUDLastLapTime = time
                 UVHUDBestLapTime = time
             else
                 local timedifference = time - UVHUDBestLapTime
-                chat.AddText(Color(255, 255, 255), "Your last lap: ", Color(255, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (+"..math.Round(timedifference, 3)..")")
+                chat.AddText(Color(255, 255, 255), address.." last lap: ", Color(255, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (+"..math.Round(timedifference, 3)..")")
                 UVHUDLastLapTime = time
             end
         end
@@ -949,6 +951,14 @@ else
         end
         //print(my_vehicle, my_array)
         if !my_vehicle then UVHUDRaceCurrentCheckpoint = nil; return end
+        if my_array.Finished then
+            -- clean up
+            UVHUDRaceCurrentCheckpoint = nil;
+            UVHUDRace = false;
+            return
+        end
+
+        UVHUDRace = true;
 
         local element1 = {
             { x = 0, y = h/7 },
