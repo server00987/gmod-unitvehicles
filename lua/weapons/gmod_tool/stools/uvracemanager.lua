@@ -17,6 +17,8 @@ if SERVER then
 		util.AddNetworkString("UVRace_SetID")
 	end
 
+	util.AddNetworkString("UVStartRace")
+
 	local function KillCheckpoints()
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			ent:Remove()
@@ -64,6 +66,9 @@ if SERVER then
 	local function StartRace(ply, cmd, args)
 
 		-- if !IsValid( UVMoveToGridSlot( ply ) ) then return end
+		for _, v in pairs(args) do
+			print(v)
+		end
 		if UVRaceInEffect then return end
 
 		UVRacePrep = true
@@ -260,6 +265,7 @@ elseif CLIENT then
 	language.Add("Cleanup_uvrace_ents", "UV Race Spawns")
 	language.Add("Undone_UVRaceEnt", "Undone UV Race entity")
 
+	//CreateClientConVar("unitvehicle_racelaps", "3")
 	CreateClientConVar("unitvehicle_racetheme", "1")
 
 	local ang0 = Angle(0, 0, 0)
@@ -380,6 +386,20 @@ elseif CLIENT then
 	end
 	concommand.Add("uvrace_queryimport", QueryImport)
 
+	local function UpdateVars( ply, cmd, args )
+		local convar = args[1]
+		local value = args[2]
+
+		net.Start( "UVUpdateSettings" )
+
+		net.WriteTable({
+			[convar] = value
+		})
+
+		net.SendToServer()
+	end
+	concommand.Add("uvrace_updatevars", UpdateVars)
+
 	local function QueryExport()
 		Derma_StringRequest("Export", "What will this race be called?", cpID, function(txt)
 			RunConsoleCommand("uvrace_export", txt)
@@ -497,12 +517,22 @@ function TOOL.BuildCPanel(panel)
 
 	panel:AddControl("Label", {Text = "Race", Description = "Race"})
 	--panel:AddControl("Button", {Label = "Start Solo", Command = "uvrace_startsolo", Text = "Start the race solo"})
-	panel:AddControl("Button", {Label = "Start Race", Command = "uvrace_startrace", Text = "Start the race with other racers"})
+	//panel:AddControl("Button", {Label = "Start Race", Command = "uvrace_startrace", Text = "Start the race with other racers"})
+	panel:Button("Start Race", "uvrace_startrace")
 	panel:AddControl("Button", {Label = "Invite Racers", Command = "uvrace_startinvite", Text = "Invite racers"})
 	panel:AddControl("Button", {Label = "Stop Race", Command = "uvrace_stop", Text = "Stop the race"})
 
 	panel:AddControl("Label", {Text = "Options", Description = "Options"})
-	panel:NumSlider("Laps", "unitvehicle_racelaps", 1, 100, 0)
+	local last_lap_value
+	local lap_slider = panel:NumSlider("Laps", "unitvehicle_racelaps", 1, 100, 0)
+	function lap_slider:Think()
+		local value = GetConVar("unitvehicle_racelaps"):GetInt()
+
+		if last_lap_value ~= value then
+			RunConsoleCommand("uvrace_updatevars", "unitvehicle_racelaps", value)
+			last_lap_value = value
+		end
+	end
 
 	local racetheme, label = panel:ComboBox( "Race Theme", "unitvehicle_racetheme" )
 	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
