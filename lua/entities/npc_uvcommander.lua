@@ -1439,12 +1439,36 @@ if SERVER then
 								UVDeployWeapon(self.v, k)
 								continue
 							end
+							for _, v in pairs(self.v.wheels) do
+								if IsValid(v) and v.bursted and !self.repairtimer then
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+	
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
+							end
 						elseif self.v.IsSimfphyscar then
 							if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
 								UVDeployWeapon(self.v, k)
 								continue
 							end
-						elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and self.v:VC_getHealth() and self.v:VC_getHealthMax() then
+							for _, wheel in pairs(self.v.Wheels) do
+								if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+	
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
+							end
+						elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
 							if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
 								UVDeployWeapon(self.v, k)
 								continue

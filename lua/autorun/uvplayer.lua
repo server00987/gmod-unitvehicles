@@ -230,11 +230,29 @@ if SERVER then
             end
         end
         if car.IsSimfphyscar then
-            if car:GetCurHealth() == car:GetMaxHealth() then return end
+            local repaired_tires = false 
+
+		    if istable(car.Wheels) then
+			    for i = 1, table.Count( car.Wheels ) do
+				    local Wheel = car.Wheels[ i ]
+				    if IsValid(Wheel) and Wheel:GetDamaged() then
+					    repaired_tires = true
+					    Wheel:SetDamaged( false )
+				    end
+			    end
+		    end
+
+            if !repaired_tires and car:GetCurHealth() == car:GetMaxHealth() then return end
+
             is_repaired = true
             car:EmitSound('ui/pursuit/repair.wav')
-            car.simfphysoldhealth = car:GetMaxHealth()
-            car:SetCurHealth(car:GetMaxHealth())
+
+            -- TODO: There is some bug when AI is using a simfphys car, GetMaxHealth for some reason returns -inf...
+            if IsValid(car:GetDriver()) then
+                car.simfphysoldhealth = car:GetMaxHealth()
+                car:SetCurHealth(car:GetMaxHealth())
+            end
+
             car:SetOnFire( false )
             car:SetOnSmoke( false )
             
@@ -247,15 +265,6 @@ if SERVER then
             net.Broadcast()
             
             car:OnRepaired()
-            
-            if istable(car.Wheels) then
-                for i = 1, table.Count( car.Wheels ) do
-                    local Wheel = car.Wheels[ i ]
-                    if IsValid(Wheel) then
-                        Wheel:SetDamaged( false )
-                    end
-                end
-            end
         end
         if car.IsGlideVehicle then
             local repaired = false
