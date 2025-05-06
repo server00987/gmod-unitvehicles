@@ -327,7 +327,7 @@ if SERVER then
 				
 				local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
 	
-				local maxDist = 1000
+				local maxDist = 750
 				local distSqr = dist:LengthSqr()
 				local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
 	
