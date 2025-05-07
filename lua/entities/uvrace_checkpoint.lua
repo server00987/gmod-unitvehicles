@@ -57,8 +57,13 @@ if CLIENT then
 				render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 255))
 				render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 255, 100))
 			elseif id == 1 then
-				render.DrawWireframeBox(pos, ang0, vec0, max, Color(0, 255, 0))
-				render.DrawBox(pos, ang0, vec0, max, Color(0, 255, 0, 100))
+				if self:GetFinishLine() then
+					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 0, 0))
+					render.DrawBox(pos, ang0, vec0, max, Color(255, 0, 0, 100))
+				else
+					render.DrawWireframeBox(pos, ang0, vec0, max, Color(0, 255, 0))
+					render.DrawBox(pos, ang0, vec0, max, Color(0, 255, 0, 100))
+				end
 			else
 				if self:GetFinishLine() then
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 0, 0))
@@ -79,8 +84,8 @@ if CLIENT then
 				if id == 0 then
 					draw.SimpleText( "ID NOT SET", "UVFont4", data2D.x, data2D.y, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				elseif id == 1 then
-					if #ents.FindByClass("uvrace_checkpoint") == 1 then
-						draw.SimpleText( "START/FINISH", "UVFont4", data2D.x, data2D.y, Color( 0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					if self:GetFinishLine() then
+						draw.SimpleText( "FINISH", "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
 						draw.SimpleText( "START", "UVFont4", data2D.x, data2D.y, Color( 0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
