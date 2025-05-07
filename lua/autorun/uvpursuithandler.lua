@@ -553,6 +553,8 @@ if SERVER then
 	util.AddNetworkString( "UVUpdateRacerName" )
 	
 	util.AddNetworkString( "UVUpdateSuspectVisibility" )
+
+	util.AddNetworkString( "UVRacerJoin" )
 	
 	--Enemies can't exit the vehicle during pursuits or races
 	hook.Add("CanExitVehicle", "UVExitingVehicleWhlistInPursuit", function( veh, ply)
@@ -3339,6 +3341,11 @@ else --HUD/Options
 		local in_view = net.ReadBool()
 		
 		car.inunitview = in_view
+	end)
+
+	net.Receive( "UVRacerJoin" , function()
+		local message = net.ReadString()
+		chat.AddText(Color(127, 255, 159), message)
 	end)
 	
 	net.Receive("UVHUDBustedDebrief", function()

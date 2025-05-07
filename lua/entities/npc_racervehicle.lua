@@ -661,6 +661,11 @@ if SERVER then
 		
 		if !self.v.racer and UVNames then
 			self.v.racer = UVNames.Racers[math.random(1, #UVNames.Racers)]
+			local joinmessage = "Racer AI (" .. self.v.racer .. ") has joined the game"
+			
+			net.Start( "UVRacerJoin" )
+				net.WriteString(joinmessage)
+			net.Broadcast()
 		end
 		
 		local pttable = {
