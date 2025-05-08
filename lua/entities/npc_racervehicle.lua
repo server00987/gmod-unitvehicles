@@ -172,7 +172,7 @@ if SERVER then
 	
 	function ENT:FindRace()
 		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
-			if !UVRaceInProgress then return end
+			if !UVRaceInProgress then self.PatrolWaypoint = nil; return end
 			
 			local array = UVRaceTable['Participants'][self.v]
 
@@ -225,7 +225,7 @@ if SERVER then
 			
 					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
 						target = next_point
-						target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 200)
+						target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
 					end
 				end
 				
@@ -233,7 +233,7 @@ if SERVER then
 				-- Further tests may be needed to determine which one is better
 				self.PatrolWaypoint = {
 					['Target'] = target_pos,
-					['SpeedLimit'] = target:GetSpeedLimit() or 0
+					['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
 				}
 				-- if cansee then
 				-- 	self.PatrolWaypoint = {
