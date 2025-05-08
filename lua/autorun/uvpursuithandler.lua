@@ -3781,6 +3781,7 @@ else --HUD/Options
 			panel:Button( "Stop Pursuit", "uv_stoppursuit")
 			panel:Button( "Start Racers horde", "uv_racershordestart")
 			panel:Button( "Stop Racers horde", "uv_racershordestop")
+			panel:Button( "Clear Bounty", "uv_clearbounty")
 			panel:Button( "Show Wanted Table (in console)", "uv_wantedtable")
 			
 		end)

@@ -206,6 +206,12 @@ concommand.Add("uv_wantedtable", function(ply)
 	PrintTable(uvpotentialsuspects)
 end)
 
+concommand.Add("uv_clearbounty", function(ply)
+	if not ply:IsSuperAdmin() then return end
+	PrintMessage( HUD_PRINTTALK, "Bounty cleared" )
+	uvbounty = 0
+end)
+
 function UVApplyHeatLevel()
 	if MinHeatLevel:GetInt() <= 1 then
 		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 1!")
