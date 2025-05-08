@@ -231,21 +231,25 @@ if SERVER then
 				
 				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
 				-- Further tests may be needed to determine which one is better
-				if cansee then
-					self.PatrolWaypoint = {
-						['Target'] = target_pos,
-						['SpeedLimit'] = target:GetSpeedLimit() or 0
-					}
-				else
-					-- Must utilize dvs
-					local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target)
+				self.PatrolWaypoint = {
+					['Target'] = target_pos,
+					['SpeedLimit'] = target:GetSpeedLimit() or 0
+				}
+				-- if cansee then
+				-- 	self.PatrolWaypoint = {
+				-- 		['Target'] = target_pos,
+				-- 		['SpeedLimit'] = target:GetSpeedLimit() or 0
+				-- 	}
+				-- else
+				-- 	-- Must utilize dvs
+				-- 	local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
 
-					if waypoints and #waypoints > 0 then
-						self.PatrolWaypoint = waypoints[2]
-					else
-						self.PatrolWaypoint = nearest_waypoint
-					end
-				end
+				-- 	if waypoints and #waypoints > 0 then
+				-- 		self.PatrolWaypoint = waypoints[2]
+				-- 	else
+				-- 		self.PatrolWaypoint = nearest_waypoint
+				-- 	end
+				-- end
 			end
 
 
@@ -320,40 +324,40 @@ if SERVER then
 			
 			--Unique racing techniques
 
-			if self.v.uvraceparticipant then
-				local velocity = self.v:GetVelocity():GetNormalized()
+			-- if self.v.uvraceparticipant then
+			-- 	local velocity = self.v:GetVelocity():GetNormalized()
 
-				local vect_sanitized = vect --* Vector(1, 0, 1)
-				local velo_sanitized = velocity --* Vector(1, 0, 1)
+			-- 	local vect_sanitized = vect --* Vector(1, 0, 1)
+			-- 	local velo_sanitized = velocity --* Vector(1, 0, 1)
 				
-				local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
+			-- 	local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
 	
-				local maxDist = 750
-				local distSqr = dist:LengthSqr()
-				local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
+			-- 	local maxDist = 750
+			-- 	local distSqr = dist:LengthSqr()
+			-- 	local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
 	
-				angle_diff = angle_diff * distanceFactor
+			-- 	angle_diff = angle_diff * distanceFactor
 	
-				local misalignment = math.Clamp(angle_diff / 90, -1, 1)
-				throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
+			-- 	local misalignment = math.Clamp(angle_diff / 90, -1, 1)
+			-- 	throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
 				
-				if angle_diff < 10 then
-					throttle = 1
-				end
+			-- 	if angle_diff < 10 then
+			-- 		throttle = 1
+			-- 	end
 
-				-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
-				-- 	throttle = -1
-				-- end
-				-- if angle_diff > 25 then
-				-- 	throttle = throttle * 0.5
-				-- end
-				//local dist_len = dist:LengthSqr()
-				-- print("Distance:",dist_len)
-				-- print("Angle Difference:",angle_diff)	
-			end
+			-- 	-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
+			-- 	-- 	throttle = -1
+			-- 	-- end
+			-- 	-- if angle_diff > 25 then
+			-- 	-- 	throttle = throttle * 0.5
+			-- 	-- end
+			-- 	//local dist_len = dist:LengthSqr()
+			-- 	-- print("Distance:",dist_len)
+			-- 	-- print("Angle Difference:",angle_diff)	
+			-- end
 			-- print(self.Speeding)
 			-- print(self.v:GetVelocity():LengthSqr(), self.Speeding*300)
-			if self.v:GetVelocity():LengthSqr() > self.Speeding*350 then 
+			if self.v:GetVelocity():LengthSqr() > self.Speeding*350 and self.v.uvraceparticipant then 
 				throttle = -1
 			elseif self.v:GetVelocity():LengthSqr() > self.Speeding*300 then
 				throttle = 0
