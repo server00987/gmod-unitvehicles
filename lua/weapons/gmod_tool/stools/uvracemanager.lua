@@ -116,6 +116,8 @@ if SERVER then
 	local function StartRaceInvite(ply, cmd, args)
 		if UVRaceInEffect then return end
 
+		local invited_racers = {}
+
 		for _, v in ents.Iterator() do
 			if table.HasValue(UVRaceCurrentParticipants, v) then continue end
 			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle or v.uvbusted then continue end
@@ -124,8 +126,9 @@ if SERVER then
 			local is_player = IsValid(driver) and driver:IsPlayer()
 
 			if !v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
-				PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex())) )
+				//PrintMessage( HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex())) )
 
+				table.insert(invited_racers, ((is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex())))
 				-- if is_player then
 				-- 	v.racer = driver
 				-- else
@@ -145,7 +148,13 @@ if SERVER then
 					v.raceinvited = false
 				end)
 			end
-		end		
+		end	
+		
+		if #invited_racers > 0 then
+			net.Start("uvrace_racerinvited")
+			net.WriteTable(invited_racers)
+			net.Send(ply)
+		end
 	end
 	concommand.Add("uvrace_startinvite", StartRaceInvite)
 

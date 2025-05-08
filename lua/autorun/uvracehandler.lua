@@ -256,6 +256,8 @@ if SERVER then
     util.AddNetworkString( "uvrace_info" )
     util.AddNetworkString( "uvrace_invite" )
 
+    util.AddNetworkString( "uvrace_racerinvited" )
+
     util.AddNetworkString( "uvrace_announcebestlaptime" )
 
     function UVRaceCheckFinishLine()
@@ -678,6 +680,14 @@ else
             chat.AddText(Color(255, 255, 255), "New best lap by "..driver..": ", Color(0, 255, 255), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
         else
             chat.AddText(Color(255, 255, 255), "Best lap by "..driver..": ", Color(0, 255, 255), UVDisplayTimeRace(time))
+        end
+    end)
+
+    net.Receive( "uvrace_racerinvited", function() 
+        local racers = net.ReadTable()
+
+        for _, v in pairs(racers) do
+            chat.AddText(Color(255, 255, 255), "Sent race invite to: ", Color(0,255,0), v)
         end
     end)
 
