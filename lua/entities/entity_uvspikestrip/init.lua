@@ -72,7 +72,7 @@ function ENT:DoUpdate()
 
 	local startpos = self:GetPos()
 	local dir = self:GetUp()
-	local len = 128
+	local len = 20
 
 	local mins = self:OBBMins()
 	local maxs = self:OBBMaxs()

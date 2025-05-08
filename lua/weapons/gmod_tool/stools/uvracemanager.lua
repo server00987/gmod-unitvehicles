@@ -163,10 +163,15 @@ if SERVER then
 		if !file.Exists(filename, "DATA") then return end
 
 		local entList = file.Read(filename, "DATA"):Split("\n")
-
-		UVRaceEnd()
+	
+		if UVRaceInEffect then
+			UVRaceEnd()
+		end
 
 		--Delete all checkpoints and spawns
+		for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
+			ent:Remove()
+		end
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			ent:Remove()
 		end
@@ -241,8 +246,6 @@ if SERVER then
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
-			print(ent:GetSpeedLimit())
-			print(ent:GetID())
 			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .."\n"
 		end
 
@@ -356,18 +359,12 @@ elseif CLIENT then
 			selectedCP:SetID(id)
 			selectedCP:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
 
-			print('HAHA', GetConVar("uvracemanager_speedlimit"):GetInt())
-
 			net.Start("UVRace_SetID")
 				net.WriteEntity(selectedCP)
 				net.WriteUInt(id, 16)
 				net.WriteUInt(GetConVar("uvracemanager_speedlimit"):GetInt(), 16)
 			net.SendToServer()
 
-			-- net.Start("UVRace_SetSpeedLimit")
-			-- 	net.WriteEntity(selectedCP)
-			-- 	net.WriteUInt(GetConVar("uvracemanager_speedlimit"):GetInt(), 16)
-			-- net.SendToServer()
 		end, nil, "Set", "Cancel")
 	end
 	net.Receive("UVRace_SelectID", SelectID)
