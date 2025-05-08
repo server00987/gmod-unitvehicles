@@ -3,6 +3,7 @@ ENT.Type = "brush"
 
 AccessorFunc( ENT, "pos1", "Pos1")
 AccessorFunc( ENT, "pos2", "Pos2")
+AccessorFunc( ENT, "speedlimit", "SpeedLimit")
 
 if SERVER then
 	function ENT:SetupDataTables()

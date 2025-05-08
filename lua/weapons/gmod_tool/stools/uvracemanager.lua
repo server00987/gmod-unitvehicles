@@ -3,6 +3,8 @@ TOOL.Name = "Race Manager"
 TOOL.Command = nil
 TOOL.ConfigName = ""
 
+TOOL.ClientConVar["speedlimit"] = 50
+
 cleanup.Register("uvrace_ents")
 
 local MAX_TRACE_LENGTH = math.sqrt(3) * 2 * 16384
@@ -15,6 +17,7 @@ if SERVER then
 		util.AddNetworkString("UVRace_UpdatePos")
 		util.AddNetworkString("UVRace_SelectID")
 		util.AddNetworkString("UVRace_SetID")
+		util.AddNetworkString("UVRace_SetSpeedLimit")
 	end
 
 	util.AddNetworkString("UVStartRace")
@@ -181,6 +184,7 @@ if SERVER then
 			if cid then
 				local check = ents.Create("uvrace_checkpoint")
 
+				local speedlimit = tonumber(params[8]) or 0
 				local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
 				local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
 
@@ -188,6 +192,7 @@ if SERVER then
 				check:SetPos(pos)
 				check:SetMaxPos(Vector(mx, my, mz))
 				check:SetID(cid)
+				check:SetSpeedLimit(speedlimit)
 				check:Spawn()
 
 				undo.AddEntity(check)
@@ -236,7 +241,9 @@ if SERVER then
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
-			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. "\n"
+			print(ent:GetSpeedLimit())
+			print(ent:GetID())
+			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .."\n"
 		end
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
@@ -253,8 +260,10 @@ if SERVER then
 	local function SetID()
 		local ent = net.ReadEntity()
 		local id = net.ReadUInt(16)
+		local speedlimit = net.ReadUInt(16)
 
 		ent:SetID(id)
+		ent:SetSpeedLimit(speedlimit)
 		UVRaceCheckFinishLine()
 	end
 	net.Receive("UVRace_SetID", SetID)
@@ -345,11 +354,20 @@ elseif CLIENT then
 		Derma_StringRequest("Set ID", "Set a new ID. Start at 1. Must be in order. Use the same ID for branching checkpoints.", cpID, function(text)
 			local id = tonumber(text)
 			selectedCP:SetID(id)
+			selectedCP:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
+
+			print('HAHA', GetConVar("uvracemanager_speedlimit"):GetInt())
 
 			net.Start("UVRace_SetID")
 				net.WriteEntity(selectedCP)
 				net.WriteUInt(id, 16)
+				net.WriteUInt(GetConVar("uvracemanager_speedlimit"):GetInt(), 16)
 			net.SendToServer()
+
+			-- net.Start("UVRace_SetSpeedLimit")
+			-- 	net.WriteEntity(selectedCP)
+			-- 	net.WriteUInt(GetConVar("uvracemanager_speedlimit"):GetInt(), 16)
+			-- net.SendToServer()
 		end, nil, "Set", "Cancel")
 	end
 	net.Receive("UVRace_SelectID", SelectID)
@@ -422,6 +440,7 @@ function TOOL:LeftClick(trace)
 			local cPoint = ents.Create("uvrace_checkpoint")
 			cPoint:SetPos(pos1)
 			cPoint:SetMaxPos(pos)
+			cPoint:SetSpeedLimit(GetConVar('uvracemanager_speedlimit'):GetInt())
 			cPoint:Spawn()
 
 			undo.Create("UVRaceEnt")
@@ -533,6 +552,8 @@ function TOOL.BuildCPanel(panel)
 			last_lap_value = value
 		end
 	end
+
+	local speed_slider = panel:NumSlider("Speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
 
 	local racetheme, label = panel:ComboBox( "Race Theme", "unitvehicle_racetheme" )
 	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )

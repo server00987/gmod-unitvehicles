@@ -172,7 +172,7 @@ if SERVER then
 	
 	function ENT:FindRace()
 		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
-			if !UVRaceInProgress then self.stuck = false; return nil end
+			if !UVRaceInProgress then return end
 			
 			local array = UVRaceTable['Participants'][self.v]
 
@@ -203,10 +203,11 @@ if SERVER then
 				-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
 				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
 				//local target = selected_point.target_point
-				local target = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
-				local cansee = self:CanSeeGoal(target)
+				local target = selected_point
+				local target_pos = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
+				local cansee = self:CanSeeGoal(target_pos)
 
-				local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+				//local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 
 				local velocity = self.v:GetVelocity()
 				//print(velocity:LengthSqr())
@@ -216,15 +217,15 @@ if SERVER then
 				local dotThreshold = 0.5
 
 				if next_point then
-					local toCheckpoint = (target - self.v:WorldSpaceCenter()):GetNormalized()
+					local toCheckpoint = (target_pos - self.v:WorldSpaceCenter()):GetNormalized()
 					local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
 			
 					local dot = forward:Dot(toCheckpoint)
-					local dist = self.v:WorldSpaceCenter():Distance(target)
+					local dist = self.v:WorldSpaceCenter():Distance(target_pos)
 			
 					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
-						//target = next_point.target_point
-						target = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 200)
+						target = next_point
+						target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 200)
 					end
 				end
 				
@@ -232,8 +233,8 @@ if SERVER then
 				-- Further tests may be needed to determine which one is better
 				if cansee then
 					self.PatrolWaypoint = {
-						['Target'] = target,
-						['SpeedLimit'] = (nearest_waypoint and nearest_waypoint.SpeedLimit ^ 2) or math.huge
+						['Target'] = target_pos,
+						['SpeedLimit'] = target:GetSpeedLimit() or 0
 					}
 				else
 					-- Must utilize dvs
@@ -350,8 +351,11 @@ if SERVER then
 				-- print("Distance:",dist_len)
 				-- print("Angle Difference:",angle_diff)	
 			end
-
-			if self.v:GetVelocity():LengthSqr() > self.Speeding then 
+			-- print(self.Speeding)
+			-- print(self.v:GetVelocity():LengthSqr(), self.Speeding*300)
+			if self.v:GetVelocity():LengthSqr() > self.Speeding*350 then 
+				throttle = -1
+			elseif self.v:GetVelocity():LengthSqr() > self.Speeding*300 then
 				throttle = 0
 			end
 

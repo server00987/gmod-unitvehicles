@@ -296,6 +296,7 @@ if SERVER then
 			check:SetPos1(pos)
 			check:SetPos2(mpos)
 			check:SetID(ent:GetID())
+            check:SetSpeedLimit(ent:GetSpeedLimit())
 			check:SetFinishLine(ent:GetFinishLine())
 			check:Spawn()
 		end

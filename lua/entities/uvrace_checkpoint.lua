@@ -7,6 +7,7 @@ ENT.Editable = true
 function ENT:SetupDataTables()
 	self:NetworkVar("Vector", 0, "MaxPos")
 	self:NetworkVar("Int", 0, "ID", {KeyName = "UVRace_CheckpointID", Edit = {type = "Generic", order = 1}})
+	self:NetworkVar("Int", 1, "SpeedLimit", {KeyName = "UVRace_SpeedLimit", Edit = {type = "Generic", order = 2}})
 	self:NetworkVar("Bool", 0, "FinishLine")
 end
 
@@ -42,6 +43,7 @@ if CLIENT then
 	local ang0 = Angle(0, 0, 0)
 	function ENT:Draw()
 		local id = self:GetID()
+		local speedlimit = self:GetSpeedLimit() or math.huge
 		if !id then return end
 		local pos = self:GetPos()
 
@@ -82,18 +84,18 @@ if CLIENT then
 				local data2D = point:ToScreen()
 
 				if id == 0 then
-					draw.SimpleText( "ID NOT SET", "UVFont4", data2D.x, data2D.y, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					draw.SimpleText( "ID NOT SET".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				elseif id == 1 then
 					if self:GetFinishLine() then
-						draw.SimpleText( "FINISH", "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "FINISH".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
-						draw.SimpleText( "START", "UVFont4", data2D.x, data2D.y, Color( 0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "START".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
 				else
 					if self:GetFinishLine() then
-						draw.SimpleText( "FINISH", "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "FINISH".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
-						draw.SimpleText( "CHECKPOINT " .. id, "UVFont4", data2D.x, data2D.y, Color( 255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "CHECKPOINT " .. id.."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
 				end
 
