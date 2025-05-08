@@ -1820,6 +1820,7 @@ function UVBustEnemy(self, enemy)
 			end)
 			wreck:SetEngineHealth(0)
 			wreck.UnflipForce = 0
+			wreck.AngularDrag = vector_origin
 			if wreck:GetVelocity():LengthSqr() > 250000 then
 				UVGlideDetachWheels(wreck)
 			end
@@ -2504,6 +2505,7 @@ function UVPlayerWreck(vehicle)
 		wreck:SetEngineHealth(0)
 		wreck:UpdateHealthOutputs()
 		wreck.UnflipForce = 0
+		wreck.AngularDrag = vector_origin
 		if wreck:GetVelocity():LengthSqr() > 250000 then
 			UVGlideDetachWheels(wreck)
 		end

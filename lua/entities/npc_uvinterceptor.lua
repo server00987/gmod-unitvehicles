@@ -258,6 +258,7 @@ if SERVER then
 				wreck:SetEngineHealth(0)
 				wreck:UpdateHealthOutputs()
 				wreck.UnflipForce = 0
+				wreck.AngularDrag = vector_origin
 				if wreck.CanSwitchHeadlights then
 					wreck:SetHeadlightState(0)
 				end
