@@ -22,21 +22,24 @@ if SERVER then
 
 	util.AddNetworkString("UVStartRace")
 
-	local function KillCheckpoints()
+	local function KillCheckpoints(ply)
+		if !ply:IsSuperAdmin() then return end
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			ent:Remove()
 		end
 	end
 	concommand.Add("uvrace_killcps", KillCheckpoints)
 
-	local function KillSpawns()
+	local function KillSpawns(ply)
+		if !ply:IsSuperAdmin() then return end
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
 			ent:Remove()
 		end
 	end
 	concommand.Add("uvrace_killspawns", KillSpawns)
 
-	local function KillAll()
+	local function KillAll(ply)
+		if !ply:IsSuperAdmin() then return end
 		for _, ent in ipairs(ents.FindByClass("uvrace_*")) do
 			ent:Remove()
 		end
@@ -44,7 +47,7 @@ if SERVER then
 	concommand.Add("uvrace_killall", KillAll)
 
 	local function StopRace(ply, cmd, args)
-
+		if !ply:IsSuperAdmin() then return end
 		UVRaceEnd()
         net.Start( "uvrace_end" )
         net.Broadcast()
@@ -67,7 +70,7 @@ if SERVER then
 	-- concommand.Add("uvrace_startsolo", StartRaceSolo)
 
 	local function StartRace(ply, cmd, args)
-
+		if !ply:IsSuperAdmin() then return end
 		-- if !IsValid( UVMoveToGridSlot( ply ) ) then return end
 		for _, v in pairs(args) do
 			print(v)
@@ -114,6 +117,7 @@ if SERVER then
 	concommand.Add("uvrace_startrace", StartRace)
 
 	local function StartRaceInvite(ply, cmd, args)
+		if !ply:IsSuperAdmin() then return end
 		if UVRaceInEffect then return end
 
 		local invited_racers = {}
@@ -168,6 +172,7 @@ if SERVER then
 	end
 
 	local function Import(ply, cmd, args)
+		if !ply:IsSuperAdmin() then return end
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1]
 		if !file.Exists(filename, "DATA") then return end
 
@@ -245,6 +250,7 @@ if SERVER then
 	}
 
 	local function Export(ply, cmd, args)
+		if !ply:IsSuperAdmin() then return end
 		local plynick = Entity(1):Nick()
 
 		local str = "name " .. args[1] .. " '" .. plynick .. "'\n"
@@ -269,7 +275,8 @@ if SERVER then
 	end
 	concommand.Add("uvrace_export", Export)
 
-	local function SetID()
+	local function SetID(len, ply)
+		if !ply:IsSuperAdmin() then return end
 		local ent = net.ReadEntity()
 		local id = net.ReadUInt(16)
 		local speedlimit = net.ReadUInt(16)
@@ -283,6 +290,7 @@ elseif CLIENT then
 	language.Add("tool.uvracemanager.name", "Race Manager")
 	language.Add("tool.uvracemanager.desc", "Create UV Race checkpoints.")
 	language.Add("tool.uvracemanager.0", "Left click to spawn checkpoint. Right click to edit checkpoint. Reload to create spawn.")
+	language.Add("tool.uvracemanager.1", "You must be superadmin to use this tool!")
 	language.Add("Cleanup_uvrace_ents", "UV Race Spawns")
 	language.Add("Undone_UVRaceEnt", "Undone UV Race entity")
 
@@ -436,6 +444,7 @@ end
 function TOOL:LeftClick(trace)
 	if !trace.Hit then return end
 	local ply = self:GetOwner()
+	if !ply:IsSuperAdmin() then return end
 
 	local pos
 
@@ -480,6 +489,7 @@ end
 function TOOL:RightClick()
 	local ply = self:GetOwner()
 	local startpos = ply:EyePos()
+	if !ply:IsSuperAdmin() then return end
 
 	local tr = util.TraceLine({
 		start = startpos,
@@ -509,6 +519,7 @@ function TOOL:Reload( trace )
 	if !trace.Hit then return end
 	local hp = trace.HitPos
 	local ply = self:GetOwner()
+	if !ply:IsSuperAdmin() then return end
 
 	if game.SinglePlayer() or SERVER then
 		local spawn = ents.Create("uvrace_spawn")
