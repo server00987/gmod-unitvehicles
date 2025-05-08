@@ -2421,11 +2421,6 @@ else --HUD/Options
 			else
 				UVNotificationColor = Color( 255, 0, 0)
 				UVNotification = "/// BUSTED ///"
-				
-				timer.Simple(7, function()
-					UVHUDDisplayBusting = false
-					UVHUDDisplayNotification = false
-				end)
 			end
 		end
 		if !UVHUDDisplayNotification then
@@ -3393,6 +3388,11 @@ else --HUD/Options
 			draw.SimpleText("ROADBLOCKS DODGED: "..roadblocksdodged, "UVFont6", 500, 420, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 			draw.SimpleText("SPIKE STRIPS DODGED: "..spikestripsdodged, "UVFont6", 500, 480, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		end
+				
+		timer.Simple(5, function()
+			UVHUDDisplayBusting = false
+			UVHUDDisplayNotification = false
+		end)
 		
 		function OK:DoClick() ResultPanel:Close() end
 		
