@@ -72,7 +72,7 @@ local function PlayRaceMusic(theme, my_vehicle)
 end
 
 function UVSoundRacing(my_vehicle)
-    if !RacingMusic:GetBool() then return end
+    if !RacingMusic:GetBool() or (!RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
     if (not UVHUDRace) or UVPlayingRace or UVSoundDelayed then return end
 
     if timer.Exists("UVRaceMusicTransition") then
@@ -1125,10 +1125,8 @@ else
             return
         end
 
-        if !UVHUDDisplayPursuit then
+        if !UVHUDDisplayBusting then
             UVSoundRacing( my_vehicle )
-        elseif UVPlayingRace then
-            UVSoundRacingStop()
         end
 
         UVHUDRace = true;
