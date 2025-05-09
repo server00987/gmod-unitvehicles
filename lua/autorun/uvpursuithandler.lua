@@ -170,8 +170,8 @@ end
 -- end
 function UVPlaySound( FileName, Loop, StopLoop )
 	if !PlayMusic:GetBool() then return end
-	if UVLoadedSounds then
-		if UVLoadedSounds == FileName then print('Ended') return end
+	if UVLoadedSounds and UVLoadedSounds ~= FileName then
+		//if UVLoadedSounds == FileName then print('Ended') return end
 		--Entity(1):StopSound(UVLoadedSounds)
 		if Loop or StopLoop then
 			if UVSoundLoop then
@@ -183,21 +183,24 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			UVSoundSource:Stop()
 			UVSoundSource = nil
 		end
-	end
-	UVLoadedSounds = FileName
+	end 
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
-	sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
-		if IsValid(source) then
-			if Loop then
-				UVSoundLoop = source
-				source:SetVolume(PursuitVolume:GetFloat())
-			else
-				UVSoundSource = source
+	if UVLoadedSounds ~= FileName then
+		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
+			if IsValid(source) then
+				if Loop then
+					UVSoundLoop = source
+					source:SetVolume(PursuitVolume:GetFloat())
+				else
+					UVSoundSource = source
+				end
+				source:EnableLooping(Loop)
+				source:Play()
 			end
-			source:EnableLooping(Loop)
-			source:Play()
-		end
-	end)
+		end)
+	end
+	
+	UVLoadedSounds = FileName
 	
 	local duration = SoundDuration(FileName)
 	UVDelaySound()

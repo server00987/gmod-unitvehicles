@@ -13,6 +13,10 @@ local LBColors = {
     ["Disqualified"] = Color(255,255,255,133)
 }
 
+local UVRacePlayIntro = false
+local UVRacePlayMusic = false 
+local UVRacePlayTransition = false
+
 function UVSoundRacingStop()
     if UVPlayingRace then
         if timer.Exists("UVRaceMusicTransition") then
@@ -59,9 +63,17 @@ function UVGetRaceMusicPath(theme, my_vehicle)
     return UVGetRandomSound(racePath)
 end
 
+
+local function PlayRaceMusic(theme, my_vehicle)
+    local track = UVGetRaceMusicPath(theme, my_vehicle)
+    if track then
+        UVPlaySound(track, true)
+    end
+end
+
 function UVSoundRacing(my_vehicle)
     if !RacingMusic:GetBool() then return end
-    if not UVHUDRace or UVPlayingRace or UVSoundDelayed then return end
+    if (not UVHUDRace) or UVPlayingRace or UVSoundDelayed then return end
 
     if timer.Exists("UVRaceMusicTransition") then
         timer.Remove("UVRaceMusicTransition")
@@ -69,42 +81,60 @@ function UVSoundRacing(my_vehicle)
 
     local theme = GetConVar("unitvehicle_racetheme"):GetString()
 
-    local function PlayRaceMusic()
-        local track = UVGetRaceMusicPath(theme, my_vehicle)
-        if track then
-            UVPlaySound(track, true)
-        end
-    end
-
-    if UVRaceFirstLaunch then
-        UVRaceFirstLaunch = false
+    if UVRacePlayIntro then
+        UVRacePlayIntro = false
+        //UVRacePlayMusic = true
 
         local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
         if introTrack then
             UVPlaySound(introTrack, false)
-            timer.Create("UVRaceMusicTransition", SoundDuration(introTrack), 1, function()
-                if UVHUDRace then
-                    PlayRaceMusic()
-                end
-            end)
         else
-            PlayRaceMusic()
+            PlayRaceMusic(theme, my_vehicle)
+            UVRacePlayTransition = true
         end
-    else
-        local transitionTrack = UVGetRandomSound("uvracesfx/" .. theme .. "/transition")
+    elseif UVRacePlayTransition then
+        UVRacePlayTransition = false 
+
+        local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
+
         if transitionTrack then
-            UVPlaySound(transitionTrack, false)
-            timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
-                PlayRaceMusic()
-            end)
+            UVPlaySound(transitionTrack, true)
         else
-            PlayRaceMusic()
+            PlayRaceMusic(theme, my_vehicle)
+            UVRacePlayTransition = true
         end
+    elseif UVRacePlayMusic then
+        UVRacePlayTransition = true
+        //UVRacePlayMusic = false 
+
+        PlayRaceMusic(theme, my_vehicle)
     end
 
-    if timer.Exists("UVPursuitThemeReplay") then
-        timer.Remove("UVPursuitThemeReplay")
-    end
+    -- if UVRaceFirstLaunch then
+    --     UVRaceFirstLaunch = false
+
+    --     local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
+    --     if introTrack then
+    --         UVPlaySound(introTrack, false)
+    --         timer.Create("UVRaceMusicTransition", SoundDuration(introTrack), 1, function()
+    --             if UVHUDRace then
+    --                 PlayRaceMusic(theme, my_vehicle)
+    --             end
+    --         end)
+    --     else
+    --         PlayRaceMusic()
+    --     end
+    -- else
+    --     local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
+    --     if transitionTrack then
+    --         UVPlaySound(transitionTrack, false)
+    --         timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
+    --             PlayRaceMusic(theme, my_vehicle)
+    --         end)
+    --     else
+    --         PlayRaceMusic()
+    --     end
+    -- end
 
     UVPlayingRace = true
     UVPlayingHeat = false
@@ -1004,7 +1034,10 @@ else
     net.Receive( "uvrace_begin", function()
         local time = net.ReadFloat()
 
-        UVRaceFirstLaunch = true
+        UVRacePlayIntro = true
+        UVRacePlayMusic = true 
+        UVRacePlayTransition = false
+
         UVPlayingRace = false
 
         if UVHUDRaceInfo and UVHUDRaceInfo['Info'] then
