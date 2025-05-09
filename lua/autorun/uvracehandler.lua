@@ -38,6 +38,7 @@ function UVGetRandomSound(folder)
 end
 
 function UVGetRaceMusicPath(theme, my_vehicle)
+    if !RacingMusic:GetBool() then return end
     local isFinalLap = IsValid(my_vehicle)
         and UVHUDRaceLaps > 1
         and UVHUDRaceLaps == UVHUDRaceInfo["Participants"][my_vehicle].Lap
@@ -54,6 +55,7 @@ function UVGetRaceMusicPath(theme, my_vehicle)
 end
 
 function UVSoundRacing(my_vehicle)
+    if !RacingMusic:GetBool() then return end
     if not UVHUDRace or UVPlayingRace or UVSoundDelayed then return end
 
     if timer.Exists("UVRaceMusicTransition") then
@@ -902,7 +904,7 @@ else
     end)
 
     net.Receive( "uvrace_end", function()
-        if UVHUDRace then 
+        if UVHUDRace and RacingMusic:GetBool() then 
             local theme = GetConVar("unitvehicle_racetheme"):GetString()
             local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/raceend/*", "GAME" )
             surface.PlaySound( "uvracemusic/".. theme .."/raceend/".. soundfiles[math.random(1, #soundfiles)] ) 
@@ -956,7 +958,7 @@ else
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 UVHUDRaceInfo['Participants'][participant].Finished = true 
 
-                if IsValid(participant) and participant:GetDriver() == LocalPlayer() then
+                if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
                     local theme = GetConVar("unitvehicle_racetheme"):GetString()
                     local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/"..((place <= 3 and "win") or "loss").."/*", "GAME" )
                     if soundfiles and #soundfiles > 0 then
@@ -979,7 +981,7 @@ else
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 if reason == 'Busted' or reason == 'Disqualified' then
 
-                    if IsValid(participant) and participant:GetDriver() == LocalPlayer() then
+                    if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
                         local theme = GetConVar("unitvehicle_racetheme"):GetString()
                         local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/loss/*", "GAME" )
                         if soundfiles and #soundfiles > 0 then

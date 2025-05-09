@@ -236,7 +236,7 @@ local local_convars = {
 	["unitvehicle_pursuittheme"] = 'string',
 	["unitvehicle_targetvehicletype"] = 'integer',
 	["unitvehicle_detectionrange"] = 'integer',
-	["unitvehicle_playmusic"] = 'integer',
+	//["unitvehicle_playmusic"] = 'integer',
 	["unitvehicle_neverevade"] = 'integer',
 	["unitvehicle_bustedtimer"] = 'integer',
 	["unitvehicle_canwreck"] = 'integer',
@@ -268,7 +268,7 @@ if SERVER then
 	HeatLevels = CreateConVar("unitvehicle_heatlevels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit." )
 	TargetVehicleType = CreateConVar("unitvehicle_targetvehicletype", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: 1 = All vehicles are targeted. 2 = Decent Vehicles are targeted only. 3 = Other vehicles besides Decent Vehicles are targeted.")
 	DetectionRange = CreateConVar("unitvehicle_detectionrange", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
-	PlayMusic = CreateConVar("unitvehicle_playmusic", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Pursuit themes will play.")
+	//PlayMusic = CreateConVar("unitvehicle_playmusic", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Pursuit themes will play.")
 	NeverEvade = CreateConVar("unitvehicle_neverevade", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateConVar("unitvehicle_bustedtimer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
 	SpawnCooldown = CreateConVar("unitvehicle_spawncooldown", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
@@ -1912,6 +1912,7 @@ else --HUD/Options
 	TargetVehicleType = CreateClientConVar("unitvehicle_targetvehicletype", 1, true, false, "Unit Vehicles: 1 = All vehicles are targeted. 2 = Decent Vehicles are targeted only. 3 = Other vehicles besides Decent Vehicles are targeted.")
 	DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
+	RacingMusic = CreateClientConVar("unitvehicle_racingmusic", 1, true, false, "Unit Vehicles: If set to 1, Racing music will play.")
 	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
 	NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
@@ -2102,7 +2103,7 @@ else --HUD/Options
 		["unitvehicle_pursuittheme"] = 'string',
 		["unitvehicle_targetvehicletype"] = 'integer',
 		["unitvehicle_detectionrange"] = 'integer',
-		["unitvehicle_playmusic"] = 'integer',
+		//["unitvehicle_playmusic"] = 'integer',
 		["unitvehicle_neverevade"] = 'integer',
 		["unitvehicle_bustedtimer"] = 'integer',
 		["unitvehicle_canwreck"] = 'integer',
@@ -3685,6 +3686,8 @@ else --HUD/Options
 			panel:Help("——— Music ———")
 			panel:CheckBox("Pursuit Music", "unitvehicle_playmusic")
 			panel:ControlHelp("Pursuit themes will play.")
+			panel:CheckBox("Racing Music", "unitvehicle_racingmusic")
+			panel:ControlHelp("Racing themes will play.")
 			local pursuittheme, label = panel:ComboBox( "Pursuit Theme", "unitvehicle_pursuittheme" )
 			local files, folders = file.Find( "sound/uvpursuitmusic/*", "GAME" )
 			if folders != nil then
