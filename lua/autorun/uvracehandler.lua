@@ -76,7 +76,7 @@ function UVSoundRacing(my_vehicle)
 
         local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
         if introTrack then
-            UVPlaySound(introTrack, true)
+            UVPlaySound(introTrack, false)
             timer.Create("UVRaceMusicTransition", SoundDuration(introTrack), 1, function()
                 if UVHUDRace then
                     PlayRaceMusic()
@@ -88,7 +88,7 @@ function UVSoundRacing(my_vehicle)
     else
         local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
         if transitionTrack then
-            UVPlaySound(transitionTrack, true)
+            UVPlaySound(transitionTrack, false)
             timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
                 PlayRaceMusic()
             end)

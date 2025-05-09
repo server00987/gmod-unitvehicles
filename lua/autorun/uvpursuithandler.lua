@@ -233,7 +233,7 @@ end
 
 local local_convars = {
 	["unitvehicle_heatlevels"] = 'integer',
-	["unitvehicle_pursuittheme"] = 'string',
+	//["unitvehicle_pursuittheme"] = 'string',
 	["unitvehicle_targetvehicletype"] = 'integer',
 	["unitvehicle_detectionrange"] = 'integer',
 	//["unitvehicle_playmusic"] = 'integer',
@@ -254,7 +254,7 @@ local local_convars = {
 	["unitvehicle_relentless"] = 'integer',
 	["unitvehicle_spawnmainunits"] = 'integer',
 	["unitvehicle_dvwaypointspriority"] = 'integer',
-	["unitvehicle_pursuitthemeplayrandomheat"] = 'integer',
+	//["unitvehicle_pursuitthemeplayrandomheat"] = 'integer',
 	["unitvehicle_repaircooldown"] = 'integer',
 	["unitvehicle_repairrange"] = 'integer',
 	["unitvehicle_racertags"] = 'integer',
@@ -264,7 +264,7 @@ local local_convars = {
 if SERVER then
 	
 	--convars--
-	PursuitTheme = CreateConVar("unitvehicle_pursuittheme", "nfsmostwanted", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
+	//PursuitTheme = CreateConVar("unitvehicle_pursuittheme", "nfsmostwanted", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
 	HeatLevels = CreateConVar("unitvehicle_heatlevels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit." )
 	TargetVehicleType = CreateConVar("unitvehicle_targetvehicletype", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: 1 = All vehicles are targeted. 2 = Decent Vehicles are targeted only. 3 = Other vehicles besides Decent Vehicles are targeted.")
 	DetectionRange = CreateConVar("unitvehicle_detectionrange", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
@@ -287,7 +287,7 @@ if SERVER then
 	Relentless = CreateConVar("unitvehicle_relentless", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Units will ram the target more frequently.")
 	SpawnMainUnits = CreateConVar("unitvehicle_spawnmainunits", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateConVar("unitvehicle_dvwaypointspriority", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
-	PursuitThemePlayRandomHeat = CreateConVar("unitvehicle_pursuitthemeplayrandomheat", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
+	//PursuitThemePlayRandomHeat = CreateConVar("unitvehicle_pursuitthemeplayrandomheat", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
 	RepairCooldown = CreateConVar("unitvehicle_repaircooldown", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateConVar("unitvehicle_repairrange", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
 	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Racers will have their own tags which you can see as a cop during pursuits.")
