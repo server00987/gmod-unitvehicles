@@ -1172,7 +1172,7 @@ else
                 LastWrongWayCheckTime = CurTime()
             end
 
-            if CurTime() - LastWrongWayCheckTime > 1 then
+            if CurTime() - LastWrongWayCheckTime > 2 then
                 if !UVHUDNotification then
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
                     local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/wrongway/*", "GAME" )
