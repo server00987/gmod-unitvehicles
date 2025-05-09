@@ -297,6 +297,7 @@ elseif CLIENT then
 
 	//CreateClientConVar("unitvehicle_racelaps", "3")
 	CreateClientConVar("unitvehicle_racetheme", "1")
+	CreateClientConVar("unitvehicle_sfxtheme", "1")
 
 	local ang0 = Angle(0, 0, 0)
 	local vec0 = Vector(0, 0, 0)
@@ -578,6 +579,14 @@ function TOOL.BuildCPanel(panel)
 	if folders != nil then
 		for k, v in pairs(folders) do
 			racetheme:AddChoice( v )
+		end
+	end
+
+	local sfxtheme, label = panel:ComboBox( "Race SFX", "unitvehicle_sfxtheme" )
+	local files, folders = file.Find( "sound/uvracesfx/*", "GAME" )
+	if folders != nil then
+		for k, v in pairs(folders) do
+			sfxtheme:AddChoice( v )
 		end
 	end
 end

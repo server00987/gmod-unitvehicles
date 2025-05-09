@@ -26,6 +26,11 @@ function UVSoundRacingStop()
             UVLoadedSounds = nil
             UVSoundLoop = nil
         end
+        if UVSoundSource then
+            UVSoundSource:Stop()
+            UVLoadedSounds = nil
+            UVSoundSource = nil
+        end
     end
 end
 
@@ -86,7 +91,7 @@ function UVSoundRacing(my_vehicle)
             PlayRaceMusic()
         end
     else
-        local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
+        local transitionTrack = UVGetRandomSound("uvracesfx/" .. theme .. "/transition")
         if transitionTrack then
             UVPlaySound(transitionTrack, false)
             timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
@@ -843,9 +848,9 @@ else
             UVHUDRace = true
             UVHUDRaceCheckpoints = GetGlobalInt( "uvrace_checkpoints" )
 
-            local theme = GetConVar("unitvehicle_racetheme"):GetString()
-            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/racestart/*", "GAME" )
-            surface.PlaySound( "uvracemusic/".. theme .."/racestart/".. soundfiles[math.random(1, #soundfiles)] )
+            local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+            local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/start/*", "GAME" )
+            surface.PlaySound( "uvracesfx/".. theme .."/start/".. soundfiles[math.random(1, #soundfiles)] )
         end
     end)
 
@@ -905,9 +910,9 @@ else
 
     net.Receive( "uvrace_end", function()
         if UVHUDRace and RacingMusic:GetBool() then 
-            local theme = GetConVar("unitvehicle_racetheme"):GetString()
-            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/raceend/*", "GAME" )
-            surface.PlaySound( "uvracemusic/".. theme .."/raceend/".. soundfiles[math.random(1, #soundfiles)] ) 
+            local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+            local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
+            surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] ) 
         end
 
         UVHUDRace = false
@@ -942,9 +947,9 @@ else
             local driver = participant:GetDriver()
 
             if driver == LocalPlayer() then
-                local theme = GetConVar("unitvehicle_racetheme"):GetString()
-                local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/checkpointpass/*", "GAME" )
-                surface.PlaySound( "uvracemusic/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
+                local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+                local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/checkpointpass/*", "GAME" )
+                surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
             end
         end
     end)
@@ -959,10 +964,10 @@ else
                 UVHUDRaceInfo['Participants'][participant].Finished = true 
 
                 if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
-                    local theme = GetConVar("unitvehicle_racetheme"):GetString()
-                    local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/"..((place <= 3 and "win") or "loss").."/*", "GAME" )
+                    local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+                    local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/"..((place <= 3 and "win") or "loss").."/*", "GAME" )
                     if soundfiles and #soundfiles > 0 then
-                        local audio_path = "uvracemusic/".. theme .."/"..((place <= 3 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
+                        local audio_path = "uvracesfx/".. theme .."/"..((place <= 3 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
                         surface.PlaySound(audio_path)
                     end
                 end
@@ -982,10 +987,10 @@ else
                 if reason == 'Busted' or reason == 'Disqualified' then
 
                     if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
-                        local theme = GetConVar("unitvehicle_racetheme"):GetString()
-                        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/loss/*", "GAME" )
+                        local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+                        local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/loss/*", "GAME" )
                         if soundfiles and #soundfiles > 0 then
-                            local audio_path = "uvracemusic/".. theme .."/loss/".. soundfiles[math.random(1, #soundfiles)]
+                            local audio_path = "uvracesfx/".. theme .."/loss/".. soundfiles[math.random(1, #soundfiles)]
                             surface.PlaySound(audio_path)
                         end
                     end
@@ -1041,7 +1046,7 @@ else
 
     net.Receive( "uvrace_start", function()
         local time = net.ReadInt( 11 )
-        local theme = GetConVar("unitvehicle_racetheme"):GetString()
+        local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
         local starttable = {
             "GO!",
             "1",
@@ -1052,14 +1057,14 @@ else
             "GET READY",
         }
 
-        local soundfilescount3 = file.Find( "sound/uvracemusic/".. theme .."/count3/*", "GAME" )
-        local soundfilecount3 = "uvracemusic/".. theme .."/count3/".. soundfilescount3[math.random(1, #soundfilescount3)]
-        local soundfilescount2 = file.Find( "sound/uvracemusic/".. theme .."/count2/*", "GAME" )
-        local soundfilecount2 = "uvracemusic/".. theme .."/count2/".. soundfilescount2[math.random(1, #soundfilescount2)]
-        local soundfilescount1 = file.Find( "sound/uvracemusic/".. theme .."/count1/*", "GAME" )
-        local soundfilecount1 = "uvracemusic/".. theme .."/count1/".. soundfilescount1[math.random(1, #soundfilescount1)]
-        local soundfilescountgo = file.Find( "sound/uvracemusic/".. theme .."/countgo/*", "GAME" )
-        local soundfilecountgo = "uvracemusic/".. theme .."/countgo/".. soundfilescountgo[math.random(1, #soundfilescountgo)]
+        local soundfilescount3 = file.Find( "sound/uvracesfx/".. theme .."/count3/*", "GAME" )
+        local soundfilecount3 = "uvracesfx/".. theme .."/count3/".. soundfilescount3[math.random(1, #soundfilescount3)]
+        local soundfilescount2 = file.Find( "sound/uvracesfx/".. theme .."/count2/*", "GAME" )
+        local soundfilecount2 = "uvracesfx/".. theme .."/count2/".. soundfilescount2[math.random(1, #soundfilescount2)]
+        local soundfilescount1 = file.Find( "sound/uvracesfx/".. theme .."/count1/*", "GAME" )
+        local soundfilecount1 = "uvracesfx/".. theme .."/count1/".. soundfilescount1[math.random(1, #soundfilescount1)]
+        local soundfilescountgo = file.Find( "sound/uvracesfx/".. theme .."/countgo/*", "GAME" )
+        local soundfilecountgo = "uvracesfx/".. theme .."/countgo/".. soundfilescountgo[math.random(1, #soundfilescountgo)]
         local startsound = {
             [1] = soundfilecountgo,
             [2] = soundfilecount1,
