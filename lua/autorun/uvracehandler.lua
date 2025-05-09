@@ -1147,6 +1147,34 @@ else
         -- used by checkpoint entities
         UVHUDRaceCurrentCheckpoint = checkpoint_count
 
+        -- check for wrong way
+        if _UVCurrentCheckpoint then
+            local vehicle_center = my_vehicle:WorldSpaceCenter()
+            local vehicle_velocity = my_vehicle:GetVelocity() -- :Dot((_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2)
+            local check_center_pos = (_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2
+
+            local unit = ((check_center_pos - vehicle_center) * Vector(1,0,1)):GetNormalized()
+            local normalized_velo = vehicle_velocity:GetNormalized() * Vector(1,0,1)
+
+            local dot_product = normalized_velo:Dot(unit)
+
+            if dot_product > - .5 then
+                LastWrongWayCheckTime = CurTime()
+            end
+
+            if CurTime() - LastWrongWayCheckTime > 1 then
+                if !UVHUDNotification then
+                    local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+                    local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/wrongway/*", "GAME" )
+                    if soundfiles and #soundfiles > 0 then
+                        local audio_path = "uvracesfx/".. theme .."/wrongway/".. soundfiles[math.random(1, #soundfiles)]
+                        surface.PlaySound(audio_path)
+                    end
+                    UVNotifyDriver("WRONG WAY", 3)
+                end
+            end
+        end
+
         draw.DrawText( 
             "Time: " 
             .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. 

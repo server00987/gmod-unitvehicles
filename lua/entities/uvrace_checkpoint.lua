@@ -123,6 +123,7 @@ if CLIENT then
 			local max = self:GetMaxPos() - pos
 
 			if id == currentcheckpoint then
+				_UVCurrentCheckpoint = self
 				if id == GetGlobalInt("uvrace_checkpoints") then --Finish line
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 255))
 				else
