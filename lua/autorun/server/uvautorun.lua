@@ -1764,7 +1764,7 @@ function UVBustEnemy(self, enemy)
 		table.RemoveByValue(uvpotentialsuspects, enemy)
 	end
 	local timeacknowledge = 5
-	local enemydriver = self.edriver or UVGetDriver(enemy)
+	local enemydriver = UVGetDriver(enemy)
 
 	if uvtargeting or self.UVAir then --Arrest
 		if enemy:IsVehicle() then
