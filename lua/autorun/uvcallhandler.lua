@@ -121,6 +121,7 @@ if SERVER then
         end
 
         timer.Simple(0.5, function()
+            UVApplyHeatLevel()
             UVUpdateHeatLevel()
             UVAutoSpawn()
             uvidlespawning = CurTime()
