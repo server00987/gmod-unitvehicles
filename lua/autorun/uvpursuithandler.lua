@@ -3694,8 +3694,8 @@ else --HUD/Options
 			end
 			panel:CheckBox("Random Heat Level Songs", "unitvehicle_pursuitthemeplayrandomheat")
 			panel:ControlHelp("Random Heat Level songs from your selected Pursuit Theme will play instead.")
-			local volume_theme = panel:NumSlider("Volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
-			panel:ControlHelp("Sets the volume of the pursuit theme. (Local)")
+			local volume_theme = panel:NumSlider("Music Volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
+			panel:ControlHelp("Sets the volume of the music. (Local)")
 			
 			volume_theme.OnValueChanged = function( self, value )
 				if value == 0 then

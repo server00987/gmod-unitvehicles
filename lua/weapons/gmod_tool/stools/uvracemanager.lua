@@ -4,6 +4,7 @@ TOOL.Command = nil
 TOOL.ConfigName = ""
 
 TOOL.ClientConVar["speedlimit"] = 50
+TOOL.ClientConVar["laps"] = 1
 
 cleanup.Register("uvrace_ents")
 
@@ -560,9 +561,9 @@ function TOOL.BuildCPanel(panel)
 
 	panel:AddControl("Label", {Text = "Options", Description = "Options"})
 	local last_lap_value
-	local lap_slider = panel:NumSlider("Laps", "unitvehicle_racelaps", 1, 100, 0)
+	local lap_slider = panel:NumSlider("Laps", "uvracemanager_laps", 1, 100, 0)
 	function lap_slider:Think()
-		local value = GetConVar("unitvehicle_racelaps"):GetInt()
+		local value = GetConVar("uvracemanager_laps"):GetInt()
 
 		if last_lap_value ~= value then
 			RunConsoleCommand("uvrace_updatevars", "unitvehicle_racelaps", value)

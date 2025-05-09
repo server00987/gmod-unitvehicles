@@ -29,88 +29,82 @@ function UVSoundRacingStop()
     end
 end
 
-function UVSoundRacing()
-    if !UVHUDRace then return end
-	if UVPlayingRace or UVSoundDelayed then return end
+function UVGetRandomSound(folder)
+    local files = file.Find("sound/" .. folder .. "/*", "GAME")
+    if files and #files > 0 then
+        return folder .. "/" .. files[math.random(1, #files)]
+    end
+    return nil
+end
+
+function UVGetRaceMusicPath(theme, my_vehicle)
+    local isFinalLap = IsValid(my_vehicle)
+        and UVHUDRaceLaps > 1
+        and UVHUDRaceLaps == UVHUDRaceInfo["Participants"][my_vehicle].Lap
+
+    local endingPath = "uvracemusic/" .. theme .. "/ending"
+    local racePath = "uvracemusic/" .. theme .. "/race"
+
+    if isFinalLap then
+        local endingTrack = UVGetRandomSound(endingPath)
+        if endingTrack then return endingTrack end
+    end
+
+    return UVGetRandomSound(racePath)
+end
+
+function UVSoundRacing(my_vehicle)
+    if not UVHUDRace or UVPlayingRace or UVSoundDelayed then return end
 
     if timer.Exists("UVRaceMusicTransition") then
         timer.Remove("UVRaceMusicTransition")
     end
 
-    if UVRaceFirstLaunch then
-        UVRaceFirstLaunch = false 
+    local theme = GetConVar("unitvehicle_racetheme"):GetString()
 
-        local theme = GetConVar("unitvehicle_racetheme"):GetString()
-        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/intro/*", "GAME" )
-
-        if soundfiles and #soundfiles > 0 then
-            -- play intro, wait a bit, play race music
-            local audio_path = "uvracemusic/".. theme .."/intro/".. soundfiles[math.random(1, #soundfiles)]
-
-            UVPlaySound(audio_path, true)
-
-            timer.Create("UVRaceMusicTransition", SoundDuration(audio_path), 1, function()
-                if !UVHUDRace then return end
-                local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
-
-                if soundfiles and #soundfiles > 0 then
-                    local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
-                    UVPlaySound(audio_path, true)
-                end
-            end)
-        else
-            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
-
-            if soundfiles and #soundfiles > 0 then
-                local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
-                UVPlaySound(audio_path, true)
-            end
-        end
-    else
-        -- if not UVRaceTransitionPlay then
-        --     UVRaceTransitionPlay
-        -- end
-        local theme = GetConVar("unitvehicle_racetheme"):GetString()
-        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/transition/*", "GAME" )
-
-        if soundfiles and #soundfiles > 0 then
-            -- play intro, wait a bit, play race music
-            local audio_path = "uvracemusic/".. theme .."/transition/".. soundfiles[math.random(1, #soundfiles)]
-
-            UVPlaySound(audio_path, true)
-
-            timer.Simple(SoundDuration(audio_path), function()
-                local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
-
-                if soundfiles and #soundfiles > 0 then
-                    local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
-                    UVPlaySound(audio_path, true)
-                end
-            end)
-        else
-            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
-
-            if soundfiles and #soundfiles > 0 then
-                local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
-                UVPlaySound(audio_path, true)
-            end
+    local function PlayRaceMusic()
+        local track = UVGetRaceMusicPath(theme, my_vehicle)
+        if track then
+            UVPlaySound(track, true)
         end
     end
 
-    -- local theme = GetConVar("unitvehicle_racetheme"):GetString()
-    -- local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
-    -- UVPlaySound( "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)], true )
+    if UVRaceFirstLaunch then
+        UVRaceFirstLaunch = false
 
-	if timer.Exists("UVPursuitThemeReplay") then
-		timer.Remove("UVPursuitThemeReplay")
-	end
+        local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
+        if introTrack then
+            UVPlaySound(introTrack, true)
+            timer.Create("UVRaceMusicTransition", SoundDuration(introTrack), 1, function()
+                if UVHUDRace then
+                    PlayRaceMusic()
+                end
+            end)
+        else
+            PlayRaceMusic()
+        end
+    else
+        local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
+        if transitionTrack then
+            UVPlaySound(transitionTrack, true)
+            timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
+                PlayRaceMusic()
+            end)
+        else
+            PlayRaceMusic()
+        end
+    end
+
+    if timer.Exists("UVPursuitThemeReplay") then
+        timer.Remove("UVPursuitThemeReplay")
+    end
 
     UVPlayingRace = true
-	UVPlayingHeat = false
-	UVPlayingBusting = false
-	UVPlayingCooldown = false
-	UVPlayingBusted = false
-	UVPlayingEscaped = false
+    UVPlayingHeat = false
+    UVPlayingBusting = false
+    UVPlayingCooldown = false
+    UVPlayingBusted = false
+    UVPlayingEscaped = false
 end
 
 function UVDisplayTimeRace(time) -- include milliseconds in the string
@@ -1102,7 +1096,7 @@ else
                 break
             end
         end
-        //print(my_vehicle, my_array)
+
         if !my_vehicle then UVSoundRacingStop(); UVHUDRaceCurrentCheckpoint = nil; return end
         if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
             -- clean up
@@ -1111,10 +1105,9 @@ else
             UVHUDRace = false;
             return
         end
-        //print("???")
+
         if !UVHUDDisplayPursuit then
-            //print("hm")
-            UVSoundRacing()
+            UVSoundRacing( my_vehicle )
         elseif UVPlayingRace then
             UVSoundRacingStop()
         end
