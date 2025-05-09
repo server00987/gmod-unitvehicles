@@ -87,7 +87,7 @@ function UVSoundRacing(my_vehicle)
 
         local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
         if introTrack then
-            UVPlaySound(introTrack, false)
+            UVPlaySound(introTrack, true)
         else
             PlayRaceMusic(theme, my_vehicle)
             UVRacePlayTransition = true

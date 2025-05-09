@@ -76,6 +76,7 @@ function UVSoundHeat(heatlevel)
 end
 
 function UVSoundBusting()
+	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDRace then return end
 	if UVPlayingBusting or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
