@@ -1158,7 +1158,7 @@ else
         UVHUDRaceCurrentCheckpoint = checkpoint_count
 
         -- check for wrong way
-        if _UVCurrentCheckpoint then
+        if _UVCurrentCheckpoint and IsValid(_UVCurrentCheckpoint) then
             local vehicle_center = my_vehicle:WorldSpaceCenter()
             local vehicle_velocity = my_vehicle:GetVelocity() -- :Dot((_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2)
             local check_center_pos = (_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2
