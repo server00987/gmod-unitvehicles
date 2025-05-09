@@ -118,6 +118,15 @@ if SERVER then
 					UVRaceRemoveParticipant( vehicle, 'Finished' )
 				else
 					vehicle_array['Lap'] = vehicle_array['Lap'] +1
+
+					if vehicle_array['Lap'] == UVRaceLaps:GetInt() then
+						if IsValid(driver) and driver:IsPlayer() then
+							net.Start("uvrace_notification")
+							net.WriteString("FINAL LAP")
+							net.WriteFloat(3)
+							net.Send(driver)
+						end
+					end
 					--vehicle.currentlap = vehicle.currentlap + 1
 				end
 

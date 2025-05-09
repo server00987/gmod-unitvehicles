@@ -13,6 +13,106 @@ local LBColors = {
     ["Disqualified"] = Color(255,255,255,133)
 }
 
+function UVSoundRacingStop()
+    if UVPlayingRace then
+        if timer.Exists("UVRaceMusicTransition") then
+            timer.Remove("UVRaceMusicTransition")
+        end
+
+        UVPlayingRace = false
+
+        if UVSoundLoop then
+            UVSoundLoop:Stop()
+            UVLoadedSounds = nil
+            UVSoundLoop = nil
+        end
+    end
+end
+
+function UVSoundRacing()
+    if !UVHUDRace then return end
+	if UVPlayingRace or UVSoundDelayed then return end
+
+    if timer.Exists("UVRaceMusicTransition") then
+        timer.Remove("UVRaceMusicTransition")
+    end
+
+    if UVRaceFirstLaunch then
+        UVRaceFirstLaunch = false 
+
+        local theme = GetConVar("unitvehicle_racetheme"):GetString()
+        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/intro/*", "GAME" )
+
+        if soundfiles and #soundfiles > 0 then
+            -- play intro, wait a bit, play race music
+            local audio_path = "uvracemusic/".. theme .."/intro/".. soundfiles[math.random(1, #soundfiles)]
+
+            UVPlaySound(audio_path, true)
+
+            timer.Create("UVRaceMusicTransition", SoundDuration(audio_path), 1, function()
+                if !UVHUDRace then return end
+                local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
+
+                if soundfiles and #soundfiles > 0 then
+                    local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
+                    UVPlaySound(audio_path, true)
+                end
+            end)
+        else
+            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
+
+            if soundfiles and #soundfiles > 0 then
+                local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
+                UVPlaySound(audio_path, true)
+            end
+        end
+    else
+        -- if not UVRaceTransitionPlay then
+        --     UVRaceTransitionPlay
+        -- end
+        local theme = GetConVar("unitvehicle_racetheme"):GetString()
+        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/transition/*", "GAME" )
+
+        if soundfiles and #soundfiles > 0 then
+            -- play intro, wait a bit, play race music
+            local audio_path = "uvracemusic/".. theme .."/transition/".. soundfiles[math.random(1, #soundfiles)]
+
+            UVPlaySound(audio_path, true)
+
+            timer.Simple(SoundDuration(audio_path), function()
+                local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
+
+                if soundfiles and #soundfiles > 0 then
+                    local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
+                    UVPlaySound(audio_path, true)
+                end
+            end)
+        else
+            local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
+
+            if soundfiles and #soundfiles > 0 then
+                local audio_path = "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)]
+                UVPlaySound(audio_path, true)
+            end
+        end
+    end
+
+    -- local theme = GetConVar("unitvehicle_racetheme"):GetString()
+    -- local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/race/*", "GAME" )
+    -- UVPlaySound( "uvracemusic/".. theme .."/race/".. soundfiles[math.random(1, #soundfiles)], true )
+
+	if timer.Exists("UVPursuitThemeReplay") then
+		timer.Remove("UVPursuitThemeReplay")
+	end
+
+    UVPlayingRace = true
+	UVPlayingHeat = false
+	UVPlayingBusting = false
+	UVPlayingCooldown = false
+	UVPlayingBusted = false
+	UVPlayingEscaped = false
+end
+
 function UVDisplayTimeRace(time) -- include milliseconds in the string
 	local formattedtime = string.FormattedTime( time )
 
@@ -246,6 +346,7 @@ if SERVER then
     util.AddNetworkString( "uvrace_start" )
     util.AddNetworkString( "uvrace_end" )
     util.AddNetworkString( "uvrace_participants" )
+    util.AddNetworkString("uvrace_notification")
 
     util.AddNetworkString( "uvrace_disqualify" )
     
@@ -487,6 +588,10 @@ if SERVER then
             UVRaceRemoveParticipant(vehicle)
         end
 
+        if timer.Exists("uvrace_start") then
+            timer.Remove("uvrace_start")
+        end
+
         table.Empty(UVRaceCurrentParticipants)
 
         for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
@@ -667,10 +772,14 @@ else
         duration = duration or 5
         UVHUDNotificationString = message
         UVHUDNotification = true 
-        timer.Simple( 3, function()
+        timer.Simple( duration, function()
             UVHUDNotification = false
         end)
     end
+
+    net.Receive( "uvrace_notification", function()
+        UVNotifyDriver( net.ReadString(), net.ReadFloat() )
+    end)
 
     net.Receive( "uvrace_announcebestlaptime", function()
         local time = net.ReadFloat()
@@ -808,6 +917,11 @@ else
         UVHUDRace = false
         UVHUDRaceInfo = nil
         UVHUDRaceStart = nil
+
+        if UVPlayingRace then
+            --UVStopSound()
+            UVPlayingRace = false
+        end
         -- UVHUDRaceCurrentCheckpoint = 1
         -- UVHUDRaceCurrentLap = 1
         -- UVHUDRaceCurrentPos = 1
@@ -848,6 +962,15 @@ else
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 UVHUDRaceInfo['Participants'][participant].Finished = true 
 
+                if IsValid(participant) and participant:GetDriver() == LocalPlayer() then
+                    local theme = GetConVar("unitvehicle_racetheme"):GetString()
+                    local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/"..((place <= 3 and "win") or "loss").."/*", "GAME" )
+                    if soundfiles and #soundfiles > 0 then
+                        local audio_path = "uvracemusic/".. theme .."/"..((place <= 3 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
+                        surface.PlaySound(audio_path)
+                    end
+                end
+
                 local place_array = PlaceStrings[place] or PlaceStrings[4]
                 chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, " has finished ", place_array[1], string.format(place_array[2], place), Color(255,255,255), " with a time of ", Color(0,255,0), UVDisplayTimeRace(time))        
             end
@@ -861,6 +984,16 @@ else
         if UVHUDRaceInfo then
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 if reason == 'Busted' or reason == 'Disqualified' then
+
+                    if IsValid(participant) and participant:GetDriver() == LocalPlayer() then
+                        local theme = GetConVar("unitvehicle_racetheme"):GetString()
+                        local soundfiles = file.Find( "sound/uvracemusic/".. theme .."/loss/*", "GAME" )
+                        if soundfiles and #soundfiles > 0 then
+                            local audio_path = "uvracemusic/".. theme .."/loss/".. soundfiles[math.random(1, #soundfiles)]
+                            surface.PlaySound(audio_path)
+                        end
+                    end
+
                     UVHUDRaceInfo['Participants'][participant][reason] = true
                 end
             end
@@ -869,6 +1002,9 @@ else
 
     net.Receive( "uvrace_begin", function()
         local time = net.ReadFloat()
+
+        UVRaceFirstLaunch = true
+        UVPlayingRace = false
 
         if UVHUDRaceInfo and UVHUDRaceInfo['Info'] then
             UVHUDRaceInfo['Info'].Started = true
@@ -968,11 +1104,19 @@ else
         end
         //print(my_vehicle, my_array)
         if !my_vehicle then UVHUDRaceCurrentCheckpoint = nil; return end
-        if my_array.Finished then
+        if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
             -- clean up
+            UVSoundRacingStop()
             UVHUDRaceCurrentCheckpoint = nil;
             UVHUDRace = false;
             return
+        end
+        //print("???")
+        if !UVHUDDisplayPursuit then
+            //print("hm")
+            UVSoundRacing()
+        elseif UVPlayingRace then
+            UVSoundRacingStop()
         end
 
         UVHUDRace = true;

@@ -66,6 +66,7 @@ function UVSoundHeat(heatlevel)
 		end
 	end
 	
+	UVPlayingRace = false
 	--UVPlayingHeat = true
 	UVPlayingBusting = false
 	UVPlayingCooldown = false
@@ -83,6 +84,7 @@ function UVSoundBusting()
 	if soundtable != nil then
 		UVPlaySound("uvpursuitmusic/"..theme.."/busting/"..soundtable[math.random(1, #soundtable)], true)
 	end
+	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = true
 	UVPlayingCooldown = false
@@ -100,6 +102,7 @@ function UVSoundCooldown()
 	if soundtable != nil then
 		UVPlaySound("uvpursuitmusic/"..theme.."/cooldown/"..soundtable[math.random(1, #soundtable)], true)
 	end
+	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
 	UVPlayingCooldown = true
@@ -117,6 +120,7 @@ function UVSoundBusted()
 	if soundtable != nil then
 		UVPlaySound("uvpursuitmusic/"..theme.."/busted/"..soundtable[math.random(1, #soundtable)], false, true)
 	end
+	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
 	UVPlayingCooldown = false
@@ -138,6 +142,7 @@ function UVSoundEscaped()
 	if soundtable != nil then
 		UVPlaySound("uvpursuitmusic/"..theme.."/escaped/"..soundtable[math.random(1, #soundtable)], false)
 	end
+	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
 	UVPlayingCooldown = false
@@ -166,7 +171,7 @@ end
 function UVPlaySound( FileName, Loop, StopLoop )
 	if !PlayMusic:GetBool() then return end
 	if UVLoadedSounds then
-		if UVLoadedSounds == FileName then return end
+		if UVLoadedSounds == FileName then print('Ended') return end
 		--Entity(1):StopSound(UVLoadedSounds)
 		if Loop or StopLoop then
 			if UVSoundLoop then
@@ -206,6 +211,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 end
 
 function UVStopSound()
+	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
 	UVPlayingCooldown = false
@@ -2948,7 +2954,7 @@ else --HUD/Options
 				draw.DrawText( UVNotification, "UVFont",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
 		else
-			if UVSoundLoop then
+			if UVSoundLoop and !UVPlayingRace then
 				UVSoundLoop:Stop()
 				UVSoundLoop = nil
 			end
