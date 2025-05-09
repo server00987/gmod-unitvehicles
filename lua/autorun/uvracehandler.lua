@@ -110,32 +110,6 @@ function UVSoundRacing(my_vehicle)
         PlayRaceMusic(theme, my_vehicle)
     end
 
-    -- if UVRaceFirstLaunch then
-    --     UVRaceFirstLaunch = false
-
-    --     local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
-    --     if introTrack then
-    --         UVPlaySound(introTrack, false)
-    --         timer.Create("UVRaceMusicTransition", SoundDuration(introTrack), 1, function()
-    --             if UVHUDRace then
-    --                 PlayRaceMusic(theme, my_vehicle)
-    --             end
-    --         end)
-    --     else
-    --         PlayRaceMusic()
-    --     end
-    -- else
-    --     local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
-    --     if transitionTrack then
-    --         UVPlaySound(transitionTrack, false)
-    --         timer.Create("UVRaceMusicTransition", SoundDuration(transitionTrack), 1, function()
-    --             PlayRaceMusic(theme, my_vehicle)
-    --         end)
-    --     else
-    --         PlayRaceMusic()
-    --     end
-    -- end
-
     UVPlayingRace = true
     UVPlayingHeat = false
     UVPlayingBusting = false
@@ -377,7 +351,8 @@ if SERVER then
     util.AddNetworkString( "uvrace_start" )
     util.AddNetworkString( "uvrace_end" )
     util.AddNetworkString( "uvrace_participants" )
-    util.AddNetworkString("uvrace_notification")
+    util.AddNetworkString( "uvrace_notification" )
+    util.AddNetworkString( "uvrace_decline" )
 
     util.AddNetworkString( "uvrace_disqualify" )
     
@@ -810,6 +785,10 @@ else
 
     net.Receive( "uvrace_notification", function()
         UVNotifyDriver( net.ReadString(), net.ReadFloat() )
+    end)
+
+    net.Receive( "uvrace_decline", function() 
+        chat.AddText(Color(255, 126, 126), net.ReadString())
     end)
 
     net.Receive( "uvrace_announcebestlaptime", function()

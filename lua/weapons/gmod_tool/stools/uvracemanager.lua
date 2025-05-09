@@ -73,10 +73,14 @@ if SERVER then
 	local function StartRace(ply, cmd, args)
 		if !ply:IsSuperAdmin() then return end
 		-- if !IsValid( UVMoveToGridSlot( ply ) ) then return end
-		for _, v in pairs(args) do
-			print(v)
-		end
 		if UVRaceInEffect then return end
+
+		if uvtargeting then
+			net.Start("uvrace_decline")
+			net.WriteString("You cannot start a race now, lose the cops first!")
+			net.Send(ply)
+			return
+		end
 
 		UVRacePrep = true
 		UVRaceInEffect = true
@@ -120,6 +124,13 @@ if SERVER then
 	local function StartRaceInvite(ply, cmd, args)
 		if !ply:IsSuperAdmin() then return end
 		if UVRaceInEffect then return end
+
+		if uvtargeting then
+			net.Start("uvrace_decline")
+			net.WriteString("You cannot invite others to race while being pursued!")
+			net.Send(ply)
+			return
+		end
 
 		local invited_racers = {}
 
