@@ -1102,7 +1102,7 @@ else
                 break
             end
         end
-        //print(my_vehicle, my_array)
+
         if !my_vehicle then UVSoundRacingStop(); UVHUDRaceCurrentCheckpoint = nil; return end
         if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
             -- clean up
@@ -1111,9 +1111,8 @@ else
             UVHUDRace = false;
             return
         end
-        //print("???")
+
         if !UVHUDDisplayPursuit then
-            //print("hm")
             UVSoundRacing()
         elseif UVPlayingRace then
             UVSoundRacingStop()
