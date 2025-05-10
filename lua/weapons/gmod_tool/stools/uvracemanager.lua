@@ -310,8 +310,8 @@ elseif CLIENT then
 	language.Add("Undone_UVRaceEnt", "Undone UV Race entity")
 
 	//CreateClientConVar("unitvehicle_racelaps", "3")
-	CreateClientConVar("unitvehicle_racetheme", "1")
-	CreateClientConVar("unitvehicle_sfxtheme", "1")
+	CreateClientConVar("unitvehicle_racetheme", "carbon - bending light")
+	CreateClientConVar("unitvehicle_sfxtheme", "unbound")
 
 	local ang0 = Angle(0, 0, 0)
 	local vec0 = Vector(0, 0, 0)
