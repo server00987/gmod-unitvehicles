@@ -1573,6 +1573,8 @@ if SERVER then
 					TimeTillNextHeat = UVUTimeTillNextHeat5:GetInt()
 				end
 				
+				local lang = language.GetPhrase
+				
 				timer.Create("UVTimeTillNextHeat", TimeTillNextHeat, 0, function()
 					if UVUTimeTillNextHeatEnabled:GetInt() != 1 then
 						timer.Remove("UVTimeTillNextHeat")
@@ -1581,7 +1583,7 @@ if SERVER then
 					if uvheatlevel < 2  and !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then 
 						uvheatlevel = 2
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat2:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 2!")
+						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1599,7 +1601,7 @@ if SERVER then
 					elseif uvheatlevel < 3 and !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
 						uvheatlevel = 3
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat3:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 3!")
+						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 3 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1617,7 +1619,7 @@ if SERVER then
 					elseif uvheatlevel < 4 and !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
 						uvheatlevel = 4
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat4:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 4!")
+						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 4 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1635,7 +1637,7 @@ if SERVER then
 					elseif uvheatlevel < 5 and !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
 						uvheatlevel = 5
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat5:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 5!")
+						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 5 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1653,7 +1655,7 @@ if SERVER then
 					elseif uvheatlevel < 6 and !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
 						uvheatlevel = 6
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat5:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 6!")
+						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 6 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -2400,17 +2402,17 @@ else --HUD/Options
 	
 	
 	net.Receive("UVHUDBusting", function()
-		
+		local lang = language.GetPhrase
 		UVBustingProgress = net.ReadString()
 		UVHUDDisplayBusting = true
 		UVNotificationColor = Color( 255, 0, 0)
-		UVNotification = "BUSTING"
+		UVNotification = lang("uv.chase.busting")
 		UVBustingTimeLeft = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
 		if UVHUDDisplayPursuit then
 			if UVBustingTimeLeft >= 3 then
-				UVNotification = "BUSTING"
+				UVNotification = lang("uv.chase.busting")
 			elseif UVBustingTimeLeft >= 2 then
-				UVNotification = "! BUSTING !"
+				UVNotification = "! " .. lang("uv.chase.busting") .. " !"
 				if math.floor(RealTime()*4)==math.Round(RealTime()*4) then
 					UVNotificationColor = Color( 255, 0, 0)
 				else
@@ -2418,7 +2420,7 @@ else --HUD/Options
 				end
 				UVSoundBusting()
 			elseif UVBustingTimeLeft >= 1 then
-				UVNotification = "!! BUSTING !!"
+				UVNotification = "!! " .. lang("uv.chase.busting") .. " !!"
 				if math.floor(RealTime()*6)==math.Round(RealTime()*6) then
 					UVNotificationColor = Color( 255, 0, 0)
 				else
@@ -2426,7 +2428,7 @@ else --HUD/Options
 				end
 				UVSoundBusting()
 			elseif UVBustingTimeLeft >= 0 then
-				UVNotification = "!!! BUSTING !!!"
+				UVNotification = "!!! " .. lang("uv.chase.busting") .. " !!!"
 				if math.floor(RealTime()*8)==math.Round(RealTime()*8) then
 					UVNotificationColor = Color( 255, 0, 0)
 				else
@@ -2435,7 +2437,7 @@ else --HUD/Options
 				UVSoundBusting()
 			else
 				UVNotificationColor = Color( 255, 0, 0)
-				UVNotification = "/// BUSTED ///"
+				UVNotification = "/// " .. lang("uv.chase.busted") .. " ///"
 			end
 		end
 		if !UVHUDDisplayNotification then
@@ -2456,7 +2458,7 @@ else --HUD/Options
 		
 		if !UVHUDDisplayNotification and !uvenemybusted and UVBustingTimeLeft < 1 and UVBustingTimeLeft >= 0 then
 			UVNotificationColor = Color( 0, 255, 0)
-			UVNotification = "BUST EVADED BY "..UVBustingTimeLeft.." s!"
+			UVNotification = string.format(language.GetPhrase("uv.chase.evadedtime"), UVBustingTimeLeft)
 			UVHUDDisplayNotification = true
 			timer.Simple(2, function()
 				if !UVHUDDisplayBusting then
@@ -2470,12 +2472,12 @@ else --HUD/Options
 	net.Receive("UVHUDEnemyBusted", function()
 		
 		UVNotificationColor = Color( 255, 0, 0)
+		local bustedtext = language.GetPhrase("uv.chase.busted")
 		if !UVHUDDisplayNotification then
-			if !UVHUDRaceInProgress then
-				UVNotification = "/// BUSTED ///"
-			else
-				UVNotification = "/// RACE SHUTDOWN ///"
+			if UVHUDRaceInProgress then 
+				bustedtext = language.GetPhrase("uv.race.shutdown")
 			end
+			UVNotification = "/// " .. bustedtext .. " ///"
 			UVHUDDisplayNotification = true
 			timer.Simple(5.1, function()
 				UVHUDDisplayNotification = nil
@@ -2514,7 +2516,7 @@ else --HUD/Options
 		else
 			UVNotificationColor = Color( 255, 255, 255)
 		end
-		UVNotification = "--- HIDING ---"
+		UVNotification = "--- " .. language.GetPhrase("uv.chase.hiding") .. " ---"
 		UVHUDDisplayNotification = true
 		
 	end)
@@ -2754,6 +2756,7 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
+		local lang = language.GetPhrase
 		
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
@@ -2790,7 +2793,7 @@ else --HUD/Options
 			surface.SetFont( "UVFont2" )
 			surface.SetTextColor(255,255,255)
 			surface.SetTextPos( w/1.35, h/10 ) 
-			surface.DrawText( "BOUNTY >" )
+			surface.DrawText( lang("uv.hud.bounty") .. " >" )
 			draw.DrawText( UVBounty, "UVFont2",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			draw.DrawText( "☠ "..UVWrecks, "UVFont3",w/3+w/3+12,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			draw.DrawText( UVTags.." ☄", "UVFont3",w/3,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
@@ -2910,7 +2913,7 @@ else --HUD/Options
 					local T = math.Clamp((healthratio)*(w/3-38),0,w/3-38)
 					surface.DrawRect(w/3+25,h/20,T,8)
 				end
-				draw.DrawText( "⛊ COMMANDER ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
+				draw.DrawText( "⛊ " .. lang("uv.unit.commander") .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
 			end
 			if !UVHUDDisplayNotification then
 				if (UnitsChasing > 0 or NeverEvade:GetBool()) and !UVHUDDisplayCooldown then
@@ -2919,15 +2922,15 @@ else --HUD/Options
 					if !UVHUDDisplayBackupTimer then
 						if !UVHUDCopMode then
 							if UnitsChasing != 1 then
-								draw.DrawText( "CHASED BY "..UnitsChasing.." UNITS", "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+								draw.DrawText( string.format( lang"uv.chase.units", UnitsChasing ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 							else
-								draw.DrawText( "CHASED BY "..UnitsChasing.." UNIT", "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+								draw.DrawText( string.format( lang"uv.chase.unit", UnitsChasing ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 							end
 						else
-							draw.DrawText( "SUSPECTS LEFT: "..UVHUDWantedSuspectsNumber, "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+							draw.DrawText( string.format( lang"uv.chase.suspects", UVHUDWantedSuspectsNumber ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 						end
 					else
-						draw.DrawText( "BACKUP: "..UVBackupTimer, "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						draw.DrawText( string.format( lang"uv.chase.backupin", UVBackupTimer ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					end
 					UVSoundHeat(UVHeatLevel)
 				elseif !UVHUDDisplayCooldown then
@@ -2936,7 +2939,7 @@ else --HUD/Options
 						UVEvadingProgress = EvadingProgress
 					end
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					draw.DrawText( "EVADING", "UVFont",w/2,h/1.05, Color( 0, 255, 0), TEXT_ALIGN_CENTER )
+					draw.DrawText( lang("uv.chase.evading"), "UVFont",w/2,h/1.05, Color( 0, 255, 0), TEXT_ALIGN_CENTER )
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
 					surface.SetDrawColor(Color( 0, 255, 0))
@@ -2951,7 +2954,7 @@ else --HUD/Options
 				else
 					EvadingProgress = 0
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					draw.DrawText( "COOLDOWN", "UVFont",w/2,h/1.05, Color(0,0,255), TEXT_ALIGN_CENTER )
+					draw.DrawText( lang("uv.chase.cooldown"), "UVFont",w/2,h/1.05, Color(0,0,255), TEXT_ALIGN_CENTER )
 				end
 			else
 				EvadingProgress = 0
@@ -3137,7 +3140,7 @@ else --HUD/Options
 					end
 				end
 			else
-				draw.DrawText( "JAMMED", "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+				draw.DrawText( lang("uv.pt.jammed"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 			end
 		end
 		
@@ -3240,11 +3243,12 @@ else --HUD/Options
 	function UVRenderCommander(ent)
 		local localPlayer = LocalPlayer()
 		local box_color = Color(0, 161, 255)
+		local lang = language.GetPhrase
 		
 		if IsValid(ent) then
 			if !UVHUDDisplayPursuit then return end
 			
-			local callsign = "COMMANDER\n⛊"
+			local callsign = lang("uv.unit.commander") .. "\n⛊"
 			local driver = ent:GetDriver()
 			if driver:IsPlayer() then
 				callsign = driver:GetName()
@@ -3387,23 +3391,32 @@ else --HUD/Options
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		
-		OK:SetText("OK")
+		OK:SetText( language.GetPhrase("addons.confirm") )
 		OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
 		ResultPanel.Paint = function(self, w, h)
+			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("/// BUSTED ///", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("You have been busted by "..unit.."!", "UVFont5", 500, 60, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("TIME: "..time, "UVFont6", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("BOUNTY: "..bounty, "UVFont6", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DEPLOYED: "..deploys, "UVFont6", 500, 240, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DAMAGED: "..tags, "UVFont6", 500, 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS IMMOBILIZED: "..wrecks, "UVFont6", 500, 360, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("ROADBLOCKS DODGED: "..roadblocksdodged, "UVFont6", 500, 420, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("SPIKE STRIPS DODGED: "..spikestripsdodged, "UVFont6", 500, 480, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(string.format( lang("uv.chase.over.bustedby"), unit ), "UVFont5", 500, 60, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.bounty"), "UVFont5", 25, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.time"), "UVFont5", 25, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.deployed"), "UVFont5", 25, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.damaged"), "UVFont5", 25, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.destroyed"), "UVFont5", 25, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.blocks"), "UVFont5", 25, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.spikes"), "UVFont5", 25, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			
+			draw.SimpleText( bounty, "UVFont5", 975, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", 975, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", 975, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", 975, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", 975, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", 975, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", 975, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
-				
+
 		timer.Simple(5, function()
 			UVHUDDisplayBusting = false
 			UVHUDDisplayNotification = false
@@ -3443,21 +3456,30 @@ else --HUD/Options
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		
-		OK:SetText("OK")
+		OK:SetText( language.GetPhrase("addons.confirm") )
 		OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
 		ResultPanel.Paint = function(self, w, h)
+			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("--- ESCAPED ---", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("You have escaped from the Unit Vehicles!", "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("TIME: "..time, "UVFont6", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("BOUNTY: "..bounty, "UVFont6", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DEPLOYED: "..deploys, "UVFont6", 500, 240, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DAMAGED: "..tags, "UVFont6", 500, 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS IMMOBILIZED: "..wrecks, "UVFont6", 500, 360, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("ROADBLOCKS DODGED: "..roadblocksdodged, "UVFont6", 500, 420, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("SPIKE STRIPS DODGED: "..spikestripsdodged, "UVFont6", 500, 480, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("--- " .. lang("uv.chase.over.escaped") .. " ---", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.escapedfrom"), "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.bounty"), "UVFont5", 25, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.time"), "UVFont5", 25, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.deployed"), "UVFont5", 25, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.damaged"), "UVFont5", 25, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.destroyed"), "UVFont5", 25, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.blocks"), "UVFont5", 25, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.spikes"), "UVFont5", 25, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			
+			draw.SimpleText( bounty, "UVFont5", 975, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", 975, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", 975, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", 975, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", 975, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", 975, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", 975, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -3493,21 +3515,30 @@ else --HUD/Options
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		
-		OK:SetText("OK")
+		OK:SetText( language.GetPhrase("addons.confirm") )
 		OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
 		ResultPanel.Paint = function(self, w, h)
+			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("--- ESCAPED ---", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText(UVHUDWantedSuspectsNumber.." suspect(s) has escaped!", "UVFont5", 500, 60, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("TIME: "..time, "UVFont6", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("BOUNTY: "..bounty, "UVFont6", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DEPLOYED: "..deploys, "UVFont6", 500, 240, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DAMAGED: "..tags, "UVFont6", 500, 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS IMMOBILIZED: "..wrecks, "UVFont6", 500, 360, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("ROADBLOCKS DODGED: "..roadblocksdodged, "UVFont6", 500, 420, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("SPIKE STRIPS DODGED: "..spikestripsdodged, "UVFont6", 500, 480, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("--- " .. lang("uv.chase.over.escaped") .. " ---", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( string.format( lang("uv.chase.over.suspects.escaped.num"), UVHUDWantedSuspectsNumber), "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.bounty"), "UVFont5", 25, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.time"), "UVFont5", 25, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.deployed"), "UVFont5", 25, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.damaged"), "UVFont5", 25, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.destroyed"), "UVFont5", 25, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.blocks"), "UVFont5", 25, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.spikes"), "UVFont5", 25, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			
+			draw.SimpleText( bounty, "UVFont5", 975, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", 975, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", 975, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", 975, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", 975, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", 975, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", 975, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -3543,21 +3574,30 @@ else --HUD/Options
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		
-		OK:SetText("OK")
+		OK:SetText( language.GetPhrase("addons.confirm") )
 		OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
 		ResultPanel.Paint = function(self, w, h)
+			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("/// BUSTED ///", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("All suspects have been busted!", "UVFont5", 500, 60, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("TIME: "..time, "UVFont6", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("BOUNTY: "..bounty, "UVFont6", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DEPLOYED: "..deploys, "UVFont6", 500, 240, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS DAMAGED: "..tags, "UVFont6", 500, 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("UNITS IMMOBILIZED: "..wrecks, "UVFont6", 500, 360, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("ROADBLOCKS DODGED: "..roadblocksdodged, "UVFont6", 500, 420, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("SPIKE STRIPS DODGED: "..spikestripsdodged, "UVFont6", 500, 480, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(string.format( lang("uv.chase.over.suspects.busted"), unit ), "UVFont5", 500, 60, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.bounty"), "UVFont5", 25, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.time"), "UVFont5", 25, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.deployed"), "UVFont5", 25, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.damaged"), "UVFont5", 25, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.units.destroyed"), "UVFont5", 25, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.blocks"), "UVFont5", 25, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.dodged.spikes"), "UVFont5", 25, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			
+			draw.SimpleText( bounty, "UVFont5", 975, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", 975, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", 975, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", 975, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", 975, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", 975, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", 975, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -3616,8 +3656,14 @@ else --HUD/Options
 		
 		local racer = array['Racer']
 		local cop = array['Cop']
+		local col = {
+			w = Color(255,255,255),
+			r = Color(255,54,54),
+			b = Color(53,134,255),
+			uv = Color(0,81,161),
+		}
 		
-		chat.AddText(Color(0, 81, 161), "[Unit Vehicles]: ", Color(255, 54, 54), racer, Color(255, 255, 255), " has been BUSTED by ", Color(53, 134, 255), cop, Color(255, 255, 255), '!')
+		chat.AddText(Color(0, 81, 161), "[Unit Vehicles] ", Color(255, 54, 54), racer, Color(255, 255, 255), language.GetPhrase("uv.hud.racer.arrested"), Color(53, 134, 255), cop, Color(255, 255, 255), '!')
 	end)
 	
 	net.Receive("UVHUDWreckedDebrief", function()
