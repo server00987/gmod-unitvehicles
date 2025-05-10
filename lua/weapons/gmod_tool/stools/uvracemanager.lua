@@ -82,7 +82,7 @@ if SERVER then
 			return
 		end
 
-		RunConsoleCommand("uv_stoppursuit")
+		//RunConsoleCommand("uv_stoppursuit")
 		RunConsoleCommand("uv_despawnvehicles")
 
 		UVRacePrep = true

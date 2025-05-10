@@ -182,14 +182,22 @@ function UVFormLeaderboard(racers)
         local function getStatusPriority(data)
             if data.Disqualified or data.Busted then return 3 end
             if data.Finished then return 1 end
-            return 2 -- Actively racing
+            return 2
         end
 
         local aPriority = getStatusPriority(aData)
         local bPriority = getStatusPriority(bData)
 
         if aPriority ~= bPriority then
-            return aPriority < bPriority -- Lower number = higher priority
+            return aPriority < bPriority
+        end
+
+        if aData.Finished and bData.Finished then
+            local aLTime = aData.LastLapTime or math.huge
+            local bLTime = bData.LastLapTime or math.huge
+            if aLTime ~= bLTime then
+                return aLTime < bLTime
+            end
         end
 
         if aData.Lap ~= bData.Lap then
@@ -203,7 +211,14 @@ function UVFormLeaderboard(racers)
 
         local aTime = aData.Checkpoints[aCP] or 0
         local bTime = bData.Checkpoints[bCP] or 0
-        return aTime < bTime
+
+        if aTime ~= bTime then
+            return aTime < bTime
+        end
+
+        -- local aLTime = (aData.LastLapTime or math.huge) - UVHUDRaceInfo.Info.Time
+        -- local bLTime = (bData.LastLapTime or math.huge) - UVHUDRaceInfo.Info.Time
+        -- return aLTime < bLTime
     end)
 
     for i, v in ipairs(sorted_table) do
@@ -300,54 +315,6 @@ function UVFormLeaderboard(racers)
     //UVSortedRacers = sorted_table
 
     return sorted_table, leaderboardLines
-end
-
-function UVOrderPositions(racers)
-    local sortedRacers = {}
-
-    for ent, data in pairs(racers) do
-        local checkpoints = data.Checkpoints or {}
-        local lastCheckpointTime = 0
-
-        for _, time in pairs(checkpoints) do
-            if time > lastCheckpointTime then
-                lastCheckpointTime = time
-            end
-        end
-
-        table.insert(sortedRacers, {
-            Entity = ent,
-            Lap = data.Lap or 0,
-            CheckpointCount = table.Count(checkpoints),
-            LastCheckpointTime = lastCheckpointTime,
-            Finished = data.Finished,
-            Disqualified = data.Disqualified
-        })
-    end
-
-    table.sort(sortedRacers, function(a, b)
-        if a.Disqualified and not b.Disqualified then return false end
-        if b.Disqualified and not a.Disqualified then return true end
-
-        if a.Finished and not b.Finished then return true end
-        if b.Finished and not a.Finished then return false end
-
-        if a.Lap ~= b.Lap then
-            return a.Lap > b.Lap
-        end
-
-        if a.CheckpointCount ~= b.CheckpointCount then
-            return a.CheckpointCount > b.CheckpointCount
-        end
-
-        return a.LastCheckpointTime < b.LastCheckpointTime
-    end)
-
-    for pos, data in ipairs(sortedRacers) do
-        if IsValid(data.Entity) then
-            racers[data.Entity].Position = pos
-        end
-    end
 end
 
 if SERVER then
@@ -984,6 +951,7 @@ else
         if UVHUDRaceInfo then
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 UVHUDRaceInfo['Participants'][participant].Lap = UVHUDRaceInfo['Participants'][participant].Lap +1
+                UVHUDRaceInfo['Participants'][participant].LastLapTime = time
                 table.Empty(UVHUDRaceInfo['Participants'][participant]['Checkpoints'])
             end
         end

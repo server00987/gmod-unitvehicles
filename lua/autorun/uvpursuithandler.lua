@@ -1268,8 +1268,8 @@ if SERVER then
 		--Player-controlled Racers
 		if next(uvrvwithpursuittech) != nil then
 			for k, car in pairs(uvrvwithpursuittech) do
-				if !IsValid(car) or !UVGetDriver(car):IsPlayer() then continue end
 				local driver = UVGetDriver(car)
+				if !driver or !driver:IsPlayer() then continue end
 				if car.PursuitTech then
 					net.Start( 'UVHUDPursuitTech' )
 					net.WriteTable(car.PursuitTech)
