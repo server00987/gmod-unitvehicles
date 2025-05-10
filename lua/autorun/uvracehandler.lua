@@ -215,10 +215,10 @@ function UVFormLeaderboard(racers)
             
             if v.array.Finished then
                 str = '  [FINISHED]'
-            elseif v.array.Disqualified then
-                str = '  [DNF]'
             elseif v.array.Busted then
                 str = '  [BUSTED]'
+            elseif v.array.Disqualified then
+                str = '  [DNF]'
             end
 
             line = line .. str
