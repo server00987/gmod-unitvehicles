@@ -85,9 +85,6 @@ if SERVER then
 		//RunConsoleCommand("uv_stoppursuit")
 		RunConsoleCommand("uv_despawnvehicles")
 
-		UVRacePrep = true
-		UVRaceInEffect = true
-
 		for _, v in ents.Iterator() do
 			if table.HasValue(UVRaceCurrentParticipants, v) then continue end
 			if (!v.IsGlideVehicle and !v.IsSimfphyscar and v:GetClass() ~= 'prop_vehicle_jeep') or v.wrecked or v.UnitVehicle then continue end
@@ -106,10 +103,15 @@ if SERVER then
 			local driver = v:GetDriver()
 
 			local ent = UVMoveToGridSlot(v, !(driver and driver:IsPlayer()))
-			if ent then ready_drivers = ready_drivers + 1 end
+
+			if (ent) then ready_drivers = ready_drivers + 1 
+			else UVRaceRemoveParticipant( v ) end
 		end
 
 		if ready_drivers <= 0 then return end
+
+		UVRacePrep = true
+		UVRaceInEffect = true
 
 		UVRaceMakeCheckpoints()
 		
@@ -119,8 +121,6 @@ if SERVER then
 		end)
 
 		--UVRacePrep = false
-
-		AddHooks()
 	end
 	concommand.Add("uvrace_startrace", StartRace)
 

@@ -228,6 +228,10 @@ if SERVER then
 						target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
 					end
 				end
+
+				if velocity:LengthSqr() < 150000 then
+					target_pos = target.target_point
+				end
 				
 				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
 				-- Further tests may be needed to determine which one is better

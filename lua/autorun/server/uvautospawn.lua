@@ -1619,22 +1619,16 @@ end
 
 function UVMoveToGridSlot( vehicle, aienabled )
 	local entrantvehicle = vehicle
-
-	-- if !IsValid(entrantvehicle) then 
-	-- 	PrintMessage( HUD_PRINTTALK, "Enter a vehicle to take part in the race!")
-	-- 	return 
-	-- end
-
-	-- local Memory = GetVehicleData( entrantvehicle )
-	-- if !Memory then return end
 	local PT = (vehicle.PursuitTech and table.Copy(vehicle.PursuitTech))
 
 	local Memory = GetVehicleData( vehicle )
 
 	local driver = vehicle:GetDriver()
-	local ply = (IsValid(driver) and driver) or Entity(1)
+	local ply = (IsValid(driver) and driver)
 
-	local racer_name = vehicle.racer or "Racer "..vehicle:EntIndex()
+	local racer_name = (ply and ply:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())
+
+	ply = ply or Entity(1)
 
 	local spawns = ents.FindByClass("uvrace_spawn")
 	local spawn
@@ -1650,6 +1644,11 @@ function UVMoveToGridSlot( vehicle, aienabled )
 				spawn = v
 			end
 		end
+	end
+
+	if !spawn then
+		PrintMessage( HUD_PRINTTALK, "No positions left for "..racer_name)
+		return nil
 	end
 
 	local pos = spawn:GetPos()
