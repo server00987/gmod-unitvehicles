@@ -211,6 +211,8 @@ function UVFormLeaderboard(racers)
 
         if !IsValid(vehicle) then
             local line = string.format("%d. %s", i, v.array.Name)
+            local str = ''
+            
             if v.array.Finished then
                 str = '  [FINISHED]'
             elseif v.array.Disqualified then
@@ -218,7 +220,7 @@ function UVFormLeaderboard(racers)
             elseif v.array.Busted then
                 str = '  [BUSTED]'
             end
-            
+
             line = line .. str
 
             local selected_color = LBColors.Disqualified
