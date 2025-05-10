@@ -211,7 +211,15 @@ function UVFormLeaderboard(racers)
 
         if !IsValid(vehicle) then
             local line = string.format("%d. %s", i, v.array.Name)
-            line = line .. '  [DNF]'
+            if v.array.Finished then
+                str = '  [FINISHED]'
+            elseif v.array.Disqualified then
+                str = '  [DNF]'
+            elseif v.array.Busted then
+                str = '  [BUSTED]'
+            end
+            
+            line = line .. str
 
             local selected_color = LBColors.Disqualified
 
@@ -639,7 +647,7 @@ if SERVER then
     end
 
     hook.Add("player_activate", "UVRaceArrayInit", function( data )
-        local id = data.userid				// Same as Player:UserID() for the speaker
+        local id = data.userid
 		local ply = Player(id)
 
         if UVRaceInProgress then
@@ -658,57 +666,21 @@ if SERVER then
 
     hook.Add( "Think", "UVRacing", function( ply )
 
-        -- if !UVRaceInProgress then 
-        --     UVRaceTime = 0
-        -- else 
-        --     UVRaceTime = CurTime() - UVRaceStartTime
-        -- end
-
         if !UVRaceInEffect then return end
         if UVRacePrep then return end
 
         if next( UVRaceCurrentParticipants ) != nil then
             local pos = 0
             local player_table = {}
-            --local network_table = {}
-
-            //UVOrderPositions(UVRaceTable['Participants'])
-            //UVRaceTable['Info']['Time'] = UVRaceTime
 
             for _, vehicle in pairs( UVRaceCurrentParticipants ) do
-               --pos = pos + 1
                 if IsValid( vehicle ) then
-                    -- if !vehicle.currentcheckpoint then
-                    --     vehicle.currentcheckpoint = 1
-                    -- end
-                    -- if !vehicle.currentlap then
-                    --     vehicle.currentlap = 1
-                    -- end
-                    -- if !vehicle.lastlaptime then
-                    --     vehicle.lastlaptime = CurTime()
-                    -- end
-                    -- if !vehicle.bestlaptime then
-                    --     vehicle.bestlaptime = CurTime()
-                    -- end
-
                     local driver = UVGetDriver( vehicle )
                     if IsValid( driver ) then
                         table.insert(player_table, driver)
-                        -- net.Start( "uvrace_info" )
-                        --     net.WriteInt( vehicle.currentcheckpoint, 11 )
-                        --     net.WriteInt( vehicle.currentlap, 11 )
-                        --     net.WriteInt( pos, 11 )
-                        --     net.WriteInt( UVRaceLaps:GetInt(), 11 )
-                        --     net.WriteFloat( UVRaceTime )
-                        --     net.WriteInt( #UVRaceCurrentParticipants, 11 )
-                        -- net.Send( driver )
                     end
 
-                    -- if vehicle.wrecked or vehicle.uvbusted then
-                    --     UVRaceRemoveParticipant( vehicle )
-                    -- end
                     if vehicle.uvbusted then
-                        --UVRaceTable['Participants'][vehicle].Busted = true
                         UVRaceRemoveParticipant( vehicle, 'Busted' )
                         continue
                     end
@@ -721,13 +693,6 @@ if SERVER then
 
                 end
             end
-
-            -- for _, player in pairs ( player_table ) do
-            --     net.Start( "uvrace_info" )
-            --     net.WriteTable( UVRaceTable )
-            --     net.Send( player )
-            -- end
-
 
         elseif !UVRacePrep then
             UVRaceEnd()
@@ -824,13 +789,6 @@ else
     end)
 
     net.Receive( "uvrace_info", function()
-        -- UVHUDRaceCurrentCheckpoint = net.ReadInt( 11 )
-        -- UVHUDRaceCurrentLap = net.ReadInt( 11 )
-        -- UVHUDRaceCurrentPos = net.ReadInt( 11 )
-        -- UVHUDRaceLaps = net.ReadInt( 11 )
-        -- UVHUDRaceTime = UVDisplayTimeRace( net.ReadFloat() )
-        -- UVHUDRaceCurrentParticipants = net.ReadInt( 11 )
-
         UVHUDRaceInfo = net.ReadTable()
 
         UVHUDRaceTime = UVDisplayTimeRace( UVHUDRaceInfo['Info']['Time'] )
@@ -929,16 +887,8 @@ else
         UVHUDRaceStart = nil
 
         if UVPlayingRace then
-            --UVStopSound()
             UVPlayingRace = false
         end
-        -- UVHUDRaceCurrentCheckpoint = 1
-        -- UVHUDRaceCurrentLap = 1
-        -- UVHUDRaceCurrentPos = 1
-        -- UVHUDRaceLaps = 1
-        -- UVHUDLastLapTime = nil
-        -- UVHUDBestLapTime = nil
-        -- UVHUDRaceTime = UVDisplayTimeRace(0)
     end)
 
     net.Receive( "uvrace_checkpointcomplete", function()
@@ -1219,15 +1169,6 @@ else
                 TEXT_ALIGN_LEFT 
             )
         end
-
-        -- draw.DrawText( 
-        --     string_array,
-        --     "UVFont4", 
-        --     0, 
-        --     h/3, 
-        --     Color( 255, 255, 255), 
-        --     TEXT_ALIGN_LEFT 
-        -- )
 
     end)
 
