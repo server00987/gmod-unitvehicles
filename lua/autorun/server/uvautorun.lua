@@ -215,22 +215,22 @@ end)
 
 function UVApplyHeatLevel()
 	if MinHeatLevel:GetInt() <= 1 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 1!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 1!")
 		uvheatlevel = 1
 	elseif !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 2!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 2!")
 		uvheatlevel = 2
 	elseif !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 3!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 3!")
 		uvheatlevel = 3
 	elseif !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 4!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 4!")
 		uvheatlevel = 4
 	elseif !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 5!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 5!")
 		uvheatlevel = 5
 	elseif !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
-		PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 6!")
+		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 6!")
 		uvheatlevel = 6
 	end
 end
@@ -244,7 +244,7 @@ function UVUpdateHeatLevel()
 		elseif bounty < UVUHeatMinimumBounty3:GetInt() and !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then
 			if uvheatlevel < 2 then 
 				uvheatlevel = 2
-				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 2!")
+				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 2!")
 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
@@ -262,7 +262,7 @@ function UVUpdateHeatLevel()
 		elseif bounty < UVUHeatMinimumBounty4:GetInt() and !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
 			if uvheatlevel < 3 then 
 				uvheatlevel = 3
-				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 3!")
+				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 3!")
 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
@@ -280,7 +280,7 @@ function UVUpdateHeatLevel()
 		elseif bounty < UVUHeatMinimumBounty5:GetInt() and !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
 			if uvheatlevel < 4 then 
 				uvheatlevel = 4
-				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 4!")
+				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 4!")
 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
@@ -298,7 +298,7 @@ function UVUpdateHeatLevel()
 		elseif bounty < UVUHeatMinimumBounty6:GetInt() and !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
 			if uvheatlevel < 5 then 
 				uvheatlevel = 5
-				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 5!")
+				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 5!")
 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	

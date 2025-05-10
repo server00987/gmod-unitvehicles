@@ -214,16 +214,14 @@ else
         surface.PlaySound("ui/pursuit/wanted/"..soundfiles[math.random(1, #soundfiles)])
 
         if Glide then
-            local text = [[<color=255,0,0>You are now wanted by the Unit Vehicles!</color>]]
-
             Glide.Notify( {
-                text = text,
+                text = "#uv.hud.popup.wanted",
                 icon = "hud/MILESTONE_PURSUIT.png",
                 sound = "glide/ui/phone_notify.wav",
-                lifetime = 10
+                lifetime = 5
             } )
         else
-            chat.AddText(Color(255,0,0), "You are now wanted by the Unit Vehicles!")
+            chat.AddText(Color(255,0,0), language.GetPhrase("uv.hud.popup.wanted"))
         end
 
     end)

@@ -122,7 +122,7 @@ if SERVER then
 					if vehicle_array['Lap'] == UVRaceLaps:GetInt() then
 						if IsValid(driver) and driver:IsPlayer() then
 							net.Start("uvrace_notification")
-							net.WriteString("FINAL LAP")
+							net.WriteString("#uv.race.finallap")
 							net.WriteFloat(3)
 							net.Send(driver)
 						end

@@ -1,12 +1,5 @@
 AddCSLuaFile()
 
-local PlaceStrings = {
-    [1] = {Color(240,203,122), "%sst"},
-    [2] = {Color(183,201,210), "%snd"},
-    [3] = {Color(179,128,41), "%srd"},
-    [4] = {Color(27,147,0), "%sth"}
-}
-
 local LBColors = {
     ["LocalPlayer"] = Color(255,221,0),
     ["Others"] = Color(255,255,255),
@@ -223,17 +216,18 @@ function UVFormLeaderboard(racers)
 
     for i, v in ipairs(sorted_table) do
         local vehicle = v.vehicle
+		local lang = language.GetPhrase
 
         if !IsValid(vehicle) then
             local line = string.format("%d. %s", i, v.array.Name)
             local str = ''
             
             if v.array.Finished then
-                str = '  [FINISHED]'
+                str = lang("uv.race.suffix.finished")
             elseif v.array.Busted then
-                str = '  [BUSTED]'
+                str = lang("uv.race.suffix.busted")
             elseif v.array.Disqualified then
-                str = '  [DNF]'
+                str = lang("uv.race.suffix.dnf")
             end
 
             line = line .. str
@@ -283,13 +277,13 @@ function UVFormLeaderboard(racers)
             local sign = (totalTimeDiff >= 0) and "+" or "-"
 
             local str = "???"
-
+            
             if v.array.Finished then
-                str = '  [FINISHED]'
+                str = lang("uv.race.suffix.finished")
             elseif v.array.Disqualified then
-                str = '  [DNF]'
+                str = lang("uv.race.suffix.dnf")
             elseif v.array.Busted then
-                str = '  [BUSTED]'
+                str = lang("uv.race.suffix.busted")
             elseif v.array.Lap ~= lArray.Lap then
                 str = ''
             else
@@ -899,9 +893,17 @@ else
                         surface.PlaySound(audio_path)
                     end
                 end
+				
+				local lang = language.GetPhrase
+				local PlaceStrings = {
+					[1] = {Color(240,203,122), lang("uv.race.place.1")},
+					[2] = {Color(183,201,210), lang("uv.race.place.2")},
+					[3] = {Color(179,128,41), lang("uv.race.place.3")},
+					[4] = {Color(27,147,0), lang("uv.race.place")},
+				}
 
                 local place_array = PlaceStrings[place] or PlaceStrings[4]
-                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, " has finished ", place_array[1], string.format(place_array[2], place), Color(255,255,255), " with a time of ", Color(0,255,0), UVDisplayTimeRace(time))        
+                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], string.format(place_array[2], place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))        
             end
         end        
     end)
@@ -947,6 +949,7 @@ else
     net.Receive( "uvrace_lapcomplete", function()
         local participant = net.ReadEntity()
         local time = net.ReadFloat()
+		local lang = language.GetPhrase
 
         if UVHUDRaceInfo then
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
@@ -956,21 +959,21 @@ else
             end
         end
 
-        local address = ((IsValid(participant) and participant:GetDriver() == LocalPlayer() and 'Your') or (UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] and UVHUDRaceInfo['Participants'][participant].Name.."'s"))
+        local address = ((IsValid(participant) and participant:GetDriver() == LocalPlayer() and lang("uv.race.you")) or (UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] and UVHUDRaceInfo['Participants'][participant].Name))
 
         if UVHUDLastLapTime == nil then
-            chat.AddText(Color(255, 255, 255), address.." first lap: ", Color(0, 255, 0), UVDisplayTimeRace(time))
+            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.laptime"), address), Color(0, 255, 0), UVDisplayTimeRace(time))
             UVHUDLastLapTime = time
             UVHUDBestLapTime = time
         else
             if time < UVHUDBestLapTime then
                 local timedifference = UVHUDBestLapTime - time
-                chat.AddText(Color(255, 255, 255), address.." best lap: ", Color(0, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
+                chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.bestlap"), address), Color(0, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
                 UVHUDLastLapTime = time
                 UVHUDBestLapTime = time
             else
                 local timedifference = time - UVHUDBestLapTime
-                chat.AddText(Color(255, 255, 255), address.." last lap: ", Color(255, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (+"..math.Round(timedifference, 3)..")")
+                chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.laptime"), address), Color(255, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (+"..math.Round(timedifference, 3)..")")
                 UVHUDLastLapTime = time
             end
         end
@@ -980,13 +983,13 @@ else
         local time = net.ReadInt( 11 )
         local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
         local starttable = {
-            "GO!",
+            "#uv.race.go",
             "1",
             "2",
             "3",
-            "GET READY",
-            "GET READY",
-            "GET READY",
+            "#uv.race.getready",
+            "#uv.race.getready",
+            "#uv.race.getready",
         }
 
         local soundfilescount3 = file.Find( "sound/uvracesfx/".. theme .."/count3/*", "GAME" )
@@ -1016,11 +1019,11 @@ else
 		local h = ScrH()
 
         if UVHUDNotification then
-            draw.DrawText( UVHUDNotificationString, "UVFont7", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDNotificationString, "UVFont5", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         if UVHUDRaceStart then
-            draw.DrawText( UVHUDRaceStart, "UVFont7", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDRaceStart, "UVFont5", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
         if !UVHUDRace then return end
@@ -1051,12 +1054,23 @@ else
 
         UVHUDRace = true;
 
-        local element1 = {
-            { x = 0, y = h/7 },
-            { x = w*0.2, y = h/7 },
-            { x = w*0.125, y = h/3 },
-            { x = 0, y = h/3 },
-        }
+		local element1 = {}
+
+		if UVHUDRaceInfo.Info.Laps > 1 then
+			element1 = {
+				{ x = 0, y = h/7 },
+				{ x = w*0.35, y = h/7 },
+				{ x = w*0.25, y = h/3 },
+				{ x = 0, y = h/3 },
+			}
+		else
+			element1 = {
+				{ x = 0, y = h/7 },
+				{ x = w*0.35, y = h/7 },
+				{ x = w*0.25, y = h/3.5 },
+				{ x = 0, y = h/3.5 },
+			}
+		end
         surface.SetDrawColor( 0, 0, 0, 200)
         draw.NoTexture()
         surface.DrawPoly( element1 )
@@ -1100,27 +1114,18 @@ else
                         local audio_path = "uvracesfx/".. theme .."/wrongway/".. soundfiles[math.random(1, #soundfiles)]
                         surface.PlaySound(audio_path)
                     end
-                    UVNotifyDriver("WRONG WAY", 3)
+                    UVNotifyDriver("#uv.race.wrongway", 3)
                 end
             end
         end
-
+		
+		local lang = language.GetPhrase
         draw.DrawText( 
-            "Time: " 
-            .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. 
-            "\nCheck: " 
-            .. checkpoint_count .. 
-            "/" .. GetGlobalInt( "uvrace_checkpoints" ) 
-            .. (UVHUDRaceInfo.Info.Laps > 1 and "\nLap: ".. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps or "") .. 
-            "\nPos: " 
-            .. UVHUDRaceCurrentPos .. 
-            "/" 
-            .. UVHUDRaceCurrentParticipants,
-            "UVFont", 
-            0, 
-            h/7, 
-            Color( 255, 255, 255), 
-            TEXT_ALIGN_LEFT 
+			lang("uv.race.time") .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. "\n" ..
+			lang("uv.race.check") .. checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" )  .. "\n" ..
+			(UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.lap") .. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") ..
+			lang("uv.race.pos") .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,
+            "UVFont", 10, h/7, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT 
         )
 
         -- String array -> {Color, string}
@@ -1129,14 +1134,17 @@ else
         
         for i=1, racer_count, 1 do
             local entry = string_array[i]
+			local racerpos = 3.75
+			
+			if UVHUDRaceInfo.Info.Laps > 1 then
+				racerpos = 3.25
+			end
 
             draw.DrawText( 
-                entry[2],
-                "UVFont4", 
-                0, 
-                (h/3) + i *  ((racer_count > 5 and 20) or 28), 
-                entry[1], 
-                TEXT_ALIGN_LEFT 
+                entry[2], "UVFont4", 
+				10, 
+				(h/racerpos) + i * ((racer_count > 5 and 20) or 28), 
+                entry[1], TEXT_ALIGN_LEFT 
             )
         end
 
