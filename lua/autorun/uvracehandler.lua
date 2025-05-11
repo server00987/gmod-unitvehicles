@@ -1103,11 +1103,8 @@ else
             
             local unit = ((check_center_pos - vehicle_center)):GetNormalized()
             local normalized_velo = vehicle_velocity:GetNormalized()
-
-            print(unit, normalized_velo)
             
             local dot_product = normalized_velo:Dot(unit)
-            print("Dot:", dot_product)
             
             if dot_product > - .8 then
                 LastWrongWayCheckTime = CurTime()
