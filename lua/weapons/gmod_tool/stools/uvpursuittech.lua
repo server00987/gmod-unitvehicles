@@ -66,12 +66,12 @@ if CLIENT then
 		{ name = "reload" }
 	}
 
-	language.Add("tool.uvpursuittech.name", "Racer Pursuit Tech")
-	language.Add("tool.uvpursuittech.desc", "Apply Pursuit Tech to your vehicles! Use it to fight against the Unit Vehicles!")
-	language.Add("tool.uvpursuittech.0", "Looking for more options? Find it under the options tab" )
-	language.Add("tool.uvpursuittech.left", "Apply the Pursuit Tech to the your vehicle. Dosen't work on Unit Vehicles, use the Unit Pursuit Tech Tool for that!" )
-	language.Add("tool.uvpursuittech.right", "Change Pursuit Tech" )
-	language.Add("tool.uvpursuittech.reload", "Select Pursuit Tech slot" )
+	-- language.Add("tool.uvpursuittech.name", "Racer Pursuit Tech")
+	-- language.Add("tool.uvpursuittech.desc", "Apply Pursuit Tech to your vehicles! Use it to fight against the Unit Vehicles!")
+	-- language.Add("tool.uvpursuittech.0", "Looking for more options? Find it under the options tab" )
+	-- language.Add("tool.uvpursuittech.left", "Apply the Pursuit Tech to the your vehicle. Dosen't work on Unit Vehicles, use the Unit Pursuit Tech Tool for that!" )
+	-- language.Add("tool.uvpursuittech.right", "Change Pursuit Tech" )
+	-- language.Add("tool.uvpursuittech.reload", "Select Pursuit Tech slot" )
 
 end
 
@@ -100,11 +100,11 @@ function TOOL:LeftClick( trace )
 				end
 			end
 
-			self:GetOwner():ChatPrint(
-				sel_v
-				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-			)
+			-- self:GetOwner():ChatPrint(
+				-- sel_v
+				-- and string.format( language.GetPhrase("tool.uvpursuittech.popup.replace"), UVGetVehicleMakeAndModel(car), ptselected, (PT_Slots_Replacement_Strings[slot] or slot), sel_v.Tech )
+				-- or string.format( language.GetPhrase("tool.uvpursuittech.popup.install"), UVGetVehicleMakeAndModel(car), ptselected, (PT_Slots_Replacement_Strings[slot] or slot) )
+			-- )
 
 			local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
 			ammo_count = ammo_count > 0 and ammo_count or math.huge
@@ -146,12 +146,12 @@ function TOOL:RightClick(trace)
 	local ptselected = self:GetClientInfo("pursuittech")
 	
 	if ptselected == pttable[#pttable] then
-		self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[1])
+		-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[1])
 		self:GetOwner():ConCommand("uvpursuittech_pursuittech "..pttable[1])
 	else
 		for k,v in pairs(pttable) do
 			if v == ptselected then
-				self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[k+1])
+				-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[k+1])
 				self:GetOwner():ConCommand("uvpursuittech_pursuittech "..pttable[k+1])
 			end
 		end
@@ -168,7 +168,7 @@ function TOOL:Reload()
 	if new_slot > slots then new_slot = 1 end
 
 	self:GetOwner():ConCommand("uvpursuittech_slot "..new_slot)
-	self:GetOwner():ChatPrint("Selected slot: "..(PT_Slots_Replacement_Strings[new_slot] or new_slot))
+	-- self:GetOwner():ChatPrint("Slot ".. new_slot .. " selected.")
 end
 
 if CLIENT then
@@ -176,10 +176,10 @@ if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
 
 		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("Apply Settings")
+		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin to apply settings!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -221,9 +221,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "Pursuit Tech Settings Applied!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvpursuittech.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "Pursuit Tech Settings Applied!\n" )
+			Msg( "#tool.uvpursuittech.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -237,26 +237,26 @@ if CLIENT then
 		})
 
 		--[[CPanel:AddControl("Label", {
-			Text = "——— EMP ———",
+			Text = "#uv.ptech.emp.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems. Stronger than an ESF, but it takes time to lock on.",
+			Text = "#uv.ptech.emp.desc,
 		})]]
 
 		CPanel:AddControl("Label", {
-			Text = "——— ESF ———",
+			Text = "#uv.ptech.esf.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Electrostatic Field (ESF) charges your car's body with a powerful static field that protects it against Stun Mines, and deals a powerful shock to anyone that touches it.",
+			Text = "#uv.ptech.esf.desc",
 		})
 
 		local esfduration = vgui.Create("DNumSlider")
 		esfduration:SetMin(1)
 		esfduration:SetMax(30)
 		esfduration:SetDecimals(0)
-		esfduration:SetText("ESF Duration")
+		esfduration:SetText("#uv.ptech.duration")
 		esfduration:SetConVar("uvpursuittech_esfduration")
 		CPanel:AddItem(esfduration)
 
@@ -264,7 +264,7 @@ if CLIENT then
 		esfpower:SetMin(100000)
 		esfpower:SetMax(10000000)
 		esfpower:SetDecimals(0)
-		esfpower:SetText("ESF Power")
+		esfpower:SetText("#uv.ptech.power")
 		esfpower:SetConVar("uvpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
 
@@ -272,16 +272,16 @@ if CLIENT then
 		esfdamage:SetMin(0)
 		esfdamage:SetMax(1)
 		esfdamage:SetDecimals(1)
-		esfdamage:SetText("ESF Damage")
+		esfdamage:SetText("#uv.ptech.damage")
 		esfdamage:SetConVar("uvpursuittech_esfdamage")
-		esfdamage:SetTooltip("Damage dealt (1 = Full damage)")
+		esfdamage:SetTooltip("#uv.ptech.damage.tip")
 		CPanel:AddItem(esfdamage)
 
 		local esfcooldown = vgui.Create("DNumSlider")
 		esfcooldown:SetMin(0)
 		esfcooldown:SetMax(120)
 		esfcooldown:SetDecimals(0)
-		esfcooldown:SetText("ESF Cooldown")
+		esfcooldown:SetText("#uv.ptech.cooldown")
 		esfcooldown:SetConVar("uvpursuittech_cooldown_esf")
 		CPanel:AddItem(esfcooldown)
 
@@ -289,7 +289,7 @@ if CLIENT then
 		esfammo:SetMin(0)
 		esfammo:SetMax(120)
 		esfammo:SetDecimals(0)
-		esfammo:SetText("ESF Ammo")
+		esfammo:SetText("#uv.ptech.ammo")
 		esfammo:SetConVar("uvpursuittech_maxammo_esf")
 		CPanel:AddItem(esfammo)
 
@@ -304,18 +304,18 @@ if CLIENT then
 		end
 
 		CPanel:AddControl("Label", {
-			Text = "——— Jammer ———",
+			Text = "#uv.ptech.jammer.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Jammer interferes with radar guidance and communications within the entire server, removing all existing Pursuit Tech deployments, and prevents others from using their Pursuit Tech.",
+			Text = "#uv.ptech.jammer.desc",
 		})
 
 		local jammerduration = vgui.Create("DNumSlider")
 		jammerduration:SetMin(1)
 		jammerduration:SetMax(30)
 		jammerduration:SetDecimals(0)
-		jammerduration:SetText("Jammer Duration")
+		jammerduration:SetText("#uv.ptech.duration")
 		jammerduration:SetConVar("uvpursuittech_jammerduration")
 		CPanel:AddItem(jammerduration)
 
@@ -323,7 +323,7 @@ if CLIENT then
 		jammercooldown:SetMin(0)
 		jammercooldown:SetMax(120)
 		jammercooldown:SetDecimals(0)
-		jammercooldown:SetText("Jammer Cooldown")
+		jammercooldown:SetText("#uv.ptech.cooldown")
 		jammercooldown:SetConVar("uvpursuittech_cooldown_jammer")
 		CPanel:AddItem(jammercooldown)
 
@@ -331,7 +331,7 @@ if CLIENT then
 		jammerammo:SetMin(0)
 		jammerammo:SetMax(120)
 		jammerammo:SetDecimals(0)
-		jammerammo:SetText("Jammer Ammo")
+		jammerammo:SetText("#uv.ptech.ammo")
 		jammerammo:SetConVar("uvpursuittech_maxammo_jammer")
 		CPanel:AddItem(jammerammo)
 
@@ -346,18 +346,18 @@ if CLIENT then
 		end
 
 		CPanel:AddControl("Label", {
-			Text = "——— Shockwave ———",
+			Text = "#uv.ptech.shockwave.title",
 		})
 		
 		CPanel:AddControl("Label", {
-			Text = "- The Shockwave creates a sonic shock blast from the center of the car that damages and pushes away nearby vehicles.",
+			Text = "#uv.ptech.shockwave.desc",
 		})
 
 		local shockwavepower = vgui.Create("DNumSlider")
 		shockwavepower:SetMin(100000)
 		shockwavepower:SetMax(10000000)
 		shockwavepower:SetDecimals(0)
-		shockwavepower:SetText("Shockwave Power")
+		shockwavepower:SetText("#uv.ptech.power")
 		shockwavepower:SetConVar("uvpursuittech_shockwavepower")
 		CPanel:AddItem(shockwavepower)
 
@@ -365,8 +365,8 @@ if CLIENT then
 		shockwavedamage:SetMin(0)
 		shockwavedamage:SetMax(1)
 		shockwavedamage:SetDecimals(1)
-		shockwavedamage:SetText("Shockwave Damage")
-		shockwavedamage:SetTooltip("Damage dealt (1 = Full damage)")
+		shockwavedamage:SetText("#uv.ptech.damage")
+		shockwavedamage:SetTooltip("#uv.ptech.damage.tip")
 		shockwavedamage:SetConVar("uvpursuittech_shockwavedamage")
 		CPanel:AddItem(shockwavedamage)
 
@@ -374,7 +374,7 @@ if CLIENT then
 		shockwavecooldown:SetMin(0)
 		shockwavecooldown:SetMax(120)
 		shockwavecooldown:SetDecimals(0)
-		shockwavecooldown:SetText("Shockwave Cooldown")
+		shockwavecooldown:SetText("#uv.ptech.cooldown")
 		shockwavecooldown:SetConVar("uvpursuittech_cooldown_shockwave")
 		CPanel:AddItem(shockwavecooldown)
 
@@ -382,23 +382,23 @@ if CLIENT then
 		shockwaveammo:SetMin(0)
 		shockwaveammo:SetMax(120)
 		shockwaveammo:SetDecimals(0)
-		shockwaveammo:SetText("Shockwave Ammo")
+		shockwaveammo:SetText("#uv.ptech.ammo")
 		shockwaveammo:SetConVar("uvpursuittech_maxammo_shockwave")
 		CPanel:AddItem(shockwaveammo)
 
 		CPanel:AddControl("Label", {
-			Text = "——— Spikes Strips ———",
+			Text = "#uv.ptech.spikes.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Deployed from the rear of the vehicle, Spike Strips expand to damage the tires of any car travelling over them.",
+			Text = "#uv.ptech.spikes.desc",
 		})
 
 		local spikestripduration = vgui.Create("DNumSlider")
 		spikestripduration:SetMin(5)
 		spikestripduration:SetMax(120)
 		spikestripduration:SetDecimals(0)
-		spikestripduration:SetText("Spike Strip Duration")
+		spikestripduration:SetText("uv.ptech.duration")
 		spikestripduration:SetConVar("uvpursuittech_spikestripduration")
 		CPanel:AddItem(spikestripduration)
 
@@ -406,7 +406,7 @@ if CLIENT then
 		spikestripcooldown:SetMin(0)
 		spikestripcooldown:SetMax(120)
 		spikestripcooldown:SetDecimals(0)
-		spikestripcooldown:SetText("Spike Strip Cooldown")
+		spikestripcooldown:SetText("uv.ptech.cooldown")
 		spikestripcooldown:SetConVar("uvpursuittech_cooldown_spikestrip")
 		CPanel:AddItem(spikestripcooldown)
 
@@ -414,23 +414,23 @@ if CLIENT then
 		spikestripammo:SetMin(0)
 		spikestripammo:SetMax(120)
 		spikestripammo:SetDecimals(0)
-		spikestripammo:SetText("Spike Strip Ammo")
+		spikestripammo:SetText("uv.ptech.ammo")
 		spikestripammo:SetConVar("uvpursuittech_maxammo_spikestrip")
 		CPanel:AddItem(spikestripammo)
 
 		CPanel:AddControl("Label", {
-			Text = "——— Stun Mine ———",
+			Text = "#uv.ptech.stunmine.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Stun Mines are deployed behind your car. When contacted by other cars they will overload the vehicle's electrical system causing damage and loss of control.",
+			Text = "#uv.ptech.stunmine.desc",
 		})
 
 		local stunminepower = vgui.Create("DNumSlider")
 		stunminepower:SetMin(100000)
 		stunminepower:SetMax(10000000)
 		stunminepower:SetDecimals(0)
-		stunminepower:SetText("Stun Mine Power")
+		stunminepower:SetText("#uv.ptech.power")
 		stunminepower:SetConVar("uvpursuittech_stunminepower")
 		CPanel:AddItem(stunminepower)
 
@@ -438,8 +438,8 @@ if CLIENT then
 		stunminedamage:SetMin(0)
 		stunminedamage:SetMax(1)
 		stunminedamage:SetDecimals(1)
-		stunminedamage:SetText("Stun Mine Damage")
-		stunminedamage:SetTooltip("Damage dealt (1 = Full damage)")
+		stunminedamage:SetText("#uv.ptech.damage")
+		stunminedamage:SetTooltip("#uv.ptech.damage.tip")
 		stunminedamage:SetConVar("uvpursuittech_stunminedamage")
 		CPanel:AddItem(stunminedamage)
 
@@ -447,7 +447,7 @@ if CLIENT then
 		stunminecooldown:SetMin(0)
 		stunminecooldown:SetMax(120)
 		stunminecooldown:SetDecimals(0)
-		stunminecooldown:SetText("Stun Mine Cooldown")
+		stunminecooldown:SetText("#uv.ptech.cooldown")
 		stunminecooldown:SetConVar("uvpursuittech_cooldown_stunmine")
 		CPanel:AddItem(stunminecooldown)
 
@@ -455,24 +455,24 @@ if CLIENT then
 		stunmineammo:SetMin(0)
 		stunmineammo:SetMax(120)
 		stunmineammo:SetDecimals(0)
-		stunmineammo:SetText("Stun Mine Ammo")
+		stunmineammo:SetText("#uv.ptech.ammo")
 		stunmineammo:SetConVar("uvpursuittech_maxammo_stunmine")
 		CPanel:AddItem(stunmineammo)
 		
 
 		CPanel:AddControl("Label", {
-			Text = "——— Repair Kit ———",
+			Text = "#uv.ptech.repairkit.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Repair Kit deploys an onboard repair system that activates a rapid field-fix for your vehicle. Designed with emergency response and tactical mobility in mind, the Auto-Repair Module restores your vehicle’s structural integrity using built-in self-sealing components and reinforced hydraulic systems.",
+			Text = "#uv.ptech.repairkit.desc",
 		})
 
 		local repairkitcooldown = vgui.Create("DNumSlider")
 		repairkitcooldown:SetMin(0)
 		repairkitcooldown:SetMax(120)
 		repairkitcooldown:SetDecimals(0)
-		repairkitcooldown:SetText("Repair Kit Cooldown")
+		repairkitcooldown:SetText("#uv.ptech.cooldown")
 		repairkitcooldown:SetConVar("uvpursuittech_cooldown_repairkit")
 		CPanel:AddItem(repairkitcooldown)
 
@@ -480,7 +480,7 @@ if CLIENT then
 		repairkitammo:SetMin(0)
 		repairkitammo:SetMax(120)
 		repairkitammo:SetDecimals(0)
-		repairkitammo:SetText("Repair Kit Ammo")
+		repairkitammo:SetText("#uv.ptech.ammo")
 		repairkitammo:SetConVar("uvpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
 	end
@@ -491,6 +491,15 @@ if CLIENT then
 
 		local ptselected = self:GetClientInfo("pursuittech")
 		local slot = self:GetClientNumber("slot")
+		local PT_Replacement_Strings = {
+			['ESF'] = '#uv.ptech.esf.short',
+			['Killswitch'] = '#uv.ptech.killswitch',
+			['Jammer'] = '#uv.ptech.jammer',
+			['Shockwave'] = '#uv.ptech.shockwave',
+			['Stunmine'] = '#uv.ptech.stunmine',
+			['Spikestrip'] = '#uv.ptech.spikes',
+			['Repair Kit'] = '#uv.ptech.repairkit'
+		}
 
 		surface.SetDrawColor( Color( 0, 0, 0) )
 		surface.DrawRect( 0, 0, width, height )
@@ -499,8 +508,8 @@ if CLIENT then
 		surface.SetMaterial( toolicon )
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
-		draw.SimpleText( ptselected, "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( 'Slot: '..(PT_Slots_Replacement_Strings[slot] or slot), "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( 'Slot: ' .. slot, "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 

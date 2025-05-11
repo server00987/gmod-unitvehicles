@@ -8,19 +8,9 @@ local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
-PT_Replacement_Strings = {
-	['ESF'] = 'ESF',
-	['Killswitch'] = 'KILLSW',
-	['Jammer'] = 'JAM',
-	['Shockwave'] = 'SHWAV',
-	['Stunmine'] = 'MINE',
-	['Spikestrip'] = 'SPIKE',
-	['Repair Kit'] = 'REPAIR'
-}
-
 PT_Slots_Replacement_Strings = {
-	[1] = 'Right',
-	[2] = 'Left'
+	[1] = "#uv.ptech.slot1",
+	[2] = "#uv.ptech.slot2"
 }
 
 --Sound spam check--
@@ -2147,7 +2137,7 @@ else --HUD/Options
 		
 		if convar then
 			convar:SetInt(key)
-			KeyBindButtons[slot]:SetText("Slot "..(PT_Slots_Replacement_Strings[slot] or '?').." - "..string.upper(input.GetKeyName(key)))
+			KeyBindButtons[slot]:SetText("Slot " .. slot .." - "..string.upper(input.GetKeyName(key)))
 		end
 		
 		IsSettingKeybind = false
@@ -3123,6 +3113,15 @@ else --HUD/Options
 			UVHUDPursuitTech = nil
 		end
 		if UVHUDPursuitTech then
+			local PT_Replacement_Strings = {
+				['ESF'] = '#uv.ptech.esf.short',
+				['Killswitch'] = '#uv.ptech.killswitch.short',
+				['Jammer'] = '#uv.ptech.jammer.short',
+				['Shockwave'] = '#uv.ptech.shockwave.short',
+				['Stunmine'] = '#uv.ptech.stunmine.short',
+				['Spikestrip'] = '#uv.ptech.spikes.short',
+				['Repair Kit'] = '#uv.ptech.repairkit.short'
+			}
 			if !uvclientjammed then
 				for i=1, 2, 1 do
 					if UVHUDPursuitTech[i] then
