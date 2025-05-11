@@ -1573,7 +1573,7 @@ if SERVER then
 					TimeTillNextHeat = UVUTimeTillNextHeat5:GetInt()
 				end
 				
-				local lang = language.GetPhrase
+				-- local lang = language.GetPhrase
 				
 				timer.Create("UVTimeTillNextHeat", TimeTillNextHeat, 0, function()
 					if UVUTimeTillNextHeatEnabled:GetInt() != 1 then
@@ -1583,7 +1583,7 @@ if SERVER then
 					if uvheatlevel < 2  and !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then 
 						uvheatlevel = 2
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat2:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
+						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1601,7 +1601,7 @@ if SERVER then
 					elseif uvheatlevel < 3 and !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
 						uvheatlevel = 3
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat3:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 3 ) )
+						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 3 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1619,7 +1619,7 @@ if SERVER then
 					elseif uvheatlevel < 4 and !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
 						uvheatlevel = 4
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat4:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 4 ) )
+						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 4 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1637,7 +1637,7 @@ if SERVER then
 					elseif uvheatlevel < 5 and !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
 						uvheatlevel = 5
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat5:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 5 ) )
+						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 5 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -1655,7 +1655,7 @@ if SERVER then
 					elseif uvheatlevel < 6 and !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
 						uvheatlevel = 6
 						timer.Adjust("UVTimeTillNextHeat", UVUTimeTillNextHeat5:GetInt(), 0)
-						PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 6 ) )
+						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 6 ) )
 						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
 							local units = ents.FindByClass("npc_uv*")
 							local random_entry = math.random(#units)	
@@ -3729,48 +3729,48 @@ else --HUD/Options
 		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVOptions", "Settings", "", "", function(panel)
 			panel:Clear()
 			
-			panel:Button("Apply Settings", "uv_local_update_settings")
-			panel:Help("——— Heat Levels ———")
-			panel:CheckBox("Enable Heat Levels", "unitvehicle_heatlevels")
-			panel:ControlHelp("^ ENABLE THIS FOR THE REST BELOW TO WORK!")
-			panel:CheckBox("Enable AI Unit Spawning", "unitvehicle_spawnmainunits")
-			panel:ControlHelp("Main AI Units (Patrol, Support, etc.) will spawn to patrol/chase. Other Units such as Rhino or Helicopter can be optionally enabled in the Unit Manager Tool settings.")
-			panel:NumSlider("Minimum Heat Level", "unitvehicle_minheatlevel", 1, 6, 0)
-			panel:ControlHelp("Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
-			panel:NumSlider("Maximum Heat Level", "unitvehicle_maxheatlevel", 1, 6, 0)
-			panel:ControlHelp("Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
+			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings")
+			panel:Help("#uv.settings.heatlevels")
+			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
+			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
+			panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
+			panel:ControlHelp("#uv.settings.heatlevels.aiunits.desc")
+			panel:NumSlider("#uv.settings.heatlevels.min", "unitvehicle_minheatlevel", 1, 6, 0)
+			panel:ControlHelp("#uv.settings.heatlevels.min.desc")
+			panel:NumSlider("#uv.settings.heatlevels.max", "unitvehicle_maxheatlevel", 1, 6, 0)
+			panel:ControlHelp("#uv.settings.heatlevels.max.desc")
 			
-			panel:Help("——— Target Vehicle Type ———")
-			panel:NumSlider("Target Vehicle Type", "unitvehicle_targetvehicletype", 1, 3, 0)
-			panel:ControlHelp("1 = All vehicles are targeted. 2 = Decent Vehicles are targeted only. 3 = Other vehicles besides Decent Vehicles are targeted.")
+			panel:Help("#uv.settings.targetvehicle")
+			panel:NumSlider("#uv.settings.targetvehicle.target", "unitvehicle_targetvehicletype", 1, 3, 0)
+			panel:ControlHelp("#uv.settings.targetvehicle.target.desc")
 			
-			panel:Help("——— Music ———")
-			panel:CheckBox("Pursuit Music", "unitvehicle_playmusic")
-			panel:ControlHelp("Pursuit themes will play.")
-			panel:CheckBox("Racing Music", "unitvehicle_racingmusic")
-			panel:ControlHelp("Racing themes will play.")
-			panel:CheckBox("Racing Music Priority", "unitvehicle_racingmusicpriority")
-			panel:ControlHelp("Racing theme will play during pursuits while racing.")
-			local pursuittheme, label = panel:ComboBox( "Pursuit Theme", "unitvehicle_pursuittheme" )
+			panel:Help("#uv.settings.music")
+			panel:CheckBox("#uv.settings.music.pursuit", "unitvehicle_playmusic")
+			panel:ControlHelp("#uv.settings.music.pursuit.desc")
+			panel:CheckBox("#uv.settings.music.race", "unitvehicle_racingmusic")
+			panel:ControlHelp("#uv.settings.music.race.desc")
+			panel:CheckBox("#uv.settings.music.race.priority", "unitvehicle_racingmusicpriority")
+			panel:ControlHelp("#uv.settings.music.race.priority.desc")
+			local pursuittheme, label = panel:ComboBox( "#uv.settings.music.pursuittheme", "unitvehicle_pursuittheme" )
 			local files, folders = file.Find( "sound/uvpursuitmusic/*", "GAME" )
 			if folders != nil then
 				for k, v in pairs(folders) do
 					pursuittheme:AddChoice( v )
 				end
 			end
-			panel:CheckBox("Random Heat Level Songs", "unitvehicle_pursuitthemeplayrandomheat")
-			panel:ControlHelp("Random Heat Level songs from your selected Pursuit Theme will play instead.")
-			local volume_theme = panel:NumSlider("Music Volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
-			panel:ControlHelp("Sets the volume of the music. (Local)")
+			panel:CheckBox("#uv.settings.music.pursuittheme.random", "unitvehicle_pursuitthemeplayrandomheat")
+			panel:ControlHelp("#uv.settings.music.pursuittheme.random.desc")
+			local volume_theme = panel:NumSlider("#uv.settings.music.volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
+			panel:ControlHelp("#uv.settings.music.volume.desc")
 			
 			volume_theme.OnValueChanged = function( self, value )
-				if value == 0 then
-					volume_theme:SetText("Volume: MUTE")
-				elseif value == 2 then
-					volume_theme:SetText("Volume: MAX")
-				else
-					volume_theme:SetText("Volume: "..math.floor(math.Round(value*100) + .5).."%")
-				end
+				-- if value == 0 then
+					-- volume_theme:SetText("Volume: MUTE")
+				-- elseif value == 2 then
+					-- volume_theme:SetText("Volume: MAX")
+				-- else
+					-- volume_theme:SetText("Volume: "..math.floor(math.Round(value*100) + .5).."%")
+				-- end
 				
 				if UVSoundLoop then
 					UVSoundLoop:SetVolume( value )
@@ -3778,83 +3778,83 @@ else --HUD/Options
 			end
 			
 			
-			panel:Help("——— Pursuit ———")
-			panel:CheckBox("Auto Health", "unitvehicle_autohealth")
-			panel:ControlHelp("All suspects will have unlimited vehicle health and your health as a suspect will be set according to your vehicle's mass. Use this if you don't wanna keep getting wrecked/want to have tougher suspects.")
-			panel:NumSlider("Repair Cooldown", "unitvehicle_repaircooldown", 5, 300, 0)
-			panel:ControlHelp("Cooldown in seconds before you can use the repair shop again. Set this to 0 to make all repair shops a one-time use.")
-			panel:NumSlider("Repair Range", "unitvehicle_repairrange", 10, 1000, 0)
-			panel:ControlHelp("Distance in studs to the repair shop where you can repair your vehicle.")
-			panel:CheckBox("Never Evade", "unitvehicle_neverevade")
-			panel:ControlHelp("You won't be able to evade the Unit Vehicles. Good luck.")
-			panel:NumSlider("Busted Timer", "unitvehicle_bustedtimer", 0, 10, 1)
-			panel:ControlHelp("Time in seconds before the enemy gets busted. Set this to 0 to disable.")
-			panel:NumSlider("Spawn Cooldown", "unitvehicle_spawncooldown", 0, 120, 1)
-			panel:ControlHelp("Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
-			panel:NumSlider("Spikes Strip Duration", "unitvehicle_spikestripduration", 0, 100, 0)
-			panel:ControlHelp("Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
-			panel:CheckBox("Racer Tags", "unitvehicle_racertags")
-			panel:ControlHelp("Racers will have their own tags which you can see as a cop during pursuits.")
+			panel:Help("#uv.settings.pursuit")
+			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
+			panel:ControlHelp("#uv.settings.pursuit.autohealth.desc")
+			panel:NumSlider("#uv.settings.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
+			panel:ControlHelp("#uv.settings.pursuit.repaircooldown.desc")
+			panel:NumSlider("#uv.settings.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)
+			panel:ControlHelp("#uv.settings.pursuit.repairrange.desc")
+			panel:CheckBox("#uv.settings.pursuit.noevade", "unitvehicle_neverevade")
+			panel:ControlHelp("#uv.settings.pursuit.noevade")
+			panel:NumSlider("#uv.settings.pursuit.bustedtime", "unitvehicle_bustedtimer", 0, 10, 1)
+			panel:ControlHelp("#uv.settings.pursuit.bustedtime.desc")
+			panel:NumSlider("#uv.settings.pursuit.respawntime", "unitvehicle_spawncooldown", 0, 120, 1)
+			panel:ControlHelp("#uv.settings.pursuit.respawntime.desc")
+			panel:NumSlider("#uv.settings.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.pursuit.spikeduration.desc")
+			panel:CheckBox("#uv.settings.pursuit.racertags", "unitvehicle_racertags")
+			panel:ControlHelp("#uv.settings.pursuit.racertags.desc")
 			
-			panel:Help("——— Pursuit Tech ———")
-			panel:ControlHelp("Set your Pursuit Tech slot keybinds here.")
+			panel:Help("#uv.settings.ptech")
+			panel:ControlHelp("#uv.settings.ptech.desc")
 			
 			-- put slots in a row
 			--local dpanel = panel:ControlPanel("uv_keybinds")
-			panel:Help("Keybinds")
+			panel:Help("#uv.settings.ptech.keybinds")
 			
 			KeyBindButtons = {}
-			KeyBindButtons[1] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[1] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
-			KeyBindButtons[2] = panel:Button("Slot "..(PT_Slots_Replacement_Strings[2] or '?').." - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
+			KeyBindButtons[1] = panel:Button(language.GetPhrase("uv.settings.ptech.slot1") .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
+			KeyBindButtons[2] = panel:Button(language.GetPhrase("uv.settings.ptech.slot2") .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
 			
-			panel:CheckBox("Racer Pursuit Tech", "unitvehicle_racerpursuittech")
-			panel:ControlHelp("Racers will spawn with Pursuit Tech.")
+			panel:CheckBox("#uv.settings.ptech.racer", "unitvehicle_racerpursuittech")
+			panel:ControlHelp("#uv.settings.ptech.racer.desc")
 			
-			panel:Help("——— AI Logic ———")
-			panel:CheckBox("Relentless", "unitvehicle_relentless")
-			panel:ControlHelp("Units will behave like cops in NFS Rivals. They don't give a single damn about their own safety.")
-			panel:CheckBox("Can Wreck", "unitvehicle_canwreck")
-			panel:ControlHelp("Unit Vehicles can crash out.")
-			panel:NumSlider("Detection Range", "unitvehicle_detectionrange", 1, 100, 0)
-			panel:ControlHelp("Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
-			panel:CheckBox("Enable headlights", "unitvehicle_enableheadlights")
-			panel:ControlHelp("Units and Racer Vehicles will shine their headlights (helicopters will shine their spotlights also). Impacts computer performance.")
+			panel:Help("#uv.settings.ailogic")
+			panel:CheckBox("#uv.settings.ailogic.relentless", "unitvehicle_relentless")
+			panel:ControlHelp("#uv.settings.ailogic.relentless.desc")
+			panel:CheckBox("#uv.settings.ailogic.wrecking", "unitvehicle_canwreck")
+			panel:ControlHelp("#uv.settings.ailogic.wrecking.desc")
+			panel:NumSlider("#uv.settings.ailogic.detectionrange", "unitvehicle_detectionrange", 1, 100, 0)
+			panel:ControlHelp("#uv.settings.ailogic.detectionrange.desc")
+			panel:CheckBox("#uv.settings.ailogic.headlights", "unitvehicle_enableheadlights")
+			panel:ControlHelp("#uv.settings.ailogic.headlights.desc")
 			
-			panel:Help("——— AI Navigation ———")
-			panel:CheckBox("Pathfinding", "unitvehicle_pathfinding")
-			panel:ControlHelp("Units uses A* pathfinding algorithm on navmesh/Decent Vehicle Waypoints to navigate. Impacts computer performance.")
-			panel:CheckBox("Decent Vehicle Waypoints priority", "unitvehicle_dvwaypointspriority")
-			panel:ControlHelp("Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed on your map).")
+			panel:Help("#uv.settings.ainav")
+			panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
+			panel:ControlHelp("#uv.settings.ainav.pathfind.desc")
+			panel:CheckBox("#uv.settings.ainav.dvpriority", "unitvehicle_dvwaypointspriority")
+			panel:ControlHelp("#uv.settings.ainav.dvpriority.desc")
 			
-			panel:Help("——— Chatter ———")
-			panel:CheckBox("Chatter Enabled", "unitvehicle_chatter")
-			panel:CheckBox("Chatter As Text", "unitvehicle_chattertext")
-			panel:ControlHelp("Units' radio chatter will be displayed in the chatbox instead.")
+			panel:Help("#uv.settings.chatter")
+			panel:CheckBox("#uv.settings.chatter.enable", "unitvehicle_chatter")
+			panel:CheckBox("#uv.settings.chatter.text", "unitvehicle_chattertext")
+			panel:ControlHelp("#uv.settings.chatter.text.desc")
 			
-			panel:Help("——— Call Response ———")
-			panel:CheckBox("Enable Call Response", "unitvehicle_callresponse")
-			panel:ControlHelp("Units will spawn and respond to the location regarding various calls.")
-			panel:NumSlider("Speed Limit (MPH)", "unitvehicle_speedlimit", 0, 100, 0)
-			panel:ControlHelp("Speed limit in MPH for idle Units to enforce. Patrolling Units still enforces speed limits set on DV Waypoints. Set this to 0 to disable.")
+			panel:Help("#uv.settings.response")
+			panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
+			panel:ControlHelp("#uv.settings.response.enable.desc")
+			panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.response.speedlimit.desc")
 			
-			panel:Help("——— Addon Supports ———")
-			panel:CheckBox("VCMod ELS Priority", "unitvehicle_vcmodelspriority")
-			panel:ControlHelp("Units using base HL2 vehicles will attempt to use VCMod ELS over Photon if both are installed.")
+			panel:Help("#uv.settings.addon")
+			panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
+			panel:ControlHelp("#uv.settings.addon.vcmod.els.desc")
 			
-			panel:Help("——— Reset Settings ———")
-			panel:Button( "Reset All Settings", "uv_resetallsettings")
+			panel:Help("#uv.settings.reset")
+			panel:Button( "#uv.settings.reset.all", "uv_resetallsettings")
 			
 		end)
-		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVPursuitManager", "Pursuit Manager", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
 			
-			panel:Button( "Spawn Unit Vehicles", "uv_spawnvehicles")
-			panel:Button( "Despawn Unit Vehicles", "uv_despawnvehicles")
-			panel:Button( "Start Pursuit", "uv_startpursuit")
-			panel:Button( "Stop Pursuit", "uv_stoppursuit")
-			panel:Button( "Start Racers horde", "uv_racershordestart")
-			panel:Button( "Stop Racers horde", "uv_racershordestop")
-			panel:Button( "Clear Bounty", "uv_clearbounty")
-			panel:Button( "Show Wanted Table (in console)", "uv_wantedtable")
+			panel:Button( "#uv.settings.pm.ai.spawn", "uv_spawnvehicles")
+			panel:Button( "#uv.settings.pm.ai.despawn", "uv_despawnvehicles")
+			panel:Button( "#uv.settings.pm.pursuit.start", "uv_startpursuit")
+			panel:Button( "#uv.settings.pm.pursuit.stop", "uv_stoppursuit")
+			panel:Button( "#uv.settings.hor.start", "uv_racershordestart")
+			panel:Button( "#uv.settings.hor.stop", "uv_racershordestop")
+			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
+			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
 			
 		end)
 	end)
