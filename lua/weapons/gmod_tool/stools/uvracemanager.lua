@@ -1,5 +1,5 @@
 TOOL.Category = "Unit Vehicles"
-TOOL.Name = "Race Manager"
+TOOL.Name = "#Race Manager"
 TOOL.Command = nil
 TOOL.ConfigName = ""
 
@@ -302,12 +302,13 @@ if SERVER then
 	end
 	net.Receive("UVRace_SetID", SetID)
 elseif CLIENT then
-	language.Add("tool.uvracemanager.name", "Race Manager")
-	language.Add("tool.uvracemanager.desc", "Create UV Race checkpoints.")
-	language.Add("tool.uvracemanager.0", "Left click to spawn checkpoint. Right click to edit checkpoint. Reload to create spawn.")
-	language.Add("tool.uvracemanager.1", "You must be superadmin to use this tool!")
-	language.Add("Cleanup_uvrace_ents", "UV Race Spawns")
-	language.Add("Undone_UVRaceEnt", "Undone UV Race entity")
+
+	TOOL.Information = {
+		{ name = "info"},
+		{ name = "left" },
+		{ name = "right" },
+		{ name = "reload" }
+	}
 
 	//CreateClientConVar("unitvehicle_racelaps", "3")
 	CreateClientConVar("unitvehicle_racetheme", "carbon - bending light")
@@ -350,6 +351,7 @@ elseif CLIENT then
 
 	local function Count()
 		local cpIDTbl = {}
+		local lang = language.GetPhrase
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			local index = cpIDTbl[ent:GetID()]
@@ -359,11 +361,11 @@ elseif CLIENT then
 		end
 
 		for id, count in pairs(cpIDTbl) do
-			local str = count > 1 and "There are " .. count .. " checkpoints with ID " .. id or "There is " .. count .. " checkpoint with ID " .. id
-			chat.AddText(str)
+			local str = count > 1 and "tool.uvracemanager.count.checkpoints" or "tool.uvracemanager.count.checkpoint"
+			chat.AddText(string.format(lang(str), count, id))
 		end
 
-		chat.AddText("There are " .. #ents.FindByClass("uvrace_spawn") .. " grid slots.")
+		chat.AddText(string.format(lang("tool.uvracemanager.count.startpoint"),#ents.FindByClass("uvrace_spawn") ) )
 	end
 	concommand.Add("uvrace_count", Count)
 

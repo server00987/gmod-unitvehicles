@@ -230,7 +230,7 @@ if CLIENT then
 		end
 
 		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("Apply Settings")
+		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "You need to be a super admin!", NOTIFY_ERROR, 5 )

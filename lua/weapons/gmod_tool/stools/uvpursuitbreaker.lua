@@ -56,11 +56,11 @@ if CLIENT then
 		{ name = "right" },
 	}
 
-	language.Add("tool.uvpursuitbreaker.name", "Pursuit Breakers")
-	language.Add("tool.uvpursuitbreaker.desc", "Create and manage your Pursuit Breakers for this map! Crash into them to take out Unit Vehicles!")
-	language.Add("tool.uvpursuitbreaker.0", "Build a structure anywhere on this map (or use a dupe if you are lazy, make sure the props are welded together)! When done, right-click it!" )
-	language.Add("tool.uvpursuitbreaker.left", "Spawns ALL saved pursuit breakers for this map (mind the lag if you have many!)" )
-	language.Add("tool.uvpursuitbreaker.right", "Saves the structure as a pursuit breaker for this map. The Pursuit Breaker icon created is where you right-click it" )
+	-- language.Add("tool.uvpursuitbreaker.name", "Pursuit Breakers")
+	-- language.Add("tool.uvpursuitbreaker.desc", "Create and manage your Pursuit Breakers for this map! Crash into them to take out Unit Vehicles!")
+	-- language.Add("tool.uvpursuitbreaker.0", "Build a structure anywhere on this map (or use a dupe if you are lazy, make sure the props are welded together)! When done, right-click it!" )
+	-- language.Add("tool.uvpursuitbreaker.left", "Spawns ALL saved pursuit breakers for this map (mind the lag if you have many!)" )
+	-- language.Add("tool.uvpursuitbreaker.right", "Saves the structure as a pursuit breaker for this map. The Pursuit Breaker icon created is where you right-click it" )
 
 	local selecteditem	= nil
 	local UVPBTOOLMemory = {}
@@ -77,37 +77,37 @@ if CLIENT then
 		PursuitBreakerAdjust:SetSize(400, 220)
 		PursuitBreakerAdjust:SetBackgroundBlur(true)
 		PursuitBreakerAdjust:Center()
-		PursuitBreakerAdjust:SetTitle("Name Pursuit Breaker")
+		PursuitBreakerAdjust:SetTitle("#tool.uvpursuitbreaker.create")
 		PursuitBreakerAdjust:SetDraggable(false)
 		PursuitBreakerAdjust:MakePopup()
 
 		local Intro = vgui.Create( "DLabel", PursuitBreakerAdjust )
-		Intro:SetPos( 20, 40 )
-		Intro:SetText( "You've selected a structure with "..UVPBTOOLMemory.PropCount.." entities and "..UVPBTOOLMemory.ConstraintCount.." constraints!\n- The Pursuit Breaker icon created is where you right-clicked just now." )
+		Intro:SetPos( 20, 25 )
+		Intro:SetText( string.format( language.GetPhrase("tool.uvpursuitbreaker.create.desc"), UVPBTOOLMemory.PropCount, UVPBTOOLMemory.ConstraintCount ) )
 		Intro:SizeToContents()
 
 		local PursuitBreakerNameEntry = vgui.Create( "DTextEntry", PursuitBreakerAdjust )
 		PursuitBreakerNameEntry:SetPos( 20, 80 )
-		PursuitBreakerNameEntry:SetPlaceholderText( "ex. downtown_gasstation" )
+		PursuitBreakerNameEntry:SetPlaceholderText( "#tool.uvpursuitbreaker.create.name" )
 		PursuitBreakerNameEntry:SetSize(PursuitBreakerAdjust:GetWide() / 2, 22)
 
 		local ActiveDuration = vgui.Create( "DNumSlider", PursuitBreakerAdjust )
 		ActiveDuration:SetPos( 20, 120 )
 		ActiveDuration:SetSize( PursuitBreakerAdjust:GetWide(), 22 )
-		ActiveDuration:SetText( "Active Duration" )
+		ActiveDuration:SetText( "#tool.uvpursuitbreaker.create.duration" )
 		ActiveDuration:SetMin( 1 )
 		ActiveDuration:SetMax( 60 )
 		ActiveDuration:SetDecimals( 0 )
 		ActiveDuration:SetValue( 10 )
-		ActiveDuration:SetTooltip( "How long until the Pursuit Breaker stops disabling Units? Use higher values if your pursuit breaker takes too long to collapse" )
+		ActiveDuration:SetTooltip( "#tool.uvpursuitbreaker.create.duration.desc" )
 
 		local DontUnweldProps = vgui.Create( "DCheckBoxLabel", PursuitBreakerAdjust )
 		DontUnweldProps:SetPos( 20, 160 )
-		DontUnweldProps:SetText( "Don't unweld props" )
+		DontUnweldProps:SetText( "#tool.uvpursuitbreaker.create.keepweld" )
 		DontUnweldProps:SetValue( 0 )
-		DontUnweldProps:SetTooltip( "Turn this on if your pursuit breaker itself is destructible" )
+		DontUnweldProps:SetTooltip( "#tool.uvpursuitbreaker.create.keepweld.desc" )
 
-		OK:SetText("Create Pursuit Breaker")
+		OK:SetText("#tool.uvpursuitbreaker.create.spawn")
 		OK:SetSize(PursuitBreakerAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 
@@ -129,7 +129,7 @@ if CLIENT then
 				surface.PlaySound( "buttons/button15.wav" )
 
 			else
-				PursuitBreakerNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
+				PursuitBreakerNameEntry:SetPlaceholderText( "#tool.uvpursuitbreaker.create.name.fill" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -179,7 +179,7 @@ if CLIENT then
 					net.Start("UVPursuitBreakerLoad")
 					net.WriteString(selecteditem)
 					net.SendToServer()
-					notification.AddLegacy( "Pursuit Breaker "..selecteditem.." loaded!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( language.GetPhrase("tool.uvpursuitbreaker.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
 					
 				end
@@ -197,10 +197,10 @@ if CLIENT then
 		end
 
 		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("Apply Settings")
+		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin to apply settings!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -217,9 +217,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "Pursuit Breaker Settings Applied!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvpursuitbreaker.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "Pursuit Breaker Settings Applied!\n" )
+			Msg( "#tool.uvpursuitbreaker.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -233,11 +233,11 @@ if CLIENT then
 		})
 	
 		CPanel:AddControl("Label", {
-			Text = "***PRESS 'APPLY SETTINGS' ABOVE FOR CHANGES TO TAKE EFFECT!***",
+			Text = "#tool.settings.clickapply",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "——— PURSUIT BREAKERS FOR THIS MAP ———\n\n- Click on the Pursuit Breaker below to load it.\n- Empty? Build a structure and right-click it to save it as a Pursuit Breaker!",
+			Text = "#tool.uvpursuitbreaker.settings.desc",
 		})
 
 		local Frame = vgui.Create( "DFrame" )
@@ -259,27 +259,27 @@ if CLIENT then
 		UVPursuitBreakerGetSaves( UVPursuitBreakerScrollPanel )
 
 		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "Refresh" )
+		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
 		Refresh.DoClick = function( self )
 			UVPursuitBreakerScrollPanel:Clear()
 			selecteditem = nil
 			UVPursuitBreakerGetSaves( UVPursuitBreakerScrollPanel )
-			notification.AddLegacy( "Pursuit Breaker(s) refreshed!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvpursuitbreaker.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
 
 		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "Delete" )
+		Delete:SetText( "#spawnmenu.menu.delete" )
 		Delete:SetSize( 280, 20 )
 		Delete.DoClick = function( self )
 			
 			if isstring(selecteditem) then
 				file.Delete( "unitvehicles/pursuitbreakers/"..game.GetMap().."/"..selecteditem )
-				notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
-				Msg( "Pursuit Breaker "..selecteditem.." has been deleted!\n" )
+				Msg( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ) )
 			end
 			
 			UVPursuitBreakerScrollPanel:Clear()
@@ -289,12 +289,12 @@ if CLIENT then
 		CPanel:AddItem(Delete)
 
 		CPanel:AddControl("Label", {
-			Text = "——— SETTINGS ———",
+			Text = "#tool.uvpursuitbreaker.settings",
 		})
 
 		local MaxPB = vgui.Create( "DNumSlider", CPanel )
-		MaxPB:SetText( "Max Loaded PB(s)" )
-		MaxPB:SetTooltip( "How many Pursuit Breakers can be loaded at once? Set this to 0 to disable Pursuit Breakers from spawning." )
+		MaxPB:SetText( "#tool.uvpursuitbreaker.settings.maxnr" )
+		MaxPB:SetTooltip( "#tool.uvpursuitbreaker.settings.maxnr.desc" )
 		MaxPB:SetMin( 0 )
 		MaxPB:SetMax( 10 )
 		MaxPB:SetDecimals( 0 )
@@ -302,8 +302,8 @@ if CLIENT then
 		CPanel:AddItem(MaxPB)
 
 		local PBCooldown = vgui.Create( "DNumSlider", CPanel )
-		PBCooldown:SetText( "PB Cooldown" )
-		PBCooldown:SetTooltip( "How long until the used Pursuit Breaker despawns and another one spawns?" )
+		PBCooldown:SetText( "#tool.uvpursuitbreaker.settings.cooldown" )
+		PBCooldown:SetTooltip( "#tool.uvpursuitbreaker.settings.cooldown.desc" )
 		PBCooldown:SetMin( 1 )
 		PBCooldown:SetMax( 600 )
 		PBCooldown:SetDecimals( 0 )
