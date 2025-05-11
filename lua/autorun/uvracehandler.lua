@@ -1101,10 +1101,13 @@ else
             local vehicle_velocity = my_vehicle:GetVelocity() -- :Dot((_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2)
             local check_center_pos = (_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2
             
-            local unit = ((check_center_pos - vehicle_center) * Vector(1,0,1)):GetNormalized()
-            local normalized_velo = vehicle_velocity:GetNormalized() * Vector(1,0,1)
+            local unit = ((check_center_pos - vehicle_center)):GetNormalized()
+            local normalized_velo = vehicle_velocity:GetNormalized()
+
+            print(unit, normalized_velo)
             
             local dot_product = normalized_velo:Dot(unit)
+            print("Dot:", dot_product)
             
             if dot_product > - .8 then
                 LastWrongWayCheckTime = CurTime()
