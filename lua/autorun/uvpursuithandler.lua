@@ -173,7 +173,7 @@ end
 -- 	end)
 -- end
 function UVPlaySound( FileName, Loop, StopLoop )
-	if !PlayMusic:GetBool() then return end
+	//if !PlayMusic:GetBool() then return end
 	if UVLoadedSounds and UVLoadedSounds ~= FileName then
 		//if UVLoadedSounds == FileName then print('Ended') return end
 		--Entity(1):StopSound(UVLoadedSounds)
