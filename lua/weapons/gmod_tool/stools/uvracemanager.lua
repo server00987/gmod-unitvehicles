@@ -389,7 +389,7 @@ elseif CLIENT then
 
 		local cpID = ent:GetID()
 
-		Derma_StringRequest("Set ID", "Set a new ID. Start at 1. Must be in order. Use the same ID for branching checkpoints.", cpID, function(text)
+		Derma_StringRequest("#tool.uvracemanager.checkpoint.setid", "#tool.uvracemanager.checkpoint.setid.desc", cpID, function(text)
 			local id = tonumber(text)
 			selectedCP:SetID(id)
 			selectedCP:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
@@ -400,7 +400,7 @@ elseif CLIENT then
 				net.WriteUInt(GetConVar("uvracemanager_speedlimit"):GetInt(), 16)
 			net.SendToServer()
 
-		end, nil, "Set", "Cancel")
+		end, nil, "#addons.confirm", "#addons.cancel")
 	end
 	net.Receive("UVRace_SelectID", SelectID)
 
@@ -424,7 +424,7 @@ elseif CLIENT then
 			local params = name:Split(" ")
 			local nick = name:match("'.*$"):Replace("'", "")
 
-			dbutton:SetText(params[2] .. " by " .. nick)
+			dbutton:SetText(params[2] .. " | " .. nick)
 			dbutton:Dock(TOP)
 			dbutton:DockMargin(0, 0, 0, 5)
 
@@ -451,9 +451,9 @@ elseif CLIENT then
 	concommand.Add("uvrace_updatevars", UpdateVars)
 
 	local function QueryExport()
-		Derma_StringRequest("Export", "What will this race be called?", cpID, function(txt)
+		Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvracemanager.export.desc", cpID, function(txt)
 			RunConsoleCommand("uvrace_export", txt)
-		end, nil, "Export", "Cancel")
+		end, nil, "#addons.confirm", "#addons.cancel")
 	end
 	concommand.Add("uvrace_queryexport", QueryExport)
 end
@@ -525,7 +525,7 @@ function TOOL:RightClick()
 			net.WriteEntity(ent)
 		net.Send(self:GetOwner())
 	elseif CLIENT then
-		Derma_StringRequest("Set ID", "Set a new ID.", ent:GetID(), function(text)
+		Derma_StringRequest("#tool.uvracemanager.checkpoint.setid", "#tool.uvracemanager.checkpoint.setid.desc", ent:GetID(), function(text)
 			ent:SetID(tonumber(text))
 		end, nil, "Set", "Cancel")
 	end
@@ -557,28 +557,23 @@ function TOOL:Reload( trace )
 end
 
 function TOOL.BuildCPanel(panel)
-	panel:AddControl("Header", { Text = "tool.uvracemanager.name", Description = language.GetPhrase("tool.uvracemanager.desc")})
-	panel:AddControl("Button", {Label = "Get Race Info", Command = "uvrace_count", Text = "Get Race Info"})
+	-- panel:AddControl("Header", { Text = "tool.uvracemanager.name", Description = "#tool.uvracemanager.desc"})
+	panel:AddControl("Header", { Text = "tool.uvracemanager.name"})
+	
+	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racec", Description = "Race"})
+	-- panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.start", Command = "uvrace_startrace"})
+	panel:Button("#tool.uvracemanager.settings.racec.start", "uvrace_startrace")
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.stop", Command = "uvrace_stop"})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.invite", Command = "uvrace_startinvite"})
+	
+	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.saveloadrace", Description = "Race"})
+	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.loadrace", Command = "uvrace_queryimport" })
+	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.saverace", Command = "uvrace_queryexport" })
 
-	panel:AddControl("Label", {Text = "Save/Load Race", Description = "Save/Load Race"})
-	panel:AddControl("Button",  { Label	= "Load Race", Command = "uvrace_queryimport", Text = "Load Race"})
-	panel:AddControl("Button",  { Label	= "Save Race", Command = "uvrace_queryexport", Text = "Save Race"})
 
-	panel:AddControl("Label", {Text = "Remove", Description = "Remove placements"})
-	panel:AddControl("Button", {Label = "Remove all checkpoints", Command = "uvrace_killcps", Text = "Remove all checkpoint placements"})
-	panel:AddControl("Button", {Label = "Remove all spawns", Command = "uvrace_killspawns", Text = "Remove all spawn placements"})
-	panel:AddControl("Button", {Label = "Remove all spawns and checkpoints", Command = "uvrace_killall", Text = "Remove all UV Race spawns and checkpoints"})
-
-	panel:AddControl("Label", {Text = "Race", Description = "Race"})
-	--panel:AddControl("Button", {Label = "Start Solo", Command = "uvrace_startsolo", Text = "Start the race solo"})
-	//panel:AddControl("Button", {Label = "Start Race", Command = "uvrace_startrace", Text = "Start the race with other racers"})
-	panel:Button("Start Race", "uvrace_startrace")
-	panel:AddControl("Button", {Label = "Invite Racers", Command = "uvrace_startinvite", Text = "Invite racers"})
-	panel:AddControl("Button", {Label = "Stop Race", Command = "uvrace_stop", Text = "Stop the race"})
-
-	panel:AddControl("Label", {Text = "Options", Description = "Options"})
+	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.raceo"})
 	local last_lap_value
-	local lap_slider = panel:NumSlider("Laps", "uvracemanager_laps", 1, 100, 0)
+	local lap_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.laps", "uvracemanager_laps", 1, 100, 0)
 	function lap_slider:Think()
 		local value = GetConVar("uvracemanager_laps"):GetInt()
 
@@ -588,9 +583,9 @@ function TOOL.BuildCPanel(panel)
 		end
 	end
 
-	local speed_slider = panel:NumSlider("Speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
+	local speed_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
 
-	local racetheme, label = panel:ComboBox( "Race Theme", "unitvehicle_racetheme" )
+	local racetheme, label = panel:ComboBox( "#tool.uvracemanager.settings.raceo.music", "unitvehicle_racetheme" )
 	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
 	if folders != nil then
 		for k, v in pairs(folders) do
@@ -598,12 +593,20 @@ function TOOL.BuildCPanel(panel)
 		end
 	end
 
-	local sfxtheme, label = panel:ComboBox( "Race SFX", "unitvehicle_sfxtheme" )
+	local sfxtheme, label = panel:ComboBox( "#tool.uvracemanager.settings.raceo.sfx", "unitvehicle_sfxtheme" )
 	local files, folders = file.Find( "sound/uvracesfx/*", "GAME" )
 	if folders != nil then
 		for k, v in pairs(folders) do
 			sfxtheme:AddChoice( v )
 		end
 	end
+	
+	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.clearassets"})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.cp", Command = "uvrace_killcps"})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.startpos", Command = "uvrace_killspawns"})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.all", Command = "uvrace_killall"})
+	panel:AddControl("Label", {Text = " "})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.getraceinfo", Command = "uvrace_count" })
+
 end
 
