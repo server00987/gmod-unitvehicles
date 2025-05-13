@@ -2915,17 +2915,22 @@ else --HUD/Options
 					EvadingProgress = 0
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					if !UVHUDDisplayBackupTimer then
+						local uloc, utype = "uv.chase.unit", UnitsChasing
 						if !UVHUDCopMode then
-							if UnitsChasing != 1 then
-								draw.DrawText( string.format( lang"uv.chase.units", UnitsChasing ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-							else
-								draw.DrawText( string.format( lang"uv.chase.unit", UnitsChasing ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+							if UnitsChasing != 1 then 
+								uloc = "uv.chase.units"
 							end
 						else
-							draw.DrawText( string.format( lang"uv.chase.suspects", UVHUDWantedSuspectsNumber ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+							utype = UVHUDWantedSuspectsNumber
+							if UVHUDWantedSuspectsNumber != 1 then
+								uloc = "uv.chase.suspects"
+							else
+								uloc = "uv.chase.suspect"
+							end
 						end
+						draw.DrawText( string.format( lang(uloc), utype ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					else
-						draw.DrawText( string.format( lang"uv.chase.backupin", UVBackupTimer ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					end
 					UVSoundHeat(UVHeatLevel)
 				elseif !UVHUDDisplayCooldown then
