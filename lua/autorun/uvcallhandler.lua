@@ -18,7 +18,7 @@ if SERVER then
     util.AddNetworkString( "UVHUDWanted" )
 
     hook.Add("Think", "UVCheckForCalls", function()
-        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcalllocation or uvcallexists then
+        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then
             if uvcalllocation and uvtargeting then --Remove the call, allow for new calls to come in
                 uvcalllocation = nil
             end
@@ -84,7 +84,7 @@ if SERVER then
     end
 
     function UVCallInitiate(suspectvehicle, type)
-        if !GetConVar("unitvehicle_callresponse"):GetBool() or uvcalllocation or uvtargeting or uvcallexists then return end
+        if !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then return end
 
         uvpreinfractioncount = 0
 
