@@ -653,12 +653,13 @@ else
                 
                 if v.array.Finished then
                     str = lang("uv.race.suffix.finished")
-                elseif v.array.Disqualified then
-                    str = lang("uv.race.suffix.dnf")
                 elseif v.array.Busted then
                     str = lang("uv.race.suffix.busted")
+                elseif v.array.Disqualified then
+                    str = lang("uv.race.suffix.dnf")
                 elseif v.array.Lap ~= lArray.Lap then
-                    str = ''
+                    local difference = v.array.Lap - lArray.Lap
+                    str = string.format( lang("uv.race.suffix.lap"), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
                 else
                     str = string.format("  (%s%.3f)", sign, math.abs(totalTimeDiff))
                 end

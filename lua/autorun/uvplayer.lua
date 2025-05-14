@@ -63,6 +63,7 @@ if SERVER then
     end)
     
     function UVDeployWeapon(car, slot)
+        if !car or !IsValid(car) then return end
         if uvjammerdeployed and !car.jammerexempt then return end
         if !car.PursuitTech then return end
         
