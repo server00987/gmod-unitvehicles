@@ -622,9 +622,9 @@ if SERVER then
 					local EntityMeta = FindMetaTable( "Entity" )
 					local getTable = EntityMeta.GetTable
 					local selfvTbl = getTable( self.v )
-					local wheelslip = selfvTbl.avgSideSlip > 0 and selfvTbl.avgSideSlip or selfvTbl.avgSideSlip < 0 and selfvTbl.avgSideSlip * -1
+					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
 					if wheelslip != false then
-						throttle = throttle - wheelslip --Glide traction control
+						throttle = throttle - (wheelslip/10) --Glide traction control
 					end
 				else
 					local maththrottle = throttle - math.abs(steer)
@@ -1580,12 +1580,13 @@ if SERVER then
 						end --Cornering
 					end
 				elseif self.v.IsGlideVehicle then
-					if vectdot > 0 and evectdot > 0 and dist:Dot(forward) > 0 and dist:Length2DSqr() > 250000 and self:StraightToTarget(self.e) then 
-						local maththrottle = throttle - math.abs(steer)
-						if maththrottle >= 0 then
-							throttle = maththrottle
-						end
-					end --Cornering
+					local EntityMeta = FindMetaTable( "Entity" )
+					local getTable = EntityMeta.GetTable
+					local selfvTbl = getTable( self.v )
+					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+					if wheelslip != false then
+						throttle = throttle - (wheelslip/10) --Glide traction control
+					end
 					if dist:Length2DSqr() > 250000 and vectdot < 0 and dist:Dot(forward) > 0 and (right.z > 0.75 or right.z < -0.75) and !self.stuck then
 						steer = 0
 						throttle = 1
