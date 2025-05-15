@@ -2489,7 +2489,9 @@ function UVPlayerWreck(vehicle)
 	local bountyplus = (vehicle.playerbounty)*(uvcombobounty)
 	local bounty = string.Comma(bountyplus)
 	if IsValid(vehicle.e) and isfunction(vehicle.e.GetDriver) and IsValid(UVGetDriver(vehicle.e)) and UVGetDriver(vehicle.e):IsPlayer() then 
-		UVGetDriver(vehicle.e):PrintMessage( HUD_PRINTCENTER, name.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
+		--UVGetDriver(vehicle.e):PrintMessage( HUD_PRINTCENTER, name.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
+		UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", v, '', bounty, uvcombobounty)
+
 	end
 	uvwrecks = uvwrecks + 1
 	local driver = UVGetDriver(vehicle)
