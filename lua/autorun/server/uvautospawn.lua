@@ -1919,7 +1919,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 				uv:Spawn()
 				uv:Activate()
 				ply = uv
-				
+
 			else
 				if Ent.IsSimfphyscar then
 					ply:EnterVehicle( Ent.DriverSeat )
@@ -1934,6 +1934,8 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 			end
 		end
 	end)
+
+	return Ent
 end
 
 function UVMoveToGridSlot( vehicle, aienabled )

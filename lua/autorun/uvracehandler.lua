@@ -23,9 +23,15 @@ if SERVER then
     util.AddNetworkString( "uvrace_participants" )
     util.AddNetworkString( "uvrace_notification" )
     util.AddNetworkString( "uvrace_decline" )
+    util.AddNetworkString( "uvrace_sendmessage" )
+
+    util.AddNetworkString( "uvrace_resetcountdown" )
+    util.AddNetworkString( "uvrace_resetfailed" )
     
     util.AddNetworkString( "uvrace_replace" )
     util.AddNetworkString( "uvrace_disqualify" )
+
+    util.AddNetworkString( "uvrace_replace" )
     
     util.AddNetworkString( "uvrace_checkpointcomplete" )
     util.AddNetworkString( "uvrace_lapcomplete" )
@@ -136,12 +142,12 @@ if SERVER then
         end
 
         old_vehicle.isresetting = true
-        new_vehicle.hasreset = true
+        new_vehicle.hasreset = CurTime()
 
         UVRaceAddParticipant(new_vehicle)
         UVRaceRemoveParticipant(old_vehicle)
 
-        timer.Simple(1, function()
+        timer.Simple(10, function()
             new_vehicle.hasreset = false
         end)
 
@@ -747,8 +753,8 @@ else
         UVHUDRaceCurrentParticipants = 1
     end
     
-    function UVNotifyDriver( message, duration )
-        duration = duration or 5
+    function UVNotifyDriver( message ) --, duration
+        local duration = 5
         UVHUDNotificationString = message
         UVHUDNotification = true 
         timer.Simple( duration, function()
@@ -827,6 +833,26 @@ else
             local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/start/*", "GAME" )
             surface.PlaySound( "uvracesfx/".. theme .."/start/".. soundfiles[math.random(1, #soundfiles)] )
         end
+    end)
+
+    net.Receive( "uvrace_resetfailed", function()
+        local lang = language.GetPhrase
+        
+        chat.AddText(
+            Color(255, 126, 126),
+            lang( net.ReadString() )
+        )
+    end)
+
+    net.Receive( "uvrace_resetcountdown", function()
+        local lang = language.GetPhrase
+        local time_left = net.ReadInt(4)
+        
+        chat.AddText(
+            Color(255, 255, 255),
+            string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
+            time_left 
+        )
     end)
     
     net.Receive( "uvrace_invite", function()
@@ -1147,6 +1173,13 @@ else
         
         -- used by checkpoint entities
         UVHUDRaceCurrentCheckpoint = checkpoint_count
+
+        for _, v in pairs( ents.FindByClass("uvrace_checkpoint") ) do
+            if v:GetID() == checkpoint_count +1 then
+                _UVCurrentCheckpoint = v
+                break
+            end
+        end
         
         -- check for wrong way
         if _UVCurrentCheckpoint and IsValid(_UVCurrentCheckpoint) then
@@ -1163,7 +1196,7 @@ else
                 LastWrongWayCheckTime = CurTime()
             end
             
-            if CurTime() - LastWrongWayCheckTime > 1 then
+            if CurTime() - LastWrongWayCheckTime > 3 then
                 if !UVHUDNotification then
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
                     local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/wrongway/*", "GAME" )

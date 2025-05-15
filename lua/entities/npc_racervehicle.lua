@@ -459,7 +459,16 @@ if SERVER then
 				if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
 					self.stuck = true
 					self.moving = CurTime()
-					timer.Simple(2, function() if IsValid(self.v) then self.stuck = nil self.PatrolWaypoint = nil end end)
+					timer.Simple(2, function() 
+						if IsValid(self.v) then 
+							self.stuck = nil 
+							self.PatrolWaypoint = nil 
+							
+							if self.v.uvraceparticipant and ((not self.v.uvbustingprogress) or self.v.uvbustingprogress <= 0) then
+								UVResetPosition( self.v )
+							end
+						end 
+					end)
 				end
 			end
 			

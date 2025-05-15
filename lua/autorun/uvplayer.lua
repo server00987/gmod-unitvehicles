@@ -16,8 +16,73 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     
     if button == KEY_M then
         local car = UVGetVehicle( ply )
+
         if car then
-            UVResetPosition(car)
+            if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
+            if not UVRaceInProgress then return end
+
+            local key = "VehicleReset_"..car:EntIndex()
+            if timer.Exists( key ) then return end
+
+            if car.hasreset then
+                net.Start("uvrace_resetfailed")
+                net.WriteString("uv.race.resetcooldown")
+                net.Send(ply)
+                return
+            end
+
+            if car:GetVelocity():LengthSqr() > 5000 then
+                net.Start("uvrace_resetfailed")
+                net.WriteString("uv.race.resetstationary")
+                net.Send(ply)
+                return
+            end
+
+            if car.uvbustingprogress and car.uvbustingprogress > 0 then
+                timer.Remove(key)
+                net.Start("uvrace_resetfailed")
+                net.WriteString("uv.race.resetbusting")
+                net.Send(ply)
+                return
+            end
+
+            net.Start( "uvrace_resetcountdown" )
+            net.WriteInt(2, 4)
+            net.Send(ply)
+
+            timer.Create( key, 1, 2, function()
+                local remaining_reps = timer.RepsLeft( key )
+
+                if !IsValid(car) or car:GetDriver() ~= ply then
+                    timer.Remove(key)
+                end
+
+                if car:GetVelocity():LengthSqr() > 5000 then
+                    net.Start("uvrace_resetfailed")
+                    net.WriteString("uv.race.resetstationary")
+                    net.Send(ply)
+                    return
+                end
+
+                if car.uvbustingprogress and car.uvbustingprogress > 0 then
+                    timer.Remove(key)
+                    net.Start("uvrace_resetfailed")
+                    net.WriteString("uv.race.resetbusting")
+                    net.Send(ply)
+                    return
+                end
+
+                if remaining_reps > 0 then
+                    net.Start( "uvrace_resetcountdown" )
+                    net.WriteInt(remaining_reps, 4)
+                    net.Send(ply)
+                else
+                    if IsValid(car) and car:GetDriver() == ply then
+                        UVResetPosition(car)
+                    end
+                end
+            end)
+            --UVResetPosition(car)
         end
     end
     
@@ -51,6 +116,8 @@ if SERVER then
         
         local entry = UVRaceTable.Participants [vehicle]
         if not entry then return end
+
+        if vehicle.hasreset then return end
         
         local vehicle_class = vehicle:GetClass()
         
@@ -90,10 +157,31 @@ if SERVER then
         end
         
         if vehicle_class == "gmod_sent_vehicle_fphysics_base" then
-            UVTeleportSimfphysVehicle( vehicle, (ground_trace.Hit and ground_trace.HitPos) or pos, ang )
+            vehicle = UVTeleportSimfphysVehicle( vehicle, (ground_trace.Hit and ground_trace.HitPos) or pos, ang )
+        elseif vehicle.IsGlideVehicle then
+            vehicle:SetPos( (ground_trace.Hit and (ground_trace.HitPos + (Vector(0,0,1) * 25))) or pos )
+            vehicle:SetAngles( ang )
+            vehicle:PhysWake()
         else
-            vehicle:SetPos( pos )
+            local physObj = vehicle:GetPhysicsObject()
+            physObj:EnableMotion(false)
+
+            ang.yaw = ang.yaw - 90
+
+            vehicle:SetPos( (ground_trace.Hit and (ground_trace.HitPos + (Vector(0,0,1) * 50))) or pos )
+            vehicle:SetAngles( ang )
+            vehicle:SetVelocity(Vector(0,0,0))
+            
+            timer.Simple(.5, function()
+                physObj:EnableMotion(true)
+                physObj:Wake()
+            end)
         end
+
+        vehicle.hasreset = CurTime()
+        timer.Simple(10, function()
+            vehicle.hasreset = nil
+        end)
     end
     
     net.Receive( "UVPTKeybindRequest", function( len, ply )
