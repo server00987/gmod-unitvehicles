@@ -697,7 +697,9 @@ else
                     str = lang("uv.race.suffix.dnf")
                 elseif v.array.Lap ~= lArray.Lap then
                     local difference = v.array.Lap - lArray.Lap
-                    str = string.format( lang("uv.race.suffix.lap"), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
+					local ltext = "uv.race.suffix.lap"
+					if math.abs( difference ) != 1 then ltext = "uv.race.suffix.laps" end
+                    str = string.format( lang(ltext), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
                 else
                     str = string.format("  (%s%.3f)", sign, math.abs(totalTimeDiff))
                 end

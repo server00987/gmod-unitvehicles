@@ -379,14 +379,24 @@ if SERVER then
 
 			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
 
-			if self.v.IsSimfphyscar and self.v:GetVelocity():LengthSqr() > 10000 then
-				if istable(self.v.Wheels) then
-					for i = 1, table.Count( self.v.Wheels ) do
-						local Wheel = self.v.Wheels[ i ]
-						if !Wheel then return end
-						if Wheel:GetGripLoss() > 0 then
-							throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+			if self.v:GetVelocity():LengthSqr() > 10000 then
+				if self.v.IsSimfphyscar then 
+					if istable(self.v.Wheels) then
+						for i = 1, table.Count( self.v.Wheels ) do
+							local Wheel = self.v.Wheels[ i ]
+							if !Wheel then return end
+							if Wheel:GetGripLoss() > 0 then
+								throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+							end
 						end
+					end
+				elseif self.v.IsGlideVehicle then
+					local EntityMeta = FindMetaTable( "Entity" )
+					local getTable = EntityMeta.GetTable
+					local selfvTbl = getTable( self.v )
+					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+					if wheelslip != false then
+						throttle = throttle - (wheelslip/10) --Glide traction control
 					end
 				end
 			end

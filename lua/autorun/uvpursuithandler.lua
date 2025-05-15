@@ -2221,6 +2221,13 @@ else --HUD/Options
 		weight = 500,
 		italic = true,
 	})
+		
+	surface.CreateFont("UVFont-Smaller", {
+		font = "Arial",
+		size = (math.Round(ScrH()*0.0425)),
+		weight = 500,
+		italic = true,
+	})
 	
 	surface.CreateFont("UVFont2", {
 		font = "Arial",
@@ -2922,15 +2929,15 @@ else --HUD/Options
 							end
 						else
 							utype = UVHUDWantedSuspectsNumber
-							if UVHUDWantedSuspectsNumber != 1 then
+							-- if UVHUDWantedSuspectsNumber != 1 then
 								uloc = "uv.chase.suspects"
-							else
-								uloc = "uv.chase.suspect"
-							end
+							-- else
+								-- uloc = "uv.chase.suspect"
+							-- end
 						end
-						draw.DrawText( string.format( lang(uloc), utype ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						draw.DrawText( string.format( lang(uloc), utype ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					else
-						draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					end
 					UVSoundHeat(UVHeatLevel)
 				elseif !UVHUDDisplayCooldown then
@@ -2939,7 +2946,7 @@ else --HUD/Options
 						UVEvadingProgress = EvadingProgress
 					end
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					draw.DrawText( lang("uv.chase.evading"), "UVFont",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
 					surface.SetDrawColor(Color( 0, 255, 0))
@@ -2954,7 +2961,7 @@ else --HUD/Options
 				else
 					EvadingProgress = 0
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					draw.DrawText( lang("uv.chase.cooldown"), "UVFont",w/2,h/1.05, Color(255,255,255), TEXT_ALIGN_CENTER )
+					draw.DrawText( lang("uv.chase.cooldown"), "UVFont-Smaller",w/2,h/1.05, Color(255,255,255), TEXT_ALIGN_CENTER )
 				end
 			else
 				EvadingProgress = 0
@@ -2963,7 +2970,7 @@ else --HUD/Options
 				else
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 				end
-				draw.DrawText( UVNotification, "UVFont",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
+				draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
 		else
 			if UVSoundLoop and !UVPlayingRace then
