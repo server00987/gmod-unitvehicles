@@ -98,6 +98,8 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
 end)
 
 if SERVER then
+
+    util.AddNetworkString('UVNotification')
     
     util.AddNetworkString('UVGetNewKeybind')
     util.AddNetworkString('UVPTKeybindRequest')
@@ -109,6 +111,16 @@ if SERVER then
     
     util.AddNetworkString( "UVWeaponJammerEnable" )
     util.AddNetworkString( "UVWeaponJammerDisable" )
+
+    function UVNotifyCenter( ply_array, frmt, ... )
+        for _, v in pairs( ply_array ) do
+
+            net.Start('UVNotification')
+            net.WriteString( frmt ); net.WriteTable( { ... } )
+            net.Send( v )
+
+        end
+    end
     
     function UVResetPosition( vehicle )
         -- Check if vehicle is a race participant
@@ -786,6 +798,19 @@ if SERVER then
     end
     
 else
+
+    net.Receive("UVNotification", function()
+        local lang = language.GetPhrase
+        
+        local format = net.ReadString()
+        local args = net.ReadTable()
+
+        for k, v in pairs (args) do
+            args[k]=lang (v)
+        end
+
+        LocalPlayer():PrintMessage( HUD_PRINTCENTER, string.format( lang(format), unpack ( args ) ) )
+    end)
     
     net.Receive("UVWeaponJammerEnable", function()
         local ply = net.ReadEntity()

@@ -355,8 +355,13 @@ if SERVER then
     
     
     hook.Add("player_activate", "UVRaceArrayInit", function( data )
+
         local id = data.userid
         local ply = Player(id)
+
+        -- timer.Simple(3, function()
+        --     UVNotifyCenter( {ply}, "uv.test" , 'Hi', 'uv.unit.racer')
+        -- end)
         
         if UVRaceInProgress then
             net.Start( "uvrace_info" )
@@ -755,7 +760,7 @@ else
         UVHUDRaceCurrentParticipants = 1
     end
     
-    function UVNotifyDriver( message, duration ) --, duration
+    function UVRaceNotify( message, duration ) --, duration
         local duration = duration or 5
 
         UVHUDNotificationString = message
@@ -766,7 +771,7 @@ else
     end
     
     net.Receive( "uvrace_notification", function()
-        UVNotifyDriver( net.ReadString(), net.ReadFloat() )
+        UVRaceNotify( net.ReadString(), net.ReadFloat() )
     end)
     
     net.Receive( "uvrace_decline", function() 
@@ -1216,7 +1221,7 @@ else
                         local audio_path = "uvracesfx/".. theme .."/wrongway/".. soundfiles[math.random(1, #soundfiles)]
                         surface.PlaySound(audio_path)
                     end
-					if hudyes then UVNotifyDriver("#uv.race.wrongway", 1.5) end
+					if hudyes then UVRaceNotify("#uv.race.wrongway", 1.5) end
                 end
             end
         end
