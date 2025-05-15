@@ -16,28 +16,28 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     
     if button == KEY_M then
         local car = UVGetVehicle( ply )
-
+        
         if car then
             if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
             if not UVRaceInProgress then return end
-
+            
             local key = "VehicleReset_"..car:EntIndex()
             if timer.Exists( key ) then return end
-
+            
             if car.hasreset then
                 net.Start("uvrace_resetfailed")
                 net.WriteString("uv.race.resetcooldown")
                 net.Send(ply)
                 return
             end
-
+            
             if car:GetVelocity():LengthSqr() > 5000 then
                 net.Start("uvrace_resetfailed")
                 net.WriteString("uv.race.resetstationary")
                 net.Send(ply)
                 return
             end
-
+            
             if car.uvbustingprogress and car.uvbustingprogress > 0 then
                 timer.Remove(key)
                 net.Start("uvrace_resetfailed")
@@ -45,25 +45,25 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
                 net.Send(ply)
                 return
             end
-
+            
             net.Start( "uvrace_resetcountdown" )
             net.WriteInt(2, 4)
             net.Send(ply)
-
+            
             timer.Create( key, 1, 2, function()
                 local remaining_reps = timer.RepsLeft( key )
-
+                
                 if !IsValid(car) or car:GetDriver() ~= ply then
                     timer.Remove(key)
                 end
-
+                
                 if car:GetVelocity():LengthSqr() > 5000 then
                     net.Start("uvrace_resetfailed")
                     net.WriteString("uv.race.resetstationary")
                     net.Send(ply)
                     return
                 end
-
+                
                 if car.uvbustingprogress and car.uvbustingprogress > 0 then
                     timer.Remove(key)
                     net.Start("uvrace_resetfailed")
@@ -71,7 +71,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
                     net.Send(ply)
                     return
                 end
-
+                
                 if remaining_reps > 0 then
                     net.Start( "uvrace_resetcountdown" )
                     net.WriteInt(remaining_reps, 4)
@@ -98,7 +98,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
 end)
 
 if SERVER then
-
+    
     util.AddNetworkString('UVNotification')
     
     util.AddNetworkString('UVGetNewKeybind')
@@ -111,14 +111,14 @@ if SERVER then
     
     util.AddNetworkString( "UVWeaponJammerEnable" )
     util.AddNetworkString( "UVWeaponJammerDisable" )
-
+    
     function UVNotifyCenter( ply_array, frmt, ... )
         for _, v in pairs( ply_array ) do
-
+            
             net.Start('UVNotification')
             net.WriteString( frmt ); net.WriteTable( { ... } )
             net.Send( v )
-
+            
         end
     end
     
@@ -128,7 +128,7 @@ if SERVER then
         
         local entry = UVRaceTable.Participants [vehicle]
         if not entry then return end
-
+        
         if vehicle.hasreset then return end
         
         local vehicle_class = vehicle:GetClass()
@@ -155,16 +155,16 @@ if SERVER then
         
         local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
         local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_OPAQUE, filter = {checkpoint}})
-
+        
         local next_pos = nil
         local next_dir = nil
-
+        
         local ang = Angle(0, 0, 0) 
-
+        
         if next_checkpoint then
             next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
             next_dir = (next_pos - pos):GetNormalized()
-
+            
             ang = next_dir:Angle()
         end
         
@@ -177,9 +177,9 @@ if SERVER then
         else
             local physObj = vehicle:GetPhysicsObject()
             physObj:EnableMotion(false)
-
+            
             ang.yaw = ang.yaw - 90
-
+            
             vehicle:SetPos( (ground_trace.Hit and (ground_trace.HitPos + (Vector(0,0,1) * 50))) or pos )
             vehicle:SetAngles( ang )
             vehicle:SetVelocity(Vector(0,0,0))
@@ -189,7 +189,7 @@ if SERVER then
                 physObj:Wake()
             end)
         end
-
+        
         vehicle.hasreset = CurTime()
         timer.Simple(10, function()
             vehicle.hasreset = nil
@@ -798,18 +798,28 @@ if SERVER then
     end
     
 else
-
+    
     net.Receive("UVNotification", function()
         local lang = language.GetPhrase
         
         local format = net.ReadString()
         local args = net.ReadTable()
-
+        
         for k, v in pairs (args) do
             args[k]=lang (v)
         end
-
-        LocalPlayer():PrintMessage( HUD_PRINTCENTER, string.format( lang(format), unpack ( args ) ) )
+        
+        UVCenterNotification = string.format( lang(format), unpack ( args ) )
+        
+        if timer.Exists("UVNotificationTimer") then
+            timer.Remove("UVNotificationTimer")
+        end
+        
+        timer.Create("UVNotificationTimer", 5, 1, function()
+            UVCenterNotification = nil
+        end)
+        
+        --LocalPlayer():PrintMessage( HUD_PRINTCENTER, string.format( lang(format), unpack ( args ) ) )
     end)
     
     net.Receive("UVWeaponJammerEnable", function()
@@ -862,4 +872,38 @@ else
         halo.Add( UVWithESF, Color(255,255,255), 10, 10, 1 )
     end)
     
+    local function noti_draw(text, font, x, y, color)
+        surface.SetFont(font)
+        local lines = string.Explode("\n", text)
+        
+        local lH = {}
+        local mW = 0
+        local tH = 0
+        
+        for _, line in ipairs(lines) do
+            local w, h = surface.GetTextSize(line)
+            table.insert( lH, h )
+            mW = math.max( mW, w )
+            tH = tH + h
+        end
+
+        local currentY = y - tH/2
+        
+        for i, line in ipairs(lines) do
+            local w,h = surface.GetTextSize(line)
+            draw.SimpleText(line, font, x - w/2, currentY, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            currentY = currentY + h
+        end
+    end
+    
+    hook.Add( "HUDPaint", "UVNotifications", function()
+        if UVCenterNotification then 
+            local h = ScrH()/2.7
+            local w = ScrW()/2
+
+            print(255 - math.abs( math.sin(CurTime() * 2) * 50))
+
+            noti_draw (UVCenterNotification, "HUDDefault", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 2) * 100)))
+        end
+    end)
 end
