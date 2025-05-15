@@ -24,6 +24,7 @@ if SERVER then
     util.AddNetworkString( "uvrace_notification" )
     util.AddNetworkString( "uvrace_decline" )
     
+    util.AddNetworkString( "uvrace_replace" )
     util.AddNetworkString( "uvrace_disqualify" )
     
     util.AddNetworkString( "uvrace_checkpointcomplete" )
@@ -104,6 +105,7 @@ if SERVER then
         vehicle.racefinished = false
         vehicle.uvraceparticipant = true
         vehicle.racedriver = driver
+        vehicle.isresetting = false
         
         if sendmsg then
             PrintMessage( HUD_PRINTTALK, ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())).. " has joined the race!" )
@@ -111,8 +113,42 @@ if SERVER then
         
         vehicle:CallOnRemove( "uvrace_participantremoved", function( ent )
             local driver = UVGetDriver( vehicle )
+
+            if vehicle.isresetting then return end
             UVRaceRemoveParticipant( ent, 'Disqualified' )
         end )
+    end
+
+    function UVRaceReplaceParticipant( old_vehicle, new_vehicle )
+        if UVRaceTable.Participants then
+            if UVRaceTable.Participants and UVRaceTable.Participants[ old_vehicle ] then
+               UVRaceTable.Participants[ new_vehicle ] = UVRaceTable.Participants[ old_vehicle ]
+               UVRaceTable.Participants[ old_vehicle ] = nil
+                -- if reason then
+                --     net.Start( "uvrace_disqualify" )
+                --     net.WriteEntity(vehicle)
+                --     net.WriteString(reason)
+                --     net.Broadcast()
+                    
+                --     UVRaceTable.Participants [vehicle][reason] = true
+                -- end
+            end
+        end
+
+        old_vehicle.isresetting = true
+        new_vehicle.hasreset = true
+
+        UVRaceAddParticipant(new_vehicle)
+        UVRaceRemoveParticipant(old_vehicle)
+
+        timer.Simple(1, function()
+            new_vehicle.hasreset = false
+        end)
+
+        net.Start( "uvrace_replace" )
+        net.WriteEntity(old_vehicle)
+        net.WriteEntity(new_vehicle)
+        net.Broadcast()
     end
     
     function UVRaceRemoveParticipant( vehicle, reason )
@@ -307,6 +343,8 @@ if SERVER then
             end
         end
     end
+
+    
     
     hook.Add("player_activate", "UVRaceArrayInit", function( data )
         local id = data.userid
@@ -333,14 +371,14 @@ if SERVER then
         
         if next( UVRaceCurrentParticipants ) != nil then
             local pos = 0
-            local player_table = {}
+            --local player_table = {}
             
             for _, vehicle in pairs( UVRaceCurrentParticipants ) do
                 if IsValid( vehicle ) then
-                    local driver = UVGetDriver( vehicle )
-                    if IsValid( driver ) then
-                        table.insert(player_table, driver)
-                    end
+                    -- local driver = UVGetDriver( vehicle )
+                    -- if IsValid( driver ) then
+                    --     table.insert(player_table, driver)
+                    -- end
                     
                     if vehicle.uvbusted then
                         UVRaceRemoveParticipant( vehicle, 'Busted' )
@@ -348,7 +386,7 @@ if SERVER then
                     end
                     
                     -- Damage check
-                    if UVCheckIfWrecked(vehicle) then
+                    if UVCheckIfWrecked(vehicle) and !vehicle.hasreset then
                         UVRaceRemoveParticipant( vehicle, 'Disqualified' )
                         continue
                     end
@@ -932,6 +970,18 @@ else
                     
                     UVHUDRaceInfo['Participants'][participant][reason] = true
                 end
+            end
+        end
+    end)
+
+    net.Receive( "uvrace_replace", function() 
+        local old_entity = net.ReadEntity()
+        local new_entity = net.ReadEntity()
+
+        if UVHUDRaceInfo and UVHUDRaceInfo ['Participants'] then
+            if UVHUDRaceInfo ['Participants'][old_entity] then
+                UVHUDRaceInfo ['Participants'][new_entity] = UVHUDRaceInfo ['Participants'][old_entity]
+                UVHUDRaceInfo ['Participants'][old_entity] = nil
             end
         end
     end)

@@ -9,9 +9,16 @@ local temp_keybinds = {
 
 local keybind_requests = {}
 
-hook.Add( "PlayerButtonDown", "PlayerButtonDownWikiExample2", function( ply, button )
+hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     if CLIENT and not IsFirstTimePredicted() then
         return
+    end
+    
+    if button == KEY_M then
+        local car = UVGetVehicle( ply )
+        if car then
+            UVResetPosition(car)
+        end
     end
     
     if keybind_requests[ply] then
@@ -37,6 +44,57 @@ if SERVER then
     
     util.AddNetworkString( "UVWeaponJammerEnable" )
     util.AddNetworkString( "UVWeaponJammerDisable" )
+    
+    function UVResetPosition( vehicle )
+        -- Check if vehicle is a race participant
+        if not table.HasValue( UVRaceCurrentParticipants, vehicle ) then return end
+        
+        local entry = UVRaceTable.Participants [vehicle]
+        if not entry then return end
+        
+        local vehicle_class = vehicle:GetClass()
+        
+        local look_up_needle = # entry.Checkpoints
+        local checkpoint = nil
+        local next_checkpoint = nil
+        
+        -- Get last passed checkpoint
+        for _, v in pairs(ents.FindByClass("uvrace_checkpoint")) do
+            local id = v:GetID()
+            
+            if id == look_up_needle then
+                checkpoint = v
+            elseif id == look_up_needle +1 then
+                next_checkpoint = v
+            end
+        end
+        
+        if not checkpoint then return end
+        
+        -- Teleport to the checkpoint
+        --PrintMessage( HUD_PRINTTALK, "Resetting position..." )
+        
+        local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
+        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_OPAQUE, filter = {checkpoint}})
+
+        local next_pos = nil
+        local next_dir = nil
+
+        local ang = Angle(0, 0, 0) 
+
+        if next_checkpoint then
+            next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
+            next_dir = (next_pos - pos):GetNormalized()
+
+            ang = next_dir:Angle()
+        end
+        
+        if vehicle_class == "gmod_sent_vehicle_fphysics_base" then
+            UVTeleportSimfphysVehicle( vehicle, (ground_trace.Hit and ground_trace.HitPos) or pos, ang )
+        else
+            vehicle:SetPos( pos )
+        end
+    end
     
     net.Receive( "UVPTKeybindRequest", function( len, ply )
         local slot = net.ReadInt( 3 )
@@ -172,7 +230,7 @@ if SERVER then
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             local result = UVDeployKillSwitch(car)
-
+            
             if result then
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
@@ -225,35 +283,35 @@ if SERVER then
                 car:VC_repairFull_Admin()
             else
                 local mass = vehicle:GetPhysicsObject():GetMass()
-			    vehicle:SetMaxHealth(mass)
-			    vehicle:SetHealth(mass)
-			    vehicle:StopParticles()
+                vehicle:SetMaxHealth(mass)
+                vehicle:SetHealth(mass)
+                vehicle:StopParticles()
             end
         end
         if car.IsSimfphyscar then
             local repaired_tires = false 
-
-		    if istable(car.Wheels) then
-			    for i = 1, table.Count( car.Wheels ) do
-				    local Wheel = car.Wheels[ i ]
-				    if IsValid(Wheel) and Wheel:GetDamaged() then
-					    repaired_tires = true
-					    Wheel:SetDamaged( false )
-				    end
-			    end
-		    end
-
+            
+            if istable(car.Wheels) then
+                for i = 1, table.Count( car.Wheels ) do
+                    local Wheel = car.Wheels[ i ]
+                    if IsValid(Wheel) and Wheel:GetDamaged() then
+                        repaired_tires = true
+                        Wheel:SetDamaged( false )
+                    end
+                end
+            end
+            
             if !repaired_tires and car:GetCurHealth() == car:GetMaxHealth() then return end
-
+            
             is_repaired = true
             car:EmitSound('ui/pursuit/repair.wav')
-
+            
             -- TODO: There is some bug when AI is using a simfphys car, GetMaxHealth for some reason returns -inf...
             if IsValid(car:GetDriver()) then
                 car.simfphysoldhealth = car:GetMaxHealth()
                 car:SetCurHealth(car:GetMaxHealth())
             end
-
+            
             car:SetOnFire( false )
             car:SetOnSmoke( false )
             
@@ -445,7 +503,7 @@ if SERVER then
                 if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
                     UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Get close to an enemy to killswitch them!")
                 end
-
+                
                 return false
             end
             
@@ -455,7 +513,7 @@ if SERVER then
             if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
                 UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "There's no enemies to killswitch!")
             end
-
+            
             return false
         end
     end
