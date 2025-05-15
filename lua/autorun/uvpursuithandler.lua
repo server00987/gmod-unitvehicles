@@ -8,6 +8,8 @@ local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
 
+local showhud = GetConVar("cl_drawhud")
+
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot1",
 	[2] = "#uv.ptech.slot2"
@@ -2400,37 +2402,28 @@ else --HUD/Options
 	
 	net.Receive("UVHUDBusting", function()
 		local lang = language.GetPhrase
+        local blink = 255 * math.abs(math.sin(RealTime() * 4))
+        local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+        local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
 		UVBustingProgress = net.ReadString()
 		UVHUDDisplayBusting = true
-		UVNotificationColor = Color( 255, 0, 0)
+		UVNotificationColor = Color( 255, 255, 255)
 		UVNotification = lang("uv.chase.busting")
 		UVBustingTimeLeft = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
 		if UVHUDDisplayPursuit then
 			if UVBustingTimeLeft >= 3 then
 				UVNotification = lang("uv.chase.busting")
 			elseif UVBustingTimeLeft >= 2 then
+				UVNotificationColor = Color( 255, blink, blink)
 				UVNotification = "! " .. lang("uv.chase.busting") .. " !"
-				if math.floor(RealTime()*4)==math.Round(RealTime()*4) then
-					UVNotificationColor = Color( 255, 0, 0)
-				else
-					UVNotificationColor = Color( 255, 255, 255)
-				end
 				UVSoundBusting()
 			elseif UVBustingTimeLeft >= 1 then
+				UVNotificationColor = Color( 255, blink2, blink2)
 				UVNotification = "!! " .. lang("uv.chase.busting") .. " !!"
-				if math.floor(RealTime()*6)==math.Round(RealTime()*6) then
-					UVNotificationColor = Color( 255, 0, 0)
-				else
-					UVNotificationColor = Color( 255, 255, 255)
-				end
 				UVSoundBusting()
 			elseif UVBustingTimeLeft >= 0 then
+				UVNotificationColor = Color( 255, blink3, blink3)
 				UVNotification = "!!! " .. lang("uv.chase.busting") .. " !!!"
-				if math.floor(RealTime()*8)==math.Round(RealTime()*8) then
-					UVNotificationColor = Color( 255, 0, 0)
-				else
-					UVNotificationColor = Color( 255, 255, 255)
-				end
 				UVSoundBusting()
 			else
 				UVNotificationColor = Color( 255, 255, 255)
@@ -2467,16 +2460,12 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDEnemyBusted", function()
-		
-		-- UVNotificationColor = Color( 255, 0, 0)
-		if math.floor(RealTime()*4)==math.Round(RealTime()*4) then
-			UVNotificationColor = Color( 255, 0, 0)
-		else
-			UVNotificationColor = Color( 255, 255, 255)
-		end
+        local blink = 255 * math.abs(math.sin(RealTime() * 8))
+		UVNotificationColor = Color(255, blink, blink)
 		local bustedtext = language.GetPhrase("uv.chase.busted")
 		if !UVHUDDisplayNotification then
-			if UVHUDRaceInProgress then 
+			if UVHUDRaceInProgress then
+				
 				bustedtext = language.GetPhrase("uv.race.shutdown")
 			end
 			UVNotification = "/// " .. bustedtext .. " ///"
@@ -2511,16 +2500,10 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDHiding", function()
-		
-		UVNotificationColor = Color( 0, 255, 0)
-		if math.floor(RealTime()*2)==math.Round(RealTime()*2) then
-			UVNotificationColor = Color( 0, 0, 255)
-		else
-			UVNotificationColor = Color( 255, 255, 255)
-		end
+		local blink = 255 * math.abs(math.sin(RealTime() * 6))
+		UVNotificationColor = Color( blink, blink, 255)
 		UVNotification = "--- " .. language.GetPhrase("uv.chase.hiding") .. " ---"
 		UVHUDDisplayNotification = true
-		
 	end)
 	
 	net.Receive("UVHUDStopHiding", function()
@@ -2758,12 +2741,13 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
+		local hudyes = showhud:GetBool()
 		local lang = language.GetPhrase
 		
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
 		
-		if UVHUDDisplayPursuit then
+		if UVHUDDisplayPursuit and hudyes then
 			outofpursuit = CurTime()
 			
 			local UVHeatBountyMin
@@ -2848,15 +2832,20 @@ else --HUD/Options
 				end
 			end
 			local B = math.Clamp((HeatProgress)*(w/20+60),0,w/20+60)
-			if HeatProgress >= 0.75 and HeatProgress < 1 then --When close to next heat level
-				if math.floor(RealTime()*2)==math.Round(RealTime()*2) then
-					surface.SetDrawColor(Color(255,0,0))
-				else
-					surface.SetDrawColor(Color(255,255,255))
-				end
+			local blink = 255 * math.abs(math.sin(RealTime() * 4))
+			local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+			local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+			
+			if HeatProgress >= 0.6 and HeatProgress < 0.75 then
+				surface.SetDrawColor(Color(255,blink,blink))
+			elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
+				surface.SetDrawColor(Color(255,blink2,blink2))
+			elseif HeatProgress >= 0.9 and HeatProgress < 1 then
+				surface.SetDrawColor(Color(255, blink3, blink3))
 			elseif HeatProgress >= 1 then
 				surface.SetDrawColor(Color(255,0,0))
 			end
+			
 			surface.DrawRect(w/1.099,h/120,B,39)
 			local ResourceText = "⛉\n"..UVResourcePoints
 			if UVOneCommanderActive then
@@ -2979,7 +2968,7 @@ else --HUD/Options
 			end
 		end
 		
-		if UVHUDDisplayBusting and !UVHUDDisplayCooldown then
+		if UVHUDDisplayBusting and !UVHUDDisplayCooldown and hudyes then
 			if !BustingProgress or BustingProgress == 0 then
 				BustingProgress = CurTime()
 			end
@@ -2997,7 +2986,7 @@ else --HUD/Options
 			BustingProgress = 0
 		end
 		
-		if UVHUDDisplayCooldown then
+		if UVHUDDisplayCooldown and hudyes then
 			if !CooldownProgress or CooldownProgress == 0 then
 				CooldownProgress = CurTime()
 			end

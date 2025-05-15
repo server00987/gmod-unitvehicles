@@ -77,7 +77,7 @@ if SERVER then
 
 		if uvtargeting then
 			net.Start("uvrace_decline")
-			net.WriteString("You cannot start a race now, lose the cops first!")
+			net.WriteString("uv.race.start.error.chased")
 			net.Send(ply)
 			return
 		end
@@ -130,7 +130,7 @@ if SERVER then
 
 		if uvtargeting then
 			net.Start("uvrace_decline")
-			net.WriteString("You cannot invite others to race while being pursued!")
+			net.WriteString("uv.race.invite.error.chased")
 			net.Send(ply)
 			return
 		end

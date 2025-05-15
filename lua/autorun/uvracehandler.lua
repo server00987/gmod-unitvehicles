@@ -10,6 +10,8 @@ local UVRacePlayIntro = false
 local UVRacePlayMusic = false 
 local UVRacePlayTransition = false
 
+local showhud = GetConVar("cl_drawhud")
+
 if SERVER then
     UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
     
@@ -753,8 +755,9 @@ else
         UVHUDRaceCurrentParticipants = 1
     end
     
-    function UVNotifyDriver( message ) --, duration
-        local duration = 5
+    function UVNotifyDriver( message, duration ) --, duration
+        local duration = duration or 5
+
         UVHUDNotificationString = message
         UVHUDNotification = true 
         timer.Simple( duration, function()
@@ -767,17 +770,24 @@ else
     end)
     
     net.Receive( "uvrace_decline", function() 
-        chat.AddText(Color(255, 126, 126), net.ReadString())
+	local lang = language.GetPhrase
+	
+	chat.AddText(
+		Color(255, 126, 126),
+		lang( net.ReadString() )
+	)
     end)
     
     net.Receive( "uvrace_announcebestlaptime", function()
         local time = net.ReadFloat()
         local driver = net.ReadString()
         local timedifference = net.ReadFloat()
+		local lang = language.GetPhrase
+		
         if timedifference != 0 then
-            chat.AddText(Color(255, 255, 255), "New best lap by "..driver..": ", Color(0, 255, 255), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
+            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap.new"), driver), Color(0, 255, 255), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
         else
-            chat.AddText(Color(255, 255, 255), "Best lap by "..driver..": ", Color(0, 255, 255), UVDisplayTimeRace(time))
+            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap"), driver), Color(0, 255, 255), UVDisplayTimeRace(time))
         end
     end)
     
@@ -785,7 +795,7 @@ else
         local racers = net.ReadTable()
         
         for _, v in pairs(racers) do
-            chat.AddText(Color(255, 255, 255), "Sent race invite to: ", Color(0,255,0), v)
+            chat.AddText(Color(255, 255, 255), language.GetPhrase("uv.race.invite.sentto"), Color(0,255,0), v)
         end
     end)
     
@@ -875,17 +885,17 @@ else
         ResultPanel:SetDraggable(false)
         ResultPanel:MakePopup()
         
-        Yes:SetText("Yes")
+        Yes:SetText("#openurl.yes")
         Yes:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
         Yes:SetPos(ResultPanel:GetWide() / 8, ResultPanel:GetTall() - 22 - Yes:GetTall())
-        No:SetText("No")
+        No:SetText("#openurl.nope")
         No:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
         No:SetPos(ResultPanel:GetWide() * 7 / 8 - No:GetWide(), ResultPanel:GetTall() - 22 - No:GetTall())
         
         ResultPanel.Paint = function(self, w, h)
             draw.RoundedBox(2, 0, 0, w, h, faded_black)
-            draw.SimpleText("RACE INVITE", "UVFont", 500, 5, Color(30, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-            draw.SimpleText("You got invited to a race! Would you like to join?", "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText("#uv.race.invite", "UVFont", 500, 5, Color(30, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText("#uv.race.invite.desc", "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         end
         
         function Yes:DoClick()
@@ -1100,12 +1110,13 @@ else
         
         local w = ScrW()
         local h = ScrH()
-        
-        if UVHUDNotification then
+		local hudyes = showhud:GetBool()
+
+        if UVHUDNotification and hudyes then
             draw.DrawText( UVHUDNotificationString, "UVFont5", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
-        if UVHUDRaceStart then
+        if UVHUDRaceStart and hudyes then
             draw.DrawText( UVHUDRaceStart, "UVFont5", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
@@ -1156,8 +1167,9 @@ else
         end
         surface.SetDrawColor( 0, 0, 0, 200)
         draw.NoTexture()
-        surface.DrawPoly( element1 )
-        
+		if hudyes then
+			surface.DrawPoly( element1 )
+        end
         local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo['Participants'])
         
         UVHUDRaceCurrentParticipants = 0
@@ -1204,19 +1216,21 @@ else
                         local audio_path = "uvracesfx/".. theme .."/wrongway/".. soundfiles[math.random(1, #soundfiles)]
                         surface.PlaySound(audio_path)
                     end
-                    UVNotifyDriver("#uv.race.wrongway", 3)
+					if hudyes then UVNotifyDriver("#uv.race.wrongway", 1.5) end
                 end
             end
         end
         
         local lang = language.GetPhrase
-        draw.DrawText( 
-            lang("uv.race.time") .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. "\n" ..
-            lang("uv.race.check") .. checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" )  .. "\n" ..
-            (UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.lap") .. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") ..
-            lang("uv.race.pos") .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,
-            "UVFont", 10, h/7, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT 
-        )
+		if hudyes then
+			draw.DrawText( 
+				lang("uv.race.time") .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. "\n" ..
+				lang("uv.race.check") .. checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" )  .. "\n" ..
+				(UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.lap") .. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") ..
+				lang("uv.race.pos") .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,
+				"UVFont", 10, h/7, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT 
+			)
+		end
     
         local racer_count = #string_array
     
@@ -1227,13 +1241,14 @@ else
             if UVHUDRaceInfo.Info.Laps > 1 then
                 racerpos = 3.25
             end
-        
-            draw.DrawText( 
-                entry[2], "UVFont4", 
-                10, 
-                (h/racerpos) + i * ((racer_count > 5 and 20) or 28), 
-                entry[1], TEXT_ALIGN_LEFT 
-            )
+			if hudyes then
+				draw.DrawText( 
+					entry[2], "UVFont4", 
+					10, 
+					(h/racerpos) + i * ((racer_count > 5 and 20) or 28), 
+					entry[1], TEXT_ALIGN_LEFT 
+				)
+			end
         end
     end)
 end
