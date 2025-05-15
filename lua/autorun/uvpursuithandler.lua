@@ -558,7 +558,7 @@ if SERVER then
 	util.AddNetworkString( "UVUpdateRacerName" )
 	
 	util.AddNetworkString( "UVUpdateSuspectVisibility" )
-
+	
 	util.AddNetworkString( "UVRacerJoin" )
 	
 	--Enemies can't exit the vehicle during pursuits or races
@@ -1015,7 +1015,7 @@ if SERVER then
 				end
 			end
 		end
-				
+		
 		--Player-controlled Unit Vehicles
 		if next(uvplayerunittablevehicle) != nil then
 			for k, car in pairs(uvplayerunittablevehicle) do
@@ -1173,9 +1173,9 @@ if SERVER then
 				end
 			end
 		end
-
+		
 		local visible_suspects = {}
-
+		
 		if next(uvunitvehicles) != nil or (uvtargeting and !uvenemyescaping) then
 			for k, unit in pairs(uvunitvehicles) do
 				if !IsValid(unit) or !unit.UnitVehicle then
@@ -1189,9 +1189,9 @@ if SERVER then
 					if uvhiding then
 						visualrange = 1000000
 					end
-
+					
 					local check = false
-
+					
 					for _, j in pairs(ents.FindByClass("uvair")) do
 						if !(j.Downed and j.disengaging and j.crashing) and j:GetTarget() == v then
 							v.inunitview = true
@@ -1199,7 +1199,7 @@ if SERVER then
 							table.insert(visible_suspects, v)
 						end
 					end
-
+					
 					if !check then
 						if UVVisualOnTarget(unit, v) then
 							v.inunitview = true
@@ -2223,7 +2223,7 @@ else --HUD/Options
 		weight = 500,
 		italic = true,
 	})
-		
+	
 	surface.CreateFont("UVFont-Smaller", {
 		font = "Arial",
 		size = (math.Round(ScrH()*0.0425)),
@@ -2402,9 +2402,9 @@ else --HUD/Options
 	
 	net.Receive("UVHUDBusting", function()
 		local lang = language.GetPhrase
-        local blink = 255 * math.abs(math.sin(RealTime() * 4))
-        local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-        local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+		local blink = 255 * math.abs(math.sin(RealTime() * 4))
+		local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+		local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
 		UVBustingProgress = net.ReadString()
 		UVHUDDisplayBusting = true
 		UVNotificationColor = Color( 255, 255, 255)
@@ -2460,7 +2460,7 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDEnemyBusted", function()
-        local blink = 255 * math.abs(math.sin(RealTime() * 8))
+		local blink = 255 * math.abs(math.sin(RealTime() * 8))
 		UVNotificationColor = Color(255, blink, blink)
 		local bustedtext = language.GetPhrase("uv.chase.busted")
 		if !UVHUDDisplayNotification then
@@ -2501,6 +2501,7 @@ else --HUD/Options
 	
 	net.Receive("UVHUDHiding", function()
 		local blink = 255 * math.abs(math.sin(RealTime() * 6))
+		if UVHUDCopMode then return end
 		UVNotificationColor = Color( blink, blink, 255)
 		UVNotification = "--- " .. language.GetPhrase("uv.chase.hiding") .. " ---"
 		UVHUDDisplayNotification = true
@@ -2738,6 +2739,8 @@ else --HUD/Options
 	outofpursuit = 0
 	
 	hook.Add( "HUDPaint", "UVHUD", function() --HUD
+
+		if LocalPlayer():GetVehicle() == NULL then return end
 		
 		local w = ScrW()
 		local h = ScrH()
@@ -2919,9 +2922,9 @@ else --HUD/Options
 						else
 							utype = UVHUDWantedSuspectsNumber
 							-- if UVHUDWantedSuspectsNumber != 1 then
-								uloc = "uv.chase.suspects"
+							uloc = "uv.chase.suspects"
 							-- else
-								-- uloc = "uv.chase.suspect"
+							-- uloc = "uv.chase.suspect"
 							-- end
 						end
 						draw.DrawText( string.format( lang(uloc), utype ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
@@ -2949,8 +2952,18 @@ else --HUD/Options
 					UVSoundHeat(UVHeatLevel)
 				else
 					EvadingProgress = 0
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					draw.DrawText( lang("uv.chase.cooldown"), "UVFont-Smaller",w/2,h/1.05, Color(255,255,255), TEXT_ALIGN_CENTER )
+					draw.DrawText( ResourceText, "UVFont3",w/2,h/((UVHUDCopMode and 1.17) or 1.23), UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					
+					local color = Color(255,255,255)
+
+					if UVHUDCopMode then
+						local blink = 255 * math.abs(math.sin(RealTime() * 6))
+						color = Color( blink, blink, 255)
+					end
+
+					local text = (UVHUDCopMode and "/// "..lang("uv.chase.cooldown").." ///") or lang("uv.chase.cooldown")
+
+					draw.DrawText( text, "UVFont-Smaller",w/2,h/1.05, color, TEXT_ALIGN_CENTER )
 				end
 			else
 				EvadingProgress = 0
@@ -2990,18 +3003,20 @@ else --HUD/Options
 			if !CooldownProgress or CooldownProgress == 0 then
 				CooldownProgress = CurTime()
 			end
-			EvadingProgress = 0
-			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
-			surface.SetDrawColor(Color(0,0,255))
-			surface.DrawRect(w/3,h/1.1,12,40)
-			surface.DrawRect(w*2/3,h/1.1,12,40)
-			surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-			surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
-			surface.SetDrawColor(Color(0,0,255))
-			local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
-			surface.DrawRect(w/3+16,h/1.1+16,T,8)
 			UVSoundCooldown()
+			if !UVHUDCopMode then
+				surface.SetDrawColor( 0, 0, 0, 200)
+				surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
+				surface.SetDrawColor(Color(0,0,255))
+				surface.DrawRect(w/3,h/1.1,12,40)
+				surface.DrawRect(w*2/3,h/1.1,12,40)
+				surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
+				surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
+				surface.SetDrawColor(Color(0,0,255))
+				local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
+				surface.DrawRect(w/3+16,h/1.1+16,T,8)
+			end
+			EvadingProgress = 0
 		else
 			CooldownProgress = 0
 		end
@@ -3361,7 +3376,7 @@ else --HUD/Options
 		
 		car.inunitview = in_view
 	end)
-
+	
 	net.Receive( "UVRacerJoin" , function()
 		local message = net.ReadString()
 		chat.AddText(Color(127, 255, 159), message)
@@ -3421,7 +3436,7 @@ else --HUD/Options
 			draw.SimpleText( roadblocksdodged, "UVFont5", 990, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			draw.SimpleText( spikestripsdodged, "UVFont5", 990, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
-
+		
 		timer.Simple(5, function()
 			UVHUDDisplayBusting = false
 			UVHUDDisplayNotification = false
@@ -3432,7 +3447,7 @@ else --HUD/Options
 	end)
 	
 	net.Receive("UVHUDEscapedDebrief", function()
-
+		
 		if UVHUDRace then return end
 		
 		local w = ScrW()
@@ -3765,11 +3780,11 @@ else --HUD/Options
 			
 			volume_theme.OnValueChanged = function( self, value )
 				-- if value == 0 then
-					-- volume_theme:SetText("Volume: MUTE")
+				-- volume_theme:SetText("Volume: MUTE")
 				-- elseif value == 2 then
-					-- volume_theme:SetText("Volume: MAX")
+				-- volume_theme:SetText("Volume: MAX")
 				-- else
-					-- volume_theme:SetText("Volume: "..math.floor(math.Round(value*100) + .5).."%")
+				-- volume_theme:SetText("Volume: "..math.floor(math.Round(value*100) + .5).."%")
 				-- end
 				
 				if UVSoundLoop then
