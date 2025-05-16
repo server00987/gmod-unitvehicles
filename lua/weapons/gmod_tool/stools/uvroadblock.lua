@@ -1,5 +1,5 @@
 TOOL.Category		=	"Unit Vehicles"
-TOOL.Name			=	"#Roadblocks"
+TOOL.Name			=	"#tool.uvroadblock.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
@@ -79,12 +79,12 @@ if CLIENT then
 		{ name = "reload" },
 	}
 
-	language.Add("tool.uvroadblock.name", "Roadblocks")
-	language.Add("tool.uvroadblock.desc", "Create and manage custom Roadblocks for this map!")
-	language.Add("tool.uvroadblock.0", "Build a roadblock anywhere on this map (make sure it's welded together)! When done, right-click it!" )
-	language.Add("tool.uvroadblock.left", "Spawns the selected roadblock prop" )
-	language.Add("tool.uvroadblock.right", "Saves the roadblock as a roadblock for this map. The Roadblock icon created is where you right-click it" )
-	language.Add("tool.uvroadblock.reload", "Change the roadblock type" )
+	-- language.Add("tool.uvroadblock.name", "Roadblocks")
+	-- language.Add("tool.uvroadblock.desc", "Create and manage custom Roadblocks for this map!")
+	-- language.Add("tool.uvroadblock.0", "Build a roadblock anywhere on this map (make sure it's welded together)! When done, right-click it!" )
+	-- language.Add("tool.uvroadblock.left", "Spawns the selected roadblock prop" )
+	-- language.Add("tool.uvroadblock.right", "Saves the roadblock as a roadblock for this map. The Roadblock icon created is where you right-click it" )
+	-- language.Add("tool.uvroadblock.reload", "Change the roadblock type" )
 
 	local selecteditem	= nil
 	local UVRBTOOLMemory = {}
@@ -96,29 +96,30 @@ if CLIENT then
 	net.Receive("UVRoadblocksAdjust", function()
 		local RoadblocksAdjust = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
+		local lang = language.GetPhrase
 
 		RoadblocksAdjust:Add(OK)
 		RoadblocksAdjust:SetSize(500, 220)
 		RoadblocksAdjust:SetBackgroundBlur(true)
 		RoadblocksAdjust:Center()
-		RoadblocksAdjust:SetTitle("Name Roadblock")
+		RoadblocksAdjust:SetTitle("#tool.uvroadblock.create")
 		RoadblocksAdjust:SetDraggable(false)
 		RoadblocksAdjust:MakePopup()
 
 		local Intro = vgui.Create( "DLabel", RoadblocksAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( "You've selected a roadblock with "..UVRBTOOLMemory.PropCount.." entities!\n- The Roadblock icon created is where you right-clicked just now and where you were facing." )
+		Intro:SetText( string.format( lang("tool.uvroadblock.create.desc"), UVRBTOOLMemory.PropCount ) )
 		Intro:SizeToContents()
 
 		local RoadblocksNameEntry = vgui.Create( "DTextEntry", RoadblocksAdjust )
 		RoadblocksNameEntry:SetPos( 20, 80 )
-		RoadblocksNameEntry:SetPlaceholderText( "ex. bridge_tacticalroadblock" )
+		RoadblocksNameEntry:SetPlaceholderText( "#tool.uvroadblock.create.name" )
 		RoadblocksNameEntry:SetSize(RoadblocksAdjust:GetWide() / 2, 22)
 
 		local RoadblockHeatLevel = vgui.Create( "DNumSlider", RoadblocksAdjust )
 		RoadblockHeatLevel:SetPos( 20, 120 )
-		RoadblockHeatLevel:SetText( "Min Heat Level" )
-		RoadblockHeatLevel:SetTooltip( "At which Heat Level does this roadblock start to appear (assuming roadblocks are enabled for that Heat Level)?" )
+		RoadblockHeatLevel:SetText( "#tool.uvroadblock.joinpursuit" )
+		RoadblockHeatLevel:SetTooltip( "#tool.uvroadblock.joinpursuit.desc" )
 		RoadblockHeatLevel:SetMin( 1 )
 		RoadblockHeatLevel:SetMax( 6 )
 		RoadblockHeatLevel:SetDecimals( 0 )
@@ -127,8 +128,8 @@ if CLIENT then
 
 		local DisperseAfterPassing = vgui.Create( "DCheckBoxLabel", RoadblocksAdjust )
 		DisperseAfterPassing:SetPos( 20, 160 )
-		DisperseAfterPassing:SetText( "Disperse after passing" )
-		DisperseAfterPassing:SetTooltip( "If checked, roadblock units will disperse (join the pursuit) after being passed." )
+		DisperseAfterPassing:SetText( "#tool.uvroadblock.joinpursuit" )
+		DisperseAfterPassing:SetTooltip( "tool.uvroadblock.joinpursuit.desc" )
 		DisperseAfterPassing:SetValue( false )
 
 		local RoadblockAngle = LocalPlayer():EyeAngles()
@@ -156,7 +157,7 @@ if CLIENT then
 				surface.PlaySound( "buttons/button15.wav" )
 
 			else
-				RoadblocksNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
+				RoadblocksNameEntry:SetPlaceholderText( "#tool.uvpursuitbreaker.create.name.fill" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -202,7 +203,7 @@ if CLIENT then
 				if isstring(selecteditem) then
 
 					if !LocalPlayer():IsSuperAdmin() then
-						notification.AddLegacy( "You need to be a super admin to apply settings!", NOTIFY_ERROR, 5 )
+						notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 						surface.PlaySound( "buttons/button10.wav" )
 						return
 					end
@@ -212,7 +213,7 @@ if CLIENT then
 					net.Start("UVRoadblocksLoad")
 					net.WriteString(selecteditem)
 					net.SendToServer()
-					notification.AddLegacy( "Roadblock "..selecteditem.." loaded!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( language.GetPhrase("tool.uvroadblock.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
 					
 				end
@@ -230,10 +231,10 @@ if CLIENT then
 		end
 
 		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("Apply Settings")
+		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -253,7 +254,7 @@ if CLIENT then
 
 			notification.AddLegacy( "Roadblock Settings Applied!", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "Roadblock Settings Applied!\n" )
+			Msg( "#tool.uvroadblock.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -267,11 +268,11 @@ if CLIENT then
 		})
 	
 		CPanel:AddControl("Label", {
-			Text = "***PRESS 'APPLY SETTINGS' ABOVE FOR CHANGES TO TAKE EFFECT!***",
+			Text = "#tool.settings.clickapply",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "——— ROADBLOCKS FOR THIS MAP ———\n\n- Click on the Roadblock below to load it.\n- Empty? Build a roadblock and right-click it to save it as a Roadblock!",
+			Text = "#tool.uvroadblock.settings.roadblocks",
 		})
 
 		local Frame = vgui.Create( "DFrame" )
@@ -293,27 +294,27 @@ if CLIENT then
 		UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
 
 		local MarkAll = vgui.Create( "DButton", CPanel )
-		MarkAll:SetText( "Mark All Locations (10 s)" )
+		MarkAll:SetText( "#tool.uvroadblock.markall" )
 		MarkAll:SetSize( 280, 20 )
 		MarkAll.DoClick = function( self )
 			UVMarkAllLocations()
-			notification.AddLegacy( "Marked all roadblock locations!", NOTIFY_UNDO, 10 )
+			notification.AddLegacy( "#tool.uvroadblock.markedall", NOTIFY_UNDO, 10 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(MarkAll)
 
 		local LoadAll = vgui.Create( "DButton", CPanel )
-		LoadAll:SetText( "Load All (MIND THE LAG)" )
+		LoadAll:SetText( "#tool.uvroadblock.load.all" )
 		LoadAll:SetSize( 280, 20 )
 		LoadAll.DoClick = function( self )
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
 			net.Start("UVRoadblocksLoadAll")
 			net.SendToServer()
-			notification.AddLegacy( "Loaded all roadblocks!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvroadblock.loaded.all", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(LoadAll)
@@ -325,7 +326,7 @@ if CLIENT then
 			UVRoadblocksScrollPanel:Clear()
 			selecteditem = nil
 			UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
-			notification.AddLegacy( "Roadblock(s) refreshed!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvroadblock.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
@@ -337,7 +338,7 @@ if CLIENT then
 			
 			if isstring(selecteditem) then
 				file.Delete( "unitvehicles/roadblocks/"..game.GetMap().."/"..selecteditem )
-				notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( language.GetPhrase("tool.uvroadblock.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
 				Msg( "Roadblock "..selecteditem.." has been deleted!\n" )
 			end
@@ -349,12 +350,12 @@ if CLIENT then
 		CPanel:AddItem(Delete)
 
 		CPanel:AddControl("Label", {
-			Text = "——— SETTINGS ———",
+			Text = "#tool.uvroadblock.settings",
 		})
 
 		local MaxRB = vgui.Create( "DNumSlider", CPanel )
-		MaxRB:SetText( "Max Loaded RB(s)" )
-		MaxRB:SetTooltip( "How many Roadblocks can be loaded at once? Set this to 0 to disable Roadblocks from spawning." )
+		MaxRB:SetText( "#tool.uvroadblock.settings.maxnr" )
+		MaxRB:SetTooltip( "#tool.uvroadblock.settings.maxnr.desc" )
 		MaxRB:SetMin( 0 )
 		MaxRB:SetMax( 10 )
 		MaxRB:SetDecimals( 0 )
@@ -362,8 +363,8 @@ if CLIENT then
 		CPanel:AddItem(MaxRB)
 
 		local Override = vgui.Create( "DNumSlider", CPanel )
-		Override:SetText( "Override Disperse" )
-		Override:SetTooltip( "0 = Off\n1 = All roadblock units will disperse\n2 = All roadblock units will NOT disperse" )
+		Override:SetText( "#tool.uvroadblock.settings.alwaysjoinpursuit" )
+		Override:SetTooltip( "#tool.uvroadblock.settings.alwaysjoinpursuit.desc" )
 		Override:SetMin( 0 )
 		Override:SetMax( 2 )
 		Override:SetDecimals( 0 )
@@ -371,7 +372,7 @@ if CLIENT then
 		CPanel:AddItem(Override)
 
 		CPanel:AddControl("Label", {
-			Text = "0 = Off\n1 = All roadblock units will disperse\n2 = All roadblock units will NOT disperse",
+			Text = "#tool.uvroadblock.settings.alwaysjoinpursuit.desc",
 		})
 			
 	end
@@ -381,6 +382,16 @@ if CLIENT then
 	function TOOL:DrawToolScreen(width, height)
 
 		local ptselected = self:GetClientInfo("type")
+		local RB_Strings = {
+			['Vehicle'] = '#tool.uvroadblock.type.vehicle',
+			['Concrete Barrier'] = '#tool.uvroadblock.type.concrete',
+			['Barricade'] = '#tool.uvroadblock.type.barricade',
+			['Sawhorse Barricade'] = '#tool.uvroadblock.type.sawhorse',
+			['Barrel'] = '#tool.uvroadblock.type.barrel',
+			['Cone'] = '#tool.uvroadblock.type.cone',
+			['Spikestrip'] = '#tool.uvroadblock.type.spikes',
+		}
+
 	
 		surface.SetDrawColor( Color( 0, 0, 0) )
 		surface.DrawRect( 0, 0, width, height )
@@ -389,7 +400,7 @@ if CLIENT then
 		surface.SetMaterial( toolicon )
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
-		draw.SimpleText( ptselected, "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( (RB_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 
@@ -476,12 +487,12 @@ function TOOL:Reload( trace )
 	local rbselected = self:GetClientInfo("type")
 	
 	if rbselected == rbtable[#rbtable] then
-		self:GetOwner():ChatPrint("Roadblock type changed to "..rbtable[1])
+		-- self:GetOwner():ChatPrint("Roadblock type changed to "..rbtable[1])
 		self:GetOwner():ConCommand("uvroadblock_type "..rbtable[1])
 	else
 		for k,v in pairs(rbtable) do
 			if v == rbselected then
-				self:GetOwner():ChatPrint("Roadblock type changed to "..rbtable[k+1])
+				-- self:GetOwner():ChatPrint("Roadblock type changed to "..rbtable[k+1])
 				self:GetOwner():ConCommand("uvroadblock_type "..rbtable[k+1])
 			end
 		end

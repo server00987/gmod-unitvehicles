@@ -245,7 +245,9 @@ if SERVER then
 			local bountyplus = (UVUBountyInterceptor:GetInt())*(uvcombobounty)
 			local bounty = string.Comma(bountyplus)
 			if IsValid(self.e) and isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
-				UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "Interceptor "..v.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
+				--UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "Interceptor "..v.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
+				UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "uv.unit.interceptor", v, bounty, uvcombobounty)
+
 			end
 			uvwrecks = uvwrecks + 1
 			if self.v.IsGlideVehicle then
@@ -258,6 +260,7 @@ if SERVER then
 				wreck:SetEngineHealth(0)
 				wreck:UpdateHealthOutputs()
 				wreck.UnflipForce = 0
+				wreck.AngularDrag = vector_origin
 				if wreck.CanSwitchHeadlights then
 					wreck:SetHeadlightState(0)
 				end
@@ -621,9 +624,9 @@ if SERVER then
 					local EntityMeta = FindMetaTable( "Entity" )
 					local getTable = EntityMeta.GetTable
 					local selfvTbl = getTable( self.v )
-					local wheelslip = selfvTbl.avgSideSlip > 0 and selfvTbl.avgSideSlip or selfvTbl.avgSideSlip < 0 and selfvTbl.avgSideSlip * -1
+					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
 					if wheelslip != false then
-						throttle = throttle - wheelslip --Glide traction control
+						throttle = throttle - (wheelslip/10) --Glide traction control
 					end
 				else
 					local maththrottle = throttle - math.abs(steer)
@@ -1251,7 +1254,7 @@ if SERVER then
 				if uvcalm and edist:Length2DSqr() < 250000 then
 					throttle = 0
 				end --No ramming
-				if self.v.IsSimfphyscar or self.v.IsGlideVehicle then
+				if self.v.IsSimfphyscar or self.v.IsGlideVehicle and !Relentless:GetBool() then
 					if !self.formationpoint and eedist:LengthSqr() < 6250000 and (self.v:GetVelocity():LengthSqr()/2) > self.e:GetVelocity():LengthSqr() and self.e:GetVelocity():LengthSqr() > 100000 then
 						throttle = -1
 					end --Slow down when enemy slows down
@@ -1407,12 +1410,37 @@ if SERVER then
 								UVDeployWeapon(self.v, k)
 								continue
 							end
+							for _, v in pairs(self.v.wheels) do
+								if IsValid(v) and v.bursted and !self.repairtimer then
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+	
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
+							end
 						elseif self.v.IsSimfphyscar then
 							if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
 								UVDeployWeapon(self.v, k)
 								continue
 							end
-						elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and self.v:VC_getHealth() and self.v:VC_getHealthMax() then
+							for _, wheel in pairs(self.v.Wheels) do
+								if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
+
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+	
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
+							end
+						elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
 							if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
 								UVDeployWeapon(self.v, k)
 								continue
@@ -1483,53 +1511,53 @@ if SERVER then
 			local botimeout = 10
 			if botimeout then
 				if CurTime() > self.bountytimer + botimeout then
-				self.bountytimer = CurTime()
-				local aggressive = math.random(0,1)
-				if aggressive == 0 then
-					self.driveinfront = nil
-				else
-					self.driveinfront = true
-				end
-				local MathAggressive = math.random(1,10) 
-				if MathAggressive == 1 then
-					if !self.aggressive and uvtargeting then
-						self.aggressive = true
-						if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
-							UVChatterAggressive(self) 
+					self.bountytimer = CurTime()
+					local aggressive = math.random(0,1)
+					if aggressive == 0 then
+						self.driveinfront = nil
+					else
+						self.driveinfront = true
+					end
+					local MathAggressive = math.random(1,10) 
+					if MathAggressive == 1 then
+						if !self.aggressive and uvtargeting then
+							self.aggressive = true
+							if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
+								UVChatterAggressive(self) 
+							end
+						else
+							self.aggressive = nil
+							if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
+								UVChatterPassive(self) 
+							end
+						end
+					elseif MathAggressive == 2 then
+						if Chatter:GetBool() and HeatLevels:GetBool() and IsValid(self.v) and not uvcalm and #uvunitschasing == 1 then
+							UVChatterRequestBackup(self)
+						end
+					elseif MathAggressive == 3 then
+						if Chatter:GetBool() and IsValid(self.v) and not uvcalm then
+							UVChatterRequestSitrep(self)
 						end
 					else
-						self.aggressive = nil
-						if Chatter:GetBool() and IsValid(self.v) and self:StraightToTarget(self.e) and not uvcalm then
-							UVChatterPassive(self) 
+						local MathAggressive2 = math.random(1,10)
+						if Chatter:GetBool() and MathAggressive2 == 1 then
+							UVChatterRequestDisengage(self)
 						end
 					end
-				elseif MathAggressive == 2 then
-					if Chatter:GetBool() and HeatLevels:GetBool() and IsValid(self.v) and not uvcalm and #uvunitschasing == 1 then
-						UVChatterRequestBackup(self) 
+					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
+						self.edriver = UVGetDriver(self.e)
+						UVAddToWantedListDriver(self.edriver)
+						else
+						self.edriver = nil
 					end
-				elseif MathAggressive == 3 then
-					if Chatter:GetBool() and IsValid(self.v) and not uvcalm then
-						UVChatterRequestSitrep(self)
+					local MathSiren = math.random(1,100)
+					if MathSiren < 30 then
+						self:SetELSSiren(true)
 					end
-				else
-					local MathAggressive2 = math.random(1,100)
-					if Chatter:GetBool() and MathAggressive2 == 1 then
-						UVChatterRequestDisengage(self)
+					if Chatter:GetBool() and IsValid(self.v) and self.e:GetVelocity():LengthSqr() > 100000 and self:StraightToTarget(self.e) and MathAggressive != 1 then
+						UVChatterCloseToEnemy(self) 
 					end
-				end
-				if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
-					self.edriver = UVGetDriver(self.e)
-					UVAddToWantedListDriver(self.edriver)
-					else
-					self.edriver = nil
-				end
-				local MathSiren = math.random(1,100)
-				if MathSiren < 30 then
-					self:SetELSSiren(true)
-				end
-				if Chatter:GetBool() and IsValid(self.v) and self.e:GetVelocity():LengthSqr() > 100000 and self:StraightToTarget(self.e) and MathAggressive != 1 then
-					UVChatterCloseToEnemy(self) 
-				end
 				end
 			end
 
@@ -1554,12 +1582,13 @@ if SERVER then
 						end --Cornering
 					end
 				elseif self.v.IsGlideVehicle then
-					if vectdot > 0 and evectdot > 0 and dist:Dot(forward) > 0 and dist:Length2DSqr() > 250000 and self:StraightToTarget(self.e) then 
-						local maththrottle = throttle - math.abs(steer)
-						if maththrottle >= 0 then
-							throttle = maththrottle
-						end
-					end --Cornering
+					local EntityMeta = FindMetaTable( "Entity" )
+					local getTable = EntityMeta.GetTable
+					local selfvTbl = getTable( self.v )
+					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+					if wheelslip != false then
+						throttle = throttle - (wheelslip/10) --Glide traction control
+					end
 					if dist:Length2DSqr() > 250000 and vectdot < 0 and dist:Dot(forward) > 0 and (right.z > 0.75 or right.z < -0.75) and !self.stuck then
 						steer = 0
 						throttle = 1

@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/unitvehiclesprops/uvarrow/arrow2"
+
+	$nocull 1
+	$nodecal			1
+	$translucent		1
+}

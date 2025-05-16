@@ -18,7 +18,7 @@ if SERVER then
     util.AddNetworkString( "UVHUDWanted" )
 
     hook.Add("Think", "UVCheckForCalls", function()
-        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcalllocation or uvcallexists then
+        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then
             if uvcalllocation and uvtargeting then --Remove the call, allow for new calls to come in
                 uvcalllocation = nil
             end
@@ -84,7 +84,7 @@ if SERVER then
     end
 
     function UVCallInitiate(suspectvehicle, type)
-        if !GetConVar("unitvehicle_callresponse"):GetBool() or uvcalllocation or uvtargeting or uvcallexists then return end
+        if !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then return end
 
         uvpreinfractioncount = 0
 
@@ -121,6 +121,7 @@ if SERVER then
         end
 
         timer.Simple(0.5, function()
+            UVApplyHeatLevel()
             UVUpdateHeatLevel()
             UVAutoSpawn()
             uvidlespawning = CurTime()
@@ -213,16 +214,14 @@ else
         surface.PlaySound("ui/pursuit/wanted/"..soundfiles[math.random(1, #soundfiles)])
 
         if Glide then
-            local text = [[<color=255,0,0>You are now wanted by the Unit Vehicles!</color>]]
-
             Glide.Notify( {
-                text = text,
+                text = "#uv.hud.popup.wanted",
                 icon = "hud/MILESTONE_PURSUIT.png",
                 sound = "glide/ui/phone_notify.wav",
-                lifetime = 10
+                lifetime = 5
             } )
         else
-            chat.AddText(Color(255,0,0), "You are now wanted by the Unit Vehicles!")
+            chat.AddText(Color(255,0,0), language.GetPhrase("uv.hud.popup.wanted"))
         end
 
     end)

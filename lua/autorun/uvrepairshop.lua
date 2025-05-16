@@ -11,7 +11,6 @@ else
     
     net.Receive("UVHUDRepairCooldown", function() --Inform the player when the repair shop can be used again
         local timeleft = net.ReadInt(32)
-        print(timeleft)
         chat.AddText(Color(255, 0, 0), "Repair unavailable, come back in ", Color(255, 255, 255), timeleft.." s")
         surface.PlaySound("ui/pursuit/repairunavailable.wav")
     end)
