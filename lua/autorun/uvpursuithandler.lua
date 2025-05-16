@@ -3328,12 +3328,21 @@ else --HUD/Options
 	function UVRenderEnemySquare(ent)
 		local localPlayer = LocalPlayer()
 		local box_color = (!UVHUDCopMode and Color(60, 255, 0)) or Color( 255, 0, 0)
+		local blink = 255 * math.abs(math.sin(RealTime() * 4))
+		local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+		local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
 		
+		local lang = language.GetPhrase
+		
+		local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-ent.uvbustingprogress),3)
+	
 		if ent.beingbusted then
-			if math.floor(RealTime()*4)==math.Round(RealTime()*4) then
-				box_color = Color( 255, 0, 0)
-			else
-				box_color = Color( 255, 255, 255)
+			if entbustedtimeleft >= 2 then
+				box_color = Color( 255, blink, blink)
+			elseif entbustedtimeleft >= 1 then
+				box_color = Color( 255, blink2, blink2)
+			elseif entbustedtimeleft >= 0 then
+				box_color = Color( 255, blink3, blink3)
 			end
 		end
 		
@@ -3373,7 +3382,9 @@ else --HUD/Options
 			local textX = (MinX + MaxX) / 2
 			local textY = MinY - 20
 			cam.Start2D()
-			draw.DrawText(enemycallsign..((ent.beingbusted and " (BEING BUSTED " .. math.Clamp(math.floor(((ent.uvbustingprogress / BustedTimer:GetInt()) * 100) + .5), 0, 100) .. "%)") or "").."\n"..math.Round(distInMeters).." m", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
+			local bustpro = math.Clamp(math.floor(((ent.uvbustingprogress / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+			local bustdist = math.Round(distInMeters) .. " m"
+			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") .. "\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
 			cam.End2D()
 		end
 	end
