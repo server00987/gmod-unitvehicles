@@ -15,6 +15,12 @@ PT_Slots_Replacement_Strings = {
 	[2] = "#uv.ptech.slot2"
 }
 
+local Materials = {
+	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"), -- Replace with your material path
+	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
+	['UNITS'] = Material("hud/MILESTONE_INFRACTIONS.png")
+}
+
 --Sound spam check--
 
 function UVDelaySound()
@@ -195,7 +201,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end)
 	end
-
+	
 	print(FileName)
 	
 	UVLoadedSounds = FileName
@@ -2741,7 +2747,7 @@ else --HUD/Options
 	outofpursuit = 0
 	
 	hook.Add( "HUDPaint", "UVHUD", function() --HUD
-
+		
 		local vehicle = LocalPlayer():GetVehicle()
 		
 		local w = ScrW()
@@ -2751,6 +2757,9 @@ else --HUD/Options
 		
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
+		
+		-- hudyes = true 
+		-- UVHUDDisplayPursuit = true
 		
 		if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
 			outofpursuit = CurTime()
@@ -2852,6 +2861,7 @@ else --HUD/Options
 			end
 			
 			surface.DrawRect(w/1.099,h/120,B,39)
+			//local ResourceText = UVResourcePoints -- "⛉\n"
 			local ResourceText = "⛉\n"..UVResourcePoints
 			if UVOneCommanderActive then
 				if !UVHUDCommanderLastHealth or !UVHUDCommanderLastMaxHealth then
@@ -2939,6 +2949,27 @@ else --HUD/Options
 						EvadingProgress = CurTime()
 						UVEvadingProgress = EvadingProgress
 					end
+					
+					-- local tex = Materials['UNITS']:GetTexture("$basetexture")
+					-- if tex then
+					-- 	local texW, texH = tex:Width(), tex:Height()
+					-- 	local aspect = texW / texH
+						
+					-- 	local desiredHeight = ScrH() * 0.06 -- change this to what you want
+					-- 	local desiredWidth = desiredHeight * aspect
+						
+					-- 	local x = ScrW() / 2 - desiredWidth / 2
+					-- 	local y = ScrH() / 1.2 - desiredHeight / 2
+						
+					-- 	-- surface.SetDrawColor(255, 255, 255)
+					-- 	-- surface.SetMaterial(iconMat)
+					-- 	-- surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
+						
+					-- 	surface.SetDrawColor(255, 255, 255) -- Color (R, G, B, A)
+					-- 	surface.SetMaterial(Materials['UNITS'])
+					-- 	surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight) -- x, y, width, height
+					-- end
+					
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 					surface.SetDrawColor( 0, 0, 0, 200)
@@ -2957,14 +2988,14 @@ else --HUD/Options
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/((UVHUDCopMode and 1.17) or 1.23), UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					
 					local color = Color(255,255,255)
-
+					
 					if UVHUDCopMode then
 						local blink = 255 * math.abs(math.sin(RealTime() * 6))
 						color = Color( blink, blink, 255)
 					end
-
+					
 					local text = (UVHUDCopMode and "/// "..lang("uv.chase.cooldown").." ///") or lang("uv.chase.cooldown")
-
+					
 					draw.DrawText( text, "UVFont-Smaller",w/2,h/1.05, color, TEXT_ALIGN_CENTER )
 				end
 			else
@@ -2983,7 +3014,7 @@ else --HUD/Options
 				UVSoundLoop = nil
 			end
 		end
-
+		
 		if vehicle == NULL then 
 			UVHUDPursuitTech = nil
 			return 
