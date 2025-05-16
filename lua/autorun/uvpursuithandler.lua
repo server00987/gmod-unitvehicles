@@ -4192,7 +4192,6 @@ else --HUD/Options
 			panel:AddControl("Header", {Description = "——— Misc ———"})
 			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
 			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
-			panel:Button( "DEBUG", "uv_wantedtable")
 			
 		end)
 	end)

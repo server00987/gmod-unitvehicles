@@ -534,55 +534,58 @@ if CLIENT then
 				UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
 				UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
 				UnitAdjust:Close()
+
+				local file_ext = (((UVTOOLMemory.VehicleBase == 'base_glide_car' or UVTOOLMemory.VehicleBase == "base_glide_motorcycle") and "json") or "txt")
+
 				if AssignToHeatLevel then
 					if UnitClass == "1: Patrol" then
 						local availableunits = GetConVar("uvunitmanager_unitspatrol"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "2: Support" then
 						local availableunits = GetConVar("uvunitmanager_unitssupport"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "3: Pursuit" then
 						local availableunits = GetConVar("uvunitmanager_unitspursuit"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "4: Interceptor" then
 						local availableunits = GetConVar("uvunitmanager_unitsinterceptor"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "5: Special" then
 						local availableunits = GetConVar("uvunitmanager_unitsspecial"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "6: Commander" then
 						local availableunits = GetConVar("uvunitmanager_unitscommander"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif UnitClass == "7: Rhino" then
 						local availableunits = GetConVar("uvunitmanager_rhinos"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, Name..".txt")
+							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, availableunits.." "..Name..".txt")
+							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					end
 					notification.AddLegacy( "Saved "..Name.." as a Unit at Heat Level "..HeatLevel.."!", NOTIFY_UNDO, 5 )
