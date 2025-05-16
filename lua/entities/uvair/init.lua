@@ -698,7 +698,7 @@ function ENT:StartCrush()
 		local bounty = string.Comma(bountyplus)
 		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
 			-- self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "uv.unit.helicopter", v, bounty, uvcombobounty)
+			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "uv.unit.helicopter", '', bounty, uvcombobounty)
 		end end
 		uvwrecks = uvwrecks + 1
 		self.crashing = true
