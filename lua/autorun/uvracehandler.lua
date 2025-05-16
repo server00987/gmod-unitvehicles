@@ -738,26 +738,44 @@ else
         return sorted_table, leaderboardLines
     end
 
+    function UVStopRacing()
+        UVSoundRacingStop()
+        UVHUDRaceCurrentCheckpoint = nil;
+        UVHUDDisplayRacing = false;
+        UVHUDRace = false;
+
+        if _UVCurrentCheckpoint then
+            _UVCurrentCheckpoint.blip.alpha = 0
+        end
+        if _UVNextCheckpoint then
+            _UVNextCheckpoint.blip.alpha = 0
+        end
+    end
+
     --
     
-    if !UVHUDRaceInfo then
+    if not UVHUDRaceInfo then
         UVHUDRaceInfo = {}
     end
     
-    if !UVHUDRaceTime or !UVHUDRace then
+    if not UVHUDRaceTime or not UVHUDRace then
         UVHUDRaceTime = UVDisplayTimeRace(0)
     end
     
-    if !UVHUDRaceLaps then
+    if not UVHUDRaceLaps then
         UVHUDRaceLaps = 1
     end
     
-    if !UVHUDRaceCurrentLap then
+    if not UVHUDRaceCurrentLap then
         UVHUDRaceCurrentLap = 1
     end
     
-    if !UVHUDRaceCurrentParticipants then
+    if not UVHUDRaceCurrentParticipants then
         UVHUDRaceCurrentParticipants = 1
+    end
+
+    if not UVHUDDisplayRacing then
+        UVHUDDisplayRacing = false
     end
     
     function UVRaceNotify( message, duration ) --, duration
@@ -775,12 +793,12 @@ else
     end)
     
     net.Receive( "uvrace_decline", function() 
-	local lang = language.GetPhrase
+	    local lang = language.GetPhrase
 	
-	chat.AddText(
-		Color(255, 126, 126),
-		lang( net.ReadString() )
-	)
+	    chat.AddText(
+		    Color(255, 126, 126),
+		    lang( net.ReadString() )
+	    )
     end)
     
     net.Receive( "uvrace_announcebestlaptime", function()
@@ -1138,14 +1156,14 @@ else
             end
         end
         
-        if !my_vehicle then UVSoundRacingStop(); UVHUDRaceCurrentCheckpoint = nil; return end
+        if !my_vehicle then UVStopRacing() return end
         if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
             -- clean up
-            UVSoundRacingStop()
-            UVHUDRaceCurrentCheckpoint = nil;
-            UVHUDRace = false;
+            UVStopRacing()
             return
         end
+
+        UVHUDDisplayRacing = true
         
         if !UVHUDDisplayBusting then
             UVSoundRacing( my_vehicle )
@@ -1194,7 +1212,14 @@ else
         for _, v in pairs( ents.FindByClass("uvrace_checkpoint") ) do
             if v:GetID() == checkpoint_count +1 then
                 _UVCurrentCheckpoint = v
-                break
+                v.blip.alpha = 255
+                v.blip.color = Color(0,255,0)
+            elseif v:GetID() == checkpoint_count +2 then
+                _UVNextCheckpoint = v
+                v.blip.alpha = 255
+                v.blip.color = Color(255,204,0)
+            else
+                v.blip.alpha = 0
             end
         end
         

@@ -21,6 +21,20 @@ function ENT:Initialize()
 
 	if CLIENT then
 		self:SetRenderBoundsWS(self:GetPos(), self:GetMaxPos())
+		if GMinimap then
+			for i,v in pairs(GMinimap) do
+				print(i,v )
+			end
+			self.blip, self.blip_id = GMinimap:AddBlip( {
+                id = "Checkpoint"..self:GetID(),
+                position = (self:GetPos() + self:GetMaxPos())/2,
+                icon = "hud/MINIMAP_ICON_CIRCUIT.png",
+                scale = 1.5,
+                color = Color( 255, 255, 255),
+				alpha = 0,
+                lockIconAng = true
+            } )
+		end
 	end
 
 	if SERVER then
@@ -138,6 +152,12 @@ if CLIENT then
 
 			cam.End3D()
 			
+		end
+	end
+
+	function ENT:OnRemove()
+		if GMinimap then
+			GMinimap:RemoveBlipById( self.blip_id )
 		end
 	end
 end

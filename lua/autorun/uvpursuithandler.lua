@@ -20,7 +20,7 @@ local Colors = {
 	['White'] = Color(255, 255, 255)
 }
 
-local Materials = {
+Materials = {
 	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"),
 	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
 	['UNITS'] = Material("hud/COPS_ICON.png"),
@@ -39,7 +39,7 @@ function UVDelaySound()
 end
 
 function UVSoundHeat(heatlevel)
-	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDRace then return end
+	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if UVPlayingHeat or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -81,7 +81,7 @@ function UVSoundHeat(heatlevel)
 end
 
 function UVSoundBusting()
-	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDRace then return end
+	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if UVPlayingBusting or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -100,7 +100,7 @@ function UVSoundBusting()
 end
 
 function UVSoundCooldown()
-	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDRace then return end
+	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if UVPlayingCooldown or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -137,7 +137,7 @@ function UVSoundBusted()
 end
 
 function UVSoundEscaped()
-	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDRace then return end
+	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if UVPlayingEscaped or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -194,6 +194,9 @@ function UVPlaySound( FileName, Loop, StopLoop )
 		end
 	end 
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
+	local snd
+	local expectedEndTime
+	
 	if UVLoadedSounds ~= FileName or (not UVSoundLoop) then
 		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
 			if IsValid(source) then
@@ -205,21 +208,44 @@ function UVPlaySound( FileName, Loop, StopLoop )
 				end
 				source:EnableLooping(Loop)
 				source:Play()
+				
+				local duration = source:GetLength()
+				
+				if duration > 0 then
+					expectedEndTime = RealTime() + duration
+				end
+				
+				snd = source
 			end
 		end)
 	end
 	
 	UVLoadedSounds = FileName
 	
-	local duration = SoundDuration(FileName)
+	-- local duration = SoundDuration(FileName)
 	UVDelaySound()
-	timer.Create("UVPursuitThemeReplay", duration, 1, function()
-		if UVHUDDisplayBusting then
-			UVSoundBusting()
-			return
+	hook.Add("Think", "CheckSoundFinished", function()
+		if IsValid(snd) and expectedEndTime then
+			if RealTime() >= expectedEndTime then
+				--print("Sound finished (pause-safe check)!")
+				hook.Remove("Think", "CheckSoundFinished")
+
+				if UVHUDDisplayBusting then
+					UVSoundBusting()
+					return
+				end
+				UVStopSound()
+			end
 		end
-		UVStopSound()
 	end)
+	
+	-- timer.Create("UVPursuitThemeReplay", duration, 1, function()
+	-- 	if UVHUDDisplayBusting then
+	-- 		UVSoundBusting()
+	-- 		return
+	-- 	end
+	-- 	UVStopSound()
+	-- end)
 end
 
 function UVStopSound()
@@ -2112,6 +2138,8 @@ else --HUD/Options
 	
 	UVRBMax = CreateClientConVar("unitvehicle_roadblock_maxrb", 1, true, false)
 	UVRBOverride = CreateClientConVar("unitvehicle_roadblock_override", 0, true, false)
+
+	UVUnitsColor = Color(255,255,255)
 	
 	local local_convars = {
 		["unitvehicle_heatlevels"] = 'integer',
@@ -2253,6 +2281,11 @@ else --HUD/Options
 		
 		notification.AddLegacy('Pursuit Settings applied!', NOTIFY_GENERIC, 3)
 	end)
+
+	concommand.Add("uv_spawn_as_unit", function(ply)
+		net.Start("UVHUDRespawnInUV")
+		net.SendToServer()
+	end)
 	
 	surface.CreateFont("UVFont", {
 		font = "Arial",
@@ -2293,6 +2326,20 @@ else --HUD/Options
 		size = (math.Round(ScrH()*0.043)),
 		weight = 500,
 	})
+
+	surface.CreateFont("UVFont5WeightShadow", {
+		font = "EurostileBold",
+		size = (math.Round(ScrH()*0.043)),
+		weight = 500,
+		shadow = true
+	})
+	
+	surface.CreateFont("UVFont5Shadow", {
+		font = "EurostileBold",
+		size = (math.Round(ScrH()*0.03)),
+		weight = 350,
+		shadow = true
+	})
 	
 	surface.CreateFont("UVFont6", {
 		font = "VCR OSD Mono",
@@ -2306,6 +2353,7 @@ else --HUD/Options
 		weight = 500,
 		shadow = true,
 	})
+	
 	
 	net.Receive("UVHUDPursuit", function()
 		
@@ -2332,6 +2380,35 @@ else --HUD/Options
 	net.Receive("UVHUDResourcePoints", function()
 		
 		local ResourcePoints = net.ReadString()
+		local rp_num = tonumber(ResourcePoints)
+
+		if rp_num ~= UVResourcePoints then
+			hook.Remove("Think", "UVRPColorPulse")
+			UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50)) or Color(50,255,50)
+			--UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
+
+			local clrs = {}
+
+			for _, v in pairs( { 'r', 'g', 'b' } ) do
+				if UVUnitsColor[v] ~= 255 then table.insert(clrs, v) end
+			end 
+			
+			-- if timer.Exists("UVWrecksColor") then
+			-- 	timer.Remove("UVWrecksColor")
+			-- end
+			local val = 50
+
+			hook.Add("Think", "UVRPColorPulse", function()
+				val = val + 200 * RealFrameTime()
+				-- UVResourcePointsColor.b = val
+				-- UVResourcePointsColor.g = val
+				for _, v in pairs( clrs ) do
+					UVUnitsColor[v] = val
+				end
+
+				if val >= 255 then hook.Remove("Think", "UVRPColorPulse") end
+			end)
+		end
 		UVResourcePoints = tonumber(ResourcePoints)
 		UVResourcePointsColor = Color( 255, 255, 255)
 		
@@ -2365,21 +2442,26 @@ else --HUD/Options
 	net.Receive("UVHUDWrecks", function()
 		
 		local wrecks = net.ReadString()
-
+		
 		if wrecks ~= UVWrecks then
-			UVWrecksColor = Colors['Yellow']
-
-			if timer.Exists("UVWrecksColor") then
-				timer.Remove("UVWrecksColor")
-			end
-
-			timer.Create("UVWrecksColor", .3, 1, function()
-				UVWrecksColor = Colors['White']
+			hook.Remove("Think", "UVWrecksColorPulse")
+			UVWrecksColor = Color(255,255,0)
+			
+			-- if timer.Exists("UVWrecksColor") then
+			-- 	timer.Remove("UVWrecksColor")
+			-- end
+			hook.Add("Think", "UVWrecksColorPulse", function()
+				UVWrecksColor.b = UVWrecksColor.b + 200 * RealFrameTime()
+				if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
 			end)
-		-- else
-		-- 	UVTagsColor = Colors['White']
+			
+			-- timer.Create("UVWrecksColor", .3, 1, function()
+			-- 	UVWrecksColor = Colors['White']
+			-- end)
+			-- else
+			-- 	UVTagsColor = Colors['White']
 		end
-
+		
 		UVWrecks = wrecks
 		
 	end)
@@ -2387,21 +2469,27 @@ else --HUD/Options
 	net.Receive("UVHUDTags", function()
 		
 		local tags = net.ReadString()
-
+		
 		if tags ~= UVTags then
-			UVTagsColor = Colors['Yellow']
+			hook.Remove("Think", "UVTagsColorPulse")
+			UVTagsColor = Color(255,255,0)
 			
-			if timer.Exists("UVTagsColor") then
-				timer.Remove("UVTagsColor")
-			end
+			-- if timer.Exists("UVWrecksColor") then
+			-- 	timer.Remove("UVWrecksColor")
+			-- end
 
-			timer.Create("UVTagsColor", .3, 1, function()
-				UVTagsColor = Colors['White']
+			hook.Add("Think", "UVTagsColorPulse", function()
+				UVTagsColor.b = UVTagsColor.b + 200 * RealFrameTime()
+				if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
 			end)
-		-- else
-		-- 	UVTagsColor = Colors['White']
+			
+			-- timer.Create("UVWrecksColor", .3, 1, function()
+			-- 	UVWrecksColor = Colors['White']
+			-- end)
+			-- else
+			-- 	UVTagsColor = Colors['White']
 		end
-
+		
 		UVTags = tags
 		
 	end)
@@ -2824,7 +2912,7 @@ else --HUD/Options
 		-- UVHUDDisplayPursuit = true
 		-- UVHUDCopMode = false
 		-- UVHUDDisplayCooldown = false
-		-- UVHUDDisplayNotification = true
+		-- UVHUDDisplayNotification = false
 		-- UVHUDDisplayBusting = false
 		-- UVHUDDisplayEvading = false
 		-- UnitsChasing = 1
@@ -2860,19 +2948,19 @@ else --HUD/Options
 			
 			DrawIcon(Materials['CLOCK'], w/1.135, h*0.07, .05, UVResourcePointsColor)
 			
-			draw.DrawText( UVTimer, "UVFont2",w/1.005, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			surface.SetFont( "UVFont2" )
+			draw.DrawText( UVTimer, "UVFont5",w/1.005, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			surface.SetFont( "UVFont5" )
 			surface.SetTextColor(255,255,255)
 			surface.SetTextPos( w/1.35, h/10 ) 
 			surface.DrawText( "#uv.hud.bounty" )
-			draw.DrawText( UVBounty, "UVFont2",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-
+			draw.DrawText( UVBounty, "UVFont5",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			
 			-- draw.DrawText( 99, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
 			
 			-- draw.DrawText( 99, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
-
+			
 			if UVHeatLevel == 1 then
 				UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
 				UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
@@ -2893,7 +2981,7 @@ else --HUD/Options
 				UVHeatBountyMax = math.huge
 			end
 			
-			draw.DrawText( UVHeatLevel.." ", "UVFont2", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			draw.DrawText( UVHeatLevel.." ", "UVFont5", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			DrawIcon(Materials['HEAT'], w/1.135, h*0.027, .05, UVResourcePointsColor)
 			
@@ -3004,16 +3092,16 @@ else --HUD/Options
 			if !UVHUDDisplayNotification then
 				if (UnitsChasing > 0 or NeverEvade:GetBool()) and !UVHUDDisplayCooldown then
 					EvadingProgress = 0
-
-					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-
-					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+					
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVUnitsColor)
+					draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.115, UVUnitsColor, TEXT_ALIGN_CENTER )
+					
+					draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
 					DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
-
+					
 					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
-					draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
-
+					draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+					
 					if !UVHUDDisplayBackupTimer then
 						local uloc, utype = "uv.chase.unit", UnitsChasing
 						if !UVHUDCopMode then
@@ -3058,17 +3146,21 @@ else --HUD/Options
 					-- 	surface.SetMaterial(Materials['UNITS'])
 					-- 	surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight) -- x, y, width, height
 					-- end
-
-					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			 		DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
-			
-			 		draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
 					
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
+					DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
 					
-					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+					draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
+					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
+					
+					draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.17, UVUnitsColor, TEXT_ALIGN_CENTER )
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVUnitsColor)
+					
+					local blink = 255 * math.abs(math.sin(RealTime() * 6))
+					color = Color( blink, 255, blink)
+					
+					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, color, TEXT_ALIGN_CENTER )
+					
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
 					surface.SetDrawColor(Color( 0, 255, 0))
@@ -3082,43 +3174,43 @@ else --HUD/Options
 					UVSoundHeat(UVHeatLevel)
 				else
 					EvadingProgress = 0
-
+					
 					-- DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
 					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-
+					
 					-- draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 					-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, Color(255,255,255))
-
+					
 					-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, Color(255,255,255))
 					-- draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-
+					
 					-- DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
 					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/((UVHUDCopMode and 1.17) or 1.23), UVResourcePointsColor, TEXT_ALIGN_CENTER )
-
-					if UVHUDCopMode then
-						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
-						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
-
-						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
-						draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
-
-						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
-						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-					else
-						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
-			 			DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
-			
-			 			draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
-						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
 					
-						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					if UVHUDCopMode then
+						draw.DrawText( UVWrecks, "UVFont5",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
+						
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
+						draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+						
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVUnitsColor)
+						draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.115, UVUnitsColor, TEXT_ALIGN_CENTER )
+					else
+						draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
+						
+						draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
+						
+						draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.17, UVUnitsColor, TEXT_ALIGN_CENTER )
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVUnitsColor)
 					end
-
+					
 					-- draw.DrawText( 99, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			 		-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
-			
-			 		-- draw.DrawText( 99, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+					-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
+					
+					-- draw.DrawText( 99, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 					-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
 					
 					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
@@ -3139,38 +3231,47 @@ else --HUD/Options
 				EvadingProgress = 0
 				if UVHUDDisplayBusting or UVHUDDisplayCooldown then
 					if UVHUDCopMode then
-						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
 						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
-
+						
 						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
-						draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
-
-						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
-						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+						
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVUnitsColor)
+						draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.115, UVUnitsColor, TEXT_ALIGN_CENTER )
 					else
-						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
-			 			DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
-			
-			 			draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
+						draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
+						
+						draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
 						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
-					
-						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
-						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+						
+						draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.17, UVUnitsColor, TEXT_ALIGN_CENTER )
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVUnitsColor)
 					end
 				else
-					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+					draw.DrawText( UVWrecks, "UVFont5WeightShadow",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
 					DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
-
-					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
-					draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
-
-					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					
+					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVUnitsColor)
+					draw.DrawText( UVTags, "UVFont5WeightShadow", w/2.79, h/1.115, UVUnitsColor, TEXT_ALIGN_LEFT )
+					
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVUnitsColor)
+					draw.DrawText( ResourceText, "UVFont5WeightShadow",w/2,h/1.115, UVUnitsColor, TEXT_ALIGN_CENTER )
 				end
 				draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
-		elseif not UVPlayingRace then
-			--UVStopSound()
+			-- elseif not UVPlayingRace then
+			-- 	--UVStopSound()
+			-- 	if UVSoundLoop then
+			-- 		UVSoundLoop:Stop()
+			-- 		UVSoundLoop = nil
+			-- 	end
+		end
+		
+		if (not UVHUDDisplayPursuit) and ((not UVHUDDisplayRacing) or (not UVHUDRace)) then
+			UVStopSound()
+			
 			if UVSoundLoop then
 				UVSoundLoop:Stop()
 				UVSoundLoop = nil
@@ -4063,14 +4164,24 @@ else --HUD/Options
 		end)
 		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
 			
+			panel:SetContentAlignment(8)
+			panel:AddControl("Header", {Description = "	——— Units ———"})
 			panel:Button( "#uv.settings.pm.ai.spawn", "uv_spawnvehicles")
 			panel:Button( "#uv.settings.pm.ai.despawn", "uv_despawnvehicles")
+			panel:Button( "#uv.settings.pm.ai.spawnas", "uv_spawn_as_unit")
+
+			panel:AddControl("Header", {Description = "——— Pursuit ———"})
 			panel:Button( "#uv.settings.pm.pursuit.start", "uv_startpursuit")
 			panel:Button( "#uv.settings.pm.pursuit.stop", "uv_stoppursuit")
+
+			panel:AddControl("Header", {Description = "——— Racers ———"})
 			panel:Button( "#uv.settings.hor.start", "uv_racershordestart")
 			panel:Button( "#uv.settings.hor.stop", "uv_racershordestop")
+
+			panel:AddControl("Header", {Description = "——— Misc ———"})
 			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
 			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
+			panel:Button( "DEBUG", "uv_wantedtable")
 			
 		end)
 	end)
