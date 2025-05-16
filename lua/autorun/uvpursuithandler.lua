@@ -2946,7 +2946,7 @@ else --HUD/Options
 			-- surface.SetTextPos( w/1.35, h/20 ) 
 			-- surface.DrawText( "⏰" )
 			
-			DrawIcon(Materials['CLOCK'], w/1.135, h*0.07, .05, UVResourcePointsColor)
+			DrawIcon(Materials['CLOCK'], w/1.135, h*0.07, .05, Color(255,255,255))
 			
 			draw.DrawText( UVTimer, "UVFont5",w/1.005, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			surface.SetFont( "UVFont5" )
@@ -2983,7 +2983,7 @@ else --HUD/Options
 			
 			draw.DrawText( UVHeatLevel.." ", "UVFont5", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
-			DrawIcon(Materials['HEAT'], w/1.135, h*0.027, .05, UVResourcePointsColor)
+			DrawIcon(Materials['HEAT'], w/1.135, h*0.027, .05, Color(255,255,255))
 			
 			surface.SetDrawColor(Color(109,109,109,200))
 			surface.DrawRect(w/1.099,h/120,w/20+60,39)
