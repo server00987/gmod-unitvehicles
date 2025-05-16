@@ -179,7 +179,7 @@ end
 -- end
 function UVPlaySound( FileName, Loop, StopLoop )
 	//if !PlayMusic:GetBool() then return end
-	if UVLoadedSounds and UVLoadedSounds ~= FileName then
+	if UVLoadedSounds ~= FileName then
 		//if UVLoadedSounds == FileName then print('Ended') return end
 		--Entity(1):StopSound(UVLoadedSounds)
 		if Loop or StopLoop then
@@ -194,6 +194,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 		end
 	end 
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
+	
 	local snd
 	local expectedEndTime
 	
@@ -206,6 +207,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 				else
 					UVSoundSource = source
 				end
+
 				source:EnableLooping(Loop)
 				source:Play()
 				
@@ -2445,14 +2447,18 @@ else --HUD/Options
 		
 		if wrecks ~= UVWrecks then
 			hook.Remove("Think", "UVWrecksColorPulse")
+			if timer.Exists("UVWrecksColorPulseDelay") then timer.Remove("UVWrecksColorPulseDelay") end
 			UVWrecksColor = Color(255,255,0)
 			
 			-- if timer.Exists("UVWrecksColor") then
 			-- 	timer.Remove("UVWrecksColor")
 			-- end
-			hook.Add("Think", "UVWrecksColorPulse", function()
-				UVWrecksColor.b = UVWrecksColor.b + 200 * RealFrameTime()
-				if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
+
+			timer.Create("UVWrecksColorPulseDelay", 1, 1, function()
+				hook.Add("Think", "UVWrecksColorPulse", function()
+					UVWrecksColor.b = UVWrecksColor.b + 450 * RealFrameTime()
+					if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
+				end)
 			end)
 			
 			-- timer.Create("UVWrecksColor", .3, 1, function()
@@ -2472,15 +2478,19 @@ else --HUD/Options
 		
 		if tags ~= UVTags then
 			hook.Remove("Think", "UVTagsColorPulse")
+			if timer.Exists("UVTagsColorPulseDelay") then timer.Remove("UVTagsColorPulseDelay") end
+
 			UVTagsColor = Color(255,255,0)
 			
 			-- if timer.Exists("UVWrecksColor") then
 			-- 	timer.Remove("UVWrecksColor")
 			-- end
 
-			hook.Add("Think", "UVTagsColorPulse", function()
-				UVTagsColor.b = UVTagsColor.b + 200 * RealFrameTime()
-				if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
+			timer.Create("UVTagsColorPulseDelay", 1, 1, function()
+				hook.Add("Think", "UVTagsColorPulse", function()
+					UVTagsColor.b = UVTagsColor.b + 450 * RealFrameTime()
+					if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
+				end)
 			end)
 			
 			-- timer.Create("UVWrecksColor", .3, 1, function()
@@ -2622,8 +2632,9 @@ else --HUD/Options
 		local bustedtext = language.GetPhrase("uv.chase.busted")
 		if !UVHUDDisplayNotification then
 			if UVHUDRaceInProgress then
-				
-				bustedtext = language.GetPhrase("uv.race.shutdown")
+				if #UVHUDWantedSuspects <= 1 then
+					bustedtext = language.GetPhrase("uv.race.shutdown")
+				end
 			end
 			UVNotification = "/// " .. bustedtext .. " ///"
 			UVHUDDisplayNotification = true
@@ -3628,7 +3639,7 @@ else --HUD/Options
 		
 		local lang = language.GetPhrase
 		
-		local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-ent.uvbustingprogress),3)
+		local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-(ent.uvbustingprogress or 0)),3)
 	
 		if ent.beingbusted then
 			if entbustedtimeleft >= 2 then

@@ -431,24 +431,14 @@ if SERVER then
     end)
 else
     function UVSoundRacingStop()
-        if UVPlayingRace then
-            if timer.Exists("UVRaceMusicTransition") then
-                timer.Remove("UVRaceMusicTransition")
-            end
+        UVPlayingRace = false
+        -- if UVPlayingRace then
+        --     if timer.Exists("UVRaceMusicTransition") then
+        --         timer.Remove("UVRaceMusicTransition")
+        --     end
             
-            UVPlayingRace = false
-            
-            if UVSoundLoop then
-                UVSoundLoop:Stop()
-                UVLoadedSounds = nil
-                UVSoundLoop = nil
-            end
-            if UVSoundSource then
-                UVSoundSource:Stop()
-                UVLoadedSounds = nil
-                UVSoundSource = nil
-            end
-        end
+        --     UVPlayingRace = false
+        -- end
     end
     
     function UVGetRandomSound(folder)
@@ -740,6 +730,7 @@ else
 
     function UVStopRacing()
         UVSoundRacingStop()
+
         UVHUDRaceCurrentCheckpoint = nil;
         UVHUDDisplayRacing = false;
         UVHUDRace = false;
