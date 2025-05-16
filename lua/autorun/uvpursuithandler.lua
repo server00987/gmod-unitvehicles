@@ -18,7 +18,7 @@ PT_Slots_Replacement_Strings = {
 local Materials = {
 	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"), -- Replace with your material path
 	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
-	['UNITS'] = Material("hud/MILESTONE_INFRACTIONS.png")
+	['UNITS'] = Material("hud/COPS_ICON.png")
 }
 
 --Sound spam check--
@@ -2176,6 +2176,25 @@ else --HUD/Options
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
+	function DrawIcon(material, x, y, height_ratio)
+		local tex = material :GetTexture("$basetexture")
+
+		if tex then
+			local texW, texH = tex:Width(), tex:Height()
+			local aspect = texW / texH
+			
+			local desiredHeight = ScrH() * height_ratio
+			local desiredWidth = desiredHeight * aspect
+			
+			local x = x - desiredWidth / 2
+			local y = y - desiredHeight / 2
+			
+			surface.SetDrawColor(255, 255, 255)
+			surface.SetMaterial(material)
+			surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
+		end
+	end
+	
 	concommand.Add("uv_keybinds", function( ply, cmd, slot )
 		if IsSettingKeybind then
 			notification.AddLegacy( "You are already setting a keybind!", NOTIFY_ERROR, 5 )
@@ -2758,8 +2777,8 @@ else --HUD/Options
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
 		
-		-- hudyes = true 
-		-- UVHUDDisplayPursuit = true
+		hudyes = true 
+		UVHUDDisplayPursuit = true
 		
 		if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
 			outofpursuit = CurTime()
@@ -2795,8 +2814,12 @@ else --HUD/Options
 			surface.SetTextPos( w/1.35, h/10 ) 
 			surface.DrawText( "#uv.hud.bounty" )
 			draw.DrawText( UVBounty, "UVFont2",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			draw.DrawText( "☠ "..UVWrecks, "UVFont3",w/3+w/3+12,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			draw.DrawText( UVTags.." ☄", "UVFont3",w/3,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			draw.DrawText( UVWrecks, "UVFont3",w/3+w/3+12,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			//DrawIcon()
+			DrawIcon(Materials['UNITS_DISABLED'], w/2.75+w/3+12, h/1.03, 0.06)
+			DrawIcon(Materials['UNITS_DAMAGED'], w/3.27, h/1.03, 0.06)
+
+			draw.DrawText( UVTags, "UVFont3",w/3,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			if UVHeatLevel == 1 then
 				UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
 				UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
@@ -2861,8 +2884,8 @@ else --HUD/Options
 			end
 			
 			surface.DrawRect(w/1.099,h/120,B,39)
-			//local ResourceText = UVResourcePoints -- "⛉\n"
-			local ResourceText = "⛉\n"..UVResourcePoints
+			local ResourceText = UVResourcePoints -- "⛉\n"
+			--local ResourceText = "⛉\n"..UVResourcePoints
 			if UVOneCommanderActive then
 				if !UVHUDCommanderLastHealth or !UVHUDCommanderLastMaxHealth then
 					UVHUDCommanderLastHealth = 0
@@ -2969,8 +2992,10 @@ else --HUD/Options
 					-- 	surface.SetMaterial(Materials['UNITS'])
 					-- 	surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight) -- x, y, width, height
 					-- end
+
+					DrawIcon(Materials['UNITS'], ScrW() / 2, ScrH() / 1.2, .06)
 					
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
