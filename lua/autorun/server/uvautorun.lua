@@ -2686,8 +2686,6 @@ function UVGlideDetachWheels(vehicle)
 					end
 				end)
 
-				continue
-
 			else
 				
 				break
