@@ -901,7 +901,7 @@ else
             local h = ScrH()/2.7
             local w = ScrW()/2
 
-            noti_draw (UVCenterNotification, "HUDDefault", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 2) * 100)))
+            noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 150)))
         end
     end)
 end

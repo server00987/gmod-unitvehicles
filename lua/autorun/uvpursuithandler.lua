@@ -15,10 +15,17 @@ PT_Slots_Replacement_Strings = {
 	[2] = "#uv.ptech.slot2"
 }
 
+local Colors = {
+	['Yellow'] = Color(255, 255, 0),
+	['White'] = Color(255, 255, 255)
+}
+
 local Materials = {
-	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"), -- Replace with your material path
+	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"),
 	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
-	['UNITS'] = Material("hud/COPS_ICON.png")
+	['UNITS'] = Material("hud/COPS_ICON.png"),
+	['HEAT'] = Material("hud/HEAT_ICON.png"),
+	['CLOCK'] = Material("hud/TIMER_ICON.png")
 }
 
 --Sound spam check--
@@ -201,8 +208,6 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end)
 	end
-	
-	print(FileName)
 	
 	UVLoadedSounds = FileName
 	
@@ -2176,9 +2181,9 @@ else --HUD/Options
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
-	function DrawIcon(material, x, y, height_ratio)
+	function DrawIcon(material, x, y, height_ratio, color)
 		local tex = material :GetTexture("$basetexture")
-
+		
 		if tex then
 			local texW, texH = tex:Width(), tex:Height()
 			local aspect = texW / texH
@@ -2189,7 +2194,12 @@ else --HUD/Options
 			local x = x - desiredWidth / 2
 			local y = y - desiredHeight / 2
 			
-			surface.SetDrawColor(255, 255, 255)
+			if color then
+				surface.SetDrawColor(color:Unpack())
+			else
+				surface.SetDrawColor(255,255,255)
+			end
+			
 			surface.SetMaterial(material)
 			surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
 		end
@@ -2354,13 +2364,45 @@ else --HUD/Options
 	
 	net.Receive("UVHUDWrecks", function()
 		
-		UVWrecks = net.ReadString()
+		local wrecks = net.ReadString()
+
+		if wrecks ~= UVWrecks then
+			UVWrecksColor = Colors['Yellow']
+
+			if timer.Exists("UVWrecksColor") then
+				timer.Remove("UVWrecksColor")
+			end
+
+			timer.Create("UVWrecksColor", .3, 1, function()
+				UVWrecksColor = Colors['White']
+			end)
+		-- else
+		-- 	UVTagsColor = Colors['White']
+		end
+
+		UVWrecks = wrecks
 		
 	end)
 	
 	net.Receive("UVHUDTags", function()
 		
-		UVTags = net.ReadString()
+		local tags = net.ReadString()
+
+		if tags ~= UVTags then
+			UVTagsColor = Colors['Yellow']
+			
+			if timer.Exists("UVTagsColor") then
+				timer.Remove("UVTagsColor")
+			end
+
+			timer.Create("UVTagsColor", .3, 1, function()
+				UVTagsColor = Colors['White']
+			end)
+		-- else
+		-- 	UVTagsColor = Colors['White']
+		end
+
+		UVTags = tags
 		
 	end)
 	
@@ -2777,8 +2819,15 @@ else --HUD/Options
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
 		
-		hudyes = true 
-		UVHUDDisplayPursuit = true
+		-- TEST VARS, REMOVE AFTER FINISHING
+		-- hudyes = true 
+		-- UVHUDDisplayPursuit = true
+		-- UVHUDCopMode = false
+		-- UVHUDDisplayCooldown = false
+		-- UVHUDDisplayNotification = true
+		-- UVHUDDisplayBusting = false
+		-- UVHUDDisplayEvading = false
+		-- UnitsChasing = 1
 		
 		if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
 			outofpursuit = CurTime()
@@ -2804,22 +2853,26 @@ else --HUD/Options
 			draw.NoTexture()
 			surface.DrawPoly( element2 )
 			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.SetFont( "UVFont2" )
-			surface.SetTextColor(255,255,255)
-			surface.SetTextPos( w/1.35, h/20 ) 
-			surface.DrawText( "⏰" )
+			-- surface.SetFont( "UVFont2" )
+			-- surface.SetTextColor(255,255,255)
+			-- surface.SetTextPos( w/1.35, h/20 ) 
+			-- surface.DrawText( "⏰" )
+			
+			DrawIcon(Materials['CLOCK'], w/1.135, h*0.07, .05, UVResourcePointsColor)
+			
 			draw.DrawText( UVTimer, "UVFont2",w/1.005, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			surface.SetFont( "UVFont2" )
 			surface.SetTextColor(255,255,255)
 			surface.SetTextPos( w/1.35, h/10 ) 
 			surface.DrawText( "#uv.hud.bounty" )
 			draw.DrawText( UVBounty, "UVFont2",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			draw.DrawText( UVWrecks, "UVFont3",w/3+w/3+12,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			//DrawIcon()
-			DrawIcon(Materials['UNITS_DISABLED'], w/2.75+w/3+12, h/1.03, 0.06)
-			DrawIcon(Materials['UNITS_DAMAGED'], w/3.27, h/1.03, 0.06)
 
-			draw.DrawText( UVTags, "UVFont3",w/3,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			-- draw.DrawText( 99, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
+			
+			-- draw.DrawText( 99, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
+
 			if UVHeatLevel == 1 then
 				UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
 				UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
@@ -2839,7 +2892,11 @@ else --HUD/Options
 				UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
 				UVHeatBountyMax = math.huge
 			end
-			draw.DrawText( "♨"..UVHeatLevel.." ", "UVFont2", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			
+			draw.DrawText( UVHeatLevel.." ", "UVFont2", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			
+			DrawIcon(Materials['HEAT'], w/1.135, h*0.027, .05, UVResourcePointsColor)
+			
 			surface.SetDrawColor(Color(109,109,109,200))
 			surface.DrawRect(w/1.099,h/120,w/20+60,39)
 			surface.SetDrawColor(Color(255,255,255))
@@ -2947,7 +3004,16 @@ else --HUD/Options
 			if !UVHUDDisplayNotification then
 				if (UnitsChasing > 0 or NeverEvade:GetBool()) and !UVHUDDisplayCooldown then
 					EvadingProgress = 0
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
+					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+
+					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+					DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
+
+					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
+					draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+
 					if !UVHUDDisplayBackupTimer then
 						local uloc, utype = "uv.chase.unit", UnitsChasing
 						if !UVHUDCopMode then
@@ -2977,25 +3043,31 @@ else --HUD/Options
 					-- if tex then
 					-- 	local texW, texH = tex:Width(), tex:Height()
 					-- 	local aspect = texW / texH
-						
+					
 					-- 	local desiredHeight = ScrH() * 0.06 -- change this to what you want
 					-- 	local desiredWidth = desiredHeight * aspect
-						
+					
 					-- 	local x = ScrW() / 2 - desiredWidth / 2
 					-- 	local y = ScrH() / 1.2 - desiredHeight / 2
-						
+					
 					-- 	-- surface.SetDrawColor(255, 255, 255)
 					-- 	-- surface.SetMaterial(iconMat)
 					-- 	-- surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
-						
+					
 					-- 	surface.SetDrawColor(255, 255, 255) -- Color (R, G, B, A)
 					-- 	surface.SetMaterial(Materials['UNITS'])
 					-- 	surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight) -- x, y, width, height
 					-- end
 
-					DrawIcon(Materials['UNITS'], ScrW() / 2, ScrH() / 1.2, .06)
+					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			 		DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
+			
+			 		draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
 					
 					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					
 					draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
@@ -3010,7 +3082,47 @@ else --HUD/Options
 					UVSoundHeat(UVHeatLevel)
 				else
 					EvadingProgress = 0
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/((UVHUDCopMode and 1.17) or 1.23), UVResourcePointsColor, TEXT_ALIGN_CENTER )
+
+					-- DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
+					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+
+					-- draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+					-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, Color(255,255,255))
+
+					-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, Color(255,255,255))
+					-- draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+
+					-- DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/((UVHUDCopMode and 1.17) or 1.23), UVResourcePointsColor, TEXT_ALIGN_CENTER )
+
+					if UVHUDCopMode then
+						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
+
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
+						draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
+						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					else
+						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
+			 			DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
+			
+			 			draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
+					
+						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					end
+
+					-- draw.DrawText( 99, "UVFont3",w/3.28+w/3+12,h/1.16, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			 		-- DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, Color(255,255,255))
+			
+			 		-- draw.DrawText( 99, "UVFont3", w/2.79, h/1.16, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+					-- DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, Color(255,255,255))
+					
+					-- draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					-- DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
 					
 					local color = Color(255,255,255)
 					
@@ -3026,9 +3138,34 @@ else --HUD/Options
 			else
 				EvadingProgress = 0
 				if UVHUDDisplayBusting or UVHUDDisplayCooldown then
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.23, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					if UVHUDCopMode then
+						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+						DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
+
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
+						draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
+						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					else
+						draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.16, UVWrecksColor, TEXT_ALIGN_RIGHT )
+			 			DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.13, 0.06, UVWrecksColor)
+			
+			 			draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.16, UVTagsColor, TEXT_ALIGN_LEFT )
+						DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.13, 0.06, UVTagsColor)
+					
+						draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+						DrawIcon(Materials['UNITS'], w / 2, h / 1.2, .06, UVResourcePointsColor)
+					end
 				else
-					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.17, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+					draw.DrawText( UVWrecks, "UVFont3",w/3.28+w/3+12,h/1.115, UVWrecksColor, TEXT_ALIGN_RIGHT )
+					DrawIcon(Materials['UNITS_DISABLED'], w/3.1+w/3+12, h/1.09, 0.06, UVWrecksColor)
+
+					DrawIcon(Materials['UNITS_DAMAGED'], w/2.9, h/1.09, 0.06, UVTagsColor)
+					draw.DrawText( UVTags, "UVFont3", w/2.79, h/1.115, UVTagsColor, TEXT_ALIGN_LEFT )
+
+					DrawIcon(Materials['UNITS'], w / 2, h / 1.14, .06, UVResourcePointsColor)
+					draw.DrawText( ResourceText, "UVFont3",w/2,h/1.115, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 				end
 				draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
