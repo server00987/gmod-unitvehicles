@@ -181,7 +181,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 		end
 	end 
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
-	if UVLoadedSounds ~= FileName then
+	if UVLoadedSounds ~= FileName or (not UVSoundLoop) then
 		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
 			if IsValid(source) then
 				if Loop then
@@ -195,6 +195,8 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end)
 	end
+
+	print(FileName)
 	
 	UVLoadedSounds = FileName
 	
@@ -2740,7 +2742,7 @@ else --HUD/Options
 	
 	hook.Add( "HUDPaint", "UVHUD", function() --HUD
 
-		if LocalPlayer():GetVehicle() == NULL then return end
+		local vehicle = LocalPlayer():GetVehicle()
 		
 		local w = ScrW()
 		local h = ScrH()
@@ -2750,7 +2752,7 @@ else --HUD/Options
 		local UnitsChasing = tonumber(UVUnitsChasing)
 		local UVBustTimer = BustedTimer:GetFloat()
 		
-		if UVHUDDisplayPursuit and hudyes then
+		if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
 			outofpursuit = CurTime()
 			
 			local UVHeatBountyMin
@@ -2974,11 +2976,17 @@ else --HUD/Options
 				end
 				draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 			end
-		else
-			if UVSoundLoop and !UVPlayingRace then
+		elseif not UVPlayingRace then
+			--UVStopSound()
+			if UVSoundLoop then
 				UVSoundLoop:Stop()
 				UVSoundLoop = nil
 			end
+		end
+
+		if vehicle == NULL then 
+			UVHUDPursuitTech = nil
+			return 
 		end
 		
 		if UVHUDDisplayBusting and !UVHUDDisplayCooldown and hudyes then
@@ -3125,9 +3133,9 @@ else --HUD/Options
 			drawCircle( w/2, h/10, 14, 50 )
 		end
 		--Pursuit Tech
-		if !localPlayer:InVehicle() then
-			UVHUDPursuitTech = nil
-		end
+		-- if !localPlayer:InVehicle() then
+		-- 	UVHUDPursuitTech = nil
+		-- end
 		if UVHUDPursuitTech then
 			local PT_Replacement_Strings = {
 				['ESF'] = '#uv.ptech.esf.short',

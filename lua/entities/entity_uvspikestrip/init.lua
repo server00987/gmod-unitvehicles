@@ -133,11 +133,13 @@ function ENT:DoUpdate()
 			local og_forwardtractionmax = j.params.forwardTractionMax
 			local og_sidetractionmax = j.params.sideTractionMax
 
+			local og_radius = j.params.radius
+
 			function j:_restore() -- temp func
 				j.bursted = false
 				j.params.forwardTractionMax = og_forwardtractionmax
 				j.params.sideTractionMax = og_sidetractionmax
-				j:Repair()
+				j:SetRadius( og_radius )
 				timer.Remove("uvspiked"..j:EntIndex())
 			end
 
@@ -165,11 +167,12 @@ function ENT:DoUpdate()
 				timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
 					if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
 						if array[1].wrecked then return end
-						j.bursted = false
-						j.params.forwardTractionMax = og_forwardtractionmax
-						j.params.sideTractionMax = og_sidetractionmax
+						-- j.bursted = false
+						-- j.params.forwardTractionMax = og_forwardtractionmax
+						-- j.params.sideTractionMax = og_sidetractionmax
 						j:EmitSound("gadgets/spikestrip/tirereinflatesound.wav")
-						j:Repair()
+						-- j:Repair()
+						j:_restore()
 					end
 				end)
 			end
