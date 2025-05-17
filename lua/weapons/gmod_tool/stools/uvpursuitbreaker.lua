@@ -1,5 +1,5 @@
-TOOL.Category		=	"Unit Vehicles"
-TOOL.Name			=	"#Pursuit Breakers"
+TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Name			=	"#tool.uvpursuitbreaker.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
@@ -200,7 +200,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end

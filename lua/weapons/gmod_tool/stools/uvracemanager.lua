@@ -1,5 +1,5 @@
-TOOL.Category = "Unit Vehicles"
-TOOL.Name = "#Race Manager"
+TOOL.Category = "uv.settings.unitvehicles"
+TOOL.Name = "#tool.uvracemanager.name"
 TOOL.Command = nil
 TOOL.ConfigName = ""
 

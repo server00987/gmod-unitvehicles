@@ -1,5 +1,5 @@
-TOOL.Category		=	"Unit Vehicles"
-TOOL.Name			=	"#Unit Manager"
+TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Name			=	"#tool.uvunitmanager.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
@@ -372,11 +372,11 @@ if CLIENT then
 		{ name = "right" },
 	}
 
-	language.Add("tool.uvunitmanager.name", "Unit Manager")
-	language.Add("tool.uvunitmanager.desc", "Create and manage your own Unit Vehicles!")
-	language.Add("tool.uvunitmanager.0", "Looking for more options? Find it under the options tab" )
-	language.Add("tool.uvunitmanager.left", "Spawns the currently selected Unit, incase if you wanna make adjustments" )
-	language.Add("tool.uvunitmanager.right", "Select the vehicle you would like to be added to the Unit" )
+	-- language.Add("tool.uvunitmanager.name", "Unit Manager")
+	-- language.Add("tool.uvunitmanager.desc", "Create and manage your own Unit Vehicles!")
+	-- language.Add("tool.uvunitmanager.0", "Looking for more options? Find it under the options tab" )
+	-- language.Add("tool.uvunitmanager.left", "Spawns the currently selected Unit, incase if you wanna make adjustments" )
+	-- language.Add("tool.uvunitmanager.right", "Select the vehicle you would like to be added to the Unit" )
 
 	local selecteditem	= nil
 	local UVTOOLMemory	= {}

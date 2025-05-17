@@ -1,5 +1,5 @@
-TOOL.Category		=	"Unit Vehicles"
-TOOL.Name			=	"#Racer Pursuit Tech"
+TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Name			=	"#tool.uvpursuittech.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
@@ -241,7 +241,7 @@ if CLIENT then
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.emp.desc,
+			Text = "#uv.ptech.emp.desc",
 		})]]
 
 		CPanel:AddControl("Label", {
@@ -257,6 +257,7 @@ if CLIENT then
 		esfduration:SetMax(30)
 		esfduration:SetDecimals(0)
 		esfduration:SetText("#uv.ptech.duration")
+		esfduration:SetTooltip("#uv.ptech.duration.desc")
 		esfduration:SetConVar("uvpursuittech_esfduration")
 		CPanel:AddItem(esfduration)
 
@@ -265,6 +266,7 @@ if CLIENT then
 		esfpower:SetMax(10000000)
 		esfpower:SetDecimals(0)
 		esfpower:SetText("#uv.ptech.power")
+		esfpower:SetTooltip("#uv.ptech.power.desc")
 		esfpower:SetConVar("uvpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
 
@@ -273,8 +275,8 @@ if CLIENT then
 		esfdamage:SetMax(1)
 		esfdamage:SetDecimals(1)
 		esfdamage:SetText("#uv.ptech.damage")
+		esfdamage:SetTooltip("#uv.ptech.damage.desc")
 		esfdamage:SetConVar("uvpursuittech_esfdamage")
-		esfdamage:SetTooltip("#uv.ptech.damage.tip")
 		CPanel:AddItem(esfdamage)
 
 		local esfcooldown = vgui.Create("DNumSlider")
@@ -282,6 +284,7 @@ if CLIENT then
 		esfcooldown:SetMax(120)
 		esfcooldown:SetDecimals(0)
 		esfcooldown:SetText("#uv.ptech.cooldown")
+		esfcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		esfcooldown:SetConVar("uvpursuittech_cooldown_esf")
 		CPanel:AddItem(esfcooldown)
 
@@ -290,6 +293,7 @@ if CLIENT then
 		esfammo:SetMax(120)
 		esfammo:SetDecimals(0)
 		esfammo:SetText("#uv.ptech.ammo")
+		esfammo:SetTooltip("#uv.ptech.ammo.desc")
 		esfammo:SetConVar("uvpursuittech_maxammo_esf")
 		CPanel:AddItem(esfammo)
 
@@ -316,6 +320,7 @@ if CLIENT then
 		jammerduration:SetMax(30)
 		jammerduration:SetDecimals(0)
 		jammerduration:SetText("#uv.ptech.duration")
+		jammerduration:SetTooltip("#uv.ptech.duration.desc")
 		jammerduration:SetConVar("uvpursuittech_jammerduration")
 		CPanel:AddItem(jammerduration)
 
@@ -324,6 +329,7 @@ if CLIENT then
 		jammercooldown:SetMax(120)
 		jammercooldown:SetDecimals(0)
 		jammercooldown:SetText("#uv.ptech.cooldown")
+		jammercooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		jammercooldown:SetConVar("uvpursuittech_cooldown_jammer")
 		CPanel:AddItem(jammercooldown)
 
@@ -332,6 +338,7 @@ if CLIENT then
 		jammerammo:SetMax(120)
 		jammerammo:SetDecimals(0)
 		jammerammo:SetText("#uv.ptech.ammo")
+		jammerammo:SetTooltip("#uv.ptech.ammo.desc")
 		jammerammo:SetConVar("uvpursuittech_maxammo_jammer")
 		CPanel:AddItem(jammerammo)
 
@@ -358,6 +365,7 @@ if CLIENT then
 		shockwavepower:SetMax(10000000)
 		shockwavepower:SetDecimals(0)
 		shockwavepower:SetText("#uv.ptech.power")
+		shockwavepower:SetTooltip("#uv.ptech.power.desc")
 		shockwavepower:SetConVar("uvpursuittech_shockwavepower")
 		CPanel:AddItem(shockwavepower)
 
@@ -366,7 +374,7 @@ if CLIENT then
 		shockwavedamage:SetMax(1)
 		shockwavedamage:SetDecimals(1)
 		shockwavedamage:SetText("#uv.ptech.damage")
-		shockwavedamage:SetTooltip("#uv.ptech.damage.tip")
+		shockwavedamage:SetTooltip("#uv.ptech.damage.desc")
 		shockwavedamage:SetConVar("uvpursuittech_shockwavedamage")
 		CPanel:AddItem(shockwavedamage)
 
@@ -374,6 +382,7 @@ if CLIENT then
 		shockwavecooldown:SetMin(0)
 		shockwavecooldown:SetMax(120)
 		shockwavecooldown:SetDecimals(0)
+		shockwavecooldown:SetText("#uv.ptech.cooldown")
 		shockwavecooldown:SetText("#uv.ptech.cooldown")
 		shockwavecooldown:SetConVar("uvpursuittech_cooldown_shockwave")
 		CPanel:AddItem(shockwavecooldown)
@@ -383,6 +392,7 @@ if CLIENT then
 		shockwaveammo:SetMax(120)
 		shockwaveammo:SetDecimals(0)
 		shockwaveammo:SetText("#uv.ptech.ammo")
+		shockwaveammo:SetTooltip("#uv.ptech.ammo.desc")
 		shockwaveammo:SetConVar("uvpursuittech_maxammo_shockwave")
 		CPanel:AddItem(shockwaveammo)
 
@@ -398,7 +408,8 @@ if CLIENT then
 		spikestripduration:SetMin(5)
 		spikestripduration:SetMax(120)
 		spikestripduration:SetDecimals(0)
-		spikestripduration:SetText("uv.ptech.duration")
+		spikestripduration:SetText("#uv.ptech.duration")
+		spikestripduration:SetTooltip("#uv.ptech.duration.desc")
 		spikestripduration:SetConVar("uvpursuittech_spikestripduration")
 		CPanel:AddItem(spikestripduration)
 
@@ -406,7 +417,8 @@ if CLIENT then
 		spikestripcooldown:SetMin(0)
 		spikestripcooldown:SetMax(120)
 		spikestripcooldown:SetDecimals(0)
-		spikestripcooldown:SetText("uv.ptech.cooldown")
+		spikestripcooldown:SetText("#uv.ptech.cooldown")
+		spikestripcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		spikestripcooldown:SetConVar("uvpursuittech_cooldown_spikestrip")
 		CPanel:AddItem(spikestripcooldown)
 
@@ -414,7 +426,8 @@ if CLIENT then
 		spikestripammo:SetMin(0)
 		spikestripammo:SetMax(120)
 		spikestripammo:SetDecimals(0)
-		spikestripammo:SetText("uv.ptech.ammo")
+		spikestripammo:SetText("#uv.ptech.ammo")
+		spikestripammo:SetTooltip("#uv.ptech.ammo.desc")
 		spikestripammo:SetConVar("uvpursuittech_maxammo_spikestrip")
 		CPanel:AddItem(spikestripammo)
 
@@ -431,6 +444,7 @@ if CLIENT then
 		stunminepower:SetMax(10000000)
 		stunminepower:SetDecimals(0)
 		stunminepower:SetText("#uv.ptech.power")
+		stunminepower:SetTooltip("#uv.ptech.power.desc")
 		stunminepower:SetConVar("uvpursuittech_stunminepower")
 		CPanel:AddItem(stunminepower)
 
@@ -439,7 +453,7 @@ if CLIENT then
 		stunminedamage:SetMax(1)
 		stunminedamage:SetDecimals(1)
 		stunminedamage:SetText("#uv.ptech.damage")
-		stunminedamage:SetTooltip("#uv.ptech.damage.tip")
+		stunminedamage:SetTooltip("#uv.ptech.damage.desc")
 		stunminedamage:SetConVar("uvpursuittech_stunminedamage")
 		CPanel:AddItem(stunminedamage)
 
@@ -448,6 +462,7 @@ if CLIENT then
 		stunminecooldown:SetMax(120)
 		stunminecooldown:SetDecimals(0)
 		stunminecooldown:SetText("#uv.ptech.cooldown")
+		stunminecooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		stunminecooldown:SetConVar("uvpursuittech_cooldown_stunmine")
 		CPanel:AddItem(stunminecooldown)
 
@@ -456,6 +471,7 @@ if CLIENT then
 		stunmineammo:SetMax(120)
 		stunmineammo:SetDecimals(0)
 		stunmineammo:SetText("#uv.ptech.ammo")
+		stunmineammo:SetTooltip("#uv.ptech.ammo.desc")
 		stunmineammo:SetConVar("uvpursuittech_maxammo_stunmine")
 		CPanel:AddItem(stunmineammo)
 		
@@ -473,6 +489,7 @@ if CLIENT then
 		repairkitcooldown:SetMax(120)
 		repairkitcooldown:SetDecimals(0)
 		repairkitcooldown:SetText("#uv.ptech.cooldown")
+		repairkitcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		repairkitcooldown:SetConVar("uvpursuittech_cooldown_repairkit")
 		CPanel:AddItem(repairkitcooldown)
 
@@ -481,6 +498,7 @@ if CLIENT then
 		repairkitammo:SetMax(120)
 		repairkitammo:SetDecimals(0)
 		repairkitammo:SetText("#uv.ptech.ammo")
+		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
 		repairkitammo:SetConVar("uvpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
 	end
@@ -493,7 +511,6 @@ if CLIENT then
 		local slot = self:GetClientNumber("slot")
 		local PT_Replacement_Strings = {
 			['ESF'] = '#uv.ptech.esf.short',
-			['Killswitch'] = '#uv.ptech.killswitch',
 			['Jammer'] = '#uv.ptech.jammer',
 			['Shockwave'] = '#uv.ptech.shockwave',
 			['Stunmine'] = '#uv.ptech.stunmine',
@@ -509,7 +526,7 @@ if CLIENT then
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
 		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( 'Slot: ' .. slot, "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( slot == 1 and "#uv.ptech.slot1" or "#uv.ptech.slot2", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 
