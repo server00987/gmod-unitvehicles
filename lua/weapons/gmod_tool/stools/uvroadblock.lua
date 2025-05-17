@@ -1,4 +1,4 @@
-TOOL.Category		=	"Unit Vehicles"
+TOOL.Category		=	"uv.settings.unitvehicles"
 TOOL.Name			=	"#tool.uvroadblock.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""

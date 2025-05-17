@@ -1,5 +1,5 @@
-TOOL.Category		=	"Unit Vehicles"
-TOOL.Name			=	"#Unit Pursuit Tech"
+TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Name			=	"#tool.uvunitpursuittech.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
@@ -47,12 +47,12 @@ if CLIENT then
 		{ name = "reload" }
 	}
 
-	language.Add("tool.uvunitpursuittech.name", "Unit Pursuit Tech")
-	language.Add("tool.uvunitpursuittech.desc", "Apply Pursuit Tech to your Unit vehicles! Use it to fight against street racers!")
-	language.Add("tool.uvunitpursuittech.0", "Looking for more options? Find it under the options tab" )
-	language.Add("tool.uvunitpursuittech.left", "Apply the Pursuit Tech to the your Unit vehicle. Don't have a Unit vehicle? Create one using the Unit Manager!" )
-	language.Add("tool.uvunitpursuittech.right", "Change Pursuit Tech" )
-	language.Add("tool.uvunitpursuittech.reload", "Select Pursuit Tech slot" )
+	-- language.Add("tool.uvunitpursuittech.name", "Unit Pursuit Tech")
+	-- language.Add("tool.uvunitpursuittech.desc", "Apply Pursuit Tech to your Unit vehicles! Use it to fight against street racers!")
+	-- language.Add("tool.uvunitpursuittech.0", "Looking for more options? Find it under the options tab" )
+	-- language.Add("tool.uvunitpursuittech.left", "Apply the Pursuit Tech to the your Unit vehicle. Don't have a Unit vehicle? Create one using the Unit Manager!" )
+	-- language.Add("tool.uvunitpursuittech.right", "Change Pursuit Tech" )
+	-- language.Add("tool.uvunitpursuittech.reload", "Select Pursuit Tech slot" )
 
 end
 
@@ -81,11 +81,11 @@ function TOOL:LeftClick( trace )
 				end
 			end
 
-			self:GetOwner():ChatPrint(
-				sel_v
-				and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-				or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-			)
+			-- self:GetOwner():ChatPrint(
+				-- sel_v
+				-- and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
+				-- or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
+			-- )
 			
 			local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
 			ammo_count = ammo_count > 0 and ammo_count or math.huge
@@ -125,12 +125,12 @@ function TOOL:RightClick(trace)
 	local ptselected = self:GetClientInfo("pursuittech")
 	
 	if ptselected == pttable[#pttable] then
-		self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[1])
+		-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[1])
 		self:GetOwner():ConCommand("uvunitpursuittech_pursuittech "..pttable[1])
 	else
 		for k,v in pairs(pttable) do
 			if v == ptselected then
-				self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[k+1])
+				-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[k+1])
 				self:GetOwner():ConCommand("uvunitpursuittech_pursuittech "..pttable[k+1])
 			end
 		end
@@ -147,7 +147,7 @@ function TOOL:Reload()
 	if new_slot > slots then new_slot = 1 end
 
 	self:GetOwner():ConCommand("uvunitpursuittech_slot "..new_slot)
-	self:GetOwner():ChatPrint("Selected slot: "..(PT_Slots_Replacement_Strings[new_slot] or new_slot))
+	-- self:GetOwner():ChatPrint("Slot: " .. new_slot .. " selected.")
 end
 
 if CLIENT then
@@ -158,7 +158,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin to apply settings!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -193,9 +193,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "Pursuit Tech Settings Applied!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvpursuittech.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "Pursuit Tech Settings Applied!\n" )
+			Msg( "#tool.uvpursuittech.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -209,26 +209,27 @@ if CLIENT then
 		})
 
 		--[[CPanel:AddControl("Label", {
-			Text = "——— EMP ———",
+			Text = "#uv.ptech.emp.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems. Stronger than an ESF, but it takes time to lock on.",
+			Text = "#uv.ptech.emp.desc",
 		})]]
 
 		CPanel:AddControl("Label", {
-			Text = "——— ESF ———",
+			Text = "#uv.ptech.esf.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Electrostatic Field (ESF) charges your car's body with a powerful static field that protects it against Stun Mines, and deals a powerful shock to anyone that touches it.",
+			Text = "#uv.ptech.esf.desc",
 		})
 
 		local esfduration = vgui.Create("DNumSlider")
 		esfduration:SetMin(1)
 		esfduration:SetMax(30)
 		esfduration:SetDecimals(0)
-		esfduration:SetText("ESF Duration")
+		esfduration:SetText("#uv.ptech.duration")
+		esfduration:SetTooltip("#uv.ptech.duration.desc")
 		esfduration:SetConVar("uvunitpursuittech_esfduration")
 		CPanel:AddItem(esfduration)
 
@@ -236,7 +237,8 @@ if CLIENT then
 		esfpower:SetMin(100000)
 		esfpower:SetMax(10000000)
 		esfpower:SetDecimals(0)
-		esfpower:SetText("ESF Power")
+		esfpower:SetText("#uv.ptech.power")
+		esfpower:SetTooltip("#uv.ptech.power.desc")
 		esfpower:SetConVar("uvunitpursuittech_esfpower")
 		CPanel:AddItem(esfpower)
 
@@ -244,8 +246,8 @@ if CLIENT then
 		esfdamage:SetMin(0)
 		esfdamage:SetMax(1)
 		esfdamage:SetDecimals(1)
-		esfdamage:SetText("ESF Damage")
-		esfdamage:SetTooltip("Damage dealt (1 = Full damage, 0 = No damage)")
+		esfdamage:SetText("#uv.ptech.damage")
+		esfdamage:SetTooltip("#uv.ptech.damage.desc")
 		esfdamage:SetConVar("uvunitpursuittech_esfdamage")
 		CPanel:AddItem(esfdamage)
 
@@ -253,8 +255,8 @@ if CLIENT then
 		esfcooldown:SetMin(0)
 		esfcooldown:SetMax(120)
 		esfcooldown:SetDecimals(0)
-		esfcooldown:SetText("ESF Cooldown")
-		esfcooldown:SetTooltip("Cooldown time before the ESF can be used again.")
+		esfcooldown:SetText("#uv.ptech.cooldown")
+		esfcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		esfcooldown:SetConVar("uvunitpursuittech_cooldown_esf")
 		CPanel:AddItem(esfcooldown)
 
@@ -262,8 +264,8 @@ if CLIENT then
 		esfammo:SetMin(0)
 		esfammo:SetMax(120)
 		esfammo:SetDecimals(0)
-		esfammo:SetText("ESF Ammo")
-		esfammo:SetTooltip("Number of times the ESF can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		esfammo:SetText("#uv.ptech.ammo")
+		esfammo:SetTooltip("#uv.ptech.ammo.desc")
 		esfammo:SetConVar("uvunitpursuittech_maxammo_esf")
 		CPanel:AddItem(esfammo)
 
@@ -278,18 +280,19 @@ if CLIENT then
 		end
 
 		CPanel:AddControl("Label", {
-			Text = "——— Spikes Strips ———",
+			Text = "#uv.ptech.spikes.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Deployed from the rear of the vehicle, Spike Strips expand to damage the tires of any car travelling over them.",
+			Text = "#uv.ptech.spikes.desc",
 		})
 
 		local spikestripduration = vgui.Create("DNumSlider")
 		spikestripduration:SetMin(5)
 		spikestripduration:SetMax(120)
 		spikestripduration:SetDecimals(0)
-		spikestripduration:SetText("Spike Strip Duration")
+		spikestripduration:SetText("#uv.ptech.duration")
+		spikestripduration:SetTooltip("#uv.ptech.duration.desc")
 		spikestripduration:SetConVar("uvunitpursuittech_spikestripduration")
 		CPanel:AddItem(spikestripduration)
 
@@ -297,8 +300,8 @@ if CLIENT then
 		spikestripcooldown:SetMin(0)
 		spikestripcooldown:SetMax(120)
 		spikestripcooldown:SetDecimals(0)
-		spikestripcooldown:SetText("Spike Strip Cooldown")
-		spikestripcooldown:SetTooltip("Cooldown time before the Spike Strip can be used again.")
+		spikestripcooldown:SetText("#uv.ptech.cooldown")
+		spikestripcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		spikestripcooldown:SetConVar("uvunitpursuittech_cooldown_spikestrip")
 		CPanel:AddItem(spikestripcooldown)
 
@@ -306,35 +309,25 @@ if CLIENT then
 		spikestripammo:SetMin(0)
 		spikestripammo:SetMax(120)
 		spikestripammo:SetDecimals(0)
-		spikestripammo:SetText("Spike Strip Ammo")
-		spikestripammo:SetTooltip("Number of times the Spike Strip can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		spikestripammo:SetText("#uv.ptech.ammo")
+		spikestripammo:SetTooltip("#uv.ptech.ammo.desc")
 		spikestripammo:SetConVar("uvunitpursuittech_maxammo_spikestrip")
 		CPanel:AddItem(spikestripammo)
 
-		-- spikestripduration.OnValueChanged = function(self, value)
-		-- 	local cooldown_value = GetConVar("uvunitpursuittech_cooldown_spikestrip"):GetInt()
-
-		-- 	if value > cooldown_value then
-		-- 		spikestripcooldown:SetValue(value)
-		-- 	end
-
-		-- 	spikestripcooldown:SetMin(value)
-		-- 	spikestripcooldown:SetMax(120)
-		-- end
-
 		CPanel:AddControl("Label", {
-			Text = "——— Killswitch ———",
+			Text = "#uv.ptech.killswitch.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- The Killswitch locks onto a target vehicle before delivering a powerful electromagnetic pulse that temporarily disables the engine.",
+			Text = "#uv.ptech.killswitch.desc",
 		})
 
 		local killswitchlockontime = vgui.Create("DNumSlider")
 		killswitchlockontime:SetMin(1)
 		killswitchlockontime:SetMax(10)
 		killswitchlockontime:SetDecimals(1)
-		killswitchlockontime:SetText("KS Lock-On Time")
+		killswitchlockontime:SetText("#uv.ptech.disablelock")
+		killswitchlockontime:SetTooltip("#uv.ptech.disablelock.desc")
 		killswitchlockontime:SetConVar("uvunitpursuittech_killswitchlockontime")
 		CPanel:AddItem(killswitchlockontime)
 
@@ -342,7 +335,8 @@ if CLIENT then
 		killswitchdisableduration:SetMin(1)
 		killswitchdisableduration:SetMax(10)
 		killswitchdisableduration:SetDecimals(1)
-		killswitchdisableduration:SetText("KS Disable Duration")
+		killswitchdisableduration:SetText("#uv.ptech.disabletime")
+		killswitchdisableduration:SetTooltip("#uv.ptech.disabletime.desc")
 		killswitchdisableduration:SetConVar("uvunitpursuittech_killswitchdisableduration")
 		CPanel:AddItem(killswitchdisableduration)
 
@@ -350,8 +344,8 @@ if CLIENT then
 		killswitchcooldown:SetMin(0)
 		killswitchcooldown:SetMax(120)
 		killswitchcooldown:SetDecimals(0)
-		killswitchcooldown:SetText("KS Cooldown")
-		killswitchcooldown:SetTooltip("Cooldown time before the Killswitch can be used again.")
+		killswitchcooldown:SetText("#uv.ptech.cooldown")
+		killswitchcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		killswitchcooldown:SetConVar("uvunitpursuittech_cooldown_killswitch")
 		CPanel:AddItem(killswitchcooldown)
 
@@ -359,8 +353,8 @@ if CLIENT then
 		killswitchammo:SetMin(0)
 		killswitchammo:SetMax(120)
 		killswitchammo:SetDecimals(0)
-		killswitchammo:SetText("KS Ammo")
-		killswitchammo:SetTooltip("Number of times the Killswitch can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		killswitchammo:SetText("#uv.ptech.ammo")
+		killswitchammo:SetTooltip("#uv.ptech.ammo.desc")
 		killswitchammo:SetConVar("uvunitpursuittech_maxammo_killswitch")
 		CPanel:AddItem(killswitchammo)
 
@@ -374,20 +368,20 @@ if CLIENT then
 			killswitchcooldown:SetMin(value)
 		end
 
-		CPanel:AddControl("Header", {
-			Description = "——— Repair Kit ———",
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.repairkit.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Repair Kit deploys an onboard repair system that activates a rapid field-fix for your vehicle. Designed with emergency response and tactical mobility in mind, the Auto-Repair Module restores your vehicle’s structural integrity using built-in self-sealing components and reinforced hydraulic systems.",
+			Text = "#uv.ptech.repairkit.desc",
 		})
 
 		local repairkitcooldown = vgui.Create("DNumSlider")
 		repairkitcooldown:SetMin(0)
 		repairkitcooldown:SetMax(120)
 		repairkitcooldown:SetDecimals(0)
-		repairkitcooldown:SetText("Repair Kit Cooldown")
-		repairkitcooldown:SetTooltip("Cooldown time before the Repair Kit can be used again.")
+		repairkitcooldown:SetText("#uv.ptech.cooldown")
+		repairkitcooldown:SetTooltip("#uv.ptech.cooldown.desc")
 		repairkitcooldown:SetConVar("uvunitpursuittech_cooldown_repairkit")
 		CPanel:AddItem(repairkitcooldown)
 
@@ -395,8 +389,8 @@ if CLIENT then
 		repairkitammo:SetMin(0)
 		repairkitammo:SetMax(120)
 		repairkitammo:SetDecimals(0)
-		repairkitammo:SetText("Repair Kit Ammo")
-		repairkitammo:SetTooltip("Number of times the Repair Kit can be used before it needs to be reloaded. (Setting to 0 will make it infinite)")
+		repairkitammo:SetText("#uv.ptech.ammo")
+		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
 		repairkitammo:SetConVar("uvunitpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
 
@@ -408,6 +402,12 @@ if CLIENT then
 
 		local ptselected = self:GetClientInfo("pursuittech")
 		local slot = self:GetClientNumber("slot")
+		local PT_Replacement_Strings = {
+			['ESF'] = '#uv.ptech.esf.short',
+			['Killswitch'] = '#uv.ptech.killswitch',
+			['Spikestrip'] = '#uv.ptech.spikes',
+			['Repair Kit'] = '#uv.ptech.repairkit'
+		}
 
 		surface.SetDrawColor( Color( 0, 0, 0) )
 		surface.DrawRect( 0, 0, width, height )
@@ -416,8 +416,8 @@ if CLIENT then
 		surface.SetMaterial( toolicon )
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
-		draw.SimpleText( ptselected, "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( 'Slot: '..(PT_Slots_Replacement_Strings[slot] or slot), "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( slot == 1 and "#uv.ptech.slot1" or "#uv.ptech.slot2", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 
