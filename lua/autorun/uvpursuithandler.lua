@@ -3463,7 +3463,7 @@ else --HUD/Options
 					if UVHUDPursuitTech[i] then
 						local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
 						
-						if input.IsKeyDown(var) then
+						if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 							net.Start("UVPTUse")
 							net.WriteInt(i, 3)
 							net.SendToServer()

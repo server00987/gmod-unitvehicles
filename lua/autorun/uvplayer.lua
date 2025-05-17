@@ -302,6 +302,10 @@ if SERVER then
         if !car or !IsValid(car) then return end
         if uvjammerdeployed and !car.jammerexempt then return end
         if !car.PursuitTech then return end
+
+        if car.uvraceparticipant then
+            if UVRaceInEffect and not UVRaceInProgress then return end
+        end
         
         local pursuit_tech = car.PursuitTech[slot]
         if !pursuit_tech then return end

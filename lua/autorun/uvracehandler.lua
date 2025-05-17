@@ -275,6 +275,12 @@ if SERVER then
         for _, vehicle in pairs( UVRaceCurrentParticipants ) do
             vehicle:GetPhysicsObject():EnableMotion( true )
             vehicle.racestart = CurTime()
+
+            if vehicle.PursuitTech then
+                for _, v in pairs(vehicle.PursuitTech) do
+                    v.LastUsed = CurTime()
+                end
+            end
             
             if UVRaceTable['Participants'] and UVRaceTable['Participants'][vehicle] then
                 UVRaceTable['Participants'][vehicle]['LastLapTime'] = CurTime()
