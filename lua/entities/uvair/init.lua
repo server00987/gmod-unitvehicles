@@ -39,10 +39,9 @@ function ENT:SpawnFunction(ply, tr, cl)
 	ent:SetPos(tr.HitPos)
 	ent:SetAngles(Angle(0,ply:GetAngles().y+180,0))
 	ent.Owner = ply
-	ent.Friendly = ply:GetNW2Bool("gtaaichopper_friendly")
 	ent:Spawn()
 	ent:Activate()
-	ent:SetTarget(IsValid(ply:GetNW2Entity("gtaaichopper_target")) and ply:GetNW2Entity("gtaaichopper_target") or ply)
+	ent:SetTarget(ply)
 	
 	return ent
 end
@@ -376,20 +375,6 @@ function ENT:PhysicsUpdate()
 		local closetotar = self.CloseToTarget
 		self.CloseToTarget = false
 		
-		if self.Friendly and self:GetTarget()==self.Owner then
-			local t = {}
-			for k,v in pairs(ents.FindByClass("npc_*")) do
-				local dist = self.Owner:GetPos():DistToSqr(Vector(v:GetPos().x,v:GetPos().y,self:GetPos().z))
-				if !isenemy(v) or dist>(self.Friendly and 1500*1500 or 1000*1000) or v:Health()<=0 then continue end
-				table.insert(t,{v,dist})
-			end
-			
-			if #t!=0 then
-				table.sort(t,function(a,b) return a[2]<b[2] end)
-				self:SetTarget(t[1][1])
-			end
-		end
-		
 		self:ApplyAngles()
 		self:ApplyHeight()
 		
@@ -474,7 +459,7 @@ function ENT:ApplyHeight(height)
 	height = height or self:CheckWorldHeight()
 	
 	if (!height or height=="stop") and IsValid(self:GetTarget()) then
-		local d = self:GetPos().z-(self.Friendly and self.Owner:GetPos() or self:GetTargetPos()).z
+		local d = self:GetPos().z-self:GetTargetPos().z
 		
 		height = d<(self.StayInAir and 250 or 300) and "up" or d>(self.StayInAir and 1000 or 950) and height!="stop" and "down" or false
 	end
@@ -812,7 +797,7 @@ function ENT:StartTouch(prop)
 end
 
 local function check(ent1,ent2)
-	if (ent1:GetClass()=="uvair" or ent1.Base=="uvair") and !ent1.Downed and (ent2==game.GetWorld() or IsValid(ent2:GetPhysicsObject()) and !ent2:GetPhysicsObject():IsMotionEnabled()) then
+	if (ent1:GetClass()=="uvair" or ent1.Base=="uvair") and !ent1.Downed and (ent2==game.GetWorld() or (ent2:GetClass() != "prop_physics" and !ent2:IsVehicle())) then
 		return false
 	end
 end
@@ -820,21 +805,4 @@ end
 hook.Add("ShouldCollide","uvair",function(ent1,ent2)
 	local ret = check(ent1,ent2)==false or check(ent2,ent1)==false
 	if ret then return false end
-end)
-
-concommand.Add("gta_aichopper_friendly",function(ply,cmd,args)
-	if args[1] or args[1]=="" then
-		ply:SetNW2Bool("gtaaichopper_friendly",tobool(args[1]))
-	end
-end)
-
-concommand.Add("gta_aichopper_target",function(ply,cmd,args)
-	if args[1] then
-		for k,v in pairs(player.GetAll()) do
-			if string.find(v:Nick():lower(),args[1]:Replace("\"",""):lower(),1,true) then
-				ply:SetNW2Entity("gtaaichopper_target",v)
-				return
-			end
-		end
-	end
 end)

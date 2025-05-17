@@ -98,18 +98,24 @@ if CLIENT then
 				local data2D = point:ToScreen()
 
 				if id == 0 then
-					draw.SimpleText( "ID NOT SET".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					local blink = 255 * math.abs(math.sin(RealTime() * 4))
+					draw.SimpleText( "#uv.racemanager.invalid", "UVFont4", data2D.x, data2D.y - 10, Color( 255, blink, blink), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				elseif id == 1 then
 					if self:GetFinishLine() then
-						draw.SimpleText( "FINISH".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "#uv.racemanager.finishline", "UVFont4", data2D.x, data2D.y - 10, Color( 255, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
-						draw.SimpleText( "START".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "#uv.racemanager.startline", "UVFont4", data2D.x, data2D.y - 10, Color( 50, 255, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
 				else
 					if self:GetFinishLine() then
-						draw.SimpleText( "FINISH".."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( "#uv.racemanager.finishline", "UVFont4", data2D.x, data2D.y - 10, Color( 255, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
-						draw.SimpleText( "CHECKPOINT " .. id.."\n".."SPEEDLIMIT: "..tostring(speedlimit), "UVFont4", data2D.x, data2D.y, Color( 255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.checkpoint"), id ), "UVFont4", data2D.x, data2D.y - 10, Color( 255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
 				end
 
