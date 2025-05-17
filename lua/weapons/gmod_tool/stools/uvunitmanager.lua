@@ -388,71 +388,72 @@ if CLIENT then
 	net.Receive("UVUnitManagerAdjustUnit", function()
 		local UnitAdjust = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
+		local lang = language.GetPhrase
 
 		UnitAdjust:Add(OK)
 		UnitAdjust:SetSize(600, 400)
 		UnitAdjust:SetBackgroundBlur(true)
 		UnitAdjust:Center()
-		UnitAdjust:SetTitle("Unit Options")
+		UnitAdjust:SetTitle("#tool.uvunitmanager.create")
 		UnitAdjust:SetDraggable(false)
 		UnitAdjust:MakePopup()
 
 		local Intro = vgui.Create( "DLabel", UnitAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( "The vehicle base you've selected is: "..UVTOOLMemory.VehicleBase)
+		Intro:SetText( string.format( lang("tool.uvunitmanager.create.base"), UVTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 
 		local Intro2 = vgui.Create( "DLabel", UnitAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( "Spawn name: "..UVTOOLMemory.SpawnName )
+		Intro2:SetText( string.format( lang("tool.uvunitmanager.create.rawname"), UVTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 
 		local Intro3 = vgui.Create( "DLabel", UnitAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "Unique Unit Name (if you want to replace an existing Unit, type that name)" )
+		Intro3:SetText( "#tool.uvunitmanager.create.uniquename" )
 		Intro3:SizeToContents()
 
 		local UnitNameEntry = vgui.Create( "DTextEntry", UnitAdjust )
 		UnitNameEntry:SetPos( 20, 120 )
-		UnitNameEntry:SetPlaceholderText( "ex. sgtcross_corvette" )
+		UnitNameEntry:SetPlaceholderText( "#tool.uvunitmanager.create.name" )
 		UnitNameEntry:SetSize(UnitAdjust:GetWide() / 2, 22)
 
 		local Intro5 = vgui.Create( "DLabel", UnitAdjust )
 		Intro5:SetPos( 20, 160 )
-		Intro5:SetText( "----- OPTIONALS -----")
+		Intro5:SetText( "#tool.uvunitmanager.create.optional")
 		Intro5:SizeToContents()
 
 		local AssignToHeatLevelEntry = vgui.Create("DCheckBoxLabel", UnitAdjust )
 		AssignToHeatLevelEntry:SetPos( 20, 200 )
-		AssignToHeatLevelEntry:SetText("Assign to Heat Level (options below, leave blank if you want to manually assign Units yourself)")
+		AssignToHeatLevelEntry:SetText("#tool.uvunitmanager.create.optional.assignheatlevel")
 		AssignToHeatLevelEntry:SetSize(UnitAdjust:GetWide(), 22)
 
 		local Intro4 = vgui.Create( "DLabel", UnitAdjust )
 		Intro4:SetPos( 20, 240 )
-		Intro4:SetText( "Unit Class" )
+		Intro4:SetText( "#tool.uvunitmanager.create.optional.class" )
 		Intro4:SizeToContents()
 
 		local UnitClassEntry = vgui.Create( "DComboBox", UnitAdjust )
 		UnitClassEntry:SetPos( 20, 260 )
-		UnitClassEntry:SetValue( "1: Patrol" )
-		UnitClassEntry:AddChoice( "1: Patrol" )
-		UnitClassEntry:AddChoice( "2: Support" )
-		UnitClassEntry:AddChoice( "3: Pursuit" )
-		UnitClassEntry:AddChoice( "4: Interceptor" )
-		UnitClassEntry:AddChoice( "5: Special" )
-		UnitClassEntry:AddChoice( "6: Commander" )
-		UnitClassEntry:AddChoice( "7: Rhino" )
+		UnitClassEntry:SetValue( "1: " .. lang("uv.unit.patrol") )
+		UnitClassEntry:AddChoice( "1: " .. lang("uv.unit.patrol") )
+		UnitClassEntry:AddChoice( "2: " .. lang("uv.unit.support") )
+		UnitClassEntry:AddChoice( "3: " .. lang("uv.unit.pursuit") )
+		UnitClassEntry:AddChoice( "4: " .. lang("uv.unit.interceptor") )
+		UnitClassEntry:AddChoice( "5: " .. lang("uv.unit.special") )
+		UnitClassEntry:AddChoice( "6: " .. lang("uv.unit.commander") )
+		UnitClassEntry:AddChoice( "7: " .. lang("uv.unit.rhino") )
 		UnitClassEntry:SetSize(UnitAdjust:GetWide() / 2, 22)
 
 		local HeatLevelEntry = vgui.Create( "DNumSlider", UnitAdjust )
 		HeatLevelEntry:SetPos( 20, 300 )
-		HeatLevelEntry:SetText("Heat Level")
+		HeatLevelEntry:SetText("#tool.uvunitmanager.create.optional.heatlevel")
 		HeatLevelEntry:SetValue(1)
 		HeatLevelEntry:SetMinMax(1, 6)
 		HeatLevelEntry:SetDecimals(0)
 		HeatLevelEntry:SetSize(UnitAdjust:GetWide() / 2, 22)
 
-		OK:SetText("Create Unit")
+		OK:SetText("#tool.uvunitmanager.create.create")
 		OK:SetSize(UnitAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 
@@ -538,49 +539,49 @@ if CLIENT then
 				local file_ext = (((UVTOOLMemory.VehicleBase == 'base_glide_car' or UVTOOLMemory.VehicleBase == "base_glide_motorcycle") and "json") or "txt")
 
 				if AssignToHeatLevel then
-					if UnitClass == "1: Patrol" then
+					if string.StartsWith(UnitClass, "1") then
 						local availableunits = GetConVar("uvunitmanager_unitspatrol"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitspatrol"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "2: Support" then
+					elseif string.StartsWith(UnitClass, "2") then
 						local availableunits = GetConVar("uvunitmanager_unitssupport"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitssupport"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "3: Pursuit" then
+					elseif string.StartsWith(UnitClass, "3") then
 						local availableunits = GetConVar("uvunitmanager_unitspursuit"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitspursuit"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "4: Interceptor" then
+					elseif string.StartsWith(UnitClass, "4") then
 						local availableunits = GetConVar("uvunitmanager_unitsinterceptor"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitsinterceptor"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "5: Special" then
+					elseif string.StartsWith(UnitClass, "5") then
 						local availableunits = GetConVar("uvunitmanager_unitsspecial"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitsspecial"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "6: Commander" then
+					elseif string.StartsWith(UnitClass, "6") then
 						local availableunits = GetConVar("uvunitmanager_unitscommander"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, Name.."."..file_ext)
 						else
 							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
-					elseif UnitClass == "7: Rhino" then
+					elseif string.StartsWith(UnitClass, "7") then
 						local availableunits = GetConVar("uvunitmanager_rhinos"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
 							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, Name.."."..file_ext)
@@ -588,10 +589,10 @@ if CLIENT then
 							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					end
-					notification.AddLegacy( "Saved "..Name.." as a Unit at Heat Level "..HeatLevel.."!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("tool.uvunitmanager.saved.heatlevel"), Name, HeatLevel ), NOTIFY_UNDO, 5 )
 					Msg( "Saved "..Name.." as a Unit at Heat Level "..HeatLevel.."!\n" )
 				else
-					notification.AddLegacy( "Saved "..Name.." as a Unit!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("tool.uvunitmanager.saved"), Name ), NOTIFY_UNDO, 5 )
 					Msg( "Saved "..Name.." as a Unit!\n" )
 				end
 
@@ -813,6 +814,8 @@ if CLIENT then
 	end
 
 	function TOOL.BuildCPanel(CPanel)
+		local lang = language.GetPhrase
+
 		if !file.Exists( "unitvehicles/glide", "DATA" ) then
 			file.CreateDir( "unitvehicles/glide/units" )
 			print("Created a Glide data file for the Unit Vehicles!")
@@ -832,7 +835,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if !LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "You need to be a super admin to apply settings!", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -938,9 +941,9 @@ if CLIENT then
 				RunConsoleCommand("unitvehicle_unit_helicopters" .. i, GetConVar("uvunitmanager_helicopters" .. i):GetInt())
 			end
 
-			notification.AddLegacy( "Unit Settings Applied!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvunitmanager.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "Unit Settings Applied!\n" )
+			Msg( "#tool.uvunitmanager.applied" )
 
 		end
 		CPanel:AddItem(applysettings)
@@ -955,11 +958,15 @@ if CLIENT then
 		})
 	
 		CPanel:AddControl("Label", {
-			Text = "***PRESS 'APPLY SETTINGS' ABOVE FOR CHANGES TO TAKE EFFECT!***\n\n——— NOTE ———\n\n- Server ConVar 'unitvehicle_heatlevels' needs to be enabled for the rest to work!\n- Simfphys is currently supported at this time!\n",
+			Text = "#tool.settings.clickapply",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "——— GLOBAL SIMFPHYS UNITS ———\n\n- Empty? Right click a vehicle to start creating a new Unit.",
+			Text = "#tool.uvunitmanager.settings.note",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "#tool.uvunitmanager.settings.global.simphys",
 		})
 
 		local Frame = vgui.Create( "DFrame" )
@@ -981,7 +988,7 @@ if CLIENT then
 		UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
 
 		local Assignment = vgui.Create( "DButton", CPanel )
-		Assignment:SetText( "Get Unit Assignment" )
+		Assignment:SetText( "#tool.uvunitmanager.settings.getunitassign" )
 		Assignment:SetSize( 280, 20 )
 		Assignment.DoClick = function( self )
 			if isstring(selecteditem) then
@@ -993,27 +1000,27 @@ if CLIENT then
 		CPanel:AddItem(Assignment)
 
 		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "Refresh" )
+		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
 		Refresh.DoClick = function( self )
 			UVUnitManagerScrollPanel:Clear()
 			selecteditem = nil
 			UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-			notification.AddLegacy( "Unit(s) refreshed!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
 
 		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "Delete" )
+		Delete:SetText( "#spawnmenu.menu.delete" )
 		Delete:SetSize( 280, 20 )
 		Delete.DoClick = function( self )
 			
 			if isstring(selecteditem) then
 				if file.Delete( "unitvehicles/simfphys/units/"..selecteditem ) then
-					notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( "Unit "..selecteditem.." has been deleted!\n" )
+					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
 				end
 			end
 			
@@ -1024,7 +1031,7 @@ if CLIENT then
 		CPanel:AddItem(Delete)
 
 		CPanel:AddControl("Label", {
-			Text = "——— GLOBAL GLIDE UNITS ———\n\n- Empty? Right click a vehicle to start creating a new Unit.",
+			Text = "#tool.uvunitmanager.settings.global.glide",
 		})
 
 		local FrameGlide = vgui.Create( "DFrame" )
@@ -1046,7 +1053,7 @@ if CLIENT then
 		UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
 
 		local AssignmentGlide = vgui.Create( "DButton", CPanel )
-		AssignmentGlide:SetText( "Get Unit Assignment" )
+		AssignmentGlide:SetText( "#tool.uvunitmanager.settings.getunitassign" )
 		AssignmentGlide:SetSize( 280, 20 )
 		AssignmentGlide.DoClick = function( self )
 			if isstring(selecteditem) then
@@ -1058,27 +1065,27 @@ if CLIENT then
 		CPanel:AddItem(AssignmentGlide)
 
 		local RefreshGlide = vgui.Create( "DButton", CPanel )
-		RefreshGlide:SetText( "Refresh" )
+		RefreshGlide:SetText( "#refresh" )
 		RefreshGlide:SetSize( 280, 20 )
 		RefreshGlide.DoClick = function( self )
 			UVUnitManagerScrollPanelGlide:Clear()
 			selecteditem = nil
 			UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
-			notification.AddLegacy( "Unit(s) refreshed!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(RefreshGlide)
 
 		local DeleteGlide = vgui.Create( "DButton", CPanel )
-		DeleteGlide:SetText( "Delete" )
+		DeleteGlide:SetText( "#spawnmenu.menu.delete" )
 		DeleteGlide:SetSize( 280, 20 )
 		DeleteGlide.DoClick = function( self )
 			
 			if isstring(selecteditem) then
 				if file.Delete( "unitvehicles/glide/units/"..selecteditem ) then
-					notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( "Unit "..selecteditem.." has been deleted!\n" )
+					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
 				end
 			end
 			
@@ -1089,7 +1096,7 @@ if CLIENT then
 		CPanel:AddItem(DeleteGlide)
 
 		CPanel:AddControl("Label", {
-			Text = "——— GLOBAL PROP_VEHICLE_JEEP UNITS ———\n\n- Empty? Right click a vehicle to start creating a new Unit.",
+			Text = "#tool.uvunitmanager.settings.global.hl2",
 		})
 
 		local FrameJeep = vgui.Create( "DFrame" )
@@ -1111,7 +1118,7 @@ if CLIENT then
 		UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
 
 		local AssignmentJeep = vgui.Create( "DButton", CPanel )
-		AssignmentJeep:SetText( "Get Unit Assignment" )
+		AssignmentJeep:SetText( "#tool.uvunitmanager.settings.getunitassign" )
 		AssignmentJeep:SetSize( 280, 20 )
 		AssignmentJeep.DoClick = function( self )
 			if isstring(selecteditem) then
@@ -1123,27 +1130,27 @@ if CLIENT then
 		CPanel:AddItem(AssignmentJeep)
 
 		local RefreshJeep = vgui.Create( "DButton", CPanel )
-		RefreshJeep:SetText( "Refresh" )
+		RefreshJeep:SetText( "#refresh" )
 		RefreshJeep:SetSize( 280, 20 )
 		RefreshJeep.DoClick = function( self )
 			UVUnitManagerScrollPanelJeep:Clear()
 			selecteditem = nil
 			UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
-			notification.AddLegacy( "Unit(s) refreshed!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(RefreshJeep)
 
 		local DeleteJeep = vgui.Create( "DButton", CPanel )
-		DeleteJeep:SetText( "Delete" )
+		DeleteJeep:SetText( "#spawnmenu.menu.delete" )
 		DeleteJeep:SetSize( 280, 20 )
 		DeleteJeep.DoClick = function( self )
 			
 			if isstring(selecteditem) then
 				if file.Delete( "unitvehicles/prop_vehicle_jeep/units/"..selecteditem ) then
-					notification.AddLegacy( "Deleted "..selecteditem.."!", NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( "Unit "..selecteditem.." has been deleted!\n" )
+					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
 				end
 			end
 			
@@ -1154,170 +1161,166 @@ if CLIENT then
 		CPanel:AddItem(DeleteJeep)
 
 		CPanel:AddControl("Label", {
-			Text = "——— VEHICLE BASE ———",
+			Text = "#tool.uvunitmanager.settings.base.title",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- Every assigned Unit needs to have the same vehicle base!",
+			Text = "#tool.uvunitmanager.settings.base.title.desc",
 		})
 
 		local vehiclebase = vgui.Create("DNumSlider")
-		vehiclebase:SetText("Vehicle Base")
+		vehiclebase:SetText("#tool.uvunitmanager.settings.base")
+		vehiclebase:SetTooltip("#tool.uvunitmanager.settings.base.type")
 		vehiclebase:SetMinMax(1, 3)
 		vehiclebase:SetDecimals(0)
 		vehiclebase:SetValue(GetConVar("uvunitmanager_vehiclebase"))
 		vehiclebase:SetConVar("uvunitmanager_vehiclebase")
 		CPanel:AddItem(vehiclebase)
 
+		-- CPanel:AddControl("Label", {
+			-- Text = "1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide",
+		-- })
+
 		CPanel:AddControl("Label", {
-			Text = "1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide",
+			Text = "#uv.settings.ptech",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "——— PURSUIT TECH ———",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "- Patrol and Support Units are not equipped with Pursuit Tech!\n- If you want to use weapons, click the 'Spawn in a random assigned Unit' button!",
+			Text = "#tool.uvunitmanager.settings.ptech.desc",
 		})
 
 		local pursuittech = vgui.Create("DCheckBoxLabel")
-		pursuittech:SetText("Toggle Pursuit Tech")
+		pursuittech:SetText("#tool.uvunitpursuittech.name")
 		pursuittech:SetConVar("uvunitmanager_pursuittech")
-		pursuittech:SetTooltip("Check if AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.)")
+		pursuittech:SetTooltip("#tool.uvunitmanager.settings.ptech.enable.desc")
 		pursuittech:SetValue(GetConVar("uvunitmanager_pursuittech"):GetInt())
 		CPanel:AddItem(pursuittech)
 
 		CPanel:AddControl("Label", {
-			Text = "- Weapons",
+			Text = "#tool.uvunitmanager.settings.ptech.spawnwith",
 		})
 
 		local pursuittech_esf = vgui.Create("DCheckBoxLabel")
-		pursuittech_esf:SetText("ESF")
+		pursuittech_esf:SetText("#uv.ptech.esf")
 		pursuittech_esf:SetConVar("uvunitmanager_pursuittech_esf")
-		pursuittech_esf:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with ESF.")
+		pursuittech_esf:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_esf:SetValue(GetConVar("uvunitmanager_pursuittech_esf"):GetInt())
 		CPanel:AddItem(pursuittech_esf)
 
 		local pursuittech_spikes = vgui.Create("DCheckBoxLabel")
-		pursuittech_spikes:SetText("Spikestrips")
+		pursuittech_spikes:SetText("#uv.ptech.spikes")
 		pursuittech_spikes:SetConVar("uvunitmanager_pursuittech_spikestrip")
-		pursuittech_spikes:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with spike strips.")
+		pursuittech_spikes:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_spikes:SetValue(GetConVar("uvunitmanager_pursuittech_spikestrip"):GetInt())
 		CPanel:AddItem(pursuittech_spikes)
 
 		local pursuittech_killswitch = vgui.Create("DCheckBoxLabel")
-		pursuittech_killswitch:SetText("Killswitch")
+		pursuittech_killswitch:SetText("#uv.ptech.killswitch")
 		pursuittech_killswitch:SetConVar("uvunitmanager_pursuittech_killswitch")
-		pursuittech_killswitch:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with killswitch.")
+		pursuittech_killswitch:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_killswitch:SetValue(GetConVar("uvunitmanager_pursuittech_killswitch"):GetInt())
 		CPanel:AddItem(pursuittech_killswitch)
 
 		local pursuittech_repairkit = vgui.Create("DCheckBoxLabel")
-		pursuittech_repairkit:SetText("Repair Kit")
+		pursuittech_repairkit:SetText("#uv.ptech.repairkit")
 		pursuittech_repairkit:SetConVar("uvunitmanager_pursuittech_repairkit")
-		pursuittech_repairkit:SetTooltip("Check if AI and player-controlled Unit Vehicles can spawn with repair kits.")
+		pursuittech_repairkit:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_repairkit:SetValue(GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
 		CPanel:AddItem(pursuittech_repairkit)
 
 		CPanel:AddControl("Label", {
-			Text = "——— ONE COMMANDER ———",
+			Text = "#tool.uvunitmanager.settings.commander",
 		})
 
-		CPanel:AddControl("Label", {
-			Text = "With One Commander enabled, the Commander will be made as a BOSS! There will be an endless horde of Units until the Commander is taken out!",
-		})
+		-- CPanel:AddControl("Label", {
+			-- Text = "With One Commander enabled, the Commander will be made as a BOSS! There will be an endless horde of Units until the Commander is taken out!",
+		-- })
 
 		local onecommander = vgui.Create("DCheckBoxLabel")
-		onecommander:SetText("One Commander")
+		onecommander:SetText("#tool.uvunitmanager.settings.commander.solo")
 		onecommander:SetConVar("uvunitmanager_onecommander")
-		onecommander:SetTooltip("Check if the Unit should only deploy One Commander at a time (ex. Sergeant Cross)")
+		onecommander:SetTooltip("#tool.uvunitmanager.settings.commander.solo.desc")
 		onecommander:SetValue(GetConVar("uvunitmanager_onecommander"):GetInt())
 		CPanel:AddItem(onecommander)
 
 		local onecommanderhealth = vgui.Create("DNumSlider")
-		onecommanderhealth:SetText("One Commander Health")
+		onecommanderhealth:SetText("#tool.uvunitmanager.settings.commander.health")
 		onecommanderhealth:SetMinMax(1000, 10000)
 		onecommanderhealth:SetDecimals(0)
 		onecommanderhealth:SetValue(GetConVar("uvunitmanager_onecommanderhealth"))
 		onecommanderhealth:SetConVar("uvunitmanager_onecommanderhealth")
-		onecommanderhealth:SetTooltip("How much health would this One Commander have? Turn it up if you really want a boss fight!")
+		onecommanderhealth:SetTooltip("#tool.uvunitmanager.settings.commander.health")
 		CPanel:AddItem(onecommanderhealth)
 
 		CPanel:AddControl("Label", {
-			Text = "———  HELICOPTER  ———",
-		})
-		CPanel:AddControl("Label", {
-			Text = "\n1 = Most Wanted\n2 = Undercover\n3 = Hot Pursuit\n4 = No Limits\n5 = Payback",
+			Text = "#tool.uvunitmanager.settings.heli",
 		})
 
 		local helicoptermodel = vgui.Create("DNumSlider")
-		helicoptermodel:SetText("Helicopter Model")
+		helicoptermodel:SetText("#tool.uvunitmanager.settings.heli.model")
+		helicoptermodel:SetTooltip("#tool.uvunitmanager.settings.heli.model.desc")
 		helicoptermodel:SetMinMax(1, 5)
 		helicoptermodel:SetDecimals(0)
 		helicoptermodel:SetValue(GetConVar("uvunitmanager_helicoptermodel"))
 		helicoptermodel:SetConVar("uvunitmanager_helicoptermodel")
 		CPanel:AddItem(helicoptermodel)
 
+		local helicopterbustracer = vgui.Create("DCheckBoxLabel")
+		helicopterbustracer:SetText("#tool.uvunitmanager.settings.heli.canbust")
+		helicopterbustracer:SetConVar("uvunitmanager_helicopterbusting")
+		helicopterbustracer:SetTooltip("#tool.uvunitmanager.settings.heli.canbust.desc")
+		helicopterbustracer:SetValue(GetConVar("uvunitmanager_helicopterbusting"):GetInt())
+		CPanel:AddItem(helicopterbustracer)
+
 		CPanel:AddControl("Label", {
-			Text = "- Helicopter Pursuit Tech",
+			Text = "#tool.uvunitpursuittech.name",
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "- NOTE: If you want to use the Helicopter's Pursuit Tech, you need to toggle Pursuit Tech above!",
+			Text = "#tool.uvunitmanager.settings.heli.ptech.note",
 		})
 
 		local helibarrels = vgui.Create("DCheckBoxLabel")
-		helibarrels:SetText("Barrels")
+		helibarrels:SetText("#uv.ptech.expbarrel")
 		helibarrels:SetConVar("uvunitmanager_helicopterbarrels")
-		helibarrels:SetTooltip("Check if the Helicopter should use barrels")
+		helibarrels:SetTooltip("#tool.uvunitmanager.settings.heli.ptech.canuse")
 		helibarrels:SetValue(GetConVar("uvunitmanager_helicopterbarrels"):GetInt())
 		CPanel:AddItem(helibarrels)
 
 		local helispikes = vgui.Create("DCheckBoxLabel")
-		helispikes:SetText("Spike Strips")
+		helispikes:SetText("#uv.ptech.spikes")
 		helispikes:SetConVar("uvunitmanager_helicopterspikestrip")
-		helispikes:SetTooltip("Check if the Helicopter should use spike strips")
+		helispikes:SetTooltip("#tool.uvunitmanager.settings.heli.ptech.canuse")
 		helispikes:SetValue(GetConVar("uvunitmanager_helicopterspikestrip"):GetInt())
 		CPanel:AddItem(helispikes)
 
-		CPanel:AddControl("Label", {
-			Text = "- Settings",
-		})
+		-- CPanel:AddControl("Label", {
+			-- Text = "——— SPAWNING ———\n\n- Spawn in a random assigned Unit to test out the Unit Vehicles!\n- Your Unit will be EQUIPPED with Pursuit Tech if its assigned to Pursuit, Interceptor, Special or Commander!",
+		-- })
 
-		local onecommander = vgui.Create("DCheckBoxLabel")
-		onecommander:SetText("Bust Racers")
-		onecommander:SetConVar("uvunitmanager_helicopterbusting")
-		onecommander:SetTooltip("Check if the helicopter should be able to bust racers")
-		onecommander:SetValue(GetConVar("uvunitmanager_helicopterbusting"):GetInt())
-		CPanel:AddItem(onecommander)
-
-		CPanel:AddControl("Label", {
-			Text = "——— SPAWNING ———\n\n- Spawn in a random assigned Unit to test out the Unit Vehicles!\n- Your Unit will be EQUIPPED with Pursuit Tech if its assigned to Pursuit, Interceptor, Special or Commander!",
-		})
-
-		local Respawn = vgui.Create( "DButton", CPanel )
-		Respawn:SetText( "Spawn in a random assigned Unit" )
-		Respawn:SetSize( 280, 20 )
-		Respawn.DoClick = function( self )
-			local redeploysound = {
-				"ui/redeploy/redeploy1.wav",
-				"ui/redeploy/redeploy2.wav",
-				"ui/redeploy/redeploy3.wav",
-				"ui/redeploy/redeploy4.wav",
-			}
-			surface.PlaySound( redeploysound[math.random(1, #redeploysound)] )
-			net.Start("UVHUDRespawnInUV")
-			net.SendToServer()
-		end
-		CPanel:AddItem(Respawn)
+		-- local Respawn = vgui.Create( "DButton", CPanel )
+		-- Respawn:SetText( "Spawn in a random assigned Unit" )
+		-- Respawn:SetSize( 280, 20 )
+		-- Respawn.DoClick = function( self )
+			-- local redeploysound = {
+				-- "ui/redeploy/redeploy1.wav",
+				-- "ui/redeploy/redeploy2.wav",
+				-- "ui/redeploy/redeploy3.wav",
+				-- "ui/redeploy/redeploy4.wav",
+			-- }
+			-- surface.PlaySound( redeploysound[math.random(1, #redeploysound)] )
+			-- net.Start("UVHUDRespawnInUV")
+			-- net.SendToServer()
+		-- end
+		-- CPanel:AddItem(Respawn)
 
 		CPanel:AddControl("Label", {
-			Text = "——— BOUNTY FOR DISABLING UNITS ———",
+			Text = "#tool.uvunitmanager.settings.bounty.disable",
 		})
 
 		local BountyPatrol = vgui.Create("DNumSlider")
-		BountyPatrol:SetText("Patrol")
+		BountyPatrol:SetText("#uv.unit.patrol")
+		BountyPatrol:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyPatrol:SetMinMax(0, 1000000)
 		BountyPatrol:SetDecimals(0)
 		BountyPatrol:SetValue(GetConVar("uvunitmanager_bountypatrol"))
@@ -1325,7 +1328,8 @@ if CLIENT then
 		CPanel:AddItem(BountyPatrol)
 
 		local BountySupport = vgui.Create("DNumSlider")
-		BountySupport:SetText("Support")
+		BountySupport:SetText("#uv.unit.support")
+		BountySupport:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountySupport:SetMinMax(0, 1000000)
 		BountySupport:SetDecimals(0)
 		BountySupport:SetValue(GetConVar("uvunitmanager_bountysupport"))
@@ -1333,7 +1337,8 @@ if CLIENT then
 		CPanel:AddItem(BountySupport)
 
 		local BountyPursuit = vgui.Create("DNumSlider")
-		BountyPursuit:SetText("Pursuit")
+		BountyPursuit:SetText("#uv.unit.pursuit")
+		BountyPursuit:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyPursuit:SetMinMax(0, 1000000)
 		BountyPursuit:SetDecimals(0)
 		BountyPursuit:SetValue(GetConVar("uvunitmanager_bountypursuit"))
@@ -1341,7 +1346,8 @@ if CLIENT then
 		CPanel:AddItem(BountyPursuit)
 
 		local BountyInterceptor = vgui.Create("DNumSlider")
-		BountyInterceptor:SetText("Interceptor")
+		BountyInterceptor:SetText("#uv.unit.interceptor")
+		BountyInterceptor:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyInterceptor:SetMinMax(0, 1000000)
 		BountyInterceptor:SetDecimals(0)
 		BountyInterceptor:SetValue(GetConVar("uvunitmanager_bountyinterceptor"))
@@ -1349,7 +1355,8 @@ if CLIENT then
 		CPanel:AddItem(BountyInterceptor)
 
 		local BountyAir = vgui.Create("DNumSlider")
-		BountyAir:SetText("Air")
+		BountyAir:SetText("#uv.unit.helicopter")
+		BountyAir:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyAir:SetMinMax(0, 1000000)
 		BountyAir:SetDecimals(0)
 		BountyAir:SetValue(GetConVar("uvunitmanager_bountyair"))
@@ -1357,7 +1364,8 @@ if CLIENT then
 		CPanel:AddItem(BountyAir)
 
 		local BountySpecial = vgui.Create("DNumSlider")
-		BountySpecial:SetText("Special")
+		BountySpecial:SetText("#uv.unit.special")
+		BountySpecial:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountySpecial:SetMinMax(0, 1000000)
 		BountySpecial:SetDecimals(0)
 		BountySpecial:SetValue(GetConVar("uvunitmanager_bountyspecial"))
@@ -1365,7 +1373,8 @@ if CLIENT then
 		CPanel:AddItem(BountySpecial)
 
 		local BountyCommander = vgui.Create("DNumSlider")
-		BountyCommander:SetText("Commander")
+		BountyCommander:SetText("#uv.unit.commander")
+		BountyCommander:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyCommander:SetMinMax(0, 1000000)
 		BountyCommander:SetDecimals(0)
 		BountyCommander:SetValue(GetConVar("uvunitmanager_bountycommander"))
@@ -1373,7 +1382,8 @@ if CLIENT then
 		CPanel:AddItem(BountyCommander)
 
 		local BountyRhino = vgui.Create("DNumSlider")
-		BountyRhino:SetText("Rhino")
+		BountyRhino:SetText("#uv.unit.rhino")
+		BountyRhino:SetTooltip("#tool.uvunitmanager.settings.bounty.disable.desc")
 		BountyRhino:SetMinMax(0, 1000000)
 		BountyRhino:SetDecimals(0)
 		BountyRhino:SetValue(GetConVar("uvunitmanager_bountyrhino"))
@@ -1381,12 +1391,13 @@ if CLIENT then
 		CPanel:AddItem(BountyRhino)
 
 		CPanel:AddControl("Label", {
-			Text = "——— BOUNTY GAINED EVERY 10 SECONDS ———",
+			Text = "#tool.uvunitmanager.settings.bounty.10s",
 		})
 
 		for i = 1, 6 do
 			bountytime[i] = vgui.Create("DNumSlider")
-			bountytime[i]:SetText("Heat Level " .. i)
+			bountytime[i]:SetText( string.format( lang("uv.hud.heatlvl"), i ) )
+			bountytime[i]:SetTooltip("#tool.uvunitmanager.settings.bounty.10s.desc")
 			bountytime[i]:SetMinMax(0, 1000000)
 			bountytime[i]:SetDecimals(0)
 			bountytime[i]:SetValue(GetConVar("uvunitmanager_bountytime" .. i))
@@ -1395,19 +1406,20 @@ if CLIENT then
 		end
 
 		CPanel:AddControl("Label", {
-			Text = "——— TIME TILL NEXT HEAT ———",
+			Text = "#tool.uvunitmanager.settings.heatlvl.timed.title",
 		})
 
 		local TimeTillNextHeatEnabled = vgui.Create("DCheckBoxLabel")
-		TimeTillNextHeatEnabled:SetText("Enable Time Till Next Heat (in seconds)")
+		TimeTillNextHeatEnabled:SetText("#tool.uvunitmanager.settings.heatlvl.timed")
 		TimeTillNextHeatEnabled:SetConVar("uvunitmanager_timetillnextheatenabled")
-		TimeTillNextHeatEnabled:SetTooltip("Use time to determine Heat Levels instead of bounty")
+		TimeTillNextHeatEnabled:SetTooltip("#tool.uvunitmanager.settings.heatlvl.timed.desc")
 		TimeTillNextHeatEnabled:SetValue(GetConVar("uvunitmanager_timetillnextheatenabled"):GetInt())
 		CPanel:AddItem(TimeTillNextHeatEnabled)
 
 		for i = 1, 5 do
 			timetillnextheat[i] = vgui.Create("DNumSlider")
-			timetillnextheat[i]:SetText("Heat Level " .. i .. " - " .. i+1)
+			timetillnextheat[i]:SetText( string.format( lang("uv.hud.heatlvl"), i .. " > " .. i+1 ) )
+			timetillnextheat[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl.time")
 			timetillnextheat[i]:SetMinMax(10, 600)
 			timetillnextheat[i]:SetDecimals(0)
 			timetillnextheat[i]:SetValue(GetConVar("uvunitmanager_timetillnextheat" .. i))
@@ -1418,24 +1430,24 @@ if CLIENT then
 		local emptydefault = " "
 
 		CPanel:AddControl("Label", {
-			Text = "——— ASSIGNED UNITS ———",
+			Text = "#tool.uvunitmanager.settings.assunits.title",
 		})
 	
 		for i = 1, 6 do
 	
 			heatlevel[i] = CPanel:AddControl("Label", {
-				Text = "— Heat Level " .. i .." —",
+				Text = string.format( lang("tool.uvunitmanager.settings.heatlvl.title"), i ),
 			})
 
 			CPanel:AddControl("Label", {
-				Text = "Patrol Units",
+				Text = "#uv.unit.patrol",
 			})
 
 			unitspatrol[i] = vgui.Create( "DTextEntry" )
-			unitspatrol[i]:SetPlaceholderText( "ex. crownvic.txt impala.txt ..." )
+			unitspatrol[i]:SetPlaceholderText( " " )
 			unitspatrol[i]:SetText(GetConVar("uvunitmanager_unitspatrol" .. i):GetString())
 			unitspatrol[i]:SetConVar("uvunitmanager_unitspatrol" .. i)
-			unitspatrol[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. crownvic.txt impala.txt ...")
+			unitspatrol[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl1.desc")
 			unitspatrol[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1451,14 +1463,14 @@ if CLIENT then
 			CPanel:AddItem(unitspatrol[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Support Units",
+				Text = "#uv.unit.support",
 			})
 
 			unitssupport[i] = vgui.Create( "DTextEntry" )
-			unitssupport[i]:SetPlaceholderText( "ex. explorer.txt tahoe.txt ..." )
+			unitssupport[i]:SetPlaceholderText( " " )
 			unitssupport[i]:SetText(GetConVar("uvunitmanager_unitssupport" .. i):GetString())
 			unitssupport[i]:SetConVar("uvunitmanager_unitssupport" .. i)
-			unitssupport[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. explorer.txt tahoe.txt ...")
+			unitssupport[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl2.desc")
 			unitssupport[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1474,14 +1486,14 @@ if CLIENT then
 			CPanel:AddItem(unitssupport[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Pursuit Units",
+				Text = "#uv.unit.pursuit",
 			})
 
 			unitspursuit[i] = vgui.Create( "DTextEntry" )
-			unitspursuit[i]:SetPlaceholderText( "ex. charger.txt camaro.txt ..." )
+			unitspursuit[i]:SetPlaceholderText( " " )
 			unitspursuit[i]:SetText(GetConVar("uvunitmanager_unitspursuit" .. i):GetString())
 			unitspursuit[i]:SetConVar("uvunitmanager_unitspursuit" .. i)
-			unitspursuit[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. charger.txt camaro.txt ...")
+			unitspursuit[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl3.desc")
 			unitspursuit[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1497,14 +1509,14 @@ if CLIENT then
 			CPanel:AddItem(unitspursuit[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Interceptor Units",
+				Text = "#uv.unit.interceptor",
 			})
 
 			unitsinterceptor[i] = vgui.Create( "DTextEntry" )
-			unitsinterceptor[i]:SetPlaceholderText( "ex. corvette.txt aventador.txt ..." )
+			unitsinterceptor[i]:SetPlaceholderText( " " )
 			unitsinterceptor[i]:SetText(GetConVar("uvunitmanager_unitsinterceptor" .. i):GetString())
 			unitsinterceptor[i]:SetConVar("uvunitmanager_unitsinterceptor" .. i)
-			unitsinterceptor[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. corvette.txt aventador.txt ...")
+			unitsinterceptor[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl4.desc")
 			unitsinterceptor[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1520,14 +1532,14 @@ if CLIENT then
 			CPanel:AddItem(unitsinterceptor[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Special Units",
+				Text = "#uv.unit.special",
 			})
 
 			unitsspecial[i] = vgui.Create( "DTextEntry" )
-			unitsspecial[i]:SetPlaceholderText( "ex. bearcat.txt mrap.txt ..." )
+			unitsspecial[i]:SetPlaceholderText( " " )
 			unitsspecial[i]:SetText(GetConVar("uvunitmanager_unitsspecial" .. i):GetString())
 			unitsspecial[i]:SetConVar("uvunitmanager_unitsspecial" .. i)
-			unitsspecial[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. bearcat.txt mrap.txt ...")
+			unitsspecial[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
 			unitsspecial[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1543,14 +1555,14 @@ if CLIENT then
 			CPanel:AddItem(unitsspecial[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Commander Units",
+				Text = "#uv.unit.commander",
 			})
 
 			unitscommander[i] = vgui.Create( "DTextEntry" )
-			unitscommander[i]:SetPlaceholderText( "ex. cross.txt shaw.txt ..." )
+			unitscommander[i]:SetPlaceholderText( " " )
 			unitscommander[i]:SetText(GetConVar("uvunitmanager_unitscommander" .. i):GetString())
 			unitscommander[i]:SetConVar("uvunitmanager_unitscommander" .. i)
-			unitscommander[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. cross.txt shaw.txt ...")
+			unitscommander[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl6.desc")
 			unitscommander[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1566,14 +1578,14 @@ if CLIENT then
 			CPanel:AddItem(unitscommander[i])
 
 			CPanel:AddControl("Label", {
-				Text = "Rhinos",
+				Text = "#uv.unit.rhino",
 			})
 
 			rhinos[i] = vgui.Create( "DTextEntry" )
-			rhinos[i]:SetPlaceholderText( "ex. bearcat.txt mrap.txt ..." )
+			rhinos[i]:SetPlaceholderText( " " )
 			rhinos[i]:SetText(GetConVar("uvunitmanager_rhinos" .. i):GetString())
 			rhinos[i]:SetConVar("uvunitmanager_rhinos" .. i)
-			rhinos[i]:SetTooltip("Copy the Unit from the GLOBAL UNITS list! ex. bearcat.txt mrap.txt ...")
+			rhinos[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
 			rhinos[i].OnLoseFocus = function( self )
 				if ( self:GetText() == "" ) then
 					self:SetText( emptydefault )
@@ -1589,61 +1601,61 @@ if CLIENT then
 			CPanel:AddItem(rhinos[i])
 
 			heatminimumbounty[i] = vgui.Create("DNumSlider")
-			heatminimumbounty[i]:SetText("Minimum Bounty")
+			heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
 			heatminimumbounty[i]:SetMinMax(1, 10000000)
 			heatminimumbounty[i]:SetDecimals(0)
 			heatminimumbounty[i]:SetValue(GetConVar("uvunitmanager_heatminimumbounty" .. i))
 			heatminimumbounty[i]:SetConVar("uvunitmanager_heatminimumbounty" .. i)
-			heatminimumbounty[i]:SetTooltip("How much bounty you need to get to this Heat Level? Try not to overlap this for other Heat Levels! Useless if Time Till Next Heat is enabled!")
+			heatminimumbounty[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.minbounty.desc")
 			CPanel:AddItem(heatminimumbounty[i])
 	
 			maxunits[i] = vgui.Create("DNumSlider")
-			maxunits[i]:SetText("Max Units")
+			maxunits[i]:SetText("#tool.uvunitmanager.settings.heatlevel.maxunits")
 			maxunits[i]:SetMinMax(1, 20)
 			maxunits[i]:SetDecimals(0)
 			maxunits[i]:SetValue(GetConVar("uvunitmanager_maxunits" .. i))
 			maxunits[i]:SetConVar("uvunitmanager_maxunits" .. i)
-			maxunits[i]:SetTooltip("What's the max amount of Units that should be chasing you at any given time? If you have a potato PC, it's best to set it low!")
+			maxunits[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.maxunits.desc")
 			CPanel:AddItem(maxunits[i])
 	
 			unitsavailable[i] = vgui.Create("DNumSlider")
-			unitsavailable[i]:SetText("Units Available")
+			unitsavailable[i]:SetText("#tool.uvunitmanager.settings.heatlevel.avaunits")
 			unitsavailable[i]:SetMinMax(1, 100)
 			unitsavailable[i]:SetDecimals(0)
 			unitsavailable[i]:SetValue(GetConVar("uvunitmanager_unitsavailable" .. i))
 			unitsavailable[i]:SetConVar("uvunitmanager_unitsavailable" .. i)
-			unitsavailable[i]:SetTooltip("How many Units should spawn to chase you before it runs out (and starts the backup timer below)?")
+			unitsavailable[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.avaunits.desc")
 			CPanel:AddItem(unitsavailable[i])
 	
 			backuptimer[i] = vgui.Create("DNumSlider")
-			backuptimer[i]:SetText("Backup Timer")
+			backuptimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.backuptime")
 			backuptimer[i]:SetMinMax(10, 1000)
 			backuptimer[i]:SetDecimals(0)
 			backuptimer[i]:SetValue(GetConVar("uvunitmanager_backuptimer" .. i))
 			backuptimer[i]:SetConVar("uvunitmanager_backuptimer" .. i)
-			backuptimer[i]:SetTooltip("Time in seconds before backup arrives (more Units spawning to give chase).")
+			backuptimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.backuptime.desc")
 			CPanel:AddItem(backuptimer[i])
 	
 			cooldowntimer[i] = vgui.Create("DNumSlider")
-			cooldowntimer[i]:SetText("Cooldown Timer")
+			cooldowntimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.cooldowntime")
 			cooldowntimer[i]:SetMinMax(0, 1000)
 			cooldowntimer[i]:SetDecimals(0)
 			cooldowntimer[i]:SetValue(GetConVar("uvunitmanager_cooldowntimer" .. i))
 			cooldowntimer[i]:SetConVar("uvunitmanager_cooldowntimer" .. i)
-			cooldowntimer[i]:SetTooltip("Time in seconds that you should spend before escaping.")
+			cooldowntimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.cooldowntime.desc")
 			CPanel:AddItem(cooldowntimer[i])
 	
 			roadblocks[i] = vgui.Create("DCheckBoxLabel")
-			roadblocks[i]:SetText("Roadblocks")
+			roadblocks[i]:SetText("#tool.uvunitmanager.settings.heatlevel.roadblocks")
 			roadblocks[i]:SetConVar("uvunitmanager_roadblocks" .. i)
-			roadblocks[i]:SetTooltip("Enable for roadblocks.")
+			roadblocks[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.roadblocks.desc")
 			roadblocks[i]:SetValue(GetConVar("uvunitmanager_roadblocks" .. i):GetInt())
 			CPanel:AddItem(roadblocks[i])
 	
 			helicopters[i] = vgui.Create("DCheckBoxLabel")
-			helicopters[i]:SetText("Helicopters")
+			helicopters[i]:SetText("#tool.uvunitmanager.settings.heatlevel.helicopter")
 			helicopters[i]:SetConVar("uvunitmanager_helicopters" .. i)
-			helicopters[i]:SetTooltip("Enable for an eye in the sky.")
+			helicopters[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.helicopter.desc")
 			helicopters[i]:SetValue(GetConVar("uvunitmanager_helicopters" .. i):GetInt())
 			CPanel:AddItem(helicopters[i])
 	

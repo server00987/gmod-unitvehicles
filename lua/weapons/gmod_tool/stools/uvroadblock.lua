@@ -320,7 +320,7 @@ if CLIENT then
 		CPanel:AddItem(LoadAll)
 
 		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "Refresh" )
+		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
 		Refresh.DoClick = function( self )
 			UVRoadblocksScrollPanel:Clear()
@@ -332,7 +332,7 @@ if CLIENT then
 		CPanel:AddItem(Refresh)
 
 		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "Delete" )
+		Delete:SetText( "#spawnmenu.menu.delete" )
 		Delete:SetSize( 280, 20 )
 		Delete.DoClick = function( self )
 			
