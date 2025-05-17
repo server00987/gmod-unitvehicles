@@ -422,7 +422,7 @@ if SERVER then
 
 	function ENT:PathFindToEnemy(vectors)
 
-		if !vectors or !isvector(vectors) or self.NavigateBlind or !GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown then
+		if !vectors or !isvector(vectors) or self.NavigateBlind or !GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then
 			return
 		end
 
