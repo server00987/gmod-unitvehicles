@@ -40,6 +40,7 @@ end
 
 function UVSoundHeat(heatlevel)
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
+	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -82,6 +83,7 @@ end
 
 function UVSoundBusting()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
+	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingBusting or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -101,6 +103,7 @@ end
 
 function UVSoundCooldown()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
+	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingCooldown or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -138,6 +141,7 @@ end
 
 function UVSoundEscaped()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
+	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingEscaped or UVSoundDelayed then return end
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
@@ -187,10 +191,11 @@ function UVPlaySound( FileName, Loop, StopLoop )
 				UVSoundLoop:Stop()
 				UVSoundLoop = nil
 			end
-		end
-		if UVSoundSource then
-			UVSoundSource:Stop()
-			UVSoundSource = nil
+		else
+			if UVSoundSource then
+				UVSoundSource:Stop()
+				UVSoundSource = nil
+			end
 		end
 	end 
 	--Entity(1):EmitSound(FileName, 0, 100, 1, CHAN_STATIC)
@@ -1956,6 +1961,7 @@ else --HUD/Options
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
 	RacingMusic = CreateClientConVar("unitvehicle_racingmusic", 1, true, false, "Unit Vehicles: If set to 1, Racing music will play.")
 	RacingMusicPriority = CreateClientConVar("unitvehicle_racingmusicpriority", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits while racing.")
+	RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
 	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
 	NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
@@ -2362,6 +2368,7 @@ else --HUD/Options
 		UVBountyString = net.ReadString()
 		UVBountyNo = tonumber(UVBountyString)
 		UVBounty = string.Comma(UVBountyString)
+
 		UVHUDDisplayPursuit = true
 		
 	end)
@@ -4090,6 +4097,8 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.music.race.desc")
 			panel:CheckBox("#uv.settings.music.race.priority", "unitvehicle_racingmusicpriority")
 			panel:ControlHelp("#uv.settings.music.race.priority.desc")
+			panel:CheckBox("#uv.settings.music.race.outsideraces", "unitvehicle_racingmusicoutsideraces")
+			panel:ControlHelp("#uv.settings.music.race.outsideraces.desc")
 			local pursuittheme, label = panel:ComboBox( "#uv.settings.music.pursuittheme", "unitvehicle_pursuittheme" )
 			local files, folders = file.Find( "sound/uvpursuitmusic/*", "GAME" )
 			if folders != nil then

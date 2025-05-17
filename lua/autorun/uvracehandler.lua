@@ -6,7 +6,7 @@ local LBColors = {
     ["Disqualified"] = Color(255,255,255,133)
 }
 
-local UVRacePlayIntro = false
+local UVRacePlayIntro = true
 local UVRacePlayMusic = false 
 local UVRacePlayTransition = false
 
@@ -475,8 +475,12 @@ else
     end
     
     function UVSoundRacing(my_vehicle)
-        if !RacingMusic:GetBool() or (!RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
-        if (not UVHUDRace) or UVPlayingRace or UVSoundDelayed then return end
+        if !RacingThemeOutsideRace:GetBool() then
+            if !RacingMusic:GetBool() or (!RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
+            if (not UVHUDRace) then return end 
+        end
+
+        if UVPlayingRace or UVSoundDelayed then return end
         
         if timer.Exists("UVRaceMusicTransition") then
             timer.Remove("UVRaceMusicTransition")
@@ -490,6 +494,7 @@ else
         
         if UVRacePlayIntro then
             UVRacePlayIntro = false
+            UVPlayingRace = true
             //UVRacePlayMusic = true
             
             local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
@@ -501,6 +506,7 @@ else
             end
         elseif UVRacePlayTransition then
             UVRacePlayTransition = false 
+            UVPlayingRace = true
             
             local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
             
@@ -511,13 +517,13 @@ else
                 UVRacePlayTransition = true
             end
         elseif UVRacePlayMusic then
+            UVPlayingRace = true
             UVRacePlayTransition = true
             //UVRacePlayMusic = false 
             
             PlayRaceMusic(theme, my_vehicle)
         end
         
-        UVPlayingRace = true
         UVPlayingHeat = false
         UVPlayingBusting = false
         UVPlayingCooldown = false
@@ -778,6 +784,10 @@ else
             UVHUDNotification = false
         end)
     end
+
+    concommand.Add( "uvrace_resetposition", function()
+        net.Start("UVResetPosition"); net.SendToServer()
+    end)
     
     net.Receive( "uvrace_notification", function()
         UVRaceNotify( net.ReadString(), net.ReadFloat() )
