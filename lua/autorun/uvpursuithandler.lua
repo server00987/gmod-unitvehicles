@@ -2456,7 +2456,7 @@ else --HUD/Options
 
 			timer.Create("UVWrecksColorPulseDelay", 1, 1, function()
 				hook.Add("Think", "UVWrecksColorPulse", function()
-					UVWrecksColor.b = UVWrecksColor.b + 450 * RealFrameTime()
+					UVWrecksColor.b = UVWrecksColor.b + 600 * RealFrameTime()
 					if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
 				end)
 			end)
@@ -2488,7 +2488,7 @@ else --HUD/Options
 
 			timer.Create("UVTagsColorPulseDelay", 1, 1, function()
 				hook.Add("Think", "UVTagsColorPulse", function()
-					UVTagsColor.b = UVTagsColor.b + 450 * RealFrameTime()
+					UVTagsColor.b = UVTagsColor.b + 600 * RealFrameTime()
 					if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
 				end)
 			end)
