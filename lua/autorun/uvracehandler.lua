@@ -1210,19 +1210,21 @@ else
         -- used by checkpoint entities
         UVHUDRaceCurrentCheckpoint = checkpoint_count
 
-        for _, v in pairs( ents.FindByClass("uvrace_checkpoint") ) do
-            if v:GetID() == checkpoint_count +1 then
-                _UVCurrentCheckpoint = v
-                v.blip.alpha = 255
-                v.blip.color = Color(0,255,0)
-            elseif v:GetID() == checkpoint_count +2 then
-                _UVNextCheckpoint = v
-                v.blip.alpha = 255
-                v.blip.color = Color(255,204,0)
-            else
-                v.blip.alpha = 0
-            end
-        end
+		if GMinimap then
+			for _, v in pairs( ents.FindByClass("uvrace_checkpoint") ) do
+				if v:GetID() == checkpoint_count +1 then
+					_UVCurrentCheckpoint = v
+					v.blip.alpha = 255
+					v.blip.color = Color(0,255,0)
+				elseif v:GetID() == checkpoint_count +2 then
+					_UVNextCheckpoint = v
+					v.blip.alpha = 255
+					v.blip.color = Color(255,204,0)
+				else
+					v.blip.alpha = 0
+				end
+			end
+		end
         
         -- check for wrong way
         if _UVCurrentCheckpoint and IsValid(_UVCurrentCheckpoint) then
