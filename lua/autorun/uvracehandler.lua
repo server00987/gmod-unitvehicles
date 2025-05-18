@@ -10,11 +10,6 @@ local UVRacePlayIntro = true
 local UVRacePlayMusic = false 
 local UVRacePlayTransition = false
 
-Materials = {
-	['CLOCK'] = Material("hud/TIMER_ICON.png"),
-	['CHECK'] = Material("hud/MINIMAP_ICON_CIRCUIT.png"),
-}
-
 local showhud = GetConVar("cl_drawhud")
 
 if SERVER then
@@ -1307,7 +1302,8 @@ else
         for i=1, racer_count, 1 do
 			if racer_count == 1 then return end
             local entry = string_array[i]
-			local racercount = i * (racer_count > 8 and 26 or 28)
+			-- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+			local racercount = i * w*0.0135
 			if hudyes then
 				
 				surface.SetDrawColor( 200, 200, 200, 150)

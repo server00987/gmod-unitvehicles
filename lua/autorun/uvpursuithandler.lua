@@ -25,7 +25,8 @@ Materials = {
 	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
 	['UNITS'] = Material("hud/COPS_ICON.png"),
 	['HEAT'] = Material("hud/HEAT_ICON.png"),
-	['CLOCK'] = Material("hud/TIMER_ICON.png")
+	['CLOCK'] = Material("hud/TIMER_ICON.png"),
+	['CHECK'] = Material("hud/MINIMAP_ICON_CIRCUIT.png"),
 }
 
 --Sound spam check--
@@ -3056,9 +3057,8 @@ else --HUD/Options
 						UVHeatBountyMax = math.huge
 					end
 					
+					DrawIcon( Materials['HEAT'], w*0.71, h*0.235, .05, Color(255,255,255) ) -- Icon
 					draw.DrawText( UVHeatLevel, "UVFont5", w*0.74, h*0.2125, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-					
-					DrawIcon(Materials['HEAT'], w*0.71, h*0.235, .05, Color(255,255,255))
 					
 					surface.SetDrawColor(Color(109,109,109,200))
 					surface.DrawRect(w*0.745,h*0.2175,w*0.225,h*0.035)
@@ -3779,23 +3779,23 @@ else --HUD/Options
 		ResultPanel.Paint = function(self, w, h)
 			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText(string.format( lang("uv.chase.over.bustedby"), unit ), "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", 10, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.time", "UVFont5", 10, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", 10, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", 10, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", 10, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", 10, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", 10, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(string.format( lang("uv.chase.over.bustedby"), unit ), "UVFont5", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.time", "UVFont5", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", 990, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", 990, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", 990, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", 990, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", 990, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", 990, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", 990, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( bounty, "UVFont5", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		timer.Simple(5, function()
@@ -3844,23 +3844,23 @@ else --HUD/Options
 		ResultPanel.Paint = function(self, w, h)
 			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("--- " .. lang("uv.chase.over.evaded") .. " ---", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( lang("uv.chase.over.escapedfrom"), "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", 10, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.time", "UVFont5", 10, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", 10, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", 10, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", 10, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", 10, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", 10, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText("--- " .. lang("uv.chase.over.evaded") .. " ---", "UVFont", w*0.5, h*0.01, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( lang("uv.chase.over.escapedfrom"), "UVFont5", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.time", "UVFont5", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", 990, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", 990, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", 990, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", 990, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", 990, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", 990, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", 990, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( bounty, "UVFont5", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -3903,23 +3903,23 @@ else --HUD/Options
 		ResultPanel.Paint = function(self, w, h)
 			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("--- " .. lang("uv.chase.over.evaded") .. " ---", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( string.format( lang("uv.chase.over.suspects.escaped.num"), UVHUDWantedSuspectsNumber), "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", 10, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.time", "UVFont5", 10, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", 10, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", 10, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", 10, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", 10, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", 10, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText("--- " .. lang("uv.chase.over.evaded") .. " ---", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( string.format( lang("uv.chase.over.suspects.escaped.num"), UVHUDWantedSuspectsNumber), "UVFont5", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.time", "UVFont5", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", 990, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", 990, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", 990, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", 990, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", 990, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", 990, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", 990, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( bounty, "UVFont5", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -3962,23 +3962,23 @@ else --HUD/Options
 		ResultPanel.Paint = function(self, w, h)
 			local lang = language.GetPhrase
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", 500, 5, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText(string.format( lang("uv.chase.over.suspects.busted"), unit ), "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", 10, 120, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.time", "UVFont5", 10, 180, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", 10, 240, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", 10, 300, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", 10, 360, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", 10, 420, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", 10, 480, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", w*0.5, h*0.01, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(string.format( lang("uv.chase.over.suspects.busted"), unit ), "UVFont5", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.bounty", "UVFont5", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.time", "UVFont5", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.deployed", "UVFont5", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.damaged", "UVFont5", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.units.destroyed", "UVFont5", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.blocks", "UVFont5", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.chase.over.dodged.spikes", "UVFont5", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", 990, 120, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", 990, 180, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", 990, 240, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", 990, 300, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", 990, 360, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", 990, 420, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", 990, 480, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( bounty, "UVFont5", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVFont5", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVFont5", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVFont5", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVFont5", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 		end
 		
 		function OK:DoClick() ResultPanel:Close() end
@@ -4077,10 +4077,10 @@ else --HUD/Options
 		
 		ResultPanel.Paint = function(self, w, h)
 			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("/// " .. language.GetPhrase("uv.chase.wrecked") .. " ///", "UVFont", 500, 5, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.takenout", "UVFont5", 500, 60, Color(255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.rejoin", "UVFont5", 500, 120, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.respawn", "UVFont5", 500, 180, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("/// " .. language.GetPhrase("uv.chase.wrecked") .. " ///", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("#uv.chase.wrecked.takenout", "UVFont5", w*0.5, h*0.15, Color(255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("#uv.chase.wrecked.rejoin", "UVFont5", w*0.5, h*0.35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText("#uv.chase.wrecked.respawn", "UVFont5", w*0.5, h*0.55, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		end
 		
 		function Yes:DoClick()
