@@ -747,10 +747,10 @@ else
         UVHUDDisplayRacing = false;
         UVHUDRace = false;
 
-        if _UVCurrentCheckpoint then
+        if _UVCurrentCheckpoint and _UVCurrentCheckpoint.blip then
             _UVCurrentCheckpoint.blip.alpha = 0
         end
-        if _UVNextCheckpoint then
+        if _UVNextCheckpoint and _UVCurrentCheckpoint.blip then
             _UVNextCheckpoint.blip.alpha = 0
         end
     end
