@@ -1,14 +1,19 @@
 AddCSLuaFile()
 
 local LBColors = {
-    ["LocalPlayer"] = Color(255,221,0),
+    ["LocalPlayer"] = Color(255,200,0),
     ["Others"] = Color(255,255,255),
-    ["Disqualified"] = Color(255,255,255,133)
+    ["Disqualified"] = Color(255,50,50,133)
 }
 
 local UVRacePlayIntro = true
 local UVRacePlayMusic = false 
 local UVRacePlayTransition = false
+
+Materials = {
+	['CLOCK'] = Material("hud/TIMER_ICON.png"),
+	['CHECK'] = Material("hud/MINIMAP_ICON_CIRCUIT.png"),
+}
 
 local showhud = GetConVar("cl_drawhud")
 
@@ -477,6 +482,31 @@ else
         local track = UVGetRaceMusicPath(theme, my_vehicle)
         if track then
             UVPlaySound(track, true)
+        end
+
+		if !string.find(track, "/race/") then return end
+		track = string.gsub(track, "uvracemusic/" .. theme .. "/race/", "")
+		track = string.gsub(track, ".mp3", "")
+		track = string.gsub(track, ".wav", "")
+		track = string.gsub(track, ".ogg", "")
+		
+        if Glide then
+            Glide.Notify( {
+                text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n<color=255,255,0>" .. track .. "</color>\n" .. theme,
+                icon = "hud/MINIMAP_ICON_SAFE_HOUSE.png",
+                lifetime = 5
+            } )
+        else
+			chat.AddText(
+				Color(255, 126, 126),
+				language.GetPhrase("uv.race.radio"),
+				Color(255, 255, 255),
+				": ",
+				Color(255, 255,0),
+				track,
+				Color(255, 255, 255),
+				" - " .. theme
+			)
         end
     end
     
@@ -1177,29 +1207,7 @@ else
         end
         
         UVHUDRace = true;
-        
-        local element1 = {}
-        
-        if UVHUDRaceInfo.Info.Laps > 1 then
-            element1 = {
-                { x = 0, y = h/7 },
-                { x = w*0.35, y = h/7 },
-                { x = w*0.25, y = h/3 },
-                { x = 0, y = h/3 },
-            }
-        else
-            element1 = {
-                { x = 0, y = h/7 },
-                { x = w*0.35, y = h/7 },
-                { x = w*0.25, y = h/3.5 },
-                { x = 0, y = h/3.5 },
-            }
-        end
-        surface.SetDrawColor( 0, 0, 0, 200)
-        draw.NoTexture()
-		if hudyes then
-			surface.DrawPoly( element1 )
-        end
+ 
         local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo['Participants'])
         
         UVHUDRaceCurrentParticipants = 0
@@ -1263,33 +1271,55 @@ else
                 end
             end
         end
-        
-        local lang = language.GetPhrase
-		if hudyes then
-			draw.DrawText( 
-				lang("uv.race.time") .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. "\n" ..
-				lang("uv.race.check") .. checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" )  .. "\n" ..
-				(UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.lap") .. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") ..
-				lang("uv.race.pos") .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,
-				"UVFont", 10, h/7, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT 
-			)
-		end
-    
+            
         local racer_count = #string_array
     
+        local lang = language.GetPhrase
+		if hudyes then
+			-- Timer
+			surface.SetDrawColor( 0, 0, 0, 200)
+			surface.DrawRect( w*0.8, h*0.1, w*0.175, h*0.05)
+			DrawIcon( Materials['CLOCK'], w*0.815, h*0.1225, .05, Color(255,255,255) ) -- Icon
+			draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont", w*0.97, h*0.1, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			
+			-- Lap & Checkpoint Counter
+			surface.SetDrawColor( 0, 0, 0, 200)
+			surface.DrawRect( w*0.8, h*0.155, w*0.175, h*0.05)
+			if UVHUDRaceInfo.Info.Laps > 1 then
+				draw.DrawText( "#uv.race.lap", "UVFont", w*0.805, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_LEFT ) -- Lap Counter
+				draw.DrawText( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps, "UVFont", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT ) -- Lap Counter
+			else
+				DrawIcon( Materials['CHECK'], w*0.815, h*0.18, .04, Color(255,255,255) ) -- Icon
+				draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			end
+			if racer_count > 1 then
+				-- Position Counter
+				surface.SetDrawColor( 0, 0, 0, 200)
+				surface.DrawRect( w*0.72, h*0.1, w*0.075, h*0.105)
+				surface.SetDrawColor( 255, 255, 255, 255)
+				surface.DrawRect( w*0.72, h*0.15, w*0.075, h*0.005) -- Divider
+				
+				draw.DrawText( UVHUDRaceCurrentPos, "UVFont", w*0.755, h*0.1, LBColors.LocalPlayer, TEXT_ALIGN_CENTER ) -- Upper, Your Position
+				draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
+			end
+		end
+
         for i=1, racer_count, 1 do
+			if racer_count == 1 then return end
             local entry = string_array[i]
-            local racerpos = 3.75
-        
-            if UVHUDRaceInfo.Info.Laps > 1 then
-                racerpos = 3.25
-            end
+			local racercount = i * (racer_count > 8 and 26 or 28)
 			if hudyes then
+				
+				surface.SetDrawColor( 200, 200, 200, 150)
+				draw.NoTexture()
+				surface.DrawRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
+				
 				draw.DrawText( 
-					entry[2], "UVFont4", 
-					10, 
-					(h/racerpos) + i * ((racer_count > 5 and 20) or 28), 
-					entry[1], TEXT_ALIGN_LEFT 
+					entry[2], "UVFont4",
+					w*0.725,
+					(h*0.185) + racercount, 
+					entry[1],
+					TEXT_ALIGN_LEFT 
 				)
 			end
         end
