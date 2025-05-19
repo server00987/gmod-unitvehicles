@@ -3242,7 +3242,7 @@ else --HUD/Options
 							EvadingProgress = 0
 						end
 
-						if not (UVPlayingBusted or UVPlayingBusting or UVPlayingCooldown) then
+						if !UVHUDDisplayBusting then
 							UVSoundHeat( UVHeatLevel )
 						end
 						
