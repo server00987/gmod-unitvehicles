@@ -3235,10 +3235,6 @@ else --HUD/Options
 						else
 							EvadingProgress = 0
 						end
-
-						if !UVHUDDisplayBusting then
-							UVSoundHeat( UVHeatLevel )
-						end
 						
 						-- Evade Box, Middle
 						surface.SetDrawColor( middlergb.r, middlergb.g, middlergb.b, middlergb.a )
@@ -3424,6 +3420,10 @@ else --HUD/Options
 				-- if UVHUDDisplayBusting or UVHUDDisplayCooldown then
 				-- draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 				-- end
+			end
+
+			if !UVHUDDisplayBusting and !UVHUDDisplayCooldown then
+				UVSoundHeat( UVHeatLevel )
 			end
 			-- elseif not UVPlayingRace then
 			-- 	--UVStopSound()
