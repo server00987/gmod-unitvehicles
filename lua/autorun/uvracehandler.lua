@@ -775,7 +775,7 @@ else
         if _UVCurrentCheckpoint and _UVCurrentCheckpoint.blip then
             _UVCurrentCheckpoint.blip.alpha = 0
         end
-        if _UVNextCheckpoint and _UVCurrentCheckpoint.blip then
+        if _UVNextCheckpoint and _UVNextCheckpoint.blip then
             _UVNextCheckpoint.blip.alpha = 0
         end
     end
@@ -1180,11 +1180,11 @@ else
 		local hudyes = showhud:GetBool()
 
         if UVHUDNotification and hudyes then
-            draw.DrawText( UVHUDNotificationString, "UVFont5", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
         if UVHUDRaceStart and hudyes then
-            draw.DrawText( UVHUDRaceStart, "UVFont5", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDRaceStart, "UVFont5ShadowBig", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
         if !UVHUDRace then return end
@@ -1324,7 +1324,7 @@ else
 			local racercount = i * w*0.0135
 			if hudyes then
 				
-				surface.SetDrawColor( 200, 200, 200, 150)
+				surface.SetDrawColor( 0, 0, 0, 200)
 				draw.NoTexture()
 				surface.DrawRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
 				
