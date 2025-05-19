@@ -3325,7 +3325,7 @@ else --HUD/Options
 									
 									surface.SetDrawColor( 130, 199, 74, 124)
 									surface.DrawRect( w*0.333, bottomy, w*0.34, h*0.05)
-									draw.DrawText( "#uv.chase.hiding", "UVFont5UI-BottomBar", w*0.5, bottomy, Color(255, 255, 255), TEXT_ALIGN_CENTER )
+									draw.DrawText( "#uv.chase.hiding", "UVFont5UI-BottomBar", w*0.5, bottomy, color, TEXT_ALIGN_CENTER )
 								end
 
 								surface.SetDrawColor( 200, 200, 200 )
