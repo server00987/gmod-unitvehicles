@@ -488,7 +488,7 @@ else
         if Glide then
             Glide.Notify( {
                 text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n<color=255,255,0>" .. track .. "</color>\n" .. theme,
-                icon = "hud/MINIMAP_ICON_SAFE_HOUSE.png",
+                icon = "hud/ICON_EA_TRAX_64.png",
                 lifetime = 5
             } )
         else
@@ -1275,17 +1275,17 @@ else
 			surface.SetDrawColor( 0, 0, 0, 200)
 			surface.DrawRect( w*0.8, h*0.1, w*0.175, h*0.05)
 			DrawIcon( Materials['CLOCK'], w*0.815, h*0.1225, .05, Color(255,255,255) ) -- Icon
-			draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont", w*0.97, h*0.1, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+			draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont5", w*0.97, h*0.1, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			-- Lap & Checkpoint Counter
 			surface.SetDrawColor( 0, 0, 0, 200)
 			surface.DrawRect( w*0.8, h*0.155, w*0.175, h*0.05)
 			if UVHUDRaceInfo.Info.Laps > 1 then
-				draw.DrawText( "#uv.race.lap", "UVFont", w*0.805, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_LEFT ) -- Lap Counter
-				draw.DrawText( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps, "UVFont", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT ) -- Lap Counter
+				draw.DrawText( "#uv.race.lap", "UVFont5", w*0.805, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_LEFT ) -- Lap Counter
+				draw.DrawText( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps, "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT ) -- Lap Counter
 			else
 				DrawIcon( Materials['CHECK'], w*0.815, h*0.18, .04, Color(255,255,255) ) -- Icon
-				draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+				draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			end
 			if racer_count > 1 then
 				-- Position Counter
@@ -1294,8 +1294,8 @@ else
 				surface.SetDrawColor( 255, 255, 255, 255)
 				surface.DrawRect( w*0.72, h*0.15, w*0.075, h*0.005) -- Divider
 				
-				draw.DrawText( UVHUDRaceCurrentPos, "UVFont", w*0.755, h*0.1, LBColors.LocalPlayer, TEXT_ALIGN_CENTER ) -- Upper, Your Position
-				draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
+				draw.DrawText( UVHUDRaceCurrentPos, "UVFont5", w*0.755, h*0.1, LBColors.LocalPlayer, TEXT_ALIGN_CENTER ) -- Upper, Your Position
+				draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont5", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
 			end
 		end
 

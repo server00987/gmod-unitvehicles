@@ -22,9 +22,6 @@ function ENT:Initialize()
 	if CLIENT then
 		self:SetRenderBoundsWS(self:GetPos(), self:GetMaxPos())
 		if GMinimap then
-			for i,v in pairs(GMinimap) do
-				print(i,v )
-			end
 			self.blip, self.blip_id = GMinimap:AddBlip( {
                 id = "Checkpoint"..self:GetID(),
                 position = (self:GetPos() + self:GetMaxPos())/2,

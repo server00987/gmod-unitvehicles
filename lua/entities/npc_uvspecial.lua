@@ -1499,7 +1499,6 @@ if SERVER then
 							end
 							for _, wheel in pairs(self.v.Wheels) do
 								if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
-									print("what is it then?")
 									local id = "tire_repair"..self.v:EntIndex()
 									self.repairtimer = true
 	
