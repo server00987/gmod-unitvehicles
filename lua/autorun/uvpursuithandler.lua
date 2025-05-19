@@ -2405,14 +2405,8 @@ else --HUD/Options
 		shadow = true
 	})
 	
-	surface.CreateFont("UVFont6", {
-		font = "VCR OSD Mono",
-		size = (math.Round(ScrH()*0.0462962963)),
-		weight = 500,
-	})
-	
-	surface.CreateFont("UVFont7", {
-		font = "VCR OSD Mono",
+	surface.CreateFont("UVFont5ShadowBig", {
+		font = "EurostileBold",
 		size = (math.Round(ScrH()*0.1)),
 		weight = 500,
 		shadow = true,

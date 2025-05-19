@@ -1180,11 +1180,11 @@ else
 		local hudyes = showhud:GetBool()
 
         if UVHUDNotification and hudyes then
-            draw.DrawText( UVHUDNotificationString, "UVFont5Shadow", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
         if UVHUDRaceStart and hudyes then
-            draw.DrawText( UVHUDRaceStart, "UVFont5Shadow", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVHUDRaceStart, "UVFont5ShadowBig", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
         if !UVHUDRace then return end
