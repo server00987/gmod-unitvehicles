@@ -3225,8 +3225,8 @@ else --HUD/Options
 							surface.SetDrawColor( 155, 207, 0)
 							surface.DrawRect( w*0.51, bottomy2, T, h*0.01)
 							middlergb = {
-								r = 0,
-								g = 255,
+								r = 155,
+								g = 207,
 								b = 0,
 								a = 255,
 							}
