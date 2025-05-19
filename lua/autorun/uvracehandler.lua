@@ -817,7 +817,19 @@ else
     end
 
     concommand.Add( "uvrace_resetposition", function()
+        if (not UVResetDelay) or (CurTime() - UVResetDelay > 1) then
+            UVResetDelay = CurTime()
+        else return end
+
         net.Start("UVResetPosition"); net.SendToServer()
+    end)
+
+    concommand.Add( "uv_skipsong", function()
+        if (not UVSkipDelay) or (CurTime() - UVSkipDelay > 1) then
+            UVSkipDelay = CurTime()
+        else return end
+
+        UVStopSound()
     end)
     
     net.Receive( "uvrace_notification", function()
@@ -1200,6 +1212,12 @@ else
         if !UVHUDDisplayBusting then
             UVSoundRacing( my_vehicle )
         end
+
+        local var = UVKeybindResetPosition:GetInt()
+						
+		if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+			LocalPlayer():ConCommand('uvrace_resetposition')
+		end
         
         UVHUDRace = true;
  

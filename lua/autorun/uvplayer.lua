@@ -91,8 +91,8 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
         keybind_requests[ply] = nil
         
         net.Start("UVGetNewKeybind")
-        net.WriteInt(slot, 9)
-        net.WriteInt(button, 9)
+        net.WriteInt(slot, 16)
+        net.WriteInt(button, 16)
         net.Send(ply)
     end
 end)
@@ -275,14 +275,14 @@ if SERVER then
     end)
     
     net.Receive( "UVPTKeybindRequest", function( len, ply )
-        local slot = net.ReadInt( 3 )
+        local slot = net.ReadInt( 16 )
         
         if !slot then return end
         keybind_requests[ply] = slot
     end)
     
     net.Receive( "UVPTUse", function( len, ply )
-        local slot = net.ReadInt( 3 )
+        local slot = net.ReadInt( 16 )
         
         if table.HasValue(uvplayerunittableplayers, ply) then --UNIT VEHICLES
             for k, car in pairs(uvplayerunittablevehicle) do

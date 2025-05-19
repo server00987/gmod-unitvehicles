@@ -15,6 +15,13 @@ PT_Slots_Replacement_Strings = {
 	[2] = "#uv.ptech.slot2"
 }
 
+local Control_Strings = {
+	[1] = "#uv.ptech.slot1",
+	[2] = "#uv.ptech.slot2",
+	[3] = "#uv.settings.music.skipsong",
+	[4] = "#uv.settings.race.resetposition"
+}
+
 local Colors = {
 	['Yellow'] = Color(255, 255, 0),
 	['White'] = Color(255, 255, 255),
@@ -2125,6 +2132,9 @@ else --HUD/Options
 	
 	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
 	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
+
+	UVKeybindResetPosition = CreateClientConVar("unitvehicle_keybind_resetposition", KEY_M, true, false)
+	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
 	
 	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
 	UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
@@ -2188,13 +2198,20 @@ else --HUD/Options
 	
 	net.Receive('UVGetNewKeybind', function()
 		--if IsSettingKeybind then return end
-		local slot = net.ReadInt(9)
-		local key = net.ReadInt(9)
-		local convar = GetConVar("unitvehicle_pursuittech_keybindslot_"..slot)
+		local slot = net.ReadInt(16)
+		local key = net.ReadInt(16)
+
+		local entry = KeyBindButtons[slot]
 		
-		if convar then
-			convar:SetInt(key)
-			KeyBindButtons[slot]:SetText("Slot " .. slot .." - "..string.upper(input.GetKeyName(key)))
+		if entry then
+			local convar = GetConVar( entry[1] )
+		
+			if convar then
+				convar :SetInt( key )
+				entry[2] :SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper(input.GetKeyName(key)) )
+			end
+		else
+			warn("Invalid slot key; if you run into this please report it to a developer!")
 		end
 		
 		IsSettingKeybind = false
@@ -2220,6 +2237,11 @@ else --HUD/Options
 	local UVHUDMilestoneSpikestrips = Material("hud/MILESTONE_SPIKESTRIPS.png")
 	local UVHUDPursuitBreaker = Material("hud/WORLD_PURSUITBREAKER.png")
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
+
+	if not KeyBindButtons then
+		KeyBindButtons = {}
+	end
+
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
@@ -2256,11 +2278,11 @@ else --HUD/Options
 		local slot = slot[1]
 		
 		net.Start("UVPTKeybindRequest")
-		net.WriteInt(slot, 3)
+		net.WriteInt(slot, 16)
 		net.SendToServer()
 		
 		IsSettingKeybind = slot
-		KeyBindButtons[tonumber(slot)]:SetText('PRESS A KEY NOW!')
+		KeyBindButtons[tonumber(slot)][2] :SetText('PRESS A KEY NOW!')
 	end)
 	
 	concommand.Add("uv_local_update_settings", function( ply )
@@ -2427,7 +2449,7 @@ else --HUD/Options
 		
 		if rp_num ~= UVResourcePoints then
 			hook.Remove("Think", "UVRPColorPulse")
-			UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50, 200)) or Color(50,255,50, 200)
+			UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
 			--UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
 			
 			local clrs = {}
@@ -2489,7 +2511,7 @@ else --HUD/Options
 		if wrecks ~= UVWrecks then
 			hook.Remove("Think", "UVWrecksColorPulse")
 			if timer.Exists("UVWrecksColorPulseDelay") then timer.Remove("UVWrecksColorPulseDelay") end
-			UVWrecksColor = Color(255,255,0, 200)
+			UVWrecksColor = Color(255,255,0, 150)
 			
 			-- if timer.Exists("UVWrecksColor") then
 			-- 	timer.Remove("UVWrecksColor")
@@ -2521,7 +2543,7 @@ else --HUD/Options
 			hook.Remove("Think", "UVTagsColorPulse")
 			if timer.Exists("UVTagsColorPulseDelay") then timer.Remove("UVTagsColorPulseDelay") end
 			
-			UVTagsColor = Color(255,255,0, 200)
+			UVTagsColor = Color(255,255,0, 150)
 			
 			-- if timer.Exists("UVWrecksColor") then
 			-- 	timer.Remove("UVWrecksColor")
@@ -2980,7 +3002,7 @@ else --HUD/Options
 		-- UVCooldownTimer = .5
 		-- ResourceText = 30
 		-- UVUnitsChasing = 2
-		-- UnitsChasing = 1
+		-- UnitsChasing = 1v
 		
 		if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
 			outofpursuit = CurTime()
@@ -3215,9 +3237,13 @@ else --HUD/Options
 								a = 255,
 							}
 							UVEvasionColor = Color( blink, 255, blink)
-							UVSoundHeat(UVHeatLevel)
+							--UVSoundHeat(UVHeatLevel)
 						else
 							EvadingProgress = 0
+						end
+
+						if not (UVPlayingBusted or UVPlayingBusting or UVPlayingCooldown) then
+							UVSoundHeat( UVHeatLevel )
 						end
 						
 						-- Evade Box, Middle
@@ -3363,7 +3389,7 @@ else --HUD/Options
 					-- else
 					-- draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
 					-- end
-					-- UVSoundHeat(UVHeatLevel)
+					--UVSoundHeat(UVHeatLevel)
 				elseif !UVHUDDisplayCooldown then
 					-- if !EvadingProgress or EvadingProgress == 0 then
 					-- EvadingProgress = CurTime()
@@ -3425,6 +3451,12 @@ else --HUD/Options
 		if vehicle == NULL then 
 			UVHUDPursuitTech = nil
 			return 
+		end
+
+		local var = UVKeybindSkipSong:GetInt()
+						
+		if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+			LocalPlayer():ConCommand('uv_skipsong')
 		end
 		
 		-- if UVHUDDisplayBusting and !UVHUDDisplayCooldown and hudyes then
@@ -3591,7 +3623,7 @@ else --HUD/Options
 						
 						if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 							net.Start("UVPTUse")
-							net.WriteInt(i, 3)
+							net.WriteInt(i, 16)
 							net.SendToServer()
 						end
 						
@@ -4217,14 +4249,21 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.targetvehicle.target.desc")
 			
 			panel:Help("#uv.settings.music")
+			panel:Help("#uv.settings.ptech.keybinds")
+			
+			KeyBindButtons[3] = {
+				UVKeybindSkipSong:GetName(),
+				panel:Button(language.GetPhrase(Control_Strings[3]) .. " - "..string.upper(input.GetKeyName(UVKeybindSkipSong:GetInt())), "uv_keybinds", '3')
+			}
+
 			panel:CheckBox("#uv.settings.music.pursuit", "unitvehicle_playmusic")
 			panel:ControlHelp("#uv.settings.music.pursuit.desc")
 			panel:CheckBox("#uv.settings.music.race", "unitvehicle_racingmusic")
 			panel:ControlHelp("#uv.settings.music.race.desc")
 			panel:CheckBox("#uv.settings.music.race.priority", "unitvehicle_racingmusicpriority")
 			panel:ControlHelp("#uv.settings.music.race.priority.desc")
-			panel:CheckBox("#uv.settings.music.pursuit.priority", "unitvehicle_racingmusicoutsideraces")
-			panel:ControlHelp("#uv.settings.music.pursuit.priority.desc")
+			panel:CheckBox("#uv.settings.music.race.racingpriority", "unitvehicle_racingmusicoutsideraces")
+			panel:ControlHelp("#uv.settings.music.race.racingpriority.desc")
 			local pursuittheme, label = panel:ComboBox( "#uv.settings.music.pursuittheme", "unitvehicle_pursuittheme" )
 			local files, folders = file.Find( "sound/uvpursuitmusic/*", "GAME" )
 			if folders != nil then
@@ -4250,7 +4289,14 @@ else --HUD/Options
 					UVSoundLoop:SetVolume( value )
 				end
 			end
+
+			panel:Help("#uv.settings.race")
+			panel:Help("#uv.settings.race.keybinds")
 			
+			KeyBindButtons[4] = {
+				UVKeybindResetPosition:GetName(),
+				panel:Button(language.GetPhrase(Control_Strings[4]) .. " - "..string.upper(input.GetKeyName(UVKeybindResetPosition:GetInt())), "uv_keybinds", '4')
+			}
 			
 			panel:Help("#uv.settings.pursuit")
 			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
@@ -4277,9 +4323,14 @@ else --HUD/Options
 			--local dpanel = panel:ControlPanel("uv_keybinds")
 			panel:Help("#uv.settings.ptech.keybinds")
 			
-			KeyBindButtons = {}
-			KeyBindButtons[1] = panel:Button(language.GetPhrase("uv.settings.ptech.slot1") .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
-			KeyBindButtons[2] = panel:Button(language.GetPhrase("uv.settings.ptech.slot2") .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
+			KeyBindButtons[1] = {
+				UVPTKeybindSlot1:GetName(), --Convar string, button
+				panel:Button(language.GetPhrase(Control_Strings[1]) .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot1:GetInt())), "uv_keybinds", '1')
+			}
+			KeyBindButtons[2] = {
+				UVPTKeybindSlot2:GetName(),
+				panel:Button(language.GetPhrase(Control_Strings[2]) .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
+			}
 			
 			panel:CheckBox("#uv.settings.ptech.racer", "unitvehicle_racerpursuittech")
 			panel:ControlHelp("#uv.settings.ptech.racer.desc")
