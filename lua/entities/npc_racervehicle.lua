@@ -166,7 +166,15 @@ if SERVER then
 		if !self.v or !target then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_OPAQUE, filter = {self, self.v}}).Fraction==1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v}}).Fraction==1
+		return tobool(tr)
+	end
+
+	function ENT:ObstaclesNearby()
+		if !self.v then
+			return
+		end
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction != 1
 		return tobool(tr)
 	end
 	
@@ -205,7 +213,7 @@ if SERVER then
 				//local target = selected_point.target_point
 				local target = selected_point
 				local target_pos = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
-				local cansee = self:CanSeeGoal(target_pos)
+				--local cansee = self:CanSeeGoal(target_pos)
 
 				//local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 
@@ -224,8 +232,11 @@ if SERVER then
 					local dist = self.v:WorldSpaceCenter():Distance(target_pos)
 			
 					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
-						target = next_point
-						target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+						--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+						if self:CanSeeGoal(next_point.target_point) then
+							target = next_point
+							target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+						end
 					end
 				end
 

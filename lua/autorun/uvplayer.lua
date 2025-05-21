@@ -16,28 +16,28 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     
     -- if button == KEY_M then
     --     local car = UVGetVehicle( ply )
-        
+    
     --     if car then
     --         if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
     --         if not UVRaceInProgress then return end
-            
+    
     --         local key = "VehicleReset_"..car:EntIndex()
     --         if timer.Exists( key ) then return end
-            
+    
     --         if car.hasreset then
     --             net.Start("uvrace_resetfailed")
     --             net.WriteString("uv.race.resetcooldown")
     --             net.Send(ply)
     --             return
     --         end
-            
+    
     --         if car:GetVelocity():LengthSqr() > 5000 then
     --             net.Start("uvrace_resetfailed")
     --             net.WriteString("uv.race.resetstationary")
     --             net.Send(ply)
     --             return
     --         end
-            
+    
     --         if car.uvbustingprogress and car.uvbustingprogress > 0 then
     --             timer.Remove(key)
     --             net.Start("uvrace_resetfailed")
@@ -45,25 +45,25 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     --             net.Send(ply)
     --             return
     --         end
-            
+    
     --         net.Start( "uvrace_resetcountdown" )
     --         net.WriteInt(2, 4)
     --         net.Send(ply)
-            
+    
     --         timer.Create( key, 1, 2, function()
     --             local remaining_reps = timer.RepsLeft( key )
-                
+    
     --             if !IsValid(car) or car:GetDriver() ~= ply then
     --                 timer.Remove(key)
     --             end
-                
+    
     --             if car:GetVelocity():LengthSqr() > 5000 then
     --                 net.Start("uvrace_resetfailed")
     --                 net.WriteString("uv.race.resetstationary")
     --                 net.Send(ply)
     --                 return
     --             end
-                
+    
     --             if car.uvbustingprogress and car.uvbustingprogress > 0 then
     --                 timer.Remove(key)
     --                 net.Start("uvrace_resetfailed")
@@ -71,7 +71,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     --                 net.Send(ply)
     --                 return
     --             end
-                
+    
     --             if remaining_reps > 0 then
     --                 net.Start( "uvrace_resetcountdown" )
     --                 net.WriteInt(remaining_reps, 4)
@@ -105,7 +105,7 @@ if SERVER then
     util.AddNetworkString('UVPTKeybindRequest')
     
     util.AddNetworkString('UVResetPosition')
-
+    
     util.AddNetworkString( "UVPTUse" )
     
     util.AddNetworkString( "UVWeaponESFEnable" )
@@ -118,11 +118,11 @@ if SERVER then
         for _, v in pairs( ply_array ) do
             
             net.Start('UVNotification')
-
+            
             net.WriteTable( {
                 frmt, icon_name, { ... }
             } )
-
+            
             net.Send( v )
             
         end
@@ -201,7 +201,7 @@ if SERVER then
             vehicle.hasreset = nil
         end)
     end
-
+    
     net.Receive("UVResetPosition", function(len, ply)
         local car = UVGetVehicle( ply )
         
@@ -302,7 +302,7 @@ if SERVER then
         if !car or !IsValid(car) then return end
         if uvjammerdeployed and !car.jammerexempt then return end
         if !car.PursuitTech then return end
-
+        
         if car.uvraceparticipant then
             if UVRaceInEffect and not UVRaceInProgress then return end
         end
@@ -888,7 +888,7 @@ else
         -- local icon = net.ReadString()
         -- local args = net.ReadTable()
         local array = net.ReadTable()
-
+        
         local args = array[3]
         local icon = array[2]
         local format = array[1]
@@ -976,7 +976,7 @@ else
             mW = math.max( mW, w )
             tH = tH + h
         end
-
+        
         local currentY = y - tH/2
         
         for i, line in ipairs(lines) do
@@ -990,7 +990,7 @@ else
         if UVCenterNotification then 
             local h = ScrH()/2.7
             local w = ScrW()/2
-
+            
             //noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
             noti_draw (UVCenterNotification, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
             

@@ -2132,7 +2132,7 @@ else --HUD/Options
 	
 	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
 	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
-
+	
 	UVKeybindResetPosition = CreateClientConVar("unitvehicle_keybind_resetposition", KEY_M, true, false)
 	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
 	
@@ -2200,12 +2200,12 @@ else --HUD/Options
 		--if IsSettingKeybind then return end
 		local slot = net.ReadInt(16)
 		local key = net.ReadInt(16)
-
+		
 		local entry = KeyBindButtons[slot]
 		
 		if entry then
 			local convar = GetConVar( entry[1] )
-		
+			
 			if convar then
 				convar :SetInt( key )
 				entry[2] :SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper(input.GetKeyName(key)) )
@@ -2237,11 +2237,13 @@ else --HUD/Options
 	local UVHUDMilestoneSpikestrips = Material("hud/MILESTONE_SPIKESTRIPS.png")
 	local UVHUDPursuitBreaker = Material("hud/WORLD_PURSUITBREAKER.png")
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
-
+	
+	local UVClosestSuspect = nil
+	
 	if not KeyBindButtons then
 		KeyBindButtons = {}
 	end
-
+	
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
@@ -2650,6 +2652,7 @@ else --HUD/Options
 				-- UVNotification = "!!! " .. lang("uv.chase.busting") .. " !!!"
 				UVSoundBusting()
 			else
+				UVBustedColor = Color( 255, 0, 0)
 				-- UVBustedColor = Color( 255, 255, 255, 50)
 				UVNotification = "/// " .. lang("uv.chase.busted") .. " ///"
 			end
@@ -2686,6 +2689,7 @@ else --HUD/Options
 	net.Receive("UVHUDEnemyBusted", function()
 		local blink = 255 * math.abs(math.sin(RealTime() * 8))
 		UVNotificationColor = Color(255, blink, blink)
+		UVBustedColor = Color(255, 0, 0)
 		local bustedtext = language.GetPhrase("uv.chase.busted")
 		if !UVHUDDisplayNotification then
 			if UVHUDRaceInProgress then
@@ -3013,6 +3017,39 @@ else --HUD/Options
 			-- surface.SetDrawColor( 0, 0, 0, 200)
 			-- draw.NoTexture()
 			-- surface.DrawPoly( element1 )
+			if UVHUDCopMode then
+				UVBustedColor = Color( 255, 255, 255, 50 )
+				UVHUDDisplayBusting = false
+			end
+			
+			if UVHUDCopMode and next(UVHUDWantedSuspects) ~= nil then
+				local ply = LocalPlayer()
+
+				UVClosestSuspect = nil
+				UVHUDDisplayBusting = false
+
+				local closestDistance = math.huge
+				
+				for _, suspect in pairs(UVHUDWantedSuspects) do
+					local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+
+					if dist < 250000 and dist < closestDistance then
+						closestDistance = dist
+						UVClosestSuspect = suspect
+					end
+
+				end
+
+				if UVClosestSuspect then
+					if UVClosestSuspect.beingbusted then
+						UVHUDDisplayBusting = true
+						UVBustingProgress = UVClosestSuspect.uvbustingprogress
+
+						local blink = 255 * math.abs(math.sin(RealTime() * 8))
+						UVBustedColor = Color(255, blink, blink)
+					end
+				end
+			end
 			
 			if !UVHUDRace then
 				if hudyes then
@@ -3211,6 +3248,7 @@ else --HUD/Options
 								a = 255,
 							}
 						else
+							UVBustedColor = Color( 255, 255, 255, 50 )
 							BustingProgress = 0
 						end
 						
@@ -3304,12 +3342,12 @@ else --HUD/Options
 							
 							-- Upper Box
 							if !UVHUDCopMode then
-
+								
 								if UVHUDDisplayHidingPrompt then
 									surface.SetMaterial(Materials['BACKGROUND'])
 									surface.SetDrawColor(0, 175, 0, 200)
 									surface.DrawTexturedRect(w*0.333, bottomy, w*0.34, h*0.05)
-
+									
 									local blink = 255 * math.Clamp( math.abs(math.sin(RealTime() * 2)), .7, 1 )
 									color = Color( blink, 255, blink)
 									
@@ -3317,39 +3355,39 @@ else --HUD/Options
 									surface.DrawRect( w*0.333, bottomy, w*0.34, h*0.05)
 									draw.DrawText( "#uv.chase.hiding", "UVFont5UI-BottomBar", w*0.5, bottomy, color, TEXT_ALIGN_CENTER )
 								end
-
+								
 								surface.SetDrawColor( 200, 200, 200 )
 								surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
 								
 								local T = math.Clamp((UVCooldownTimer)*(w*0.34),0,w*0.34)
 								surface.SetDrawColor( 75, 75, 255)
 								surface.DrawRect( w*0.333, bottomy2, T, h*0.01)
-
+								
 								surface.SetDrawColor( 0, 0, 0, 200)
 								surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
 								draw.DrawText( "#uv.chase.cooldown", "UVFont5UI-BottomBar", w*0.5, bottomy3, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
-
+								
 							else
 								local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.CopThemeShade)) or table.Copy(Colors.RacerThemeShade)
 								local theme_color = (UVHUDCopMode and table.Copy(Colors.CopTheme)) or table.Copy(Colors.RacerTheme)
-
+								
 								-- surface.SetDrawColor( shade_theme_color:Unpack() )
 								-- surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
-
+								
 								shade_theme_color.a = shade_theme_color.a - 35
 								theme_color.a = theme_color.a - 35
 								
 								local blink = 255 * math.Clamp( math.abs(math.sin(RealTime())), .7, 1 )
 								color = Color( blink, blink, 255)
-
+								
 								surface.SetDrawColor(shade_theme_color :Unpack())
 								surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
-						
+								
 								surface.SetDrawColor(theme_color  :Unpack())
-
+								
 								surface.SetMaterial(Materials['BACKGROUND'])
 								surface.DrawTexturedRect(w*0.333, bottomy3, w*0.34, h*0.05)
-
+								
 								local text = lang("uv.chase.cooldown")
 								draw.DrawText( text, "UVFont5UI-BottomBar",w/2,bottomy3, color, TEXT_ALIGN_CENTER )
 							end
@@ -3421,7 +3459,7 @@ else --HUD/Options
 				-- draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
 				-- end
 			end
-
+			
 			if !UVHUDDisplayBusting and !UVHUDDisplayCooldown then
 				UVSoundHeat( UVHeatLevel )
 			end
@@ -3443,12 +3481,13 @@ else --HUD/Options
 		end
 		
 		if vehicle == NULL then 
+			UVHUDDisplayBusting = false
 			UVHUDPursuitTech = nil
 			return 
 		end
-
+		
 		local var = UVKeybindSkipSong:GetInt()
-						
+		
 		if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			LocalPlayer():ConCommand('uv_skipsong')
 		end
@@ -4249,7 +4288,7 @@ else --HUD/Options
 				UVKeybindSkipSong:GetName(),
 				panel:Button(language.GetPhrase(Control_Strings[3]) .. " - "..string.upper(input.GetKeyName(UVKeybindSkipSong:GetInt())), "uv_keybinds", '3')
 			}
-
+			
 			panel:CheckBox("#uv.settings.music.pursuit", "unitvehicle_playmusic")
 			panel:ControlHelp("#uv.settings.music.pursuit.desc")
 			panel:CheckBox("#uv.settings.music.race", "unitvehicle_racingmusic")
@@ -4283,7 +4322,7 @@ else --HUD/Options
 					UVSoundLoop:SetVolume( value )
 				end
 			end
-
+			
 			panel:Help("#uv.settings.race")
 			panel:Help("#uv.settings.race.keybinds")
 			
