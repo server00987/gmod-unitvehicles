@@ -1539,7 +1539,7 @@ function UVChangeTactics(tactic)
 		table.insert(AvailableUnits, v)
 	end
 
-	if #uvunitschasing == 1 then --One unit remaining
+	if #uvunitschasing == 1 and !Relentless:GetBool() then --One unit remaining
 		local FormationPoints = {
 			Vector(0,-300,0), --Rear
 		}
