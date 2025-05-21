@@ -3885,7 +3885,7 @@ else --HUD/Options
 			local textX = (MinX + MaxX) / 2
 			local textY = MinY - 20
 			cam.Start2D()
-			local bustpro = math.Clamp(math.floor(((ent.uvbustingprogress / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
 			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") .. "\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
 			cam.End2D()
