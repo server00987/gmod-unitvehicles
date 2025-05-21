@@ -131,6 +131,7 @@ if SERVER then
     function UVResetPosition( vehicle )
         -- Check if vehicle is a race participant
         if not table.HasValue( UVRaceCurrentParticipants, vehicle ) then return end
+        if not UVRaceInProgress then return end
         
         local entry = UVRaceTable.Participants [vehicle]
         if not entry then return end

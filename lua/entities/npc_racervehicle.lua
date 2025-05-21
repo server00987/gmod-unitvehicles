@@ -170,6 +170,49 @@ if SERVER then
 		return tobool(tr)
 	end
 
+	function ENT:ObstaclesNearbySide()
+		if !self.v or !self.v.width then
+			return
+		end
+
+		local width = self.v.width/2
+		local turnleft = -1
+		local turnright = 1
+
+		local speed = self.v:GetVelocity():LengthSqr()
+		speed = math.sqrt(speed)
+
+		local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
+		local right = Vector(width,math.Clamp(speed, width, math.huge),0)
+		local leftstart = Vector(-width,0,0)
+		local rightstart = Vector(width,0,0)
+
+		if self.v.IsSimfphyscar then
+			left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			leftstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			rightstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		elseif self.v.IsGlideVehicle then
+			left:Rotate(Angle(0, -90, 0))
+			right:Rotate(Angle(0, -90, 0))
+			leftstart:Rotate(Angle(0, -90, 0))
+			rightstart:Rotate(Angle(0, -90, 0))
+		end
+		
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+
+		if trleft > trright then
+			return turnleft
+		end
+		if trleft < trright then
+			return turnright
+		end
+
+		return false
+
+	end
+
 	function ENT:ObstaclesNearby()
 		if !self.v then
 			return
@@ -240,7 +283,18 @@ if SERVER then
 					end
 				end
 
+				local target1 = target:GetPos1() * Vector(1,1,1)
+				local target2 = target:GetPos2() * Vector(1,1,1)
+
+				local size = (target2 - target1):LengthSqr()
+
+				--print('Vehicle velocity', velocity:LengthSqr())
+
 				if velocity:LengthSqr() < 150000 then
+					target_pos = target.target_point
+				end
+
+				if size < 200000 then
 					target_pos = target.target_point
 				end
 				
@@ -390,27 +444,28 @@ if SERVER then
 
 			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
 
-			if self.v:GetVelocity():LengthSqr() > 10000 then
-				if self.v.IsSimfphyscar then 
-					if istable(self.v.Wheels) then
-						for i = 1, table.Count( self.v.Wheels ) do
-							local Wheel = self.v.Wheels[ i ]
-							if !Wheel then return end
-							if Wheel:GetGripLoss() > 0 then
-								throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
-							end
-						end
-					end
-				elseif self.v.IsGlideVehicle then
-					local EntityMeta = FindMetaTable( "Entity" )
-					local getTable = EntityMeta.GetTable
-					local selfvTbl = getTable( self.v )
-					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
-					if wheelslip != false then
-						throttle = throttle - (wheelslip/10) --Glide traction control
-					end
-				end
-			end
+			-- if self.v:GetVelocity():LengthSqr() > 10000 then
+			-- 	if self.v.IsSimfphyscar then 
+			-- 		if istable(self.v.Wheels) then
+			-- 			for i = 1, table.Count( self.v.Wheels ) do
+			-- 				local Wheel = self.v.Wheels[ i ]
+			-- 				if !Wheel then return end
+			-- 				if Wheel:GetGripLoss() > 0 then
+			-- 					throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+			-- 				end
+			-- 			end
+			-- 		end
+			-- 	elseif self.v.IsGlideVehicle then
+			-- 		local EntityMeta = FindMetaTable( "Entity" )
+			-- 		local getTable = EntityMeta.GetTable
+			-- 		local selfvTbl = getTable( self.v )
+			-- 		local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+			-- 		if wheelslip != false then
+			-- 			throttle = throttle - (wheelslip/10) --Glide traction control
+			-- 		end
+			-- 	end
+			-- end
+			
 			if dist:Dot(forward) < 0 and !self.stuck then
 				if vectdot > 0 then
 					if right.z > 0 then 
