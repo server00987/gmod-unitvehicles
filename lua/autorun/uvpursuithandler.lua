@@ -32,7 +32,7 @@ local Colors = {
 	['CopThemeShade'] = Color(41, 149, 212, 107)--Color(93, 85, 166, 107)
 }
 
-Materials = {
+UVMaterials = {
 	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"),
 	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
 	['UNITS'] = Material("hud/COPS_ICON.png"),
@@ -2226,6 +2226,9 @@ else --HUD/Options
 	UVRBMax = CreateClientConVar("unitvehicle_roadblock_maxrb", 1, true, false)
 	UVRBOverride = CreateClientConVar("unitvehicle_roadblock_override", 0, true, false)
 	
+	UVHUDTypeRacing = CreateClientConVar("unitvehicle_hudtype_racing", "mostwanted", true, false, "Which HUD type to use when in a race.")
+	UVHUDTypePursuit = CreateClientConVar("unitvehicle_hudtype_pursuit", "mostwanted", true, false, "Which HUD type to use when in a pursuit.")
+	
 	UVUnitsColor = Color(255,255,255)
 	
 	local local_convars = {
@@ -2921,7 +2924,7 @@ else --HUD/Options
 			timer.Simple(0.1, function()
 				blip.alpha = 255
 				timer.Create( "flashingblip"..id, 0.05, 0, function()
-					if flashwhite and UVHUDDisplayPursuit and !blip.disabled then
+					if flashwhite and UVHUDDisplayPursuit or blip.disabled then
 						blip.color = Color( 255, 255, 255)
 						flashwhite = false
 					elseif created and UVHUDDisplayPursuit and !blip.disabled then
@@ -3008,7 +3011,7 @@ else --HUD/Options
 		if GMinimap then
 			local blip = GMinimap:FindBlipByID("UVBlip"..id)
 			if !blip then return end
-			blip.color = Color( 150, 0, 0)
+			blip.color = Color( 255, 255, 255)
 			local key = "disabled"
 			blip[key] = true
 		end
@@ -3183,7 +3186,7 @@ else --HUD/Options
 					-- Timer
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w*0.7, h*0.1, w*0.275, h*0.05)
-					DrawIcon( Materials['CLOCK'], w*0.71, h*0.1225, .05, Color(255,255,255) ) -- Icon
+					DrawIcon( UVMaterials['CLOCK'], w*0.71, h*0.1225, .05, Color(255,255,255) ) -- Icon
 					draw.DrawText( UVTimer, "UVFont5", w*0.97, h*0.105, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )			
 					
 					-- Bounty
@@ -3216,7 +3219,7 @@ else --HUD/Options
 						UVHeatBountyMax = math.huge
 					end
 					
-					DrawIcon( Materials['HEAT'], w*0.71, h*0.235, .05, Color(255,255,255) ) -- Icon
+					DrawIcon( UVMaterials['HEAT'], w*0.71, h*0.235, .05, Color(255,255,255) ) -- Icon
 					draw.DrawText( UVHeatLevel, "UVFont5", w*0.74, h*0.2125, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 					
 					surface.SetDrawColor(Color(109,109,109,200))
@@ -3283,13 +3286,13 @@ else --HUD/Options
 					if !UVHUDDisplayCooldown then
 						-- General Icons
 						draw.DrawText( UVWrecks, "UVFont5WeightShadow",w*0.64, bottomy4, UVWrecksColor, TEXT_ALIGN_RIGHT )
-						DrawIcon(Materials['UNITS_DISABLED'], w*0.66, bottomy5, 0.06, UVWrecksColor)
+						DrawIcon(UVMaterials['UNITS_DISABLED'], w*0.66, bottomy5, 0.06, UVWrecksColor)
 						
 						draw.DrawText( UVTags, "UVFont5WeightShadow", w*0.36, bottomy4, UVTagsColor, TEXT_ALIGN_LEFT )
-						DrawIcon(Materials['UNITS_DAMAGED'], w*0.345, bottomy5, 0.06, UVTagsColor)
+						DrawIcon(UVMaterials['UNITS_DAMAGED'], w*0.345, bottomy5, 0.06, UVTagsColor)
 						
 						draw.DrawText( ResourceText, "UVFont5WeightShadow", w*0.5, bottomy4, UVUnitsColor, TEXT_ALIGN_CENTER )
-						DrawIcon(Materials['UNITS'], w*0.5, bottomy6, .07, UVUnitsColor)
+						DrawIcon(UVMaterials['UNITS'], w*0.5, bottomy6, .07, UVUnitsColor)
 						
 						-- Evade Box, All BG
 						surface.SetDrawColor( 200, 200, 200, 100 )
@@ -3367,8 +3370,8 @@ else --HUD/Options
 						surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
 						
 						surface.SetDrawColor(theme_color  :Unpack())
-						--DrawIcon( Materials['CLOCK'], w*0.71, h*0.1225, .05, Color(255,255,255) ) -- Icon
-						surface.SetMaterial(Materials['BACKGROUND'])
+						--DrawIcon( UVMaterials['CLOCK'], w*0.71, h*0.1225, .05, Color(255,255,255) ) -- Icon
+						surface.SetMaterial(UVMaterials['BACKGROUND'])
 						surface.DrawTexturedRect(w*0.333, bottomy3, w*0.34, h*0.05)
 						
 						-- surface.SetDrawColor( 0, 0, 0, 200)
@@ -3426,7 +3429,7 @@ else --HUD/Options
 							if !UVHUDCopMode then
 								
 								if UVHUDDisplayHidingPrompt then
-									-- surface.SetMaterial(Materials['BACKGROUND'])
+									-- surface.SetMaterial(UVMaterials['BACKGROUND'])
 									surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 									surface.SetDrawColor(0, 175, 0, 200)
 									surface.DrawTexturedRect(w*0.333, bottomy, w*0.34, h*0.05)
@@ -3468,7 +3471,7 @@ else --HUD/Options
 								
 								surface.SetDrawColor(theme_color  :Unpack())
 								
-								surface.SetMaterial(Materials['BACKGROUND'])
+								surface.SetMaterial(UVMaterials['BACKGROUND'])
 								surface.DrawTexturedRect(w*0.333, bottomy3, w*0.34, h*0.05)
 								
 								local text = lang("uv.chase.cooldown")
@@ -4050,11 +4053,11 @@ else --HUD/Options
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
 			-- Upper Results Tab
-			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
+			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
+			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 255, 183, 61, 25 )
 			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
@@ -4187,11 +4190,11 @@ else --HUD/Options
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
 			-- Upper Results Tab
-			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
+			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
+			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 255, 183, 61, 25 )
 			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
@@ -4317,11 +4320,11 @@ else --HUD/Options
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
 			-- Upper Results Tab
-			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
+			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
+			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 61, 183, 255, 25 )
 			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
@@ -4447,11 +4450,11 @@ else --HUD/Options
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
 			-- Upper Results Tab
-			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
+			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
+			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 61, 183, 255, 25 )
 			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
@@ -4650,6 +4653,18 @@ else --HUD/Options
 			panel:Clear()
 			
 			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings")
+			panel:Help("#uv.settings.uistyle.title")
+			local uistyleracing, label = panel:ComboBox( "#uv.settings.uistyle.racing", "unitvehicle_hudtype_racing" )
+			uistyleracing:AddChoice( "Most Wanted", "mostwanted")
+			-- uistyleracing:AddChoice( "Carbon", "carbon")
+			-- uistyleracing:AddChoice( "Underground", "underground")
+			-- uistyleracing:AddChoice( "Underground 2", "underground2")
+			-- uistyleracing:AddChoice( "Undercover", "undercover")
+			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
+			uistyleracing:AddChoice( "#uv.uistyle.none", " ")
+			
+			panel:ControlHelp("#uv.settings.uistyle.racing.desc")
+			
 			panel:Help("#uv.settings.heatlevels")
 			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
 			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
