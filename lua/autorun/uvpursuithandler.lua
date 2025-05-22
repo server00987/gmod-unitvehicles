@@ -45,6 +45,24 @@ Materials = {
 	['RESULTRACER'] = Material("hud/(9)(9)T_UI_PlayerRacer_Large_Icon.png"),
 }
 
+function UVGetDriver(vehicle)
+	if !IsValid(vehicle) then return false end
+
+	if vehicle.IsSimfphyscar or vehicle:GetClass() == "prop_vehicle_jeep" then
+		return vehicle:GetDriver()
+	elseif vehicle.IsGlideVehicle then
+		if not vehicle.seats or next(vehicle.seats) == nil then return false end
+
+		local seat = vehicle.seats[1]
+
+		if IsValid( seat ) then
+            return seat:GetDriver()
+        end
+	end
+
+	return false
+end
+
 --Sound spam check--
 
 function UVDelaySound()
@@ -1111,6 +1129,8 @@ if SERVER then
 				end
 			end
 		end
+
+		local player_unit_active = false
 		
 		--Player-controlled Unit Vehicles
 		if next(uvplayerunittablevehicle) != nil then
@@ -1141,6 +1161,9 @@ if SERVER then
 						net.WriteTable(car.PursuitTech)
 						net.Send(driver)
 					end
+
+					player_unit_active = true
+
 					if !table.HasValue(uvplayerunittableplayers, driver) then
 						table.insert(uvplayerunittableplayers, driver)
 						driver.uvplayerlastvehicle = car
@@ -1260,6 +1283,8 @@ if SERVER then
 				end
 			end
 		end
+
+		UVUnitsHavePlayers = player_unit_active
 		
 		if next(ents.FindByClass("npc_uv*")) != nil then
 			for k, unit in pairs(ents.FindByClass("npc_uv*")) do
@@ -3150,7 +3175,7 @@ else --HUD/Options
 							local T = math.Clamp((healthratio)*(w/3-38),0,w/3-38)
 							surface.DrawRect(w/3+25,h/20,T,8)
 						end
-						draw.DrawText( "⛊ " .. lang("uv.unit.commander") .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
+						draw.DrawText( "⛊ " .. lang("uv.unit.commander") .. " ⛊", "UVFont5UI-BottomBar",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
 					end
 					
 					-- [ Upper Right Info Box ] --
@@ -3818,12 +3843,15 @@ else --HUD/Options
 			if !UVHUDDisplayPursuit then return end
 			
 			local callsign = lang("uv.unit.commander") .. "\n⛊"
-			local driver = ent:GetDriver()
-			if driver:IsPlayer() then
-				callsign = driver:GetName()
-				if localPlayer == driver then
-					return
-				end
+			local driver = UVGetDriver(ent)
+
+			print(driver)
+
+			if driver and driver:IsPlayer() then
+				callsign = driver:GetName() .. "\n⛊"
+				-- if localPlayer == driver then
+				-- 	return
+				-- end
 			end
 			
 			local pos = ent:GetPos()

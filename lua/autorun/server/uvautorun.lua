@@ -2584,21 +2584,21 @@ function UVGetVehicle(driver)
 
 end
 
-function UVGetDriver(vehicle)
-	if !IsValid(vehicle) then return false end
+-- function UVGetDriver(vehicle)
+-- 	if !IsValid(vehicle) then return false end
 
-	if vehicle.IsSimfphyscar or vehicle:GetClass() == "prop_vehicle_jeep" then
-		return vehicle:GetDriver()
-	elseif vehicle.IsGlideVehicle then
-		local seat = vehicle.seats[1]
+-- 	if vehicle.IsSimfphyscar or vehicle:GetClass() == "prop_vehicle_jeep" then
+-- 		return vehicle:GetDriver()
+-- 	elseif vehicle.IsGlideVehicle then
+-- 		local seat = vehicle.seats[1]
 
-		if IsValid( seat ) then
-            return seat:GetDriver()
-        end
-	end
+-- 		if IsValid( seat ) then
+--             return seat:GetDriver()
+--         end
+-- 	end
 
-	return false
-end
+-- 	return false
+-- end
 
 function UVNavigateDVWaypoint(self, vectors)
 

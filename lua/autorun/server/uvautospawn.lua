@@ -322,7 +322,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor1:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial1:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander1:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
@@ -349,7 +349,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor2:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial2:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander2:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
@@ -376,7 +376,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor3:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial3:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander3:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
@@ -403,7 +403,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor4:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial4:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander4:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
@@ -430,7 +430,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor5:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial5:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander5:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
@@ -457,7 +457,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor6:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial6:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander6:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified then
+			print(UVUnitsHavePlayers, ply)
+			print(UVUnitsHavePlayers and not ply)
+			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
 			givenunitstable = {
