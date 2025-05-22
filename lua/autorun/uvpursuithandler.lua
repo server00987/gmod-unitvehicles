@@ -1139,10 +1139,10 @@ if SERVER then
 				if !table.HasValue(uvunitvehicles, car) and car.UnitVehicle then
 					table.insert(uvunitvehicles, car)
 				end
-				
+
 				if IsValid(car) and !car.wrecked and
 				(car:Health() <= 0 and car:GetClass() == "prop_vehicle_jeep" or --No health 
-				car.uvclasstospawnon != "npc_uvcommander" and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and (car.rammed or car:GetVelocity():LengthSqr() < 10000) or --Flipped
+				car.uvclasstospawnon != "npc_uvcommander" and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and car.rammed --[[or car:GetVelocity():LengthSqr() < 10000)]] or --Flipped
 				car:WaterLevel() > 2 or --Underwater
 				car:IsOnFire() or --On fire
 				UVPlayerIsWrecked(car)) then --Other parameters
@@ -3620,7 +3620,7 @@ else --HUD/Options
 					if ent.displayedonhud then
 						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
 						if !curblip then continue end
-						if UVHUDCopMode and not (GetConVar("unitvehicle_unit_onecommanderevading"):GetBool() or not UVOneCommanderActive) and (UVHUDDisplayCooldown or not UVHUDDisplayPursuit or UnitsChasing <= 0 or not ent.inunitview) then
+						if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) then
 							curblip.alpha = 0
 						else
 							curblip.alpha = 255

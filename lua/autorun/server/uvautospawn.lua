@@ -457,8 +457,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor6:GetString())
 			local UnitsSpecial = string.Trim(UVUUnitsSpecial6:GetString())
 			local UnitsCommander = string.Trim(UVUUnitsCommander6:GetString())
-			print(UVUnitsHavePlayers, ply)
-			print(UVUnitsHavePlayers and not ply)
 			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 				UnitsCommander = ""
 			end
