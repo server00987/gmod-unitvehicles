@@ -3595,7 +3595,7 @@ else --HUD/Options
 					if ent.displayedonhud then
 						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
 						if !curblip then continue end
-						if UVHUDCopMode and (UVHUDDisplayCooldown or !UVHUDDisplayPursuit or UnitsChasing <= 0 or !ent.inunitview) then
+						if UVHUDCopMode and not (GetConVar("unitvehicle_unit_onecommanderevading"):GetBool() or not UVOneCommanderActive) and (UVHUDDisplayCooldown or not UVHUDDisplayPursuit or UnitsChasing <= 0 or not ent.inunitview) then
 							curblip.alpha = 0
 						else
 							curblip.alpha = 255
@@ -3890,7 +3890,7 @@ else --HUD/Options
 		if IsValid(ent) then
 			if !UVHUDDisplayPursuit then return end
 			-- if UVHUDCopMode and (UVHUDDisplayCooldown or tonumber(UVUnitsChasing) <= 0 or !ent.inunitview) and not UVOneCommanderActive then return end
-			if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading")) and UVOneCommanderActive)) then return end
+			if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) then return end
 			
 			local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
 			local enemydriver = ent:GetDriver()
