@@ -3845,8 +3845,6 @@ else --HUD/Options
 			local callsign = lang("uv.unit.commander") .. "\n⛊"
 			local driver = UVGetDriver(ent)
 
-			print(driver)
-
 			if driver and driver:IsPlayer() then
 				callsign = driver:GetName() .. "\n⛊"
 				-- if localPlayer == driver then
