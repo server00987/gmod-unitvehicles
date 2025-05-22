@@ -23,817 +23,850 @@ if SERVER then
 	--Setting ConVars.
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local RacerPursuitTech = GetConVar("unitvehicle_racerpursuittech")
-
+	
 	-- function GetClosestPoint(ent, pos)
 	-- 	local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
 	-- 	local localPos = ent:WorldToLocal(pos)
-		
+	
 	-- 	-- Clamp each coordinate
 	-- 	local clamped = Vector(
 	-- 		math.Clamp(localPos.x, mins.x, maxs.x),
 	-- 		math.Clamp(localPos.y, mins.y, maxs.y),
 	-- 		math.Clamp(localPos.z, mins.z, maxs.z)
 	-- 	)
-		
+	
 	-- 	return ent:LocalToWorld(clamped)
 	-- end
-	function GetClosestPoint(ent, pos, margin)
+	-- function GetClosestPoint(ent, pos, margin)
+	-- 	if not IsValid(ent) then return nil end
+	
+	-- 	margin = margin or 1 -- How far to stay away from the edge (in source units)
+	
+	-- 	local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
+	-- 	local localPos = ent:WorldToLocal(pos)
+	
+	-- 	-- Shrink bounds inward by margin
+	-- 	local paddedMins = Vector(mins.x + margin, mins.y + margin, mins.z + margin)
+	-- 	local paddedMaxs = Vector(maxs.x - margin, maxs.y - margin, maxs.z - margin)
+	
+	-- 	-- Clamp to the smaller, inset box
+	-- 	local clamped = Vector(
+	-- 		math.Clamp(localPos.x, paddedMins.x, paddedMaxs.x),
+	-- 		math.Clamp(localPos.y, paddedMins.y, paddedMaxs.y),
+	-- 		math.Clamp(localPos.z, paddedMins.z, paddedMaxs.z)
+	-- 	)
+	
+	-- 	return ent:LocalToWorld(clamped)
+	-- end
+	
+	function GetClosestPoint(ent, pos, margin, safeDistance)
 		if not IsValid(ent) then return nil end
-	
-		margin = margin or 1 -- How far to stay away from the edge (in source units)
-	
+		
+		margin = margin or 1
+		safeDistance = safeDistance or 100
+		
 		local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
 		local localPos = ent:WorldToLocal(pos)
-	
-		-- Shrink bounds inward by margin
+		
 		local paddedMins = Vector(mins.x + margin, mins.y + margin, mins.z + margin)
 		local paddedMaxs = Vector(maxs.x - margin, maxs.y - margin, maxs.z - margin)
-	
-		-- Clamp to the smaller, inset box
-		local clamped = Vector(
-			math.Clamp(localPos.x, paddedMins.x, paddedMaxs.x),
-			math.Clamp(localPos.y, paddedMins.y, paddedMaxs.y),
-			math.Clamp(localPos.z, paddedMins.z, paddedMaxs.z)
-		)
-	
-		return ent:LocalToWorld(clamped)
-	end
-	
-	function ENT:OnRemove()
-		--By undoing, driving, diving in water, or getting stuck, and the vehicle is remaining.
-		if IsValid(self.v) and self.v:IsVehicle() then
-			self.v.RacerVehicle = nil
-			if self.v.IsScar then --If the vehicle is SCAR.
-				self.v.HasDriver = self.v.BaseClass.HasDriver --Restore some functions.
-				self.v.SpecialThink = self.v.BaseClass.SpecialThink
-				if not self.v:HasDriver() then --If there's no driver, stop the engine.
-					self.v:TurnOffCar()
-					self.v:HandBrakeOn()
-					self.v:GoNeutral()
-					self.v:NotTurning()
-				end
-			elseif self.v.IsSimfphyscar then --The vehicle is Simfphys Vehicle.
-				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
-				if not IsValid(self.v:GetDriver()) then --If there's no driver, stop the engine.
-					self.v:StopEngine()
-				end
-				self.v.PressedKeys = self.v.PressedKeys or {} --Reset key states.
-				self.v.PressedKeys["Shift"] = false
-				self.v.PressedKeys["Space"] = true
-				if self.v.uvbusted then
-					local randomno = math.random(1, 2)
-					if randomno == 1 then
-						self.v.PressedKeys["Space"] = false
-					end
-				end
-			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
-			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
-			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
-				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
-				self.v:SetThrottle(0)
-				self:SetELS(false)
-			elseif self.v.IsGlideVehicle then
-				self.v:TurnOff()
-				self.v:TriggerInput("Throttle", 0)
-				if self.v.uvbusted then
-					local randomno = math.random(1, 4)
-					if randomno == 1 then
-						self.v:TriggerInput("Handbrake", 0)
-						self.v:TriggerInput("Brake", 0)
-					elseif randomno == 2 then
-						self.v:TriggerInput("Handbrake", 1)
-						self.v:TriggerInput("Brake", 0)
-					elseif randomno == 3 then
-						self.v:TriggerInput("Handbrake", 0)
-						self.v:TriggerInput("Brake", 1)
-					elseif randomno == 4 then
-						self.v:TriggerInput("Handbrake", 1)
-						self.v:TriggerInput("Brake", 1)
-					end
-				else
-					self.v:TriggerInput("Handbrake", 1)
-					self.v:TriggerInput("Brake", 0)
-				end
-			end
-			
-			local e = EffectData()
-			e:SetEntity(self.v)
-			util.Effect("entity_remove", e) --Perform an effect.
-			
-		end
 		
+		local clamped = Vector(
+		math.Clamp(localPos.x, paddedMins.x, paddedMaxs.x),
+		math.Clamp(localPos.y, paddedMins.y, paddedMaxs.y),
+		math.Clamp(localPos.z, paddedMins.z, paddedMaxs.z)
+	)
+	
+	local worldPoint = ent:LocalToWorld(clamped)
+	
+	if pos:DistToSqr(worldPoint) < (safeDistance * safeDistance) then
+		local forwardOffset = ent:GetForward() * 50
+		return ent:GetPos() + forwardOffset
 	end
 	
-	function ENT:StraightToRace(point)
-		if !self.v or !self.e then
-			return
-		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
-		return tobool(tr)
-	end
-	
-	function ENT:Stop()
-		if self.v.IsScar then
-			self.v:GoNeutral()
-			self.v:NotTurning()
-			self.v:HandBrakeOn()
-		elseif self.v.IsSimfphyscar then
-			self.v.PressedKeys = self.v.PressedKeys or {}
-			self.v.PressedKeys["W"] = false
-			self.v.PressedKeys["A"] = false
-			self.v.PressedKeys["S"] = false
-			self.v.PressedKeys["D"] = false
+	return worldPoint
+end
+
+function ENT:OnRemove()
+	--By undoing, driving, diving in water, or getting stuck, and the vehicle is remaining.
+	if IsValid(self.v) and self.v:IsVehicle() then
+		self.v.RacerVehicle = nil
+		if self.v.IsScar then --If the vehicle is SCAR.
+			self.v.HasDriver = self.v.BaseClass.HasDriver --Restore some functions.
+			self.v.SpecialThink = self.v.BaseClass.SpecialThink
+			if not self.v:HasDriver() then --If there's no driver, stop the engine.
+				self.v:TurnOffCar()
+				self.v:HandBrakeOn()
+				self.v:GoNeutral()
+				self.v:NotTurning()
+			end
+		elseif self.v.IsSimfphyscar then --The vehicle is Simfphys Vehicle.
+			self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
+			if not IsValid(self.v:GetDriver()) then --If there's no driver, stop the engine.
+				self.v:StopEngine()
+			end
+			self.v.PressedKeys = self.v.PressedKeys or {} --Reset key states.
 			self.v.PressedKeys["Shift"] = false
 			self.v.PressedKeys["Space"] = true
-		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
+			if self.v.uvbusted then
+				local randomno = math.random(1, 2)
+				if randomno == 1 then
+					self.v.PressedKeys["Space"] = false
+				end
+			end
+		elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
+		isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
+		isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+			self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
 			self.v:SetThrottle(0)
-			self.v:SetSteering(0, 0)
-			if self.v:GetVelocity():LengthSqr() < 10000 then 
-				self.v:SetHandbrake(true)
-			else 
-				self.v:SetHandbrake(false)
-			end
+			self:SetELS(false)
 		elseif self.v.IsGlideVehicle then
-			self.v:TriggerInput("Handbrake", 1)
+			self.v:TurnOff()
 			self.v:TriggerInput("Throttle", 0)
-			self.v:TriggerInput("Brake", 0)
-			self.v:TriggerInput("Steer", 0)
-		end
-		self.moving = CurTime()
-	end
-
-	function ENT:CanSeeGoal(target)
-		if !self.v or !target then
-			return
-		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v}}).Fraction==1
-		return tobool(tr)
-	end
-
-	function ENT:ObstaclesNearbySide()
-		if !self.v or !self.v.width then
-			return
-		end
-
-		local width = self.v.width/2
-		local turnleft = -1
-		local turnright = 1
-
-		local speed = self.v:GetVelocity():LengthSqr()
-		speed = math.sqrt(speed)
-
-		local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
-		local right = Vector(width,math.Clamp(speed, width, math.huge),0)
-		local leftstart = Vector(-width,0,0)
-		local rightstart = Vector(width,0,0)
-
-		if self.v.IsSimfphyscar then
-			left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
-			right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
-			leftstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
-			rightstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
-		elseif self.v.IsGlideVehicle then
-			left:Rotate(Angle(0, -90, 0))
-			right:Rotate(Angle(0, -90, 0))
-			leftstart:Rotate(Angle(0, -90, 0))
-			rightstart:Rotate(Angle(0, -90, 0))
-		end
-		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-
-		if trleft > trright then
-			return turnleft
-		end
-		if trleft < trright then
-			return turnright
-		end
-
-		return false
-
-	end
-
-	function ENT:ObstaclesNearby()
-		if !self.v then
-			return
-		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction != 1
-		return tobool(tr)
-	end
-	
-	function ENT:FindRace()
-		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
-			if !UVRaceInProgress then self.PatrolWaypoint = nil; return end
-			
-			local array = UVRaceTable['Participants'][self.v]
-
-			local current_checkp = #array.Checkpoints + 1
-			local next_checkp = #array.Checkpoints + 2
-			local selected_point = nil
-			local next_point
-
-			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
-				if v:GetID() == current_checkp then
-					selected_point = v
-					-- self.PatrolWaypoint = {
-					-- 	['Target'] = (v:GetPos1()+v:GetPos2())/2,
-					-- 	['SpeedLimit'] = math.huge
-					-- }
+			if self.v.uvbusted then
+				local randomno = math.random(1, 4)
+				if randomno == 1 then
+					self.v:TriggerInput("Handbrake", 0)
+					self.v:TriggerInput("Brake", 0)
+				elseif randomno == 2 then
+					self.v:TriggerInput("Handbrake", 1)
+					self.v:TriggerInput("Brake", 0)
+				elseif randomno == 3 then
+					self.v:TriggerInput("Handbrake", 0)
+					self.v:TriggerInput("Brake", 1)
+				elseif randomno == 4 then
+					self.v:TriggerInput("Handbrake", 1)
+					self.v:TriggerInput("Brake", 1)
 				end
-				if v:GetID() == next_checkp then
-					next_point = v
-				end
-			end
-
-			if selected_point then
-				-- local pos1 = selected_point:GetPos1()
-				-- local pos2 = selected_point:GetPos2()
-
-				-- local lowest_y = math.min(pos1.y, pos2.y)
-
-				-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
-				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
-				//local target = selected_point.target_point
-				local target = selected_point
-				local target_pos = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
-				--local cansee = self:CanSeeGoal(target_pos)
-
-				//local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-
-				local velocity = self.v:GetVelocity()
-				//print(velocity:LengthSqr())
-				local normalized_velocity = velocity:GetNormalized()
-
-				local tolerance = 750
-				local dotThreshold = 0.5
-
-				if next_point then
-					local toCheckpoint = (target_pos - self.v:WorldSpaceCenter()):GetNormalized()
-					local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
-			
-					local dot = forward:Dot(toCheckpoint)
-					local dist = self.v:WorldSpaceCenter():Distance(target_pos)
-			
-					if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
-						--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
-						if self:CanSeeGoal(next_point.target_point) then
-							target = next_point
-							target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
-						end
-					end
-				end
-
-				local target1 = target:GetPos1()
-				local target2 = target:GetPos2()
-
-				local size = (target2 - target1):LengthSqr()
-
-				--print('Vehicle velocity', velocity:LengthSqr())
-
-				if velocity:LengthSqr() < 150000 then
-					target_pos = target.target_point
-				end
-
-				if size < 200000 then
-					target_pos = target.target_point
-				end
-				
-				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
-				-- Further tests may be needed to determine which one is better
-				self.PatrolWaypoint = {
-					['Target'] = target_pos,
-					['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
-				}
-				-- if cansee then
-				-- 	self.PatrolWaypoint = {
-				-- 		['Target'] = target_pos,
-				-- 		['SpeedLimit'] = target:GetSpeedLimit() or 0
-				-- 	}
-				-- else
-				-- 	-- Must utilize dvs
-				-- 	local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
-
-				-- 	if waypoints and #waypoints > 0 then
-				-- 		self.PatrolWaypoint = waypoints[2]
-				-- 	else
-				-- 		self.PatrolWaypoint = nearest_waypoint
-				-- 	end
-				-- end
-			end
-
-
-		else
-			if next(dvd.Waypoints) == nil then
-				return
-			end
-		
-			local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-			if Waypoint.Neighbors then --Keep going straight
-				self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
 			else
-				self.PatrolWaypoint = Waypoint
-			end
-		end
-
-		-- if next(dvd.Waypoints) == nil then
-		-- 	return
-		-- end
-		
-		-- local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-		-- if Waypoint.Neighbors then --Keep going straight
-		-- 	self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
-		-- else
-		-- 	self.PatrolWaypoint = Waypoint
-		-- end
-
-		-- self.PatrolWaypoint = {}
-		-- self.PatrolWaypoint["Target"] = Entity(1):GetPos()
-		-- self.PatrolWaypoint["SpeedLimit"] = math.huge
-		
-	end
-	
-	function ENT:Race()
-		
-		self:FindRace()
-		
-		-- if next(dvd.Waypoints) == nil then
-		-- 	return
-		-- end
-		
-		if self.PatrolWaypoint then
-			
-			if !self.racing then
-				self.racing = true
-			end
-			
-			--Set handbrake
-			if self.v.IsScar then
-				self.v:HandBrakeOff()
-			elseif self.v.IsSimfphyscar then
-				--self.v:SetActive(true)
-				--self.v:StartEngine()
-				self.v.PressedKeys = self.v.PressedKeys or {}
-				self.v.PressedKeys["Space"] = false
-			elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
-				self.v:SetHandbrake(false)
-			end
-			
-			--Racing techniques
-			local WaypointPos = self.PatrolWaypoint["Target"]
-			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
-			local dist = WaypointPos - self.v:WorldSpaceCenter()
-			local vect = dist:GetNormalized()
-			local vectdot = vect:Dot(self.v:GetVelocity())
-			local throttle = dist:Dot(forward) > 0 and 1 or -1
-			local right = vect:Cross(forward)
-			local steer_amount = right:Length()
-			local steer = right.z > 0 and steer_amount or -steer_amount
-			local speedlimitmph = self.PatrolWaypoint["SpeedLimit"]
-			self.Speeding = speedlimitmph^2
-			
-			--Unique racing techniques
-
-			-- if self.v.uvraceparticipant then
-			-- 	local velocity = self.v:GetVelocity():GetNormalized()
-
-			-- 	local vect_sanitized = vect --* Vector(1, 0, 1)
-			-- 	local velo_sanitized = velocity --* Vector(1, 0, 1)
-				
-			-- 	local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
-	
-			-- 	local maxDist = 750
-			-- 	local distSqr = dist:LengthSqr()
-			-- 	local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
-	
-			-- 	angle_diff = angle_diff * distanceFactor
-	
-			-- 	local misalignment = math.Clamp(angle_diff / 90, -1, 1)
-			-- 	throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
-				
-			-- 	if angle_diff < 10 then
-			-- 		throttle = 1
-			-- 	end
-
-			-- 	-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
-			-- 	-- 	throttle = -1
-			-- 	-- end
-			-- 	-- if angle_diff > 25 then
-			-- 	-- 	throttle = throttle * 0.5
-			-- 	-- end
-			-- 	//local dist_len = dist:LengthSqr()
-			-- 	-- print("Distance:",dist_len)
-			-- 	-- print("Angle Difference:",angle_diff)	
-			-- end
-			-- print(self.Speeding)
-			-- print(self.v:GetVelocity():LengthSqr(), self.Speeding*300)
-			if self.v:GetVelocity():LengthSqr() > self.Speeding*350 and self.v.uvraceparticipant then 
-				throttle = -1
-			elseif self.v:GetVelocity():LengthSqr() > self.Speeding*300 then
-				throttle = 0
-			end
-
-			if self.stuck then
-				steer = 0
-				throttle = throttle * -1
-			end --Getting unstuck
-
-			-- -- slow it down for tight corners if we are going too fast
-			-- if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
-			-- 	throttle = -1
-			-- end
-
-			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
-
-			-- if self.v:GetVelocity():LengthSqr() > 10000 then
-			-- 	if self.v.IsSimfphyscar then 
-			-- 		if istable(self.v.Wheels) then
-			-- 			for i = 1, table.Count( self.v.Wheels ) do
-			-- 				local Wheel = self.v.Wheels[ i ]
-			-- 				if !Wheel then return end
-			-- 				if Wheel:GetGripLoss() > 0 then
-			-- 					throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
-			-- 				end
-			-- 			end
-			-- 		end
-			-- 	elseif self.v.IsGlideVehicle then
-			-- 		local EntityMeta = FindMetaTable( "Entity" )
-			-- 		local getTable = EntityMeta.GetTable
-			-- 		local selfvTbl = getTable( self.v )
-			-- 		local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
-			-- 		if wheelslip != false then
-			-- 			throttle = throttle - (wheelslip/10) --Glide traction control
-			-- 		end
-			-- 	end
-			-- end
-			
-			if dist:Dot(forward) < 0 and !self.stuck then
-				if vectdot > 0 then
-					if right.z > 0 then 
-						steer = -1 
-					else 
-						steer = 1 
-					end
-				end
-			end --K turn
-			
-			--Set throttle
-			if self.v.IsScar then
-				if throttle > 0 then
-					self.v:GoForward(throttle)
-				else
-					self.v:GoBack(-throttle)
-				end
-			elseif self.v.IsSimfphyscar then
-				self.v.PressedKeys = self.v.PressedKeys or {}
-				self.v.PressedKeys["Shift"] = false
-				self.v.PressedKeys["joystick_throttle"] = throttle
-				self.v.PressedKeys["joystick_brake"] = throttle * -1
-			elseif self.v.IsGlideVehicle then
-				self.v:TriggerInput("Handbrake", 0)
-				self.v:TriggerInput("Throttle", throttle)
-				self.v:TriggerInput("Brake", throttle * -1)
-			elseif isfunction(self.v.SetThrottle) and !self.v.IsGlideVehicle then
-				self.v:SetThrottle(throttle)
-			end
-			if self.v.IsScar then
-				if steer > 0 then
-					self.v:TurnRight(steer)
-				elseif steer < 0 then
-					self.v:TurnLeft(-steer)
-				else
-					self.v:NotTurning()
-				end
-			elseif self.v.IsSimfphyscar then
-				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
-			elseif self.v.IsGlideVehicle then
-				steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.
-				self.v:TriggerInput("Steer", steer)
-			elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
-				self.v:SetSteering(steer, 0)
-			end
-			
-			--Resetting
-			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
-				self.moving = CurTime()
-			end
-			if self.stuck then 
-				self.moving = CurTime()
-			end
-			
-			local timeout = 1
-			if timeout and timeout > 0 then
-				if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
-					self.stuck = true
-					self.moving = CurTime()
-					timer.Simple(2, function() 
-						if IsValid(self.v) then 
-							self.stuck = nil 
-							self.PatrolWaypoint = nil 
-							
-							if self.v.uvraceparticipant and ((not self.v.uvbustingprogress) or self.v.uvbustingprogress <= 0) then
-								UVResetPosition( self.v )
-							end
-						end 
-					end)
-				end
-			end
-			
-		else
-			self:Stop()
-		end
-		
-		--Pursuit Tech
-		if self.v.PursuitTech and uvtargeting then
-			for k, v in pairs(self.v.PursuitTech) do
-				if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
-					UVDeployWeapon(self.v, k)
-				end
-				if v.Tech == "Repair Kit" then
-					if self.v.IsGlideVehicle then
-						if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
-							UVDeployWeapon(self.v, k)
-							continue
-						end
-						for _, v in pairs(self.v.wheels) do
-							if IsValid(v) and v.bursted and !self.repairtimer then
-								local id = "tire_repair"..self.v:EntIndex()
-								self.repairtimer = true
-
-								timer.Create(id, 1, 1, function()
-									UVDeployWeapon(self.v, k)
-									timer.Simple(5, function() self.repairtimer = false; end)
-								end)
-								break
-							end
-						end
-					elseif self.v.IsSimfphyscar then
-						if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
-							UVDeployWeapon(self.v, k)
-							continue
-						end
-						for _, wheel in pairs(self.v.Wheels) do
-							if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
-								local id = "tire_repair"..self.v:EntIndex()
-								self.repairtimer = true
-
-								timer.Create(id, 1, 1, function()
-									UVDeployWeapon(self.v, k)
-									timer.Simple(5, function() self.repairtimer = false; end)
-								end)
-								break
-							end
-						end
-					elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
-						if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
-							UVDeployWeapon(self.v, k)
-							continue
-						end
-					end
-				end
-			end
-		end	
-	end
-	
-	function ENT:Think()
-		self:SetPos(self.v:GetPos() + Vector(0,0,50))
-		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
-
-		if self.v then
-			if self.v.raceinvited then
-				if !table.HasValue(UVRaceCurrentParticipants, self.v) then
-					UVRaceAddParticipant( self.v, nil, true )
-					return
-				end
-				self.v.raceinvited = false
-				timer.Remove('RaceInviteExpire'..v:EntIndex())
-			end
-		end
-
-		if not GetConVar("ai_ignoreplayers"):GetBool() then
-			self:Race()
-		else
-			self:Stop()
-		end
-
-		-- Make their computing rate higher ONLY if they are in a race
-		if self.v.uvraceparticipant then
-			self:NextThink( CurTime() )
-			return true
-		end
-	end
-	
-	function ENT:Initialize()
-		self:SetNoDraw(true)
-		self:SetMoveType(MOVETYPE_NONE)
-		self:SetModel(self.Modelname)
-		self:SetHealth(-1)
-		
-		self.moving = CurTime()
-		
-		timer.Simple(3, function()
-			if IsValid(self.v) then
-				if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 
-					self.v:VC_setRunningLights(true)
-				end
-			end
-		end)
-		
-		--Pick up a vehicle in the given sphere.
-		if self.vehicle then
-			local v = self.vehicle
-			if v.RacerVehicle then return end --If it's already a Racer Vehicle, don't pick it up.
-			if v.IsScar then --If it's a SCAR.
-				if not v:HasDriver() then --If driver's seat is empty.
-					self.v = v
-					v.RacerVehicle = self
-					v.HasDriver = function() return true end --SCAR script assumes there's a driver.
-					v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
-					v:StartCar()
-				end
-			elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
-				if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
-					self.v = v
-					v.RacerVehicle = self
-					v:SetActive(true)
-					v:StartEngine()
-					if GetConVar("unitvehicle_enableheadlights"):GetBool() then
-						v:SetLightsEnabled(true)
-					end
-					if GetConVar("unitvehicle_autohealth"):GetBool() then
-						v:SetMaxHealth(math.huge)
-						v:SetCurHealth(math.huge)
-					end
-				end
-			elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
-				if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
-					self.v = v
-					v.RacerVehicle = self
-					v:EnableEngine(true)
-					v:StartEngine(true)
-					if GetConVar("unitvehicle_autohealth"):GetBool() then
-						if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
-							v:VC_repairFull_Admin()
-							if !v:VC_hasGodMode() then
-								v:VC_setGodMode(true)
-							end
-						end
-					end
-				end
-			elseif v.IsGlideVehicle then --Glide
-				if not IsValid(v:GetDriver()) then
-					self.v = v
-					v.RacerVehicle = self
-					v:SetEngineState(2)
-					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
-						v:SetHeadlightState(1)
-					end
-				end
-			end
-		else
-			local distance = DetectionRange:GetFloat()
-			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
-				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
-				if v.RacerVehicle then continue end
-				if v:IsVehicle() then
-					if v.IsScar then --If it's a SCAR.
-						if not v:HasDriver() then --If driver's seat is empty.
-							self.v = v
-							v.RacerVehicle = self
-							v.HasDriver = function() return true end --SCAR script assumes there's a driver.
-							v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
-							v:StartCar()
-							break
-						end
-					elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
-						if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
-							self.v = v
-							v.RacerVehicle = self
-							v:SetActive(true)
-							v:StartEngine()
-							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
-								v:SetLightsEnabled(true)
-							end
-							if GetConVar("unitvehicle_autohealth"):GetBool() then
-								v:SetMaxHealth(math.huge)
-								v:SetCurHealth(math.huge)
-							end
-							break
-						end
-					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
-						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
-							self.v = v
-							v.RacerVehicle = self
-							v:EnableEngine(true)
-							v:StartEngine(true)
-							if GetConVar("unitvehicle_autohealth"):GetBool() then
-								if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
-									v:VC_repairFull_Admin()
-									if !v:VC_hasGodMode() then
-										v:VC_setGodMode(true)
-									end
-								end
-							end
-							break
-						end
-					elseif v.IsGlideVehicle then --Glide
-						if not IsValid(v:GetDriver()) then
-							self.v = v
-							v.RacerVehicle = self
-							v:TurnOn()
-							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
-								v:SetHeadlightState(1)
-							end
-							break
-						end
-					end
-				end
+				self.v:TriggerInput("Handbrake", 1)
+				self.v:TriggerInput("Brake", 0)
 			end
 		end
 		
-		if not IsValid(self.v) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Racer Vehicle.
 		local e = EffectData()
 		e:SetEntity(self.v)
-		util.Effect("propspawn", e) --Perform a spawn effect.
-		self.v:EmitSound( "beams/beamstart5.wav" )
+		util.Effect("entity_remove", e) --Perform an effect.
 		
-		if !self.v.racer and UVNames then
-			self.v.racer = UVNames.Racers[math.random(1, #UVNames.Racers)]
-			local joinmessage = "Racer AI (" .. self.v.racer .. ") has joined the game"
-			
-			net.Start( "UVRacerJoin" )
-				net.WriteString(joinmessage)
-			net.Broadcast()
+	end
+	
+end
+
+function ENT:StraightToRace(point)
+	if !self.v or !self.e then
+		return
+	end
+	local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
+	return tobool(tr)
+end
+
+function ENT:Stop()
+	if self.v.IsScar then
+		self.v:GoNeutral()
+		self.v:NotTurning()
+		self.v:HandBrakeOn()
+	elseif self.v.IsSimfphyscar then
+		self.v.PressedKeys = self.v.PressedKeys or {}
+		self.v.PressedKeys["W"] = false
+		self.v.PressedKeys["A"] = false
+		self.v.PressedKeys["S"] = false
+		self.v.PressedKeys["D"] = false
+		self.v.PressedKeys["Shift"] = false
+		self.v.PressedKeys["Space"] = true
+	elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
+		self.v:SetThrottle(0)
+		self.v:SetSteering(0, 0)
+		if self.v:GetVelocity():LengthSqr() < 10000 then 
+			self.v:SetHandbrake(true)
+		else 
+			self.v:SetHandbrake(false)
+		end
+	elseif self.v.IsGlideVehicle then
+		self.v:TriggerInput("Handbrake", 1)
+		self.v:TriggerInput("Throttle", 0)
+		self.v:TriggerInput("Brake", 0)
+		self.v:TriggerInput("Steer", 0)
+	end
+	self.moving = CurTime()
+end
+
+function ENT:CanSeeGoal(target)
+	if !self.v or !target then
+		return
+	end
+	local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v}}).Fraction==1
+	return tobool(tr)
+end
+
+function ENT:ObstaclesNearbySide()
+	if !self.v or !self.v.width then
+		return
+	end
+	
+	local width = self.v.width/2
+	local turnleft = -1
+	local turnright = 1
+	
+	local speed = self.v:GetVelocity():LengthSqr()
+	speed = math.sqrt(speed)
+	
+	local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
+	local right = Vector(width,math.Clamp(speed, width, math.huge),0)
+	local leftstart = Vector(-width,0,0)
+	local rightstart = Vector(width,0,0)
+	
+	if self.v.IsSimfphyscar then
+		left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		leftstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		rightstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+	elseif self.v.IsGlideVehicle then
+		left:Rotate(Angle(0, -90, 0))
+		right:Rotate(Angle(0, -90, 0))
+		leftstart:Rotate(Angle(0, -90, 0))
+		rightstart:Rotate(Angle(0, -90, 0))
+	end
+	
+	local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+	local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+	
+	if trleft > trright then
+		return turnleft
+	end
+	if trleft < trright then
+		return turnright
+	end
+	
+	return false
+	
+end
+
+function ENT:ObstaclesNearby()
+	if !self.v then
+		return
+	end
+	local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction != 1
+	return tobool(tr)
+end
+
+function ENT:FindRace()
+	if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
+		if !UVRaceInProgress then self.PatrolWaypoint = nil; return end
+		
+		local array = UVRaceTable['Participants'][self.v]
+		
+		local current_checkp = #array.Checkpoints + 1
+		local next_checkp = #array.Checkpoints + 2
+		local selected_point = nil
+		local next_point
+		
+		for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
+			if v:GetID() == current_checkp then
+				selected_point = v
+				-- self.PatrolWaypoint = {
+				-- 	['Target'] = (v:GetPos1()+v:GetPos2())/2,
+				-- 	['SpeedLimit'] = math.huge
+				-- }
+			end
+			if v:GetID() == next_checkp then
+				next_point = v
+			end
 		end
 		
-		local pttable = {
-			--"EMP",
-			"ESF",
-			"Jammer",
-			"Shockwave",
-			"Spikestrip",
-			"Stunmine",
-			"Repair Kit",
-		}
-		
-		if RacerPursuitTech:GetBool() then
-			if not self.v.PursuitTech then
-				self.v.PursuitTech = {}
-
-				for i=1, 2, 1 do
-					local selected_pt = pttable[math.random(#pttable)]
-					local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
-					local sel_k, sel_v
+		if selected_point then
+			-- local pos1 = selected_point:GetPos1()
+			-- local pos2 = selected_point:GetPos2()
+			
+			-- local lowest_y = math.min(pos1.y, pos2.y)
+			
+			-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
+			-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
+			--local target = selected_point.target_point
+			local target = selected_point
+			local target_pos = GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
+			--local cansee = self:CanSeeGoal(target_pos)
+			
+			--local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+			
+			local velocity = self.v:GetVelocity()
+			--print(velocity:LengthSqr())
+			local normalized_velocity = velocity:GetNormalized()
+			
+			local tolerance = 750
+			local dotThreshold = 0.5
+			
+			if next_point then
+				local toCheckpoint = (target_pos - self.v:WorldSpaceCenter()):GetNormalized()
+				local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
 				
-					for k,v in pairs(self.v.PursuitTech) do
-						if v.Tech == selected_pt then
-							sel_k, sel_v = k, v
-							self.v.PursuitTech[k] = nil
-							break
-						end
-					end
-
-					local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
-					ammo_count = ammo_count > 0 and ammo_count or math.huge
+				local dot = forward:Dot(toCheckpoint)
+				local dist = self.v:WorldSpaceCenter():Distance(target_pos)
 				
-					self.v.PursuitTech[i] = {
-						Tech = selected_pt,
-						Ammo = ammo_count,
-						Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
-						LastUsed = -math.huge,
-						Upgraded = false
-					}
+				if dist < tolerance and dot > dotThreshold and velocity:LengthSqr() > 50000 then
+					--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+					--if self:CanSeeGoal(next_point.target_point) then
+					target = next_point
+					target_pos = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+					--end
 				end
+			end
+			
+			local target1 = target:GetPos1()
+			local target2 = target:GetPos2()
+			
+			local size = (target2 - target1):LengthSqr()
+			
+			--print('Vehicle velocity', velocity:LengthSqr())
+			
+			if velocity:LengthSqr() < 150000 then
+				target_pos = target.target_point
+			end
+			
+			print(velocity:LengthSqr())
+			
+			if size < 200000 then
+				target_pos = target.target_point
+			end
+			
+			--print(self.v:WorldSpaceCenter():Distance(target_pos))
+			
+			-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
+			-- Further tests may be needed to determine which one is better
+			self.PatrolWaypoint = {
+				['Target'] = target_pos,
+				['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
+			}
+			-- if cansee then
+			-- 	self.PatrolWaypoint = {
+			-- 		['Target'] = target_pos,
+			-- 		['SpeedLimit'] = target:GetSpeedLimit() or 0
+			-- 	}
+			-- else
+			-- 	-- Must utilize dvs
+			-- 	local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
+			
+			-- 	if waypoints and #waypoints > 0 then
+			-- 		self.PatrolWaypoint = waypoints[2]
+			-- 	else
+			-- 		self.PatrolWaypoint = nearest_waypoint
+			-- 	end
+			-- end
+		end
+		
+		
+	else
+		if next(dvd.Waypoints) == nil then
+			self.PatrolWaypoint = nil
+			return
+		end
+		
+		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		if Waypoint.Neighbors then --Keep going straight
+			self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+		else
+			self.PatrolWaypoint = Waypoint
+		end
+	end
+	
+	-- if next(dvd.Waypoints) == nil then
+	-- 	return
+	-- end
+	
+	-- local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+	-- if Waypoint.Neighbors then --Keep going straight
+	-- 	self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+	-- else
+	-- 	self.PatrolWaypoint = Waypoint
+	-- end
+	
+	-- self.PatrolWaypoint = {}
+	-- self.PatrolWaypoint["Target"] = Entity(1):GetPos()
+	-- self.PatrolWaypoint["SpeedLimit"] = math.huge
+	
+end
 
-				table.insert(uvrvwithpursuittech, self.v)
-
-				self.v:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
-					if table.HasValue(uvrvwithpursuittech, car) then
-						table.RemoveByValue(uvrvwithpursuittech, car)
-					end
+function ENT:Race()
+	
+	self:FindRace()
+	
+	-- if next(dvd.Waypoints) == nil then
+	-- 	return
+	-- end
+	
+	if self.PatrolWaypoint then
+		
+		if !self.racing then
+			self.racing = true
+		end
+		
+		--Set handbrake
+		if self.v.IsScar then
+			self.v:HandBrakeOff()
+		elseif self.v.IsSimfphyscar then
+			--self.v:SetActive(true)
+			--self.v:StartEngine()
+			self.v.PressedKeys = self.v.PressedKeys or {}
+			self.v.PressedKeys["Space"] = false
+		elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
+			self.v:SetHandbrake(false)
+		end
+		
+		--Racing techniques
+		local WaypointPos = self.PatrolWaypoint["Target"]
+		local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
+		local dist = WaypointPos - self.v:WorldSpaceCenter()
+		local vect = dist:GetNormalized()
+		local vectdot = vect:Dot(self.v:GetVelocity())
+		local throttle = dist:Dot(forward) > 0 and 1 or -1
+		local right = vect:Cross(forward)
+		local steer_amount = right:Length()
+		local steer = right.z > 0 and steer_amount or -steer_amount
+		local speedlimitmph = self.PatrolWaypoint["SpeedLimit"]
+		self.Speeding = speedlimitmph^2
+		
+		--Unique racing techniques
+		
+		-- if self.v.uvraceparticipant then
+		-- 	local velocity = self.v:GetVelocity():GetNormalized()
+		
+		-- 	local vect_sanitized = vect --* Vector(1, 0, 1)
+		-- 	local velo_sanitized = velocity --* Vector(1, 0, 1)
+		
+		-- 	local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
+		
+		-- 	local maxDist = 750
+		-- 	local distSqr = dist:LengthSqr()
+		-- 	local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
+		
+		-- 	angle_diff = angle_diff * distanceFactor
+		
+		-- 	local misalignment = math.Clamp(angle_diff / 90, -1, 1)
+		-- 	throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
+		
+		-- 	if angle_diff < 10 then
+		-- 		throttle = 1
+		-- 	end
+		
+		-- 	-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
+		-- 	-- 	throttle = -1
+		-- 	-- end
+		-- 	-- if angle_diff > 25 then
+		-- 	-- 	throttle = throttle * 0.5
+		-- 	-- end
+		-- 	//local dist_len = dist:LengthSqr()
+		-- 	-- print("Distance:",dist_len)
+		-- 	-- print("Angle Difference:",angle_diff)	
+		-- end
+		-- print(self.Speeding)
+		-- print(self.v:GetVelocity():LengthSqr(), self.Speeding*300)
+		if self.v:GetVelocity():LengthSqr() > self.Speeding*350 and self.v.uvraceparticipant then 
+			throttle = -1
+		elseif self.v:GetVelocity():LengthSqr() > self.Speeding*300 then
+			throttle = 0
+		end
+		
+		if self.stuck then
+			steer = 0
+			throttle = throttle * -1
+		end --Getting unstuck
+		
+		-- -- slow it down for tight corners if we are going too fast
+		-- if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
+		-- 	throttle = -1
+		-- end
+		
+		-- print("Velocity:",self.v:GetVelocity():LengthSqr())
+		
+		-- if self.v:GetVelocity():LengthSqr() > 10000 then
+		-- 	if self.v.IsSimfphyscar then 
+		-- 		if istable(self.v.Wheels) then
+		-- 			for i = 1, table.Count( self.v.Wheels ) do
+		-- 				local Wheel = self.v.Wheels[ i ]
+		-- 				if !Wheel then return end
+		-- 				if Wheel:GetGripLoss() > 0 then
+		-- 					throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+		-- 				end
+		-- 			end
+		-- 		end
+		-- 	elseif self.v.IsGlideVehicle then
+		-- 		local EntityMeta = FindMetaTable( "Entity" )
+		-- 		local getTable = EntityMeta.GetTable
+		-- 		local selfvTbl = getTable( self.v )
+		-- 		local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+		-- 		if wheelslip != false then
+		-- 			throttle = throttle - (wheelslip/10) --Glide traction control
+		-- 		end
+		-- 	end
+		-- end
+		
+		if dist:Dot(forward) < 0 and !self.stuck then
+			if vectdot > 0 then
+				if right.z > 0 then 
+					steer = -1 
+				else 
+					steer = 1 
+				end
+			end
+		end --K turn
+		
+		--Set throttle
+		if self.v.IsScar then
+			if throttle > 0 then
+				self.v:GoForward(throttle)
+			else
+				self.v:GoBack(-throttle)
+			end
+		elseif self.v.IsSimfphyscar then
+			self.v.PressedKeys = self.v.PressedKeys or {}
+			self.v.PressedKeys["Shift"] = false
+			self.v.PressedKeys["joystick_throttle"] = throttle
+			self.v.PressedKeys["joystick_brake"] = throttle * -1
+		elseif self.v.IsGlideVehicle then
+			self.v:TriggerInput("Handbrake", 0)
+			self.v:TriggerInput("Throttle", throttle)
+			self.v:TriggerInput("Brake", throttle * -1)
+		elseif isfunction(self.v.SetThrottle) and !self.v.IsGlideVehicle then
+			self.v:SetThrottle(throttle)
+		end
+		if self.v.IsScar then
+			if steer > 0 then
+				self.v:TurnRight(steer)
+			elseif steer < 0 then
+				self.v:TurnLeft(-steer)
+			else
+				self.v:NotTurning()
+			end
+		elseif self.v.IsSimfphyscar then
+			self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
+		elseif self.v.IsGlideVehicle then
+			steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.
+			self.v:TriggerInput("Steer", steer)
+		elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+			self.v:SetSteering(steer, 0)
+		end
+		
+		--Resetting
+		if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
+			self.moving = CurTime()
+		end
+		if self.stuck then 
+			self.moving = CurTime()
+		end
+		
+		local timeout = 1
+		if timeout and timeout > 0 then
+			if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
+				self.stuck = true
+				self.moving = CurTime()
+				timer.Simple(2, function() 
+					if IsValid(self.v) then 
+						self.stuck = nil 
+						self.PatrolWaypoint = nil 
+						
+						if self.v.uvraceparticipant and ((not self.v.uvbustingprogress) or self.v.uvbustingprogress <= 0) then
+							UVResetPosition( self.v )
+						end
+					end 
 				end)
 			end
 		end
 		
-		if !self.uvscripted then
-			if next(dvd.Waypoints) == nil then
-				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned!" )
-			else
-				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned! (DV Waypoints detected!)" )
+	else
+		self:Stop()
+	end
+	
+	--Pursuit Tech
+	if self.v.PursuitTech and uvtargeting then
+		for k, v in pairs(self.v.PursuitTech) do
+			if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
+				UVDeployWeapon(self.v, k)
+			end
+			if v.Tech == "Repair Kit" then
+				if self.v.IsGlideVehicle then
+					if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+					for _, v in pairs(self.v.wheels) do
+						if IsValid(v) and v.bursted and !self.repairtimer then
+							local id = "tire_repair"..self.v:EntIndex()
+							self.repairtimer = true
+							
+							timer.Create(id, 1, 1, function()
+								UVDeployWeapon(self.v, k)
+								timer.Simple(5, function() self.repairtimer = false; end)
+							end)
+							break
+						end
+					end
+				elseif self.v.IsSimfphyscar then
+					if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+					for _, wheel in pairs(self.v.Wheels) do
+						if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
+							local id = "tire_repair"..self.v:EntIndex()
+							self.repairtimer = true
+							
+							timer.Create(id, 1, 1, function()
+								UVDeployWeapon(self.v, k)
+								timer.Simple(5, function() self.repairtimer = false; end)
+							end)
+							break
+						end
+					end
+				elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
+					if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+						UVDeployWeapon(self.v, k)
+						continue
+					end
+				end
 			end
 		end
-		
-		local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.
-		if not isvector(max) then min, max = self.v:GetModelBounds() end --If getting hit box bounds is failed, get model bounds instead.
-		if not isvector(max) then max = vector_up * math.random(80, 200) end --If even getting model bounds is failed, set a random value.
-		
-		local tr = util.TraceHull({start = self.v:GetPos() + vector_up * max.z, 
-		endpos = self.v:GetPos(), ignoreworld = true,
-		mins = Vector(-16, -16, -1), maxs = Vector(16, 16, 1)})
-		self.CollisionHeight = tr.HitPos.z - self.v:GetPos().z
-		if self.CollisionHeight < 10 then self.CollisionHeight = max.z end
-		self.v:DeleteOnRemove(self)
-		
+	end	
+end
+
+function ENT:Think()
+	self:SetPos(self.v:GetPos() + Vector(0,0,50))
+	self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
+	
+	if self.v then
+		if self.v.raceinvited then
+			if !table.HasValue(UVRaceCurrentParticipants, self.v) then
+				UVRaceAddParticipant( self.v, nil, true )
+				return
+			end
+			self.v.raceinvited = false
+			timer.Remove('RaceInviteExpire'..v:EntIndex())
+		end
 	end
+	
+	if not GetConVar("ai_ignoreplayers"):GetBool() then
+		self:Race()
+	else
+		self:Stop()
+	end
+	
+	-- Make their computing rate higher ONLY if they are in a race
+	if self.v.uvraceparticipant then
+		self:NextThink( CurTime() )
+		return true
+	end
+end
+
+function ENT:Initialize()
+	self:SetNoDraw(true)
+	self:SetMoveType(MOVETYPE_NONE)
+	self:SetModel(self.Modelname)
+	self:SetHealth(-1)
+	
+	self.moving = CurTime()
+	
+	timer.Simple(3, function()
+		if IsValid(self.v) then
+			if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 
+				self.v:VC_setRunningLights(true)
+			end
+		end
+	end)
+	
+	--Pick up a vehicle in the given sphere.
+	if self.vehicle then
+		local v = self.vehicle
+		if v.RacerVehicle then return end --If it's already a Racer Vehicle, don't pick it up.
+		if v.IsScar then --If it's a SCAR.
+			if not v:HasDriver() then --If driver's seat is empty.
+				self.v = v
+				v.RacerVehicle = self
+				v.HasDriver = function() return true end --SCAR script assumes there's a driver.
+				v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
+				v:StartCar()
+			end
+		elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
+			if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
+				self.v = v
+				v.RacerVehicle = self
+				v:SetActive(true)
+				v:StartEngine()
+				if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+					v:SetLightsEnabled(true)
+				end
+				if GetConVar("unitvehicle_autohealth"):GetBool() then
+					v:SetMaxHealth(math.huge)
+					v:SetCurHealth(math.huge)
+				end
+			end
+		elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+			if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
+				self.v = v
+				v.RacerVehicle = self
+				v:EnableEngine(true)
+				v:StartEngine(true)
+				if GetConVar("unitvehicle_autohealth"):GetBool() then
+					if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
+						v:VC_repairFull_Admin()
+						if !v:VC_hasGodMode() then
+							v:VC_setGodMode(true)
+						end
+					end
+				end
+			end
+		elseif v.IsGlideVehicle then --Glide
+			if not IsValid(v:GetDriver()) then
+				self.v = v
+				v.RacerVehicle = self
+				v:SetEngineState(2)
+				if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+					v:SetHeadlightState(1)
+				end
+			end
+		end
+	else
+		local distance = DetectionRange:GetFloat()
+		for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
+			if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
+			if v.RacerVehicle then continue end
+			if v:IsVehicle() then
+				if v.IsScar then --If it's a SCAR.
+					if not v:HasDriver() then --If driver's seat is empty.
+						self.v = v
+						v.RacerVehicle = self
+						v.HasDriver = function() return true end --SCAR script assumes there's a driver.
+						v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
+						v:StartCar()
+						break
+					end
+				elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
+					if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
+						self.v = v
+						v.RacerVehicle = self
+						v:SetActive(true)
+						v:StartEngine()
+						if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+							v:SetLightsEnabled(true)
+						end
+						if GetConVar("unitvehicle_autohealth"):GetBool() then
+							v:SetMaxHealth(math.huge)
+							v:SetCurHealth(math.huge)
+						end
+						break
+					end
+				elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+					if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
+						self.v = v
+						v.RacerVehicle = self
+						v:EnableEngine(true)
+						v:StartEngine(true)
+						if GetConVar("unitvehicle_autohealth"):GetBool() then
+							if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
+								v:VC_repairFull_Admin()
+								if !v:VC_hasGodMode() then
+									v:VC_setGodMode(true)
+								end
+							end
+						end
+						break
+					end
+				elseif v.IsGlideVehicle then --Glide
+					if not IsValid(v:GetDriver()) then
+						self.v = v
+						v.RacerVehicle = self
+						v:TurnOn()
+						if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+							v:SetHeadlightState(1)
+						end
+						break
+					end
+				end
+			end
+		end
+	end
+	
+	if not IsValid(self.v) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Racer Vehicle.
+	local e = EffectData()
+	e:SetEntity(self.v)
+	util.Effect("propspawn", e) --Perform a spawn effect.
+	self.v:EmitSound( "beams/beamstart5.wav" )
+	
+	if !self.v.racer and UVNames then
+		self.v.racer = UVNames.Racers[math.random(1, #UVNames.Racers)]
+		local joinmessage = "Racer AI (" .. self.v.racer .. ") has joined the game"
+		
+		net.Start( "UVRacerJoin" )
+		net.WriteString(joinmessage)
+		net.Broadcast()
+	end
+	
+	local pttable = {
+		--"EMP",
+		"ESF",
+		"Jammer",
+		"Shockwave",
+		"Spikestrip",
+		"Stunmine",
+		"Repair Kit",
+	}
+	
+	if RacerPursuitTech:GetBool() then
+		if not self.v.PursuitTech then
+			self.v.PursuitTech = {}
+			
+			for i=1, 2, 1 do
+				local selected_pt = pttable[math.random(#pttable)]
+				local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
+				local sel_k, sel_v
+				
+				for k,v in pairs(self.v.PursuitTech) do
+					if v.Tech == selected_pt then
+						sel_k, sel_v = k, v
+						self.v.PursuitTech[k] = nil
+						break
+					end
+				end
+				
+				local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
+				ammo_count = ammo_count > 0 and ammo_count or math.huge
+				
+				self.v.PursuitTech[i] = {
+					Tech = selected_pt,
+					Ammo = ammo_count,
+					Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
+					LastUsed = -math.huge,
+					Upgraded = false
+				}
+			end
+			
+			table.insert(uvrvwithpursuittech, self.v)
+			
+			self.v:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
+				if table.HasValue(uvrvwithpursuittech, car) then
+					table.RemoveByValue(uvrvwithpursuittech, car)
+				end
+			end)
+		end
+	end
+	
+	if !self.uvscripted then
+		if next(dvd.Waypoints) == nil then
+			PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned!" )
+		else
+			PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned! (DV Waypoints detected!)" )
+		end
+	end
+	
+	local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.
+	if not isvector(max) then min, max = self.v:GetModelBounds() end --If getting hit box bounds is failed, get model bounds instead.
+	if not isvector(max) then max = vector_up * math.random(80, 200) end --If even getting model bounds is failed, set a random value.
+	
+	local tr = util.TraceHull({start = self.v:GetPos() + vector_up * max.z, 
+	endpos = self.v:GetPos(), ignoreworld = true,
+	mins = Vector(-16, -16, -1), maxs = Vector(16, 16, 1)})
+	self.CollisionHeight = tr.HitPos.z - self.v:GetPos().z
+	if self.CollisionHeight < 10 then self.CollisionHeight = max.z end
+	self.v:DeleteOnRemove(self)
+	
+end
 else
 	function ENT:Initialize()
 		self:SetNoDraw(true)
