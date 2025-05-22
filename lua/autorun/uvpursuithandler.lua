@@ -2921,7 +2921,7 @@ else --HUD/Options
 			timer.Simple(0.1, function()
 				blip.alpha = 255
 				timer.Create( "flashingblip"..id, 0.05, 0, function()
-					if flashwhite and UVHUDDisplayPursuit and !blip.disabled then
+					if flashwhite and UVHUDDisplayPursuit or blip.disabled then
 						blip.color = Color( 255, 255, 255)
 						flashwhite = false
 					elseif created and UVHUDDisplayPursuit and !blip.disabled then
@@ -3008,7 +3008,7 @@ else --HUD/Options
 		if GMinimap then
 			local blip = GMinimap:FindBlipByID("UVBlip"..id)
 			if !blip then return end
-			blip.color = Color( 150, 0, 0)
+			blip.color = Color( 255, 255, 255)
 			local key = "disabled"
 			blip[key] = true
 		end
