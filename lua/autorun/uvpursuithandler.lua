@@ -27,8 +27,8 @@ local Colors = {
 	['White'] = Color(255, 255, 255),
 	['RacerTheme'] = Color(255, 221, 142, 107),
 	['RacerThemeShade'] = Color(166, 142, 85, 107),
-	['CopTheme'] = Color(148, 142, 255, 107),
-	['CopThemeShade'] = Color(93, 85, 166, 107)
+	['CopTheme'] = Color(61, 184, 255, 107),--Color(148, 142, 255, 107),
+	['CopThemeShade'] = Color(41, 149, 212, 107)--Color(93, 85, 166, 107)
 }
 
 Materials = {
@@ -3847,9 +3847,9 @@ else --HUD/Options
 
 			if driver and driver:IsPlayer() then
 				callsign = driver:GetName() .. "\n⛊"
-				-- if localPlayer == driver then
-				-- 	return
-				-- end
+				if localPlayer == driver then
+					return
+				end
 			end
 			
 			local pos = ent:GetPos()
