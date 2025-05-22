@@ -44,6 +44,10 @@ UVMaterials = {
 	['BACKGROUND_BIGGER'] = Material("hud/NFSMW_BACKGROUND_BIGGER.png"),
 	['RESULTCOP'] = Material("hud/(9)T_UI_PlayerCop_Large_Icon.png"),
 	['RESULTRACER'] = Material("hud/(9)(9)T_UI_PlayerRacer_Large_Icon.png"),
+	
+	['BACKGROUND_CARBON'] = Material("unitvehicles/hud/NFSC_GRADIENT.png"),
+	['BACKGROUND_CARBON_INVERTED'] = Material("unitvehicles/hud/NFSC_GRADIENT_INV.png"),
+	['ARROW_CARBON'] = Material("unitvehicles/hud/NFSC_ARROWRIGHT.png"),
 }
 
 function UVGetDriver(vehicle)
@@ -4656,7 +4660,7 @@ else --HUD/Options
 			panel:Help("#uv.settings.uistyle.title")
 			local uistyleracing, label = panel:ComboBox( "#uv.settings.uistyle.racing", "unitvehicle_hudtype_racing" )
 			uistyleracing:AddChoice( "Most Wanted", "mostwanted")
-			-- uistyleracing:AddChoice( "Carbon", "carbon")
+			uistyleracing:AddChoice( "Carbon", "carbon")
 			-- uistyleracing:AddChoice( "Underground", "underground")
 			-- uistyleracing:AddChoice( "Underground 2", "underground2")
 			-- uistyleracing:AddChoice( "Undercover", "undercover")

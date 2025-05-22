@@ -694,7 +694,8 @@ else
             local is_local_player = IsValid(driver) and driver == lPr
             local name = array.Name or "Racer"
             
-            local line = string.format("%d. %s", i, name)
+            -- local line = string.format("%d. %s", i, name)
+            local line = name
             
             if not is_local_player then
                 local racerCPs = array.Checkpoints or {}
@@ -1307,8 +1308,8 @@ else
 					DrawIcon( UVMaterials['CHECK'], w*0.815, h*0.18, .04, Color(255,255,255) ) -- Icon
 					draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 				end
+				-- Position Counter
 				if racer_count > 1 then
-					-- Position Counter
 					surface.SetDrawColor( 0, 0, 0, 200)
 					surface.DrawRect( w*0.72, h*0.1, w*0.075, h*0.105)
 					surface.SetDrawColor( 255, 255, 255, 255)
@@ -1318,23 +1319,77 @@ else
 					draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont5", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
 				end
 				
+				-- Racer List
+				local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
 				for i=1, racer_count, 1 do
-					-- Racer List
 					if racer_count == 1 then return end
 					local entry = string_array[i]
 					-- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
 					local racercount = i * w*0.0135
+					-- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
+					local text = alt and ("REPLACEME") or (entry[2])
 						
 					surface.SetDrawColor( 0, 0, 0, 200)
 					draw.NoTexture()
 					surface.DrawRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
 					
-					draw.DrawText( 
-						entry[2], "UVFont4",
+					draw.DrawText( -- Position
+						i, "UVFont4",
 						w*0.725,
 						(h*0.185) + racercount, 
 						entry[1],
 						TEXT_ALIGN_LEFT 
+					)
+					
+					draw.DrawText( -- Names
+						text, "UVFont4",
+						w*0.97,
+						(h*0.185) + racercount, 
+						entry[1],
+						TEXT_ALIGN_RIGHT 
+					)
+				end
+			elseif hudtype == "carbon" then
+				-- Timer
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				-- surface.SetDrawColor( 89, 255, 255, 200)
+				-- surface.DrawTexturedRect( w*0.7175, h*0.1, w*0.03, h*0.05)
+				DrawIcon( UVMaterials['CLOCK'], w*0.815, h*0.1225, .0625, Color(89, 255, 255) ) -- Icon
+				draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont5", w*0.97, h*0.1, Color( 89, 255, 255 ), TEXT_ALIGN_RIGHT )
+				
+				-- Lap & Checkpoint Counter
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON'])
+				surface.SetDrawColor( 255, 255, 255, 100)
+				surface.DrawTexturedRect( w*0.69, h*0.155, w*0.2, h*0.05)
+				local laptext = "<color=89,255,255>" .. my_array.Lap .. ":  </color>" .. UVHUDRaceInfo.Info.Laps
+				if UVHUDRaceInfo.Info.Laps > 1 then
+					draw.DrawText( "#uv.race.mw.lap", "UVFont5", w*0.875, h*0.155, Color( 255, 255, 255, 175), TEXT_ALIGN_RIGHT ) -- Lap Counter
+				else
+					draw.DrawText( "#uv.race.carbon.check", "UVFont5", w*0.875, h*0.155, Color( 255, 255, 255, 175), TEXT_ALIGN_RIGHT ) -- Checkpoint Text
+					laptext = "<color=89,255,255>" .. checkpoint_count .. ":  </color>" .. GetGlobalInt( "uvrace_checkpoints" )
+				end
+				markup.Parse("<font=UVFont5>" .. laptext):Draw(w*0.97, h*0.155, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
+
+				-- Racer List
+				local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+				for i=1, racer_count, 1 do
+					if racer_count == 1 then return end
+					local entry = string_array[i]
+					local racercount = i * w*0.0135
+					-- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
+					local text = alt and ("REPLACEME" .. "  " .. i) or (entry[2] .. "  " .. i)
+
+					-- This should only draw on LocalPlayer() but couldn't figure it out
+					surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_INVERTED'])
+					surface.SetDrawColor( 89, 255, 255, 100 )
+					surface.DrawTexturedRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
+
+					draw.DrawText( 
+						text, "UVFont4",
+						w*0.97,
+						(h*0.185) + racercount, 
+						entry[1],
+						TEXT_ALIGN_RIGHT 
 					)
 				end
 			elseif hudtype == "original" then
@@ -1379,7 +1434,7 @@ else
 					end
 					
 					draw.DrawText( 
-						entry[2], "UVFont4",
+						i .. ". " .. entry[2], "UVFont4",
 						10,
 						(h/racerpos) + i * ((racer_count > 5 and 20) or 28),
 						entry[1], TEXT_ALIGN_LEFT 
