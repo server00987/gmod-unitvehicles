@@ -7,6 +7,7 @@ local UVSoundSource
 local UVSoundLoop
 local UVSoundMiscSource
 local UVLoadedSounds
+local _last_backup_pulse_second = 0
 
 local showhud = GetConVar("cl_drawhud")
 
@@ -47,19 +48,19 @@ Materials = {
 
 function UVGetDriver(vehicle)
 	if !IsValid(vehicle) then return false end
-
+	
 	if vehicle.IsSimfphyscar or vehicle:GetClass() == "prop_vehicle_jeep" then
 		return vehicle:GetDriver()
 	elseif vehicle.IsGlideVehicle then
 		if not vehicle.seats or next(vehicle.seats) == nil then return false end
-
+		
 		local seat = vehicle.seats[1]
-
+		
 		if IsValid( seat ) then
-            return seat:GetDriver()
-        end
+			return seat:GetDriver()
+		end
 	end
-
+	
 	return false
 end
 
@@ -77,22 +78,22 @@ function UVSoundHeat(heatlevel)
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
-
+	
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-
+	
 	local theme = PursuitTheme:GetString()
 	local heat
-
+	
 	if PursuitThemePlayRandomHeat:GetBool() then
 		heat = "heat" .. math.random(1, 6)
 	else
 		heat = "heat" .. heatlevel
 	end
-
+	
 	local soundtable
-
+	
 	if UVHeatLevelIncrease then
 		UVPlayingHeat = false
 		soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/transition/*", "GAME")
@@ -104,7 +105,7 @@ function UVSoundHeat(heatlevel)
 	else
 		UVPlayingHeat = true
 		soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/" .. heat .. "/*", "GAME")
-
+		
 		-- Fallback to heat1 if the desired heat folder is missing or empty
 		if not soundtable or #soundtable == 0 then
 			soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/heat1/*", "GAME")
@@ -115,7 +116,7 @@ function UVSoundHeat(heatlevel)
 			UVPlaySound("uvpursuitmusic/" .. theme .. "/" .. heat .. "/" .. soundtable[math.random(1, #soundtable)], true)
 		end
 	end
-
+	
 	UVPlayingRace = false
 	-- UVPlayingHeat is handled above
 	UVPlayingBusting = false
@@ -128,18 +129,18 @@ function UVSoundBusting()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingBusting or UVSoundDelayed then return end
-
+	
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-
+	
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busting/*", "GAME")
-
+	
 	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
-
+	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/busting/" .. soundtable[math.random(1, #soundtable)], true)
-
+	
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = true
@@ -152,18 +153,18 @@ function UVSoundCooldown()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingCooldown or UVSoundDelayed then return end
-
+	
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-
+	
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/cooldown/*", "GAME")
-
+	
 	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
-
+	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/cooldown/" .. soundtable[math.random(1, #soundtable)], true)
-
+	
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -174,24 +175,24 @@ end
 
 function UVSoundBusted()
 	if UVPlayingBusted or UVSoundDelayed then return end
-
+	
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-
+	
 	if UVSoundLoop then
 		UVStopSound()
 		UVSoundLoop:Stop()
 		UVSoundLoop = nil
 	end
-
+	
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busted/*", "GAME")
-
+	
 	if not soundtable or #soundtable == 0 then return end
-
+	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/busted/" .. soundtable[math.random(1, #soundtable)], false, true)
-
+	
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -204,23 +205,23 @@ function UVSoundEscaped()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingEscaped or UVSoundDelayed then return end
-
+	
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-
+	
 	if UVSoundLoop then
 		UVSoundLoop:Stop()
 		UVSoundLoop = nil
 	end
-
+	
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/escaped/*", "GAME")
-
+	
 	if not soundtable or #soundtable == 0 then return end
-
+	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/escaped/" .. soundtable[math.random(1, #soundtable)], false)
-
+	
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -407,7 +408,7 @@ if SERVER then
 	
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
-
+	
 	UVUCommanderEvade = CreateConVar("unitvehicle_unit_onecommanderevading", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If enabled, will allow racers to escape while commander is on scene.")
 	UVUOneCommander = CreateConVar("unitvehicle_unit_onecommander", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUOneCommanderHealth = CreateConVar("unitvehicle_unit_onecommanderhealth", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -1129,7 +1130,7 @@ if SERVER then
 				end
 			end
 		end
-
+		
 		local player_unit_active = false
 		
 		--Player-controlled Unit Vehicles
@@ -1139,7 +1140,7 @@ if SERVER then
 				if !table.HasValue(uvunitvehicles, car) and car.UnitVehicle then
 					table.insert(uvunitvehicles, car)
 				end
-
+				
 				if IsValid(car) and !car.wrecked and
 				(car:Health() <= 0 and car:GetClass() == "prop_vehicle_jeep" or --No health 
 				car.uvclasstospawnon != "npc_uvcommander" and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and car.rammed --[[or car:GetVelocity():LengthSqr() < 10000)]] or --Flipped
@@ -1161,9 +1162,9 @@ if SERVER then
 						net.WriteTable(car.PursuitTech)
 						net.Send(driver)
 					end
-
+					
 					player_unit_active = true
-
+					
 					if !table.HasValue(uvplayerunittableplayers, driver) then
 						table.insert(uvplayerunittableplayers, driver)
 						driver.uvplayerlastvehicle = car
@@ -1283,7 +1284,7 @@ if SERVER then
 				end
 			end
 		end
-
+		
 		UVUnitsHavePlayers = player_unit_active
 		
 		if next(ents.FindByClass("npc_uv*")) != nil then
@@ -3086,27 +3087,27 @@ else --HUD/Options
 			
 			if UVHUDCopMode and next(UVHUDWantedSuspects) ~= nil then
 				local ply = LocalPlayer()
-
+				
 				UVClosestSuspect = nil
 				UVHUDDisplayBusting = false
-
+				
 				local closestDistance = math.huge
 				
 				for _, suspect in pairs(UVHUDWantedSuspects) do
 					local dist = ply:GetPos():DistToSqr(suspect:GetPos())
-
+					
 					if dist < 250000 and dist < closestDistance then
 						closestDistance = dist
 						UVClosestSuspect = suspect
 					end
-
+					
 				end
-
+				
 				if UVClosestSuspect then
 					if UVClosestSuspect.beingbusted then
 						UVHUDDisplayBusting = true
 						UVBustingProgress = UVClosestSuspect.uvbustingprogress
-
+						
 						local blink = 255 * math.abs(math.sin(RealTime() * 8))
 						UVBustedColor = Color(255, blink, blink)
 					end
@@ -3383,13 +3384,32 @@ else --HUD/Options
 							utype = UVHUDWantedSuspectsNumber
 							uloc = "uv.chase.suspects"
 						end
+						
+						--local color = Color(255,255,255)
+						if not UVBackupColor then UVBackupColor = Color(255,255,255) end
+						local num = UVBackupTimerSeconds
+						
 						if !UVHUDDisplayBackupTimer then
 							lbtext = string.format( lang(uloc), utype)
 						else
+							if num then
+								if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
+									_last_backup_pulse_second = math.floor(num)
+									
+									hook.Remove("Think", "UVBackupColorPulse")								
+									UVBackupColor = Color(255,255,0)
+									
+									hook.Add("Think", "UVBackupColorPulse", function()
+										UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
+										if UVBackupColor.b >= 255 then hook.Remove("Think", "UVBackupColorPulse") end
+									end)
+								end
+							end
+							
 							lbtext = string.format( lang("uv.chase.backupin"), UVBackupTimer)
 						end
 						
-						draw.DrawText( lbtext, "UVFont5UI-BottomBar", w*0.5, bottomy3*1.001, Color( 255, 255, 255), TEXT_ALIGN_CENTER )			
+						draw.DrawText( lbtext, "UVFont5UI-BottomBar", w*0.5, bottomy3*1.001, UVBackupColor, TEXT_ALIGN_CENTER )			
 					else
 						-- Evade Box, All BG (Moved to inner if clauses)
 						
@@ -3844,10 +3864,25 @@ else --HUD/Options
 			
 			local callsign = lang("uv.unit.commander") .. "\n⛊"
 			local driver = UVGetDriver(ent)
-
+			
 			if driver and driver:IsPlayer() then
 				callsign = driver:GetName() .. "\n⛊"
 				if localPlayer == driver then
+					if not ent.lplayernotified then
+						ent.lplayernotified = true
+						if Glide then
+							Glide.Notify( {
+								text = "<color=61, 183, 255>" .. language.GetPhrase("uv.unit.commander.notification"),
+								icon = "hud/MINIMAP_ICON_EVENT_RIVAL.png",
+								lifetime = 5
+							} )
+						else
+							chat.AddText(
+							Color(0, 81, 161), "[Unit Vehicles] ",
+							Color(61, 183, 255),
+							language.GetPhrase("uv.unit.commander.notification"))
+						end
+					end
 					return
 				end
 			end
@@ -3983,7 +4018,7 @@ else --HUD/Options
 		local bounty = UVBounty
 		local tags = UVTags
 		local wrecks = UVWrecks
-
+		
 		local ResultPanel = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
 		
@@ -4003,22 +4038,22 @@ else --HUD/Options
 		
 		local timetotal = 10
 		local timestart = CurTime()
-
+		
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			 -- Main black BG
+			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			surface.SetDrawColor( 255, 183, 61, 50 )
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
-			 -- Upper Results Tab
+			-- Upper Results Tab
 			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
 			
-			 -- Next Lower, results subtext
+			-- Next Lower, results subtext
 			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 255, 183, 61, 25 )
@@ -4072,19 +4107,19 @@ else --HUD/Options
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
 			end
-
+			
 		end
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
 			ResultPanel:Close()
 		end
-
+		
 		local wasJumping = false
 		hook.Add("Think", "CheckJumpKeyForDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
-
+			
 			if ply:KeyDown(IN_JUMP) then
 				if not wasJumping then
 					wasJumping = true
@@ -4097,12 +4132,12 @@ else --HUD/Options
 				wasJumping = false
 			end
 		end)
-
+		
 		timer.Simple(5, function()
 			UVHUDDisplayBusting = false
 			UVHUDDisplayNotification = false
 		end)
-
+		
 	end)
 	
 	net.Receive("UVHUDEscapedDebrief", function()
@@ -4120,7 +4155,7 @@ else --HUD/Options
 		local bounty = UVBounty
 		local tags = UVTags
 		local wrecks = UVWrecks
-
+		
 		local ResultPanel = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
 		
@@ -4140,22 +4175,22 @@ else --HUD/Options
 		
 		local timetotal = 10
 		local timestart = CurTime()
-
+		
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			 -- Main black BG
+			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			surface.SetDrawColor( 255, 183, 61, 50 )
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
-			 -- Upper Results Tab
+			-- Upper Results Tab
 			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
 			
-			 -- Next Lower, results subtext
+			-- Next Lower, results subtext
 			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 255, 183, 61, 25 )
@@ -4209,19 +4244,19 @@ else --HUD/Options
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
 			end
-
+			
 		end
-
+		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
 			ResultPanel:Close()
 		end
-
+		
 		local wasJumping = false
 		hook.Add("Think", "CheckJumpKeyForDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
-
+			
 			if ply:KeyDown(IN_JUMP) then
 				if not wasJumping then
 					wasJumping = true
@@ -4250,7 +4285,7 @@ else --HUD/Options
 		local tags = UVTags
 		local wrecks = UVWrecks
 		local suspects = UVHUDWantedSuspectsNumber
-
+		
 		local ResultPanel = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
 		
@@ -4270,22 +4305,22 @@ else --HUD/Options
 		
 		local timetotal = 10
 		local timestart = CurTime()
-
+		
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			 -- Main black BG
+			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			surface.SetDrawColor( 61, 183, 255, 50 )
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
-			 -- Upper Results Tab
+			-- Upper Results Tab
 			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
 			
-			 -- Next Lower, results subtext
+			-- Next Lower, results subtext
 			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 61, 183, 255, 25 )
@@ -4339,19 +4374,19 @@ else --HUD/Options
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
 			end
-
+			
 		end
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
 			ResultPanel:Close()
 		end
-
+		
 		local wasJumping = false
 		hook.Add("Think", "CheckJumpKeyForDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
-
+			
 			if ply:KeyDown(IN_JUMP) then
 				if not wasJumping then
 					wasJumping = true
@@ -4380,7 +4415,7 @@ else --HUD/Options
 		local tags = UVTags
 		local wrecks = UVWrecks
 		local suspects = UVHUDWantedSuspectsNumber
-
+		
 		local ResultPanel = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
 		
@@ -4400,22 +4435,22 @@ else --HUD/Options
 		
 		local timetotal = 10
 		local timestart = CurTime()
-
+		
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			 -- Main black BG
+			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			surface.SetDrawColor( 61, 183, 255, 50 )
 			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
 			
-			 -- Upper Results Tab
+			-- Upper Results Tab
 			DrawIcon( Materials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
 			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
 			
-			 -- Next Lower, results subtext
+			-- Next Lower, results subtext
 			surface.SetMaterial(Materials['BACKGROUND_BIGGER'])
 			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
 			surface.SetDrawColor( 61, 183, 255, 25 )
@@ -4469,19 +4504,19 @@ else --HUD/Options
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
 			end
-
+			
 		end
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
 			ResultPanel:Close()
 		end
-
+		
 		local wasJumping = false
 		hook.Add("Think", "CheckJumpKeyForDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
-
+			
 			if ply:KeyDown(IN_JUMP) then
 				if not wasJumping then
 					wasJumping = true
@@ -4562,7 +4597,7 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
-
+		
 		local ResultPanel = vgui.Create("DFrame")
 		local Yes = vgui.Create("DButton")
 		local No = vgui.Create("DButton")
@@ -4773,5 +4808,4 @@ else --HUD/Options
 			
 		end)
 	end)
-	
 end
