@@ -1178,6 +1178,7 @@ else
         local w = ScrW()
         local h = ScrH()
 		local hudyes = showhud:GetBool()
+		local hudtype = GetConVar("unitvehicle_hudtype_racing"):GetString()
 
         if UVHUDNotification and hudyes then
             draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -1289,53 +1290,104 @@ else
     
         local lang = language.GetPhrase
 		if hudyes then
-			-- Timer
-			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.DrawRect( w*0.8, h*0.1, w*0.175, h*0.05)
-			DrawIcon( Materials['CLOCK'], w*0.815, h*0.1225, .05, Color(255,255,255) ) -- Icon
-			draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont5", w*0.97, h*0.1, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			
-			-- Lap & Checkpoint Counter
-			surface.SetDrawColor( 0, 0, 0, 200)
-			surface.DrawRect( w*0.8, h*0.155, w*0.175, h*0.05)
-			if UVHUDRaceInfo.Info.Laps > 1 then
-				draw.DrawText( "#uv.race.lap", "UVFont5", w*0.805, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_LEFT ) -- Lap Counter
-				draw.DrawText( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps, "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT ) -- Lap Counter
-			else
-				DrawIcon( Materials['CHECK'], w*0.815, h*0.18, .04, Color(255,255,255) ) -- Icon
-				draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			end
-			if racer_count > 1 then
-				-- Position Counter
+			if hudtype == "mostwanted" then
+				-- Timer
 				surface.SetDrawColor( 0, 0, 0, 200)
-				surface.DrawRect( w*0.72, h*0.1, w*0.075, h*0.105)
-				surface.SetDrawColor( 255, 255, 255, 255)
-				surface.DrawRect( w*0.72, h*0.15, w*0.075, h*0.005) -- Divider
+				surface.DrawRect( w*0.8, h*0.1, w*0.175, h*0.05)
+				DrawIcon( UVMaterials['CLOCK'], w*0.815, h*0.1225, .05, Color(255,255,255) ) -- Icon
+				draw.DrawText( UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ), "UVFont5", w*0.97, h*0.1, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 				
-				draw.DrawText( UVHUDRaceCurrentPos, "UVFont5", w*0.755, h*0.1, LBColors.LocalPlayer, TEXT_ALIGN_CENTER ) -- Upper, Your Position
-				draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont5", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
-			end
-		end
-
-        for i=1, racer_count, 1 do
-			if racer_count == 1 then return end
-            local entry = string_array[i]
-			-- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
-			local racercount = i * w*0.0135
-			if hudyes then
+				-- Lap & Checkpoint Counter
+				surface.SetDrawColor( 0, 0, 0, 200)
+				surface.DrawRect( w*0.8, h*0.155, w*0.175, h*0.05)
+				if UVHUDRaceInfo.Info.Laps > 1 then
+					draw.DrawText( "#uv.race.mw.lap", "UVFont5", w*0.805, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_LEFT ) -- Lap Counter
+					draw.DrawText( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps, "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT ) -- Lap Counter
+				else
+					DrawIcon( UVMaterials['CHECK'], w*0.815, h*0.18, .04, Color(255,255,255) ) -- Icon
+					draw.DrawText( checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" ), "UVFont5", w*0.97, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+				end
+				if racer_count > 1 then
+					-- Position Counter
+					surface.SetDrawColor( 0, 0, 0, 200)
+					surface.DrawRect( w*0.72, h*0.1, w*0.075, h*0.105)
+					surface.SetDrawColor( 255, 255, 255, 255)
+					surface.DrawRect( w*0.72, h*0.15, w*0.075, h*0.005) -- Divider
+					
+					draw.DrawText( UVHUDRaceCurrentPos, "UVFont5", w*0.755, h*0.1, LBColors.LocalPlayer, TEXT_ALIGN_CENTER ) -- Upper, Your Position
+					draw.DrawText( UVHUDRaceCurrentParticipants, "UVFont5", w*0.755, h*0.155, Color( 255, 255, 255), TEXT_ALIGN_CENTER ) -- Lower, Total Positions
+				end
 				
+				for i=1, racer_count, 1 do
+					-- Racer List
+					if racer_count == 1 then return end
+					local entry = string_array[i]
+					-- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+					local racercount = i * w*0.0135
+						
+					surface.SetDrawColor( 0, 0, 0, 200)
+					draw.NoTexture()
+					surface.DrawRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
+					
+					draw.DrawText( 
+						entry[2], "UVFont4",
+						w*0.725,
+						(h*0.185) + racercount, 
+						entry[1],
+						TEXT_ALIGN_LEFT 
+					)
+				end
+			elseif hudtype == "original" then
+				local element1 = {}
+				
+				if UVHUDRaceInfo.Info.Laps > 1 then
+					element1 = {
+						{ x = 0, y = h/7 },
+						{ x = w*0.35, y = h/7 },
+						{ x = w*0.25, y = h/3 },
+						{ x = 0, y = h/3 },
+					}
+				else
+					element1 = {
+						{ x = 0, y = h/7 },
+						{ x = w*0.35, y = h/7 },
+						{ x = w*0.25, y = h/3.5 },
+						{ x = 0, y = h/3.5 },
+					}
+				end
+				-- HUD Background
 				surface.SetDrawColor( 0, 0, 0, 200)
 				draw.NoTexture()
-				surface.DrawRect( w*0.72, h*0.185 + racercount, w*0.255, h*0.025)
+				surface.DrawPoly( element1 )
 				
+				-- All HUD Text (I mean, it *works*...)
 				draw.DrawText( 
-					entry[2], "UVFont4",
-					w*0.725,
-					(h*0.185) + racercount, 
-					entry[1],
-					TEXT_ALIGN_LEFT 
-				)
+				lang("uv.race.orig.time") .. UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 ) .. "\n" ..
+				lang("uv.race.orig.check") .. checkpoint_count .. "/" .. GetGlobalInt( "uvrace_checkpoints" )  .. "\n" ..
+				(UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.orig.lap") .. my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") ..
+				lang("uv.race.orig.pos") .. UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,
+				"UVFont", 10, h/7, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT 
+			)
+			-- Racer List
+				for i=1, racer_count, 1 do
+					local entry = string_array[i]
+					-- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+					local racerpos = 3.75
+        
+					if UVHUDRaceInfo.Info.Laps > 1 then
+						racerpos = 3.25
+					end
+					
+					draw.DrawText( 
+						entry[2], "UVFont4",
+						10,
+						(h/racerpos) + i * ((racer_count > 5 and 20) or 28),
+						entry[1], TEXT_ALIGN_LEFT 
+					)
+				end
+			else
+
 			end
-        end
+		end
     end)
 end
