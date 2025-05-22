@@ -59,39 +59,47 @@ function UVSoundHeat(heatlevel)
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
+
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
+
 	local theme = PursuitTheme:GetString()
 	local heat
+
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heat = "heat"..math.random(1, 6)
+		heat = "heat" .. math.random(1, 6)
 	else
-		heat = "heat"..heatlevel
+		heat = "heat" .. heatlevel
 	end
+
 	local soundtable
-	
+
 	if UVHeatLevelIncrease then
 		UVPlayingHeat = false
-		soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/transition/*", "GAME" )
-		if soundtable != nil then 
-			UVPlaySound("uvpursuitmusic/"..theme.."/transition/"..soundtable[math.random(1, #soundtable)], false)
+		soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/transition/*", "GAME")
+		
+		-- Only play if folder exists and has sound files
+		if soundtable and #soundtable > 0 then
+			UVPlaySound("uvpursuitmusic/" .. theme .. "/transition/" .. soundtable[math.random(1, #soundtable)], false)
 		end
 	else
 		UVPlayingHeat = true
-		soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/"..heat.."/*", "GAME" )
-		if soundtable == nil then
-			soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/heat1/*", "GAME" )
-			if soundtable != nil then 
-				UVPlaySound("uvpursuitmusic/"..theme.."/heat1/"..soundtable[math.random(1, #soundtable)], true)
+		soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/" .. heat .. "/*", "GAME")
+
+		-- Fallback to heat1 if the desired heat folder is missing or empty
+		if not soundtable or #soundtable == 0 then
+			soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/heat1/*", "GAME")
+			if soundtable and #soundtable > 0 then
+				UVPlaySound("uvpursuitmusic/" .. theme .. "/heat1/" .. soundtable[math.random(1, #soundtable)], true)
 			end
 		else
-			UVPlaySound("uvpursuitmusic/"..theme.."/"..heat.."/"..soundtable[math.random(1, #soundtable)], true)
+			UVPlaySound("uvpursuitmusic/" .. theme .. "/" .. heat .. "/" .. soundtable[math.random(1, #soundtable)], true)
 		end
 	end
-	
+
 	UVPlayingRace = false
-	--UVPlayingHeat = true
+	-- UVPlayingHeat is handled above
 	UVPlayingBusting = false
 	UVPlayingCooldown = false
 	UVPlayingBusted = false
@@ -102,14 +110,18 @@ function UVSoundBusting()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingBusting or UVSoundDelayed then return end
+
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
+
 	local theme = PursuitTheme:GetString()
-	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/busting/*", "GAME" )
-	if soundtable != nil then
-		UVPlaySound("uvpursuitmusic/"..theme.."/busting/"..soundtable[math.random(1, #soundtable)], true)
-	end
+	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busting/*", "GAME")
+
+	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
+
+	UVPlaySound("uvpursuitmusic/" .. theme .. "/busting/" .. soundtable[math.random(1, #soundtable)], true)
+
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = true
@@ -122,14 +134,18 @@ function UVSoundCooldown()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingCooldown or UVSoundDelayed then return end
+
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
+
 	local theme = PursuitTheme:GetString()
-	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/cooldown/*", "GAME" )
-	if soundtable != nil then
-		UVPlaySound("uvpursuitmusic/"..theme.."/cooldown/"..soundtable[math.random(1, #soundtable)], true)
-	end
+	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/cooldown/*", "GAME")
+
+	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
+
+	UVPlaySound("uvpursuitmusic/" .. theme .. "/cooldown/" .. soundtable[math.random(1, #soundtable)], true)
+
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -140,14 +156,24 @@ end
 
 function UVSoundBusted()
 	if UVPlayingBusted or UVSoundDelayed then return end
+
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
-	local theme = PursuitTheme:GetString()
-	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/busted/*", "GAME" )
-	if soundtable != nil then
-		UVPlaySound("uvpursuitmusic/"..theme.."/busted/"..soundtable[math.random(1, #soundtable)], false, true)
+
+	if UVSoundLoop then
+		UVStopSound()
+		UVSoundLoop:Stop()
+		UVSoundLoop = nil
 	end
+
+	local theme = PursuitTheme:GetString()
+	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busted/*", "GAME")
+
+	if not soundtable or #soundtable == 0 then return end
+
+	UVPlaySound("uvpursuitmusic/" .. theme .. "/busted/" .. soundtable[math.random(1, #soundtable)], false, true)
+
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -160,18 +186,23 @@ function UVSoundEscaped()
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingEscaped or UVSoundDelayed then return end
+
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
+
 	if UVSoundLoop then
 		UVSoundLoop:Stop()
 		UVSoundLoop = nil
 	end
+
 	local theme = PursuitTheme:GetString()
-	local soundtable = file.Find( "sound/uvpursuitmusic/"..theme.."/escaped/*", "GAME" )
-	if soundtable != nil then
-		UVPlaySound("uvpursuitmusic/"..theme.."/escaped/"..soundtable[math.random(1, #soundtable)], false)
-	end
+	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/escaped/*", "GAME")
+
+	if not soundtable or #soundtable == 0 then return end
+
+	UVPlaySound("uvpursuitmusic/" .. theme .. "/escaped/" .. soundtable[math.random(1, #soundtable)], false)
+
 	UVPlayingRace = false
 	UVPlayingHeat = false
 	UVPlayingBusting = false
@@ -358,6 +389,8 @@ if SERVER then
 	
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+
+	UVUCommanderEvade = CreateConVar("unitvehicle_unit_onecommanderevading", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If enabled, will allow racers to escape while commander is on scene.")
 	UVUOneCommander = CreateConVar("unitvehicle_unit_onecommander", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVUOneCommanderHealth = CreateConVar("unitvehicle_unit_onecommanderhealth", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	
@@ -1395,7 +1428,7 @@ if SERVER then
 		local ltimeout = (uvcooldowntimer+5)
 		
 		if UVHUDPursuit then
-			if #uvunitschasing <= 0 then
+			if #uvunitschasing <= 0 and not ((not UVUCommanderEvade:GetBool()) and uvonecommanderactive) then
 				if !uvevadingprogress or uvevadingprogress == 0 then
 					uvevadingprogress = CurTime()
 				end
@@ -1539,7 +1572,7 @@ if SERVER then
 		end
 		
 		--Never evade option
-		if NeverEvade:GetBool() and uvtargeting then
+		if (NeverEvade:GetBool() and uvtargeting) or (((not UVUCommanderEvade:GetBool()) and uvonecommanderactive) and not uvenemyescaping) then
 			uvlosing = CurTime()
 		end
 		
@@ -3100,7 +3133,7 @@ else --HUD/Options
 								healthcolor = Color( 255, 255, 255)
 							end
 						end
-						ResourceText = "⛊\n∞"
+						ResourceText = "⛊"
 						local element3 = {
 							{ x = w/3, y = 0 },
 							{ x = w/3+12+w/3, y = 0 },
@@ -3465,7 +3498,7 @@ else --HUD/Options
 				-- end
 			end
 			
-			if !UVHUDDisplayBusting and !UVHUDDisplayCooldown then
+			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
 				UVSoundHeat( UVHeatLevel )
 			end
 			-- elseif not UVPlayingRace then
@@ -3856,7 +3889,8 @@ else --HUD/Options
 		
 		if IsValid(ent) then
 			if !UVHUDDisplayPursuit then return end
-			if UVHUDCopMode and (UVHUDDisplayCooldown or tonumber(UVUnitsChasing) <= 0 or !ent.inunitview) then return end
+			-- if UVHUDCopMode and (UVHUDDisplayCooldown or tonumber(UVUnitsChasing) <= 0 or !ent.inunitview) and not UVOneCommanderActive then return end
+			if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading")) and UVOneCommanderActive)) then return end
 			
 			local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
 			local enemydriver = ent:GetDriver()

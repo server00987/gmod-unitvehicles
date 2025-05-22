@@ -283,8 +283,8 @@ if SERVER then
 					end
 				end
 
-				local target1 = target:GetPos1() * Vector(1,1,1)
-				local target2 = target:GetPos2() * Vector(1,1,1)
+				local target1 = target:GetPos1()
+				local target2 = target:GetPos2()
 
 				local size = (target2 - target1):LengthSqr()
 
@@ -356,9 +356,9 @@ if SERVER then
 		
 		self:FindRace()
 		
-		if next(dvd.Waypoints) == nil then
-			return
-		end
+		-- if next(dvd.Waypoints) == nil then
+		-- 	return
+		-- end
 		
 		if self.PatrolWaypoint then
 			

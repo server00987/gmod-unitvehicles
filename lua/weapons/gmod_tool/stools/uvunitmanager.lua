@@ -23,6 +23,7 @@ local helicopters = {}
 
 TOOL.ClientConVar["vehiclebase"] = 1
 TOOL.ClientConVar["onecommander"] = 1
+TOOL.ClientConVar["onecommanderevading"] = 0
 TOOL.ClientConVar["onecommanderhealth"] = 5000
 TOOL.ClientConVar["helicoptermodel"] = 1
 TOOL.ClientConVar["helicopterbarrels"] = 1
@@ -845,6 +846,7 @@ if CLIENT then
 			convar_table['unitvehicle_unit_vehiclebase'] = GetConVar('uvunitmanager_vehiclebase'):GetInt()
 			convar_table['unitvehicle_unit_onecommander'] = GetConVar('uvunitmanager_onecommander'):GetInt()
 			convar_table['unitvehicle_unit_onecommanderhealth'] = GetConVar('uvunitmanager_onecommanderhealth'):GetInt()
+			convar_table['unitvehicle_unit_onecommanderevading'] = GetConVar('uvunitmanager_onecommanderevading'):GetInt()
 
 			convar_table['unitvehicle_unit_pursuittech'] = GetConVar('uvunitmanager_pursuittech'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_esf'] = GetConVar('uvunitmanager_pursuittech_esf'):GetInt()
@@ -907,6 +909,7 @@ if CLIENT then
 			RunConsoleCommand("unitvehicle_unit_pursuittech_repairkit", GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_onecommander", GetConVar("uvunitmanager_onecommander"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_onecommanderhealth", GetConVar("uvunitmanager_onecommanderhealth"):GetInt())
+			RunConsoleCommand("unitvehicle_unit_onecommanderevading", GetConVar("uvunitmanager_onecommanderevading"):GetInt())
 			RunConsoleCommand("unitvehicle_unit_helicoptermodel", GetConVar("uvunitmanager_helicoptermodel"):GetString())
 
 			RunConsoleCommand("unitvehicle_unit_bountypatrol", GetConVar("uvunitmanager_bountypatrol"):GetString())
@@ -1242,6 +1245,13 @@ if CLIENT then
 		onecommander:SetTooltip("#tool.uvunitmanager.settings.commander.solo.desc")
 		onecommander:SetValue(GetConVar("uvunitmanager_onecommander"):GetInt())
 		CPanel:AddItem(onecommander)
+
+		local onecommanderevade = vgui.Create("DCheckBoxLabel")
+		onecommanderevade:SetText("#tool.uvunitmanager.settings.commander.evading")
+		onecommanderevade:SetConVar("uvunitmanager_onecommanderevading")
+		onecommanderevade:SetTooltip("#tool.uvunitmanager.settings.commander.evading.desc")
+		onecommanderevade:SetValue(GetConVar("uvunitmanager_onecommanderevading"):GetInt())
+		CPanel:AddItem(onecommanderevade)
 
 		local onecommanderhealth = vgui.Create("DNumSlider")
 		onecommanderhealth:SetText("#tool.uvunitmanager.settings.commander.health")
