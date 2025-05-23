@@ -579,6 +579,594 @@ UV_UI = {
                 end
             end
         },
+        ["prostreet"] = {
+            main = function(...)
+                local w = ScrW()
+                local h = ScrH()
+
+                local my_vehicle = select(1, ...)
+                local my_array = select(2, ...)
+                local string_array = select(3, ...)
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                local checkpoint_count = #my_array["Checkpoints"]
+				local lang = language.GetPhrase
+
+                ------------------------------------
+
+                -- Timer
+                surface.SetDrawColor(0, 0, 0, 200)
+                surface.DrawRect(w * 0.425, h * 0.075, w * 0.15, h * 0.05)
+				
+                    draw.DrawText( -- Shadow
+                        "#uv.race.hud.time.ps",
+                        "UVFont5",
+                        w * 0.5 + 2.5,
+                        h * 0.035 + 2.5,
+                        Color(0, 0, 0),
+                        TEXT_ALIGN_CENTER
+                    )
+				
+                    draw.DrawText(
+                        "#uv.race.hud.time.ps",
+                        "UVFont5",
+                        w * 0.5,
+                        h * 0.035,
+                        Color(255, 255, 255, 150),
+                        TEXT_ALIGN_CENTER
+                    )
+
+                draw.DrawText(
+                    UVDisplayTimeRace((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+                    "UVFont5",
+                    w * 0.5,
+                    h * 0.0775,
+                    Color(255, 255, 255),
+                    TEXT_ALIGN_CENTER
+                )
+
+                -- Lap & Checkpoint Counter
+                -- surface.SetDrawColor(0, 0, 0, 200)
+                -- surface.DrawRect(w * 0.8, h * 0.155, w * 0.175, h * 0.05)
+
+                if UVHUDRaceInfo.Info.Laps > 1 then
+                    draw.DrawText( -- Shadow
+                        "#uv.race.hud.lap.ps",
+                        "UVFont5",
+                        w * 0.9 + 2.5,
+                        h * 0.075 + 2.5,
+                        Color(0, 0, 0),
+                        TEXT_ALIGN_RIGHT
+                    )
+                    draw.DrawText(
+                        "#uv.race.hud.lap.ps",
+                        "UVFont5",
+                        w * 0.9,
+                        h * 0.075,
+                        Color(255, 255, 255, 150),
+                        TEXT_ALIGN_RIGHT
+                    )
+					
+                    draw.DrawText(
+                        my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,
+                        "UVFont5",
+                        w * 0.97 + 2.5,
+                        h * 0.075 + 2.5,
+                        Color(0, 0, 0),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Lap Counter
+                    draw.DrawText(
+                        my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,
+                        "UVFont5",
+                        w * 0.97,
+                        h * 0.075,
+                        Color(200,255,100),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Lap Counter
+                else
+                    draw.DrawText( -- Shadow
+                        "#uv.race.hud.complete.ps",
+                        "UVFont5UI",
+                        w * 0.9 + 2.5,
+                        h * 0.075 + 2.5,
+                        Color(0, 0, 0),
+                        TEXT_ALIGN_RIGHT
+                    )
+                    draw.DrawText(
+                        "#uv.race.hud.complete.ps",
+                        "UVFont5UI",
+                        w * 0.9,
+                        h * 0.075,
+                        Color(255, 255, 255, 150),
+                        TEXT_ALIGN_RIGHT
+                    )
+					
+                    draw.DrawText( -- Shadow
+                        math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%",
+                        "UVFont5",
+                        w * 0.97 + 2.5,
+                        h * 0.075 + 2.5,
+                        Color(0, 0, 0),
+                        TEXT_ALIGN_RIGHT
+                    )
+                    draw.DrawText(
+                        math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%",
+                        "UVFont5",
+                        w * 0.97,
+                        h * 0.075,
+                        Color(200,255,100),
+                        TEXT_ALIGN_RIGHT
+                    )
+                end
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                -- Racer List
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
+				local boxyes = false
+                for i = 1, racer_count, 1 do
+                    --if racer_count == 1 then return end
+                    local entry = string_array[i]
+
+                    local racer_name = entry[1]
+                    local is_local_player = entry[2]
+                    local mode = entry[3]
+                    local diff = entry[4]
+                    local racercount = i * w * 0.0135
+                    local racercountbox = i * w * 0.0135 * racer_count
+
+                    local Strings = {
+                        ["Time"] = "%s",
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
+                    }
+
+                    local status_text = "-----"
+
+                    if entry[3] then
+                        local status_string = Strings[entry[3]]
+
+                        if status_string then
+                            local args = {}
+
+                            if entry[4] then
+                                local num = tonumber(entry[4])
+                                num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+
+                                table.insert(args, num)
+                            end
+
+                            status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                        end
+                    end
+
+                    local color = nil
+
+                    if is_local_player then
+                        color = Color(200, 255, 100)
+                    elseif entry[3] == "Disqualified" or entry[3] == "Busted" then
+                        color = Colors.MW_Disqualified
+                    else
+                        color = Colors.MW_Others
+                    end
+
+                    local text = alt and (status_text) or (racer_name)
+
+					if !boxyes then
+						surface.SetDrawColor(0, 0, 0, 200)
+						draw.NoTexture()
+						surface.DrawRect(w * 0.025, h * 0.1, w * 0.15, h * 0.04 + racercountbox)
+						boxyes = true
+					end
+
+                    draw.DrawText(i .. "      " .. text, "UVFont4", w * 0.0275, (h * 0.1) + racercount, color, TEXT_ALIGN_LEFT)
+                end
+            end
+        },
+        ["underground"] = {
+            main = function(...)
+                local w = ScrW()
+                local h = ScrH()
+
+                local my_vehicle = select(1, ...)
+                local my_array = select(2, ...)
+                local string_array = select(3, ...)
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                local checkpoint_count = #my_array["Checkpoints"]
+				local lang = language.GetPhrase
+
+                ------------------------------------
+
+                -- Timer
+                surface.SetDrawColor(0, 0, 0, 200)
+                surface.DrawRect(w * 0.02, h * 0.175, w * 0.175, h * 0.0225)
+                draw.DrawText(
+                    "#uv.race.orig.time",
+                    "UVFont4",
+                    w * 0.022,
+                    h * 0.175,
+                    Color(255, 255, 255),
+                    TEXT_ALIGN_LEFT
+                )
+
+                draw.DrawText(
+                    Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+                    "UVFont4",
+                    w * 0.1925,
+                    h * 0.175,
+                    Color(255, 255, 255),
+                    TEXT_ALIGN_RIGHT
+                )
+
+                -- Best Time
+                -- surface.SetDrawColor(0, 0, 0, 200)
+                -- surface.DrawRect(w * 0.02, h * 0.2, w * 0.175, h * 0.0225)
+                -- draw.DrawText(
+                    -- "#uv.race.hud.best.ug",
+                    -- "UVFont4",
+                    -- w * 0.022,
+                    -- h * 0.2,
+                    -- Color(255, 255, 255),
+                    -- TEXT_ALIGN_LEFT
+                -- )
+
+                -- draw.DrawText(
+					-- Carbon_FormatRaceTime(UVHUDBestLapTime) or "0:00.00",
+                    -- "UVFont4",
+                    -- w * 0.1925,
+                    -- h * 0.2,
+                    -- Color(255, 255, 255),
+                    -- TEXT_ALIGN_RIGHT
+                -- )
+
+                -- Lap & Checkpoint Counter
+                surface.SetDrawColor(0, 0, 0, 200)
+                surface.DrawRect(w * 0.02, h * 0.075, w * 0.175, h * 0.095)
+
+                -- if UVHUDRaceInfo.Info.Laps > 1 then
+                    draw.DrawText(
+                        "#uv.race.hud.lap.ug",
+                        "UVFont5",
+                        w * 0.1,
+                        h * 0.125,
+                        Color(125, 125, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Lap Counter
+                    draw.DrawText(
+                        my_array.Lap,
+                        "UVFont3Big",
+                        w * 0.1,
+                        h * 0.0675,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Lap Counter
+                    draw.DrawText(
+                        "/ " .. UVHUDRaceInfo.Info.Laps,
+                        "UVFont3",
+                        w * 0.1025,
+                        h * 0.08,
+                        Color(125, 125, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Lap Counter
+                -- else
+                    -- draw.DrawText(
+                        -- "#uv.race.hud.complete",
+                        -- "UVFont5UI",
+                        -- w * 0.805,
+                        -- h * 0.1575,
+                        -- Color(255, 255, 255),
+                        -- TEXT_ALIGN_LEFT
+                    -- )
+                    -- draw.DrawText(
+                        -- math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%",
+                        -- "UVFont5",
+                        -- w * 0.97,
+                        -- h * 0.1575,
+                        -- Color(255, 255, 255),
+                        -- TEXT_ALIGN_RIGHT
+                    -- )
+                -- end
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                -- Position Counter
+                if racer_count > 1 then
+                    surface.SetDrawColor(0, 0, 0, 200)
+                    surface.DrawRect(w * 0.8, h * 0.075, w * 0.175, h * 0.105)
+
+                    draw.DrawText(
+                        UVHUDRaceCurrentPos,
+                        "UVFont3Big",
+                        w * 0.88,
+                        h * 0.0675,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Upper, Your Position
+                    draw.DrawText(
+                        lang("uv.race.pos." .. UVHUDRaceCurrentPos),
+                        "UVFont5",
+                        w * 0.8825,
+                        h * 0.08,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Upper, Your Position Suffix
+                    draw.DrawText(
+                        "/" .. UVHUDRaceCurrentParticipants,
+                        "UVFont5",
+                        w * 0.88,
+                        h * 0.12,
+                        Color(125, 125, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Lower, Total Positions
+                end
+
+                -- Racer List
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
+                for i = 1, racer_count, 1 do
+                    --if racer_count == 1 then return end
+                    local entry = string_array[i]
+
+                    local racer_name = entry[1]
+                    local is_local_player = entry[2]
+                    local mode = entry[3]
+                    local diff = entry[4]
+                    -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+                    local racercount = i * w * 0.0155
+                    -- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
+
+                    local Strings = {
+                        ["Time"] = "%s",
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
+                    }
+
+                    local status_text = "-----"
+
+                    if entry[3] then
+                        local status_string = Strings[entry[3]]
+
+                        if status_string then
+                            local args = {}
+
+                            if entry[4] then
+                                local num = tonumber(entry[4])
+                                num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+
+                                table.insert(args, num)
+                            end
+
+                            status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                        end
+                    end
+
+                    local color = nil
+
+                    if is_local_player then
+                        color = Colors.MW_Others
+						surface.SetDrawColor(150, 150, 255, 200)
+                    elseif entry[3] == "Disqualified" or entry[3] == "Busted" then
+                        color = Colors.MW_Disqualified
+						surface.SetDrawColor(0, 0, 0, 200)
+                    else
+                        color = Colors.MW_Others
+						surface.SetDrawColor(0, 0, 0, 200)
+                    end
+
+                    local text = alt and (status_text) or (racer_name)
+
+                    -- surface.SetDrawColor(0, 0, 0, 200)
+                    draw.NoTexture()
+                    surface.DrawRect(w * 0.82, h * 0.16 + racercount, w * 0.155, h * 0.025)
+
+                    surface.SetDrawColor(0, 0, 0, 200)
+                    draw.NoTexture()
+                    surface.DrawRect(w * 0.8, h * 0.16 + racercount, w * 0.0175, h * 0.025)
+
+                    draw.DrawText(i .. ":", "UVFont4", w * 0.8075, (h * 0.16) + racercount, color, TEXT_ALIGN_CENTER)
+                    draw.DrawText(text, "UVFont4", w * 0.97, (h * 0.16) + racercount, color, TEXT_ALIGN_RIGHT)
+                end
+            end
+        },
+        ["underground2"] = {
+            main = function(...)
+                local w = ScrW()
+                local h = ScrH()
+
+                local my_vehicle = select(1, ...)
+                local my_array = select(2, ...)
+                local string_array = select(3, ...)
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                local checkpoint_count = #my_array["Checkpoints"]
+				local lang = language.GetPhrase
+
+                ------------------------------------
+
+                -- Timer
+                surface.SetDrawColor(0, 0, 0, 125)
+                surface.DrawRect(w * 0.72, h * 0.375, w * 0.255, h * 0.03)
+
+                draw.DrawText(
+                    "#uv.race.orig.time",
+                    "UVFont5UI",
+                    w * 0.722,
+                    h * 0.371,
+                    Color(255, 255, 255),
+                    TEXT_ALIGN_LEFT
+                )
+
+                draw.DrawText(
+                    UVDisplayTimeRace((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+                    "UVFont5UI",
+                    w * 0.97,
+                    h * 0.371,
+                    Color(255, 255, 255),
+                    TEXT_ALIGN_RIGHT
+                )
+
+                -- Lap & Checkpoint Counter
+                surface.SetDrawColor(0, 0, 0, 125)
+                surface.DrawRect(w * 0.72, h * 0.2075, w * 0.255, h * 0.05)
+
+                if UVHUDRaceInfo.Info.Laps > 1 then
+                    draw.DrawText(
+                        "#uv.race.hud.lap",
+                        "UVFont5",
+                        w * 0.722,
+                        h * 0.2075,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Lap Counter
+                    draw.DrawText(
+                        my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,
+                        "UVFont5",
+                        w * 0.97,
+                        h * 0.155,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Lap Counter
+                else
+                    draw.DrawText(
+                        "#uv.race.hud.complete.ug2",
+                        "UVFont",
+                        w * 0.722,
+                        h * 0.2075,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_LEFT
+                    )
+                    draw.DrawText(
+                        math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%",
+                        "UVFont",
+                        w * 0.97,
+                        h * 0.2075,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_RIGHT
+                    )
+                end
+
+                local racer_count = #string_array
+                local lang = language.GetPhrase
+
+                -- Position Counter
+                if racer_count > 1 then
+                    surface.SetDrawColor(0, 0, 0, 200)
+                    surface.DrawRect(w * 0.72, h * 0.1, w * 0.255, h * 0.105)
+
+					draw.NoTexture()
+                    surface.SetDrawColor(255, 255, 255, 255)
+                    surface.DrawTexturedRectRotated(w * 0.825, h * 0.15, w * 0.05, h * 0.005, 70) -- Divider
+
+                    draw.DrawText(
+                        UVHUDRaceCurrentPos,
+                        "UVFont3Big",
+                        w * 0.785,
+                        h * 0.095,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_RIGHT
+                    ) -- Upper, Your Position
+                    draw.DrawText(
+                        lang("uv.race.pos." .. UVHUDRaceCurrentPos),
+                        "UVFont",
+                        w * 0.785,
+                        h * 0.15,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Upper, Your Position
+                    draw.DrawText(
+                        UVHUDRaceCurrentParticipants,
+                        "UVFont3Big",
+                        w * 0.835,
+                        h * 0.095,
+                        Color(255, 255, 255),
+                        TEXT_ALIGN_LEFT
+                    ) -- Lower, Total Positions
+                end
+
+                -- Racer List
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
+                for i = 1, math.Clamp(racer_count, 1, 4), 1 do
+                    --if racer_count == 1 then return end
+                    local entry = string_array[i]
+
+                    local racer_name = entry[1]
+                    local is_local_player = entry[2]
+                    local mode = entry[3]
+                    local diff = entry[4]
+                    -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+                    local racercount = i * w * 0.0155
+                    -- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
+
+                    local Strings = {
+                        ["Time"] = "%s",
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
+                    }
+
+                    local status_text = "-----"
+
+                    if entry[3] then
+                        local status_string = Strings[entry[3]]
+
+                        if status_string then
+                            local args = {}
+
+                            if entry[4] then
+                                local num = tonumber(entry[4])
+                                num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+
+                                table.insert(args, num)
+                            end
+
+                            status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                        end
+                    end
+
+                    local color = nil
+
+                    if is_local_player then
+                        color = Color(200, 255, 200)
+						surface.SetDrawColor(0, 0, 0, 200)
+                    elseif entry[3] == "Disqualified" or entry[3] == "Busted" then
+                        color = Colors.MW_Disqualified
+						surface.SetDrawColor(0, 0, 0, 125)
+                    else
+                        color = Colors.MW_Others
+						surface.SetDrawColor(0, 0, 0, 125)
+                    end
+
+                    local text = alt and (status_text) or (racer_name)
+
+                    -- surface.SetDrawColor(0, 0, 0, 200)
+                    draw.NoTexture()
+                    surface.DrawRect(w * 0.74, h * 0.235 + racercount, w * 0.235, h * 0.025)
+
+                    surface.SetDrawColor(0, 0, 0, 125)
+                    draw.NoTexture()
+                    surface.DrawRect(w * 0.72, h * 0.235 + racercount, w * 0.0175, h * 0.025)
+
+                    draw.DrawText(i .. ":", "UVFont4", w * 0.725, (h * 0.235) + racercount, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+                    draw.DrawText(text, "UVFont4", w * 0.97, (h * 0.235) + racercount, color, TEXT_ALIGN_RIGHT)
+                end
+            end
+        },
         ["original"] = {
             main = function(...)
                 local w = ScrW()
