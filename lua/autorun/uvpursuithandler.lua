@@ -4680,7 +4680,7 @@ else --HUD/Options
 			uistyleracing:AddChoice( "Carbon", "carbon")
 			-- uistyleracing:AddChoice( "Underground", "underground")
 			-- uistyleracing:AddChoice( "Underground 2", "underground2")
-			-- uistyleracing:AddChoice( "Undercover", "undercover")
+			uistyleracing:AddChoice( "Undercover", "undercover")
 			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
 			uistyleracing:AddChoice( "#uv.uistyle.none", " ")
 			
