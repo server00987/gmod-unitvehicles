@@ -122,7 +122,7 @@ if SERVER then
 		uvclassname = {"POLICE"}
 	end
 	
-	file.AsyncRead('chatter/chatter.json', 'GAME', function( _, _, status, data )
+	file.AsyncRead('data_static/chatter.json', 'GAME', function( _, _, status, data )
 		_uvchatterarray = util.JSONToTable(data)
 	end, true)
 	
