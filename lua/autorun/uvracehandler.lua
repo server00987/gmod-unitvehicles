@@ -693,9 +693,12 @@ else
             local driver = vehicle:GetDriver()
             local is_local_player = IsValid(driver) and driver == lPr
             local name = array.Name or "Racer"
+
+            local diff = nil -- Display mode (Lap, Time, Finished, DNF/Busted)
+            local mode = nil
             
             -- local line = string.format("%d. %s", i, name)
-            local line = name
+            -- local line = name
             
             if not is_local_player then
                 local racerCPs = array.Checkpoints or {}
@@ -731,21 +734,28 @@ else
                 local str = "???"
                 
                 if v.array.Finished then
-                    str = lang("uv.race.suffix.finished")
+                    mode = 'Finished'
+                    --str = lang("uv.race.suffix.finished")
                 elseif v.array.Busted then
-                    str = lang("uv.race.suffix.busted")
+                    mode = 'Busted'
+                    --str = lang("uv.race.suffix.busted")
                 elseif v.array.Disqualified then
-                    str = lang("uv.race.suffix.dnf")
+                    mode = 'Disqualified'
+                    --str = lang("uv.race.suffix.dnf")
                 elseif v.array.Lap ~= lArray.Lap then
+                    mode = 'Lap'
                     local difference = v.array.Lap - lArray.Lap
 					local ltext = "uv.race.suffix.lap"
 					if math.abs( difference ) != 1 then ltext = "uv.race.suffix.laps" end
-                    str = string.format( lang(ltext), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
+                    diff = ((difference > 0 and '+') or '-') ..math.abs( difference )
+                    --str = string.format( lang(ltext), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
                 else
-                    str = string.format("  (%s%.3f)", sign, math.abs(totalTimeDiff))
+                    mode = 'Time'
+                    --str = string.format("  (%s%.3f)", sign, math.abs(totalTimeDiff))
+                    diff = totalTimeDiff
                 end
                 
-                line = line .. str
+                --line = line .. str
             end
             
             local selected_color = nil
@@ -758,7 +768,7 @@ else
                 selected_color = LBColors.Others
             end
             
-            table.insert(leaderboardLines, {selected_color, line})
+            table.insert(leaderboardLines, {name, is_local_player, mode, diff})
         end
         
         //UVSortedRacers = sorted_table
@@ -1224,6 +1234,8 @@ else
         UVHUDRace = true;
  
         local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo['Participants'])
+
+        PrintTable(string_array)
         
         UVHUDRaceCurrentParticipants = 0
         
