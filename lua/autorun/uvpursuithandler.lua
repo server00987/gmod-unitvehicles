@@ -32,24 +32,6 @@ local Colors = {
 	['CopThemeShade'] = Color(41, 149, 212, 107)--Color(93, 85, 166, 107)
 }
 
-UVMaterials = {
-	['UNITS_DAMAGED'] = Material("hud/COPS_DAMAGED_ICON.png"),
-	['UNITS_DISABLED'] = Material("hud/COPS_TAKENOUT_ICON.png"),
-	['UNITS'] = Material("hud/COPS_ICON.png"),
-	['HEAT'] = Material("hud/HEAT_ICON.png"),
-	['CLOCK'] = Material("hud/TIMER_ICON.png"),
-	['CHECK'] = Material("hud/MINIMAP_ICON_CIRCUIT.png"),
-	['BACKGROUND'] = Material("hud/NFSMW_BACKGROUND.png"),
-	['BACKGROUND_BIG'] = Material("hud/NFSMW_BACKGROUND_BIG.png"),
-	['BACKGROUND_BIGGER'] = Material("hud/NFSMW_BACKGROUND_BIGGER.png"),
-	['RESULTCOP'] = Material("hud/(9)T_UI_PlayerCop_Large_Icon.png"),
-	['RESULTRACER'] = Material("hud/(9)(9)T_UI_PlayerRacer_Large_Icon.png"),
-	
-	['BACKGROUND_CARBON'] = Material("unitvehicles/hud/NFSC_GRADIENT.png"),
-	['BACKGROUND_CARBON_INVERTED'] = Material("unitvehicles/hud/NFSC_GRADIENT_INV.png"),
-	['ARROW_CARBON'] = Material("unitvehicles/hud/NFSC_ARROWRIGHT.png"),
-}
-
 function UVGetDriver(vehicle)
 	if !IsValid(vehicle) then return false end
 	

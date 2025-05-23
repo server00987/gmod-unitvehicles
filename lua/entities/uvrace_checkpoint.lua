@@ -158,6 +158,10 @@ if CLIENT then
 		end
 	end
 
+	function ENT:TestCollision(startpos, delta, isbox, extents, mask)
+    	return false  -- Will never be hit by traces
+	end
+
 	function ENT:OnRemove()
 		if GMinimap then
 			GMinimap:RemoveBlipById( self.blip_id )

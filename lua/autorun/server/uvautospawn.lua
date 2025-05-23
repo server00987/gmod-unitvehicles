@@ -2231,7 +2231,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 			end
 		end)
 		
-	elseif Memory.VehicleBase == "base_glide_car" or Memory.VehicleBase == "base_glide_motorcycle" then
+	elseif Memory.VehicleBase == "base_glide_car" or Memory.VehicleBase == "base_glide_motorcycle" or Memory.VehicleBase == "base_glide_boat" or Memory.VehicleBase == "base_glide_aircraft" or Memory.VehicleBase == "base_glide_heli" or Memory.VehicleBase == "base_glide_plane" then
 		local SpawnCenter = pos + (vector_up * 25)
 		SpawnCenter.z = SpawnCenter.z - Memory.Mins.z
 		
