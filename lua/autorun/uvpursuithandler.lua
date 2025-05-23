@@ -2299,7 +2299,7 @@ else --HUD/Options
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
-	function DrawIcon(material, x, y, height_ratio, color)
+	function DrawIcon(material, x, y, height_ratio, color, args)
 		local tex = material :GetTexture("$basetexture")
 		
 		if tex then
@@ -2318,7 +2318,7 @@ else --HUD/Options
 				surface.SetDrawColor(255,255,255)
 			end
 			
-			surface.SetMaterial(material)
+			surface.SetMaterial(material, args)
 			surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
 		end
 	end
@@ -2425,6 +2425,41 @@ else --HUD/Options
 		size = (math.Round(ScrH()*0.02314814815)),
 		weight = 1100,
 		shadow = true,
+	})
+
+	surface.CreateFont("UVCarbonFont", {
+		font = "HelveticaNeue LT 57 Cn",
+		size = (math.Round(ScrH()*0.043)),
+		shadow = true,
+		weight = 1000,
+	})
+
+	surface.CreateFont("UVUndercoverAccentFont", {
+		font = "HelveticaNeue LT 57 Cn",
+		size = (math.Round(ScrH()*0.033)),
+		shadow = true,
+		weight = 1000,
+	})
+
+	surface.CreateFont("UVUndercoverLeaderboardFont", {
+		font = "HelveticaNeue LT 57 Cn",
+		size = (math.Round(ScrH()*0.03)),
+		shadow = true,
+		weight = 1000,
+	})
+
+	surface.CreateFont("UVUndercoverWhiteFont", {
+		font = "Aquarius Six",
+		size = (math.Round(ScrH()*0.047)),
+		shadow = true,
+		weight = 1,
+	})
+
+	surface.CreateFont("UVCarbonLeaderboardFont", {
+		font = "HelveticaNeue LT 57 Cn",
+		size = (math.Round(ScrH()*0.02314814815)),
+		shadow = true,
+		weight = 1000,
 	})
 	
 	surface.CreateFont("UVFont5", {
