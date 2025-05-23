@@ -747,7 +747,8 @@ else
                     local difference = v.array.Lap - lArray.Lap
 					local ltext = "uv.race.suffix.lap"
 					if math.abs( difference ) != 1 then ltext = "uv.race.suffix.laps" end
-                    diff = ((difference > 0 and '+') or '-') ..math.abs( difference )
+                    --diff = ((difference > 0 and '+') or '-') ..math.abs( difference )
+                    diff = difference
                     --str = string.format( lang(ltext), ((difference > 0 and '+') or '-') ..math.abs( difference ) )
                 else
                     mode = 'Time'
