@@ -62,8 +62,10 @@ UV_UI = {
                 local string_array = select(3, ...)
 
                 local racer_count = #string_array
+                local lang = language.GetPhrase
 
                 local checkpoint_count = #my_array["Checkpoints"]
+				local lang = language.GetPhrase
 
                 ------------------------------------
 
@@ -91,7 +93,7 @@ UV_UI = {
 
                 if UVHUDRaceInfo.Info.Laps > 1 then
                     draw.DrawText(
-                        "#uv.race.mw.lap",
+                        "#uv.race.hud.lap",
                         "UVFont5",
                         w * 0.805,
                         h * 0.155,
@@ -109,10 +111,10 @@ UV_UI = {
                 else
                     --DrawIcon(UVMaterials["CHECK"], w * 0.815, h * 0.18, .04, Color(255, 255, 255)) -- Icon
                     draw.DrawText(
-                        "#uv.race.completepercent",
-                        "UVFont5",
+                        "#uv.race.hud.complete",
+                        "UVFont5UI",
                         w * 0.805,
-                        h * 0.155,
+                        h * 0.1575,
                         Color(255, 255, 255),
                         TEXT_ALIGN_LEFT
                     )
@@ -121,13 +123,14 @@ UV_UI = {
                         --checkpoint_count .. "/" .. GetGlobalInt("uvrace_checkpoints"),
                         "UVFont5",
                         w * 0.97,
-                        h * 0.155,
+                        h * 0.1575,
                         Color(255, 255, 255),
                         TEXT_ALIGN_RIGHT
                     )
                 end
 
                 local racer_count = #string_array
+                local lang = language.GetPhrase
 
                 -- Position Counter
                 if racer_count > 1 then
@@ -160,7 +163,7 @@ UV_UI = {
                 end
 
                 -- Racer List
-                local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
                 for i = 1, racer_count, 1 do
                     --if racer_count == 1 then return end
                     local entry = string_array[i]
@@ -175,10 +178,11 @@ UV_UI = {
 
                     local Strings = {
                         ["Time"] = "%s",
-                        ["Lap"] = "%s LAPS",
-                        ["Finished"] = "FINISHED",
-                        ["Disqualified"] = "DNF",
-                        ["Busted"] = "BUSTED"
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
                     }
 
                     local status_text = "-----"
@@ -191,7 +195,7 @@ UV_UI = {
 
                             if entry[4] then
                                 local num = tonumber(entry[4])
-                                num = ((num > 0 and "+") or "-") .. string.format("%.2fs", math.abs(num))
+                                num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
 
                                 table.insert(args, num)
                             end
@@ -231,6 +235,7 @@ UV_UI = {
                 local string_array = select(3, ...)
 
                 local racer_count = #string_array
+                local lang = language.GetPhrase
 
                 local checkpoint_count = #my_array["Checkpoints"]
 
@@ -270,7 +275,7 @@ UV_UI = {
                                         ">" .. my_array.Lap .. ": </color>" .. UVHUDRaceInfo.Info.Laps
                 if UVHUDRaceInfo.Info.Laps > 1 then
                     draw.DrawText(
-                        "#uv.race.mw.lap",
+                        "#uv.race.hud.lap",
                         "UVCarbonFont",
                         w * 0.875,
                         h * 0.155,
@@ -281,7 +286,7 @@ UV_UI = {
                     -- laptext =
                     --     "<color="..Colors.Carbon_Accent.r..", "..Colors.Carbon_Accent.g..", ".. Colors.Carbon_Accent.b..">".. checkpoint_count .. ": </color>" .. GetGlobalInt("uvrace_checkpoints")
                     draw.DrawText(
-                        "#uv.race.completepercent",
+                        "#uv.race.hud.complete",
                         "UVCarbonFont",
                         w * 0.875,
                         h * 0.155,
@@ -298,7 +303,7 @@ UV_UI = {
                 )
 
                 -- Racer List
-                local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
                 for i = 1, racer_count, 1 do
                     if racer_count == 1 then
                         return
@@ -316,10 +321,11 @@ UV_UI = {
 
                     local Strings = {
                         ["Time"] = "%s",
-                        ["Lap"] = "%s LAPS",
-                        ["Finished"] = "FINISHED",
-                        ["Disqualified"] = "DNF",
-                        ["Busted"] = "BUSTED"
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
                     }
 
                     if entry[3] then
@@ -379,6 +385,7 @@ UV_UI = {
                 local string_array = select(3, ...)
 
                 local racer_count = #string_array
+                local lang = language.GetPhrase
 
                 local checkpoint_count = #my_array["Checkpoints"]
 
@@ -393,7 +400,7 @@ UV_UI = {
                 -- surface.DrawTexturedRect(w * 0.815, h * 0.111, w * 0.025, h * 0.033)
 
                 draw.DrawText(
-                    "#uv.race.time",
+                    "#uv.race.hud.time",
                     "UVUndercoverAccentFont",
                     w * 0.75,
                     h * 0.123,
@@ -421,7 +428,7 @@ UV_UI = {
                     --     TEXT_ALIGN_RIGHT
                     -- ) -- Lap Counter
                     draw.DrawText(
-                        "#uv.race.mw.lap",
+                        "#uv.race.hud.lap",
                         "UVUndercoverAccentFont",
                         w * 0.94,
                         h * 0.123,
@@ -439,7 +446,7 @@ UV_UI = {
                 else
                     --DrawIcon(UVMaterials["CHECK"], w * 0.815, h * 0.18, .04, Color(255, 255, 255)) -- Icon
                     draw.DrawText(
-                        "#uv.race.completepercent",
+                        "#uv.race.hud.complete",
                         "UVUndercoverAccentFont",
                         w * 0.94,
                         h * 0.123,
@@ -460,7 +467,7 @@ UV_UI = {
                 surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005) -- Divider
 
                 -- -- Racer List
-                local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+                local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
 
                 local baseY = h * 0.21 -- starting Y position of the list (adjust this freely)
                 local spacing = h * 0.035 -- spacing between each racer (vertical gap)
@@ -483,10 +490,11 @@ UV_UI = {
 
                     local Strings = {
                         ["Time"] = "%s",
-                        ["Lap"] = "%s LAPS",
-                        ["Finished"] = "FINISHED",
-                        ["Disqualified"] = "DNF",
-                        ["Busted"] = "BUSTED"
+                        ["Lap"] = lang("uv.race.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.suffix.laps"),
+                        ["Finished"] = lang("uv.race.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.suffix.busted"),
                     }
 
                     if entry[3] then
@@ -517,7 +525,7 @@ UV_UI = {
                     end
 
                     local text = alt and (status_text) or (racer_name)
-                    text = string.upper(text)
+                    -- text = string.upper(text)
 
                     -- This should only draw on LocalPlayer() but couldn't figure it out
                     if is_local_player then
@@ -638,8 +646,35 @@ UV_UI = {
                     local is_local_player = entry[2]
                     local mode = entry[3]
                     local diff = entry[4]
-                    -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
                     local racerpos = 3.75
+
+                    local Strings = {
+                        ["Time"] = lang("uv.race.orig.suffix.time"),
+                        ["Lap"] = lang("uv.race.orig.suffix.lap"),
+                        -- ["Laps"] = lang("uv.race.orig.suffix.laps"),
+                        ["Finished"] = lang("uv.race.orig.suffix.finished"),
+                        ["Disqualified"] = lang("uv.race.orig.suffix.dnf"),
+                        ["Busted"] = lang("uv.race.orig.suffix.busted"),
+                    }
+
+                    local status_text = " "
+
+                    if entry[3] then
+                        local status_string = Strings[entry[3]]
+
+                        if status_string then
+                            local args = {}
+
+                            if entry[4] then
+                                local num = tonumber(entry[4])
+                                num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+
+                                table.insert(args, num)
+                            end
+
+                            status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                        end
+                    end
 
                     if UVHUDRaceInfo.Info.Laps > 1 then
                         racerpos = 3.25
@@ -655,7 +690,7 @@ UV_UI = {
                         color = Colors.Original_Others
                     end
 
-                    local text = alt and (status_text) or (i .. ". " .. racer_name)
+                    local text = i .. ". " .. racer_name .. status_text
 
                     draw.DrawText(
                         text,
