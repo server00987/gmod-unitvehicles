@@ -62,7 +62,7 @@ function ENT:StartTouch( ent )
 	if ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then
 		local car = ent:GetBaseEnt()
 		if self.racerdeployed and not car.UnitVehicle then
-			if not RacerFriendlyFire:GetBool() then continue end
+			if not RacerFriendlyFire:GetBool() then return end
 		end
 		if car.esfon then
 			self.Entity:Remove()
@@ -80,7 +80,7 @@ function ENT:StartTouch( ent )
 	end
 	if ent:IsVehicle() then
 		if self.racerdeployed and not ent.UnitVehicle then
-			if not RacerFriendlyFire:GetBool() then continue end
+			if not RacerFriendlyFire:GetBool() then return end
 		end
 		if ent.esfon then
 			self.Entity:Remove()
@@ -110,8 +110,8 @@ function ENT:UVStunmineHit()
     local objects = ents.FindInSphere(entpos, 1000)
     for k, object in pairs(objects) do
         if object != car and (!table.HasValue(carchildren, object) and !table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
-			if not object.UnitVehicle and not car.UnitVehicle then
-				if not RacerFriendlyFire:GetBool() then return end
+			if not object.UnitVehicle and car then
+				if not RacerFriendlyFire:GetBool() then continue end
 			end
             local objectphys = object:GetPhysicsObject()
             local vectordifference = object:WorldSpaceCenter() - entpos
