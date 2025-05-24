@@ -78,8 +78,9 @@ if SERVER then
 
 			if #vehicle_array['Checkpoints'] >= GetGlobalInt("uvrace_checkpoints") then -- Lap completed
 
-				local laptime = CurTime() - vehicle_array['LastLapTime']
-				vehicle_array['LastLapTime'] = CurTime()
+				local laptime = CurTime() - (vehicle_array['LastLapCurTime'] or UVRaceTable.Info.Time)
+				vehicle_array['LastLapTime'] = laptime
+				vehicle_array['LastLapCurTime'] = CurTime()
 
 				table.Empty(vehicle_array['Checkpoints'])
 				--vehicle.currentcheckpoint = 1
@@ -88,6 +89,7 @@ if SERVER then
 				net.Start("uvrace_lapcomplete")
 				net.WriteEntity(vehicle)
 				net.WriteFloat(laptime)
+				net.WriteFloat(vehicle_array['LastLapCurTime'])
 				net.Broadcast()
 				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )

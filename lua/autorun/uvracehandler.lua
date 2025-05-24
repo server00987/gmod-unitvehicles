@@ -231,7 +231,7 @@ if SERVER then
                 ['Name'] = ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())),
                 --['Laps'] = {},
                 --['BestLapTime'] = CurTime(),
-                ['LastLapTime'] = CurTime(),
+                --['LastLapTime'] = CurTime(),
                 ['Finished'] = false,
                 ['Disqualified'] = false,
                 ['Busted'] = false,
@@ -276,9 +276,9 @@ if SERVER then
                 end
             end
             
-            if UVRaceTable['Participants'] and UVRaceTable['Participants'][vehicle] then
-                UVRaceTable['Participants'][vehicle]['LastLapTime'] = CurTime()
-            end
+            -- if UVRaceTable['Participants'] and UVRaceTable['Participants'][vehicle] then
+            --     UVRaceTable['Participants'][vehicle]['LastLapTime'] = CurTime()
+            -- end
         end
         
         --unclaim all spawns
@@ -1119,12 +1119,34 @@ else
     net.Receive( "uvrace_lapcomplete", function()
         local participant = net.ReadEntity()
         local time = net.ReadFloat()
+        local timecur = net.ReadFloat()
         local lang = language.GetPhrase
+
+        local old_lap = UVHUDRaceInfo['Participants'][participant].Lap
+        local new_lap = old_lap + 1
+
+        local lap_time = nil
+        local lap_time_cur = nil
         
         if UVHUDRaceInfo then
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 UVHUDRaceInfo['Participants'][participant].Lap = UVHUDRaceInfo['Participants'][participant].Lap +1
+
+                -- if not UVHUDRaceInfo['Participants'][participant].LastLapTime then
+                --     UVHUDRaceInfo['Participants'][participant].LastLapTime = time
+                --     UVHUDRaceInfo['Participants'][participant].BestLapTime = time
+                -- elseif time < UVHUDRaceInfo['Participants'][participant].BestLapTime then
+                --     UVHUDRaceInfo['Participants'][participant].BestLapTime = time
+                -- end
+                if not UVHUDRaceInfo['Participants'][participant].BestLapTime or UVHUDRaceInfo['Participants'][participant].LastLapTime > time then
+                    UVHUDRaceInfo['Participants'][participant].BestLapTime = time
+                end
+
                 UVHUDRaceInfo['Participants'][participant].LastLapTime = time
+                UVHUDRaceInfo['Participants'][participant].LastLapCurTime = timecur
+
+                lap_time = time
+                lap_time_cur = timecur
                 table.Empty(UVHUDRaceInfo['Participants'][participant]['Checkpoints'])
             end
         end
@@ -1147,6 +1169,8 @@ else
                 UVHUDLastLapTime = time
             end
         end
+
+        hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur )
     end)
     
     net.Receive( "uvrace_start", function()

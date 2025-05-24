@@ -101,9 +101,9 @@ local function carbon_racing_main( ... )
     local laptext = "<color=" .. Colors.Carbon_Accent.r .. ", " .. Colors.Carbon_Accent.g .. ", " ..Colors.Carbon_Accent.b ..">" .. my_array.Lap .. ": </color>" .. UVHUDRaceInfo.Info.Laps
     
     if UVHUDRaceInfo.Info.Laps > 1 then
-        draw.DrawText("#uv.race.mw.lap","UVCarbonFont",w * 0.875,h * 0.155,Colors.Carbon_Accent2Bright,TEXT_ALIGN_RIGHT) -- Lap Counter
+        draw.DrawText("#uv.race.hud.lap","UVCarbonFont",w * 0.875,h * 0.155,Colors.Carbon_Accent2Bright,TEXT_ALIGN_RIGHT) -- Lap Counter
     else
-        draw.DrawText("#uv.race.completepercent","UVCarbonFont",w * 0.875,h * 0.155,Colors.Carbon_Accent2Bright,TEXT_ALIGN_RIGHT) -- Checkpoint Text
+        draw.DrawText("#uv.race.hud.complete","UVCarbonFont",w * 0.875,h * 0.155,Colors.Carbon_Accent2Bright,TEXT_ALIGN_RIGHT) -- Checkpoint Text
         laptext = math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%"
     end
     
@@ -128,10 +128,11 @@ local function carbon_racing_main( ... )
         
         local Strings = {
             ["Time"] = "%s",
-            ["Lap"] = "%s LAPS",
-            ["Finished"] = "FINISHED",
-            ["Disqualified"] = "DNF",
-            ["Busted"] = "BUSTED"
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
         if entry[3] then
@@ -304,11 +305,11 @@ local function mw_racing_main( ... )
     surface.DrawRect(w * 0.8, h * 0.155, w * 0.175, h * 0.05)
     
     if UVHUDRaceInfo.Info.Laps > 1 then
-        draw.DrawText("#uv.race.mw.lap","UVFont5",w * 0.805,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Lap Counter
+        draw.DrawText("#uv.race.hud.lap","UVFont5",w * 0.805,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Lap Counter
         draw.DrawText(my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVFont5",w * 0.97,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_RIGHT) -- Lap Counter
     else
         --DrawIcon(UVMaterials["CHECK"], w * 0.815, h * 0.18, .04, Color(255, 255, 255)) -- Icon
-        draw.DrawText("#uv.race.completepercent","UVFont5",w * 0.805,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.race.hud.complete","UVFont5",w * 0.805,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_LEFT)
         draw.DrawText(math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVFont5",w * 0.97,h * 0.155,Color(255, 255, 255),TEXT_ALIGN_RIGHT)
     end
     
@@ -348,10 +349,11 @@ local function mw_racing_main( ... )
         
         local Strings = {
             ["Time"] = "%s",
-            ["Lap"] = "%s LAPS",
-            ["Finished"] = "FINISHED",
-            ["Disqualified"] = "DNF",
-            ["Busted"] = "BUSTED"
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
         local status_text = "- - - - -"
@@ -366,7 +368,7 @@ local function mw_racing_main( ... )
                     local num = tonumber(entry[4])
                     num =
                     ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2fs", math.abs(num))
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
@@ -653,7 +655,7 @@ local function mw_pursuit_main( ... )
             -- Evade Box, All BG
             surface.SetDrawColor(200, 200, 200, 100)
             surface.DrawRect(w * 0.333, bottomy2, w * 0.34, h * 0.01)
-
+            
             -- Evade Box, Busted Meter
             if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
                 if not BustingProgress or BustingProgress == 0 then
@@ -663,9 +665,9 @@ local function mw_pursuit_main( ... )
                 local blink = 255 * math.abs(math.sin(RealTime() * 4))
                 local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
                 local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-
+                
                 local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
-
+                
                 local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
                 
                 if timeLeft >= UVBustTimer * 0.5 then
@@ -912,7 +914,7 @@ local function undercover_racing_main( ... )
     -- surface.SetDrawColor(Colors.Carbon_AccentTransparent)
     -- surface.DrawTexturedRect(w * 0.815, h * 0.111, w * 0.025, h * 0.033)
     
-    draw.DrawText("#uv.race.time","UVUndercoverAccentFont",w * 0.75,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_LEFT)
+    draw.DrawText("#uv.race.hud.time","UVUndercoverAccentFont",w * 0.75,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_LEFT)
     
     draw.DrawText(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),"UVUndercoverWhiteFont",w * 0.75,h * 0.15,Colors.Undercover_Accent1,TEXT_ALIGN_LEFT)
     
@@ -926,11 +928,11 @@ local function undercover_racing_main( ... )
         --     Color(255, 255, 255),
         --     TEXT_ALIGN_RIGHT
         -- ) -- Lap Counter
-        draw.DrawText("#uv.race.mw.lap","UVUndercoverAccentFont",w * 0.94,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_RIGHT)
+        draw.DrawText("#uv.race.hud.lap","UVUndercoverAccentFont",w * 0.94,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_RIGHT)
         draw.DrawText(my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVUndercoverWhiteFont",w * 0.94,h * 0.15,Colors.Undercover_Accent1,TEXT_ALIGN_RIGHT)
     else
         --DrawIcon(UVMaterials["CHECK"], w * 0.815, h * 0.18, .04, Color(255, 255, 255)) -- Icon
-        draw.DrawText("#uv.race.completepercent","UVUndercoverAccentFont",w * 0.94,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_RIGHT)
+        draw.DrawText("#uv.race.hud.complete","UVUndercoverAccentFont",w * 0.94,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_RIGHT)
         draw.DrawText(math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVUndercoverWhiteFont",w * 0.94,h * 0.15,Colors.Undercover_Accent1,TEXT_ALIGN_RIGHT)
     end
     
@@ -961,10 +963,11 @@ local function undercover_racing_main( ... )
         
         local Strings = {
             ["Time"] = "%s",
-            ["Lap"] = "%s LAPS",
-            ["Finished"] = "FINISHED",
-            ["Disqualified"] = "DNF",
-            ["Busted"] = "BUSTED"
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
         if entry[3] then
@@ -1299,6 +1302,31 @@ UV_UI.racing.prostreet.main = prostreet_racing_main
 UV_UI.racing.underground = {}
 UV_UI.pursuit.underground = {}
 
+UV_UI.racing.underground.states = {
+    FrozenTime = false,
+    FrozenTimeValue = 0
+}
+
+UV_UI.racing.underground.events = {
+    onLapComplete = function( ... )
+        local participant  = select( 1, ... )
+        local new_lap      = select( 2, ... )
+        local old_lap      = select( 3, ... )
+        local lap_time     = select( 4, ... )
+        local lap_time_cur = select( 5, ... )
+        
+        if participant:GetDriver() ~= LocalPlayer() then return end
+        
+        UV_UI.racing.underground.states.FrozenTime = true
+        UV_UI.racing.underground.states.FrozenTimeValue = lap_time
+        
+        if timer.Exists( "_UG_TIME_FROZEN_DELAY" ) then timer.Remove( "_UG_TIME_FROZEN_DELAY" ) end
+        timer.Create("_UG_TIME_FROZEN_DELAY", 3, 1, function()
+            UV_UI.racing.underground.states.FrozenTime = false
+        end)
+    end
+}
+
 local function underground_racing_main( ... )
     local w = ScrW()
     local h = ScrH()
@@ -1319,18 +1347,46 @@ local function underground_racing_main( ... )
     surface.SetDrawColor(0, 0, 0, 200)
     surface.DrawRect(w * 0.02, h * 0.175, w * 0.175, h * 0.0225)
     draw.DrawText(
-    "#uv.race.orig.time",
+    "#uv.race.hud.time.ug",
     "UVFont4",
     w * 0.022,
     h * 0.175,
     Color(255, 255, 255),
     TEXT_ALIGN_LEFT)
     
+    local current_time = nil 
+    
+    if UV_UI.racing.underground.states.FrozenTime then
+        current_time = UVDisplayTimeRace( UV_UI.racing.underground.states.FrozenTimeValue )
+    elseif not my_array.LastLapTime then
+        current_time = UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 )
+    else
+        current_time = UVDisplayTimeRace( CurTime() - my_array.LastLapCurTime )
+    end
+    
     draw.DrawText(
-    Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+    current_time or UVDisplayTimeRace( 0 ),
     "UVFont4",
     w * 0.1925,
     h * 0.175,
+    Color(255, 255, 255),
+    TEXT_ALIGN_RIGHT)
+    
+    surface.SetDrawColor(0, 0, 0, 200)
+    surface.DrawRect(w * 0.02, h * 0.2, w * 0.175, h * 0.0225)
+    draw.DrawText(
+    "#uv.race.hud.best.ug",
+    "UVFont4",
+    w * 0.022,
+    h * 0.2,
+    Color(255, 255, 255),
+    TEXT_ALIGN_LEFT)
+    
+    draw.DrawText(
+    UVDisplayTimeRace(my_array.BestLapTime or 0),
+    "UVFont4",
+    w * 0.1925,
+    h * 0.2,
     Color(255, 255, 255),
     TEXT_ALIGN_RIGHT)
     
@@ -1508,6 +1564,31 @@ UV_UI.racing.underground.main = underground_racing_main
 UV_UI.racing.underground2 = {}
 UV_UI.pursuit.underground2 = {}
 
+UV_UI.racing.underground2.states = {
+    FrozenTime = false,
+    FrozenTimeValue = 0
+}
+
+UV_UI.racing.underground2.events = {
+    onLapComplete = function( ... )
+        local participant  = select( 1, ... )
+        local new_lap      = select( 2, ... )
+        local old_lap      = select( 3, ... )
+        local lap_time     = select( 4, ... )
+        local lap_time_cur = select( 5, ... )
+        
+        if participant:GetDriver() ~= LocalPlayer() then return end
+        
+        UV_UI.racing.underground2.states.FrozenTime = true
+        UV_UI.racing.underground2.states.FrozenTimeValue = lap_time
+        
+        if timer.Exists( "_UG_TIME_FROZEN_DELAY" ) then timer.Remove( "_UG_TIME_FROZEN_DELAY" ) end
+        timer.Create("_UG_TIME_FROZEN_DELAY", 3, 1, function()
+            UV_UI.racing.underground2.states.FrozenTime = false
+        end)
+    end
+}
+
 local function underground2_racing_main( ... )
     local w = ScrW()
     local h = ScrH()
@@ -1536,8 +1617,18 @@ local function underground2_racing_main( ... )
     Color(255, 255, 255),
     TEXT_ALIGN_LEFT)
     
+    local current_time = nil 
+    
+    if UV_UI.racing.underground2.states.FrozenTime then
+        current_time = Carbon_FormatRaceTime( UV_UI.racing.underground2.states.FrozenTimeValue )
+    elseif not my_array.LastLapTime then
+        current_time = Carbon_FormatRaceTime( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 )
+    else
+        current_time = Carbon_FormatRaceTime( CurTime() - my_array.LastLapCurTime )
+    end
+    
     draw.DrawText(
-    UVDisplayTimeRace((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+    current_time,
     "UVFont5UI",
     w * 0.97,
     h * 0.371,
@@ -1550,7 +1641,7 @@ local function underground2_racing_main( ... )
     
     if UVHUDRaceInfo.Info.Laps > 1 then
         draw.DrawText(
-        "#uv.race.hud.lap",
+        "#uv.race.hud.lap.ug",
         "UVFont5",
         w * 0.722,
         h * 0.2075,
@@ -1560,7 +1651,7 @@ local function underground2_racing_main( ... )
         my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,
         "UVFont5",
         w * 0.97,
-        h * 0.155,
+        h * 0.2075,
         Color(255, 255, 255),
         TEXT_ALIGN_RIGHT) -- Lap Counter
     else
@@ -1689,7 +1780,7 @@ UV_UI.racing.underground2.main = underground2_racing_main
 
 -- Hooks
 
--- Only used by pursuits for the time being
+-- Only used by pursuits for the time being ( underground current/best time and lap display made me change my mind ;) )
 local function onEvent( type, event, ... )
     -- local data_type = select( 1, ... )
     -- local data_name = select( 2, ... )
@@ -1699,9 +1790,15 @@ local function onEvent( type, event, ... )
     --if type == 'pursuit' then
     -- if new_data == old_data then return end
     
-    local ui_type = UVHUDTypePursuit:GetString()
+    local ui_type = nil
     
-    local event = UV_UI[type] and UV_UI.pursuit[ui_type] and UV_UI.pursuit[ui_type].events and UV_UI.pursuit[ui_type].events[event]
+    if type == 'racing' then
+        ui_type = UVHUDTypeRacing:GetString()
+    else
+        ui_type = UVHUDTypePursuit:GetString()
+    end
+    
+    local event = UV_UI[type] and UV_UI[type][ui_type] and UV_UI[type][ui_type].events and UV_UI[type][ui_type].events[event]
     if event then event ( ... ) end
     --end
 end
