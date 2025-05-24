@@ -2420,6 +2420,13 @@ else --HUD/Options
 		shadow = true,
 	})
 	
+	surface.CreateFont("UVFont3Big", {
+		font = "Arial",
+		size = (math.Round(ScrH()*0.115)),
+		weight = 500,
+		-- italic = true,
+	})
+	
 	surface.CreateFont("UVFont4", {
 		font = "Arial",
 		size = (math.Round(ScrH()*0.02314814815)),
@@ -2473,7 +2480,7 @@ else --HUD/Options
 		size = (math.Round(ScrH()*0.035)),
 		weight = 500,
 	})
-	
+
 	surface.CreateFont("UVFont5UI-BottomBar", {
 		font = "EurostileBold",
 		size = (math.Round(ScrH()*0.041)),
@@ -4208,9 +4215,10 @@ else --HUD/Options
 			local uistyleracing, label = panel:ComboBox( "#uv.settings.uistyle.racing", "unitvehicle_hudtype_racing" )
 			uistyleracing:AddChoice( "Most Wanted", "mostwanted")
 			uistyleracing:AddChoice( "Carbon", "carbon")
-			-- uistyleracing:AddChoice( "Underground", "underground")
-			-- uistyleracing:AddChoice( "Underground 2", "underground2")
+			uistyleracing:AddChoice( "Underground", "underground")
+			uistyleracing:AddChoice( "Underground 2", "underground2")
 			uistyleracing:AddChoice( "Undercover", "undercover")
+			uistyleracing:AddChoice( "Pro Street", "prostreet")
 			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
 			uistyleracing:AddChoice( "#uv.uistyle.none", "")
 			

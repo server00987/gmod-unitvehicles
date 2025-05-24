@@ -1054,14 +1054,14 @@ else
                 
                 local lang = language.GetPhrase
                 local PlaceStrings = {
-                    [1] = {Color(240,203,122), lang("uv.race.place.1")},
-                    [2] = {Color(183,201,210), lang("uv.race.place.2")},
-                    [3] = {Color(179,128,41), lang("uv.race.place.3")},
-                    [4] = {Color(27,147,0), lang("uv.race.place")},
+                    [1] = { Color(240,203,122) },
+                    [2] = { Color(183,201,210) },
+                    [3] = { Color(179,128,41) },
+                    [4] = { Color(27,147,0) },
                 }
                 
                 local place_array = PlaceStrings[place] or PlaceStrings[4]
-                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], string.format(place_array[2], place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))        
+                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], lang("uv.race.pos.num." .. place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))        
             end
         end        
     end)
