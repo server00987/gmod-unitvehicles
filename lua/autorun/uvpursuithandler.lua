@@ -2579,7 +2579,7 @@ else --HUD/Options
 		if rp_num ~= UVResourcePoints then
 			hook.Run( 'UIEventHook', 'pursuit', 'onResourceChange', rp_num, UVResourcePoints )
 		end
-		
+
 		UVResourcePoints = tonumber(ResourcePoints)
 		-- UVResourcePointsColor = Color( 255, 255, 255, 200)
 		
@@ -2775,9 +2775,9 @@ else --HUD/Options
 		-- 		UVNotification = "/// " .. lang("uv.chase.busted") .. " ///"
 		-- 	end
 		-- end
-		if !UVHUDDisplayNotification then
-			UVHUDDisplayNotification = true
-		end
+		-- if not UVHUDDisplayNotification then
+		-- 	UVHUDDisplayNotification = true
+		-- end
 		if UVBustingTimeLeft <= 0 then
 			UVNotification = true
 		end
@@ -2787,14 +2787,13 @@ else --HUD/Options
 	net.Receive("UVHUDStopBusting", function()
 		
 		UVHUDDisplayBusting = nil
-		
 		UVHUDDisplayNotification = nil
 		
 	end)
 	
 	net.Receive("UVHUDStopBustingTimeLeft", function()
 		
-		if !UVHUDDisplayNotification and !uvenemybusted and UVBustingTimeLeft < 1 and UVBustingTimeLeft >= 0 then
+		if not UVHUDDisplayNotification and !uvenemybusted and UVBustingTimeLeft < 1 and UVBustingTimeLeft >= 0 then
 			UVNotificationColor = Color( 0, 255, 0)
 			UVNotification = string.format(language.GetPhrase("uv.chase.evadedtime"), UVBustingTimeLeft)
 			UVHUDDisplayNotification = true
@@ -3098,7 +3097,7 @@ else --HUD/Options
 		local w = ScrW()
 		local h = ScrH()
 		local hudyes = showhud:GetBool()
-		local hudtype = UVHUDTypeRacing:GetString()
+		local hudtype = UVHUDTypePursuit:GetString()
 		local lang = language.GetPhrase
 		
 		-- local UnitsChasing = tonumber(UVUnitsChasing)

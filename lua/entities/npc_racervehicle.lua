@@ -322,8 +322,6 @@ function ENT:FindRace()
 				target_pos = target.target_point
 			end
 			
-			print(velocity:LengthSqr())
-			
 			if size < 200000 then
 				target_pos = target.target_point
 			end

@@ -653,7 +653,7 @@ local function mw_pursuit_main( ... )
             -- Evade Box, All BG
             surface.SetDrawColor(200, 200, 200, 100)
             surface.DrawRect(w * 0.333, bottomy2, w * 0.34, h * 0.01)
-            
+
             -- Evade Box, Busted Meter
             if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
                 if not BustingProgress or BustingProgress == 0 then
@@ -663,7 +663,7 @@ local function mw_pursuit_main( ... )
                 local blink = 255 * math.abs(math.sin(RealTime() * 4))
                 local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
                 local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-                
+
                 local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
 
                 local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
