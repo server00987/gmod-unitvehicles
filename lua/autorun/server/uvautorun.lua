@@ -699,6 +699,9 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 			end
 			local object = coldata.HitEntity
 			if car.esfon and object:IsVehicle() and !(object.UnitVehicle and car.UnitVehicle) then --ESF
+				if not object.UnitVehicle and not car.UnitVehicle then
+					if not RacerFriendlyFire:GetBool() then return end
+				end
 				local enemyvehicle = object
 				local enemycallsign
 				if object.UnitVehicle then
@@ -734,6 +737,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 					end
 				end
 				if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
+					damage = (table.HasValue(uvcommanders, object) and UVPTESFCommanderDamage:GetFloat()) or damage
 					if object.IsSimfphyscar then
 						local MaxHealth = object:GetMaxHealth()
 						local damage = MaxHealth * damage--0.4
@@ -987,6 +991,9 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 	if !IsValid(car) or car:GetClass() != "gmod_sent_vehicle_fphysics_base" then return end
 	local object = coldata.HitEntity
 	if car.esfon and object:IsVehicle() and !(object.UnitVehicle and car.UnitVehicle) then --ESF
+		if not object.UnitVehicle and not car.UnitVehicle then
+			if not RacerFriendlyFire:GetBool() then return end
+		end
 		local enemyvehicle = object
 		local enemycallsign
 		if object.UnitVehicle then
@@ -1022,6 +1029,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 			end
 		end
 		if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
+			damage = (table.HasValue(uvcommanders, object) and UVPTESFCommanderDamage:GetFloat()) or damage
 			if object.IsSimfphyscar then
 				local MaxHealth = object:GetMaxHealth()
 				local damage = MaxHealth*damage
@@ -1251,12 +1259,15 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 				if car:Health() <= car:GetMaxHealth()/4 and !car.jeepdamaged then 
 					car.jeepdamaged = true
 					if car:LookupAttachment("vehicle_engine") > 0 then
-						ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
+						ParticleEffectAttach("smoke_burning_engine_01", PATT+ACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
 					end
 				end
 			end
 		end
 		if car.esfon and object:IsVehicle() and !(object.UnitVehicle and car.UnitVehicle) then --ESF
+			if not object.UnitVehicle and not car.UnitVehicle then
+				if not RacerFriendlyFire:GetBool() then return end
+			end
 			local enemyvehicle = object
 			local enemycallsign
 			if object.UnitVehicle then
@@ -1292,6 +1303,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 				end
 			end
 			if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
+				damage = (table.HasValue(uvcommanders, object) and UVPTESFCommanderDamage:GetFloat()) or damage
 				if object.IsSimfphyscar then
 					local MaxHealth = object:GetMaxHealth()
 					local damage = MaxHealth*damage

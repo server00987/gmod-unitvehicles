@@ -48,12 +48,15 @@ TOOL.ClientConVar['cooldown_repairkit'] = 5
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 2000000
 TOOL.ClientConVar["esfdamage"] = 0.2
+TOOL.ClientConVar["esfcommanderdamage"] = 0.1
 TOOL.ClientConVar["jammerduration"] = 10
 TOOL.ClientConVar["shockwavepower"] = 2000000
 TOOL.ClientConVar["shockwavedamage"] = 0.1
+TOOL.ClientConVar["shockwavecommanderdamage"] = 0.1
 TOOL.ClientConVar["spikestripduration"] = 60
 TOOL.ClientConVar["stunminepower"] = 2000000
 TOOL.ClientConVar["stunminedamage"] = 0.1
+TOOL.ClientConVar["stunminecommanderdamage"] = 0.1
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -190,23 +193,32 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_esfduration'] = GetConVar("uvpursuittech_esfduration"):GetFloat()
 			convar_table['unitvehicle_pursuittech_esfpower'] = GetConVar("uvpursuittech_esfpower"):GetFloat()
 			convar_table['unitvehicle_pursuittech_esfdamage'] = GetConVar("uvpursuittech_esfdamage"):GetFloat()
+			convar_table['unitvehicle_pursuittech_esfcommanderdamage'] = GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat()
+
 			convar_table['unitvehicle_pursuittech_jammerduration'] = GetConVar("uvpursuittech_jammerduration"):GetFloat()
 			convar_table['unitvehicle_pursuittech_shockwavepower'] = GetConVar("uvpursuittech_shockwavepower"):GetFloat()
 			convar_table['unitvehicle_pursuittech_shockwavedamage'] = GetConVar("uvpursuittech_shockwavedamage"):GetFloat()
+			convar_table['unitvehicle_pursuittech_shockwavecommanderdamage'] = GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat()
 			convar_table['unitvehicle_pursuittech_spikestripduration'] = GetConVar("uvpursuittech_spikestripduration"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminepower'] = GetConVar("uvpursuittech_stunminepower"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminedamage'] = GetConVar("uvpursuittech_stunminedamage"):GetFloat()
+			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
+
 
 			RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
+			RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
+			RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
 			RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
+			RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
+
 			
 
 			for _, v in pairs(pttable) do
@@ -278,6 +290,15 @@ if CLIENT then
 		esfdamage:SetTooltip("#uv.ptech.damage.desc")
 		esfdamage:SetConVar("uvpursuittech_esfdamage")
 		CPanel:AddItem(esfdamage)
+
+		local esfcommanderdamage = vgui.Create("DNumSlider")
+		esfcommanderdamage:SetMin(0)
+		esfcommanderdamage:SetMax(1)
+		esfcommanderdamage:SetDecimals(1)
+		esfcommanderdamage:SetText("#uv.ptech.damagecommander")
+		esfcommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
+		esfcommanderdamage:SetConVar("uvpursuittech_esfcommanderdamage")
+		CPanel:AddItem(esfcommanderdamage)
 
 		local esfcooldown = vgui.Create("DNumSlider")
 		esfcooldown:SetMin(0)
@@ -378,6 +399,15 @@ if CLIENT then
 		shockwavedamage:SetConVar("uvpursuittech_shockwavedamage")
 		CPanel:AddItem(shockwavedamage)
 
+		local shockwavecommanderdamage = vgui.Create("DNumSlider")
+		shockwavecommanderdamage:SetMin(0)
+		shockwavecommanderdamage:SetMax(1)
+		shockwavecommanderdamage:SetDecimals(1)
+		shockwavecommanderdamage:SetText("#uv.ptech.damagecommander")
+		shockwavecommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
+		shockwavecommanderdamage:SetConVar("uvpursuittech_shockwavecommanderdamage")
+		CPanel:AddItem(shockwavecommanderdamage)
+
 		local shockwavecooldown = vgui.Create("DNumSlider")
 		shockwavecooldown:SetMin(0)
 		shockwavecooldown:SetMax(120)
@@ -456,6 +486,15 @@ if CLIENT then
 		stunminedamage:SetTooltip("#uv.ptech.damage.desc")
 		stunminedamage:SetConVar("uvpursuittech_stunminedamage")
 		CPanel:AddItem(stunminedamage)
+
+		local stunminecommanderdamage = vgui.Create("DNumSlider")
+		stunminecommanderdamage:SetMin(0)
+		stunminecommanderdamage:SetMax(1)
+		stunminecommanderdamage:SetDecimals(1)
+		stunminecommanderdamage:SetText("#uv.ptech.damagecommander")
+		stunminecommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
+		stunminecommanderdamage:SetConVar("uvpursuittech_stunminecommanderdamage")
+		CPanel:AddItem(stunminecommanderdamage)
 
 		local stunminecooldown = vgui.Create("DNumSlider")
 		stunminecooldown:SetMin(0)

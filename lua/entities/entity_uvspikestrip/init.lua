@@ -123,6 +123,9 @@ function ENT:DoUpdate()
 	for _, array in pairs(found) do
 		if !array[1].IsGlideVehicle then continue end
 		if !self.racerdeployed and IsValid(array[1].UnitVehicle) then continue end
+		if self.racerdeployed and not array[1].UnitVehicle then
+			if not RacerFriendlyFire:GetBool() then return end
+		end
 
 		local hit = false
 
@@ -196,6 +199,9 @@ function ENT:StartTouch( ent )
 			if ent:GetDamaged() then return end
 			local car = ent:GetBaseEnt()
 			if car.UnitVehicle or car.UVWanted and !AutoHealth:GetBool() then
+				if self.racerdeployed and car.UVWanted then
+					if not RacerFriendlyFire:GetBool() then return end
+				end
 				local MaxHealth = car:GetMaxHealth()
 				local damage = MaxHealth*0.1
 				car:ApplyDamage( damage, DMG_GENERIC )
@@ -220,6 +226,9 @@ function ENT:StartTouch( ent )
 				end
 			end)
 		elseif ent:GetClass() == "prop_vehicle_jeep" then
+			if self.racerdeployed and ent.UVWanted then
+				if not RacerFriendlyFire:GetBool() then return end
+			end
 			local ogmaterial0 = ent:GetWheel(0):GetMaterial()
 			local ogmaterial1 = ent:GetWheel(1):GetMaterial()
 			local ogmaterial2 = ent:GetWheel(2):GetMaterial()
