@@ -111,7 +111,7 @@ local function carbon_racing_main( ... )
     markup.Parse("<font=UVCarbonFont>" .. laptext):Draw(w * 0.97,h * 0.155,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
     
     -- Racer List
-    local alt = math.floor(CurTime() / 10) % 2 == 1
+    local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
     for i = 1, racer_count, 1 do
         if racer_count == 1 then
             return
@@ -146,7 +146,7 @@ local function carbon_racing_main( ... )
                     local num = tonumber(entry[4])
                     num =
                     ((num > 0 and "+ ") or "- ") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2fs", math.abs(num))
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
@@ -335,7 +335,7 @@ local function mw_racing_main( ... )
     end
     
     -- Racer List
-    local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+    local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
     for i = 1, racer_count, 1 do
         if racer_count == 1 then
             return
@@ -944,7 +944,7 @@ local function undercover_racing_main( ... )
     surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005) -- Divider
     
     -- -- Racer List
-    local alt = math.floor(CurTime() / 10) % 2 == 1 -- toggles every 10 seconds
+    local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
     
     local baseY = h * 0.21 -- starting Y position of the list (adjust this freely)
     local spacing = h * 0.035 -- spacing between each racer (vertical gap)
@@ -984,7 +984,7 @@ local function undercover_racing_main( ... )
                     local num = tonumber(entry[4])
                     num =
                     ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2fs", math.abs(num))
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
@@ -1266,7 +1266,9 @@ local function prostreet_racing_main( ... )
                 
                 if entry[4] then
                     local num = tonumber(entry[4])
-                    num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+                    num =
+                    ((num > 0 and "+") or "-") ..
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
@@ -1462,32 +1464,30 @@ local function underground_racing_main( ... )
     local lang = language.GetPhrase
     
     -- Position Counter
-    if racer_count > 1 then
-        surface.SetDrawColor(0, 0, 0, 200)
-        surface.DrawRect(w * 0.8, h * 0.075, w * 0.175, h * 0.105)
-        
-        draw.DrawText(
-        UVHUDRaceCurrentPos,
-        "UVFont3Big",
-        w * 0.88,
-        h * 0.0675,
-        Color(255, 255, 255),
-        TEXT_ALIGN_RIGHT) -- Upper, Your Position
-        draw.DrawText(
-        lang("uv.race.pos." .. UVHUDRaceCurrentPos),
-        "UVFont5",
-        w * 0.8825,
-        h * 0.08,
-        Color(255, 255, 255),
-        TEXT_ALIGN_LEFT) -- Upper, Your Position Suffix
-        draw.DrawText(
-        "/" .. UVHUDRaceCurrentParticipants,
-        "UVFont5",
-        w * 0.88,
-        h * 0.12,
-        Color(125, 125, 255),
-        TEXT_ALIGN_LEFT) -- Lower, Total Positions
-    end
+	surface.SetDrawColor(0, 0, 0, 200)
+	surface.DrawRect(w * 0.8, h * 0.075, w * 0.175, h * 0.105)
+	
+	draw.DrawText(
+	UVHUDRaceCurrentPos,
+	"UVFont3Big",
+	w * 0.88,
+	h * 0.0675,
+	Color(255, 255, 255),
+	TEXT_ALIGN_RIGHT) -- Upper, Your Position
+	draw.DrawText(
+	lang("uv.race.pos." .. UVHUDRaceCurrentPos),
+	"UVFont5",
+	w * 0.8825,
+	h * 0.08,
+	Color(255, 255, 255),
+	TEXT_ALIGN_LEFT) -- Upper, Your Position Suffix
+	draw.DrawText(
+	"/" .. UVHUDRaceCurrentParticipants,
+	"UVFont5",
+	w * 0.88,
+	h * 0.12,
+	Color(125, 125, 255),
+	TEXT_ALIGN_LEFT) -- Lower, Total Positions
     
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -1522,7 +1522,9 @@ local function underground_racing_main( ... )
                 
                 if entry[4] then
                     local num = tonumber(entry[4])
-                    num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+                    num =
+                    ((num > 0 and "+") or "-") ..
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
@@ -1675,36 +1677,34 @@ local function underground2_racing_main( ... )
     local racer_count = #string_array
     
     -- Position Counter
-    if racer_count > 1 then
-        surface.SetDrawColor(0, 0, 0, 200)
-        surface.DrawRect(w * 0.72, h * 0.1, w * 0.255, h * 0.105)
-        
-        draw.NoTexture()
-        surface.SetDrawColor(255, 255, 255, 255)
-        surface.DrawTexturedRectRotated(w * 0.825, h * 0.15, w * 0.05, h * 0.005, 70) -- Divider
-        
-        draw.DrawText(
-        UVHUDRaceCurrentPos,
-        "UVFont3Big",
-        w * 0.785,
-        h * 0.095,
-        Color(255, 255, 255),
-        TEXT_ALIGN_RIGHT) -- Upper, Your Position
-        draw.DrawText(
-        lang("uv.race.pos." .. UVHUDRaceCurrentPos),
-        "UVFont",
-        w * 0.785,
-        h * 0.15,
-        Color(255, 255, 255),
-        TEXT_ALIGN_LEFT) -- Upper, Your Position
-        draw.DrawText(
-        UVHUDRaceCurrentParticipants,
-        "UVFont3Big",
-        w * 0.835,
-        h * 0.095,
-        Color(255, 255, 255),
-        TEXT_ALIGN_LEFT) -- Lower, Total Positions
-    end
+	surface.SetDrawColor(0, 0, 0, 200)
+	surface.DrawRect(w * 0.72, h * 0.1, w * 0.255, h * 0.105)
+	
+	draw.NoTexture()
+	surface.SetDrawColor(255, 255, 255, 255)
+	surface.DrawTexturedRectRotated(w * 0.825, h * 0.15, w * 0.05, h * 0.005, 70) -- Divider
+	
+	draw.DrawText(
+	UVHUDRaceCurrentPos,
+	"UVFont3Big",
+	w * 0.785,
+	h * 0.095,
+	Color(255, 255, 255),
+	TEXT_ALIGN_RIGHT) -- Upper, Your Position
+	draw.DrawText(
+	lang("uv.race.pos." .. UVHUDRaceCurrentPos),
+	"UVFont",
+	w * 0.785,
+	h * 0.15,
+	Color(255, 255, 255),
+	TEXT_ALIGN_LEFT) -- Upper, Your Position
+	draw.DrawText(
+	UVHUDRaceCurrentParticipants,
+	"UVFont3Big",
+	w * 0.835,
+	h * 0.095,
+	Color(255, 255, 255),
+	TEXT_ALIGN_LEFT) -- Lower, Total Positions
     
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -1739,7 +1739,9 @@ local function underground2_racing_main( ... )
                 
                 if entry[4] then
                     local num = tonumber(entry[4])
-                    num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+                    num =
+                    ((num > 0 and "+") or "-") ..
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
                     
                     table.insert(args, num)
                 end
