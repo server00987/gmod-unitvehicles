@@ -76,6 +76,7 @@ local function carbon_racing_main( ... )
     local string_array = select(3, ...)
     
     local racer_count = #string_array
+    local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
     
@@ -284,6 +285,7 @@ local function mw_racing_main( ... )
     local string_array = select(3, ...)
     
     local racer_count = #string_array
+    local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
     
@@ -901,6 +903,7 @@ local function undercover_racing_main( ... )
     local string_array = select(3, ...)
     
     local racer_count = #string_array
+    local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
     
@@ -1129,7 +1132,6 @@ local function prostreet_racing_main( ... )
     local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
-    local lang = language.GetPhrase
     
     ------------------------------------
     
@@ -1339,7 +1341,6 @@ local function underground_racing_main( ... )
     local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
-    local lang = language.GetPhrase
     
     ------------------------------------
     
@@ -1601,7 +1602,6 @@ local function underground2_racing_main( ... )
     local lang = language.GetPhrase
     
     local checkpoint_count = #my_array["Checkpoints"]
-    local lang = language.GetPhrase
     
     ------------------------------------
     
@@ -1672,7 +1672,6 @@ local function underground2_racing_main( ... )
     end
     
     local racer_count = #string_array
-    local lang = language.GetPhrase
     
     -- Position Counter
     if racer_count > 1 then
