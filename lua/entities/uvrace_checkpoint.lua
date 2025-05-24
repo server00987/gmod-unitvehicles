@@ -17,6 +17,7 @@ function ENT:Initialize()
 	self:EnableCustomCollisions(true)
 	self:SetSolid(SOLID_BBOX)
 	self:SetCollisionBounds(vec0, self:GetMaxPos() - self:GetPos())
+
 	self:DrawShadow(false)
 
 	if CLIENT then
