@@ -165,7 +165,7 @@ local function carbon_racing_main( ... )
             color = (i > 4 and Colors.Carbon_OthersDark) or Colors.Carbon_Others
         end
         
-        local text = alt and (status_text) or (racer_name .. "   " .. i)
+        local text = alt and (status_text .. "   " .. i) or (racer_name .. "   " .. i)
         
         if is_local_player then
             surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_INVERTED"])
@@ -173,7 +173,8 @@ local function carbon_racing_main( ... )
             surface.DrawTexturedRect(w * 0.72, h * 0.185 + racercount, w * 0.255, h * 0.025)
         end
         
-        draw.DrawText("UVCarbonLeaderboardFont", w * 0.97, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT)
+		
+        draw.DrawText(text, "UVCarbonLeaderboardFont", w * 0.97, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT)
     end
 end
 
