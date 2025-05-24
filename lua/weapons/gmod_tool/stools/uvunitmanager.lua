@@ -1168,7 +1168,7 @@ if CLIENT then
 		})
 
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.base.title.desc",
+			Text = "#tool.uvunitmanager.settings.base.desc",
 		})
 
 		local vehiclebase = vgui.Create("DNumSlider")
