@@ -3631,7 +3631,7 @@ else --HUD/Options
 		OK:SetSize(w*0.015, h*0.03)
 		OK:SetPos(w*0.775, h*0.115)
 		
-		local timetotal = 10
+		local timetotal = 30
 		local timestart = CurTime()
 		
 		ResultPanel.Paint = function(self, w, h)
@@ -3768,7 +3768,7 @@ else --HUD/Options
 		OK:SetSize(w*0.015, h*0.03)
 		OK:SetPos(w*0.775, h*0.115)
 		
-		local timetotal = 10
+		local timetotal = 30
 		local timestart = CurTime()
 		
 		ResultPanel.Paint = function(self, w, h)
@@ -3898,7 +3898,7 @@ else --HUD/Options
 		OK:SetSize(w*0.015, h*0.03)
 		OK:SetPos(w*0.775, h*0.115)
 		
-		local timetotal = 10
+		local timetotal = 30
 		local timestart = CurTime()
 		
 		ResultPanel.Paint = function(self, w, h)
@@ -4028,7 +4028,7 @@ else --HUD/Options
 		OK:SetSize(w*0.015, h*0.03)
 		OK:SetPos(w*0.775, h*0.115)
 		
-		local timetotal = 10
+		local timetotal = 30
 		local timestart = CurTime()
 		
 		ResultPanel.Paint = function(self, w, h)
@@ -4246,6 +4246,8 @@ else --HUD/Options
 			
 			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings")
 			panel:Help("#uv.settings.uistyle.title")
+			panel:ControlHelp("#uv.settings.uistyle.desc")
+			
 			local uistyleracing, label = panel:ComboBox( "#uv.settings.uistyle.racing", "unitvehicle_hudtype_racing" )
 			uistyleracing:AddChoice( "Most Wanted", "mostwanted")
 			uistyleracing:AddChoice( "Carbon", "carbon")
@@ -4256,7 +4258,12 @@ else --HUD/Options
 			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
 			uistyleracing:AddChoice( "#uv.uistyle.none", "")
 			
-			panel:ControlHelp("#uv.settings.uistyle.racing.desc")
+			-- local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
+			-- uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
+			-- uistylepursuit:AddChoice( "Carbon", "carbon")
+			-- uistylepursuit:AddChoice( "Undercover", "undercover")
+			-- uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
+			-- uistylepursuit:AddChoice( "#uv.uistyle.none", "")
 			
 			panel:Help("#uv.settings.heatlevels")
 			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
