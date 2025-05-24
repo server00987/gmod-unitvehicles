@@ -2528,14 +2528,19 @@ else --HUD/Options
 	
 	net.Receive("UVHUDHeatLevel", function()
 		
-		local HeatLevel = net.ReadString()
-		UVHeatLevel = tonumber(HeatLevel)
+		local HeatLevel = tonumber(net.ReadString())
+		hook.Run( 'UIEventHook', 'pursuit', 'onHeatLevelUpdate', HeatLevel, UVHeatLevel )
+
+		UVHeatLevel = HeatLevel
 		
 	end)
 	
 	net.Receive("UVHUDUnitsChasing", function()
 		
-		UVUnitsChasing = net.ReadString()
+		local chasing = net.ReadString()
+		hook.Run( 'UIEventHook', 'pursuit', 'onChasingUnitsChange', chasing, UVUnitsChasing )
+
+		UVUnitsChasing = chasing
 		
 	end)
 	
@@ -2544,45 +2549,49 @@ else --HUD/Options
 		local ResourcePoints = net.ReadString()
 		local rp_num = tonumber(ResourcePoints)
 		
-		if rp_num ~= UVResourcePoints then
-			hook.Remove("Think", "UVRPColorPulse")
-			UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
-			--UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
+		-- if rp_num ~= UVResourcePoints then
+		-- 	hook.Remove("Think", "UVRPColorPulse")
+		-- 	UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
+		-- 	--UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
 			
-			local clrs = {}
+		-- 	local clrs = {}
 			
-			for _, v in pairs( { 'r', 'g', 'b' } ) do
-				if UVUnitsColor[v] ~= 255 then table.insert(clrs, v) end
-			end 
+		-- 	for _, v in pairs( { 'r', 'g', 'b' } ) do
+		-- 		if UVUnitsColor[v] ~= 255 then table.insert(clrs, v) end
+		-- 	end 
 			
-			-- if timer.Exists("UVWrecksColor") then
-			-- 	timer.Remove("UVWrecksColor")
-			-- end
-			local val = 50
+		-- 	-- if timer.Exists("UVWrecksColor") then
+		-- 	-- 	timer.Remove("UVWrecksColor")
+		-- 	-- end
+		-- 	local val = 50
 			
-			hook.Add("Think", "UVRPColorPulse", function()
-				val = val + 200 * RealFrameTime()
-				-- UVResourcePointsColor.b = val
-				-- UVResourcePointsColor.g = val
-				for _, v in pairs( clrs ) do
-					UVUnitsColor[v] = val
-				end
+		-- 	hook.Add("Think", "UVRPColorPulse", function()
+		-- 		val = val + 200 * RealFrameTime()
+		-- 		-- UVResourcePointsColor.b = val
+		-- 		-- UVResourcePointsColor.g = val
+		-- 		for _, v in pairs( clrs ) do
+		-- 			UVUnitsColor[v] = val
+		-- 		end
 				
-				if val >= 255 then hook.Remove("Think", "UVRPColorPulse") end
-			end)
+		-- 		if val >= 255 then hook.Remove("Think", "UVRPColorPulse") end
+		-- 	end)
+		-- end
+		if rp_num ~= UVResourcePoints then
+			hook.Run( 'UIEventHook', 'pursuit', 'onResourceChange', rp_num, UVResourcePoints )
 		end
-		UVResourcePoints = tonumber(ResourcePoints)
-		UVResourcePointsColor = Color( 255, 255, 255, 200)
 		
-		if UVHUDDisplayBackupTimer then
-			if UVBackupTimerSeconds > 10 then
-				UVResourcePointsColor = Color( 255, 255, 255, 200)
-			elseif math.floor(UVBackupTimerSeconds)==math.Round(UVBackupTimerSeconds) then
-				UVResourcePointsColor = Color( 255, 255, 255, 200)
-			else
-				UVResourcePointsColor = Color( 255, 255, 0, 200)
-			end
-		end
+		UVResourcePoints = tonumber(ResourcePoints)
+		-- UVResourcePointsColor = Color( 255, 255, 255, 200)
+		
+		-- if UVHUDDisplayBackupTimer then
+		-- 	if UVBackupTimerSeconds > 10 then
+		-- 		UVResourcePointsColor = Color( 255, 255, 255, 200)
+		-- 	elseif math.floor(UVBackupTimerSeconds)==math.Round(UVBackupTimerSeconds) then
+		-- 		UVResourcePointsColor = Color( 255, 255, 255, 200)
+		-- 	else
+		-- 		UVResourcePointsColor = Color( 255, 255, 0, 200)
+		-- 	end
+		-- end
 		
 	end)
 	
@@ -2605,29 +2614,33 @@ else --HUD/Options
 		
 		local wrecks = net.ReadString()
 		
+		-- if wrecks ~= UVWrecks then
+		-- 	hook.Remove("Think", "UVWrecksColorPulse")
+		-- 	if timer.Exists("UVWrecksColorPulseDelay") then timer.Remove("UVWrecksColorPulseDelay") end
+		-- 	UVWrecksColor = Color(255,255,0, 150)
+			
+		-- 	-- if timer.Exists("UVWrecksColor") then
+		-- 	-- 	timer.Remove("UVWrecksColor")
+		-- 	-- end
+			
+		-- 	timer.Create("UVWrecksColorPulseDelay", 1, 1, function()
+		-- 		hook.Add("Think", "UVWrecksColorPulse", function()
+		-- 			UVWrecksColor.b = UVWrecksColor.b + 600 * RealFrameTime()
+		-- 			if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
+		-- 		end)
+		-- 	end)
+			
+		-- 	-- timer.Create("UVWrecksColor", .3, 1, function()
+		-- 	-- 	UVWrecksColor = Colors['White']
+		-- 	-- end)
+		-- 	-- else
+		-- 	-- 	UVTagsColor = Colors['White']
+		-- end
+
 		if wrecks ~= UVWrecks then
-			hook.Remove("Think", "UVWrecksColorPulse")
-			if timer.Exists("UVWrecksColorPulseDelay") then timer.Remove("UVWrecksColorPulseDelay") end
-			UVWrecksColor = Color(255,255,0, 150)
-			
-			-- if timer.Exists("UVWrecksColor") then
-			-- 	timer.Remove("UVWrecksColor")
-			-- end
-			
-			timer.Create("UVWrecksColorPulseDelay", 1, 1, function()
-				hook.Add("Think", "UVWrecksColorPulse", function()
-					UVWrecksColor.b = UVWrecksColor.b + 600 * RealFrameTime()
-					if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
-				end)
-			end)
-			
-			-- timer.Create("UVWrecksColor", .3, 1, function()
-			-- 	UVWrecksColor = Colors['White']
-			-- end)
-			-- else
-			-- 	UVTagsColor = Colors['White']
+			hook.Run( 'UIEventHook', 'pursuit', 'onUnitWreck', wrecks, UVWrecks )
 		end
-		
+
 		UVWrecks = wrecks
 		
 	end)
@@ -2636,32 +2649,36 @@ else --HUD/Options
 		
 		local tags = net.ReadString()
 		
+		-- if tags ~= UVTags then
+		-- 	hook.Remove("Think", "UVTagsColorPulse")
+		-- 	if timer.Exists("UVTagsColorPulseDelay") then timer.Remove("UVTagsColorPulseDelay") end
+			
+		-- 	UVTagsColor = Color(255,255,0, 150)
+			
+		-- 	-- if timer.Exists("UVWrecksColor") then
+		-- 	-- 	timer.Remove("UVWrecksColor")
+		-- 	-- end
+			
+		-- 	timer.Create("UVTagsColorPulseDelay", 1, 1, function()
+		-- 		hook.Add("Think", "UVTagsColorPulse", function()
+		-- 			UVTagsColor.b = UVTagsColor.b + 600 * RealFrameTime()
+		-- 			if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
+		-- 		end)
+		-- 	end)
+			
+		-- 	-- timer.Create("UVWrecksColor", .3, 1, function()
+		-- 	-- 	UVWrecksColor = Colors['White']
+		-- 	-- end)
+		-- 	-- else
+		-- 	-- 	UVTagsColor = Colors['White']
+		-- end
+
 		if tags ~= UVTags then
-			hook.Remove("Think", "UVTagsColorPulse")
-			if timer.Exists("UVTagsColorPulseDelay") then timer.Remove("UVTagsColorPulseDelay") end
-			
-			UVTagsColor = Color(255,255,0, 150)
-			
-			-- if timer.Exists("UVWrecksColor") then
-			-- 	timer.Remove("UVWrecksColor")
-			-- end
-			
-			timer.Create("UVTagsColorPulseDelay", 1, 1, function()
-				hook.Add("Think", "UVTagsColorPulse", function()
-					UVTagsColor.b = UVTagsColor.b + 600 * RealFrameTime()
-					if UVTagsColor.b >= 255 then hook.Remove("Think", "UVTagsColorPulse") end
-				end)
-			end)
-			
-			-- timer.Create("UVWrecksColor", .3, 1, function()
-			-- 	UVWrecksColor = Colors['White']
-			-- end)
-			-- else
-			-- 	UVTagsColor = Colors['White']
+			hook.Run( 'UIEventHook', 'pursuit', 'onUnitTag', wrecks, UVTags )
 		end
 		
 		UVTags = tags
-		
+
 	end)
 	
 	net.Receive("UVHUDTimer", function()
@@ -2737,29 +2754,32 @@ else --HUD/Options
 		UVBustedColor = Color( 255, 255, 255, 50 )
 		UVNotification = lang("uv.chase.busting")
 		UVBustingTimeLeft = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
-		if UVHUDDisplayPursuit then
-			if UVBustingTimeLeft >= 3 then
-				-- UVNotification = lang("uv.chase.busting")
-			elseif UVBustingTimeLeft >= 2 then
-				UVBustedColor = Color( 255, blink, blink)
-				-- UVNotification = "! " .. lang("uv.chase.busting") .. " !"
-				UVSoundBusting()
-			elseif UVBustingTimeLeft >= 1 then
-				UVBustedColor = Color( 255, blink2, blink2)
-				-- UVNotification = "!! " .. lang("uv.chase.busting") .. " !!"
-				UVSoundBusting()
-			elseif UVBustingTimeLeft >= 0 then
-				UVBustedColor = Color( 255, blink3, blink3)
-				-- UVNotification = "!!! " .. lang("uv.chase.busting") .. " !!!"
-				UVSoundBusting()
-			else
-				UVBustedColor = Color( 255, 0, 0)
-				-- UVBustedColor = Color( 255, 255, 255, 50)
-				UVNotification = "/// " .. lang("uv.chase.busted") .. " ///"
-			end
-		end
+		-- if UVHUDDisplayPursuit then
+		-- 	if UVBustingTimeLeft >= 3 then
+		-- 		-- UVNotification = lang("uv.chase.busting")
+		-- 	elseif UVBustingTimeLeft >= 2 then
+		-- 		UVBustedColor = Color( 255, blink, blink)
+		-- 		-- UVNotification = "! " .. lang("uv.chase.busting") .. " !"
+		-- 		UVSoundBusting()
+		-- 	elseif UVBustingTimeLeft >= 1 then
+		-- 		UVBustedColor = Color( 255, blink2, blink2)
+		-- 		-- UVNotification = "!! " .. lang("uv.chase.busting") .. " !!"
+		-- 		UVSoundBusting()
+		-- 	elseif UVBustingTimeLeft >= 0 then
+		-- 		UVBustedColor = Color( 255, blink3, blink3)
+		-- 		-- UVNotification = "!!! " .. lang("uv.chase.busting") .. " !!!"
+		-- 		UVSoundBusting()
+		-- 	else
+		-- 		UVBustedColor = Color( 255, 0, 0)
+		-- 		-- UVBustedColor = Color( 255, 255, 255, 50)
+		-- 		UVNotification = "/// " .. lang("uv.chase.busted") .. " ///"
+		-- 	end
+		-- end
 		if !UVHUDDisplayNotification then
 			UVHUDDisplayNotification = true
+		end
+		if UVBustingTimeLeft <= 0 then
+			UVNotification = true
 		end
 		
 	end)
@@ -3078,10 +3098,11 @@ else --HUD/Options
 		local w = ScrW()
 		local h = ScrH()
 		local hudyes = showhud:GetBool()
+		local hudtype = UVHUDTypeRacing:GetString()
 		local lang = language.GetPhrase
 		
-		local UnitsChasing = tonumber(UVUnitsChasing)
-		local UVBustTimer = BustedTimer:GetFloat()
+		-- local UnitsChasing = tonumber(UVUnitsChasing)
+		-- local UVBustTimer = BustedTimer:GetFloat()
 		
 		-- TEST VARS, REMOVE AFTER FINISHING
 		-- hudyes = true 
@@ -3102,6 +3123,10 @@ else --HUD/Options
 		-- ResourceText = 30
 		-- UVUnitsChasing = 2
 		-- UnitsChasing = 1v
+		
+		if UV_UI.pursuit[hudtype] then
+			UV_UI.pursuit[hudtype].main()
+		end
 
 		if UVHUDDisplayPursuit and vehicle ~= NULL then
 			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
