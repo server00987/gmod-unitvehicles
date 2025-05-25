@@ -4291,12 +4291,12 @@ else --HUD/Options
 			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
 			uistyleracing:AddChoice( "#uv.uistyle.none", "")
 			
-			-- local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
-			-- uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
+			local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
+			uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
 			-- uistylepursuit:AddChoice( "Carbon", "carbon")
 			-- uistylepursuit:AddChoice( "Undercover", "undercover")
-			-- uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
-			-- uistylepursuit:AddChoice( "#uv.uistyle.none", "")
+			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
+			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
 			
 			panel:Help("#uv.settings.heatlevels")
 			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
