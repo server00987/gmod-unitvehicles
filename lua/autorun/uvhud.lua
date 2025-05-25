@@ -29,21 +29,28 @@ local Colors = {
 }
 
 UVMaterials = {
-    ["UNITS_DAMAGED"] = Material("hud/COPS_DAMAGED_ICON.png"),
-    ["UNITS_DISABLED"] = Material("hud/COPS_TAKENOUT_ICON.png"),
-    ["UNITS"] = Material("hud/COPS_ICON.png"),
-    ["HEAT"] = Material("hud/HEAT_ICON.png"),
-    ["CLOCK"] = Material("hud/TIMER_ICON.png"),
-    ["CLOCK_BG"] = Material("hud/TIMER_ICON_BG.png", "smooth mips"),
-    ["CHECK"] = Material("hud/MINIMAP_ICON_CIRCUIT.png"),
-    ["BACKGROUND"] = Material("hud/NFSMW_BACKGROUND.png"),
-    ["BACKGROUND_BIG"] = Material("hud/NFSMW_BACKGROUND_BIG.png"),
-    ["BACKGROUND_BIGGER"] = Material("hud/NFSMW_BACKGROUND_BIGGER.png"),
-    ["RESULTCOP"] = Material("hud/(9)T_UI_PlayerCop_Large_Icon.png"),
-    ["RESULTRACER"] = Material("hud/(9)(9)T_UI_PlayerRacer_Large_Icon.png"),
+    ["UNITS_DAMAGED"] = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png"),
+    ["UNITS_DISABLED"] = Material("unitvehicles/icons/COPS_TAKENOUT_ICON.png"),
+    ["UNITS"] = Material("unitvehicles/icons/COPS_ICON.png"),
+    ["HEAT"] = Material("unitvehicles/icons/HEAT_ICON.png"),
+    ["CLOCK"] = Material("unitvehicles/icons/TIMER_ICON.png"),
+    ["CLOCK_BG"] = Material("unitvehicles/icons/TIMER_ICON_BG.png", "smooth mips"),
+    ["CHECK"] = Material("unitvehicles/icons/MINIMAP_ICON_CIRCUIT.png"),
+    ["RESULTCOP"] = Material("unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png"),
+    ["RESULTRACER"] = Material("unitvehicles/icons/(9)(9)T_UI_PlayerRacer_Large_Icon.png"),
+	
+    ["BACKGROUND"] = Material("unitvehicles/hud/NFSMW_BACKGROUND.png"),
+    ["BACKGROUND_BIG"] = Material("unitvehicles/hud/NFSMW_BACKGROUND_BIG.png"),
+    ["BACKGROUND_BIGGER"] = Material("unitvehicles/hud/NFSMW_BACKGROUND_BIGGER.png"),
+	
+-- Carbon
+    ["UNITS_DISABLED_CARBON"] = Material("unitvehicles/icons_carbon/COPS_DESTROYED.png"),
+    ["UNITS_CARBON"] = Material("unitvehicles/icons_carbon/COPS_INVOLVED.png"),
+    ["HEAT_CARBON"] = Material("unitvehicles/icons_carbon/FLASHER_ICON_HEAT.png"),
+
+    ["ARROW_CARBON"] = Material("unitvehicles/hud/NFSC_ARROWRIGHT.png"),
     ["BACKGROUND_CARBON"] = Material("unitvehicles/hud/NFSC_GRADIENT.png"),
     ["BACKGROUND_CARBON_INVERTED"] = Material("unitvehicles/hud/NFSC_GRADIENT_INV.png"),
-    ["ARROW_CARBON"] = Material("unitvehicles/hud/NFSC_ARROWRIGHT.png"),
     ["BACKGROUND_CARBON_SMALL"] = Material("unitvehicles/hud/NFSC_GRADIENT_SMALL.png"),
     ["BACKGROUND_CARBON_SMALL_INVERTED"] = Material("unitvehicles/hud/NFSC_GRADIENT_SMALL_INV.png"),
     ["BACKGROUND_CARBON_SOLID"] = Material("unitvehicles/hud/NFSC_GRADIENT_SOLID.png"),
@@ -67,6 +74,87 @@ UV_UI = {}
 for _, v in pairs( {'racing', 'pursuit'} ) do
     UV_UI[v] = {}
 end
+
+-- Universal
+UV_UI.general = {}
+
+local function uv_general( ... )
+	local w = ScrW()
+    local h = ScrH()		
+	local vehicle = LocalPlayer():GetVehicle()
+	local localPlayer = LocalPlayer()
+		
+	if not KeyBindButtons then
+		KeyBindButtons = {}
+	end
+
+	if UVHUDPursuitTech then
+		local PT_Replacement_Strings = {
+			['ESF'] = '#uv.ptech.esf.short',
+			['Killswitch'] = '#uv.ptech.killswitch.short',
+			['Jammer'] = '#uv.ptech.jammer.short',
+			['Shockwave'] = '#uv.ptech.shockwave.short',
+			['Stunmine'] = '#uv.ptech.stunmine.short',
+			['Spikestrip'] = '#uv.ptech.spikes.short',
+			['Repair Kit'] = '#uv.ptech.repairkit.short'
+		}
+		if !uvclientjammed then
+			for i=1, 2, 1 do
+				if UVHUDPursuitTech[i] then
+					local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
+					
+					if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+						net.Start("UVPTUse")
+						net.WriteInt(i, 16)
+						net.SendToServer()
+					end
+					
+					if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
+						local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
+						local ptcol = Color(255, 255, 255)
+						
+						local blink = 255 * math.abs(math.sin(RealTime() * 3))
+						local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+						local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+						
+						if sanitized_cooldown >= 0 then ptcol = Color(255, 255, blink)
+						-- elseif sanitized_cooldown >= 2 then ptcol = Color(blink2, blink2, blink2)
+						-- elseif sanitized_cooldown >= 0 then ptcol = Color(blink3, blink3, blink3)
+						end
+						
+						draw.DrawText(
+							sanitized_cooldown .. "\n" ..
+							(PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
+							"\n"..UVHUDPursuitTech[i].Ammo,
+							"UVFont4",
+							w * (0.88 + ((i - 1) * 0.05)),
+							h * 0.6,
+							ptcol,
+							TEXT_ALIGN_CENTER
+						)
+					else
+						draw.DrawText(
+							"[ " .. input.GetKeyName( var ) .. " ]" .. "\n" ..
+							(PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
+							"\n"..UVHUDPursuitTech[i].Ammo,
+							"UVFont4",
+							w * (0.88 + ((i - 1) * 0.05)),
+							h * 0.6,
+							(UVHUDPursuitTech[i].Ammo > 0 and Color(255,255,255)) or Color(255,75,75),
+							TEXT_ALIGN_CENTER
+						)
+					end
+				else
+					draw.DrawText( "-", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
+				end
+			end
+		else
+			draw.DrawText( lang("uv.pt.jammed"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+		end
+	end
+end
+
+UV_UI.general.main = uv_general
 
 -- Carbon
 UV_UI.racing.carbon = {}
@@ -211,7 +299,7 @@ local function carbon_pursuit_main( ... )
     local UVHeatBountyMin
     local UVHeatBountyMax
     states.EvasionColor = Color(0, 255, 0, 0)
-    states.BustedColor = Color(255, 0, 0, 0)
+    states.BustedColor = Color(193, 66, 0, 0)
     
     if vehicle == NULL then return end
     
@@ -318,9 +406,9 @@ local function carbon_pursuit_main( ... )
 			surface.SetDrawColor(Colors.Carbon_AccentTransparent)
 			surface.DrawTexturedRect(w * 0.8, h * 0.111, w * 0.025, h * 0.033)
 		else
-			surface.SetMaterial(UVMaterials["BACKGROUND_CARBON"])
-			surface.SetDrawColor(Color(255,0,0, 125))
-			surface.DrawTexturedRect(w * 0.785, h * 0.111, w * 0.0925, h * 0.033)
+			surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
+			surface.SetDrawColor(Color(193, 66, 0))
+			surface.DrawTexturedRect(w * 0.795, h * 0.111, w * 0.085, h * 0.033)
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
 			surface.DrawTexturedRectRotated(w * 0.84, h * 0.1512, w * 0.01, h * 0.02, -90)
@@ -329,6 +417,7 @@ local function carbon_pursuit_main( ... )
 		end
 
 		DrawIcon(UVMaterials["CLOCK_BG"], w * 0.8, h * 0.124, .0625, Colors.Carbon_Accent) -- Icon
+		draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97 + 2, h * 0.105 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
 		draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97, h * 0.105, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
     
         -- Bounty
@@ -361,11 +450,14 @@ local function carbon_pursuit_main( ... )
             UVHeatBountyMax = math.huge
         end
 
-        DrawIcon(UVMaterials["HEAT"], w * 0.8, h * 0.28, .05, Colors.Carbon_Accent) -- Icon
+        DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8, h * 0.28, .045, Colors.Carbon_Accent) -- Icon
+        draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.81 + 2, h * 0.26 + 2, Color(0,0,0), TEXT_ALIGN_LEFT)
         draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.81, h * 0.26, Colors.Carbon_Accent, TEXT_ALIGN_LEFT)
         
+        surface.SetDrawColor(Color(0,0,0))
+        surface.DrawRect(w * 0.835 - 4, h * 0.275 - 3, w * 0.145 + 8.5, h * 0.015 + 6)
         surface.SetDrawColor(Colors.Carbon_AccentDarker)
-        surface.DrawRect(w * 0.835, h * 0.275, w * 0.14, h * 0.015)
+        surface.DrawRect(w * 0.835, h * 0.275, w * 0.145, h * 0.015)
         surface.SetDrawColor(Color(255, 255, 255))
         local HeatProgress = 0
         if MaxHeatLevel:GetInt() ~= UVHeatLevel then
@@ -392,7 +484,7 @@ local function carbon_pursuit_main( ... )
                 HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
             end
         end
-        local B = math.Clamp((HeatProgress) * w * 0.14, 0, w * 0.14)
+        local B = math.Clamp((HeatProgress) * w * 0.145, 0, w * 0.145)
         local blink = 255 * math.abs(math.sin(RealTime() * 4))
         local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
         local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
@@ -414,7 +506,8 @@ local function carbon_pursuit_main( ... )
 		surface.SetDrawColor(Color(255, 255, 255, 50))
 		surface.DrawTexturedRect(w * 0.9, h * 0.16, w * 0.075, h * 0.033)
 
-		DrawIcon(UVMaterials["UNITS_DISABLED"], w * 0.97, h * 0.175, .0625, Colors.Carbon_Accent)
+		DrawIcon(UVMaterials["UNITS_DISABLED_CARBON"], w * 0.97, h * 0.175, .05, Colors.Carbon_Accent)
+		draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_LEFT)
 		draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
 
 		-- draw.DrawText(UVTags, "UVFont5WeightShadow", w * 0.36, bottomy4, UVTagsColor, TEXT_ALIGN_LEFT)
@@ -424,8 +517,9 @@ local function carbon_pursuit_main( ... )
 		surface.SetDrawColor(Color(255, 255, 255, 50))
 		surface.DrawTexturedRect(w * 0.79, h * 0.16, w * 0.075, h * 0.033)
 
+		DrawIcon(UVMaterials["UNITS_CARBON"], w * 0.8, h * 0.175, .05, Colors.Carbon_Accent)
+		draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_RIGHT) -- Shadow
 		draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
-		DrawIcon(UVMaterials["UNITS"], w * 0.8, h * 0.175, .0625, Colors.Carbon_Accent)
             
         -- [ Bottom Info Box ] --
         local middlergb = {
@@ -434,22 +528,22 @@ local function carbon_pursuit_main( ... )
             b = 0,
             a = 255
         }
-        local bottomy = h * 0.225
-        local bottomy2 = h * 0.2
-        local bottomy3 = h * 0.3
-        local bottomy4 = h * 0.5
-        local bottomy5 = h * 0.55
-        local bottomy6 = h * 0.2
-        
+
         if not UVHUDDisplayCooldown then
-            -- Evade Box, All BG
+            -- Evade Box, Coloured Backgrounds
             surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"]) -- Busted
-			surface.SetDrawColor(Color(200, 0, 0, 175))
+			surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
+			surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
+
+			surface.SetDrawColor(Color(193, 66, 0, 175))
 			surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.085, h * 0.015)
 
             surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"]) -- Evade
+			surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
+			surface.DrawTexturedRect(w * 0.8925 - 25, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
+			
 			surface.SetDrawColor(Color(0, 200, 0, 175))
-			surface.DrawTexturedRect(w * 0.895, h * 0.215, w * 0.085, h * 0.015)
+			surface.DrawTexturedRect(w * 0.8925, h * 0.215, w * 0.085, h * 0.015)
 
             -- Evade Box, Busted Meter
             if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
@@ -466,25 +560,25 @@ local function carbon_pursuit_main( ... )
                 local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
                 
                 if timeLeft >= UVBustTimer * 0.5 then
-                    states.BustedColor = Color(255, 0, 0, blink)
+                    states.BustedColor = Color(193, 66, 0, blink)
                     -- UVSoundBusting()
                 elseif timeLeft >= UVBustTimer * 0.2 then
-                    states.BustedColor = Color(255, 0, 0, blink2)
+                    states.BustedColor = Color(193, 66, 0, blink2)
                     if playbusting then
                         UVSoundBusting()
                     end
                 elseif timeLeft >= 0 then
-                    states.BustedColor = Color(255, 0, 0, blink3)
+                    states.BustedColor = Color(193, 66, 0, blink3)
                     if playbusting then
                         UVSoundBusting()
                     end
                 else
-                    states.BustedColor = Color(255, 0, 0)
+                    states.BustedColor = Color(193, 66, 0)
                 end
                 
-                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.085), 0, w * 0.085)
+                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.082), 0, w * 0.082)
 				surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
-                surface.SetDrawColor(255, 0, 0)
+                surface.SetDrawColor(193, 66, 0)
                 surface.DrawTexturedRect(w * 0.79 + (w * 0.085 - T), h * 0.215, T, h * 0.015)
                 middlergb = {
                     r = 175,
@@ -492,7 +586,7 @@ local function carbon_pursuit_main( ... )
                     b = 0,
                 }
             else
-                UVBustedColor = Color(255, 0, 0, 0)
+                UVBustedColor = Color(193, 66, 0, 0)
                 BustingProgress = 0
             end
             
@@ -504,7 +598,7 @@ local function carbon_pursuit_main( ... )
                     UVEvadingProgress = EvadingProgress
                 end
                 
-                local T = math.Clamp((UVEvadingProgress) * (w * 0.085), 0, w * 0.085)
+                local T = math.Clamp((UVEvadingProgress) * (w * 0.082), 0, w * 0.082)
 				surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
                 surface.SetDrawColor(0, 255, 0)
                 surface.DrawTexturedRect(w * 0.895, h * 0.215, T, h * 0.015)
@@ -523,7 +617,10 @@ local function carbon_pursuit_main( ... )
             surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, 255)
             surface.DrawRect(w * 0.875, h * 0.215, w * 0.0195, h * 0.015)
             
-            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,Color(255, 0, 0, 100),TEXT_ALIGN_LEFT)
+            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795 + 2,h* 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_LEFT)
+            draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_RIGHT)
+			
+            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,Color(193, 66, 0, 100),TEXT_ALIGN_LEFT)
             draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Color(0, 255, 0, 100),TEXT_ALIGN_RIGHT)
 			
             draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,states.BustedColor,TEXT_ALIGN_LEFT)
@@ -541,7 +638,8 @@ local function carbon_pursuit_main( ... )
                 uloc = "uv.chase.suspects"
             end
 
-            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonLeaderboardFont",w * 0.7925,bottomy3 * 1.001,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
+            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.97 + 2,h * 0.3 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.97,h * 0.3,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
         else
             -- Lower Box
             -- Evade Box, All BG (Moved to inner if clauses)
@@ -558,57 +656,25 @@ local function carbon_pursuit_main( ... )
                 -- Upper Box
                 if not UVHUDCopMode then
                     -- if UVHUDDisplayHidingPrompt then
-                        -- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-                        -- surface.SetDrawColor(0, 175, 0, 200)
-                        -- surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                        
-                        -- local blink = 255 * math.Clamp(math.abs(math.sin(RealTime() * 2)), .7, 1)
-                        -- color = Color(blink, 255, blink)
-                        
-                        -- surface.SetDrawColor(130, 199, 74, 124)
-                        -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                        -- draw.DrawText(
-                        -- "#uv.chase.hiding",
-                        -- "UVFont5UI-BottomBar",
-                        -- w * 0.5,
-                        -- bottomy,
-                        -- color,
-                        -- TEXT_ALIGN_CENTER)
+						-- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_LEFT)
+						-- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 ,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
                     -- end
-                    
-                    -- surface.SetDrawColor(200, 200, 200)
-                    -- surface.DrawRect(w * 0.333, bottomy2, w * 0.34, h * 0.01)
-                    
+
                     local T = math.Clamp((UVCooldownTimer) * (w * 0.19), 0, w * 0.19)
-                    -- surface.SetDrawColor(75, 75, 255)
-                    -- surface.DrawRect(w * 0.333, bottomy2, T, h * 0.01)
-										
 					surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
+					surface.SetDrawColor(Color(0,0,0)) -- Shadow
+					surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.19 + 10, h * 0.015 + 8.5)
+					
 					surface.SetDrawColor(Colors.Carbon_AccentDarker)
 					surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.19, h * 0.015)
 
 					surface.SetDrawColor(Colors.Carbon_Accent)
 					surface.DrawTexturedRect(w * 0.79 + (w * 0.19 - T), h * 0.215, T, h * 0.015)
 
+                    draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
                     draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
                 else
-                    local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-                    local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-
-                    shade_theme_color.a = shade_theme_color.a - 35
-                    theme_color.a = theme_color.a - 35
-                    
-                    local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
-                    color = Color(blink, blink, 255)
-                    
-                    surface.SetDrawColor(shade_theme_color:Unpack())
-                    surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    
-                    surface.SetDrawColor(theme_color:Unpack())
-                    
-                    surface.SetMaterial(UVMaterials["BACKGROUND"])
-                    surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    
+                    draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
                     draw.DrawText("#uv.chase.cooldown", "UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
                 end
             else
@@ -2011,17 +2077,14 @@ local function prostreet_racing_main( ... )
     TEXT_ALIGN_CENTER)
     
     draw.DrawText(
-    UVDisplayTimeRace((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
-    "UVFont5",
+	Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),
+	"UVFont5",
     w * 0.5,
     h * 0.0775,
     Color(255, 255, 255),
     TEXT_ALIGN_CENTER)
     
     -- Lap & Checkpoint Counter
-    -- surface.SetDrawColor(0, 0, 0, 200)
-    -- surface.DrawRect(w * 0.8, h * 0.155, w * 0.175, h * 0.05)
-    
     if UVHUDRaceInfo.Info.Laps > 1 then
         draw.DrawText( -- Shadow
         "#uv.race.hud.lap.ps",

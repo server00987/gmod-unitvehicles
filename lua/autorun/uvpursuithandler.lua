@@ -3140,6 +3140,10 @@ else --HUD/Options
 		-- UVUnitsChasing = 2
 		-- UnitsChasing = 1v
 		
+		if UV_UI.general then
+			UV_UI.general.main()
+		end
+
 		if UV_UI.pursuit[hudtype] then
 			UV_UI.pursuit[hudtype].main()
 		end
@@ -3290,8 +3294,7 @@ else --HUD/Options
 				end
 			end
 		end
-		
-		
+
 		--Police Scanner
 		if (!UVHUDDisplayPursuit or UVHUDDisplayCooldown) and UVHUDScanner and !UVHUDCopMode and !uvclientjammed and localPlayer:InVehicle() then
 			local enemypos = localPlayer:GetPos()
@@ -3341,46 +3344,7 @@ else --HUD/Options
 			drawCircle( w/2, h/10, 30, 50 )
 			drawCircle( w/2, h/10, 14, 50 )
 		end
-		--Pursuit Tech
-		-- if !localPlayer:InVehicle() then
-		-- 	UVHUDPursuitTech = nil
-		-- end
-		if UVHUDPursuitTech then
-			local PT_Replacement_Strings = {
-				['ESF'] = '#uv.ptech.esf.short',
-				['Killswitch'] = '#uv.ptech.killswitch.short',
-				['Jammer'] = '#uv.ptech.jammer.short',
-				['Shockwave'] = '#uv.ptech.shockwave.short',
-				['Stunmine'] = '#uv.ptech.stunmine.short',
-				['Spikestrip'] = '#uv.ptech.spikes.short',
-				['Repair Kit'] = '#uv.ptech.repairkit.short'
-			}
-			if !uvclientjammed then
-				for i=1, 2, 1 do
-					if UVHUDPursuitTech[i] then
-						local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
-						
-						if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
-							net.Start("UVPTUse")
-							net.WriteInt(i, 16)
-							net.SendToServer()
-						end
-						
-						if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
-							local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo.." ("..sanitized_cooldown.."s)", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 0), TEXT_ALIGN_CENTER )
-						else
-							draw.DrawText( (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech).."\n"..UVHUDPursuitTech[i].Ammo, "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, (UVHUDPursuitTech[i].Ammo > 0 and Color( 255, 255, 255)) or Color(255,0,0), TEXT_ALIGN_CENTER )
-						end
-					else
-						draw.DrawText( "-", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
-					end
-				end
-			else
-				draw.DrawText( lang("uv.pt.jammed"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
-			end
-		end
-		
+
 	end)
 	
 	function UVMarkAllLocations()
@@ -4305,7 +4269,7 @@ else --HUD/Options
 			
 			local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
 			uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
-			-- uistylepursuit:AddChoice( "Carbon", "carbon")
+			uistylepursuit:AddChoice( "Carbon", "carbon")
 			-- uistylepursuit:AddChoice( "Undercover", "undercover")
 			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
 			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
