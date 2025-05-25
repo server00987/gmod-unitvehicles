@@ -2294,13 +2294,13 @@ else --HUD/Options
 	
 	unitvehicles = true
 	
-	local UVHUDCopsDamaged = Material("hud/COPS_DAMAGED_ICON.png")
-	local UVHUDCopsWrecked = Material("hud/COPS_TAKENOUT_ICON.png")
-	local UVHUDMilestoneBounty = Material("hud/MILESTONE_PURSUITBOUNTY.png")
-	local UVHUDMilestoneInfractions = Material("hud/MILESTONE_INFRACTIONS.png")
-	local UVHUDMilestoneRoadblocks = Material("hud/MILESTONE_ROADBLOCKS.png")
-	local UVHUDMilestoneSpikestrips = Material("hud/MILESTONE_SPIKESTRIPS.png")
-	local UVHUDPursuitBreaker = Material("hud/WORLD_PURSUITBREAKER.png")
+	local UVHUDCopsDamaged = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png")
+	local UVHUDCopsWrecked = Material("unitvehicles/icons/COPS_TAKENOUT_ICON.png")
+	local UVHUDMilestoneBounty = Material("unitvehicles/icons/MILESTONE_PURSUITBOUNTY.png")
+	local UVHUDMilestoneInfractions = Material("unitvehicles/icons/MILESTONE_INFRACTIONS.png")
+	local UVHUDMilestoneRoadblocks = Material("unitvehicles/icons/MILESTONE_ROADBLOCKS.png")
+	local UVHUDMilestoneSpikestrips = Material("unitvehicles/icons/MILESTONE_SPIKESTRIPS.png")
+	local UVHUDPursuitBreaker = Material("unitvehicles/icons/WORLD_PURSUITBREAKER.png")
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
 
 	if not UVUnitsChasing then
@@ -2982,13 +2982,13 @@ else --HUD/Options
 			local blip, id = GMinimap:AddBlip( {
 				id = "UVBlip"..unit:EntIndex(),
 				parent = unit,
-				icon = "hud/MINIMAP_ICON_CAR.png",
+				icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
 				scale = 1.4,
 				color = Color( 150, 0, 0),
 				alpha = 0
 			} )
 			if unit:GetClass() == "prop_vehicle_jeep" then
-				blip.icon = "hud/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+				blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
 			end
 			local created = false
 			local flashwhite = false
@@ -3018,7 +3018,7 @@ else --HUD/Options
 			local blip, id = GMinimap:AddBlip( {
 				id = "UVBlip"..unit:EntIndex(),
 				parent = unit,
-				icon = "hud/HELICOPTER_MINIMAP_ICON.png",
+				icon = "unitvehicles/icons/HELICOPTER_MINIMAP_ICON.png",
 				scale = 2,
 				color = Color( 150, 0, 0),
 				alpha = 0
@@ -3052,7 +3052,7 @@ else --HUD/Options
 			local blip, id = GMinimap:AddBlip( {
 				id = "UVBlip"..unit:EntIndex(),
 				parent = unit,
-				icon = "hud/MINIMAP_ICON_ROADBLOCK.png",
+				icon = "unitvehicles/icons/MINIMAP_ICON_ROADBLOCK.png",
 				scale = 1.4,
 				color = Color( 255, 255, 0),
 				alpha = 0
@@ -3064,7 +3064,7 @@ else --HUD/Options
 			local blip, id = GMinimap:AddBlip( {
 				id = "UVBlip"..unit:EntIndex(),
 				parent = unit,
-				icon = "hud/repairshop.png",
+				icon = "unitvehicles/icons/repairshop.png",
 				scale = 2,
 				color = Color( 0, 255, 0),
 				alpha = 0,
@@ -3250,12 +3250,12 @@ else --HUD/Options
 						local blip, id = GMinimap:AddBlip( {
 							id = "UVBlip"..ent:EntIndex(),
 							parent = ent,
-							icon = "hud/MINIMAP_ICON_CAR.png",
+							icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
 							scale = 1.4,
 							color = Color( 255, 191, 0),
 						} )
 						if ent:GetClass() == "prop_vehicle_jeep" then
-							blip.icon = "hud/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+							blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
 						end
 					end
 					if ent.displayedonhud then
@@ -3460,7 +3460,7 @@ else --HUD/Options
 						if Glide then
 							Glide.Notify( {
 								text = "<color=61, 183, 255>" .. language.GetPhrase("uv.unit.commander.notification"),
-								icon = "hud/MINIMAP_ICON_EVENT_RIVAL.png",
+								icon = "unitvehicles/icons/MINIMAP_ICON_EVENT_RIVAL.png",
 								lifetime = 5
 							} )
 						else

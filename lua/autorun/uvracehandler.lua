@@ -484,13 +484,13 @@ else
 				local trackstring = string.Explode(" - ", track)
 				Glide.Notify( {
 					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. trackstring[2] .. "\n<color=200,200,200>" .. trackstring[1] .. "\n" .. theme .. "</color>",
-					icon = "hud/ICON_EA_TRAX_64.png",
+					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
 					lifetime = 3
 				} )
 			else
 				Glide.Notify( {
 					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. track .. "</color>\n<color=200,200,200>" .. theme .. "</color>",
-					icon = "hud/ICON_EA_TRAX_64.png",
+					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
 					lifetime = 3
 				} )
 			end

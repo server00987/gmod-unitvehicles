@@ -298,7 +298,7 @@ else
             blip, id = GMinimap:AddBlip( {
                 id = jsonfile,
                 position = location,
-                icon = "hud/MINIMAP_ICON_PURSUIT_BREAKER.png",
+                icon = "unitvehicles/icons/MINIMAP_ICON_PURSUIT_BREAKER.png",
                 scale = 1.5,
                 color = Color( 255, 127, 127, 255 ),
                 lockIconAng = true

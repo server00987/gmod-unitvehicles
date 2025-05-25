@@ -26,7 +26,7 @@ function ENT:Initialize()
 			self.blip, self.blip_id = GMinimap:AddBlip( {
                 id = "Checkpoint"..self:GetID(),
                 position = (self:GetPos() + self:GetMaxPos())/2,
-                icon = "hud/MINIMAP_ICON_CIRCUIT.png",
+                icon = "unitvehicles/icons/MINIMAP_ICON_CIRCUIT.png",
                 scale = 1.5,
                 color = Color( 255, 255, 255),
 				alpha = 0,

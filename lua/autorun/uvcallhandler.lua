@@ -227,7 +227,7 @@ else
         if Glide then
             Glide.Notify( {
                 text = "#uv.hud.popup.wanted",
-                icon = "hud/MILESTONE_PURSUIT.png",
+                icon = "unitvehicles/icons/MILESTONE_PURSUIT.png",
                 sound = "glide/ui/phone_notify.wav",
                 lifetime = 5
             } )
