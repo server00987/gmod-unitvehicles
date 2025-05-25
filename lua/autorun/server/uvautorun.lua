@@ -2419,6 +2419,7 @@ function UVVisualOnTarget(unit, target)
 	if !unit or !target then
 		return
 	end
+	if unit.wrecked then return end
 	local tr = util.TraceLine({start = unit:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {unit, target, uvenemylocation}}).Fraction==1
 	return tobool(tr)
 end
@@ -2486,6 +2487,9 @@ function UVPlayerWreck(vehicle)
 	if table.HasValue(uvplayerunittablevehicle, vehicle) then
 		table.RemoveByValue(uvplayerunittablevehicle, vehicle)
 	end
+	if table.HasValue(uvunitschasing, vehicle) then
+		table.RemoveByValue(uvunitschasing, vehicle)
+	end
 	vehicle.mass = math.Round(vehicle:GetPhysicsObject():GetMass())
 	if !vehicle.playerbounty then
 		vehicle.playerbounty = 500
@@ -2516,10 +2520,15 @@ function UVPlayerWreck(vehicle)
 	local bounty = string.Comma(bountyplus)
 	if IsValid(vehicle.e) and isfunction(vehicle.e.GetDriver) and IsValid(UVGetDriver(vehicle.e)) and UVGetDriver(vehicle.e):IsPlayer() then 
 		--UVGetDriver(vehicle.e):PrintMessage( HUD_PRINTCENTER, name.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-		UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", name, '', bounty, uvcombobounty)
+		UVNotifyCenter({UVGetDriver(vehicle.e)}, "uv.hud.combo", "UNITS_DISABLED", name, '', bounty, uvcombobounty)
 		
 	end
 	uvwrecks = uvwrecks + 1
+
+	net.Start("UVHUDRemoveUV")
+	net.WriteInt(vehicle:EntIndex(), 32)
+	net.Broadcast()
+
 	local driver = UVGetDriver(vehicle)
 	if driver:IsPlayer() then
 		local bustedtable = {}

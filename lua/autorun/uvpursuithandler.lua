@@ -1285,6 +1285,8 @@ if SERVER then
 				end
 			end
 		end
+
+		
 		
 		local visible_suspects = {}
 		
@@ -3079,7 +3081,7 @@ else --HUD/Options
 		local id = net.ReadInt(32)
 		if GMinimap then
 			local blip = GMinimap:FindBlipByID("UVBlip"..id)
-			if !blip then return end
+			if not blip then return end
 			blip.color = Color( 255, 255, 255)
 			local key = "disabled"
 			blip[key] = true
