@@ -726,7 +726,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				local force = power * (1 - (vectordifference:Length()/1000))
 				enemyvehiclephys:ApplyForceCenter(angle:Forward()*force)
 				enemyvehicle.rammed = true
-				timer.Simple(5, function()
+				timer.Simple(3, function()
 					if IsValid(enemyvehicle) then
 						enemyvehicle.rammed = nil
 					end
@@ -832,7 +832,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 							car.rammed = nil
 						end
 						car.rammed = true
-						timer.Simple(5, function() 
+						timer.Simple(3, function() 
 							if not car.wrecked then 
 								car.rammed = nil
 							end 
@@ -1018,7 +1018,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		local force = power * (1 - (vectordifference:Length()/1000))
 		enemyvehiclephys:ApplyForceCenter(angle:Forward()*force)
 		enemyvehicle.rammed = true
-		timer.Simple(5, function()
+		timer.Simple(3, function()
 			if IsValid(enemyvehicle) then
 				enemyvehicle.rammed = nil
 			end
@@ -1122,7 +1122,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 					car.rammed = nil
 				end
 				car.rammed = true
-				timer.Simple(5, function() 
+				timer.Simple(3, function() 
 					if IsValid(NPC) then 
 						car.rammed = nil
 					end 
@@ -1292,7 +1292,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local force = power * (1 - (vectordifference:Length()/1000))
 			enemyvehiclephys:ApplyForceCenter(angle:Forward()*force)
 			enemyvehicle.rammed = true
-			timer.Simple(5, function()
+			timer.Simple(3, function()
 				if IsValid(enemyvehicle) then
 					enemyvehicle.rammed = nil
 				end
@@ -1385,7 +1385,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 						car.rammed = nil
 					end
 					car.rammed = true
-					timer.Simple(5, function() 
+					timer.Simple(3, function() 
 						if IsValid(NPC) then 
 							car.rammed = nil
 						end 
@@ -2524,6 +2524,10 @@ function UVPlayerWreck(vehicle)
 		
 	end
 	uvwrecks = uvwrecks + 1
+
+	if not uvresourcepointsrefreshing and uvresourcepoints > 1 and not uvonecommanderactive then
+		uvresourcepoints = (uvresourcepoints - 1)
+	end	
 
 	net.Start("UVHUDRemoveUV")
 	net.WriteInt(vehicle:EntIndex(), 32)

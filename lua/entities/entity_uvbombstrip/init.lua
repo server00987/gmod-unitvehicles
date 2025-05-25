@@ -35,7 +35,7 @@ function ENT:BombExplode()
             local force = power * (1 - (vectordifference:Length()/1000))
             objectphys:ApplyForceCenter(angle:Forward()*force)
             object.rammed = true
-            timer.Simple(5, function()
+            timer.Simple(3, function()
                 if IsValid(object) then
                     object.rammed = nil
                 end

@@ -456,6 +456,7 @@ local function mw_pursuit_main( ... )
         local closestDistance = math.huge
         
         for _, suspect in pairs(UVHUDWantedSuspects) do
+            if not IsValid(suspect) then continue end
             local dist = ply:GetPos():DistToSqr(suspect:GetPos())
             
             if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then

@@ -182,7 +182,7 @@ function ENT:DoUpdate()
 		end
 
 		if hit then
-			if !IsValid(array[1].UnitVehicle) then
+			if array[1].UnitVehicle then
 				timer.Simple(1, function()
 					if IsValid(self.Entity) then
 						self:UVSpikeStripHit()
@@ -206,7 +206,7 @@ function ENT:StartTouch( ent )
 				local damage = MaxHealth*0.1
 				car:ApplyDamage( damage, DMG_GENERIC )
 				car.rammed = true
-                timer.Simple(5, function()
+                timer.Simple(3, function()
                     if IsValid(car) then
                         car.rammed = nil
                     end
@@ -282,7 +282,7 @@ function ENT:StartTouch( ent )
 				local damage = MaxHealth*0.1
 				car:ApplyDamage( damage, DMG_GENERIC )
 				car.rammed = true
-                timer.Simple(5, function()
+                timer.Simple(3, function()
                     if IsValid(car) then
                         car.rammed = nil
                     end

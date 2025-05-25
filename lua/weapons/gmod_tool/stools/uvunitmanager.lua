@@ -894,9 +894,6 @@ if CLIENT then
 				convar_table['unitvehicle_unit_helicopters' .. i] = GetConVar('uvunitmanager_helicopters' .. i):GetInt()
 			end
 
-
-			--convar_table['unitvehicle_unit_unitspatrol1'] = 'HAHA I GOT THIS'
-
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
