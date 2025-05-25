@@ -1011,6 +1011,8 @@ else
             local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
             surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] ) 
         end
+
+        hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', table.Copy( UVHUDRaceInfo ) )
         
         UVHUDRace = false
         UVHUDRaceInfo = nil

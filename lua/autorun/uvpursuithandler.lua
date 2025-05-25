@@ -3636,9 +3636,12 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
+		local bustedtable = net.ReadTable()
+
+
+		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBustedDebrief', bustedtable )
 		
 		local time = UVDisplayTime(UVTimerProgress)
-		local bustedtable = net.ReadTable()
 		local unit = bustedtable["Unit"]
 		local deploys = bustedtable["Deploys"]
 		local roadblocksdodged = bustedtable["Roadblocks"]
@@ -3774,9 +3777,12 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
+
+		local escapedtable = net.ReadTable()
+
+		hook.Run( 'UIEventHook', 'pursuit', 'onRacerEscapedDebrief', escapedtable )
 		
 		local time = UVDisplayTime(UVTimerProgress)
-		local escapedtable = net.ReadTable()
 		local deploys = escapedtable["Deploys"]
 		local roadblocksdodged = escapedtable["Roadblocks"]
 		local spikestripsdodged = escapedtable["Spikestrips"]
@@ -3903,9 +3909,12 @@ else --HUD/Options
 		
 		local w = ScrW()
 		local h = ScrH()
+
+		local escapedtable = net.ReadTable()
+
+		hook.Run( 'UIEventHook', 'pursuit', 'onCopEscapedDebrief', escapedtable )
 		
 		local time = UVDisplayTime(UVTimerProgress)
-		local escapedtable = net.ReadTable()
 		local deploys = escapedtable["Deploys"]
 		local roadblocksdodged = escapedtable["Roadblocks"]
 		local spikestripsdodged = escapedtable["Spikestrips"]
@@ -4034,8 +4043,11 @@ else --HUD/Options
 		local w = ScrW()
 		local h = ScrH()
 		
-		local time = UVDisplayTime(UVTimerProgress)
 		local bustedtable = net.ReadTable()
+
+		hook.Run( 'UIEventHook', 'pursuit', 'onCopBustedDebrief', bustedtable )
+		
+		local time = UVDisplayTime(UVTimerProgress)
 		local deploys = bustedtable["Deploys"]
 		local roadblocksdodged = bustedtable["Roadblocks"]
 		local spikestripsdodged = bustedtable["Spikestrips"]

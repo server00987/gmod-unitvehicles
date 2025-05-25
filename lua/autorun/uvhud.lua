@@ -193,6 +193,12 @@ UV_UI.pursuit.mostwanted.states = {
     EvasionColor = Color(255, 255, 255, 50),
 }
 
+UV_UI.racing.mostwanted.events = {
+    onRaceEnd = function(...)
+        print( 'onRaceEnd', ... )
+    end
+}
+
 UV_UI.pursuit.mostwanted.events = {
     -- _onUpdate = function( data_name, ...)
     --     if data_name == 'Wrecks' then
@@ -272,6 +278,18 @@ UV_UI.pursuit.mostwanted.events = {
     end,
     onHeatLevelUpdate = function(...)
         
+    end,
+    onCopBustedDebrief = function(...)
+        print('onCopBustedDebrief',  ... )
+    end,
+    onCopEscapedDebrief = function(...)
+        print('onCopEscapedDebrief', ... )
+    end,
+    onRacerEscapedDebrief = function(...)
+        print('onRacerEscapedDebrief', ... )
+    end,
+    onRacerBustedDebrief = function(...)
+        print('onRacerBustedDebrief', ... )
     end
 }
 
