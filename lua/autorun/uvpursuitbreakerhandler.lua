@@ -89,14 +89,15 @@ if SERVER then
             ent.ActiveDuration = activeduration
             ent.DontUnweldProps = dontunweldprops
             ent:AddCallback("PhysicsCollide", function(ent, data)
-                if data.Speed > 10 and !data.HitEntity:IsWorld() and !data.HitEntity.PursuitBreaker then
+                local object = data.HitEntity
+
+                if data.Speed > 10 and !object:IsWorld() and !object.PursuitBreaker then
                     if ent.PursuitBreaker then
-                        UVTriggerPursuitBreaker(ent)
+                        UVTriggerPursuitBreaker(ent, object, data.TheirOldVelocity)
                     elseif !ent.PursuitBreakerActive then
                         return
                     end
 
-                    local object = data.HitEntity
                     local car
 
                     if object:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then
@@ -172,7 +173,7 @@ if SERVER then
 
     end
 
-    function UVTriggerPursuitBreaker(hitent)
+    function UVTriggerPursuitBreaker(hitent, object, objectvelocity)
         if hitent.PursuitBreakerActive or !hitent.PursuitBreaker then return end
 
         local entities = {}
@@ -237,6 +238,13 @@ if SERVER then
 	    	    end
             end
 
+        end
+
+        local hitentphys = hitent:GetPhysicsObject()
+        local phys = object:GetPhysicsObject()
+        if IsValid(phys) and IsValid(hitentphys) then
+            hitentphys:SetVelocity(objectvelocity)
+            phys:SetVelocity(objectvelocity)
         end
 
         if !IsValid(closestbreakableent) then return end
