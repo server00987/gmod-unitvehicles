@@ -2058,6 +2058,7 @@ else --HUD/Options
 	UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 	UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 0, true, false)
 	UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth", 1, true, false)
+	UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading", 0, true, false, "If enabled, will allow racers to escape while commander is on scene.")
 	
 	UVUPursuitTech = CreateClientConVar("unitvehicle_unit_pursuittech", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
 	UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
@@ -2299,6 +2300,10 @@ else --HUD/Options
 	local UVHUDMilestoneSpikestrips = Material("hud/MILESTONE_SPIKESTRIPS.png")
 	local UVHUDPursuitBreaker = Material("hud/WORLD_PURSUITBREAKER.png")
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
+
+	if not UVUnitsChasing then
+		UVUnitsChasing = 0
+	end
 	
 	local UVClosestSuspect = nil
 	
@@ -3213,13 +3218,28 @@ else --HUD/Options
 		local localPlayer = LocalPlayer()
 		local entities = ents.GetAll()
 		local box_color = Color(0, 255, 0)
+
+		if not RacerTags:GetBool() then
+			if GMinimap then
+				for _, ent in pairs(UVHUDWantedSuspects) do
+					if ent.displayedonhud then
+						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
+						if not curblip then continue end
+
+						curblip.alpha = 0
+					end
+				end
+			end
+		end
 		
 		if UVHUDWantedSuspects and !uvclientjammed and RacerTags:GetBool() then
 			if next(UVHUDWantedSuspects) != nil then
 				for _, ent in pairs(UVHUDWantedSuspects) do
+					if not IsValid(ent) then continue end
 					UVRenderEnemySquare(ent)
-					if !GMinimap then continue end
-					if IsValid(ent) and !ent.displayedonhud then
+
+					if not GMinimap then continue end
+					if not ent.displayedonhud then
 						ent.displayedonhud = true
 						local blip, id = GMinimap:AddBlip( {
 							id = "UVBlip"..ent:EntIndex(),
@@ -3234,8 +3254,14 @@ else --HUD/Options
 					end
 					if ent.displayedonhud then
 						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
-						if !curblip then continue end
-						if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) then
+						if not curblip then continue end
+
+						if UVHUDDisplayCooldown or 
+						(UVHUDCopMode and 
+						(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+						not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and 
+						UVOneCommanderActive)) 
+						then
 							curblip.alpha = 0
 						else
 							curblip.alpha = 255
@@ -3546,7 +3572,12 @@ else --HUD/Options
 		if IsValid(ent) then
 			if !UVHUDDisplayPursuit then return end
 			-- if UVHUDCopMode and (UVHUDDisplayCooldown or tonumber(UVUnitsChasing) <= 0 or !ent.inunitview) and not UVOneCommanderActive then return end
-			if UVHUDDisplayCooldown or (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) then return end
+			if UVHUDDisplayCooldown or 
+			(UVHUDCopMode and 
+			(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+			not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) 
+			and UVOneCommanderActive)) 
+			then return end
 			
 			local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
 			local enemydriver = ent:GetDriver()
