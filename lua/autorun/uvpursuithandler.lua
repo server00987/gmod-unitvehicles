@@ -3598,6 +3598,7 @@ else --HUD/Options
 	
 	net.Receive("UVHUDBustedDebrief", function()
 		local bustedtable = net.ReadTable()
+		if UVHUDCopMode then return end
 		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBustedDebrief', bustedtable )
 		
 		timer.Simple(5, function()
@@ -3608,6 +3609,7 @@ else --HUD/Options
 	
 	net.Receive("UVHUDEscapedDebrief", function()
 		local escapedtable = net.ReadTable()
+		if UVHUDCopMode then return end
 		hook.Run( 'UIEventHook', 'pursuit', 'onRacerEscapedDebrief', escapedtable )
 	end)
 	
