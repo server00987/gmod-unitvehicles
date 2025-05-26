@@ -168,6 +168,7 @@ function UVSoundBusted()
 	
 	if UVSoundLoop then
 		UVStopSound()
+		UVLoadedSounds = nil
 		UVSoundLoop:Stop()
 		UVSoundLoop = nil
 	end
@@ -589,6 +590,8 @@ if SERVER then
 	util.AddNetworkString("UVGetSettings_Local")
 	util.AddNetworkString("UVUpdateSettings")
 	util.AddNetworkString("UVBusted")
+
+	util.AddNetworkString("UVHUDDeploys")
 	
 	for i = 1, 6 do
 		util.AddNetworkString( "UVUMmaxunits" )
@@ -1648,6 +1651,9 @@ if SERVER then
 			net.Start( "UVHUDResourcePoints" )
 			net.WriteString(uvresourcepoints)
 			net.Broadcast()
+			net.Start( "UVHUDDeploys" )
+			net.WriteString(uvdeploys)
+			net.Broadcast()
 			net.Start( "UVHUDTimer" )
 			net.WriteString(UVTimer)
 			net.Broadcast()
@@ -2306,6 +2312,8 @@ else --HUD/Options
 	if not UVUnitsChasing then
 		UVUnitsChasing = 0
 	end
+
+	UVDeploys = 0
 	
 	local UVClosestSuspect = nil
 	
@@ -2624,6 +2632,18 @@ else --HUD/Options
 	net.Receive("UVHUDStopBackupTimer", function()
 		
 		UVHUDDisplayBackupTimer = nil
+		
+	end)
+
+	net.Receive("UVHUDDeploys", function()
+		
+		local deploys = net.ReadString()
+		
+		if deploys ~= UVDeploys then
+			hook.Run( 'UIEventHook', 'pursuit', 'onUnitDeploy', deploys, UVDeploys )
+		end
+
+		UVDeploys = deploys
 		
 	end)
 	
@@ -3162,6 +3182,8 @@ else --HUD/Options
 		
 		if (not UVHUDDisplayPursuit) and ((not UVHUDDisplayRacing) or (not UVHUDRace)) then
 			UVStopSound()
+
+			UVLoadedSounds = nil
 			
 			if UVSoundLoop then
 				UVSoundLoop:Stop()
