@@ -160,6 +160,15 @@ UV_UI.general.main = uv_general
 UV_UI.racing.carbon = {}
 UV_UI.pursuit.carbon = {}
 
+UV_UI.pursuit.carbon.events = {
+    onUnitDeploy = function(...)
+        local new_value = select (1, ...)
+        local old_value = select (2, ...)
+
+        print(new_value, old_value)
+    end
+}
+
 local function carbon_racing_main( ... )
     local w = ScrW()
     local h = ScrH()
@@ -2492,14 +2501,14 @@ local function original_pursuit_main( ... )
 			-- 	end
 		end
 
-		if (not UVHUDDisplayPursuit) and ((not UVHUDDisplayRacing) or (not UVHUDRace)) then
-			UVStopSound()
+		-- if (not UVHUDDisplayPursuit) and ((not UVHUDDisplayRacing) or (not UVHUDRace)) then
+		-- 	UVStopSound()
 
-			if UVSoundLoop then
-				UVSoundLoop:Stop()
-				UVSoundLoop = nil
-			end
-		end
+		-- 	if UVSoundLoop then
+		-- 		UVSoundLoop:Stop()
+		-- 		UVSoundLoop = nil
+		-- 	end
+		-- end
 
 		if vehicle == NULL then 
 			UVHUDPursuitTech = nil
