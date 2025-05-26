@@ -3780,7 +3780,7 @@ else --HUD/Options
 			local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
 			uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
 			uistylepursuit:AddChoice( "Carbon", "carbon")
-			-- uistylepursuit:AddChoice( "Undercover", "undercover")
+			uistylepursuit:AddChoice( "Undercover", "undercover")
 			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
 			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
 			
