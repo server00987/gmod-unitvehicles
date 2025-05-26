@@ -180,7 +180,7 @@ UV_UI.pursuit.carbon.events = {
         local old_value = select (2, ...)
 
         print(new_value, old_value)
-    end
+    end,
     -- _onUpdate = function( data_name, ...)
     --     if data_name == 'Wrecks' then
     --         UV_UI.pursuit.mostwanted.callbacks.onUnitWreck( ... )
