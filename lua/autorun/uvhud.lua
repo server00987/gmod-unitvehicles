@@ -48,13 +48,19 @@ UVMaterials = {
     ["UNITS_CARBON"] = Material("unitvehicles/icons_carbon/COPS_INVOLVED.png"),
     ["HEAT_CARBON"] = Material("unitvehicles/icons_carbon/FLASHER_ICON_HEAT.png"),
 
-    ["ARROW_CARBON"] = Material("unitvehicles/hud/NFSC_ARROWRIGHT.png"),
-    ["BACKGROUND_CARBON"] = Material("unitvehicles/hud/NFSC_GRADIENT.png"),
-    ["BACKGROUND_CARBON_INVERTED"] = Material("unitvehicles/hud/NFSC_GRADIENT_INV.png"),
-    ["BACKGROUND_CARBON_SMALL"] = Material("unitvehicles/hud/NFSC_GRADIENT_SMALL.png"),
-    ["BACKGROUND_CARBON_SMALL_INVERTED"] = Material("unitvehicles/hud/NFSC_GRADIENT_SMALL_INV.png"),
-    ["BACKGROUND_CARBON_SOLID"] = Material("unitvehicles/hud/NFSC_GRADIENT_SOLID.png"),
-    ["BACKGROUND_CARBON_SOLID_INVERTED"] = Material("unitvehicles/hud/NFSC_GRADIENT_SOLID_INV.png"),
+    ["ARROW_CARBON"] = Material("unitvehicles/hud_carbon/NFSC_ARROWRIGHT.png"),
+    ["BACKGROUND_CARBON"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT.png"),
+    ["BACKGROUND_CARBON_INVERTED"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_INV.png"),
+    ["BACKGROUND_CARBON_SMALL"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_SMALL.png"),
+    ["BACKGROUND_CARBON_SMALL_INVERTED"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_SMALL_INV.png"),
+    ["BACKGROUND_CARBON_SOLID"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_SOLID.png"),
+    ["BACKGROUND_CARBON_SOLID_INVERTED"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_SOLID_INV.png"),
+	
+    ["BACKGROUND_CARBON_FILLED"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_FILLED.png"),
+    ["BACKGROUND_CARBON_FILLED_INVERTED"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT_FILLED_INV.png"),
+	
+    ["X_OUTER_CARBON"] = Material("unitvehicles/hud_carbon/SHAPE_INGAME_OUTLINE.png"),
+    ["EOC_FRAME_CARBON"] = Material("unitvehicles/hud_carbon/PC_HELP_FRAME_LONG.png"),
 }
 
 function Carbon_FormatRaceTime(curTime)
@@ -289,10 +295,10 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		ResultPanel:SetKeyboardInputEnabled(false)
-		
+
 		OK:SetText("X")
 		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.775, h*0.115)
+		OK:SetPos(w*0.725, h*0.205)
 		
 		local timetotal = 30
 		local timestart = CurTime()
@@ -300,67 +306,88 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
+
 			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
-			surface.SetDrawColor( 61, 183, 255, 50 )
-			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
-			
 			-- Upper Results Tab
-			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
-			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+			
+			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
+			surface.SetDrawColor(86, 214, 205)
+			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
+
+			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
+			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
+
+			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.SetDrawColor( 61, 183, 255, 25 )
-			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
-			draw.DrawText( string.format( lang("uv.results.suspects.busted"), unit ), "UVFont5", w*0.5, h*0.19, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
+			
+			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			
+			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			-- All middle tabs, light ones
-			local numRectsLight = 6
+			local numRectsLight = 3
 			for i=0, numRectsLight, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 61, 183, 255, 25 )
-				surface.DrawRect( w*0.2, h*0.25 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 100 )
+				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
 			end
 			
 			-- All middle tabs, dark ones
-			local numRectsDark = 5
+			local numRectsDark = 3
 			for i=0, numRectsDark, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 0, 0, 0, 50 )
-				surface.DrawRect( w*0.2, h*0.29 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 25 )
+				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
 			end
 			
-			local h1, h2 = h*0.2475, h*0.2875
+			local h1, h2 = h*0.3825, h*0.4225
 			
 			-- Text
-			draw.SimpleText( "#uv.results.chase.bounty", "UVFont5", w*0.205, h1, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVFont5", w*0.205, h2, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont5", w*0.205, h1 + h*0.08, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont5", w*0.205, h2 + h*0.08, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont5", w*0.205, h1 + h*0.16, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont5", w*0.205, h2 + h*0.16, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont5", w*0.205, h1 + h*0.24, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.DrawText( "#uv.results.suspects.busted", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
+
+			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", w*0.795, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", w*0.795, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", w*0.795, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", w*0.795, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", w*0.795, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.795, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.795, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			-- draw.SimpleText( unit, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
+			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
-			surface.SetDrawColor( 61, 183, 255, 25 )
-			surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.DrawTexturedRect( w*0.2, h*0.7725, w*0.6, h*0.04)
-			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.205, h*0.7675, Color( 61, 183, 255 ), TEXT_ALIGN_LEFT )
 			
 			-- Time remaining and closing
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.795, h*0.7675, Color( 61, 183, 255 ), TEXT_ALIGN_RIGHT )
+			surface.SetDrawColor( 100, 100, 100, 125 )
+			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
+			
+			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -421,10 +448,10 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		ResultPanel:SetKeyboardInputEnabled(false)
-		
+
 		OK:SetText("X")
 		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.775, h*0.115)
+		OK:SetPos(w*0.725, h*0.205)
 		
 		local timetotal = 30
 		local timestart = CurTime()
@@ -432,67 +459,88 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
+
 			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
-			surface.SetDrawColor( 61, 183, 255, 50 )
-			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
-			
 			-- Upper Results Tab
-			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(61, 183, 255) ) -- Icon
-			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 61, 183, 255), TEXT_ALIGN_LEFT )
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+			
+			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
+			surface.SetDrawColor(86, 214, 205)
+			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
+
+			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
+			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
+
+			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.SetDrawColor( 61, 183, 255, 25 )
-			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
-			draw.DrawText( string.format(lang("uv.results.suspects.escaped.num"), UVHUDWantedSuspectsNumber), "UVFont5", w*0.5, h*0.19, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
+			
+			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			
+			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			-- All middle tabs, light ones
-			local numRectsLight = 6
+			local numRectsLight = 3
 			for i=0, numRectsLight, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 61, 183, 255, 25 )
-				surface.DrawRect( w*0.2, h*0.25 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 100 )
+				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
 			end
 			
 			-- All middle tabs, dark ones
-			local numRectsDark = 5
+			local numRectsDark = 3
 			for i=0, numRectsDark, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 0, 0, 0, 50 )
-				surface.DrawRect( w*0.2, h*0.29 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 25 )
+				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
 			end
 			
-			local h1, h2 = h*0.2475, h*0.2875
+			local h1, h2 = h*0.3825, h*0.4225
 			
 			-- Text
-			draw.SimpleText( "#uv.results.chase.bounty", "UVFont5", w*0.205, h1, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVFont5", w*0.205, h2, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont5", w*0.205, h1 + h*0.08, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont5", w*0.205, h2 + h*0.08, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont5", w*0.205, h1 + h*0.16, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont5", w*0.205, h2 + h*0.16, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont5", w*0.205, h1 + h*0.24, Color(61, 183, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.DrawText( "#uv.results.suspects.escaped.num.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
 			
-			draw.SimpleText( bounty, "UVFont5", w*0.795, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", w*0.795, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", w*0.795, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", w*0.795, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", w*0.795, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.795, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.795, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
+			draw.SimpleText( UVHUDWantedSuspectsNumber, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
-			surface.SetDrawColor( 61, 183, 255, 25 )
-			surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.DrawTexturedRect( w*0.2, h*0.7725, w*0.6, h*0.04)
-			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.205, h*0.7675, Color( 61, 183, 255 ), TEXT_ALIGN_LEFT )
+			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			
 			
 			-- Time remaining and closing
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.795, h*0.7675, Color( 61, 183, 255 ), TEXT_ALIGN_RIGHT )
+			surface.SetDrawColor( 100, 100, 100, 125 )
+			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
+			
+			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -556,7 +604,7 @@ UV_UI.pursuit.carbon.events = {
 		
 		OK:SetText("X")
 		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.775, h*0.115)
+		OK:SetPos(w*0.725, h*0.205)
 		
 		local timetotal = 30
 		local timestart = CurTime()
@@ -564,67 +612,88 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
+
 			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
-			surface.SetDrawColor( 255, 183, 61, 50 )
-			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
-			
 			-- Upper Results Tab
-			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
-			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+			
+			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
+			surface.SetDrawColor(86, 214, 205)
+			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
+
+			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
+			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
+
+			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.SetDrawColor( 255, 183, 61, 25 )
-			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
-			draw.DrawText( "#uv.results.escapedfrom", "UVFont5", w*0.5, h*0.19, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
+			
+			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			
+			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			-- All middle tabs, light ones
-			local numRectsLight = 6
+			local numRectsLight = 3
 			for i=0, numRectsLight, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 255, 183, 61, 25 )
-				surface.DrawRect( w*0.2, h*0.25 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 100 )
+				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
 			end
 			
 			-- All middle tabs, dark ones
-			local numRectsDark = 5
+			local numRectsDark = 3
 			for i=0, numRectsDark, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 0, 0, 0, 50 )
-				surface.DrawRect( w*0.2, h*0.29 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 25 )
+				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
 			end
 			
-			local h1, h2 = h*0.2475, h*0.2875
+			local h1, h2 = h*0.3825, h*0.4225
 			
 			-- Text
-			draw.SimpleText( "#uv.results.chase.bounty", "UVFont5", w*0.205, h1, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVFont5", w*0.205, h2, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont5", w*0.205, h1 + h*0.08, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont5", w*0.205, h2 + h*0.08, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont5", w*0.205, h1 + h*0.16, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont5", w*0.205, h2 + h*0.16, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont5", w*0.205, h1 + h*0.24, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.DrawText( "#uv.results.escapedfrom", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
 			
-			draw.SimpleText( bounty, "UVFont5", w*0.795, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", w*0.795, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", w*0.795, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", w*0.795, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", w*0.795, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.795, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.795, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
+			-- draw.SimpleText( "Yes", "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
-			surface.SetDrawColor( 255, 183, 61, 25 )
-			surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.DrawTexturedRect( w*0.2, h*0.7725, w*0.6, h*0.04)
-			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.205, h*0.7675, Color( 255, 183, 61 ), TEXT_ALIGN_LEFT )
+			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			
 			
 			-- Time remaining and closing
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.795, h*0.7675, Color( 255, 183, 61 ), TEXT_ALIGN_RIGHT )
+			surface.SetDrawColor( 100, 100, 100, 125 )
+			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
+			
+			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -684,10 +753,10 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel:SetDraggable(false)
 		ResultPanel:MakePopup()
 		ResultPanel:SetKeyboardInputEnabled(false)
-		
+
 		OK:SetText("X")
 		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.775, h*0.115)
+		OK:SetPos(w*0.725, h*0.205)
 		
 		local timetotal = 30
 		local timestart = CurTime()
@@ -695,67 +764,88 @@ UV_UI.pursuit.carbon.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
+
 			-- Main black BG
 			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( 0, 0, w, h)
 			
-			surface.SetDrawColor( 255, 183, 61, 50 )
-			surface.DrawRect( w*0.2, h*0.1, w*0.6, h*0.075)
-			
 			-- Upper Results Tab
-			DrawIcon( UVMaterials['RESULTCOP'], w*0.225, h*0.135, .05, Color(255, 183, 61) ) -- Icon
-			draw.DrawText( "#uv.results.pursuit", "UVFont5", w*0.25, h*0.115, Color( 255, 183, 61), TEXT_ALIGN_LEFT )
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+			
+			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
+			surface.SetDrawColor(86, 214, 205)
+			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
+
+			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
+			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
+
+			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
 			
 			-- Next Lower, results subtext
-			surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			-- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.SetDrawColor( 255, 183, 61, 25 )
-			surface.DrawTexturedRect( w*0.2, h*0.175, w*0.6, h*0.075)
-			draw.DrawText( string.format(lang("uv.results.bustedby"), unit ), "UVFont5", w*0.5, h*0.19, Color( 255, 255, 255), TEXT_ALIGN_CENTER )
+			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
+			
+			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+			
+			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 			
 			-- All middle tabs, light ones
-			local numRectsLight = 6
+			local numRectsLight = 3
 			for i=0, numRectsLight, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 255, 183, 61, 25 )
-				surface.DrawRect( w*0.2, h*0.25 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 100 )
+				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
 			end
 			
 			-- All middle tabs, dark ones
-			local numRectsDark = 5
+			local numRectsDark = 3
 			for i=0, numRectsDark, 1 do
 				local yPos = i * h * 0.08
-				surface.SetDrawColor( 0, 0, 0, 50 )
-				surface.DrawRect( w*0.2, h*0.29 + yPos, w*0.6, h*0.04)
+				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor( 86, 214, 205, 25 )
+				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
+				
+				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
 			end
 			
-			local h1, h2 = h*0.2475, h*0.2875
+			local h1, h2 = h*0.3825, h*0.4225
 			
 			-- Text
-			draw.SimpleText( "#uv.results.chase.bounty", "UVFont5", w*0.205, h1, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVFont5", w*0.205, h2, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont5", w*0.205, h1 + h*0.08, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont5", w*0.205, h2 + h*0.08, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont5", w*0.205, h1 + h*0.16, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont5", w*0.205, h2 + h*0.16, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont5", w*0.205, h1 + h*0.24, Color(255, 183, 61), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.DrawText( "#uv.results.bustedby.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
+
+			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			draw.SimpleText( bounty, "UVFont5", w*0.795, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVFont5", w*0.795, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVFont5", w*0.795, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVFont5", w*0.795, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVFont5", w*0.795, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVFont5", w*0.795, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVFont5", w*0.795, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( unit, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
+			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
-			surface.SetDrawColor( 255, 183, 61, 25 )
-			surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-			surface.DrawTexturedRect( w*0.2, h*0.7725, w*0.6, h*0.04)
-			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.205, h*0.7675, Color( 255, 183, 61 ), TEXT_ALIGN_LEFT )
 			
 			-- Time remaining and closing
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.795, h*0.7675, Color( 255, 183, 61 ), TEXT_ALIGN_RIGHT )
+			surface.SetDrawColor( 100, 100, 100, 125 )
+			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
+			
+			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -1264,8 +1354,8 @@ local function carbon_pursuit_main( ... )
                 uloc = "uv.chase.suspects"
             end
 
-            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.97 + 2,h * 0.3 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
-            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.97,h * 0.3,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825 + 2,h * 0.3 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825,h * 0.3,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
         else
             -- Lower Box
             -- Evade Box, All BG (Moved to inner if clauses)
@@ -3266,6 +3356,7 @@ local function original_pursuit_main( ... )
     
     local UnitsChasing = tonumber(UVUnitsChasing)
     local UVBustTimer = BustedTimer:GetFloat()
+	local UVBustingProgress = 0
     
     local states = UV_UI.pursuit.original.states
     

@@ -1,0 +1,24 @@
+UnLitGeneric
+{
+	$basetexture 						"unitvehicles\hud_carbon\SHAPE_INGAME_BG"
+    $basetexturetransform 			"center .5 .5 scale 1 1 rotate 0 translate 0 0"
+    $basetexturetransform2 		"center .5 .5 scale 1 1 rotate 0 translate 0 0"
+	
+	$alphatest						1
+	$ignorez							1
+
+	$detail								"unitvehicles\hud_carbon\SHAPE_INGAME_SEETHROUGH"
+	$detailscale						1
+	$detailblendmode				4
+	$detailblendfactor				1.0
+
+Proxies
+	{
+	TextureScroll
+		{
+		texturescrollvar $basetexturetransform
+		texturescrollrate 0.1
+		texturescrollangle -155
+		}
+	}
+}
