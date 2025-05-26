@@ -1195,7 +1195,8 @@ local function carbon_pursuit_main( ... )
                     states.BustedColor = Color(193, 66, 0)
                 end
                 
-                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.082), 0, w * 0.082)
+                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.085), 0, w * 0.085)
+				T = math.floor(T)
 				surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
                 surface.SetDrawColor(193, 66, 0)
                 surface.DrawTexturedRect(w * 0.79 + (w * 0.085 - T), h * 0.215, T, h * 0.015)
@@ -1280,6 +1281,8 @@ local function carbon_pursuit_main( ... )
                     -- end
 
                     local T = math.Clamp((UVCooldownTimer) * (w * 0.19), 0, w * 0.19)
+					T = math.floor(T)
+					
 					surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
 					surface.SetDrawColor(Color(0,0,0)) -- Shadow
 					surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.19 + 10, h * 0.015 + 8.5)
@@ -2341,6 +2344,7 @@ local function mw_pursuit_main( ... )
                 end
                 
                 local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1515), 0, w * 0.1515)
+				T = math.floor(T)
                 surface.SetDrawColor(255, 0, 0)
                 surface.DrawRect(w * 0.333 + (w * 0.1515 - T), bottomy2, T, h * 0.01)
                 middlergb = {
