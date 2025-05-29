@@ -465,24 +465,59 @@ else
         
         return UVGetRandomSound(racePath)
     end
-    
-    
+
+	local musicMetadata = {}
+
+	local function loadMusicMetadata()
+		local files = file.Find("data_static/music_*.json", "GAME")
+		for _, filename in ipairs(files) do
+			file.AsyncRead("data_static/" .. filename, "GAME", function(_, _, status, data)
+				if status == 0 and data then -- success
+					local ok, tbl = pcall(util.JSONToTable, data)
+					if ok and tbl then
+						musicMetadata[filename] = tbl
+					end
+				end
+			end, true)
+		end
+	end
+
+	-- Call once at script load or addon init:
+	loadMusicMetadata()
+
+	local function escape_pattern(text)
+		return text:gsub("([^%w])", "%%%1")
+	end
+
+	local function normalizePath(path)
+		return string.lower(path):gsub("\\", "/")
+	end
+
+	local function lookupTrackInMetadata(norm_path)
+		for _, metaTable in pairs(musicMetadata) do
+			local entry = metaTable[norm_path]
+			if entry then
+				return entry.artist, entry.title, entry.folder
+			end
+		end
+		return nil
+	end
+
     local function PlayRaceMusic(theme, my_vehicle)
         local track = UVGetRaceMusicPath(theme, my_vehicle)
-		
-		local function escape_pattern(text)
-			return text:gsub("([^%w])", "%%%1")
-		end
+		local jsonFiles = file.Find("data_static/music_*.json", "GAME")
+
+        if track then
+            UVPlaySound(track, true)
+        end
 
 		local placeholder_map = { -- Used for Official UV Trax Packs
 			[",,"] = ".",
 			[";;"] = "?",
 			["-;-"] = "/",
+			["=="] = ":",
+			["-!-"] = "\"",
 		}
-
-        if track then
-            UVPlaySound(track, true)
-        end
 
 		if not string.find(track, "/race/") then return end
 		track = track:gsub("uvracemusic/" .. theme .. "/race/", "")
@@ -494,37 +529,52 @@ else
 			track = string.gsub(track, escape_pattern(placeholder), char)
 		end
 
-        if Glide then
-			if string.find(track, " - ", 1, true) then
-				local trackstring = string.Explode(" - ", track)
-				Glide.Notify( {
-					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. trackstring[2] .. "\n<color=200,200,200>" .. trackstring[1] .. "\n" .. theme .. "</color>",
-					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
-					lifetime = 3,
-					immediate = true,
-				} )
+		-- Rebuild the full normalized path for lookup (lowercase, forward slash)
+		local full_path = normalizePath("sound/uvracemusic/" .. theme .. "/race/" .. track .. ".mp3")
+
+		-- Lookup metadata in JSON tables
+
+		local artist, title, folder = lookupTrackInMetadata(full_path)
+		local notificationText
+
+		if artist and title and folder then -- Use metadata from JSON (original casing)
+			 notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>"
+		else
+			if string.find(track, " - ", 1, true) then -- Fallback to parsing track name or showing raw track/folder
+				local parts = string.Explode(" - ", track)
+				notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. parts[2] .. "\n" .. "<color=200,200,200>" .. parts[1] .. "\n" .. theme .. "</color>"
 			else
-				Glide.Notify( {
-					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. track .. "</color>\n<color=200,200,200>" .. theme .. "</color>",
-					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
-					lifetime = 3,
-					immediate = true,
-				} )
+				notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. track .. "\n" .. "<color=200,200,200>" .. theme .. "</color>"
 			end
-        else
+		end
+
+		if Glide then
+			Glide.Notify({
+				text = notificationText,
+				icon = "unitvehicles/icons/ICON_EA_TRAX.png",
+				lifetime = 3,
+				immediate = true,
+			})
+		else
 			chat.AddText(
+				Color(255, 255, 255),
+				"[",
 				Color(255, 126, 126),
 				language.GetPhrase("uv.race.radio"),
 				Color(255, 255, 255),
-				": ",
-				Color(255, 255,0),
-				track,
+				"] ",
+				Color(255, 255, 0),
+				(artist and title) and (title .. " - " .. artist) or track,
 				Color(255, 255, 255),
-				" - " .. theme
+				" (",
+				Color(200, 200, 200),
+				theme,
+				Color(255, 255, 255),
+				")"
 			)
-        end
-    end
-    
+		end
+	end
+
     function UVSoundRacing(my_vehicle)
         if !RacingThemeOutsideRace:GetBool() then
             if !RacingMusic:GetBool() or (!RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
