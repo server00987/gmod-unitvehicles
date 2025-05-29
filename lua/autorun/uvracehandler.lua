@@ -469,29 +469,46 @@ else
     
     local function PlayRaceMusic(theme, my_vehicle)
         local track = UVGetRaceMusicPath(theme, my_vehicle)
+		
+		local function escape_pattern(text)
+			return text:gsub("([^%w])", "%%%1")
+		end
+
+		local placeholder_map = { -- Used for Official UV Trax Packs
+			[",,"] = ".",
+			[";;"] = "?",
+			["-;-"] = "/",
+		}
+
         if track then
             UVPlaySound(track, true)
         end
 
-		if !string.find(track, "/race/") then return end
-		track = string.gsub(track, "uvracemusic/" .. theme .. "/race/", "")
-		track = string.gsub(track, ".mp3", "")
-		track = string.gsub(track, ".wav", "")
-		track = string.gsub(track, ".ogg", "")
-		
+		if not string.find(track, "/race/") then return end
+		track = track:gsub("uvracemusic/" .. theme .. "/race/", "")
+					 :gsub("%.mp3", "")
+					 :gsub("%.wav", "")
+					 :gsub("%.ogg", "")
+
+		for placeholder, char in pairs(placeholder_map) do
+			track = string.gsub(track, escape_pattern(placeholder), char)
+		end
+
         if Glide then
-			if string.find(track, " %- ") then
+			if string.find(track, " - ", 1, true) then
 				local trackstring = string.Explode(" - ", track)
 				Glide.Notify( {
 					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. trackstring[2] .. "\n<color=200,200,200>" .. trackstring[1] .. "\n" .. theme .. "</color>",
 					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
-					lifetime = 3
+					lifetime = 3,
+					immediate = true,
 				} )
 			else
 				Glide.Notify( {
 					text = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. track .. "</color>\n<color=200,200,200>" .. theme .. "</color>",
 					icon = "unitvehicles/icons/ICON_EA_TRAX.png",
-					lifetime = 3
+					lifetime = 3,
+					immediate = true,
 				} )
 			end
         else
