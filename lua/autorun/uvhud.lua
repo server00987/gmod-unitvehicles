@@ -69,10 +69,10 @@ UVMaterials = {
     ["UNITS_DISABLED_UC"] = Material("unitvehicles/icons_undercover/HUD_COP_TAKEDOWN_ICON.png"),
     ["CTS_UC"] = Material("unitvehicles/icons_undercover/HUD_CTS_ICON.png"),
 	
-    ["BUSTED_ICON_UC"] = Material("unitvehicles/icons_undercover/BUST_COP_ICON.png"),
-    ["BUSTED_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/BUSTED_ICON_GLOW.png"),
-    ["EVADE_ICON_UC"] = Material("unitvehicles/icons_undercover/EVADE_CAR_ICON.png"),
-    ["EVADE_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/EVADE_ICON_GLOW.png"),
+    ["BUSTED_ICON_UC"] = Material("unitvehicles/icons_undercover/BUST_COP_ICON.png", "smooth mips"),
+    ["BUSTED_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/BUSTED_ICON_GLOW.png", "smooth mips"),
+    ["EVADE_ICON_UC"] = Material("unitvehicles/icons_undercover/EVADE_CAR_ICON.png", "smooth mips"),
+    ["EVADE_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/EVADE_ICON_GLOW.png", "smooth mips"),
 }
 
 function Carbon_FormatRaceTime(curTime)
@@ -2657,6 +2657,14 @@ UV_UI.racing.mostwanted.main = mw_racing_main
 UV_UI.racing.undercover = {}
 UV_UI.pursuit.undercover = {}
 
+UV_UI.pursuit.undercover.states = {
+    TagsColor = Color(255,255,255,150),
+    WrecksColor = Color(255,255,255,150),
+    UnitsColor = Color(255,255,255,150),
+    BustedColor = Color(255, 255, 255, 50),
+    EvasionColor = Color(255, 255, 255, 50),
+}
+
 UV_UI.pursuit.undercover.events = {
     onUnitDeploy = function(...)
         local new_value = select (1, ...)
@@ -3433,7 +3441,7 @@ local function undercover_pursuit_main( ... )
     local UnitsChasing = tonumber(UVUnitsChasing)
     local UVBustTimer = BustedTimer:GetFloat()
     
-    local states = UV_UI.pursuit.mostwanted.states
+    local states = UV_UI.pursuit.undercover.states
     
     local UVWrecksColor = states.WrecksColor
     local UVTagsColor = states.TagsColor
@@ -3446,7 +3454,7 @@ local function undercover_pursuit_main( ... )
     local UVHeatBountyMin
     local UVHeatBountyMax
 	
-    states.EvasionColor = Color(50, 50, 255, 125)
+    states.EvasionColor = Color(50, 173, 255)
     states.BustedColor = Color(255, 100, 100, 125)
     
     if vehicle == NULL then return end
@@ -3681,15 +3689,18 @@ local function undercover_pursuit_main( ... )
             surface.DrawRect(w * 0.333, bottomy + (h*0.034), w * 0.34, h * 0.004)
             surface.DrawTexturedRectRotated(w * 0.333, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
             surface.DrawTexturedRectRotated(w * 0.6735, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
+
+            surface.SetDrawColor(100, 100, 100, 230)
+            surface.DrawRect(w * 0.333  , bottomy, w * 0.34, h * 0.035)
             
             -- Evade Box, Evade BG
 			surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
-            surface.SetDrawColor(0, 0, 255, 50)
+            surface.SetDrawColor(50, 214, 255, 100)
             surface.DrawTexturedRect(w * 0.5, bottomy, w * 0.1725, h * 0.035)
             
             -- Evade Box, Busted BG
 			surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
-            surface.SetDrawColor(255, 0, 0, 50)
+            surface.SetDrawColor(255, 0, 0, 100)
             surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.1725, h * 0.035)
             
             -- surface.SetDrawColor(200, 200, 200, 100)
@@ -3744,9 +3755,9 @@ local function undercover_pursuit_main( ... )
                 end
                 
                 local T = math.Clamp((UVEvadingProgress) * (w * 0.1725), 0, w * 0.1725)
-                surface.SetDrawColor(100, 100, 255)
+                surface.SetDrawColor(50, 173, 255)
                 surface.DrawRect(w * 0.5, bottomy, T, h * 0.035)
-                states.EvasionColor = Color(50, 50, 255, blink)
+                states.EvasionColor = Color(50, 173, 255, blink)
             else
                 EvadingProgress = 0
             end
@@ -3755,7 +3766,7 @@ local function undercover_pursuit_main( ... )
 			DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.315, bottomy + (h*0.015), .05, states.BustedColor) -- Icon, Glow
 			DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.315, bottomy + (h*0.015), .05, Color(255,0,0, 125)) -- Icon
 			DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, states.EvasionColor) -- Icon, Glow
-			DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(100,100,255, 125)) -- Icon
+			DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 173, 255, 125)) -- Icon
 
             -- Evade Box, Dividers
             surface.SetDrawColor(255, 255, 255, 255)
@@ -3856,15 +3867,15 @@ local function undercover_pursuit_main( ... )
                         -- TEXT_ALIGN_CENTER)
                     -- end
                     
-					DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(100,100,255, blink2)) -- Icon, Glow
-					DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(100,100,255, 125)) -- Icon
+					DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
+					DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
 					
 					-- surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
                     surface.SetDrawColor(200, 200, 200, 125)
                     surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
                     
                     local T = math.Clamp((UVCooldownTimer) * (w * 0.344), 0, w * 0.344)
-                    surface.SetDrawColor(100, 100, 255, 255)
+                    surface.SetDrawColor(50, 173, 255, 255)
 					
                     surface.DrawRect(w * 0.333, bottomy, T, h * 0.03)
                     
