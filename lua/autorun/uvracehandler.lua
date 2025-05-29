@@ -1083,7 +1083,7 @@ else
         
         UVHUDRace = false
         UVHUDRaceInfo = nil
-        UVHUDRaceStart = nil
+		UVRaceCountdown = nil
         
         if UVPlayingRace then
             UVPlayingRace = false
@@ -1254,35 +1254,45 @@ else
     net.Receive( "uvrace_start", function()
         local time = net.ReadInt( 11 )
         local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
-        local starttable = {
+
+        local startTable = {
             "#uv.race.go",
             "1",
             "2",
             "3",
             "#uv.race.getready",
-            "#uv.race.getready",
-            "#uv.race.getready",
         }
-        
-        local soundfilescount3 = file.Find( "sound/uvracesfx/".. theme .."/count3/*", "GAME" )
-        local soundfilecount3 = "uvracesfx/".. theme .."/count3/".. soundfilescount3[math.random(1, #soundfilescount3)]
-        local soundfilescount2 = file.Find( "sound/uvracesfx/".. theme .."/count2/*", "GAME" )
-        local soundfilecount2 = "uvracesfx/".. theme .."/count2/".. soundfilescount2[math.random(1, #soundfilescount2)]
-        local soundfilescount1 = file.Find( "sound/uvracesfx/".. theme .."/count1/*", "GAME" )
-        local soundfilecount1 = "uvracesfx/".. theme .."/count1/".. soundfilescount1[math.random(1, #soundfilescount1)]
-        local soundfilescountgo = file.Find( "sound/uvracesfx/".. theme .."/countgo/*", "GAME" )
-        local soundfilecountgo = "uvracesfx/".. theme .."/countgo/".. soundfilescountgo[math.random(1, #soundfilescountgo)]
-        local startsound = {
-            [1] = soundfilecountgo,
-            [2] = soundfilecount1,
-            [3] = soundfilecount2,
-            [4] = soundfilecount3,
-        }   
-        
-        UVHUDRaceStart = starttable[time]
-        if startsound[time] then
-            surface.PlaySound( startsound[time] )
-        end
+
+		-- Pick correct sound
+		local sound = nil
+		if time == 1 then
+			local files = file.Find("sound/uvracesfx/" .. theme .. "/countgo/*", "GAME")
+			sound = "uvracesfx/" .. theme .. "/countgo/" .. files[math.random(#files)]
+		elseif time == 2 then
+			local files = file.Find("sound/uvracesfx/" .. theme .. "/count1/*", "GAME")
+			sound = "uvracesfx/" .. theme .. "/count1/" .. files[math.random(#files)]
+		elseif time == 3 then
+			local files = file.Find("sound/uvracesfx/" .. theme .. "/count2/*", "GAME")
+			sound = "uvracesfx/" .. theme .. "/count2/" .. files[math.random(#files)]
+		elseif time == 4 then
+			local files = file.Find("sound/uvracesfx/" .. theme .. "/count3/*", "GAME")
+			sound = "uvracesfx/" .. theme .. "/count3/" .. files[math.random(#files)]
+		end
+
+		-- Play sound
+		if sound then
+			surface.PlaySound(sound)
+		end
+
+		local label = startTable[time] or "#uv.race.getready"
+
+		-- Setup countdown display state
+		UVRaceCountdown = {
+			startTime = CurTime(),        -- When this label appeared
+			label = label,               -- The current label ("3", "2", etc.)
+			stage = time,                -- Numeric stage to identify what’s next
+			alpha = 255,                 -- Current alpha
+		}
     end)
     
     hook.Add( "HUDPaint", "UVHUDRace", function() --HUD
@@ -1292,12 +1302,92 @@ else
 		local hudyes = showhud:GetBool()
 		local hudtype = GetConVar("unitvehicle_hudtype_racing"):GetString()
 
+		-- RACE COUNTDOWN LOGIC
+		if UVRaceCountdown then
+			local elapsed = CurTime() - UVRaceCountdown.startTime
+			local fullDuration = 1.0
+			local alpha, alphabg = 255, 150
+
+			-- Only fade for countdown numbers (stage 4 and lower)
+			if UVRaceCountdown.stage <= 4 then
+				local fadeOutStart = 0.7
+				local fadeOutEnd = 0.85
+
+				if UVRaceCountdown.stage == 1 then
+					fadeOutStart = 0.85
+					fadeOutEnd = 0.975
+				end
+
+				if elapsed >= fadeOutStart and elapsed < fadeOutEnd then
+					local fadeFrac = (elapsed - fadeOutStart) / (fadeOutEnd - fadeOutStart)
+					alpha = Lerp(fadeFrac, 255, 0)
+					alphabg = Lerp(fadeFrac, 255, 0)
+				elseif elapsed >= fadeOutEnd then
+					alpha = 0
+					alphabg = 0
+				end
+				
+				if UVRaceCountdown.stage <= 0 then
+					alpha = 0
+					alphabg = 0
+				end
+			end
+
+			-- HUD Type differences
+			local bgcol = Color(0, 0, 0, alphabg)
+			local textcol = Color(255, 255, 255, alpha)
+			
+			if hudtype == "mostwanted" then
+				bgcol = Color(0, 0, 0, alphabg)
+				textcol = Color(50, 255, 50, alpha)
+			elseif hudtype == "carbon" then
+				bgcol = Color(86, 214, 205, alphabg)
+				textcol = Color(255, 217, 0, alpha)
+			elseif hudtype == "undercover" then
+				bgcol = Color(187, 226, 220, alphabg)
+				textcol = Color(255, 255, 255, alpha)
+			elseif hudtype == "prostreet" then
+				bgcol = Color(0, 0, 0, alphabg)
+				if UVRaceCountdown.stage <= 1 then
+					textcol = Color(50, 255, 50, alpha)
+				else
+					textcol = Color(255, 217, 0, alpha)
+				end
+			end
+
+			-- Text and BG
+			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
+			surface.SetDrawColor(bgcol)
+			surface.DrawTexturedRect(0, h / 3, w, h * 0.1)
+    
+			draw.DrawText(
+				language.GetPhrase(UVRaceCountdown.label),
+				"UVFont5ShadowBig",
+				w / 2 + 2.5,
+				h / 3 + 2.5,
+				Color(0, 0, 0, alpha),
+				TEXT_ALIGN_CENTER,
+				TEXT_ALIGN_CENTER
+			)
+    
+			draw.DrawText(
+				language.GetPhrase(UVRaceCountdown.label),
+				"UVFont5ShadowBig",
+				w / 2,
+				h / 3,
+				textcol,
+				TEXT_ALIGN_CENTER,
+				TEXT_ALIGN_CENTER
+			)
+
+			-- Clean up after full duration
+			if elapsed >= fullDuration then
+				UVRaceCountdown = nil
+			end
+		end
+
         if UVHUDNotification and hudyes then
             draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-        end
-        
-        if UVHUDRaceStart and hudyes then
-            draw.DrawText( UVHUDRaceStart, "UVFont5ShadowBig", ScrW()/2, ScrH()/3, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
         if !UVHUDRace then return end
@@ -1385,7 +1475,7 @@ else
             end
             
             if CurTime() - LastWrongWayCheckTime > 3 then
-                if !UVHUDNotification then
+                if !UVHUDNotification and !UVRaceCountdown then
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
                     local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/wrongway/*", "GAME" )
                     if soundfiles and #soundfiles > 0 then

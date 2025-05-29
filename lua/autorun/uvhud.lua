@@ -29,6 +29,8 @@ local Colors = {
 }
 
 UVMaterials = {
+    ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
+	
     ["UNITS_DAMAGED"] = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png"),
     ["UNITS_DISABLED"] = Material("unitvehicles/icons/COPS_TAKENOUT_ICON.png"),
     ["UNITS"] = Material("unitvehicles/icons/COPS_ICON.png"),
