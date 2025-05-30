@@ -471,14 +471,15 @@ else
 	local function loadMusicMetadata()
 		local files = file.Find("data_static/music_*.json", "GAME")
 		for _, filename in ipairs(files) do
-			file.AsyncRead("data_static/" .. filename, "GAME", function(_, _, status, data)
-				if status == 0 and data then -- success
-					local ok, tbl = pcall(util.JSONToTable, data)
-					if ok and tbl then
-						musicMetadata[filename] = tbl
-					end
+			local path = "data_static/" .. filename
+			local data = file.Read(path, "GAME")
+
+			if data then
+				local ok, tbl = pcall(util.JSONToTable, data)
+				if ok and tbl then
+					musicMetadata[filename] = tbl
 				end
-			end, true)
+			end
 		end
 	end
 
@@ -493,9 +494,18 @@ else
 		return string.lower(path):gsub("\\", "/")
 	end
 
+	local function caseInsensitiveLookup(metaTable, path)
+		for key, value in pairs(metaTable) do
+		  if key:lower() == path:lower() then
+			return value
+		  end
+		end
+		return nil
+	end
+
 	local function lookupTrackInMetadata(norm_path)
 		for _, metaTable in pairs(musicMetadata) do
-			local entry = metaTable[norm_path]
+			local entry = caseInsensitiveLookup(metaTable, norm_path)
 			if entry then
 				return entry.artist, entry.title, entry.folder
 			end
@@ -525,10 +535,6 @@ else
 					 :gsub("%.wav", "")
 					 :gsub("%.ogg", "")
 
-		for placeholder, char in pairs(placeholder_map) do
-			track = string.gsub(track, escape_pattern(placeholder), char)
-		end
-
 		-- Rebuild the full normalized path for lookup (lowercase, forward slash)
 		local full_path = normalizePath("sound/uvracemusic/" .. theme .. "/race/" .. track .. ".mp3")
 
@@ -540,11 +546,14 @@ else
 		if artist and title and folder then -- Use metadata from JSON (original casing)
 			 notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>"
 		else
+			for placeholder, char in pairs(placeholder_map) do
+				track = string.gsub(track, escape_pattern(placeholder), char)
+			end
 			if string.find(track, " - ", 1, true) then -- Fallback to parsing track name or showing raw track/folder
 				local parts = string.Explode(" - ", track)
-				notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. parts[2] .. "\n" .. "<color=200,200,200>" .. parts[1] .. "\n" .. theme .. "</color>"
+				notificationText = "<color=255,126,126>*" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. parts[2] .. "\n" .. "<color=200,200,200>" .. parts[1] .. "\n" .. theme .. "</color>"
 			else
-				notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. track .. "\n" .. "<color=200,200,200>" .. theme .. "</color>"
+				notificationText = "<color=255,126,126>*" .. language.GetPhrase("uv.race.radio") .. "</color>\n"  .. track .. "\n" .. "<color=200,200,200>" .. theme .. "</color>"
 			end
 		end
 
