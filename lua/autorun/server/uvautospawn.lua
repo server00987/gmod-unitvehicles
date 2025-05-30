@@ -1886,7 +1886,10 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 	end)
 
 	UVRaceReplaceParticipant( entrantvehicle, Ent )
-	entrantvehicle:Remove()
+
+	timer.Simple(1, function()
+		entrantvehicle:Remove()
+	end)
 	
 	Ent.racer = racer_name
 	

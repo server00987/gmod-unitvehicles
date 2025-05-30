@@ -26,8 +26,6 @@ if SERVER then
     
     util.AddNetworkString( "uvrace_replace" )
     util.AddNetworkString( "uvrace_disqualify" )
-
-    util.AddNetworkString( "uvrace_replace" )
     
     util.AddNetworkString( "uvrace_checkpointcomplete" )
     util.AddNetworkString( "uvrace_lapcomplete" )
@@ -854,8 +852,8 @@ else
     function UVStopRacing()
         UVSoundRacingStop()
 
-        UVHUDRaceCurrentCheckpoint = nil;
-        UVHUDDisplayRacing = false;
+        -- UVHUDRaceCurrentCheckpoint = nil;
+        -- UVHUDDisplayRacing = false;
         UVHUDRace = false;
 
         if _UVCurrentCheckpoint and _UVCurrentCheckpoint.blip then
@@ -988,7 +986,7 @@ else
             UVHUDRaceCurrentCheckpoint = nil
         end
         
-        if !UVHUDRace then
+        if not UVHUDRace then
             UVHUDRace = true
             UVHUDRaceCheckpoints = GetGlobalInt( "uvrace_checkpoints" )
             
@@ -1390,18 +1388,21 @@ else
             draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
-        if !UVHUDRace then return end
-        if !UVHUDRaceInfo then return end
-        if !(UVHUDRaceInfo.Info and UVHUDRaceInfo.Info.Started) then return end
+        --if not UVHUDRace then return end
+        if not UVHUDRaceInfo then return end
+        if not (UVHUDRaceInfo.Info and UVHUDRaceInfo.Info.Started) then return end
         
         local my_vehicle, my_array = nil, nil
         
         for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
+            print(vehicle)
             if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
                 my_vehicle, my_array = vehicle, array
                 break
             end
         end
+
+        print(my_vehicle, my_array)
         
         if !my_vehicle then UVStopRacing() return end
         if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
@@ -1412,7 +1413,7 @@ else
 
         UVHUDDisplayRacing = true
         
-        if !UVHUDDisplayBusting then
+        if not UVHUDDisplayBusting then
             UVSoundRacing( my_vehicle )
         end
 
