@@ -68,6 +68,8 @@ function UVSoundHeat(heatlevel)
 	if timer.Exists("UVPursuitThemeReplay") then
 		timer.Remove("UVPursuitThemeReplay")
 	end
+
+	heatlevel = heatlevel or 1
 	
 	local theme = PursuitTheme:GetString()
 	local heat
@@ -123,7 +125,7 @@ function UVSoundBusting()
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busting/*", "GAME")
 	
-	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
+	if not soundtable or #soundtable == 0 then UVSoundHeat( UVHeatLevel ) return end
 	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/busting/" .. soundtable[math.random(1, #soundtable)], true)
 	
@@ -147,7 +149,7 @@ function UVSoundCooldown()
 	local theme = PursuitTheme:GetString()
 	local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/cooldown/*", "GAME")
 	
-	if not soundtable or #soundtable == 0 then UVSoundHeat() return end
+	if not soundtable or #soundtable == 0 then UVSoundHeat( UVHeatLevel ) return end
 	
 	UVPlaySound("uvpursuitmusic/" .. theme .. "/cooldown/" .. soundtable[math.random(1, #soundtable)], true)
 	
