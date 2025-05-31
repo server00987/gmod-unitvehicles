@@ -1404,14 +1404,11 @@ else
         local my_vehicle, my_array = nil, nil
         
         for vehicle, array in pairs(UVHUDRaceInfo['Participants']) do
-            print(vehicle)
             if IsValid(vehicle) and vehicle:GetDriver() == LocalPlayer() then
                 my_vehicle, my_array = vehicle, array
                 break
             end
         end
-
-        print(my_vehicle, my_array)
         
         if !my_vehicle then UVStopRacing() return end
         if my_array.Finished or (my_array.Disqualified or my_array.Busted) then
