@@ -861,8 +861,8 @@ else
     function UVStopRacing()
         UVSoundRacingStop()
 
-        -- UVHUDRaceCurrentCheckpoint = nil;
-        -- UVHUDDisplayRacing = false;
+        --UVHUDRaceCurrentCheckpoint = nil;
+        --UVHUDDisplayRacing = false;
         UVHUDRace = false;
 
         if _UVCurrentCheckpoint and _UVCurrentCheckpoint.blip then
@@ -1397,7 +1397,7 @@ else
             draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
         
-        --if not UVHUDRace then return end
+        if not UVHUDRace then return end
         if not UVHUDRaceInfo then return end
         if not (UVHUDRaceInfo.Info and UVHUDRaceInfo.Info.Started) then return end
         
