@@ -170,7 +170,7 @@ local function uv_general( ... )
 				end
 			end
 		else
-			draw.DrawText( lang("uv.pt.jammed"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+			draw.DrawText( lang("uv.ptech.jammer.hit.you"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
 		end
 	end
 end
