@@ -3762,10 +3762,92 @@ else --HUD/Options
 	end)
 	
 	hook.Add("PopulateToolMenu", "UVMenu", function()
-		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVOptions", "Settings", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVServerOptions", "[Server] Settings", "", "", function(panel)
 			panel:Clear()
 			
 			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings")
+			
+			panel:Help("#uv.settings.heatlevels")
+			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
+			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
+			panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
+			panel:ControlHelp("#uv.settings.heatlevels.aiunits.desc")
+			panel:NumSlider("#uv.settings.heatlevels.min", "unitvehicle_minheatlevel", 1, 6, 0)
+			panel:ControlHelp("#uv.settings.heatlevels.min.desc")
+			panel:NumSlider("#uv.settings.heatlevels.max", "unitvehicle_maxheatlevel", 1, 6, 0)
+			panel:ControlHelp("#uv.settings.heatlevels.max.desc")
+			
+			panel:Help("#uv.settings.targetvehicle")
+			panel:NumSlider("#uv.settings.targetvehicle.target", "unitvehicle_targetvehicletype", 1, 3, 0)
+			panel:ControlHelp("#uv.settings.targetvehicle.target.desc")
+			
+			panel:Help("#uv.settings.pursuit")
+			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
+			panel:ControlHelp("#uv.settings.pursuit.autohealth.desc")
+			panel:NumSlider("#uv.settings.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
+			panel:ControlHelp("#uv.settings.pursuit.repaircooldown.desc")
+			panel:NumSlider("#uv.settings.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)
+			panel:ControlHelp("#uv.settings.pursuit.repairrange.desc")
+			panel:CheckBox("#uv.settings.pursuit.noevade", "unitvehicle_neverevade")
+			panel:ControlHelp("#uv.settings.pursuit.noevade.desc")
+			panel:NumSlider("#uv.settings.pursuit.bustedtime", "unitvehicle_bustedtimer", 0, 10, 1)
+			panel:ControlHelp("#uv.settings.pursuit.bustedtime.desc")
+			panel:NumSlider("#uv.settings.pursuit.respawntime", "unitvehicle_spawncooldown", 0, 120, 1)
+			panel:ControlHelp("#uv.settings.pursuit.respawntime.desc")
+			panel:NumSlider("#uv.settings.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.pursuit.spikeduration.desc")
+			panel:CheckBox("#uv.settings.pursuit.racertags", "unitvehicle_racertags")
+			panel:ControlHelp("#uv.settings.pursuit.racertags.desc")
+			
+			panel:Help("#uv.settings.ptech")
+			panel:ControlHelp("#uv.settings.ptech.desc")
+			
+			-- put slots in a row
+			--local dpanel = panel:ControlPanel("uv_keybinds")
+			
+			panel:CheckBox("#uv.settings.ptech.racer", "unitvehicle_racerpursuittech")
+			panel:ControlHelp("#uv.settings.ptech.racer.desc")
+			panel:CheckBox("#uv.settings.ptech.friendlyfire", "unitvehicle_racerfriendlyfire")
+			panel:ControlHelp("#uv.settings.ptech.friendlyfire.desc")
+			
+			panel:Help("#uv.settings.ailogic")
+			panel:CheckBox("#uv.settings.ailogic.relentless", "unitvehicle_relentless")
+			panel:ControlHelp("#uv.settings.ailogic.relentless.desc")
+			panel:CheckBox("#uv.settings.ailogic.wrecking", "unitvehicle_canwreck")
+			panel:ControlHelp("#uv.settings.ailogic.wrecking.desc")
+			panel:NumSlider("#uv.settings.ailogic.detectionrange", "unitvehicle_detectionrange", 1, 100, 0)
+			panel:ControlHelp("#uv.settings.ailogic.detectionrange.desc")
+			panel:CheckBox("#uv.settings.ailogic.headlights", "unitvehicle_enableheadlights")
+			panel:ControlHelp("#uv.settings.ailogic.headlights.desc")
+			
+			panel:Help("#uv.settings.ainav")
+			panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
+			panel:ControlHelp("#uv.settings.ainav.pathfind.desc")
+			panel:CheckBox("#uv.settings.ainav.dvpriority", "unitvehicle_dvwaypointspriority")
+			panel:ControlHelp("#uv.settings.ainav.dvpriority.desc")
+			
+			panel:Help("#uv.settings.chatter")
+			panel:CheckBox("#uv.settings.chatter.enable", "unitvehicle_chatter")
+			panel:CheckBox("#uv.settings.chatter.text", "unitvehicle_chattertext")
+			panel:ControlHelp("#uv.settings.chatter.text.desc")
+			
+			panel:Help("#uv.settings.response")
+			panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
+			panel:ControlHelp("#uv.settings.response.enable.desc")
+			panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.response.speedlimit.desc")
+			
+			panel:Help("#uv.settings.addon")
+			panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
+			panel:ControlHelp("#uv.settings.addon.vcmod.els.desc")
+			
+			panel:Help("#uv.settings.reset")
+			panel:Button( "#uv.settings.reset.all", "uv_resetallsettings")
+			
+		end)
+		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVClientOptions", "[Client] Settings", "", "", function(panel)
+			panel:Clear()
+
 			panel:Help("#uv.settings.uistyle.title")
 			panel:ControlHelp("#uv.settings.uistyle.desc")
 			
@@ -3785,20 +3867,6 @@ else --HUD/Options
 			uistylepursuit:AddChoice( "Undercover", "undercover")
 			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
 			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
-			
-			panel:Help("#uv.settings.heatlevels")
-			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
-			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
-			panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
-			panel:ControlHelp("#uv.settings.heatlevels.aiunits.desc")
-			panel:NumSlider("#uv.settings.heatlevels.min", "unitvehicle_minheatlevel", 1, 6, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.min.desc")
-			panel:NumSlider("#uv.settings.heatlevels.max", "unitvehicle_maxheatlevel", 1, 6, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.max.desc")
-			
-			panel:Help("#uv.settings.targetvehicle")
-			panel:NumSlider("#uv.settings.targetvehicle.target", "unitvehicle_targetvehicletype", 1, 3, 0)
-			panel:ControlHelp("#uv.settings.targetvehicle.target.desc")
 			
 			panel:Help("#uv.settings.music")
 			panel:Help("#uv.settings.ptech.keybinds")
@@ -3849,27 +3917,8 @@ else --HUD/Options
 				UVKeybindResetPosition:GetName(),
 				panel:Button(language.GetPhrase(Control_Strings[4]) .. " - "..string.upper(input.GetKeyName(UVKeybindResetPosition:GetInt())), "uv_keybinds", '4')
 			}
-			
-			panel:Help("#uv.settings.pursuit")
-			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
-			panel:ControlHelp("#uv.settings.pursuit.autohealth.desc")
-			panel:NumSlider("#uv.settings.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
-			panel:ControlHelp("#uv.settings.pursuit.repaircooldown.desc")
-			panel:NumSlider("#uv.settings.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)
-			panel:ControlHelp("#uv.settings.pursuit.repairrange.desc")
-			panel:CheckBox("#uv.settings.pursuit.noevade", "unitvehicle_neverevade")
-			panel:ControlHelp("#uv.settings.pursuit.noevade.desc")
-			panel:NumSlider("#uv.settings.pursuit.bustedtime", "unitvehicle_bustedtimer", 0, 10, 1)
-			panel:ControlHelp("#uv.settings.pursuit.bustedtime.desc")
-			panel:NumSlider("#uv.settings.pursuit.respawntime", "unitvehicle_spawncooldown", 0, 120, 1)
-			panel:ControlHelp("#uv.settings.pursuit.respawntime.desc")
-			panel:NumSlider("#uv.settings.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
-			panel:ControlHelp("#uv.settings.pursuit.spikeduration.desc")
-			panel:CheckBox("#uv.settings.pursuit.racertags", "unitvehicle_racertags")
-			panel:ControlHelp("#uv.settings.pursuit.racertags.desc")
-			
+
 			panel:Help("#uv.settings.ptech")
-			panel:ControlHelp("#uv.settings.ptech.desc")
 			
 			-- put slots in a row
 			--local dpanel = panel:ControlPanel("uv_keybinds")
@@ -3883,45 +3932,6 @@ else --HUD/Options
 				UVPTKeybindSlot2:GetName(),
 				panel:Button(language.GetPhrase(Control_Strings[2]) .. " - "..string.upper(input.GetKeyName(UVPTKeybindSlot2:GetInt())), "uv_keybinds", '2')
 			}
-			
-			panel:CheckBox("#uv.settings.ptech.racer", "unitvehicle_racerpursuittech")
-			panel:ControlHelp("#uv.settings.ptech.racer.desc")
-			panel:CheckBox("#uv.settings.ptech.friendlyfire", "unitvehicle_racerfriendlyfire")
-			panel:ControlHelp("#uv.settings.ptech.friendlyfire.desc")
-			
-			panel:Help("#uv.settings.ailogic")
-			panel:CheckBox("#uv.settings.ailogic.relentless", "unitvehicle_relentless")
-			panel:ControlHelp("#uv.settings.ailogic.relentless.desc")
-			panel:CheckBox("#uv.settings.ailogic.wrecking", "unitvehicle_canwreck")
-			panel:ControlHelp("#uv.settings.ailogic.wrecking.desc")
-			panel:NumSlider("#uv.settings.ailogic.detectionrange", "unitvehicle_detectionrange", 1, 100, 0)
-			panel:ControlHelp("#uv.settings.ailogic.detectionrange.desc")
-			panel:CheckBox("#uv.settings.ailogic.headlights", "unitvehicle_enableheadlights")
-			panel:ControlHelp("#uv.settings.ailogic.headlights.desc")
-			
-			panel:Help("#uv.settings.ainav")
-			panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
-			panel:ControlHelp("#uv.settings.ainav.pathfind.desc")
-			panel:CheckBox("#uv.settings.ainav.dvpriority", "unitvehicle_dvwaypointspriority")
-			panel:ControlHelp("#uv.settings.ainav.dvpriority.desc")
-			
-			panel:Help("#uv.settings.chatter")
-			panel:CheckBox("#uv.settings.chatter.enable", "unitvehicle_chatter")
-			panel:CheckBox("#uv.settings.chatter.text", "unitvehicle_chattertext")
-			panel:ControlHelp("#uv.settings.chatter.text.desc")
-			
-			panel:Help("#uv.settings.response")
-			panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
-			panel:ControlHelp("#uv.settings.response.enable.desc")
-			panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
-			panel:ControlHelp("#uv.settings.response.speedlimit.desc")
-			
-			panel:Help("#uv.settings.addon")
-			panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
-			panel:ControlHelp("#uv.settings.addon.vcmod.els.desc")
-			
-			panel:Help("#uv.settings.reset")
-			panel:Button( "#uv.settings.reset.all", "uv_resetallsettings")
 			
 		end)
 		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
