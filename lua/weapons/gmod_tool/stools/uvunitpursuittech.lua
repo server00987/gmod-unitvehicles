@@ -57,6 +57,9 @@ if CLIENT then
 end
 
 function TOOL:LeftClick( trace )
+	if SERVER then
+		util.AddNetworkString("UV_SendPursuitTech")
+	end
 
 	local car = trace.Entity
 
@@ -81,12 +84,6 @@ function TOOL:LeftClick( trace )
 				end
 			end
 
-			-- self:GetOwner():ChatPrint(
-				-- sel_v
-				-- and "Replacing "..sel_v.Tech.." with " ..ptselected.." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-				-- or "Placing "..ptselected.." on "..UVGetVehicleMakeAndModel(car).." (Slot "..(PT_Slots_Replacement_Strings[slot] or slot)..")"
-			-- )
-			
 			local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
 			ammo_count = ammo_count > 0 and ammo_count or math.huge
 
@@ -104,14 +101,28 @@ function TOOL:LeftClick( trace )
 
 			table.insert(uvrvwithpursuittech, car)
 
-			car:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
+			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
 				if table.HasValue(uvrvwithpursuittech, car) then
 					table.RemoveByValue(uvrvwithpursuittech, car)
 				end
+
+				-- Clear PursuitTech on clients too
+				net.Start("UV_SendPursuitTech")
+					net.WriteEntity(car)
+					net.WriteTable({})
+				net.Broadcast()
 			end)
+
+            -- Network the PursuitTech to all clients
+            net.Start("UV_SendPursuitTech")
+                net.WriteEntity(car)
+                net.WriteTable(car.PursuitTech)
+            net.Broadcast()
 
 			return true
 		end
+
+		return false
 
 	end
 
@@ -393,10 +404,9 @@ if CLIENT then
 		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
 		repairkitammo:SetConVar("uvunitpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
-
 	end
 	
-	local toolicon = Material( "hud/(9)T_UI_PlayerCop_Large_Icon.png", "ignorez" )
+	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", "ignorez" )
 
 	function TOOL:DrawToolScreen(width, height)
 
@@ -417,7 +427,7 @@ if CLIENT then
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
 		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( slot == 1 and "#uv.ptech.slot1" or "#uv.ptech.slot2", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( slot == 1 and "#uv.ptech.slot.left" or "#uv.ptech.slot.right", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 

@@ -12,13 +12,13 @@ local _last_backup_pulse_second = 0
 local showhud = GetConVar("cl_drawhud")
 
 PT_Slots_Replacement_Strings = {
-	[1] = "#uv.ptech.slot1",
-	[2] = "#uv.ptech.slot2"
+	[1] = "#uv.ptech.slot.right",
+	[2] = "#uv.ptech.slot.left"
 }
 
 local Control_Strings = {
-	[1] = "#uv.ptech.slot1",
-	[2] = "#uv.ptech.slot2",
+	[1] = "#uv.ptech.slot.left",
+	[2] = "#uv.ptech.slot.right",
 	[3] = "#uv.settings.music.skipsong",
 	[4] = "#uv.settings.race.resetposition"
 }

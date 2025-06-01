@@ -68,17 +68,94 @@ if CLIENT then
 		{ name = "right" },
 		{ name = "reload" }
 	}
+	hook.Add("PostDrawTranslucentRenderables", "UVPursuitTech_DrawVehicleText", function()
+		local ply = LocalPlayer()
 
-	-- language.Add("tool.uvpursuittech.name", "Racer Pursuit Tech")
-	-- language.Add("tool.uvpursuittech.desc", "Apply Pursuit Tech to your vehicles! Use it to fight against the Unit Vehicles!")
-	-- language.Add("tool.uvpursuittech.0", "Looking for more options? Find it under the options tab" )
-	-- language.Add("tool.uvpursuittech.left", "Apply the Pursuit Tech to the your vehicle. Dosen't work on Unit Vehicles, use the Unit Pursuit Tech Tool for that!" )
-	-- language.Add("tool.uvpursuittech.right", "Change Pursuit Tech" )
-	-- language.Add("tool.uvpursuittech.reload", "Select Pursuit Tech slot" )
+		-- Ensure player is holding the toolgun
+		local wep = ply:GetActiveWeapon()
+		local tool = ply:GetTool()
+		local tr = ply:GetEyeTrace()
+		local ent = tr.Entity
 
+		if not IsValid(wep) or wep:GetClass() ~= "gmod_tool" then return end
+		local allowedTools = {
+			["uvpursuittech"] = true,
+			["uvunitpursuittech"] = true,
+		}
+		
+		if not tool or not allowedTools[tool.Mode] then return end
+
+		local PT_Replacement_Strings = {
+			['ESF'] = '#uv.ptech.esf.short',
+			['Jammer'] = '#uv.ptech.jammer',
+			['Shockwave'] = '#uv.ptech.shockwave',
+			['Stunmine'] = '#uv.ptech.stunmine',
+			['Spikestrip'] = '#uv.ptech.spikes',
+			['Repair Kit'] = '#uv.ptech.repairkit',
+			['Killswitch'] = '#uv.ptech.killswitch',
+		}
+
+		-- Check if it's a valid vehicle and within range
+		if IsValid(ent) and ent:IsVehicle() and tr.HitPos:DistToSqr(ply:GetPos()) < 50000 then
+			local pos = ent:GetPos() + Vector(0, 0, 80)
+			local ang = Angle(0, EyeAngles().y - 90, 90)
+
+			-- Get pursuit tech data safely
+			local tech1 = " "
+			local tech2 = " "
+
+			if ent.PursuitTech then
+				if ent.PursuitTech[1] and ent.PursuitTech[1].Tech then
+					tech1 = PT_Replacement_Strings[ent.PursuitTech[1].Tech] or ent.PursuitTech[1].Tech
+				end
+				if ent.PursuitTech[2] and ent.PursuitTech[2].Tech then
+					tech2 = PT_Replacement_Strings[ent.PursuitTech[2].Tech] or ent.PursuitTech[2].Tech
+				end
+			end
+
+			-- Draw 3D2D label above the vehicle
+			cam.Start3D2D(pos, ang, 0.2)
+				draw.SimpleTextOutlined(
+					"#uv.ptech",
+					"DermaLarge",
+					0, 20,
+					Color(255, 255, 255),
+					TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+					1, Color(0, 0, 0)
+				)
+				draw.SimpleTextOutlined(
+					tech1,
+					"DermaLarge",
+					-27.5, 50,
+					Color(255, 255, 255),
+					TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER,
+					1, Color(0, 0, 0)
+				)
+				draw.SimpleTextOutlined(
+					"< | >",
+					"DermaLarge",
+					0, 50,
+					Color(255, 255, 255),
+					TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+					1, Color(0, 0, 0)
+				)
+				draw.SimpleTextOutlined(
+					tech2,
+					"DermaLarge",
+					30, 50,
+					Color(255, 255, 255),
+					TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER,
+					1, Color(0, 0, 0)
+				)
+			cam.End3D2D()
+		end
+	end)
 end
 
 function TOOL:LeftClick( trace )
+	if SERVER then
+		util.AddNetworkString("UV_SendPursuitTech")
+	end
 
 	local car = trace.Entity
 
@@ -103,12 +180,6 @@ function TOOL:LeftClick( trace )
 				end
 			end
 
-			-- self:GetOwner():ChatPrint(
-				-- sel_v
-				-- and string.format( language.GetPhrase("tool.uvpursuittech.popup.replace"), UVGetVehicleMakeAndModel(car), ptselected, (PT_Slots_Replacement_Strings[slot] or slot), sel_v.Tech )
-				-- or string.format( language.GetPhrase("tool.uvpursuittech.popup.install"), UVGetVehicleMakeAndModel(car), ptselected, (PT_Slots_Replacement_Strings[slot] or slot) )
-			-- )
-
 			local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
 			ammo_count = ammo_count > 0 and ammo_count or math.huge
 
@@ -126,11 +197,23 @@ function TOOL:LeftClick( trace )
 
 			table.insert(uvrvwithpursuittech, car)
 
-			car:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
+			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
 				if table.HasValue(uvrvwithpursuittech, car) then
 					table.RemoveByValue(uvrvwithpursuittech, car)
 				end
+
+				-- Clear PursuitTech on clients too
+				net.Start("UV_SendPursuitTech")
+					net.WriteEntity(car)
+					net.WriteTable({})
+				net.Broadcast()
 			end)
+
+            -- Network the PursuitTech to all clients
+            net.Start("UV_SendPursuitTech")
+                net.WriteEntity(car)
+                net.WriteTable(car.PursuitTech)
+            net.Broadcast()
 
 			return true
 		end
@@ -175,6 +258,15 @@ function TOOL:Reload()
 end
 
 if CLIENT then
+
+	net.Receive("UV_SendPursuitTech", function()
+		local car = net.ReadEntity()
+		local data = net.ReadTable()
+
+		if IsValid(car) then
+			car.PursuitTech = data
+		end
+	end)
 
 	function TOOL.BuildCPanel(CPanel)
 
@@ -542,7 +634,7 @@ if CLIENT then
 		CPanel:AddItem(repairkitammo)
 	end
 	
-	local toolicon = Material( "hud/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )
+	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )
 
 	function TOOL:DrawToolScreen(width, height)
 
@@ -565,7 +657,7 @@ if CLIENT then
 		surface.DrawTexturedRect( 0, 0, width, height )
 		
 		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( slot == 1 and "#uv.ptech.slot1" or "#uv.ptech.slot2", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( slot == 1 and "#uv.ptech.slot.left" or "#uv.ptech.slot.right", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	end
 

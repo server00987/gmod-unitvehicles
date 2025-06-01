@@ -1083,7 +1083,9 @@ else
         if UVHUDRace and RacingMusic:GetBool() then 
             local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
             local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
-            surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] ) 
+			if #soundfiles > 0 then
+				surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] )
+			end
         end
 
         hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', table.Copy( UVHUDRaceInfo ) )
@@ -1114,7 +1116,9 @@ else
             if driver == LocalPlayer() then
                 local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
                 local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/checkpointpass/*", "GAME" )
-                surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
+				if #soundfiles > 0 then
+					surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
+				end
             end
         end
     end)
@@ -1130,9 +1134,9 @@ else
                 
                 if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
-                    local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/"..((place <= 3 and "win") or "loss").."/*", "GAME" )
+                    local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/*", "GAME" )
                     if soundfiles and #soundfiles > 0 then
-                        local audio_path = "uvracesfx/".. theme .."/"..((place <= 3 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
+                        local audio_path = "uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
                         surface.PlaySound(audio_path)
                     end
                 end
@@ -1274,16 +1278,24 @@ else
 		local sound = nil
 		if time == 1 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/countgo/*", "GAME")
-			sound = "uvracesfx/" .. theme .. "/countgo/" .. files[math.random(#files)]
+			if #files > 0 then
+				sound = "uvracesfx/" .. theme .. "/countgo/" .. files[math.random(#files)]
+			end
 		elseif time == 2 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count1/*", "GAME")
-			sound = "uvracesfx/" .. theme .. "/count1/" .. files[math.random(#files)]
+			if #files > 0 then
+				sound = "uvracesfx/" .. theme .. "/count1/" .. files[math.random(#files)]
+			end
 		elseif time == 3 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count2/*", "GAME")
-			sound = "uvracesfx/" .. theme .. "/count2/" .. files[math.random(#files)]
+			if #files > 0 then
+				sound = "uvracesfx/" .. theme .. "/count2/" .. files[math.random(#files)]
+			end
 		elseif time == 4 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count3/*", "GAME")
-			sound = "uvracesfx/" .. theme .. "/count3/" .. files[math.random(#files)]
+			if #files > 0 then
+				sound = "uvracesfx/" .. theme .. "/count3/" .. files[math.random(#files)]
+			end
 		end
 
 		-- Play sound

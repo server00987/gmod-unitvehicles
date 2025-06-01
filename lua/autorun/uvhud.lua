@@ -119,45 +119,100 @@ local function uv_general( ... )
 			['Spikestrip'] = '#uv.ptech.spikes.short',
 			['Repair Kit'] = '#uv.ptech.repairkit.short'
 		}
+		
+		local BindTextReplace = {
+			KP_INS = "KP 0",
+			KP_END = "KP 1",
+			KP_DOWNARROW = "KP 2",
+			KP_PGDN = "KP 3",
+			KP_LEFTARROW = "KP 4",
+			KP_5 = "KP 5",
+			KP_RIGHTARROW = "KP 6",
+			KP_HOME = "KP 7",
+			KP_UPARROW = "KP 8",
+			KP_PGUP = "KP 9",
+			KP_SLASH = "KP /",
+			KP_MULTIPLY = "KP *",
+			KP_MINUS = "KP -",
+			KP_PLUS = "KP +",
+			KP_ENTER = "KP ENTER",
+			KP_DEL = "KP .",
+		}
+
 		if !uvclientjammed then
 			for i=1, 2, 1 do
+				local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
+
+				local function GetFriendlyKeyName(var)
+					local keyName = input.GetKeyName(var)
+					if not keyName then return "UNKNOWN" end
+
+					local upperKeyName = string.upper(keyName)
+					return BindTextReplace[upperKeyName] or keyName
+				end
+
 				if UVHUDPursuitTech[i] then
-					local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
-					
 					if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 						net.Start("UVPTUse")
 						net.WriteInt(i, 16)
 						net.SendToServer()
 					end
-					
+
 					if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
-						local sanitized_cooldown = math.Round((UVHUDPursuitTech[i].Cooldown - (CurTime() - UVHUDPursuitTech[i].LastUsed)), 1)
-						local ptcol = Color(255, 255, 255)
+						local cooldown = UVHUDPursuitTech[i].Cooldown
+						local time_since_used = CurTime() - UVHUDPursuitTech[i].LastUsed
+						local sanitized_cooldown = math.Round(cooldown - time_since_used, 1)
 						
 						local blink = 255 * math.abs(math.sin(RealTime() * 3))
-						local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-						local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-						
-						if sanitized_cooldown >= 0 then ptcol = Color(255, 255, blink)
-						-- elseif sanitized_cooldown >= 2 then ptcol = Color(blink2, blink2, blink2)
-						-- elseif sanitized_cooldown >= 0 then ptcol = Color(blink3, blink3, blink3)
-						end
-						
+
+						local x = w * (0.8575 + ((i - 1) * 0.05))
+						local y = h * 0.6
+						local bw = w * 0.0475
+						local bh = h * 0.05
+
+						-- Background
+						surface.SetDrawColor(0, 0, 0, 200)
+						surface.DrawRect(x, y, bw, bh)
+
+						-- Cooldown fill overlay
+						local fill_frac = math.Clamp(time_since_used / cooldown, 0, 1)
+						local fill_width = bw * fill_frac
+						surface.SetDrawColor(blink, blink, 0, 100)
+						surface.DrawRect(x, y, fill_width, bh)
+
+						draw.DrawText( GetFriendlyKeyName(var), "UVFont4", w * (0.88 + ((i - 1) * 0.05)), h * 0.575, Color(255, 255, 255, 125), TEXT_ALIGN_CENTER )
+
 						draw.DrawText(
-							sanitized_cooldown .. "\n" ..
 							(PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
 							"\n"..UVHUDPursuitTech[i].Ammo,
 							"UVFont4",
 							w * (0.88 + ((i - 1) * 0.05)),
 							h * 0.6,
-							ptcol,
+							Color(255, 255, 255, 125),
 							TEXT_ALIGN_CENTER
 						)
 					else
+						local kbc = Color(255, 255, 255)
+						
+						local x = w * (0.8575 + ((i - 1) * 0.05))
+						local y = h * 0.6
+						local bw = w * 0.0475
+						local bh = h * 0.05
+
+						-- Background
+						if UVHUDPursuitTech[i].Ammo > 0 then
+							surface.SetDrawColor( 0, 200, 0, 200 )
+						else
+							surface.SetDrawColor( 200, 0, 0, 100 )
+							kbc = Color(200, 50, 50, 255)
+						end
+						surface.DrawRect(x, y, bw, bh)
+						
+						draw.DrawText( GetFriendlyKeyName(var), "UVFont4", w * (0.88 + ((i - 1) * 0.05)), h * 0.575, kbc, TEXT_ALIGN_CENTER )
+
 						draw.DrawText(
-							"[ " .. input.GetKeyName( var ) .. " ]" .. "\n" ..
 							(PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
-							"\n"..UVHUDPursuitTech[i].Ammo,
+							"\n"..(UVHUDPursuitTech[i].Ammo > 0 and UVHUDPursuitTech[i].Ammo or " - "),
 							"UVFont4",
 							w * (0.88 + ((i - 1) * 0.05)),
 							h * 0.6,
@@ -166,11 +221,27 @@ local function uv_general( ... )
 						)
 					end
 				else
-					draw.DrawText( "-", "UVFont4",w/(1.05+((i -1)*.06)), h/1.7, Color( 255, 255, 255, 166), TEXT_ALIGN_CENTER )
+					draw.DrawText(
+						GetFriendlyKeyName(var) .. "\n" ..
+						" - " ..
+						"\n ",
+						"UVFont4",
+						w * (0.88 + ((i - 1) * 0.05)),
+						h * 0.6,
+						Color( 255, 255, 255, 166),
+						TEXT_ALIGN_CENTER
+					)
 				end
 			end
 		else
-			draw.DrawText( lang("uv.ptech.jammer.hit.you"), "UVFont4",w/1.05, h/1.7, Color( 255, 0, 0), TEXT_ALIGN_CENTER )
+			draw.DrawText(
+				"#uv.ptech.jammer.hit.you",
+				"UVFont4",
+				w * 0.925,
+				h * 0.6,
+				Color( 255, 255, 255, 166),
+				TEXT_ALIGN_RIGHT
+			)
 		end
 	end
 end
