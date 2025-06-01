@@ -926,10 +926,10 @@ else
             hook.Add("RenderScreenspaceEffects", "UVJammedScreen", function()
                 DrawMaterialOverlay( "effects/tvscreen_noise003a", 1 )
             end )
-            notification.AddLegacy( "YOU'RE BEING JAMMED!", NOTIFY_ERROR, 10 )
+            -- notification.AddLegacy( "YOU'RE BEING JAMMED!", NOTIFY_ERROR, 10 )
         else --ATTACKER
             surface.PlaySound( "gadgets/jammer/activate1.wav" )
-            notification.AddLegacy( "Jammer is now active!", NOTIFY_GENERIC, 10 )
+            -- notification.AddLegacy( "Jammer is now active!", NOTIFY_GENERIC, 10 )
         end
     end)
     
