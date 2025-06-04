@@ -2379,10 +2379,16 @@ local function mw_pursuit_main( ... )
             end
             draw.DrawText("⛊ " .. lang("uv.unit.commander") .. " ⛊","UVFont5UI-BottomBar",w / 2,0,Color(0, 161, 255),TEXT_ALIGN_CENTER)
         end
-        
+		
+        local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+		
         -- [ Upper Right Info Box ] --
         -- Full BG
-        surface.SetDrawColor(223, 184, 127, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+		if UVHUDCopMode then
+			surface.SetDrawColor(61, 184, 255, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+		else
+			surface.SetDrawColor(223, 184, 127, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+		end
 		surface.SetMaterial(UVMaterials["PURSUIT_BG_PULSE"])
         surface.DrawTexturedRect(w * 0.7, h * 0.101, w * 0.275, h * 0.1175)
         
@@ -2395,8 +2401,8 @@ local function mw_pursuit_main( ... )
         surface.DrawTexturedRect(w * 0.707, h * 0.16, w * 0.2625, h * 0.05)
         
         -- Timer
-        DrawIcon(UVMaterials["CLOCK"], w * 0.735, h * 0.1325, .0625, Colors.MW_Accent) -- Icon
-        draw.DrawText(UVTimer, "UVFont5UI", w * 0.965, h * 0.115, Colors.MW_Accent, TEXT_ALIGN_RIGHT)
+        DrawIcon(UVMaterials["CLOCK"], w * 0.735, h * 0.1325, .0625, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent) -- Icon
+        draw.DrawText(UVTimer, "UVFont5UI", w * 0.965, h * 0.115, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent, TEXT_ALIGN_RIGHT)
         
         -- Bounty
         draw.DrawText("#uv.hud.bounty","UVFont5UI",w * 0.7175,h * 0.1625,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
@@ -2856,7 +2862,7 @@ UV_UI.pursuit.undercover.events = {
 			local lang = language.GetPhrase
 
 			-- Main black BG
-			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.SetDrawColor( 20, 53, 91, 240 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
@@ -2994,7 +3000,7 @@ UV_UI.pursuit.undercover.events = {
 			local lang = language.GetPhrase
 
 			-- Main black BG
-			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.SetDrawColor( 20, 53, 91, 240 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
@@ -3132,7 +3138,7 @@ UV_UI.pursuit.undercover.events = {
 			local lang = language.GetPhrase
 
 			-- Main black BG
-			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.SetDrawColor( 20, 53, 91, 240 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
@@ -3257,7 +3263,7 @@ UV_UI.pursuit.undercover.events = {
 			local lang = language.GetPhrase
 
 			-- Main black BG
-			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.SetDrawColor( 20, 53, 91, 240 )
 			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
