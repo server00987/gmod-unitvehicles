@@ -2854,23 +2854,10 @@ UV_UI.pursuit.undercover.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			local bgvariables = {
-				[ "$pp_colormod_addb" ] = 111,
-				[ "$pp_colormod_addg" ] = 61,
-				[ "$pp_colormod_addb" ] = 0,
-				[ "$pp_colormod_brightness" ] = -1.71,
-				[ "$pp_colormod_color" ] = 0.07,
-				[ "$pp_colormod_contrast" ] = 2.55,
-				[ "$pp_colormod_inv" ] = 0,
-				[ "$pp_colormod_mulb" ] = 0,
-				[ "$pp_colormod_mulg" ] = 0,
-				[ "$pp_colormod_mulr" ] = 0
-			}
 
 			-- Main black BG
-			hook.Add( "RenderScreenspaceEffects", "UVUndercoverResultBG", function()
-				DrawColorModify( bgvariables )
-			end )
+			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
 			surface.SetDrawColor( 0, 0, 0, 235 )
@@ -2936,7 +2923,6 @@ UV_UI.pursuit.undercover.events = {
 
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 				self:Close()
 			end
 			
@@ -2944,7 +2930,6 @@ UV_UI.pursuit.undercover.events = {
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 			ResultPanel:Close()
 		end
 		
@@ -2959,7 +2944,6 @@ UV_UI.pursuit.undercover.events = {
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 						hook.Remove("Think", "CheckJumpKeyForDebrief")
-						hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 					end
 				end
 			else
@@ -3008,23 +2992,10 @@ UV_UI.pursuit.undercover.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			local bgvariables = {
-				[ "$pp_colormod_addb" ] = 111,
-				[ "$pp_colormod_addg" ] = 61,
-				[ "$pp_colormod_addb" ] = 0,
-				[ "$pp_colormod_brightness" ] = -1.71,
-				[ "$pp_colormod_color" ] = 0.07,
-				[ "$pp_colormod_contrast" ] = 2.55,
-				[ "$pp_colormod_inv" ] = 0,
-				[ "$pp_colormod_mulb" ] = 0,
-				[ "$pp_colormod_mulg" ] = 0,
-				[ "$pp_colormod_mulr" ] = 0
-			}
 
 			-- Main black BG
-			hook.Add( "RenderScreenspaceEffects", "UVUndercoverResultBG", function()
-				DrawColorModify( bgvariables )
-			end )
+			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
 			surface.SetDrawColor( 0, 0, 0, 235 )
@@ -3090,7 +3061,6 @@ UV_UI.pursuit.undercover.events = {
 
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 				self:Close()
 			end
 			
@@ -3098,7 +3068,6 @@ UV_UI.pursuit.undercover.events = {
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 			ResultPanel:Close()
 		end
 		
@@ -3113,7 +3082,6 @@ UV_UI.pursuit.undercover.events = {
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 						hook.Remove("Think", "CheckJumpKeyForDebrief")
-						hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 					end
 				end
 			else
@@ -3162,23 +3130,10 @@ UV_UI.pursuit.undercover.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			local bgvariables = {
-				[ "$pp_colormod_addb" ] = 111,
-				[ "$pp_colormod_addg" ] = 61,
-				[ "$pp_colormod_addb" ] = 0,
-				[ "$pp_colormod_brightness" ] = -1.71,
-				[ "$pp_colormod_color" ] = 0.07,
-				[ "$pp_colormod_contrast" ] = 2.55,
-				[ "$pp_colormod_inv" ] = 0,
-				[ "$pp_colormod_mulb" ] = 0,
-				[ "$pp_colormod_mulg" ] = 0,
-				[ "$pp_colormod_mulr" ] = 0
-			}
 
 			-- Main black BG
-			hook.Add( "RenderScreenspaceEffects", "UVUndercoverResultBG", function()
-				DrawColorModify( bgvariables )
-			end )
+			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
 			surface.SetDrawColor( 0, 0, 0, 235 )
@@ -3232,7 +3187,6 @@ UV_UI.pursuit.undercover.events = {
 			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 				self:Close()
 			end
 			
@@ -3240,7 +3194,6 @@ UV_UI.pursuit.undercover.events = {
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 			ResultPanel:Close()
 		end
 		
@@ -3255,7 +3208,6 @@ UV_UI.pursuit.undercover.events = {
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 						hook.Remove("Think", "CheckJumpKeyForDebrief")
-						hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 					end
 				end
 			else
@@ -3303,23 +3255,10 @@ UV_UI.pursuit.undercover.events = {
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
-			local bgvariables = {
-				[ "$pp_colormod_addb" ] = 111,
-				[ "$pp_colormod_addg" ] = 61,
-				[ "$pp_colormod_addb" ] = 0,
-				[ "$pp_colormod_brightness" ] = -1.71,
-				[ "$pp_colormod_color" ] = 0.07,
-				[ "$pp_colormod_contrast" ] = 2.55,
-				[ "$pp_colormod_inv" ] = 0,
-				[ "$pp_colormod_mulb" ] = 0,
-				[ "$pp_colormod_mulg" ] = 0,
-				[ "$pp_colormod_mulr" ] = 0
-			}
 
 			-- Main black BG
-			hook.Add( "RenderScreenspaceEffects", "UVUndercoverResultBG", function()
-				DrawColorModify( bgvariables )
-			end )
+			surface.SetDrawColor( 107, 130, 126, 150 )
+			surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
 			surface.SetDrawColor( 0, 0, 0, 235 )
@@ -3385,7 +3324,6 @@ UV_UI.pursuit.undercover.events = {
 			
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 				self:Close()
 			end
 			
@@ -3393,7 +3331,6 @@ UV_UI.pursuit.undercover.events = {
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 			ResultPanel:Close()
 		end
 		
@@ -3408,7 +3345,6 @@ UV_UI.pursuit.undercover.events = {
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 						hook.Remove("Think", "CheckJumpKeyForDebrief")
-						hook.Remove("RenderScreenspaceEffects", "UVUndercoverResultBG")
 					end
 				end
 			else
