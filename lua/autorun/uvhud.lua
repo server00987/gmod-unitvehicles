@@ -159,7 +159,7 @@ local function uv_general( ... )
 					if not keyName then return "UNKNOWN" end
 
 					local upperKeyName = string.upper(keyName)
-					return BindTextReplace[upperKeyName] or keyName
+					return BindTextReplace[upperKeyName] or upperKeyName
 				end
 
 				if UVHUDPursuitTech[i] then
