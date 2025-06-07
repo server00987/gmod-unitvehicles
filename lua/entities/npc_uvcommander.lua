@@ -154,7 +154,7 @@ if SERVER then
 		local t = ents.FindInSphere(self.v:WorldSpaceCenter(), 2500)
 		local distance, nearest = math.huge, nil --The nearest enemy is the target.
 		for k, v in pairs(t) do
-			if self:Validate(v) and ((SpeedLimit:GetFloat() > 0 and v:GetVelocity():LengthSqr() > (self.Speeding+30976)) or self.v.rammed or v.RacerVehicle or v.UVWanted) and self:StraightToTarget(v) then --Target conditions
+			if self:Validate(v) and ((SpeedLimit:GetFloat() > 0 and v:GetVelocity():LengthSqr() > (self.Speeding+30976)) or self.v.rammed or v.UVWanted or v.uvraceparticipant) and self:StraightToTarget(v) then --Target conditions
 				local d = v:WorldSpaceCenter():DistToSqr(self.v:WorldSpaceCenter())
 				if distance > d then
 					distance = d
@@ -1009,7 +1009,7 @@ if SERVER then
 					end)
 					self.toofar = nil
 					self.aggressive = nil
-					if uvbounty >= UVUHeatMinimumBounty1:GetInt() and !uvtargeting and !uvenemybusted then
+					if (uvbounty >= UVUHeatMinimumBounty1:GetInt() or self.e.uvraceparticipant) and !uvtargeting and !uvenemybusted then
 						timer.Simple(0.1, function()
 							uvtargeting = true
 							if Chatter:GetBool() and IsValid(self) then
