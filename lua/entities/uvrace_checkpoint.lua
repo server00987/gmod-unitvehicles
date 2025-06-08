@@ -36,15 +36,15 @@ function ENT:Initialize()
 	end
 
 	if SERVER then
-		local basePos = self:GetPos()
-		local maxPos = self:GetMaxPos()
+		-- local basePos = self:GetPos()
+		-- local maxPos = self:GetMaxPos()
 
-		if maxPos.z - basePos.z < 100 then
-			maxPos.z = basePos.z + 100
-			self:SetMaxPos(maxPos)
-		end
+		-- if maxPos.z - basePos.z < 100 then
+			-- maxPos.z = basePos.z + 100
+			-- self:SetMaxPos(maxPos)
+		-- end
 
-		self:SetCollisionBounds(vec0, maxPos - basePos)
+		-- self:SetCollisionBounds(vec0, maxPos - basePos)
 
 		hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
 			AddOriginToPVS(self:GetPos())
