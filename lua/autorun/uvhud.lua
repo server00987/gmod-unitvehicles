@@ -363,359 +363,160 @@ UV_UI.pursuit.carbon.events = {
     onHeatLevelUpdate = function(...)
         
     end,
-    onCopBustedDebrief = function(...)
-        local w = ScrW()
-		local h = ScrH()
-
-        local bustedtable = select( 1, ... )
-
-        --------------------------------------
-
-        local time = UVDisplayTime(UVTimerProgress)
-		local deploys = bustedtable["Deploys"]
-		local roadblocksdodged = bustedtable["Roadblocks"]
-		local spikestripsdodged = bustedtable["Spikestrips"]
-		local bounty = UVBounty
-		local tags = UVTags
-		local wrecks = UVWrecks
-		local suspects = UVHUDWantedSuspectsNumber
-		
-		local ResultPanel = vgui.Create("DFrame")
-		local OK = vgui.Create("DButton")
-		
-		ResultPanel:Add(OK)
-		ResultPanel:SetSize(w, h)
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
-		ResultPanel:SetKeyboardInputEnabled(false)
-
-		OK:SetText("X")
-		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.725, h*0.205)
-		
-		local timetotal = 30
-		local timestart = CurTime()
-		
-		ResultPanel.Paint = function(self, w, h)
-			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local lang = language.GetPhrase
-
-			-- Main black BG
-			surface.SetDrawColor( 0, 0, 0, 200 )
-			surface.DrawRect( 0, 0, w, h)
-			
-			-- Upper Results Tab
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
-			
-			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
-			surface.SetDrawColor(86, 214, 205)
-			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
-
-			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
-			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
-
-			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			-- Next Lower, results subtext
-			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
-			
-			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			
-			-- All middle tabs, light ones
-			local numRectsLight = 3
-			for i=0, numRectsLight, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 100 )
-				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
-			end
-			
-			-- All middle tabs, dark ones
-			local numRectsDark = 3
-			for i=0, numRectsDark, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 25 )
-				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
-			end
-			
-			local h1, h2 = h*0.3825, h*0.4225
-			
-			-- Text
-			draw.DrawText( "#uv.results.suspects.busted", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
-
-			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			
-			-- draw.SimpleText( unit, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			
-			-- Time remaining and closing
-			surface.SetDrawColor( 100, 100, 100, 125 )
-			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
-			
-			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
-			
-			if timeremaining < 1 then
-				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				self:Close()
-			end
-			
-		end
-		
-		function OK:DoClick() 
-			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			ResultPanel:Close()
-		end
-		
-		local wasJumping = false
-		hook.Add("Think", "CheckJumpKeyForDebrief", function()
-			local ply = LocalPlayer()
-			if not IsValid(ply) then return end
-			
-			if ply:KeyDown(IN_JUMP) then
-				if not wasJumping then
-					wasJumping = true
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-						hook.Remove("Think", "CheckJumpKeyForDebrief")
-					end
-				end
-			else
-				wasJumping = false
-			end
-		end)
-    end,
-    onCopEscapedDebrief = function(...)
-
-        local w = ScrW()
-		local h = ScrH()
-
-        local escapedtable = select( 1, ... )
-
-        --------------------------------------
-
-        local time = UVDisplayTime(UVTimerProgress)
-		local deploys = escapedtable["Deploys"]
-		local roadblocksdodged = escapedtable["Roadblocks"]
-		local spikestripsdodged = escapedtable["Spikestrips"]
-		local bounty = UVBounty
-		local tags = UVTags
-		local wrecks = UVWrecks
-		local suspects = UVHUDWantedSuspectsNumber
-		
-		local ResultPanel = vgui.Create("DFrame")
-		local OK = vgui.Create("DButton")
-		
-		ResultPanel:Add(OK)
-		ResultPanel:SetSize(w, h)
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
-		ResultPanel:SetKeyboardInputEnabled(false)
-
-		OK:SetText("X")
-		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.725, h*0.205)
-		
-		local timetotal = 30
-		local timestart = CurTime()
-		
-		ResultPanel.Paint = function(self, w, h)
-			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local lang = language.GetPhrase
-
-			-- Main black BG
-			surface.SetDrawColor( 0, 0, 0, 200 )
-			surface.DrawRect( 0, 0, w, h)
-			
-			-- Upper Results Tab
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
-			
-			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
-			surface.SetDrawColor(86, 214, 205)
-			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
-
-			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
-			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
-
-			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			-- Next Lower, results subtext
-			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
-			
-			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			
-			-- All middle tabs, light ones
-			local numRectsLight = 3
-			for i=0, numRectsLight, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 100 )
-				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
-			end
-			
-			-- All middle tabs, dark ones
-			local numRectsDark = 3
-			for i=0, numRectsDark, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 25 )
-				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
-			end
-			
-			local h1, h2 = h*0.3825, h*0.4225
-			
-			-- Text
-			draw.DrawText( "#uv.results.suspects.escaped.num.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
-			
-			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			
-			draw.SimpleText( UVHUDWantedSuspectsNumber, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			
-			-- Time remaining and closing
-			surface.SetDrawColor( 100, 100, 100, 125 )
-			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
-			
-			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
-			
-			if timeremaining < 1 then
-				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				self:Close()
-			end
-			
-		end
-		
-		function OK:DoClick() 
-			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			ResultPanel:Close()
-		end
-		
-		local wasJumping = false
-		hook.Add("Think", "CheckJumpKeyForDebrief", function()
-			local ply = LocalPlayer()
-			if not IsValid(ply) then return end
-			
-			if ply:KeyDown(IN_JUMP) then
-				if not wasJumping then
-					wasJumping = true
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-						hook.Remove("Think", "CheckJumpKeyForDebrief")
-					end
-				end
-			else
-				wasJumping = false
-			end
-		end)
-    end,
-    onRacerEscapedDebrief = function(...)
+	
+	ShowDebrief = function(params) -- Carbon
         if UVHUDRace then return end
+		if IsValid(ResultPanel) then ResultPanel:Remove() end
 		
+		local debriefdata = params.dataTable or escapedtable
+		local debrieftitletext = params.titleText or "Title Text"
+		local debrieftitlevar = params.titleVar or " "
+
 		local w = ScrW()
 		local h = ScrH()
 
-        local escapedtable = select( 1, ... )
-
         --------------------------------------
 
         local time = UVDisplayTime(UVTimerProgress)
-		local deploys = escapedtable["Deploys"]
-		local roadblocksdodged = escapedtable["Roadblocks"]
-		local spikestripsdodged = escapedtable["Spikestrips"]
+		local unit = debriefdata["Unit"] or "Officer Replace Me"
+		local deploys = debriefdata["Deploys"]
+		local roadblocksdodged = debriefdata["Roadblocks"]
+		local spikestripsdodged = debriefdata["Spikestrips"]
 		local bounty = UVBounty
 		local tags = UVTags
 		local wrecks = UVWrecks
+		local suspects = UVHUDWantedSuspectsNumber
 		
-		local ResultPanel = vgui.Create("DFrame")
-		local OK = vgui.Create("DButton")
-		
-		ResultPanel:Add(OK)
+		ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
 		ResultPanel:SetSize(w, h)
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
+		-- ResultPanel:SetPos(0, 0)
+		ResultPanel:SetMouseInputEnabled(true)
 		ResultPanel:SetKeyboardInputEnabled(false)
+		ResultPanel:SetZPos(32767)
+
+		local targetY = 0
+		local overshootY = h * 0.1  -- drops 10% below target before bouncing back
+		local startY = -h           -- start fully above the screen
+
+		ResultPanel:SetPos(0, startY)
+
+		local animTime = 0.33
+		local bounceTime = 0.1
+		local startTime = CurTime()
+
+		hook.Add("Think", "ResultPanelEntranceAnim", function()
+			local elapsed = CurTime() - startTime
+
+			if elapsed < animTime then
+				if elapsed < animTime - bounceTime then
+					local frac = elapsed / (animTime - bounceTime)
+					local y = Lerp(frac, startY, overshootY)
+					ResultPanel:SetPos(0, y)
+				else
+					local frac = (elapsed - (animTime - bounceTime)) / bounceTime
+					local y = Lerp(frac, overshootY, targetY)
+					ResultPanel:SetPos(0, y)
+				end
+			else
+				ResultPanel:SetPos(0, targetY)
+				hook.Remove("Think", "ResultPanelEntranceAnim")
+			end
+		end)
 		
+		local function AnimateAndRemovePanel(panel)
+			if not IsValid(panel) then return end
+
+			local startY = panel:GetY()
+			local endY = ScrH()  -- off-screen below
+			local animTime = 0.33
+			local startTime = CurTime()
+
+			-- Play sounds ONCE at start
+			surface.PlaySound("uvui/carbon/openmenu.wav")
+			surface.PlaySound("uvui/carbon/exitmenu.wav")
+
+			-- Disable interactivity
+			panel:SetMouseInputEnabled(false)
+			gui.EnableScreenClicker(false)
+
+			hook.Add("Think", "ResultPanelExitAnim", function()
+				if not IsValid(panel) then
+					hook.Remove("Think", "ResultPanelExitAnim")
+					return
+				end
+
+				local elapsed = CurTime() - startTime
+				if elapsed < animTime then
+					local frac = elapsed / animTime
+					local y = Lerp(frac, startY, endY)
+					panel:SetPos(0, y)
+				else
+					panel:Remove()
+					hook.Remove("Think", "ResultPanelExitAnim")
+				end
+			end)
+		end
+
+		gui.EnableScreenClicker(true)
+
+		local OK = vgui.Create("DButton", ResultPanel)
 		OK:SetText("X")
 		OK:SetSize(w*0.015, h*0.03)
 		OK:SetPos(w*0.725, h*0.205)
-		
+
 		local timetotal = 30
 		local timestart = CurTime()
+		local exitStarted = false -- prevent repeated trigger
 		
+		local finalTitle = "★" .. language.GetPhrase("uv.results.pursuit.carbon") .. "★"
+		local charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()[]{}<>,./?|"
+		local revealSpeed = 0.05
+		local displayStart = CurTime()
+		local scrambleSound
+		local isScrambling = true
+		local revealedChars = 0
+
+		sound.Add({
+			name = "UV.Carbon.Scramble",
+			channel = CHAN_STATIC,
+			volume = 1.0,
+			level = 70,
+			pitch = { 100 },
+			sound = "uvui/carbon/textfold.wav"
+		})
+
+		-- Start reveal timer
+		timer.Create("ScrambleTextUpdate", revealSpeed, #finalTitle, function()
+			revealedChars = revealedChars + 1
+
+			-- Start the loop sound
+			if isScrambling and not scrambleSound then
+				scrambleSound = CreateSound(LocalPlayer(), "UV.Carbon.Scramble")
+				if scrambleSound then
+					scrambleSound:Play()
+				end
+			end
+
+			-- Stop when done
+			if revealedChars >= #finalTitle then
+				isScrambling = false
+				if scrambleSound then
+					scrambleSound:FadeOut(0.2)
+					scrambleSound = nil
+				end
+			end
+		end)
+
 		ResultPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
 			local lang = language.GetPhrase
 
 			-- Main black BG
-			surface.SetDrawColor( 0, 0, 0, 200 )
-			surface.DrawRect( 0, 0, w, h)
+			-- surface.SetDrawColor( 0, 0, 0, 200 )
+			-- surface.DrawRect( 0, 0, w, h)
 			
 			-- Upper Results Tab
-			surface.SetDrawColor( 0, 0, 0, 235 )
+			surface.SetDrawColor( 0, 0, 0, 200 )
 			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
 			
 			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
@@ -725,8 +526,23 @@ UV_UI.pursuit.carbon.events = {
 			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
 			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
 
-			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
+			local timePassed = CurTime() - displayStart
+			local charsToReveal = math.min(#finalTitle, math.floor(timePassed / revealSpeed))
+
+			local animatedTitle = ""
+
+			for i = 1, #finalTitle do
+				if i <= charsToReveal then
+					animatedTitle = animatedTitle .. finalTitle:sub(i, i)
+				else
+					local randIndex = math.random(#charset)
+					local randChar = charset:sub(randIndex, randIndex)
+					animatedTitle = animatedTitle .. randChar
+				end
+			end
+
+			draw.DrawText(animatedTitle, "UVCarbonFont", w * 0.3, h * 0.2, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+
 			-- Next Lower, results subtext
 			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
 			surface.SetDrawColor( 0, 0, 0, 235 )
@@ -741,7 +557,7 @@ UV_UI.pursuit.carbon.events = {
 			for i=0, numRectsLight, 1 do
 				local yPos = i * h * 0.08
 				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 100 )
+				surface.SetDrawColor( 86, 214, 205, 175 )
 				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
 				
 				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
@@ -753,7 +569,7 @@ UV_UI.pursuit.carbon.events = {
 			for i=0, numRectsDark, 1 do
 				local yPos = i * h * 0.08
 				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 25 )
+				surface.SetDrawColor( 86, 214, 205, 75 )
 				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
 				
 				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
@@ -763,7 +579,7 @@ UV_UI.pursuit.carbon.events = {
 			local h1, h2 = h*0.3825, h*0.4225
 			
 			-- Text
-			draw.DrawText( "#uv.results.escapedfrom", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
+			draw.DrawText( debrieftitletext, "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
 			
 			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
@@ -773,7 +589,7 @@ UV_UI.pursuit.carbon.events = {
 			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			
-			-- draw.SimpleText( "Yes", "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			draw.SimpleText( debrieftitlevar, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			
 			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
@@ -791,16 +607,17 @@ UV_UI.pursuit.carbon.events = {
 			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			
-			if timeremaining < 1 then
+			if not exitStarted and timeremaining < 1 then
+				exitStarted = true
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				self:Close()
+				AnimateAndRemovePanel(ResultPanel)
 			end
 			
 		end
 		
 		function OK:DoClick() 
 			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			ResultPanel:Close()
+			AnimateAndRemovePanel(ResultPanel)
 		end
 		
 		local wasJumping = false
@@ -812,7 +629,7 @@ UV_UI.pursuit.carbon.events = {
 				if not wasJumping then
 					wasJumping = true
 					if IsValid(ResultPanel) then
-						ResultPanel:Close()
+						AnimateAndRemovePanel(ResultPanel)
 						hook.Remove("Think", "CheckJumpKeyForDebrief")
 					end
 				end
@@ -821,158 +638,40 @@ UV_UI.pursuit.carbon.events = {
 			end
 		end)
     end,
-    onRacerBustedDebrief = function(...)
-        local w = ScrW()
-		local h = ScrH()
 
-        local bustedtable = select( 1, ... )
-
-        --------------------------------------
-
-        local time = UVDisplayTime(UVTimerProgress)
-		local unit = bustedtable["Unit"]
-		local deploys = bustedtable["Deploys"]
-		local roadblocksdodged = bustedtable["Roadblocks"]
-		local spikestripsdodged = bustedtable["Spikestrips"]
-		local bounty = UVBounty
-		local tags = UVTags
-		local wrecks = UVWrecks
-		
-		local ResultPanel = vgui.Create("DFrame")
-		local OK = vgui.Create("DButton")
-		
-		ResultPanel:Add(OK)
-		ResultPanel:SetSize(w, h)
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
-		ResultPanel:SetKeyboardInputEnabled(false)
-
-		OK:SetText("X")
-		OK:SetSize(w*0.015, h*0.03)
-		OK:SetPos(w*0.725, h*0.205)
-		
-		local timetotal = 30
-		local timestart = CurTime()
-		
-		ResultPanel.Paint = function(self, w, h)
-			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local lang = language.GetPhrase
-
-			-- Main black BG
-			surface.SetDrawColor( 0, 0, 0, 200 )
-			surface.DrawRect( 0, 0, w, h)
-			
-			-- Upper Results Tab
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
-			
-			surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
-			surface.SetDrawColor(86, 214, 205)
-			surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
-
-			DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
-			DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
-
-			draw.DrawText( "★" .. lang("uv.results.pursuit.carbon") .. "★", "UVCarbonFont", w*0.3, h*0.2, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			-- Next Lower, results subtext
-			-- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-			surface.SetDrawColor( 0, 0, 0, 235 )
-			surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
-			
-			draw.DrawText( "#uv.results.chase.item.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-			
-			draw.DrawText( "#uv.results.chase.value.carbon", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-			
-			-- All middle tabs, light ones
-			local numRectsLight = 3
-			for i=0, numRectsLight, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 100 )
-				surface.DrawTexturedRect( w*0.25, h*0.34 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.34 + yPos, w*0.015, h*0.035)
-			end
-			
-			-- All middle tabs, dark ones
-			local numRectsDark = 3
-			for i=0, numRectsDark, 1 do
-				local yPos = i * h * 0.08
-				surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor( 86, 214, 205, 25 )
-				surface.DrawTexturedRect( w*0.25, h*0.38 + yPos, w*0.485, h*0.035)
-				
-				surface.SetMaterial(UVMaterials['ARROW_CARBON'])
-				surface.DrawTexturedRect( w*0.735, h*0.38 + yPos, w*0.015, h*0.035)
-			end
-			
-			local h1, h2 = h*0.3825, h*0.4225
-			
-			-- Text
-			draw.DrawText( "#uv.results.bustedby.carbon", "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
-
-			draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			
-			draw.SimpleText( unit, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			
-			
-			-- Time remaining and closing
-			surface.SetDrawColor( 100, 100, 100, 125 )
-			surface.DrawRect( w*0.2565, h*0.675, w*0.485, h*0.035)
-			
-			draw.DrawText( "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVCarbonLeaderboardFont", w*0.74, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
-			
-			if timeremaining < 1 then
-				hook.Remove("Think", "CheckJumpKeyForDebrief")
-				self:Close()
-			end
-			
-		end
-		
-		function OK:DoClick() 
-			hook.Remove("Think", "CheckJumpKeyForDebrief")
-			ResultPanel:Close()
-		end
-		
-		local wasJumping = false
-		hook.Add("Think", "CheckJumpKeyForDebrief", function()
-			local ply = LocalPlayer()
-			if not IsValid(ply) then return end
-			
-			if ply:KeyDown(IN_JUMP) then
-				if not wasJumping then
-					wasJumping = true
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-						hook.Remove("Think", "CheckJumpKeyForDebrief")
-					end
-				end
-			else
-				wasJumping = false
-			end
-		end)
-    end
+	onRacerEscapedDebrief = function(escapedtable)
+		local params = {
+			dataTable = escapedtable,
+			titleText = "#uv.results.escapedfrom",
+		}
+		UV_UI.pursuit.carbon.events.ShowDebrief(params)
+	end,
+	
+	onRacerBustedDebrief = function(bustedtable)
+		local params = {
+			dataTable = bustedtable,
+			titleText = string.format( language.GetPhrase("uv.results.bustedby"), bustedtable["Unit"] ),
+		}
+		UV_UI.pursuit.carbon.events.ShowDebrief(params)
+	end,
+	
+    onCopBustedDebrief = function(bustedtable)
+		local params = {
+			dataTable = bustedtable,
+			titleText = "#uv.results.suspects.busted",
+			titleVar = bustedtable["Unit"],
+		}
+		UV_UI.pursuit.carbon.events.ShowDebrief(params)
+	end,
+	
+	onCopEscapedDebrief = function(escapedtable)
+		local params = {
+			dataTable = escapedtable,
+			titleText = "#uv.results.suspects.escaped.num.carbon",
+			titleVar = UVHUDWantedSuspectsNumber,
+		}
+		UV_UI.pursuit.carbon.events.ShowDebrief(params)
+	end,
 }
 
 local function carbon_racing_main( ... )
@@ -1603,7 +1302,7 @@ UV_UI.pursuit.mostwanted.events = {
         
     end,
 
-	ShowDebrief = function(params)
+	ShowDebrief = function(params) -- Most Wanted
 		if UVHUDRace then return end
 
 		local debriefdata = params.dataTable or escapedtable
@@ -1664,7 +1363,6 @@ UV_UI.pursuit.mostwanted.events = {
 		local xLeft = w * 0.205
 		local xRight = w * 0.795
 		local revealInterval = 0.033
-		local tabIndex = 0
 
 		for i = 1, 13 do -- Total of 13 tabs
 			local revealTime = revealStartTime + (i - 1) * revealInterval
@@ -1868,6 +1566,7 @@ UV_UI.pursuit.mostwanted.events = {
 
 				if autoCloseRemaining <= 0 then
 					hook.Remove("Think", "CheckJumpKeyForDebrief")
+					surface.PlaySound( "uvui/mw/closemenu.wav" )
 					if not closing then
 						closing = true
 						closeStartTime = CurTime()
@@ -1894,6 +1593,7 @@ UV_UI.pursuit.mostwanted.events = {
 		end
 
 		function OK:DoClick()
+			surface.PlaySound( "uvui/mw/closemenu.wav" )
 			if not closing then
 				closing = true
 				closeStartTime = CurTime()
@@ -1907,6 +1607,7 @@ UV_UI.pursuit.mostwanted.events = {
 
 			if ply:KeyDown(IN_JUMP) then
 				if not wasJumping and not closing then
+					surface.PlaySound( "uvui/mw/closemenu.wav" )
 					wasJumping = true
 					closing = true
 					closeStartTime = CurTime()
@@ -1926,6 +1627,7 @@ UV_UI.pursuit.mostwanted.events = {
 		}
 		UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 	end,
+	
 	onRacerBustedDebrief = function(bustedtable)
 		local params = {
 			dataTable = bustedtable,
@@ -1935,6 +1637,7 @@ UV_UI.pursuit.mostwanted.events = {
 		}
 		UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 	end,
+	
     onCopBustedDebrief = function(bustedtable)
 		local params = {
 			dataTable = bustedtable,
@@ -1944,6 +1647,7 @@ UV_UI.pursuit.mostwanted.events = {
 		}
 		UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
     end,
+	
     onCopEscapedDebrief = function(escapedtable)
 		local params = {
 			dataTable = escapedtable,
