@@ -650,7 +650,8 @@ UV_UI.pursuit.carbon.events = {
 	onRacerBustedDebrief = function(bustedtable)
 		local params = {
 			dataTable = bustedtable,
-			titleText = string.format( language.GetPhrase("uv.results.bustedby"), bustedtable["Unit"] ),
+			titleText = "#uv.results.bustedby.carbon",
+			titleVar = bustedtable["Unit"],
 		}
 		UV_UI.pursuit.carbon.events.ShowDebrief(params)
 	end,
