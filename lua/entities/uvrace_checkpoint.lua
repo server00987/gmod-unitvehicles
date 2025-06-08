@@ -36,11 +36,22 @@ function ENT:Initialize()
 	end
 
 	if SERVER then
+		-- local basePos = self:GetPos()
+		-- local maxPos = self:GetMaxPos()
+
+		-- if maxPos.z - basePos.z < 100 then
+			-- maxPos.z = basePos.z + 100
+			-- self:SetMaxPos(maxPos)
+		-- end
+
+		-- self:SetCollisionBounds(vec0, maxPos - basePos)
+
 		hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
 			AddOriginToPVS(self:GetPos())
 		end)
 		UVRaceCheckFinishLine()
 	end
+
 end
 
 local allowedMasks = {
@@ -109,7 +120,7 @@ if CLIENT then
 					end
 				else
 					if self:GetFinishLine() then
-						draw.SimpleText( "#uv.racemanager.finishline", "UVFont4", data2D.x, data2D.y - 10, Color( 255, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( language.GetPhrase("uv.racemanager.finishline") .. ": " .. id, "UVFont4", data2D.x, data2D.y - 10, Color( 255, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.speedlimit"), tostring(speedlimit) ), "UVFont4", data2D.x, data2D.y + 10, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					else
 						draw.SimpleText( string.format( language.GetPhrase("uv.racemanager.checkpoint"), id ), "UVFont4", data2D.x, data2D.y - 10, Color( 255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )

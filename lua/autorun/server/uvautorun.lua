@@ -453,7 +453,7 @@ function UVUpdateHeatLevel()
 		return (#ents.FindByClass("npc_uv*") + #uvwreckedvehicles) < uvmaxunits or #ents.FindByClass("npc_uv*") < 1
 	end
 	
-	if uvtargeting and uvresourcepoints > (#ents.FindByClass("npc_uv*")) and !uvjammerdeployed then
+	if uvtargeting and !uvjammerdeployed then
 		if CheckVehicleLimit() then
 			if uvracerpresencemode then
 				local racerchance = math.random(1,2)
@@ -474,7 +474,7 @@ function UVUpdateHeatLevel()
 				UVDeployRoadblock(unit) --ROADBLOCK
 			elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable and CurTime() - uvhelicooldown > 120 then
 				UVAutoSpawn(ply, nil, true) --HELICOPTER
-			elseif SpawnMainUnits:GetBool() then
+			elseif SpawnMainUnits:GetBool() and uvresourcepoints > (#ents.FindByClass("npc_uv*")) then
 				UVAutoSpawn(ply) --NORMAL
 			end
 		end

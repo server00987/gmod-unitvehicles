@@ -17,8 +17,8 @@ Proxies
 	TextureScroll
 		{
 		texturescrollvar $basetexturetransform
-		texturescrollrate 0.1
-		texturescrollangle -155
+		texturescrollrate 0.2
+		texturescrollangle 25
 		}
 	}
 }
