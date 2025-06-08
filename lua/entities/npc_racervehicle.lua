@@ -665,10 +665,10 @@ if SERVER then
 		end
 		
 		-- Make their computing rate higher ONLY if they are in a race
-		if self.v.uvraceparticipant then
-			self:NextThink( CurTime() )
-			return true
-		end
+		-- if self.v.uvraceparticipant then
+		-- 	self:NextThink( CurTime() )
+		-- 	return true
+		-- end
 	end
 	
 	function ENT:Initialize()
