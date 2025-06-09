@@ -3762,7 +3762,7 @@ else --HUD/Options
 	end)
 	
 	hook.Add("PopulateToolMenu", "UVMenu", function()
-		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVServerOptions", "[Server] Settings", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVServerOptions", "#uv.settings.server", "", "", function(panel)
 			panel:Clear()
 			
 			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings")
@@ -3845,7 +3845,7 @@ else --HUD/Options
 			panel:Button( "#uv.settings.reset.all", "uv_resetallsettings")
 			
 		end)
-		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVClientOptions", "[Client] Settings", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVClientOptions", "#uv.settings.client", "", "", function(panel)
 			panel:Clear()
 
 			panel:Help("#uv.settings.uistyle.title")
@@ -3934,23 +3934,27 @@ else --HUD/Options
 			}
 			
 		end)
-		spawnmenu.AddToolMenuOption("Options", "Unit Vehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
 			
 			panel:SetContentAlignment(8)
-			panel:AddControl("Header", {Description = "	——— Units ———"})
+			panel:Help("#uv.settings.pm.units")
+			-- panel:AddControl("Header", {Description = "	——— Units ———"})
 			panel:Button( "#uv.settings.pm.ai.spawn", "uv_spawnvehicles")
 			panel:Button( "#uv.settings.pm.ai.despawn", "uv_despawnvehicles")
 			panel:Button( "#uv.settings.pm.ai.spawnas", "uv_spawn_as_unit")
 			
-			panel:AddControl("Header", {Description = "——— Pursuit ———"})
+			panel:Help("#uv.settings.pm.pursuit")
+			-- panel:AddControl("Header", {Description = "——— Pursuit ———"})
 			panel:Button( "#uv.settings.pm.pursuit.start", "uv_startpursuit")
 			panel:Button( "#uv.settings.pm.pursuit.stop", "uv_stoppursuit")
 			
-			panel:AddControl("Header", {Description = "——— Racers ———"})
+			panel:Help("#uv.settings.pm.racers")
+			-- panel:AddControl("Header", {Description = "——— Racers ———"})
 			panel:Button( "#uv.settings.hor.start", "uv_racershordestart")
 			panel:Button( "#uv.settings.hor.stop", "uv_racershordestop")
 			
-			panel:AddControl("Header", {Description = "——— Misc ———"})
+			panel:Help("#uv.settings.pm.misc")
+			-- panel:AddControl("Header", {Description = "——— Misc ———"})
 			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
 			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
 			
