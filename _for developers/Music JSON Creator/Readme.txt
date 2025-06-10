@@ -1,7 +1,15 @@
 This tool automatically creates .json files for use in Unit Vehicle races. It allows workshop-uploaded content to have proper displays, such as special characters, upper-cased characters and more.
 
-How do I use this?
+---> Requirements <---
+1) Python 3.11 or newer
+2) unidecode
+	> Installed using pip
+	> Open command prompt (cmd) and type in "pip install unidecode" and hit enter
+3) A proper folder structure for audio files, with audio files in the correct path
+	> "sound/uvracemusic/<Folder Name>/race/" - place your songs here
+	> To properly create .json files, ensure the songs are titled "Artist - Title"
 
+---> How do I use this? <---
 1) Move the .py and .bat files into the main addon folder (where you find "sound", "lua", "model", "materials", etc.)
 2) Run the .bat file!
 3) Move the created .json files (they'll be where the script was run) into a "data_static" folder.
