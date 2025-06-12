@@ -607,7 +607,7 @@ UV_UI.pursuit.carbon.events = {
 			local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue")
 			local conttextl = string.len(conttext)
 			
-			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), timeremaining )
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
 			local autotextl = string.len(autotext)
 			
 			surface.SetDrawColor( 150, 150, 150, 175 )
@@ -2435,6 +2435,12 @@ UV_UI.pursuit.undercover.events = {
 
 		-- Then your timer start time:
 		local timestart = autoCloseStartTime
+								
+		local function startCloseAnimation()
+			if closing then return end
+			closing = true
+			closeStart = CurTime()
+		end
 
 		BackgroundPanel.Paint = function(self, w, h)
 			local elapsed = CurTime() - fadeStart
@@ -2574,7 +2580,7 @@ UV_UI.pursuit.undercover.events = {
 					end
 
 					draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-					draw.DrawText( string.format( lang("uv.results.autoclose"), timeremaining ), "UVUndercoverLeaderboardFont", w*0.332, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
+					draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
 					
 					if timeremaining < 1 then
 						startCloseAnimation()
@@ -2582,12 +2588,6 @@ UV_UI.pursuit.undercover.events = {
 					
 				cam.PopModelMatrix()
 			cam.End2D()
-		end
-								
-		local function startCloseAnimation()
-			if closing then return end
-			closing = true
-			closeStart = CurTime()
 		end
 
 		-- function OK:DoClick() 
@@ -3494,7 +3494,7 @@ UV_UI.pursuit.original.events = {
 			-- Time remaining and closing
 			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -3589,7 +3589,7 @@ UV_UI.pursuit.original.events = {
 			-- Time remaining and closing
 			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -3685,7 +3685,7 @@ UV_UI.pursuit.original.events = {
 			
 			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
@@ -3780,7 +3780,7 @@ UV_UI.pursuit.original.events = {
 			
 			draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			
-			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), timeremaining ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			if timeremaining < 1 then
 				hook.Remove("Think", "CheckJumpKeyForDebrief")
 				self:Close()
