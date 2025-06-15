@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Chinese_Trad_Frontend.bin
+#	File created on: 2025-05-24 11:10:10
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	總修理費用
+0	AUTO	MODE_ALL	所有車輛
+0	AUTO	CUST_VINYL_MOVE_LAYER	圖層上移/下移
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	引擎缸體
+0	AUTO	CAR_SELECT_MUSTANGGT	四代mustang。搭載了4.6L V8引擎，只要提到雙門^跑車，大部分的人都會聯想到這部車。
+0	AUTO	CUST_CAT_SPEED_INTERNALS	這項升級以更堅固、更耐久的零件取代你現有的引擎內部^組件，讓你的引擎能夠輸出更大的動力，以及承受更高的^轉速。
+0	AUTO	CUST_VISUAL_DECALS	貼紙
+0	AUTO	CUST_CUSTOMIZE	改裝藍圖
+0	AUTO	CODE_ENTRY_VALID	恭喜！你輸入的代碼已被接受，你的獎勵已經解開。
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	煞車卡箝
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	你的購物車內有尚未購買的標誌。仍舊要離開嗎？
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	防傾桿
+0	AUTO	CUST_QUICK_HANDLING_D3	這項升級整合了較硬的懸吊零件使車輛非常適合直線行駛。^
+0	AUTO	CUST_QUICK_HANDLING_G3	這項升級整合了較硬的懸吊零件，使車輛非常適合過彎與^直線行駛。
+0	AUTO	CUST_QUICK_HANDLING_S3	這項升級整合了較硬的懸吊零件，使車輛非常適合過彎與^直線行駛。
+0	AUTO	CUST_REGION_REAR_TIRE	後胎
+0	AUTO	FE_STATS_BEST_SECTOR	最佳區段
+0	AUTO	CL_FREE_CAR_MARKER	免費車輛標誌
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	定義賽事
+0	AUTO	CUST_QUICK_BRAKE_DI3	這項升級可讓車輛在最短時間內停下，但允許甚至鼓勵輪^胎在減速時打滑空轉。
+0	AUTO	CUST_BP_APPLY_CONFIRM	購買套用此藍圖至你車輛上所需的全部零件得^花費 {0:d}。你要繼續嗎？
+0	AUTO	CUST_SLOT_BUSHING_KIT	軸襯組件
+0	AUTO	FE_STATS_GAMES_PLAYED	參賽次數
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	獎勵車輛
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	圖層 {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	套件資料
+0	AUTO	CUST_SLOT_NITROUS_DESC	氧化氮氣（NOS）是一種極易燃的氣體，可以在燃燒過程^裡注入器汽缸中，大幅度地暫時提高輸出動力。
+0	AUTO	CUST_QUICK_MANAGEMENT_1	這項升級重新設定了引擎電腦，使其發揮最大效能。
+0	AUTO	CUST_QUICK_MANAGEMENT_2	這項升級重新設定了引擎電腦，使其發揮最大效能。
+0	AUTO	CS_HEADER_SPEED_EVENT	速度挑戰賽
+0	AUTO	CUST_SLOT_HEADS_DESC	透過整平汽缸頭上的閥門，你可以增加流入引擎的進氣和^排氣量。這將會產生更大的馬力。
+0	AUTO	CUST_VINYL_ADDLAYER	增加新圖層
+0	AUTO	CUST_CAT_SPEED_FORCED	一具低延遲、快速啟動的渦輪增壓裝置，能賦予你有幫助^的動力曲線，以及在賽道或街頭上的無與倫比優勢。
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	最高加乘
+0	AUTO	RACE_MODE_GRIP_MODE	賽道^模式
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	下個步驟是為你的「競速日」定義賽事。
+0	AUTO	FE_STATS_NUMBER_OF_RACES	競賽次數
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	這項升級強化了將動力傳輸到車輪的零件包括傳動軸、差^速器和輪軸。
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	生涯參賽次數
+0	AUTO	RACE_DAY_ADD_EVENT	新增賽事
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	這個藍圖與你的《極速快感：職業街頭》版本不相容，^所以無法安裝。請到NeedforSpeed.com^了解更多更新檔相關與新遊戲內容。
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	車輪烤漆
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	設為啟用藍圖
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	引擎管理
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	獲勝獎勵
+0	AUTO	CUST_PAINT_BODY	烤漆
+0	AUTO	CUST_PAINT_RIMS	車輪
+0	AUTO	CUST_PAINT_TINT	車窗隔熱紙
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	沒有錯誤發生。
+0	AUTO	RACEDAY_CONFIRM_DELETE	你確定要刪除這個競速日？^這些自訂競速日的設定將會遺失。
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	語言選擇
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	採用較硬材料 - 例如聚氨酯或鋁 - 製成的軸襯，可讓你的^車輛在急轉彎的情況下不容易側翻。
+0	AUTO	HUB_DIFFICULTY_2	中等
+0	AUTO	CUST_TUNE_SPEED_BRAKES	多次地煞車，會使煞車系統累積過多的熱量，長時間下來^，會有導致煞停距離增加的威脅。較大的煞車系統有助於^降溫以及煞車耐久性。
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	最高極速
+0	AUTO	CL_SELECT_PURCHASE_METHOD	選擇購買方式
+0	AUTO	CUST_SLOT_INTAKE_DESC	進入引擎的冷空氣越多，引擎的運轉越好。另外，空氣越^冷，引擎產生的動力越大。
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	透過著重轉向過度、巨大的後防傾桿、鋁製軸襯，以及移^除前防傾桿，將可以讓你的車輛更容易滑出。
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	你確定要離開「車輛選擇」畫面並返回「生涯地圖」嗎？
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	正在儲存競速日…
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	最高評價改裝車手
+0	AUTO	RACE_MODE_DESCRIPTION	挑選你的競速模式將決定這輛車可以參與何種賽事。
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	你必須安裝AutoSculpt零件才能使用風洞！
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	進氣口的容積越大，你的引擎一次獲得的空氣就越多。有^高流量、順暢的進氣，引擎將能夠發揮更大的顛峰動力潛^能。
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	最高檢查點速度加總
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	供油系統
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	搭載了輸出動力達260匹馬力以上的2.3L引擎、限滑差速^器，以及6速變速箱。speed 3是一款時髦的掀背車
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	這項升級允許更加快速且更為精準的換檔，並且繼續輕量^化將動力傳輸到車輪的零件，達到賽車的標準。^
+0	AUTO	CAR_SELECT_INTEGRA	kouki，搭載了高轉速的B系列引擎，擁有多樣化的引^擎選擇以及極佳的操控平台，成為非常受到賽車愛好者歡^迎的車輛。
+0	AUTO	FE_HUBMAP_ETREE_CARS	車輛
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	這項升級可提升引擎的整體輸出動力。^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	這項升級可更進一步地提升輸出動力，邁向真正的賽車。^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	控制你過彎的車速，以及留意出彎時的加速，是重要的關^鍵。引擎動力越大，可提升出彎加速以及達到更高速度的^能力。
+0	AUTO	GARAGE_REPAIR_CONFIRM	你確定要維修這輛車嗎？
+0	AUTO	CAR_SELECT_S3	二代s3，這輛車位在北美販售。
+0	AUTO	CAR_SELECT_S4	比rs4容易駕馭，s4也搭載了一具4.2L V8引擎
+0	AUTO	CAR_SELECT_TT	TT的MK2版本。這個新版本榮獲了眾多的年度車款獎項。
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	氮氧增壓裝置
+0	AUTO	FE_STATS_DOWNLOADING_STATS	下載統計資料
+0	AUTO	CUST_QUICK_FORCED_D3	直線加速階段３ 強制進氣
+0	AUTO	CUST_QUICK_FORCED_G3	這項升級可增加引擎的強制進氣量，除了能夠再度提升動^力之外，並可使車輛更接近賽車。
+0	AUTO	CUST_QUICK_FORCED_S3	這項升級可增加引擎的強制進氣量，除了能夠再度提升動^力之外，並可使車輛更接近賽車。
+0	AUTO	CUST_PAINT_GROUP_CANDY	糖衣
+0	AUTO	CUST_PAINT_GROUP_GLOSS	亮光
+0	AUTO	CUST_PAINT_GROUP_MATTE	冰銅
+0	AUTO	CUST_DRIVETRAIN_GROUP	傳動系統
+0	AUTO	CUST_PAINT_GROUP_PEARL	珍珠
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	這項升級重新設定了引擎電腦，使其在劇烈加速下能夠發^揮最大效能。
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	這項升級進一步地重新設定了引擎電腦使其發揮最大效能。
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	這項升級進一步地重新設定了引擎電腦使其發揮最大效能。
+0	AUTO	CUST_SLOT_CALIPERS_DESC	有較大或多重活塞的煞車卡箝可以讓煞車來令片的表面區^域更平均地與煞車碟接觸，產生更大的煞車力道。
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	請按 START 開始
+0	AUTO	RACE_DAY_SLOT_ID	欄位 {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	消音器
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	嘗試加入競速時發生錯誤。請再試一次。
+0	AUTO	COMMON_START	開始
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	變速箱冷卻裝置
+0	AUTO	RACE_MODE_DRIFT_MODE	甩尾^模式
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	你打算改裝哪種車輪？
+0	AUTO	CUST_SLOT_FLYWHEEL	飛輪
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	賽車椅可以穩住你的位子
+0	AUTO	MODE_CHANGE_CONFIRMATION	變更模式將刪除這輛車所有先前的藍圖，包括所有的外觀^和彩繪圖案自訂內容。你確定要繼續嗎？
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	生涯所費時間
+0	AUTO	CUST_DRAG_TUT_AWD	在起跑時，四輪傳動可帶來極大的優勢，產生的巨大牽引^力可協助將每一分馬力都用於脫離靜止狀態。
+0	AUTO	CUST_DRAG_TUT_FWD	在直線加速賽中，前輪驅動的最大障礙在於維持牽引力。^動力越大，意味著得更著重於別讓輪胎空轉。打造一輛高^速的前驅直線加速賽車輛，不但得創造動力，還得讓它牢^牢地貼在地上。一旦你越過基本動力升級的門檻，你應^把重點放在控制動力和牽引力上。
+0	AUTO	CUST_DRAG_TUT_RWD	直線加速設定的關鍵在於牽引力。消除車輛輪胎的彈跳，^以及控制高速下的車輪打滑空轉。這在擁有巨大動力輸出^的車輛上尤其重要。
+0	AUTO	CUST_ENGINE_GROUP	引擎
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	《極速快感》伺服器取消了配對查詢。
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	車胎讓你牢貼地面
+0	AUTO	CAR_SELECT_GTRPROTO	R35 GTR的量產前版本。
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	稀有車輛數
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	稱霸獎勵
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} 維修標誌
+0	AUTO	CAR_SELECT_VIPERCOUPE	Viper的三代版本。這輛Dodges雙門跑車搭載的V10^引擎擁有極具特色的吼聲，可輸出高達500匹的馬力。
+0	AUTO	MAIN_MENU_TITLE	主選單
+0	AUTO	CUST_TINT_DARK	暗色
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	經由適當的懸吊設定，可在起跑時將重量適當的轉移，車^手將可駕駛一輛速度更快、牽引力更大的車輛。
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	無法總計車輛
+0	AUTO	CUST_APPLYING_BLUEPRINT	套用藍圖
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	挑選一個競速日欄位
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	中置引擎車輛，擁有可與911媲美的性能。
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	生涯完成百分比
+0	AUTO	CUST_SLOT_DIFFERENTIAL	差速器
+0	AUTO	CUST_WIND_TUNNEL_ON	開啟風洞
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	在多人競速日中不得使用維修標誌。你仍舊會損壞你的車輛，但在每場比賽^結束後，損壞會自動修復。在比賽中你的車輛也不會全毀。
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	該藍圖不符你所套用的車輛之模式。所有先前的藍圖都將^被刪除。你確定要這樣做嗎？
+0	AUTO	CUST_QUICK_POWER_DI3	這項套件著重於帶來足夠的動力，讓驅動輪打滑空轉。
+0	AUTO	RACE_MODE_DRAG_MODE	直線加速^模式
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	這項基本升級提升了車輛的整體外觀。
+0	AUTO	CUST_QUICK_VISUAL_2	加裝了下壓力翼與前分流板，你的車輛在高速時的漂浮感^將顯著降低。因而在高速下更為穩定，同時增加過彎時的^牽引力。
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	選擇遊戲模式
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	你所選擇的欄位中已有一張藍圖。你要覆寫它嗎？
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	標誌管理
+0	AUTO	CAR_SELECT_FOCUSST	在北美以外地區販售的MK2 focus，搭載了一具2.5L^225匹馬力的渦輪引擎。
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	這項升級強化了將動力傳輸到車輪的零件包括傳動軸、差^速器和輪軸。
+0	AUTO	FE_MAIN_MENU	主選單
+0	AUTO	CUST_REGION_REAR_BUMPER	後防撞桿
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	主動帶輪
+0	AUTO	CAR_SELECT_BARRACUDA	那是傳奇車輛Hemi 'Cuda。
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	最高評價車輛
+0	AUTO	CUST_APPLY_PAINT_TITLE	上漆
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	車庫中車輛數
+0	AUTO	CUST_REGION_ALL_WHEELS	所有車輪
+0	AUTO	CUST_QUICK_FORCED_2	這項升級可增加引擎的強制進氣量，提升整體動力。
+0	AUTO	FE_STATS_FASTEST_LAP	最快單圈
+0	AUTO	FE_MARKERMAN_CASH_COUNT	${0:d}
+0	AUTO	CAR_TYPE_DRAG	直線加速賽
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	為了讓你的輪胎牢牢地抓住路面，前、後防傾桿採取硬質^防傾桿，軸襯改用聚氨酯軸襯取代，而避震器則改用競速^用避震器。
+0	AUTO	CAR_TYPE_GRIP	賽道
+0	AUTO	FE_STATS_DNF_PERCENTAGE	DNF百分比
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	B-body Charger 曾經是電視裡常用的一輛車。
+0	AUTO	CUST_QUICK_INTERNALS_1	這項升級強化了引擎，允許日後更大規模的升級。^
+0	AUTO	CUST_QUICK_INTERNALS_2	這項升級進一步地加強了引擎內裝，使其能夠承受更大動^力及更高轉速。^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	你確定要重置此藍圖為預設狀態？
+0	AUTO	CUST_SLOT_RACING_SEATS	賽車級座椅
+0	AUTO	CUST_AUTOSCULPT_ZONE10	區域10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	最佳區段分數
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	最有價值車輛
+0	AUTO	CAR_SELECT_CIVICSI	第八代Civic
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle是chevy的第一輛肌肉車，在1970之^前，Chevy不採用400ci以上的引擎，但這種情況在^1970開始有所轉變，402 chevelle因而問世
+0	AUTO	CUST_CAT_GRIP_FORCED	一具低延遲、快速啟動的渦輪增壓裝置，能賦予你有幫助^的動力曲線，以及在賽道或街頭上的無與倫比優^勢。
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	歡迎來到競速日地圖
+0	AUTO	CUST_BLUEPRINT_APPLY	套用藍圖
+0	AUTO	CUST_SLOT_CAMSHAFTS	凸輪軸
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	顯示所有競賽
+0	AUTO	CUST_SLOT_HEADERS	排氣喉管
+0	AUTO	FE_STATS_FASTEST_TIME	最快時間
+0	AUTO	CUST_SUSPENSION_GROUP	懸吊
+0	AUTO	CUST_BLUEPRINT_RESET	重置藍圖
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	這項升級可更進一步地提升輸出動力，邁向專為直線加速^賽打造的車輛。^
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	這項升級可更進一步地提升輸出動力，邁向真正的賽車。^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	這項升級可更進一步地提升輸出動力，邁向真正的賽車。^
+0	AUTO	CUST_INSTALLED	已安裝
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	正在載入競速日…
+0	AUTO	CUST_SLOT_CAMS_DESC	一般日常用車的傳動凸輪開啟時間短且揚程低。隨著揚程^及開啟時間的提升，顛峰扭力轉速會移至較高的轉速區域^。最佳的凸輪是能在你通常駕駛採取的轉速區域中達到最大^的動力輸出。
+0	AUTO	CUST_QUICK_HANDLING_DI3	這項升級特別調校了懸吊系統，讓車輛過彎時能夠輕易滑出。^
+0	AUTO	CUST_QUICK_BRAKE_D3	這項升級可讓車輛在最短時間內停下，並讓輪胎在減速時^不打滑空轉。
+0	AUTO	CUST_QUICK_BRAKE_G3	賽道階段３ 煞車套件
+0	AUTO	CUST_QUICK_BRAKE_S3	這項升級可讓車輛在最短時間內從極速停下，並讓輪胎在^減速時不打滑空轉。
+0	AUTO	CUST_SLOT_BOTTLE_DESC	NOS瓶越大，你能夠儲存的NOS也就越多。此外，你可以^在一輛車上安裝多瓶NOS。使用後，每一瓶都必須充氣。
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	傍晚
+0	AUTO	CUST_TINT_LIGHT	淺色
+0	AUTO	CUST_REPAIR_DAMAGE	損壞
+0	AUTO	CUST_TINT_PEARL	珍珠色
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	最長甩尾距離
+0	AUTO	CUST_SLOT_TIPS_DESC	這些尾管可賦予你車輛更具侵略性的外觀。
+0	AUTO	CUST_SLOT_STEERING_DESC	性能齒條與小齒輪可以增加一些額外的轉向角度，同時提^供比原廠動力轉向組件要小的方向盤阻力。
+0	AUTO	CAR_SELECT_CORVETTEZ06	真正的超級車輛殺手。擁有7.0L引擎，以及鈦製軸桿^和乾式油底殼系統。
+0	AUTO	HD_COMPATIBLE	與HD相容帶來最佳遊戲體驗
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	刪除賽事
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	擊敗王者數
+0	AUTO	CUST_WIND_TUNNEL	風洞
+0	AUTO	CUST_STAGE_NUMBER	階段 {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	勝場次數
+0	AUTO	CUST_FILTER_FRONT_BUMPER	前防撞桿
+0	AUTO	MAIN_CAREER	生涯
+0	AUTO	CUST_REGION_REAR_WHEEL	後輪
+0	AUTO	CUST_QUICK_VISUAL_D3	這項升級運用不同的空力零件，增加高速時的下壓力。
+0	AUTO	CUST_QUICK_VISUAL_G3	這項升級運用不同的空力零件，增加高速時的下壓力。
+0	AUTO	CUST_QUICK_VISUAL_S3	這項升級運用不同的空力零件，增加高速時的下壓力。
+0	AUTO	CUST_TUNE_DRAG_BRAKES	多次地煞車，會使煞車系統累積過多的熱量，長時間下來^，會有導致煞停距離增加的威脅。較大的煞車系統有助於^降溫以及煞車耐久性。
+0	AUTO	CUST_QUICK_INTERNALS_DI3	這項升級強化了賽車引擎內裝，使其能夠承受更大動力及更高^轉速造成的應變。^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	排名賽勝場數
+0	AUTO	CUST_SLOT_BOV_DESC	為了讓渦輪達到並維持最大的增壓，洩壓閥會排出過多的^壓力，而不減緩引擎的轉速。
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	已有進行線上遊戲所需的更新。有關更新資訊請造訪^NeedforSpeed.com。
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	最擅長賽事類型
+0	AUTO	HUB_BREAK_RECORD	刷新紀錄
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	這些桿子可讓你的前輪貼緊地面，並承受你引擎輸出的扭力。
+0	AUTO	RACE_DAY_DIFFICULTY_1	簡單
+0	AUTO	RACE_DAY_DIFFICULTY_2	中等
+0	AUTO	RACE_DAY_DIFFICULTY_3	困難
+0	AUTO	RACE_DAY_DIFFICULTY_4	菁英
+0	AUTO	CUST_SLOT_CLUTCH	離合器
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	請按 2 鈕繼續
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	最快0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	你打算改裝前車胎或候車胎？
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	開設競速日
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	個人紀錄
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	隨著你提高引擎動力輸出，必須進行升級，以確保動力有^效地運用以及傳送至驅動輪。離合器、傳動軸以及限滑差^速器全都佔有重要的角色。
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	單人遊戲
+0	AUTO	CUST_TUNE_DRAG_ENGINE	起跑之後，動力在直線加速賽中扮演著關鍵性的角色。越^大的動力將可增加車輛在賽道上奔馳的速度，並提高測速^器速度。
+0	AUTO	RACEDAY_NO_DLC_CONTENT	這個競速日與你的《極速快感：職業街頭》版本不相容，^所以無法安裝。請到NeedforSpeed.com^了解更多更新檔相關與新遊戲內容。
+0	AUTO	RD_PLAY	展開
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	點火系統
+0	AUTO	FE_STATS_CAREER_WINS	生涯獲勝次數
+0	AUTO	RACE_DAY_LOCATION	地點
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	這項升級允許更快速的換檔，並能更有效率地將引擎動力^傳輸到車輪。
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	這項升級允許更快速且更精準地換檔，並且繼續輕量化將^動力傳輸到車輪的零件。
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	你確定要刪除這張分享藍圖？
+0	AUTO	SHOW_FRIENDS	顯示好友
+0	AUTO	FE_STATS_HUBS_DOMINATED	稱霸競速日次數
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	最快反應時間
+0	AUTO	CODE_ENTRY_INVALID	你輸入的代碼無效。^請確定你輸入的代碼是正確的，然後再試一次。
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	挑選至多8場賽事
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	維修車輛
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	維修標誌
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	虹彩
+0	AUTO	CUST_SLOT_CAM_GEARS	凸輪齒輪
+0	AUTO	CUST_SLOT_ROOF_SCOOP	車頂蓋
+0	AUTO	CUST_COMPONENTS_TITLE	改裝零件
+0	AUTO	CUST_BRAKES_GROUP	煞車
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	你確定要退出嗎？
+0	AUTO	CUST_SLOT_TRACTION_BARS	拖引桿
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	這項升級透過高性能的煞車來令片和煞車碟，提升你車輛^的停止能力。煞車是操控與控制甩尾的基本要件。
+0	AUTO	MAIN_RACE_DAY	競速日
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	速度挑戰賽勝率
+0	AUTO	SELL_CAR_CONFIRMATION	這輛車價值 {0:d}^如果你選擇賣掉這輛車，你將會失去這輛車所有的藍圖。^你確定要賣掉嗎？
+0	AUTO	RD_DELETE_RD	刪除競速日？
+0	AUTO	CAR_SELECT_G35	和350z共用底盤
+0	AUTO	CAR_SELECT_GXP	2.0L 16v渦輪車款，擁有260匹馬力、限滑差速器，以及^18吋輪圈。
+0	AUTO	CAR_SELECT_NSX	設計來展現Honda的賽車科技。這款中置引擎車輛在當^代極為先進。
+0	AUTO	CAR_SELECT_R35	R35 GTR的量產版本。
+0	AUTO	CAR_SELECT_S13	最具代表性的甩尾車輛。
+0	AUTO	CAR_SELECT_S15	這款車從不是為了北美地區而打造。但卻成為改裝文化的代表^車款。
+0	AUTO	CAR_SELECT_RS4	b7 rs4，搭載了一具400匹馬力的V8引擎，共有轎車、休^旅車及敞篷車多種車款。
+0	AUTO	CAR_SELECT_RSX	傳奇Integra的接替車款。採用全新的Honda K系列引擎。
+0	AUTO	CAR_SELECT_RX8	前製引擎，輪轉2+2後輪動力的車。RX-8擁有最完美的^50:50的重量分佈及平衡操控。
+0	AUTO	CAR_SELECT_STI	配備臥式四缸、渦輪以及四輪傳動。Sti可說是改裝車的^代表車款。這是一輛全方位，表現極佳的車款。
+0	AUTO	CAR_SELECT_Z4M	採用與E46 m3相同的Inline 6引擎，0-60加速時間只要^4.9秒，極速上限為250 km/h。
+0	AUTO	CUST_QUICK_VISUAL_DI3	甩尾階段３ 外觀
+0	AUTO	CUST_AUTOSCULPT_ZONE1	區域1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	區域2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	區域3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	區域4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	區域5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	區域6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	區域7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	區域8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	區域9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	最高競賽分數
+0	AUTO	FE_STATS_AVERAGE_SPEED	平均速度
+0	AUTO	CUST_PAINT_GROUP_METALLIC	金屬
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	請按 START 鈕
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	甩尾賽勝率
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	沒有備用車輛可用
+0	AUTO	CUST_FILTER_FRONT	前輪
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	汽車展售中心
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	即將推出的第五代camaro量產前版本。這部量產前版^本於06年發表。
+0	AUTO	CUST_QUICK_SUSPENSION_1	這項升級允許車輛更快且更平順地過彎。
+0	AUTO	CUST_QUICK_SUSPENSION_2	這項升級允許車輛更快且更平順地過彎。
+0	AUTO	CUST_QUICK_NITROUS_D3	這項升級將透過乾注式NOS，短暫地讓引擎提升50-250的^輸出馬力。這可以造就第一和最後的差異。^
+0	AUTO	CUST_QUICK_NITROUS_G3	這項升級將透過乾注式NOS，短暫地提升引擎輸出馬力。^這可以造就第一和第二的差異。  ^
+0	AUTO	CUST_QUICK_NITROUS_S3	這項升級將透過乾注式NOS，短暫地提升引擎輸出馬力。^這可以造就第一和第二的差異。  ^
+0	AUTO	CUST_PERFORMANCE	性能
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	繃緊防傾桿增加彎道中的額外剛性，協助防止轉向不足。^
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	你確定要刪除這張藍圖？
+0	AUTO	MODE_BLUEPRINTS_ONLY	藍圖
+0	AUTO	CUST_QUICK_UPGRADE	快速升級
+0	AUTO	CAR_SELECT_CORVETTEC6	最新版本的corvette，同時也是近35年來，第一款安裝^外露頭燈的版本
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	離線
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	獎勵
+0	AUTO	MAIN_QUIT_GAME	退出
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	氮氧增壓裝置
+0	AUTO	CAR_TYPE_DRIFT	甩尾賽
+0	AUTO	FE_HUBMAP_ETREE_FILTER	過濾器
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	翻滾護架除了可以帶來安全性之外，還能夠增加車體剛性^，並讓你的愛車擁有賽車般的外觀。
+0	AUTO	CUST_SLOT_BC_DESC	引擎的獲得的增壓越大越好。如果引擎能夠應付較高的增^壓而不掛掉，那麼便可加裝此裝置協助渦輪發揮極限。
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	變速箱過熱會引起很多問題
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	強制進氣
+0	AUTO	CAR_TYPE_SPEED	速度挑戰賽
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	汽缸頭
+0	AUTO	CUST_SELL_CAR_WARNING	若你賣掉這輛車，你將無法參與任何{0:s}競賽，^直到你購買另一款此類型的車輛。
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	此地點沒有本類型的賽事
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	時辰
+0	AUTO	RD_DELETED	競速日已刪除。
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	隨著你提高引擎動力輸出，必須進行升級，以確保動力有^效地運用以及傳送至驅動輪。離合器、傳動軸以及限滑差^速器全都佔有重要的角色。
+0	AUTO	CUST_SLOT_AIR_INTAKE	進氣裝置
+0	AUTO	CUST_PART_PURCHASED	已購入
+0	AUTO	CUST_BP_OPTION_UNDO	放棄
+0	AUTO	CUST_FILTER_BODY	車體
+0	AUTO	CUST_FILTER_HOOD	引擎罩
+0	AUTO	CUST_FILTER_REAR	後輪
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	透過重新設定你的引擎電腦程式，這項升級可讓更多的燃^料與空氣混合燃燒，在你急需的時候，輸出最大的動力。
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	以編織不鏽鋼強化的煞車線，可提高液壓和煞車反應。^
+0	AUTO	LS_SAVING	儲存中…
+0	AUTO	CUST_CUSTOM_UPGRADE	改裝升級
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	你沒有資格參加這競速日。^你缺乏底下類型的車輛：
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	經由適當的懸吊設定，杜絕產生過度的轉向不足或轉向過^度的情況，車手將可擁有一輛速度更快、更容^易駕駛的車輛。
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	挑選競速模式
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	你無法在原廠車體組件上安裝副^廠排氣尾管！
+0	AUTO	CUST_PURCHASE_CAR	購買車輛
+0	AUTO	CODE_ENTRY_VERIFICATION	伺服器驗證代碼中…
+0	AUTO	MC_OLD_SAVE_REWARD	感謝你對《極速快感》系列的支持。我們在生涯模式中^贈送你{0:d}枚「維修標誌」以及，{1:d}枚「徹底維修標誌」。
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	超前高級對手完賽次數
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	直線加速階段３ 動力
+0	AUTO	CUST_QUICK_POWER_G3	這項套件帶來更大的動力，使街頭競速車轉變成真正的賽車。
+0	AUTO	CUST_QUICK_POWER_S3	速度階段３ 動力
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	藍圖數
+0	AUTO	FE_STATS_BEST_RUN	最佳競速
+0	AUTO	WINDTUNNEL_DOWNFORCE	下壓力
+0	AUTO	CUST_SLOT_COOLING_DESC	不要太熱，不要太冷。剛剛好就好
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	最佳甩尾分數
+0	AUTO	CUST_CAT_DRIFT_FORCED	這項升級增加了引擎的強制進氣量，讓更多的燃料燃燒，^因而讓你的引擎有更大的輸出動力。
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	使用維修標誌
+0	AUTO	FE_STATS_FILTER_GENERAL	一般統計資料
+0	AUTO	CB_BLUEPRINTS_HEADER	藍圖類型
+0	AUTO	ENTER_SECRET_CODE	輸入秘密代碼
+0	AUTO	CUST_SLOT_BODYKIT_DESC	這將大幅地改變你的車輛外觀，並有機會增加一些空力機能。
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	全毀車輛數
+0	AUTO	CUST_SLOT_WHEELS	車輪
+0	AUTO	CUST_SLOT_SUPERCHARGER	機械增壓裝置
+0	AUTO	CAR_SELECT_SHELBYGT500	第一款安裝防傾桿的美國車，同時也是最著名的Shelby車款。
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	最長單次抬輪
+0	AUTO	FE_STATS_GRIP_WINS	賽道賽獲勝次數
+0	AUTO	CL_MS_POINTS	Microsoft® points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	最長甩尾時間
+0	AUTO	CUST_FILTER_REAR_BUMPER	後防撞桿
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	最佳0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	購買一輛車並套用此藍圖得花費 {0:d}。^你要繼續嗎？
+0	AUTO	GARAGE_REPAIR_DENIED	你沒有足夠的現金且沒有標誌可以維修這輛車
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	點擊以繼續
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	Punkbuster競賽次數
+0	AUTO	GARAGE_NO_CAR_REPAIR	你沒有足夠的現金或可用的維修標誌修理你的車。
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	沒有可用車輛
+0	AUTO	RDMAP_CREATE_PREVIEW	開設自訂競速日
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	多次地煞車，會使煞車系統累積過多的熱量，長時間下來^，會有導致煞停距離增加的威脅。較大的煞車系統有助於^降溫以及^煞車耐久性。
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	最多連續甩尾
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	比例閥
+0	AUTO	FE_STATS_CLUB_TAG	車隊代碼
+0	AUTO	CUST_SLOT_EXHAUST	排氣尾管
+0	AUTO	CAR_SELECT_INTEGRATYPER	被視為一直以來操控性最佳的前驅車輛。
+0	AUTO	CUST_CAT_DRAG_BRAKE	此處著重的不是停止，而是持續前進。目標應為採取最輕^的煞車設定，好讓你的車能夠盡快地加速。
+0	AUTO	WINDTUNNEL_DRAG	直線加速
+0	AUTO	CUST_APPLY_PAINT	上漆
+0	AUTO	WINDTUNNEL_PEAK_HP	峰值馬力
+0	AUTO	CUST_BLUEPRINT_DELETE	刪除藍圖
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	生涯資料
+0	AUTO	CUST_VISUAL_TITLE	外觀
+0	AUTO	CUST_SLOT_DRIVESHAFT	傳動軸
+0	AUTO	HACK_PURCHASE_BLUEPRINT	購買藍圖
+0	AUTO	CAREER_COMPLETION_HEADER	生涯競賽
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	引擎動力越大，會讓輪胎越容易保持空轉，產生持續的甩^尾限向。增加動力輸出，有助於進行動力甩尾。
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	最快1/4英哩
+0	AUTO	CL_NOT_ENOUGH_CASH	你沒有足夠的現金購買這輛車
+0	AUTO	CUST_SLOT_SC_DESC	這種強制進氣的方式是由引擎本身所驅動並提供更大的動力。^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	車隊
+0	AUTO	CUST_SLOT_TIRES	車胎
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	找不到競速日。
+0	AUTO	RACEDAY_EXIT_CONFIRM	這將放棄你對本競速日所做的任何變更。放棄變更嗎？
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	避震器與彈彈簧
+0	AUTO	CUST_REGION_SKIRT	側裙
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	N20瓶
+0	AUTO	CUST_QUICK_FORCED_DI3	這項升級可增加引擎的強制進氣量，除了能夠再度提升動^力之外，並可使車輛更接近賽車。
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	抬輪輔助桿
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	我們不可以談有關這輛車
+0	AUTO	CL_MAXIMUM_CARS_REACHED	你擁有的 {0:d} 車輛數已達上限。^
+0	AUTO	CUST_CUSTOMIZE_MAIN	改裝
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	透過重新設定你的引擎電腦程式，這項升級可讓更多的燃^料與空氣混合燃燒，賦予你在出彎時超越對手所^需的額外動力。
+0	AUTO	CUST_BLUEPRINT_HEADER	自訂藍圖
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	直線加速賽勝率
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	排氣系統
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	選擇
+0	AUTO	CUST_PAINT_GROUP_CHROME	鉻黃
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	分享藍圖數
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	強制進氣
+0	AUTO	FE_STATS_DRIFT_RACES	參加甩尾賽次數
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	隨著你提高引擎動力輸出，必須進行升級，以確保動力有^效地運用以及傳送至驅動輪。離合器、傳動軸以及限滑差^速器全都佔有重要的角色。
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	表現統計資料
+0	AUTO	CUST_SLOT_TURBOCHARGER	渦輪增壓裝置
+0	AUTO	CUST_SLOT_SHIFTER	排檔組件
+0	AUTO	CUST_DYNO_TEST	馬力機測試
+0	AUTO	RACE_DAY_LOCATION_10_DESC	日本車手佔據了Tokyo Dockyards的產業貨運中心。他們利用所有想得到的^都市地景建構了一些刺激的賽車路線。
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	選擇挑戰車輛
+0	AUTO	CUST_CAT_SPEED_NITROUS	這項升級將可讓你的馬力暫時提升，這可以造成勝負的差^別。
+0	AUTO	CAR_SELECT_MUSTANGGTN	五代mustang 充滿「復古未來主義」。
+0	AUTO	FE_STATS_WIN_PERCENTAGE	勝率
+0	AUTO	RD_CUSTOM_SELECT	展開競速日？
+0	AUTO	KING_FLOW_CASH_REWARD	現金獎勵
+0	AUTO	CUST_CAT_SPEED_BRAKE	這項升級透過高性能的煞車來令片和煞車碟，提升你車輛^的停止能力。在一輛適當調校的車上，煞車是^重要的一環。
+0	AUTO	CUST_SPEED_TUT_AWD	透過驅動四個車輪，牽引力會提升，尤其是在起步時和離^彎加速時。務必運用這些優勢。
+0	AUTO	CUST_SPEED_TUT_FWD	雖然駕駛前輪傳動車輛時，你得和物理定律搏鬥，若你能^夠做出正確的調校選擇，你仍就可以打造一輛令人畏懼的^賽道武器。你的首要工作，應為透過加強與前輪有關的有^零件硬度，降低前驅車轉向不足的天性。然後你將需要一^個限滑差速器協助消除扭力轉向。
+0	AUTO	CUST_SPEED_TUT_RWD	對後驅設定而言，平衡及抑制的轉向是顯著地優勢。設定^時避免過份地轉向過度。
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	冷卻系統
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	為了homoglamation用途而打造，但卻從未真被拿來^作為護衛車用。不過escort rs卻成為一直以來具代表性的車輛。
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	最快0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs，又稱作「西部的最快道路」，座落於加州沙漠的山坡上。^Willow擁有不斷變化的高度，以及很高的平均車速。
+0	AUTO	RACE_DAY_DIFFICULTY	困難度
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	你沒有足夠的現金購買目前你購物車裡所有的標誌。
+0	AUTO	CAR_SELECT_CHALLENGER	第一代的challenger，打入了雙門跑車的市場。採用^了原本作為渦輪增壓車的舊款車輛設計。
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	選擇一個可用的「競速日」欄位可讓你開設新的「自訂競速日」。你選擇的^圖示將在「我的競速日」下的「競速日地圖」上代表該「競速日」。
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	透過驅動四個車輪，牽引力會提升，尤其是在起步時和離^彎加速時。務必運用這些優勢。
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	雖然駕駛前輪傳動車輛時，你得和物理定律搏鬥，若你能^夠做出正確的調校選擇，你仍就可以打造一輛令人畏懼的^賽道武器。你的首要工作，應為透過加強與前輪有關的有^零件硬度，降低前驅車轉向不足的天性。然後你將需要一^個限滑差速器協助消除扭力轉向。
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	對後驅設定而言，平衡及抑制的轉向是顯著地優勢。設定時避^免過份地轉向過度。
+0	AUTO	CUST_SELL_CAR	出售車輛
+0	AUTO	RACE_DAY_LOCATION_12_DESC	地處德國萊比錫的精銳Porsche測試跑道，複製了賽車史上最著名的一些彎道。
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	側裙
+0	AUTO	CUST_SLOT_FUEL_DESC	高效率的燃料傳輸是產生高馬力的關鍵。較大的燃料泵加^上較大的噴嘴和升級過的燃料管，可產生明顯的馬力提升。
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	成功甩尾車輛的關鍵，在於可以預測甩尾何時發生，因而^能輕鬆地於過彎時維持過度轉向，同時保有令人訝異的穩^定性。
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	好友
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	清晨
+0	AUTO	CUST_FILTER_SPOILER	擾流翼
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	發生配對錯誤。
+0	AUTO	RACE_DAY_LOCATION_13_DESC	這條高速賽道穿越了部分的東京高速公路路段，且包含了環狀道、直線道及隧道區段。
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	參與排名遊戲次數
+0	AUTO	CUST_TUNE	調校
+0	AUTO	CUST_VISUALS_TITLE	外觀
+0	AUTO	FE_STATS_CLUB_NAME	車隊名稱
+0	AUTO	CUST_INSTALL	安裝
+0	AUTO	RACEDAY_SAVE_CONFIRM	你確定要儲存你的競速日？
+0	AUTO	FE_MATCHMAKING_JOINING	加入遊戲局…
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	洩壓閥
+0	AUTO	CUST_SLOT_ROLL_CAGE	翻滾護架
+0	AUTO	CAR_LOT_NO_DRIFTING	無法甩尾
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	這項升級以更堅固，更耐久的零件取代你現有的引擎內部^組件，讓你的引擎能夠輸出更大的動力，以及承受更高的^轉速。
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	使用徹底維修標誌
+0	AUTO	CUST_PACKAGE_VISUAL	外觀套件
+0	AUTO	CUST_EMPTY_BLUEPRINT	建立新藍圖
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	請在這裡輸入你的密碼或者是獎兌換代碼來獲得你^的獎勵。
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	這項升級源自於拉力賽，你的愛車就算是在泥巴跑也沒問題。
+0	AUTO	RACEDAY_DESC_DIFFICULTY	為你的「競速日」挑選困難度。你選擇的困難度將定義該「競速日」的「人^工智慧」困難度，以及最高車輛階層。
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	生涯車輛
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	完成12人競賽次數
+0	AUTO	CUST_REGION_FRONT_TIRE	前胎
+0	AUTO	FE_STATS_DRAG_WINS	直線加速賽獲勝數
+0	AUTO	RACE_DAY_SAVE_NAME	My Race Day
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	你沒有足夠的現金購買這個零件！
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	最高抬輪角度
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	渦輪可說是空氣幫浦
+0	AUTO	CUST_SLOT_BLOCK_DESC	增加汽缸的內徑，可提升引擎的排氣量，因而可以燃燒更^多的燃料產生更大的動力。
+0	AUTO	CUST_CAT_GRIP_BRAKE	這項升級透過高性能的煞車來令片和煞車碟，提升你車輛^的停止能力。在一輛適當調校的車上，煞車是非常重要的^一環。
+0	AUTO	CUST_SLOT_SPOILER	擾流翼
+0	AUTO	RACE_DAY_RACE_EVENTS	賽事
+0	AUTO	CUST_SLOT_STEERING_KIT	轉向組件
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	賽道賽勝率
+0	AUTO	CUST_BLUEPRINT_RENAME	更改藍圖名稱…
+0	AUTO	RACE_DAY_SLOT_FILLED	填滿
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	最高甩尾分數
+0	AUTO	CUST_VINYLS	彩繪圖案
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	以較高品質的材料製成，性能控制臂提供更多的外傾角選^擇，以及更棒的整體懸吊幾何結構。
+0	AUTO	FE_STATS_HUBS_WON	贏得競速日次數
+0	AUTO	CUST_CAT_GRIP_NITROUS	這項升級將可讓你的馬力暫時提升，這可以造成勝負的差別。
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	無資格參賽
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	為你的競速日選擇維修標誌數。開設單人競速日時，你會獲得數量相同的維^修標誌和總維修標誌。
+0	AUTO	CAR_SELECT_CAMAROSS	第一代的camaro。Camaro被描述為小型、兇狠、吃野^馬的野獸。
+0	AUTO	FE_STATS_BEAT_MODERATOR	擊敗仲裁者
+0	AUTO	CUST_SLOT_HANDBRAKE	手煞車
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	這項升級允許更加快速且更為精準的換檔，並且繼續輕量^化將動力傳輸到車輪的零件，達到賽車的標準。^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	這項升級允許更加快速且更為精準的換檔，並且繼續輕量^化將動力傳輸到車輪的零件，達到賽車的標準。^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	這項升級允許更加快速且更為精準的換檔，並且繼續輕量^化將動力傳輸到車輪的零件，達到賽車的標準。^
+0	AUTO	COMMON_CLASS_HEADER	層級
+0	AUTO	CAR_SELECT_FORDGT	為了向Ford於60年代末稱霸車壇的豐功偉業致敬而打^造。Ford GT是該經典車輛的最新車款。
+0	AUTO	FE_STATS_PERFORMANCE_STATS	表現統計資料
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	煞車碟
+0	AUTO	CUST_QUICK_INTERNALS_D3	這項升級讓引擎能夠短時間承受較大的動力。^
+0	AUTO	CUST_QUICK_INTERNALS_G3	這項升級強化了賽車引擎內裝，使其能夠承受更大動力及更高^轉速造成的應變。^
+0	AUTO	CUST_QUICK_INTERNALS_S3	速度階段３ 內膽
+0	AUTO	CUST_SLOT_PISTONS	活塞
+0	AUTO	CUST_CAT_DRIFT_NITROUS	這項升級將可讓你的馬力暫時提升，這可以造成勝負的差別。
+0	AUTO	FE_STATS_BEST_LAP_TIME	最佳單圈時間
+0	AUTO	FE_STATS_SKILLS_STATS	技巧統計資料
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	生涯概要
+0	AUTO	CUST_DRIFT_TUT_RWD	設定一輛高性能甩尾車輛的關鍵，在於平順的起始及維持^大幅度的甩尾。
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	這項升級可更進一步地提升輸出動力，邁向真正的賽車。^
+0	AUTO	CUST_SELL_CAR_DENIED	你不能賣掉你的最後一輛車
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	這些耐用的懸吊組件可防止你的車輛在高扭轉應力下撓曲^，賦予你的輪胎最大的摩擦力。
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	中午
+0	AUTO	CUST_SLOT_PULLEY_DESC	經由裝配不同尺寸的主動帶輪，機械增壓裝置將可轉得更^快，因而提供更大的增壓以及更大的動力。
+0	AUTO	CUST_SLOT_IGNITION_DESC	在高馬力的應用上，需要能量充沛、始終如一的火花。利^用以高傳導性材料 - 例如鉑和銥 - 製成的點火線^和火星塞可以提升你引擎的整體性能。
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	關閉
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	煞車線組件
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	最高加乘
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	N2O系統
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	統計資料排名伺服器目前停機。請稍後再試一次。
+0	AUTO	RACE_DAY_TRACK_CONFIG	賽道設定
+0	AUTO	CS_HEADER_DRAG_EVENT	直線加速賽
+0	AUTO	CUST_QUICK_BRAKE_1	這項升級將讓你車輛比安裝原廠煞車時有更短的停止距離。
+0	AUTO	CUST_QUICK_BRAKE_2	階段２ 煞車
+0	AUTO	CUST_REPAIR_TITLE	維修你的車輛
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	隨著你提高引擎動力輸出，必須進行升級，以確保動力有^效地運用以及傳送至驅動輪。離合器、傳動軸以及限滑差^速器全都佔有重要的角色。
+0	AUTO	CUST_BLUEPRINT_SUMMARY	藍圖摘要
+0	AUTO	CUST_CAT_DRAG_FORCED	此處著重的是強大的馬力，這些渦輪增壓組件是為了峰值^馬力和產生驚人驅動力而設計。這些零件將對你的測速器^速度產生顯著的影響。
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	你要現在參與此競速日嗎？
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	你要儲存為這藍圖所做的修改嗎？
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	這項升級強化了將動力傳輸到車輪的零件，包括傳動軸、^差速器和輪軸。
+0	AUTO	CUST_BP_EXIT_CONFIRM	這將放棄你對此藍圖所做的任何變更。放棄變更嗎？
+0	AUTO	BLUEPRINT_SHARING_RENAMING	更改藍圖名稱…
+0	AUTO	CUST_FILTER_MIRRORS	鏡子
+0	AUTO	ENTER_PRESELL_CODE	輸入兌換代碼
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	下載失敗
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	競速對決勝場數
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	這項升級進一步地重新設定了引擎電腦使其發揮最大效能。
+0	AUTO	FE_STATS_BEST_REACTION_TIME	最佳反應時間
+0	AUTO	CAR_SELECT_MK5GTI	掀背車始祖的最新版本。它搭載的2.0FSi渦輪引擎一開^始便擁有超過200匹的馬力，而且很容易透過改裝輸出^更大的馬力。
+0	AUTO	CAR_SELECT_MK5R32	熱門的掀背式設計，加上窄角V6引擎以及四輪傳動系^統，成就了你眼前的這輛車。
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	經由適當的懸吊設定，杜絕產生過度的轉向不足或轉向過^度的情況，車手將可擁有一輛速度更快、更容易駕駛的車^輛。
+0	AUTO	CUST_SLOT_CONTROL_ARMS	控制臂
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	有了如此強大的動力，必須擁有一套堅固的懸吊系統，讓^你的車輛能夠在直線加速賽道上筆直前進。
+0	AUTO	CUST_SLOT_BODY	車體組件
+0	AUTO	CUST_SLOT_HOOD	引擎罩
+0	AUTO	CUST_SLOT_PADS	煞車來令片
+0	AUTO	FE_STATS_DRIFT_WINS	甩尾賽獲勝次數
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	透過重新設定你的引擎電腦程式，這項升級可讓更多的燃^料與空氣混合燃燒，賦予你讓輪胎打滑及滑過終點線所需^的動力。
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	改裝
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	生涯車輛全毀次數
+0	AUTO	RD_CREATE_RD	開設競速日？
+0	AUTO	FE_STATS_DRAG_RACES	參加直線加速賽次數
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	斷線百分比
+0	AUTO	CUST_REGION_FRONT_WHEEL	前輪
+0	AUTO	CAR_SELECT_ECLIPSE	二代eclipse。曲柄走位。
+0	AUTO	CAR_LOT_TITLE	汽車展售中心
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	選擇一個填滿的「競速日」欄位，可讓你取得關於該競速日的資料，並可讓^你刪除該競速日。
+0	AUTO	CAREER_MAP_TITLE	生涯地圖
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	最佳甩尾分數 - 追隨者
+0	AUTO	CUST_SLOT_CRANKSHAFT	凸輪軸
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	車輛獎勵
+0	AUTO	CAR_SELECT_R34GTR	該輛車可說是改裝車的最佳註解。它為日後的其他車款^奠定了標竿。
+0	AUTO	CS_HEADER_DRIFT_EVENT	甩尾賽
+0	AUTO	RACE_DAY_MULTIPLAYER	多人遊戲
+0	AUTO	CUST_SLOT_CRANK_DESC	原廠曲軸無法承受高馬力造成的應變。若馬力超過500匹^，得使用鍛造區軸。
+0	AUTO	CAR_SELECT_COBALTSS	搭載一具機械增壓2.0L引擎，cobalt是Cavalier的^取代車款，與Honda Civic這類車輛一較長短的意圖^濃厚。
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} 呎
+0	AUTO	CAR_SELECT_350Z	Z系列的五代車款。這是後輪驅動，2+2雙門跑車。
+0	AUTO	CAR_SELECT_997T	搭載一具3.6L渦輪引擎，這輛車只需一秒鐘便^可從40 mph加速到60 mph
+0	AUTO	CAR_SELECT_AE86	Hachi-Roku。最後一款後輪驅動的小型轎車。
+0	AUTO	CAR_SELECT_CTSV	第一款以Cadillac的V-Series性能品牌推出的車輛，設^計用來對抗歐洲轎跑車。
+0	AUTO	CAR_SELECT_EVO9	2.0 16v 渦輪四輪傳動高性能掀背車款。自這輛車被打^造出來後，可說是改裝界中性能和操控性的代表。
+0	AUTO	CAR_SELECT_EVOX	EVO X可是比Stig還快。
+0	AUTO	CAR_SELECT_GTON	北美版的Holden V，搭載了corvette的LS2引擎。
+0	AUTO	CAR_SELECT_GTOO	有人認為這是首輛肌肉車。
+0	AUTO	CAR_SELECT_SHELBYGT500N	這個專案把Ford SVT（特殊車輛小組）的智慧和^傳奇Carroll Shelby融合在一起，幾乎可說是成功的保^證。這樣組合的結果，肯定能讓世界各地的Mustang愛好者^和動力追求者目瞪口呆：450匹馬力、450磅/英呎的^扭力（太帥了！）、Brembo煞車卡箝、19吋合金輪圈^，以及相當於先前Mustang Cobra的合理價格。根據該專^案設計師的說法，2006 Ford Mustang Shelby Cobra GT500「將會是有史以來動力最強大的量產Mustang。」
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	解開此競速對決
+0	AUTO	CUST_REPAIR_USE_CASH	使用現金
+0	AUTO	FE_STATS_FILTER_SKILLS	技巧統計資料
+0	AUTO	FE_STATS_SPEED_RACES	參加飆速賽次數
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	定義賽事
+0	AUTO	RD_DELETE_SHARED_RD	刪除分享的競速日？
+0	AUTO	CAREER_OVERVIEW_HEADER	生涯概要
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	排氣管
+0	AUTO	CUST_TUNE_GRIP_BRAKES	多次地煞車，會使煞車系統累積過多的熱量，長時間下來^，會有導致煞停距離增加的威脅。較大的煞車系統有助於^降溫以及煞車耐久性。
+0	AUTO	CUST_CAT_GRIP_INTERNALS	這項升級以更堅固、更耐久的零件取代你現有的引擎內部^組件，讓你的引擎能夠輸出更大的動力，以及承^受更高的轉速。
+0	AUTO	CL_DRIVETRAIN_ALL	所有類型
+0	AUTO	CL_DRIVETRAIN_AWD	四輪驅動
+0	AUTO	CL_DRIVETRAIN_FWD	前輪驅動
+0	AUTO	CL_DRIVETRAIN_RWD	後輪驅動
+0	AUTO	FE_COMMON_MODE	模式
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	進氣歧管
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	賽事紀錄
+0	AUTO	CODE_ENTRY	輸入代碼
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	購買目前你購物車內的所有標誌？
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	排氣
+0	AUTO	RACE_DAY_SPLIT_SCREEN	分割畫面
+0	AUTO	CUST_SLOT_INTERCOOLER	內冷裝置
+0	AUTO	CUST_TUNE_GRIP_ENGINE	控制你過彎的車速，以及留意出彎時的加速，是重要的關^鍵。引擎動力越大，可提升出彎加速以及達到^更高速度的能力。
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	車隊隊員數
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	引擎內部
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	這項升級強化了將動力傳輸到車輪的零件包括傳動軸、差^速器和輪軸。
+0	AUTO	CUST_WIND_TUNNEL_OFF	關閉風洞
+0	AUTO	FE_COMMON_CONFIGURATION	設定組態
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} 馬力
+0	AUTO	CS_HEADER_GRIP_EVENT	賽道賽事
+0	AUTO	CAR_SELECT_CIVIC	第六代Civic，這款Civic是改裝車界極為搶手的車款^之一，適用於道路、賽道、直線加速競賽或任何介於之間^的環境。
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	競速日已刪除
+0	AUTO	CAR_SELECT_E46M3	M3的三代版本，E 46初次登場時，搭載了當時每公升輸^出馬力最大的BMW引擎。
+0	AUTO	CAR_SELECT_E92M3	尚未推出的e92 m3。採用碳纖引擎蓋並搭載了一具V8^引擎(過去的m3s採用inline 6s)。
+0	AUTO	CAR_SELECT_ELISE	系列2，或二代elise。Elise是一款只講求駕駛體驗，^毫無舒適性可言的車輛。
+0	AUTO	CAR_SELECT_FDRX7	史上最棒的改裝車，適合甩尾或賽道賽。真正的傳奇車款。
+0	AUTO	CAR_SELECT_IS350	二代IS。後輪驅動豪華雙門跑車。新的IS有更圓滑的雙^門跑車外型、斜背式輪廓，
+0	AUTO	CAR_SELECT_LP640	搭載一具輸出動力達640匹馬力的6.5L引擎，這可說是^超級跑車性能的極致
+0	AUTO	CUST_SLOT_VALVE_DESC	經由重新分配煞車系統中的液體流動，這個裝置可以對前^輪或後輪產生更大的煞車力道。
+0	AUTO	CAR_SELECT_SUPRA	四代supra。比之前幾代更輕盈、更靈活，在測試場上^可承受.98g的橫向加速力。北美地區只量產到99年，日本^則一直量產道2002年。
+0	AUTO	CUST_FILTER_ALL_PARTS	所有零件
+0	AUTO	CUST_QUICK_SUSPENSION_D3	這項升級著重於將驅動輪的重量提升至上限，使前輪空轉^時間降至最低。
+0	AUTO	CUST_QUICK_SUSPENSION_G3	這項升級允許車輛更快且更平順地過彎不會在柏油路面上^失去抓地力。
+0	AUTO	CUST_QUICK_SUSPENSION_S3	這項升級允許車輛以極速更快且更平順地過彎，不會在柏^油路面上失去抓地力。
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	找不到適合的遊戲或玩家。請再試一次。
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	定義賽事
+0	AUTO	FE_STATS_CLUB_LEADER	車隊隊長
+0	AUTO	RACE_DAY_LOCATION_1_DESC	德國的Autobahnring是由高速道路交織而成的網絡，包括著名的Autobahn區段，^以及傾斜的彎道與隧道。
+0	AUTO	FE_MATCHMAKING_CANCELLING	取消搜尋…
+0	AUTO	CUST_SLOT_DIFF_DESC	透過這個裝置，引擎的動力終於轉換為側向動力，並傳遞^至車輪上。
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	你確定要覆寫此競速日？
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	超前領先者完賽最多時間
+0	AUTO	CAR_SELECT_ZONDAF	許多汽車記者認為Zonda F是世上最棒的超級跑車。
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	為了讓你的輪胎牢牢地抓住路面，前、後防傾桿採取硬質^防傾桿，軸襯改用聚氨酯軸襯取代，而避震器則^改用競速用避震器。
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	我的「競速日」^建立並設計你自己的「競速日」。建立一個單人或多人的「競速日」^然後與其他在線上的玩家對決。建立一個分割畫面的「競速日」並與^你的好友互相較量。^^在線上分享你的單人或多人「競速日」並邀請其他線上的玩家加入你^自己的個人「競速日」比賽。^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolisis座落於日本偏遠地區的山頂。雖然賽道的起源相當黑暗，不過高速^賽道卻是又新又乾淨。
+0	AUTO	CUST_SLOT_SHOCKS_DESC	較硬的避震器搭配上重心較低的性能彈簧，可以大幅加強車輛^的過彎能力。
+0	AUTO	CUST_CAT_DRAG_NITROUS	這項升級將可讓你的馬力暫時提升。對直線加速賽的車手^而言，NOS是不可或缺的。
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Windy City的車手將一座廢棄的機場據為己有。Chicago Airfield擁有寬廣^的跑道、數條賽道路線與甩尾路線，以及直線加速道。
+0	AUTO	FE_STATS_TOP_SPEED	極速
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	壓力控制組件
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	賽中達成最高抓地次數
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	最快60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	增壓控制器
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	專為甩尾精神聖地Ebisu打造的日本山坡道路。Fukuyama Challenge由郊區出^發，然後轉上高速公路。
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	藉由減輕驅動你的凸輪軸的齒輪或扣鏈齒輪的重量，可降^低轉動這些凸輪所需的能量，並產生更大的動力。
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X ${1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	毫髮無傷贏得競賽總數
+0	AUTO	CUST_QUICK_HANDLING_1	這項升級讓車輛在高速下能有更棒的過彎表現且更穩定。^
+0	AUTO	CUST_QUICK_HANDLING_2	階段２ 操控
+0	AUTO	CUST_SLOT_PRESSURE_DESC	雖然氧化氮氣（NOS）有暫時提升動力的好處，過多的NOS^會讓引擎的壓力超過臨界點。壓力控制組件可以確保引擎^只承受能夠應付的壓力。
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	你確定要變換地點？那將清除你現有的賽事選擇？
+0	AUTO	CUST_VINYL_LAYER_TITLE	圖層選單
+0	AUTO	CUST_CAT_DRAG_INTERNALS	這項升級將你現有的引擎內部組件改為鑄造零件，賦予它^們更耐久的強度和可靠性，得以進行那些激烈的1/4英^哩比賽。
+0	AUTO	RACE_DAY_LOCATION_5_DESC	北加州的Infineon Raceway擁有縱錯複雜的彎道與蜿蜒道路。只要一有閃失，^便會讓你的速度減慢，或讓你撞上牆壁。
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	速度^挑戰
+0	AUTO	FE_STATS_CLUB_POINTS	車隊積分
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	透過重新設定你的引擎電腦程式，這項升級可讓更多的燃^料與空氣混合燃燒，賦予你在出彎時超越對手所需的額外^動力。
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	你確定要移除賽事 %s？
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	競速日已儲存
+0	AUTO	CUST_QUICK_NITROUS_DI3	這項升級將透過乾注式NOS，短暫地提升引擎輸出馬力。^這可以造就第一和第二的差異。  ^
+0	AUTO	CUST_QUICK_POWER_1	這項基本升級套件，將可提升各個轉速階段的動力，並賦^予你的原廠車輛更具侵略氣息的聲音。
+0	AUTO	CUST_QUICK_POWER_2	這項套件是階段１的微幅升級，可提升動力範圍的動力，^並帶來更具有侵略性的聲音。
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park是極為蜿蜒且緊湊的跑道，座落於愛爾蘭郊區。
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	備用車輛
+0	AUTO	FE_STATS_GRIP_RACES	賽道次數
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	車庫
+0	AUTO	CUST_PACKAGE_POWER	動力套件
+0	AUTO	CUST_OWNED	已擁有
+0	AUTO	CUST_PAINT	烤漆
+0	AUTO	CUST_PARTS	車體零件
+0	AUTO	CUST_PACKAGE_TITLE	套件
+0	AUTO	CS_OPTION_CAR_SELECT	選擇車輛
+0	AUTO	RACE_DAY_SLOT_EMPTY	可使用
+0	AUTO	FE_STATS_ACHIEVEMENTS	達成的目標
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	開設「自訂挑戰競速日」可讓你只能在該「競速日」中使用的特定車輛。
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	手煞車可讓你再現rockford file影集風采
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Highway Route 318是地處內華達沙漠深處，飽受日曬的直線柏油跑道。^車輛可跑出200 mph以上的速度，但得留意看似容易的彎道。
+0	AUTO	CUST_SLOT_ROTORS_DESC	性能煞車碟的散熱效果比原廠好。大於原廠直徑的煞車碟^，能提供更大的表面供煞車來令片夾取，而產生更大的煞^車力道。
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	最佳甩尾分數 - 領先者
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	這項升級特別調校了懸吊系統，^讓車輛過彎時能夠輕易滑出。
+0	AUTO	CUST_REGION_FRONT_BUMPER	前防撞桿
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	預估淨值
+0	AUTO	CUST_SLOT_TRANSMISSION	變速箱
+0	AUTO	RACE_DAY_LOCATION_8_DESC	地處雷尼爾山附近的太平洋西北蒼翠綠葉之中，Portland International賽道，^或簡稱PIR，是擁有優質直線加速跑道的嚴苛公路賽道。
+0	AUTO	CUST_BLUEPRINT_SAVE	儲存藍圖
+0	AUTO	CUST_QUICK_NITROUS_1	這項升級將透過乾注式NOS，短暫地提升引擎輸出馬力。^這可以就第一和第二的差異。
+0	AUTO	CUST_QUICK_NITROUS_2	這項升級將透過乾注式NOS，短暫地提升引擎輸出馬力。^這可以就第一和第二的差異。
+0	AUTO	RACE_DAY_LOCATION_9_DESC	德州什麼都大，Texas World Speedway也不例外，在傾斜的橢圓賽道上，^有蜿蜒的道路穿梭其中。
+0	AUTO	CAR_SELECT_CORVETTE	最後的sting rays車款。二代corvette名列史上五大跑^車之一。
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	最多區段取得數
+0	AUTO	CL_DRIVETRAIN_HEADER	傳動系統
+0	AUTO	CUST_PACKAGE_HANDLING	操控套件
+0	AUTO	FE_STATS_SPEED_WINS	飆速賽獲勝次數
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	贏多檢查點勝利數
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	「頂尖改裝車手排行榜」，列出了遊戲中的頂尖藍圖改裝車手。^你的排名會依據你所分享藍圖的勝率獲。你的分享藍圖必須被使^用於至少20場比賽才會出現在排行榜。

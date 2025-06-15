@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Polish_Frontend.bin
+#	File created on: 2025-05-24 11:17:16
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	ŁĄCZNE KOSZTY NAPRAW
+0	AUTO	MODE_ALL	Wszystkie samochody
+0	AUTO	CUST_VINYL_MOVE_LAYER	WARSTWA W GÓRĘ/W DÓŁ
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	BLOK SILNIKA
+0	AUTO	CAR_SELECT_MUSTANGGT	Czwarta generacja Mustangów z 8-zaworowym silnikiem o pojemności 4,6 l i klasycznymi parametrami - właśnie to przywołuje w myślach każdy miłośnik samochodów, gdy słyszy termin pony car.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	To ulepszenie oznacza zastąpienie wewnętrznych elementów silnika mocniejszymi i wytrzymalszymi częściami, co pozwala na uzyskanie wyższej mocy i większej wytrzymałości silnika na wysokie obroty.
+0	AUTO	CUST_VISUAL_DECALS	EMBLEMATY
+0	AUTO	CUST_CUSTOMIZE	Dostosuj wzór
+0	AUTO	CODE_ENTRY_VALID	Gratulacje! Twój kod został zaakceptowany i nagroda jest odblokowana.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	ZACISKI
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	W koszyku posiadasz kupony, które nie zostały jeszcze nabyte. Czy mimo to wyjść?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	STABILIZATORY POPRZECZNE
+0	AUTO	CUST_QUICK_HANDLING_D3	W skład tej modyfikacji wchodzą części pozwalające uzyskać sztywniejsze zawieszenie i pełną przyczepność podczas jazdy w linii prostej.
+0	AUTO	CUST_QUICK_HANDLING_G3	W skład tej modyfikacji wchodzą części pozwalające uzyskać sztywniejsze zawieszenie i pełną przyczepność podczas jazdy w linii prostej i na zakrętach.
+0	AUTO	CUST_QUICK_HANDLING_S3	W skład tej modyfikacji wchodzą części pozwalające uzyskać sztywniejsze zawieszenie i pełną przyczepność podczas jazdy z maksymalną prędkością, zarówno po linii prostej, jak i na zakrętach.
+0	AUTO	CUST_REGION_REAR_TIRE	TYLNA OPONA
+0	AUTO	FE_STATS_BEST_SECTOR	NAJLEPSZY SEKTOR
+0	AUTO	CL_FREE_CAR_MARKER	KUPON NA DARMOWY SAMOCHÓD
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	ZDEFINIUJ ZAWODY
+0	AUTO	CUST_QUICK_BRAKE_DI3	Ta modyfikacja pozwala osiągnąć najlepszy czas zatrzymania oraz brak utraty przyczepności opon podczas zmniejszania szybkości.
+0	AUTO	CUST_BP_APPLY_CONFIRM	Koszt zakupu wszystkich części potrzebnych do zastosowanie tego wzoru przy Twoim samochodzie wynosi {0:d}. Czy chcesz kontynuować?
+0	AUTO	CUST_SLOT_BUSHING_KIT	ZŁĄCZKI
+0	AUTO	FE_STATS_GAMES_PLAYED	ROZEGRANE GRY
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	DODATKOWE SAMOCHODY
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	WARSTWA {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	DANE PAKIETU
+0	AUTO	CUST_SLOT_NITROUS_DESC	Podtlenek azotu jest łatwopalnym gazem, który może zostać wpompowany do cylindra przed fazą zapłonu, celem uzyskanie ogromnego przyrostu mocy.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby zwiększyć jego wydajność.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby zwiększyć jego wydajność.
+0	AUTO	CS_HEADER_SPEED_EVENT	ZAWODY W PRÓBACH PRĘDKOŚCI
+0	AUTO	CUST_SLOT_HEADS_DESC	Zastosowanie na głowicy cylindra zaworów pozwala zwiększyć przepływ powietrza do silnika i skuteczność odprowadzania spalin. Prowadzi to do uzyskiwania większej mocy.
+0	AUTO	CUST_VINYL_ADDLAYER	DODAJ NOWĄ WARSTWĘ
+0	AUTO	CUST_CAT_SPEED_FORCED	Wysokoobrotowa sprężarka o niewielkim opóźnieniu zapewnia użyteczną krzywą mocy, co stanowi ogromną zaletę zarówno na torze, jak i zwykłej ulicy.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	NAJWYŻSZY MNOŻNIK
+0	AUTO	RACE_MODE_GRIP_MODE	TRYB^GRIP
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Następnym krokiem będzie wybór zawodów, które mają być dostępne podczas Twego dnia wyścigów.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	LICZBA WYŚCIGÓW
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	To ulepszenie wzmacnia elementy przeniesienia napędu, takie jak wał napędowy, dyferencjał i półosie.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	ROZGRYWKI W KARIERZE
+0	AUTO	RACE_DAY_ADD_EVENT	DODAJ ZAWODY
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Ten wzór nie jest zgodny z Twoją wersją gry Need for Speed™ ProStreet i nie może zostać użyty. Odwiedź stronę NeedforSpeed.com, aby znaleźć informacje o aktualizacjach i nowych elementach gry.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	LAKIER KÓŁ
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Ustaw jako aktywny wzór
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	KONTROLA SILNIKA
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	NAGRODA ZA ZWYCIĘSTWO
+0	AUTO	CUST_PAINT_BODY	LAKIER
+0	AUTO	CUST_PAINT_RIMS	KOŁA
+0	AUTO	CUST_PAINT_TINT	ODCIEŃ SZYB
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Nie wystąpił błąd.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Czy na pewno chcesz usunąć ten dzień wyścigów? Twoje ustawienia oraz rekordy dnia wyścigów będą stracone.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	WYBÓR JĘZYKA
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Tuleje wykonane ze sztywniejszych materiałów, takich jak uretan czy aluminium, pozwalają na wykonywanie ciaśniejszych zakrętów przy mniejszych przechyłach karoserii.
+0	AUTO	HUB_DIFFICULTY_2	ŚREDNI
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Wielokrotne zatrzymywanie samochodu prowadzi do przegrzewania układu hamulcowego, co w konsekwencji wydłuża drogę hamowania. Większy układ hamulcowy pozwala utrzymywać niską temperaturę i zapobiegać zmianom w jego skuteczności.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	NAJWYŻSZA PRĘDKOŚĆ MAKSYMALNA
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Wybierz sposób zakupu
+0	AUTO	CUST_SLOT_INTAKE_DESC	Im więcej zimnego powietrza zostaje wtłoczone do silnika, tym lepiej. Dodatkowo im zimniejsze to powietrze, tym większa będzie uzyskiwana moc.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Tutaj nacisk położony jest na nadsterowność. Potężny tylny stabilizator poprzeczny, aluminiowe tuleje i całkowity demontaż przedniego stabilizatora poprzecznego ułatwiają wprowadzanie pojazdu w poślizg.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Czy chcesz opuścić ekran wyboru samochodu i przejść do mapy kariery?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Zapisywanie dnia wyścigów…
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	NAJWYŻEJ OCENIANY TUNER
+0	AUTO	RACE_MODE_DESCRIPTION	Wybór trybu wyścigów pozwoli określić rodzaj zawodów, w jakich będzie można brać udział tym samochodem.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Aby skorzystać z tunelu aerodynamicznego, musisz zainstalować części AutoSculpt!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Wloty o większej przepustowości pozwalają dostarczyć do silnika więcej powietrza. Wydajny, gładki wlot pozwala lepiej wykorzystać maksymalny potencjał silnika.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	ŁĄCZNA PRĘD. MAKS. W PKT. KONT.
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	SYSTEM PALIWOWY
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Posiada silnik o pojemności 2,3 l o mocy ponad 260 KM i sześciobiegową skrzynię biegów. Speed 3 to nowoczesna wersja trzydrzwiowa.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Modyfikacja pozwala na jeszcze szybszą i bardziej precyzyjną zmianę biegów, a ponadto zmniejsza wagę części odpowiadających za przekazanie mocy silnika na koła, pozwalając na osiągnięcie standardu samochodów wyścigowych.
+0	AUTO	CAR_SELECT_INTEGRA	Kouki posiada wysokoobrotowy silnik serii B i jest niezwykle popularny wśród entuzjastów wyścigów - głównie z powodu różnych rodzajów silnika i komfortu kierowania.
+0	AUTO	FE_HUBMAP_ETREE_CARS	SAMOCHODY
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Ta modyfikacja pozwala na zwiększenie mocy silnika.
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Dzięki tej modyfikacji moc silnika zbliży się parametrami do poziomu prawdziwego samochodu wyścigowego.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Kluczowe znaczenie ma utrzymywanie prędkości podczas pokonywania zakrętów, a także uzyskanie odpowiedniego przyspieszenia przy wyjściu z łuku. Im większa moc, tym łatwiej rozpędzać się przy wychodzeniu na prostą i uzyskiwać większe prędkości.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Czy na pewno chcesz naprawić ten samochód?
+0	AUTO	CAR_SELECT_S3	S3 drugiej generacji nie można kupić na terenie Ameryki Północnej.
+0	AUTO	CAR_SELECT_S4	Słabszy od modelu RS4, choć również posiada 8-zaworowy silnik o pojemności 4,2 l.
+0	AUTO	CAR_SELECT_TT	Druga wersja modelu TT. Odznaczono go licznymi nagrodami w kategorii samochód roku.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	PODTLENEK AZOTU
+0	AUTO	FE_STATS_DOWNLOADING_STATS	STATYSTYKI POBIERANIA
+0	AUTO	CUST_QUICK_FORCED_D3	Doładowanie do 3 poziomu dragu
+0	AUTO	CUST_QUICK_FORCED_G3	Dzięki tej modyfikacji ilość powietrza wtłaczanego do silnika zwiększy się jeszcze bardziej. Poprawiona wydajność całego układu pozwoli osiągnąć parametry zbliżone do samochodu wyścigowego.
+0	AUTO	CUST_QUICK_FORCED_S3	Dzięki tej modyfikacji ilość powietrza wtłaczanego do silnika zwiększy się jeszcze bardziej. Poprawiona wydajność całego układu pozwoli osiągnąć parametry zbliżone do samochodu wyścigowego.
+0	AUTO	CUST_PAINT_GROUP_CANDY	CUKIERKOWA
+0	AUTO	CUST_PAINT_GROUP_GLOSS	EMALIA
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATOWA
+0	AUTO	CUST_DRIVETRAIN_GROUP	UKŁAD NAPĘDOWY
+0	AUTO	CUST_PAINT_GROUP_PEARL	PERŁOWA
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby zwiększyć jego wydajność podczas ostrego przyspieszania.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby maksymalnie zwiększyć jego wydajność.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby maksymalnie zwiększyć jego wydajność.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Szczęki wyposażone w większe lub liczniejsze zaciski pozwalają rozprowadzić siłę hamowania po większej powierzchni tarczy, co prowadzi do uzyskania większej siły hamowania.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Aby rozpocząć, wciśnij Start.
+0	AUTO	RACE_DAY_SLOT_ID	MIEJSCE {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	TŁUMIKI
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Wystąpił błąd podczas próby dołączenia do wyścigu. Spróbuj ponownie.
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	CHŁODZENIE SKRZYNI BIEGÓW
+0	AUTO	RACE_MODE_DRIFT_MODE	TRYB^DRIFTU
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Które koła chcesz zmodyfikować?
+0	AUTO	CUST_SLOT_FLYWHEEL	KOŁO ZAMACHOWE
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Fotele wyścigowe utrzymają Cię w miejscu.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Zmiana trybów spowoduje usunięcie wszystkich poprzednich wzorów dla tego samochodu, wliczając to wszelkie zmiany wizualne oraz modyfikacje naklejek. Czy na pewno chcesz kontynuować?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	CZAS POŚWIĘCONY NA KARIERĘ
+0	AUTO	CUST_DRAG_TUT_AWD	Podczas startu napęd na cztery koła zapewnia znaczną przewagę. Doskonała trakcja pozwala przenieść na asfalt każdego konia mechanicznego.
+0	AUTO	CUST_DRAG_TUT_FWD	Największym problemem samochodów z napędem na przednie koła podczas wyścigów typu drag jest utrzymanie trakcji. Im większa moc, tym ważniejsze jest niedopuszczenie do poślizgu kół. Aby stworzyć szybki samochód z napędem na przednie koła do dragu, trzeba uzyskać dużą moc i zadbać o dobry układ przeniesienia tej mocy na asfalt. Po zainstalowaniu najbardziej podstawowych ulepszeń, nacisk należy położyć na kontrolowanie mocy i utrzymanie trakcji.
+0	AUTO	CUST_DRAG_TUT_RWD	Kluczowe ustawienia w dragu dotyczą trakcji. Dobre czasy można uzyskać eliminując podskakiwanie i poślizg kół. Ma to szczególnie duże znaczenie w przypadku samochodów o znacznej mocy.
+0	AUTO	CUST_ENGINE_GROUP	SILNIK
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Serwer Need for Speed™ anulował to żądanie.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Opony utrzymują Cię na drodze.
+0	AUTO	CAR_SELECT_GTRPROTO	GTR Proto jest prototypową wersją R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	LICZBA UNIKALNYCH SAMOCHODÓW
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	PREMIA ZA DOMINACJĘ
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	KUPONY NAPRAWY: {0:d}
+0	AUTO	CAR_SELECT_VIPERCOUPE	Trzecia wersja Vipera. 10-zaworowy silnik w sportowym coupe Dodge'a, wydający z siebie charakterystyczny pomruk. Jego moc dochodzi do 500 KM.
+0	AUTO	MAIN_MENU_TITLE	GŁÓWNE MENU
+0	AUTO	CUST_TINT_DARK	CIEMNY
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Odpowiednie zestrojenie zawieszenia umożliwia poprawne przeniesienie ciężaru w trakcie startu, dzięki czemu pojazd będzie szybszy, a ponadto będzie dysponował lepszą trakcją.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Nie można zniszczyć samochodów
+0	AUTO	CUST_APPLYING_BLUEPRINT	STOSOWANIE WZORU
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	WYBIERZ MIEJSCE NA DZIEŃ WYŚCIGÓW
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	To wóz z silnikiem o średnich osiągach, zbliżony parametrami do 911.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	PROCENT ROZWOJU KARIERY
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DYFERENCJAŁ
+0	AUTO	CUST_WIND_TUNNEL_ON	Wł. tunel aerodynam.
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Podczas wieloosobowych dni wyścigowych kupony naprawy są wyłączone. Wszelkie uszkodzenia zostaną zlikwidowane po wyścigu. Nie możesz także całkowicie zniszczyć samochodu.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Ten wzór nie pasuje do trybu samochodu, przy którym chcesz go zastosować. Wszystkie poprzednie wzory zostaną usunięte. Czy na pewno chcesz to zrobić?
+0	AUTO	CUST_QUICK_POWER_DI3	Celem tego pakietu było uzyskanie na tyle dużej ilości mocy silnika, aby opony w układzie napędowym traciły swoją przyczepność.
+0	AUTO	RACE_MODE_DRAG_MODE	TRYB^DRAGU
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Ta podstawowa modyfikacja pozwala poprawić ogólną prezencję samochodu.
+0	AUTO	CUST_QUICK_VISUAL_2	Po dodaniu przednich i bocznych rozdzielaczy Twój wóz będzie znacznie mocniej trzymał się drogi przy dużych prędkościach i nie straci przyczepności podczas pokonywania zakrętów.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Wybierz tryb rozgrywki
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	W wybranym miejscu znajduje się już wzór. Czy chcesz go zastąpić?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	ZARZĄDZANIE KUPONAMI
+0	AUTO	CAR_SELECT_FOCUSST	Focus MK2, który sprzedawany jest poza terenem Ameryki Północnej, posiada silnik o pojemności 2,5 litra i mocy 225 KM.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	To ulepszenie wzmacnia elementy przeniesienia napędu, takie jak wał napędowy, dyferencjały i półosie.
+0	AUTO	FE_MAIN_MENU	Główne menu
+0	AUTO	CUST_REGION_REAR_BUMPER	TYLNY ZDERZAK
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	PASEK KLINOWY
+0	AUTO	CAR_SELECT_BARRACUDA	To Hemi 'Cuda, samochód-legenda.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	NAJWYŻEJ OCENIANY SAMOCHÓD
+0	AUTO	CUST_APPLY_PAINT_TITLE	NAŁÓŻ LAKIER
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	LICZBA SAMOCHODÓW W GARAŻU
+0	AUTO	CUST_REGION_ALL_WHEELS	WSZYSTKIE KOŁA
+0	AUTO	CUST_QUICK_FORCED_2	Dzięki tej modyfikacji zwiększy się ilość powietrza wtłaczanego do silnika, poprawiając w ten sposób wydajność całego układu.
+0	AUTO	FE_STATS_FASTEST_LAP	NAJSZYBSZE OKRĄŻENIE
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Aby opony ściśle przylegały do nawierzchni, usztywniono przedni i tylny stabilizator poprzeczny, normalne tuleje zastąpiono uretanowymi i zastosowano wyścigowe amortyzatory.
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	PROCENT NU
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	B-body Charger był jednym z najsłynniejszych samochodów telewizyjnych wczechczasów.
+0	AUTO	CUST_QUICK_INTERNALS_1	Ta modyfikacja zwiększa moc silnika i pozwala na dokonywanie bardziej zaawansowanych przeróbek.
+0	AUTO	CUST_QUICK_INTERNALS_2	Dzięki tej modyfikacji w Twoim silniku znajdą się jeszcze wytrzymalsze podzespoły, pozwalające na zwiększenie jego mocy i obrotów.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Czy na pewno chcesz przywrócić ten wzór to domyślnego stanu?
+0	AUTO	CUST_SLOT_RACING_SEATS	FOTELE WYŚCIGOWE
+0	AUTO	CUST_AUTOSCULPT_ZONE10	STREFA 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	PUNKTY ZA NAJLEPSZY SEKTOR
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	NAJCENNIEJSZY SAMOCHÓD
+0	AUTO	CAR_SELECT_CIVICSI	Honda Civic ósmej generacji.
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle to pierwszy model Chevroleta typu muscle car, który posiada aż 402ci. Jest on ewenementem, gdyż do roku 1970 producent nie pozwalał montować w swoich samochodach silników większych niż 400ci.
+0	AUTO	CUST_CAT_GRIP_FORCED	Wysokoobrotowa sprężarka o niewielkim opóźnieniu zapewnia użyteczną krzywą mocy, co stanowi ogromną zaletę zarówno na torze, jak i zwykłej ulicy.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Witamy na mapie dnia wyścigów
+0	AUTO	CUST_BLUEPRINT_APPLY	Zastosuj wzór
+0	AUTO	CUST_SLOT_CAMSHAFTS	WAŁ ROZRZĄDU
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Pokaż wszystkie wyścigi
+0	AUTO	CUST_SLOT_HEADERS	GŁOWICE
+0	AUTO	FE_STATS_FASTEST_TIME	NAJLEPSZY CZAS
+0	AUTO	CUST_SUSPENSION_GROUP	ZAWIESZENIE
+0	AUTO	CUST_BLUEPRINT_RESET	ZERUJ WZÓR
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Dzięki tej modyfikacji moc silnika zbliży się parametrami do poziomu samochodu przystosowanego do wyścigów typu drag.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Dzięki tej modyfikacji moc silnika zbliży się parametrami do poziomu prawdziwego samochodu wyścigowego.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Dzięki tej modyfikacji moc silnika zbliży się parametrami do poziomu prawdziwego samochodu wyścigowego.
+0	AUTO	CUST_INSTALLED	ZAINSTALOWANO
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Wczytywanie dnia wyścigów…
+0	AUTO	CUST_SLOT_CAMS_DESC	Idealnie ustawione krzywki mają krótkie czasy otwarcia i niewielkie uchylenie. W miarę zwiększania czasu i poziomu otwarcia, maksimum momentu obrotowego przesuwa się w stronę wyższych wartości obrotów silnika. Optymalne ustawienie generuje najwięcej mocy w najczęściej używanym zakresie obrotów.
+0	AUTO	CUST_QUICK_HANDLING_DI3	Modyfikacja pozwalająca na dostosowanie zawieszenia tak, aby samochód mógł poślizgiem wchodzić w zakręty.
+0	AUTO	CUST_QUICK_BRAKE_D3	Ta modyfikacja pozwala osiągnąć najlepszy czas zatrzymania oraz brak utraty przyczepności opon podczas zmniejszania szybkości.
+0	AUTO	CUST_QUICK_BRAKE_G3	Pakiet hamulców do gripu 3 poziomu
+0	AUTO	CUST_QUICK_BRAKE_S3	Ta modyfikacja pozwala osiągnąć najlepszy czas zatrzymania oraz brak utraty przyczepności opon podczas zmniejszania szybkości.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Im większa butla, tym więcej zmieści się w niej nitro. Ponadto w samochodzie można zainstalować kilka takich pojemników. Po wykorzystaniu każdą butlę trzeba napełnić.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Wieczór
+0	AUTO	CUST_TINT_LIGHT	JASNY
+0	AUTO	CUST_REPAIR_DAMAGE	USZKODZ.
+0	AUTO	CUST_TINT_PEARL	PERŁOWY
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	NAJDŁUŻSZY DRIFT
+0	AUTO	CUST_SLOT_TIPS_DESC	Dzięki tym końcówkom, samochód będzie wyglądał naprawdę agresywnie.
+0	AUTO	CUST_SLOT_STEERING_DESC	Wyczynowy mechanizm zębatkowy pozwala zwiększyć kąt skrętu, zmniejszając jednocześnie opór na kierownicy w porównaniu do fabrycznych układów sterowania.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Niezwykła super-maszyna. Corvette posiada silnik o pojemności 7.0 l, tytanowych prętach, zaopatrzony w system suchej miski olejowej.
+0	AUTO	HD_COMPATIBLE	Optymalne wrażenia zapewnia technologia HD
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Usuń zawody
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	LICZBA POKONANYCH MISTRZÓW
+0	AUTO	CUST_WIND_TUNNEL	TUNEL AERODYNAMICZNY
+0	AUTO	CUST_STAGE_NUMBER	ETAP {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	LICZBA ZWYCIĘSTW
+0	AUTO	CUST_FILTER_FRONT_BUMPER	PRZEDNI ZDERZAK
+0	AUTO	MAIN_CAREER	KARIERA
+0	AUTO	CUST_REGION_REAR_WHEEL	TYLNE KOŁA
+0	AUTO	CUST_QUICK_VISUAL_D3	Ta modyfikacja pozwala skorzystać z części aerodynamicznych, zwiększających docisk wozu do ziemi przy dużych prędkościach.
+0	AUTO	CUST_QUICK_VISUAL_G3	Ta modyfikacja pozwala skorzystać z części aerodynamicznych, zwiększających docisk wozu do ziemi przy dużych prędkościach.
+0	AUTO	CUST_QUICK_VISUAL_S3	Ta modyfikacja pozwala skorzystać z części aerodynamicznych, zwiększających docisk wozu do ziemi przy prędkości maksymalnej.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Wielokrotne zatrzymywanie samochodu prowadzi do przegrzewania układu hamulcowego, co w konsekwencji wydłuża drogę hamowania. Większy układ hamulcowy pozwala utrzymywać niską temperaturę i zapobiegać zmianom w jego skuteczności.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Dzięki tej modyfikacji w silniku wozu wyścigowego znajdą się jeszcze wytrzymalsze podzespoły, pozwalające na zwiększenie mocy i obrotów.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	LICZBA ZWYCIĘSTW RANKINGOWYCH
+0	AUTO	CUST_SLOT_BOV_DESC	Zawór wyrównawczy pozwala sprężarce osiągnąć i utrzymać maksymalny stopień sprężania, nie zmniejszając przy tym obrotów silnika.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Dostępna jest aktualizacja wymagana do rozgrywki sieciowej. Więcej informacji znajdziesz na stronie NeedforSpeed.com.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	ULUBIONY RODZAJ ZAWODÓW
+0	AUTO	HUB_BREAK_RECORD	POBIJ REKORD
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Te pręty będą dociskać przednie koła do nawierzchni i poradzą sobie z mocą rozwijaną przez silnik.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Niski
+0	AUTO	RACE_DAY_DIFFICULTY_2	Średni
+0	AUTO	RACE_DAY_DIFFICULTY_3	Wysoki
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elita
+0	AUTO	CUST_SLOT_CLUTCH	SPRZĘGŁO
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Aby kontynuować, wciśnij przycisk 2.
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	NAJSZYBSZE 0-60 M/H
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Chcesz zmodyfikować przednie czy tylne koła?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	STWÓRZ DZIEŃ WYŚCIGÓW
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	STATYSTYKI OSOBISTE
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	W miarę zwiększania mocy silnika konieczne jest stosowanie ulepszeń, które pozwolą skutecznie przenieść ją na koła napędowe. Tutaj liczą się sprzęgła, wały napędowe oraz dyferencjały o ograniczonym poślizgu.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	SOLO
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Po starcie, kluczem do udanego dragu jest moc. Większa moc pozwala rozwinąć większą prędkość w punktach pomiarowych.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Ten dzień wyścigów nie jest zgodny z Twoją wersją gry Need for Speed™ ProStreet i nie może zostać użyty. Odwiedź stronę NeedforSpeed.com, aby znaleźć informacje o aktualizacjach i nowych elementach gry.
+0	AUTO	RD_PLAY	GRAJ
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	SYSTEM ZAPŁONOWY
+0	AUTO	FE_STATS_CAREER_WINS	ZWYCIĘSTWA W KARIERZE
+0	AUTO	RACE_DAY_LOCATION	MIEJSCE
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Ta modyfikacja pozwala na szybszą zmianę biegów i skuteczniejsze przekazanie mocy silnika na koła.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Ta modyfikacja pozwala na jeszcze szybszą i bardziej precyzyjną zmianę biegów, ponadto zmniejsza wagę części odpowiadających za przekazanie mocy silnika na koła.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Czy na pewno chcesz usunąć ten udostępniony wzór?
+0	AUTO	SHOW_FRIENDS	Pokaż znajomych
+0	AUTO	FE_STATS_HUBS_DOMINATED	ZDOMINOWANE DNI WYŚCIGÓW
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	NAJLEPSZY CZAS REAKCJI
+0	AUTO	CODE_ENTRY_INVALID	Podany kod jest nieprawidłowy. Upewnij się, że wpisany kod jest poprawny i spróbuj ponownie.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	WYBIERZ DO 8 ZAWODÓW
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Napraw samochód
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	KUPON NAPRAWY
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	OPALIZUJĄCA
+0	AUTO	CUST_SLOT_CAM_GEARS	KOŁA ZĘBATE
+0	AUTO	CUST_SLOT_ROOF_SCOOP	DACHOWY WLOT POWIETRZA
+0	AUTO	CUST_COMPONENTS_TITLE	DOSTOSUJ ELEMENTY
+0	AUTO	CUST_BRAKES_GROUP	HAMULCE
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Czy na pewno chcesz wyjść?
+0	AUTO	CUST_SLOT_TRACTION_BARS	STABILIZATORY
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	To ulepszenie poprawia charakterystykę hamowania pojazdu, dzięki zastosowaniu wyczynowych tarcz i klocków hamulcowych. Hamulce mają kluczowe znaczenie dla kontrolowania pojazdu w trakcie driftu.
+0	AUTO	MAIN_RACE_DAY	DZIEŃ WYŚCIGÓW
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	% ZWYCIĘSTW W PRÓB. PRĘDKOŚCI
+0	AUTO	SELL_CAR_CONFIRMATION	Wartość tego samochodu wynosi {0:d}^Jeśli zdecydujesz się go sprzedać, stracisz wszystkie wzory dla tego wozu. Czy na pewno chcesz go sprzedać?^
+0	AUTO	RD_DELETE_RD	Czy chcesz usunąć dzień wyścigów?
+0	AUTO	CAR_SELECT_G35	G35 korzysta z tej samej platformy co 350Z.
+0	AUTO	CAR_SELECT_GXP	GXP ma dwulitrowy, 16-zaworowy silnik z turbodoładowaniem o mocy 260 KM, LSD i osiemnastocalowe koła.
+0	AUTO	CAR_SELECT_NSX	Zaprojektowany z myślą o demonstracji nowej technologii Hondy. Ten średniej klasy wóz wykonaniem znacznie wyprzedzał swoją epokę.
+0	AUTO	CAR_SELECT_R35	To wersja produkcyjna modelu R35 GTR.
+0	AUTO	CAR_SELECT_S13	S13 to jeden z najbardziej znanych samochodów do driftu.
+0	AUTO	CAR_SELECT_S15	S15 to samochód, który pierwotnie nawet nie dotarł na teren Ameryki Północnej. Tym niemniej w świecie tuningu jest to klasyczny model.
+0	AUTO	CAR_SELECT_RS4	B7 RS4 posiada 8-zaworowy silnik o mocy 400 KM, dostępny w wersji sedan, kombi lub kabriolet.
+0	AUTO	CAR_SELECT_RSX	Następca legendarnej Integry korzysta z nowego silnika Hondy dla serii K.
+0	AUTO	CAR_SELECT_RX8	Silnik z przodu, napęd rotacyjny na tylne koła, konstrukcja typu 2+2. Model RX-8 ma niemal idealne rozłożenie wagi i niezwykle wyważony układ kierowniczy.
+0	AUTO	CAR_SELECT_STI	4-cylindrowy silnik o spalaniu wewnętrznym, turbodoładowanie i napęd na cztery koła. STI to prawdziwa wizytówka świata tuningu. Ten wóz potrafi dosłownie wszystko.
+0	AUTO	CAR_SELECT_Z4M	Posiada taki sam silnik (Inline 6), jaki zamontowano w M3 E46. Od 0 do 60 przyspiesza w 4,9 sekundy, a jego prędkość maksymalna jest odgórnie ograniczona do 250 km/h.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Pakiet wizualny dla driftu 3 poziomu
+0	AUTO	CUST_AUTOSCULPT_ZONE1	STREFA 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	STREFA 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	STREFA 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	STREFA 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	STREFA 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	STREFA 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	STREFA 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	STREFA 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	STREFA 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	NAJLEPSZY WYNIK WYŚCIGU
+0	AUTO	FE_STATS_AVERAGE_SPEED	ŚREDNIA PRĘDKOŚĆ
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALICZNA
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Wciśnij START
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	PROCENT ZWYCIĘSTW - DRIFT
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Brak dostępnych zapasowych samochodów
+0	AUTO	CUST_FILTER_FRONT	PRZEDNIE KOŁA
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	PARKING
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Prototyp 5 generacji Camaro, który zaprezentowano w roku 2006.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Ten zestaw pozwala na szybsze i bardziej precyzyjne pokonywanie zakrętów.
+0	AUTO	CUST_QUICK_SUSPENSION_2	Ten zestaw pozwala na jeszcze szybsze i znacznie bardziej precyzyjne pokonywanie zakrętów.
+0	AUTO	CUST_QUICK_NITROUS_D3	Dzięki tej modyfikacji Twój silnik otrzyma zastrzyk mocy rzędu 50 - 250 KM, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	CUST_QUICK_NITROUS_G3	Dzięki tej modyfikacji Twój silnik otrzyma zastrzyk mocy rzędu 50 - 250 KM, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	CUST_QUICK_NITROUS_S3	Dzięki tej modyfikacji Twój silnik otrzyma zastrzyk mocy rzędu 50 - 250 KM, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	CUST_PERFORMANCE	OSIĄGI
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Zastosowanie bardziej napiętych stabilizatorów poprzecznych zapewnia większą sztywność w zakrętach, co pozwala uniknąć podsterowności.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Czy na pewno chcesz usunąć ten wzór?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Wzory
+0	AUTO	CUST_QUICK_UPGRADE	SZYBKIE ULEPSZENIE
+0	AUTO	CAR_SELECT_CORVETTEC6	Najnowsza wersja Chevroleta Corvette, jednocześnie pierwszy od niemal 35 lat model, który posiada światła odsłonięte na stałe.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	NIE POŁĄCZONY
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	NAGRODA
+0	AUTO	MAIN_QUIT_GAME	WYJŚCIE
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	PODTLENEK AZOTU
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTR
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Poza zapewnianiem kierowcy ochrony, klatka bezpieczeństwa zwiększa także sztywność nadwozia i nadaje autu rasowy, rajdowy wygląd.
+0	AUTO	CUST_SLOT_BC_DESC	To ulepszenie zwiększa skuteczność hamowania pojazdu, dzięki zastosowaniu wyczynowych tarcz i klocków hamulcowych. Hamulce są ważnym elementem każdego dobrze stuningowanego wozu.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Przegrzana skrzynia biegów oznacza spore kłopoty.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	DOŁADOWANIE
+0	AUTO	CAR_TYPE_SPEED	PRÓBA PRĘDKOŚCI
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	GŁOWICE CYLINDRÓW
+0	AUTO	CUST_SELL_CAR_WARNING	Jeśli sprzedasz ten samochód, niemożliwe będzie wzięcie udziału w jakichkolwiek zawodach ({0:s}) do chwili zakupienia innego samochodu tego rodzaju.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	W tym miejscu nie ma wyścigów tego typu.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	PORA DNIA
+0	AUTO	RD_DELETED	Dzień wyścigów usunięty.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	W miarę zwiększania mocy silnika konieczne jest stosowanie ulepszeń, które pozwolą skutecznie przenieść ją na koła napędowe. Tutaj liczą się sprzęgła, wały napędowe oraz dyferencjały o ograniczonym poślizgu.
+0	AUTO	CUST_SLOT_AIR_INTAKE	WLOT POWIETRZA
+0	AUTO	CUST_PART_PURCHASED	ZAKUPIONO
+0	AUTO	CUST_BP_OPTION_UNDO	ANULUJ
+0	AUTO	CUST_FILTER_BODY	NADWOZIE
+0	AUTO	CUST_FILTER_HOOD	MASKA
+0	AUTO	CUST_FILTER_REAR	TYLNE KOŁA
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	To ulepszenie oznacza przeprogramowanie komputera sterującego silnikiem. Zwiększona zostaje ilość mieszanki paliwa i powietrza spalanych w cylindrach, dzięki czemu jednostka napędowa rozwija większą moc, dokładnie wtedy, gdy najbardziej tego potrzebujesz.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Linki hamulcowe wykonane ze splatanych drutów stalowych pozwalają zwiększyć ciśnienie hydrauliczne i skuteczność hamulców.
+0	AUTO	LS_SAVING	TRWA ZAPISYWANIE...
+0	AUTO	CUST_CUSTOM_UPGRADE	WŁASNE ULEPSZENIA
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Nie możesz wziąć udziału w wyścigu tego dnia. Nie posiadasz samochodów następującego typu:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Po ustawieniu odpowiedniej konfiguracji zawieszenia, nie powodującej zbytniej podsterowności lub nadsterowności, kierowca otrzyma samochód, który jest zarówno szybki, jak i łatwy w prowadzeniu.^
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	WYBIERZ TRYB WYŚCIGU
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Nie możesz używać końcówki wydechu z rynku wtórnego przy firmowym pakiecie karoserii!
+0	AUTO	CUST_PURCHASE_CAR	Kup samochód
+0	AUTO	CODE_ENTRY_VERIFICATION	Weryfikacja kodu na serwerze...
+0	AUTO	MC_OLD_SAVE_REWARD	Dziękujemy za grę w poprzednie tytuły z serii Need for Speed™. W nagrodę otrzymujesz kupony naprawy ({0:d}) oraz kupony pełnej naprawy w trybie kariery ({1:d}).
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	WYGR. PRZED PRZECIW. WYŻ. KLASY
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Pakiet mocy do 3 poziomu dragu
+0	AUTO	CUST_QUICK_POWER_G3	Ten pakiet Twój samochód w wóz wyścigowy, zapewniając mu jeszcze więcej mocy.
+0	AUTO	CUST_QUICK_POWER_S3	Pakiet mocy dla próby prędkości 3 poziomu
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	LICZBA WZORÓW
+0	AUTO	FE_STATS_BEST_RUN	NAJLEPSZE OKRĄŻENIE
+0	AUTO	WINDTUNNEL_DOWNFORCE	SIŁA DOCISKU
+0	AUTO	CUST_SLOT_COOLING_DESC	Nie za gorąco, nie za zimno. W sam raz.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	NAJLEPSZY WYNIK DRIFTU
+0	AUTO	CUST_CAT_DRIFT_FORCED	To ulepszenie zwiększa ilość powietrza wtłaczanego do silnika. W ten sposób można spalać więcej paliwa i uzyskać więcej mocy.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Użyj kuponu naprawy
+0	AUTO	FE_STATS_FILTER_GENERAL	STATYSTYKI OGÓLNE
+0	AUTO	CB_BLUEPRINTS_HEADER	RODZAJ WZORU
+0	AUTO	ENTER_SECRET_CODE	PODAJ TAJNY KOD
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Ta modyfikacja drastycznie zmieni wygląd pojazdu i może poprawić jego właściwości aerodynamiczne.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	LICZBA ZNISZCZONYCH SAMOCHODÓW
+0	AUTO	CUST_SLOT_WHEELS	KOŁA
+0	AUTO	CUST_SLOT_SUPERCHARGER	KOMPRESOR
+0	AUTO	CAR_SELECT_SHELBYGT500	GT500 to pierwszy amerykański samochód z poprzecznym wzmocnieniem konstrukcji bocznej. To jeden z najpopularniejszych modeli Shelby.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	NAJDŁUŻSZA JAZDA NA 2 KOŁACH
+0	AUTO	FE_STATS_GRIP_WINS	ZWYCIĘSTWA W GRIPIE
+0	AUTO	CL_MS_POINTS	punkty Microsoft® Points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	CZAS NAJDŁUŻSZEGO DRIFTU
+0	AUTO	CUST_FILTER_REAR_BUMPER	TYLNY ZDERZAK
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	NAJLEPSZY CZAS - 0-60 M/H
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Koszt zakupu samochodu oraz zastosowania przy nim tego wzoru wynosi {0:d}. Czy chcesz kontynuować?
+0	AUTO	GARAGE_REPAIR_DENIED	Nie masz dość gotówki ani kuponu, aby naprawić ten samochód.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	KLIKNIJ, aby kontynuować
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	LICZBA WYŚCIGÓW PUNKBUSTER
+0	AUTO	GARAGE_NO_CAR_REPAIR	Nie masz dość gotówki ani kuponów naprawy, aby zreperować swój samochód.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	BRAK DOSTĘPNYCH SAMOCHODÓW
+0	AUTO	RDMAP_CREATE_PREVIEW	STWÓRZ WŁASNY DZIEŃ WYŚCIGÓW
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Wielokrotne zatrzymywanie samochodu prowadzi do przegrzewania układu hamulcowego, co w konsekwencji wydłuża drogę hamowania. Większy system hamulcowy pozwala utrzymywać niską temperaturę i zapobiegać zmianom w jego skuteczności.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	NAJDŁUŻSZA SERIA DRIFTÓW
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	ZAWÓR WYRÓWNUJĄCY
+0	AUTO	FE_STATS_CLUB_TAG	PROPORZEC KLUBU
+0	AUTO	CUST_SLOT_EXHAUST	KOŃCÓWKI TŁUMIKA
+0	AUTO	CAR_SELECT_INTEGRATYPER	Integra Type R jest często uważany za najwygodniejszy w prowadzeniu wóz z napędem na przednie koła.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Tutaj nacisk położony jest nie na hamowanie, ale na jazdę. Celem powinno być korzystanie z możliwie najlżejszych hamulców, aby Twój pojazd mógł jak najszybciej przyspieszać.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Nałóż lakier
+0	AUTO	WINDTUNNEL_PEAK_HP	NAJWYŻSZA MOC
+0	AUTO	CUST_BLUEPRINT_DELETE	USUŃ WZÓR
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	STATYSTYKI KARIERY
+0	AUTO	CUST_VISUAL_TITLE	WYGLĄD
+0	AUTO	CUST_SLOT_DRIVESHAFT	WAŁ NAPĘDOWY
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Kup wzór
+0	AUTO	CAREER_COMPLETION_HEADER	UKOŃCZENIE KARIERY
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Im większa moc, tym łatwiej utrzymać poślizg kół i drift. Zwiększ moc, aby wykonywać poślizgi.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	NAJSZYBSZA 1/4 MILI
+0	AUTO	CL_NOT_ENOUGH_CASH	Masz za mało pieniędzy na ten samochód.
+0	AUTO	CUST_SLOT_SC_DESC	Tego rodzaju doładowanie jest napędzane przez silnik i zapewnia większą moc przy niskich wartościach obrotów.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	KLUB
+0	AUTO	CUST_SLOT_TIRES	OPONY
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Nie znaleziono dnia wyścigów.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Spowoduje to porzucenie wszystkich zmian wprowadzonych w tym dniu wyścigów. Anulować zmiany?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	AMORTYZATORY I SPRĘŻYNY
+0	AUTO	CUST_REGION_SKIRT	LISTWA
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	BUTLA NITRO
+0	AUTO	CUST_QUICK_FORCED_DI3	Dzięki tej modyfikacji ilość powietrza wtłaczanego do silnika zwiększy się jeszcze bardziej. Poprawiona wydajność całego układu pozwoli osiągnąć parametry zbliżone do samochodu wyścigowego.
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	PODPÓRKI DO JAZDY NA DWÓCH KOŁACH
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	nie możemy mówić o tym samochodzie
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Jesteś w posiadaniu maksymalnej liczby samochodów ({0:d}). ^Sprzedaj jeden z wozów, aby móc dokonać nowego zakupu.
+0	AUTO	CUST_CUSTOMIZE_MAIN	MODYFIKACJA
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	To ulepszenie pozwala przeprogramować komputer sterujący silnikiem, dzięki czemu możliwe jest spalanie większej ilości paliwa i powietrza. Wytwarzana jest większa moc, co pozwala łatwiej wyprzedzać przeciwników przy wyjściu z łuku.
+0	AUTO	CUST_BLUEPRINT_HEADER	ZMODYFIKUJ WZÓR
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	PROCENT ZWYCIĘSTW - DRAG
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	UKŁAD WYDECHOWY
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	WYBIERZ
+0	AUTO	CUST_PAINT_GROUP_CHROME	CHROM
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	LICZBA UDOSTĘPNIANYCH WZORÓW
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	DOŁADOWANIE
+0	AUTO	FE_STATS_DRIFT_RACES	WYŚCIGI W TRYBIE DRIFTU
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	W miarę zwiększania mocy silnika konieczne jest stosowanie ulepszeń, które pozwolą skutecznie przenieść ją na koła napędowe. Tutaj liczą się sprzęgła, wały napędowe oraz dyferencjały o ograniczonym poślizgu.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	STATYSTYKI OSIĄGÓW
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBOSPRĘŻARKA
+0	AUTO	CUST_SLOT_SHIFTER	DŹWIGNIA ZMIANY BIEGÓW
+0	AUTO	CUST_DYNO_TEST	TEST DYNAMOMETRYCZNY
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japońscy kierowcy zbudowali w tokijskim porcie wymagający tor wyścigowy - Tokyo Dockyard, wykorzystując niemal każdy możliwy element miejskiego krajobrazu.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	WYBIERZ SAMOCHODY DO WYZWANIA
+0	AUTO	CUST_CAT_SPEED_NITROUS	To ulepszenie zapewnia chwilowy przyrost mocy, który może dać Ci konieczne do zwycięstwa ułamki sekund.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Mustang 5 generacji znany jest ze swego retro-futuryzmu.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	PROCENT ZWYCIĘSTW
+0	AUTO	RD_CUSTOM_SELECT	Czy chcesz rozegrać dzień wyścigów?
+0	AUTO	KING_FLOW_CASH_REWARD	NAGRODA PIENIĘŻNA
+0	AUTO	CUST_CAT_SPEED_BRAKE	To ulepszenie zwiększa skuteczność hamowania pojazdu, dzięki zastosowaniu wyczynowych tarcz i klocków hamulcowych. Hamulce są ważnym elementem każdego dobrze stuningowanego wozu.
+0	AUTO	CUST_SPEED_TUT_AWD	Napęd na cztery koła zapewnia lepszą trakcję, szczególnie podczas startu i wychodzenia z łuków. Wykorzystaj to.^
+0	AUTO	CUST_SPEED_TUT_FWD	Jazda samochodem z napędem na przednie koła to walka z prawami fizyki. Wybierając jednak odpowiednie opcje tuningu, można z takiego pojazdu stworzyć maszynę wyścigową. Pierwszym krokiem jest ograniczenie podsterowności poprzez usztywnienie przedniego zawieszenia. W następnej kolejności należy zainstalować dyferencjał o ograniczonym poślizgu, co pozwoli wyeliminować nierównomierne przeniesienie mocy na koła.
+0	AUTO	CUST_SPEED_TUT_RWD	Największymi zaletami napędu na tylne koła jest równowaga i możliwość sterowania za pomocą przepustnicy. Należy jednak unikać przesadnie nadsterownych ustawień.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	SYSTEM CHŁODZENIA
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Cosworth stworzony został na potrzeby homologacji i nigdy tak naprawdę nie należał do Escortów. Tym niemniej Escort RS stał się reprezentantem swojej epoki i jest jednym z najbardziej znanych wozów wszechczasów.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	NAJSZYBSZE 0-100 M/H
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs znajduje się na wyżynnym terenie kalifornijskiej pustyni. Charakteryzuje się dużymi różnicami wysokości i umożliwia osiągnięcie wysokiej średniej prędkości.
+0	AUTO	RACE_DAY_DIFFICULTY	POZIOM TRUDNOŚCI
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Nie masz dość gotówki, aby nabyć wszystkie kupony znajdujące się w koszyku.
+0	AUTO	CAR_SELECT_CHALLENGER	Przedstawiciel pierwszej generacji tych samochodów i pierwsza próba firmy Dodge wejścia na rynek wozów typu pony car. Model oparty na nieco starszym projekcie, w zamierzeniach był to samochód o napędzie turbinowym.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Wybór wolnego slotu dnia wyścigów pozwoli Ci stworzyć własny dzień wyścigów. Wybrana ikona będzie go reprezentować na mapie dni wyścigów, pod nazwą: Mój dzień wyścigów.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Napęd na cztery koła zapewnia lepszą trakcję, szczególnie podczas startu i wychodzenia z łuków. Wykorzystaj to.^
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Jazda samochodem z napędem na przednie koła to walka z prawami fizyki. Wybierając jednak odpowiednie opcje tuningu, można z takiego pojazdu stworzyć maszynę wyścigową. Pierwszym krokiem jest ograniczenie podsterowności poprzez usztywnienie przedniego zawieszenia. W następnej kolejności należy zainstalować dyferencjał o ograniczonym poślizgu, co pozwoli wyeliminować nierównomierne przeniesienie mocy na koła.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Największymi zaletami napędu na tylne koła jest równowaga i możliwość kontrolowania toru jazdy za pomocą przepustnicy. Należy jednak unikać przesadnie nadsterownych ustawień.
+0	AUTO	CUST_SELL_CAR	Sprzedaj samochód
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Elitarny tor testowy firmy Porsche w Lipsku zawiera kopie najsłynniejszych zakrętów w sportach wyścigowych.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	LISTWY BOCZNE
+0	AUTO	CUST_SLOT_FUEL_DESC	Do uzyskania znacznej mocy konieczny jest wydajny system podawania paliwa. Większa pompa paliwowa w połączeniu z większymi wtryskiwaczami i zmodyfikowanymi przewodami paliwowymi pozwoli uzyskać znacznie większą moc.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Dobry samochód przeznaczony do driftu jest przewidywalny w momencie utraty przyczepności, co w połączeniu z nadsterownością pozwoli łatwo i niezwykle stabilnie pokonać zakręt.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	PRZYJACIELE
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Ranek
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Wystąpił błąd dopasowywania graczy.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	To superszybka trasa obejmująca kilka mil autostrady w Tokio. Zawiera pętle, odcinki proste oraz sekcje w tunelach.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	LICZBA GIER RANKINGOWYCH
+0	AUTO	CUST_TUNE	TUNING
+0	AUTO	CUST_VISUALS_TITLE	ELEMENTY WYGLĄDU
+0	AUTO	FE_STATS_CLUB_NAME	NAZWA KLUBU
+0	AUTO	CUST_INSTALL	Zainstaluj
+0	AUTO	RACEDAY_SAVE_CONFIRM	Czy na pewno chcesz zapisać swój dzień wyścigów?
+0	AUTO	FE_MATCHMAKING_JOINING	Dołączanie do sesji gry…
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	ZAWÓR WYLOTOWY
+0	AUTO	CUST_SLOT_ROLL_CAGE	RAMA
+0	AUTO	CAR_LOT_NO_DRIFTING	BRAK DRIFTINGU
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	To ulepszenie zastępuje wewnętrzne elementy silnika bardziej wytrzymałymi częściami, które umożliwiają pracę przy wyższych obrotach na minutę.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	UŻYJ KUPONU PEŁNEJ NAPRAWY
+0	AUTO	CUST_PACKAGE_VISUAL	Pakiet wizualizacji
+0	AUTO	CUST_EMPTY_BLUEPRINT	Stwórz nowy wzór
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Podaj teraz swój sekretny lub promocyjny kod, aby otrzymać nagrodę.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Po zainstalowaniu tego rajdowego ulepszenia Twój samochód będzie doskonale nadawał się na szutry.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Wybierz poziom trudności dla swego dnia wyścigów. Wpłynie on na SI oraz maksymalny poziom dostępnych samochodów.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	SAMOCHODY W TRYBIE KARIERY
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	UKOŃCZONE WYŚCIGI DLA 12 GRACZY
+0	AUTO	CUST_REGION_FRONT_TIRE	PRZEDNIA OPONA
+0	AUTO	FE_STATS_DRAG_WINS	ZWYCIĘSTWA W DRAGU
+0	AUTO	RACE_DAY_SAVE_NAME	MÓJ DZIEŃ WYŚCIGÓW
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Masz za mało pieniędzy na dokonanie zakupu!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	NAJWIĘKSZY KĄT NA DWÓCH KOŁACH
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Turbo pompuje powietrze.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Rozwiercając silnik można zwiększyć jego pojemność, a co za tym idzie ilość spalanego w cylindrach paliwa i uzyskać tym samym większą moc.
+0	AUTO	CUST_CAT_GRIP_BRAKE	To ulepszenie zwiększa skuteczność hamowania pojazdu, dzięki zastosowaniu wyczynowych tarcz i klocków hamulcowych. Hamulce są ważnym elementem każdego dobrze stuningowanego wozu.
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	ZAWODY WYŚCIGOWE
+0	AUTO	CUST_SLOT_STEERING_KIT	ZESTAW STEROWNICZY
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	PROCENT ZWYCIĘSTW - GRIP
+0	AUTO	CUST_BLUEPRINT_RENAME	Zmiana nazwy wzoru...
+0	AUTO	RACE_DAY_SLOT_FILLED	WYPEŁNIONE
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	NAJLEPSZY WYNIK - DRIFT
+0	AUTO	CUST_VINYLS	NAKLEJKI
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Wyczynowe wahacze wykonane z materiałów wysokiej jakości zapewniają większy zakres możliwości regulacji kąta pochylenia koła, a także znacznie lepszą ogólną geometrię.
+0	AUTO	FE_STATS_HUBS_WON	WYGRANE DNI WYŚCIGÓW
+0	AUTO	CUST_CAT_GRIP_NITROUS	To ulepszenie zapewnia chwilowy przyrost mocy, który może dać Ci konieczne do zwycięstwa ułamki sekund.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	BRAK UPRAWNIEŃ
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Ustal liczbę kuponów naprawy dla Twego dnia wyścigów. Tworząc solowy dzień wyścigów, otrzymasz równą liczbę kuponów naprawy i kuponów pełnej naprawy.
+0	AUTO	CAR_SELECT_CAMAROSS	Camaro pierwszej generacji opisywano jako małe, złośliwe zwierzę, które żywi się Mustangami.
+0	AUTO	FE_STATS_BEAT_MODERATOR	POKONAJ MODERATORA
+0	AUTO	CUST_SLOT_HANDBRAKE	HAMULEC RĘCZNY
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Modyfikacja pozwala na jeszcze szybszą i bardziej precyzyjną zmianę biegów, a ponadto zmniejsza wagę części odpowiadających za przekazanie mocy silnika na koła, pozwalając na osiągnięcie standardu samochodów wyścigowych.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Modyfikacja pozwala na jeszcze szybszą i bardziej precyzyjną zmianę biegów, a ponadto zmniejsza wagę części odpowiadających za przekazanie mocy silnika na koła, pozwalając na osiągnięcie standardu samochodów wyścigowych.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Modyfikacja pozwala na jeszcze szybszą i bardziej precyzyjną zmianę biegów, a ponadto zmniejsza wagę części odpowiadających za przekazanie mocy silnika na koła, pozwalając na osiągnięcie standardu samochodów wyścigowych.
+0	AUTO	COMMON_CLASS_HEADER	KATEGORIA
+0	AUTO	CAR_SELECT_FORDGT	Forda GT stworzono na pamiątkę dominacji firmy Ford w wyścigach pod koniec lat sześćdziesiątych. Stanowi on nowoczesną wersję klasycznego GT40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	STATYSTYKI OSIĄGÓW
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ROTORY
+0	AUTO	CUST_QUICK_INTERNALS_D3	Ta modyfikacja na krótki czas pozwala Twojemu silnikowi utrzymać znacznie większe obroty, niż normalnie.
+0	AUTO	CUST_QUICK_INTERNALS_G3	Dzięki tej modyfikacji w silniku wozu wyścigowego znajdą się jeszcze wytrzymalsze podzespoły, pozwalające na zwiększenie mocy i obrotów.
+0	AUTO	CUST_QUICK_INTERNALS_S3	Elementy silnika dla próby prędkości 3 poziomu
+0	AUTO	CUST_SLOT_PISTONS	TŁOKI
+0	AUTO	CUST_CAT_DRIFT_NITROUS	To ulepszenie zapewnia chwilowy przyrost mocy, który może dać Ci konieczne do zwycięstwa ułamki sekund.
+0	AUTO	FE_STATS_BEST_LAP_TIME	NAJLEPSZY CZAS OKRĄŻENIA
+0	AUTO	FE_STATS_SKILLS_STATS	STATYSTYKI UMIEJĘTNOŚCI
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	PRZEGLĄD KARIERY
+0	AUTO	CUST_DRIFT_TUT_RWD	Skuteczny samochód do driftu musi być tak zestrojony, aby można go było łatwo wprowadzić w ślizg i w nim utrzymać.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Dzięki tej modyfikacji moc silnika zbliży się parametrami do poziomu prawdziwego samochodu wyścigowego.
+0	AUTO	CUST_SELL_CAR_DENIED	Nie można sprzedać wozu.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Elementy zawieszenia przystosowane do przenoszenia dużych obciążeń zabezpieczają samochód przed uginaniem się podczas przenoszenia dużych obciążeń, zapewniając tym samym maksymalną przyczepność kół.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Południe
+0	AUTO	CUST_SLOT_PULLEY_DESC	Poprzez zamontowanie w sprężarce koła napędowego o innej średnicy można uzyskać większe prędkości obrotowe, a co za tym idzie większe ciśnienie doładowania i w konsekwencji większą moc.
+0	AUTO	CUST_SLOT_IGNITION_DESC	Do uzyskania dużej mocy niezbędna jest potężna iskra. Zastosowanie przewodów zapłonowych i świec wykonanych z materiałów wysokoprzewodzących, takich jak platyna i iryd, może wpłynąć na poprawę ogólnej wydajności silnika.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	WYŁ.
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	ZESTAW LINEK HAMULCOWYCH
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	NAJWIĘKSZY MNOŻNIK
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	SYSTEM NITRO
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Serwer rankingowy statystyk jest obecnie wyłączony. Spróbuj ponownie później.
+0	AUTO	RACE_DAY_TRACK_CONFIG	KONFIGURACJA TRASY
+0	AUTO	CS_HEADER_DRAG_EVENT	ZAWODY DRAGU
+0	AUTO	CUST_QUICK_BRAKE_1	Ta modyfikacja pozwala osiągnąć krótszą drogę hamowania, niż w przypadku hamulców fabrycznych.
+0	AUTO	CUST_QUICK_BRAKE_2	Hamulce 2 poziomu
+0	AUTO	CUST_REPAIR_TITLE	NAPRAW SWÓJ SAMOCHÓD
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	W miarę zwiększania mocy silnika konieczne jest stosowanie ulepszeń, które pozwolą skutecznie przenieść ją na koła napędowe. Tutaj liczą się sprzęgła, wały napędowe oraz dyferencjały o ograniczonym poślizgu.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Podsumowanie
+0	AUTO	CUST_CAT_DRAG_FORCED	Tutaj liczy się czysta moc. Elementy turbosprężarki zaprojektowano w taki sposób, aby uzyskać jak największą moc przy otwartej przepustnicy. Zastosowanie takich części będzie miało ogromny wpływ na prędkości zmierzone w punktach pomiarowych.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Czy chcesz rozegrać wybrany dzień wyścigów?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Czy chcesz zapisać zmiany wprowadzone w tym wzorze?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	To ulepszenie wzmacnia elementy przeniesienia napędu, wał napędowy, dyferencjały i półosie.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Spowoduje to porzucenie wszystkich zmian wprowadzonych w tym wzorze. Anulować zmiany?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Zmiana nazwy wzoru...
+0	AUTO	CUST_FILTER_MIRRORS	LUSTERKA
+0	AUTO	ENTER_PRESELL_CODE	PODAJ KOD PROMOCYJNY
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	POBIERANIE NIEUDANE
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	LICZBA DECYDUJĄCYCH ZWYCIĘSTW
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Modyfikacja pozwala przeprogramować elektronikę umieszczoną w silniku, aby maksymalnie zwiększyć jego wydajność.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	NAJLEPSZY CZAS REAKCJI
+0	AUTO	CAR_SELECT_MK5GTI	Mk5 GTI to najnowsza odsłona oryginalnego modelu trzydrzwiowego. Dwulitrowy silnik FSi z turbodoładowaniem o mocy początkowej 200 KM, którą można bez problemu zwiększyć.
+0	AUTO	CAR_SELECT_MK5R32	Wystarczy wziąć wersję trzydrzwiową, dodać silnik V6, napęd na cztery koła, a oto co uzyskamy.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Po ustawieniu odpowiedniej konfiguracji zawieszenia, nie powodującej zbytniej podsterowności lub nadsterowności, kierowca otrzyma samochód, który jest zarówno szybki, jak i łatwy w prowadzeniu.^
+0	AUTO	CUST_SLOT_CONTROL_ARMS	WAHACZE
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Przy tak ogromnej mocy niezbędne jest sztywne zawieszenie, dzięki któremu samochód utrzyma się na trasie.
+0	AUTO	CUST_SLOT_BODY	MODYFIKACJA NADWOZIA
+0	AUTO	CUST_SLOT_HOOD	MASKA
+0	AUTO	CUST_SLOT_PADS	KLOCKI HAMULCOWE
+0	AUTO	FE_STATS_DRIFT_WINS	ZWYCIĘSTWA W TRYBIE DRIFTU
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	To ulepszenie polega na przeprogramowaniu komputera sterującego silnikiem, dzięki czemu zwiększona zostaje ilość spalanego paliwa i powietrza. Uzyskana moc pozwala na zmniejszenie przyczepności kół i pokonanie mety poślizgiem.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	ZMIANA USTAWIEŃ
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	ROZBITE WOZY W KARIERZE
+0	AUTO	RD_CREATE_RD	Czy chcesz stworzyć dzień wyścigów?
+0	AUTO	FE_STATS_DRAG_RACES	LICZBA WYŚCIGÓW DRAG
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	WSPÓŁCZYNNIK ROZŁĄCZEŃ
+0	AUTO	CUST_REGION_FRONT_WHEEL	PRZEDNIE KOŁA
+0	AUTO	CAR_SELECT_ECLIPSE	2G Eclipse jest podatny na przesunięcie korbowodu.
+0	AUTO	CAR_LOT_TITLE	PARKING
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Wybór zajętego slotu dnia wyścigów pozwala zapoznać się z informacjami na temat tego dnia wyścigów oraz na jego usunięcie.
+0	AUTO	CAREER_MAP_TITLE	MAPA KARIERY
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	NAJLEP. WYNIK DRIFTU - PROWADZ.
+0	AUTO	CUST_SLOT_CRANKSHAFT	WAŁ KORBOWY
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	WYGRANY SAMOCHÓD
+0	AUTO	CAR_SELECT_R34GTR	Samochód, który definiuje scenę tuningu i ustawia poprzeczkę dla ewentualnych konkurentów.
+0	AUTO	CS_HEADER_DRIFT_EVENT	ZAWODY W DRIFT'CIE
+0	AUTO	RACE_DAY_MULTIPLAYER	GRA WIELOOSOBOWA
+0	AUTO	CUST_SLOT_CRANK_DESC	Fabryczne wały korbowe nie są w stanie wytrzymać obciążeń, jakie powstają przy wytwarzaniu dużej mocy. W przypadku silników wytwarzających więcej niż 500 KM konieczne jest zastosowanie kutych wałów korbowych.
+0	AUTO	CAR_SELECT_COBALTSS	Posiada silnik z kompresorem o pojemności 2.0 l. Cobalt jest następcą Cavaliera, w założeniach miał być rywalem wozów takich jak Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} ST
+0	AUTO	CAR_SELECT_350Z	To piąty model z serii Z. Napęd na tylne koła, sportowe coupe typu 2+2.
+0	AUTO	CAR_SELECT_997T	Samochód posiada silnik o pojemności 3,6 l, od sześćdziesiątki do setki rozpędza się w ciągu jednej sekundy.
+0	AUTO	CAR_SELECT_AE86	Tak zwany Hachi-Roku. To ostatni model z napędem na tylne koła.
+0	AUTO	CAR_SELECT_CTSV	CTSV to pierwszy samochód wypuszczony w ramach serii Cadillac V. Jego zadaniem była rywalizacja z europejskimi wozami sportowymi typu sedan.
+0	AUTO	CAR_SELECT_EVO9	EVO IX posiada dwulitrowy silnik, 16-zaworowy silnik z turbodoładowaniem i napęd na cztery koła. Od czasu swojego powstania jest wzorem dla szybkich i zwrotnych samochodów, zwłaszcza w przemyśle tuningowym.
+0	AUTO	CAR_SELECT_EVOX	EVO X jest szybszy niż Stig.
+0	AUTO	CAR_SELECT_GTON	Pontiac GTO to północno-amerykańska wersja platformy Holden V posiadająca silnik LS2 z Corvetty.
+0	AUTO	CAR_SELECT_GTOO	Niektórzy uważają, że to pierwszy w historii muscle car.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Ekipa pracująca nad tym wozem składała się z grupy specjalnie dobranych fachowców Forda (tzw. SVT - Special Vehicle Team) i samego Carrolla Shelby'ego, tak więc było niemal pewne, że samochód zrobi furorę. Rezultaty tej współpracy miały przyprawić o zachwyt miłośników Mustanga i innych szybkich wozów: moc 450 KM, moment obrotowy 450 f./s., tarcze hamulcowe Brembo, 19-calowe koła oraz cena w okolicach modelu Mustang Cobra. Według projektantów model Shelby Cobra GT500 z 2006 roku jest najszybszym w historii Mustangiem, wprowadzonym do produkcji seryjnej.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	ABY ODBLOKOWAĆ TE MISTRZOSTWA
+0	AUTO	CUST_REPAIR_USE_CASH	Zapłać gotówką
+0	AUTO	FE_STATS_FILTER_SKILLS	STATYSTYKI UMIEJĘTNOŚCI
+0	AUTO	FE_STATS_SPEED_RACES	PRÓBY PRĘDKOŚCI
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Zdefiniuj zawody
+0	AUTO	RD_DELETE_SHARED_RD	Czy chcesz usunąć udostępniony dzień wyścigów?
+0	AUTO	CAREER_OVERVIEW_HEADER	PRZEGLĄD KARIERY
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	RURY WYDECHOWE
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Wielokrotne zatrzymywanie samochodu prowadzi do przegrzewania układu hamulcowego, co w konsekwencji wydłuża drogę hamowania. Większy układ hamulcowy pozwala utrzymywać niską temperaturę i zapobiegać zmianom w jego skuteczności.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	To ulepszenie oznacza zastąpienie wewnętrznych elementów silnika mocniejszymi i wytrzymalszymi częściami, co pozwala na uzyskanie wyższej mocy i większej wytrzymałości silnika na wysokie obroty.
+0	AUTO	CL_DRIVETRAIN_ALL	Wszystkie rodzaje
+0	AUTO	CL_DRIVETRAIN_AWD	NA 4 KOŁA
+0	AUTO	CL_DRIVETRAIN_FWD	NAPĘD PRZEDNI
+0	AUTO	CL_DRIVETRAIN_RWD	NAPĘD TYLNY
+0	AUTO	FE_COMMON_MODE	TRYB
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	KOLEKTOR WLOTU POWIETRZA
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	REKORDY WYŚCIGÓW
+0	AUTO	CODE_ENTRY	WPROWADZENIE KODU
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Chcesz nabyć wszystkie kupony znajdujące się aktualnie w koszyku?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	UKŁAD WYDECHOWY
+0	AUTO	RACE_DAY_SPLIT_SCREEN	PODZIELONY EKRAN
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Kluczowe znaczenie ma utrzymywanie prędkości podczas pokonywania zakrętów, a także uzyskanie odpowiedniego przyspieszenia przy wyjściu z łuku. Im większa moc, tym łatwiej rozpędzać się przy wychodzeniu na prostą i uzyskiwać większe prędkości.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	LICZBA CZŁONKÓW KLUBU
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	ELEMENTY SILNIKA
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	To ulepszenie wzmacnia elementy przeniesienia napędu, wliczając w to wał napędowy, dyferencjał i półosie.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Wył. tunel aerodynam.
+0	AUTO	FE_COMMON_CONFIGURATION	KONFIGURACJA
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} KM
+0	AUTO	CS_HEADER_GRIP_EVENT	ZAWODY GRIP
+0	AUTO	CAR_SELECT_CIVIC	Honda Civic szóstej generacji to jeden z najpopularniejszych samochodów wśród tuningowców, zarówno w zawodach ulicznych, na torach wyścigowych, dragu jak i innych imprezach.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Dzień wyścigów usunięty
+0	AUTO	CAR_SELECT_E46M3	Trzecia wersja M3 - E46 - zadebiutowała w tamtym czasie z silnikiem BMW o najwyższej mocy w stosunku do zużycia paliwa.
+0	AUTO	CAR_SELECT_E92M3	E92 M3 posiada dach z włókna węglowego i napędzany jest silnikiem V8 (poprzednie M3 posiadały silniki V6).
+0	AUTO	CAR_SELECT_ELISE	Konstrukcja Elise drugiej generacji została wykonana z myślą o komforcie jazdy.
+0	AUTO	CAR_SELECT_FDRX7	FD RX-7 to jeden z najlepszych wozów do tuningowania, idealny zarówno do driftu jak i gripu. Prawdziwa legenda.
+0	AUTO	CAR_SELECT_IS350	Druga generacja IS to luksusowe coupe z napędem na tylne koła. Posiada smukłą, elegancką sylwetkę i opływowy tył.
+0	AUTO	CAR_SELECT_LP640	Dzięki silnikowi o pojemności 6,5 l, wyciągającemu 640 KM, LP650 jest na liście najszybszych samochodów na świecie.
+0	AUTO	CUST_SLOT_VALVE_DESC	To urządzenie kontroluje przepływ płynu hydraulicznego w systemie hamulcowym, umożliwiając zastosowanie większej siły hamowania z przodu lub z tyłu.
+0	AUTO	CAR_SELECT_SUPRA	Czwarta generacja modelu Supra w założeniach miała być lżejsza i bardziej zwrotna od poprzednika, podczas ślizgu osiągała 0.98g. W Stanach Zjednoczonych ostatni model tego samochodu zszedł z taśmy produkcyjnej w roku 1999, Japonia kontynuowała produkcję aż do roku 2002.
+0	AUTO	CUST_FILTER_ALL_PARTS	WSZYSTKIE CZĘŚCI
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Ta modyfikacja pozwala maksymalnie zwiększyć wagę wozu w okolicy kół napędowych, jednocześnie zmniejszając nacisk na przednie opony.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Ten zestaw pozwala na jeszcze szybsze i znacznie bardziej precyzyjne pokonywanie zakrętów. Podczas jazdy po asfalcie gwarantuje niemal 100% przyczepność.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Ten zestaw pozwala na jeszcze szybsze i znacznie bardziej precyzyjne pokonywanie zakrętów, nawet przy maksymalnej prędkości. Podczas jazdy po asfalcie gwarantuje niemal 100% przyczepność.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Nie znaleziono pasujących rozgrywek lub graczy. Spróbuj ponownie.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Zdefiniuj zawody
+0	AUTO	FE_STATS_CLUB_LEADER	LIDER KLUBU
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Niemiecki Autobahnring to połączona sieć dróg szybkiego ruchu, która zawiera sekcje Autobahnu, a także tunele i pochyłe zakręty.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Anulowanie poszukiwania rozgrywki…
+0	AUTO	CUST_SLOT_DIFF_DESC	Tutaj moc zostaje ostatecznie przekazana na półosie i dalej na koła.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Czy na pewno chcesz zastąpić wskazany dzień wyścigów?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	LICZBA ZWYCIĘSTW PRZED LIDEREM
+0	AUTO	CAR_SELECT_ZONDAF	Wielu dziennikarzy z pism samochodowych na całym świecie uważa, że Zonda F to jedna z najszybszych maszyn na naszej planecie.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Aby opony ściśle przylegały do nawierzchni, usztywniono przedni i tylny stabilizator poprzeczny, normalne tuleje zastąpiono uretanowymi i zastosowano wyścigowe amortyzatory.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Mój dzień wyścigów^Zaprojektuj i stwórz własny dzień wyścigów. Stwórz dzień wyścigów solo lub dla wielu graczy i rywalizuj z innymi w sieci. Stwórz dzień wyścigów w trybie podzielonego ekranu i rzuć wyzwanie przyjacielowi.^^Udostępnij w sieci swój dzień wyścigów solo lub dla wielu graczy i zaproś ich do udziału w stworzonych przez Ciebie zawodach.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis znajduje się na górskim szczycie, w odosobnionej części Japonii. Choć tor ma mroczne pochodzenie, to trasa szybkiego ruchu jest nowa i czysta.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Sztywniejsze amortyzatory w połączeniu z obniżonym środkiem ciężkości, który zapewniają wyczynowe sprężyny, mogą znacznie poprawić zdolność pojazdu do szybkiego pokonywania zakrętów.
+0	AUTO	CUST_CAT_DRAG_NITROUS	To ulepszenie zapewnia chwilowy przyrost mocy. Podtlenek azotu to niezbędne wyposażenie dla wszystkich uczestników wyścigów typu drag.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Kierowcy wietrznego miasta zajęli opuszczony pas startowy i uznali go za swój nowy tor wyścigowy - Chicago Airfield. Tor ten posiada kilka tras dla wyścigów w trybie driftu, gripu oraz dragu.
+0	AUTO	FE_STATS_TOP_SPEED	PRĘDKOŚĆ MAKSYMALNA
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	ZESTAW REGULACJI CIŚNIENIA
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	LICZB. OSIĄG. MAKS. TRAKCJI
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	NAJSZYBSZE 0-60 M/H
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	STEROWANIE SPRĘŻANIEM
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Na zboczu tej góry mieści się Ebisu, duchowa ojczyzna driftingu. Wyzwanie Fukuyamy przecina tereny wiejskie i skręca na drogę szybkiego ruchu.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Zmniejszając masę przekładni i kół zębatych, które napędzają wał rozrządu, można ograniczyć energię pochłaniana na jego obracanie, zwiększając tym sposobem moc wyjściową.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	ŁĄCZ. L. ZWYCIĘSTW BEZ USZKODZEŃ
+0	AUTO	CUST_QUICK_HANDLING_1	Dzięki tej modyfikacji samochód będzie lepiej wchodził w zakręty. Ponadto poprawi się jego stabilność przy większych prędkościach.
+0	AUTO	CUST_QUICK_HANDLING_2	Pakiet prowadzenia 2 poziomu
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Choć nitro doskonale nadaje się do chwilowego zwiększenia uzyskiwanej mocy, zastosowanie zbyt dużej jego ilości może przekraczać mechaniczną wytrzymałość silnika. Zestaw sterowania ciśnieniem zapewnia, że silnik będzie pracować pod takim ciśnieniem, z jakim może sobie poradzić.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Czy na pewno chcesz zmienić lokację? Spowoduje to anulowanie wybranych dotychczas zawodów.
+0	AUTO	CUST_VINYL_LAYER_TITLE	MENU WARSTW
+0	AUTO	CUST_CAT_DRAG_INTERNALS	To ulepszenie oznacza wymianę elementów wewnętrznych silnika na części kute - przydaje się to szczególnie podczas niezwykle wymagających wyścigów na 1/4 mili.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Trasa wyścigowa Infineon w północnej Kalifornii to skomplikowany ciąg zakrętów na różnych wysokościach. Jeden zły ruch i tracisz prędkość lub wbijasz się w ścianę.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	PRÓBA^PRĘDKOŚCI
+0	AUTO	FE_STATS_CLUB_POINTS	PUNKTY KLUBU
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	To ulepszenie pozwala przeprogramować komputer sterujący silnikiem, dzięki czemu możliwe jest spalanie większej ilości paliwa i powietrza. Wytwarzana jest większa moc, co pozwala łatwiej wyprzedzać przeciwników przy wyjściu z łuku.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Czy na pewno chcesz usunąć zawody %s ?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Dzień wyścigów zapisany
+0	AUTO	CUST_QUICK_NITROUS_DI3	Dzięki tej modyfikacji Twój silnik otrzyma zastrzyk mocy rzędu 50 - 250 KM, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	CUST_QUICK_POWER_1	Ten podstawowy zestaw ulepszeń zwiększy zakres obrotów silnika Twojego samochodu, nadając mu nieco bardziej agresywny profil.
+0	AUTO	CUST_QUICK_POWER_2	Ten zestaw powstał na bazie ulepszeń z pierwszego etapu modyfikacji. Zwiększa ogólną moc i wydajność wozu, a dźwięk silnika staje się również bardziej agresywny.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park to niesamowicie zwarty i pokręcony tor, znajdujący się w samym środku irlandzkiego krajobrazu.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	SAMOCHÓD ZAPASOWY
+0	AUTO	FE_STATS_GRIP_RACES	LICZBA WYŚCIGÓW GRIP
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAŻ
+0	AUTO	CUST_PACKAGE_POWER	PAKIET NAPĘDU
+0	AUTO	CUST_OWNED	WŁASNE
+0	AUTO	CUST_PAINT	LAKIER
+0	AUTO	CUST_PARTS	CZĘŚCI NADWOZIA
+0	AUTO	CUST_PACKAGE_TITLE	PAKIET
+0	AUTO	CS_OPTION_CAR_SELECT	Wybierz samochód
+0	AUTO	RACE_DAY_SLOT_EMPTY	DOSTĘPNE
+0	AUTO	FE_STATS_ACHIEVEMENTS	OSIĄGNIĘCIA
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Stworzenie dnia wyścigów z wyzwaniami pozwoli Ci określić samochody, z których będzie można korzystać podczas tych zawodów.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Hamulec ręczny pozwala Ci gwałtownie hamować
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Autostrada 318 to odcinek rozgrzanego słońcem asfaltu na pustyni w Nevadzie. Można tu jechać ponad 200 mil na godzinę, ale trzeba uważać na zwodniczo proste łuki.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Wyczynowe tarcze hamulcowe znacznie lepiej radzą sobie z odprowadzaniem ciepła niż części fabryczne. Dodatkowo mają większa średnicę i większą powierzchnię dostępną dla klocków hamulcowych, co w efekcie pozwala na uzyskanie większej siły hamowania.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	NAJLEPSZY WYNIK DRIFTU - GONIĄCY
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Modyfikacja pozwalająca dostosować zawieszenie tak, aby samochód mógł poślizgiem wchodzić w zakręty.
+0	AUTO	CUST_REGION_FRONT_BUMPER	PRZEDNI ZDERZAK
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	SZACOWANA WARTOŚĆ NETTO
+0	AUTO	CUST_SLOT_TRANSMISSION	SKRZYNIA BIEGÓW
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Portland International Raceway w pobliżu góry Rainier na północno-zachodnim wybrzeżu Pacyfiku to wymagająca trasa z doskonałym odcinkiem do wyścigów typu drag.
+0	AUTO	CUST_BLUEPRINT_SAVE	ZAKTUALIZUJ WZÓR
+0	AUTO	CUST_QUICK_NITROUS_1	Dzięki tej modyfikacji Twój silnik otrzyma minimalny zastrzyk mocy, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	CUST_QUICK_NITROUS_2	Dzięki tej modyfikacji Twój silnik otrzyma niewielki zastrzyk mocy, w postaci podtlenku azotu. Czasem może to oznaczać różnicę między pierwszym a drugim miejscem.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	W Teksasie wszystko jest większe, a tamtejszy tor wyścigowy jest tego najlepszym dowodem. Pełna zakrętów droga przecina tu owalny tor wyścigowy o dużym nachyleniu.
+0	AUTO	CAR_SELECT_CORVETTE	Ostatni model typu Sting Ray, Corvette drugiej generacji, znalazł się w piątce najlepszych sportowych samochodów wszechczasów.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	NAJWIĘCEJ ZDOBYTYCH SEKTORÓW
+0	AUTO	CL_DRIVETRAIN_HEADER	UKŁAD NAPĘDOWY
+0	AUTO	CUST_PACKAGE_HANDLING	Pakiet prowadzenia
+0	AUTO	FE_STATS_SPEED_WINS	ZWYCIĘSTWA W PRÓBACH PRĘDKOŚCI
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	NAJWIĘCEJ WYGRANYCH PKT. KONTR.
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	W rankingach tuningowców znajdują się najlepsi tuningowcy wzorów. Twoja pozycja uzależniona jest od procentu zwycięstw wszystkich udostępnianych przez Ciebie wzorów. Udostępniany wzór musi być wykorzystany w co najmniej 20 wyścigach, zanim pojawisz się w rankingach.

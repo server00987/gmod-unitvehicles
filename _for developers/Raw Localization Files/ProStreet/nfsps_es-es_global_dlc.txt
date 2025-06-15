@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Spanish_Global_DLC.bin
+#	File created on: 2025-05-24 11:18:32
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Super Club
+0	1A821602	0x1A821602	Speed Loop
+0	1A821603	0x1A821603	Ruta 1 primera parte
+0	1A821604	0x1A821604	Ruta 2 segunda parte
+0	1A821605	0x1A821605	Ruta 3 completa
+0	1A82161D	0x1A82161D	Puente de la bahía de Tokio
+0	1BB8601F	0x1BB8601F	Tu versión de NFS ProStreet es incompatible con la versión de la sesión del juego a la que quieres unirte. Para obtener mejor resultados, todos los jugadores tendrían que asegurarse de recibir las últimas actualizaciones. Visita NeedforSpeed.com para más detalles.
+0	35E21908	0x35E21908	¡El Pack extendido Energizer Lithium ya se puede descargar en el Bazar de Xbox LIVE!
+0	3EC4AB81	0x3EC4AB81	¡Diviértete!
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKIO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKIO EXPRESSWAY II
+0	42781C20	0x42781C20	ahora disponibles para descargar en el Bazar Xbox LIVE
+0	525DCCC5	0x525DCCC5	Pack extendido Energizer Lithium
+0	5959EB4C	0x5959EB4C	El jugador con el que quieres compartir todavía no ha recibido la última actualización. Debe actualizar Need for Speed antes de poder compartir este día de carrera.
+0	59C9AC1C	0x59C9AC1C	Booster Pack de Coca-Cola Zero.
+0	61098C88	0x61098C88	El jugador con el que quieres compartir todavía no ha recibido la última actualización. Debe actualizar Need for Speed antes de poder compartir este proyecto.
+0	6692EC80	0x6692EC80	El fichero que intentas usar no se puede cargar debido a que el contenido del paquete no está disponible.
+0	671480B8	0x671480B8	GRATIS - Pista de pruebas certificada de Porsche Leipzig
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	GRATIS - 2007 SEAT León Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokio Expressway
+0	71FD1C1D	0x71FD1C1D	Tokio Expressway II
+0	7A83FDB7	0x7A83FDB7	Juega como debería ser
+0	800472C1	0x800472C1	No, gracias
+0	82E2BDAE	0x82E2BDAE	El Booster Pack que has descargado es de un idioma que no coincide con el disco de juego. ¿Deseas descargar la versión correcta?
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	Gratuito
+0	88D1ECEE	0x88D1ECEE	Booster Pack de Coca-Cola Zero GRATUITO.
+0	88E17FE9	0x88E17FE9	¡Consigue esta descarga GRATUITA en el Bazar Xbox LIVE con nuevos circuitos, coches y eventos adicionales para el modo carrera y día de carrera!
+0	91F522D5	0x91F522D5	Busca el Árbol de carrera extendida y las pantallas de Día de carrera, así como los coches GRATUITOS en el garaje del modo carrera
+0	930C8172	0x930C8172	Gracias por descargar
+0	A76603FD	0xA76603FD	con el Booster Pack de Coca-Cola Zero GRATUITO.
+0	BCFBDE9A	0xBCFBDE9A	Need for Speed™ ProStreet Booster Pack no se puede descargar en este momento.
+0	C174E20F	0xC174E20F	Need for Speed™ ProStreet tiene que reiniciarse antes de que el nuevo contenido esté disponible. Habrá un período de tiempo de inactividad antes de que reinicie. ACEPTAR para comenzar.
+0	E4AF851F	0xE4AF851F	GRATIS - Circuito de Tokio de Japón
+0	E5E32468	0xE5E32468	Visita NeedforSpeed.com para más actualizaciones y más eventos
+0	E62B2319	0xE62B2319	GRATIS - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	¡Además incluye 14 coches nuevos como el Bugatti Veyron 16.4 y el Porsche 911 GT3! Visita NeedforSpeed.com para más detalles
+0	F39D0787	0xF39D0787	¡Descargar gratis ahora!
+0	F5663CFA	0xF5663CFA	¡Consigue ahora esta descarga GRATUITA con nuevos circuitos, coches nuevos y modos y días de carrera extendidos!
+0	FEEF54A9	0xFEEF54A9	¡Visita NeedforSpeed.com para más actualizaciones y más eventos!

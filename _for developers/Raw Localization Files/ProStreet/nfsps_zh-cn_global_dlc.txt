@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Chinese_Simp_Global_DLC.bin
+#	File created on: 2025-05-24 11:09:56
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Super Club
+0	1A821602	0x1A821602	Speed Loop
+0	1A821603	0x1A821603	Route 1前半
+0	1A821604	0x1A821604	Route 2后半
+0	1A821605	0x1A821605	Route 3完整
+0	1A82161D	0x1A82161D	Tokyo Bay Bridge
+0	1BB8601F	0x1BB8601F	你的《极品飞车 街头狂飙》版本与你尝试加入的游戏不匹配。^为了最佳效果，所有的玩家都需要确定获得了最新的更新。^访问NeedforSpeed.com获得详细信息。
+0	35E21908	0x35E21908	免费扩展包现已在Xbox LIVE卖场提供下载！
+0	3EC4AB81	0x3EC4AB81	尽情享受！
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKYO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKYO EXPRESSWAY II
+0	42781C20	0x42781C20	现已在Xbox LIVE卖场提供下载！
+0	525DCCC5	0x525DCCC5	扩展包
+0	5959EB4C	0x5959EB4C	你要共享的玩家尚未获得最新的游戏更新。他们必须先更^新他们的《极品飞车》才能获得此比赛日的共享。
+0	59C9AC1C	0x59C9AC1C	扩充包
+0	61098C88	0x61098C88	你要共享的玩家尚未获得最新的游戏更新。他们必须先更^新他们的《极品飞车》才能获得此蓝图的共享。
+0	6692EC80	0x6692EC80	你想载入的文件无法读取，因为内容已不存在。
+0	671480B8	0x671480B8	免费 - Porsche Leipzig的正式测试赛道
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	免费 - 2007 SEAT Leon Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokyo Expressway
+0	71FD1C1D	0x71FD1C1D	Tokyo Expressway II
+0	7A83FDB7	0x7A83FDB7	游戏就是应该那样
+0	800472C1	0x800472C1	不，谢谢
+0	82E2BDAE	0x82E2BDAE	你下载的扩充包语言版本与该游戏盘不匹配。^你想下载一个正确的版本吗？
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	免费
+0	88D1ECEE	0x88D1ECEE	免费的扩充包
+0	88E17FE9	0x88E17FE9	从Xbox LIVE卖场获得该免费下载，新赛道、新赛车、扩展的生涯模式和比赛日赛事！
+0	91F522D5	0x91F522D5	查看扩展的生涯树和比赛日画面，生涯车库里更有你的免费赛车！
+0	930C8172	0x930C8172	谢谢您下载
+0	A76603FD	0xA76603FD	带有免费的扩充包
+0	BCFBDE9A	0xBCFBDE9A	《极品飞车 街头狂飙》扩充包现在无法下载。
+0	C174E20F	0xC174E20F	《极品飞车 街头狂飙》需要重新启动后才可拥有新内容。^重起前将有短暂停滞。点击"好"开始。
+0	E4AF851F	0xE4AF851F	免费 - 日本的Tokyo Expressway
+0	E5E32468	0xE5E32468	访问NeedforSpeed.com获得更多更新资讯和社区活动
+0	E62B2319	0xE62B2319	免费 - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	新增14款新车，包括Bugatti Veyron 16.4和Porsche 911 GT3！详情请访问NeedforSpeed.com！
+0	F39D0787	0xF39D0787	现在就免费下载！
+0	F5663CFA	0xF5663CFA	现在就免费下载，获得新赛道、新赛车、扩展的生涯模式和比赛日赛事！
+0	FEEF54A9	0xFEEF54A9	访问NeedforSpeed.com获得更多更新资讯和社区活动！

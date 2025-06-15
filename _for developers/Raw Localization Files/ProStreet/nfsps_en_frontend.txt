@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\English_Frontend.bin
+#	File created on: 2025-05-24 11:12:22
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	TOTAL REPAIR COST
+0	AUTO	MODE_ALL	All Cars
+0	AUTO	CUST_VINYL_MOVE_LAYER	Move Layer Up/Down
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	ENGINE BLOCK
+0	AUTO	CAR_SELECT_MUSTANGGT	With a 4.6L V8, this 4th gen Mustang is the car that most of the world thinks of when they think of pony car.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	This upgrade replaces your existing engine internals with stronger, more durable parts, allowing for your engine to make more power and sustain higher RPMs.  ^
+0	AUTO	CUST_VISUAL_DECALS	DECALS
+0	AUTO	CUST_CUSTOMIZE	Customize Blueprint
+0	AUTO	CODE_ENTRY_VALID	Congratulations!  Your code has been accepted and your reward has been unlocked.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	CALIPERS
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	You have markers in your shopping cart that have not been purchased.  Exit anyway?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	ANTI-ROLL BARS
+0	AUTO	CUST_QUICK_HANDLING_D3	This upgrade combines stiffer suspension parts to keep the car fully planted in a straight line. ^
+0	AUTO	CUST_QUICK_HANDLING_G3	This upgrade combines stiffer suspension parts to keep the car fully planted in turns and on the straights. ^
+0	AUTO	CUST_QUICK_HANDLING_S3	This upgrade combines stiffer suspension parts to keep the car fully planted at high speeds in turns and on the straights.^
+0	AUTO	CUST_REGION_REAR_TIRE	REAR TIRE
+0	AUTO	FE_STATS_BEST_SECTOR	BEST SECTOR
+0	AUTO	CL_FREE_CAR_MARKER	FREE CAR MARKER
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	DEFINE RACE EVENTS
+0	AUTO	CUST_QUICK_BRAKE_DI3	This upgrade makes sure that maximum stopping time is attained but allows and even encourages the tires to brake traction under deceleration.^
+0	AUTO	CUST_BP_APPLY_CONFIRM	It costs {0:d} to purchase all the parts required in order to apply this Blueprint to your car. Do you wish to proceed?
+0	AUTO	CUST_SLOT_BUSHING_KIT	BUSHING KIT
+0	AUTO	FE_STATS_GAMES_PLAYED	GAMES PLAYED
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUS CARS
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	LAYER {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	PACKAGE INFORMATION
+0	AUTO	CUST_SLOT_NITROUS_DESC	Nitrous, a highly combustible gas, can be injected into the cylinder during combustion to vastly increase temporary power output.^
+0	AUTO	CUST_QUICK_MANAGEMENT_1	This upgrade reprograms the engine computer to maximize performance.^
+0	AUTO	CUST_QUICK_MANAGEMENT_2	This upgrade reprograms the engine computer to maximize performance.^
+0	AUTO	CS_HEADER_SPEED_EVENT	SPEED CHALLENGE EVENTS
+0	AUTO	CUST_SLOT_HEADS_DESC	By porting the valves on your cylinder head, you can increase the flow of air into the engine and exhaust gases out of the engine. This will result in higher horsepower.^
+0	AUTO	CUST_VINYL_ADDLAYER	ADD NEW LAYER
+0	AUTO	CUST_CAT_SPEED_FORCED	A low-lag, quick-spooling turbo will give you a useable power curve and an unparalleled advantage on the track or on the street.^
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	HIGHEST MULTIPLIER
+0	AUTO	RACE_MODE_GRIP_MODE	GRIP^MODE
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	The next step is defining the race events for your Race Day.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	NUMBER OF RACES
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	NUMBER OF CAREER GAMES
+0	AUTO	RACE_DAY_ADD_EVENT	ADD EVENT
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	This Blueprint is incompatible with your version of Need for Speed™ ProStreet and can not be applied.  Visit NeedforSpeed.com for information on updates and new game content.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	WHEEL PAINT
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Set as Active Blueprint
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	ENGINE MANAGEMENT
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	WIN REWARD
+0	AUTO	CUST_PAINT_BODY	PAINT
+0	AUTO	CUST_PAINT_RIMS	WHEELS
+0	AUTO	CUST_PAINT_TINT	WINDOW TINT
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	No error has occurred.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Are you sure you want to delete this Race Day? Your custom settings and records for this Race Day will be lost.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	LANGUAGE SELECT
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Bushings made from stiffer materials such as urethane or aluminum will allow your car to turn tighter with less body roll.^
+0	AUTO	HUB_DIFFICULTY_2	MEDIUM
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	HIGHEST TOP SPEED
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Select purchase method
+0	AUTO	CUST_SLOT_INTAKE_DESC	The more cool air an engine receives, the better it can perform. Also, the cooler the air is, the more power the engine makes. ^
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	With an emphasis on oversteer, the big, rear anti-sway bar, aluminum bushings and removal of the front sway bar will make it a lot easier to turn your car sideways.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Do you wish to leave the Car Select screen and return to the Career Map?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Saving Race Day...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	HIGHEST RATED CAR TUNER
+0	AUTO	RACE_MODE_DESCRIPTION	Choosing your race mode will determine which events this car can compete in.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	You must install AutoSculpt parts to access wind tunnel!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	The higher capactiy the air intake, the more air your engine will receive at a time. With a high-flow, smooth intake, the engine will be able to attain much more of it's peak power potential.^
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	TOP TOTAL CHECKPOINT SPEED
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	FUEL SYSTEM
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	With a turbo 2.3L motor pushing 260+hp, a LSD, and a 6-speed tranny, the Speed 3 is a modern hot hatch.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels for a race car standard.^
+0	AUTO	CAR_SELECT_INTEGRA	The Kouki, with its high revving B series motor is an incredibly popular car with racing enthusiasts due to its many motor options and great handling platform.
+0	AUTO	FE_HUBMAP_ETREE_CARS	CARS
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	This upgrade increases the overall power output of the engine. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	This upgrade goes a step further and takes power toward that of a true race car.^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Managing your speed throughout corners, as well as paying proper attention to corner exit acceleration, is key. More engine power increases the ability to rocket out from turns and reach higher speeds.^
+0	AUTO	GARAGE_REPAIR_CONFIRM	Are you sure you wish to repair this car?
+0	AUTO	CAR_SELECT_S3	The 2nd gen S3 is not sold in North America.
+0	AUTO	CAR_SELECT_S4	Tamer than the RS4, the S4 also sports a 4.2L V8.
+0	AUTO	CAR_SELECT_TT	The mark 2 version of the TT has received numerous car of the year awards.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	NITROUS OXIDE
+0	AUTO	FE_STATS_DOWNLOADING_STATS	DOWNLOADING STATS
+0	AUTO	CUST_QUICK_FORCED_D3	Drag stage 3 forced induction
+0	AUTO	CUST_QUICK_FORCED_G3	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	AUTO	CUST_QUICK_FORCED_S3	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	AUTO	CUST_PAINT_GROUP_CANDY	CANDY
+0	AUTO	CUST_PAINT_GROUP_GLOSS	GLOSS
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATTE
+0	AUTO	CUST_DRIVETRAIN_GROUP	DRIVETRAIN
+0	AUTO	CUST_PAINT_GROUP_PEARL	PEARLESCENT
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	This upgrade further reprograms the engine computer to maximize performance for hard acceleration.^
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	This upgrade further reprograms the engine computer to maximize performance.^
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	This upgrade further reprograms the engine computer to maximize performance.^
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Calipers with larger or multiple pistons can more evenly distribute the surface area of a brake pad to the rotor, resulting in more braking power.^
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Press START to begin
+0	AUTO	RACE_DAY_SLOT_ID	SLOT {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	MUFFLERS
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	An error occurred while trying to join the race.  Please try again.
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	TRANSMISSION COOLING
+0	AUTO	RACE_MODE_DRIFT_MODE	DRIFT^MODE
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Which wheels would you like to customize?
+0	AUTO	CUST_SLOT_FLYWHEEL	FLYWHEEL
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Racing seats keep you in place.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Changing modes will delete all previous Blueprints for this car including all visual and vinyl customizations. Are you sure you wish to proceed?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	TIME SPENT IN CAREER RACES
+0	AUTO	CUST_DRAG_TUT_AWD	All-wheel-drive is a huge advantage off the line, enabling monstrous traction to help every single horsepower dig from a stop.^
+0	AUTO	CUST_DRAG_TUT_FWD	A front-wheel-drive's biggest hurdle when it comes to drag racing is maintaining traction. The more power you have means more emphasis on keeping the tires from spinning. Building a fast FWD drag car is about creating power, and getting it to the ground. Once you go beyond the basic power upgrades, your emphasis has to be on controlling that power and traction.
+0	AUTO	CUST_DRAG_TUT_RWD	The key to a drag setup is traction. Eliminate wheelhop from the car and manage your wheelspin for fast times. This is even more true in cars with large power outputs.^
+0	AUTO	CUST_ENGINE_GROUP	ENGINE
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	The Need for Speed server has canceled the query.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Tires stick you to the ground.
+0	AUTO	CAR_SELECT_GTRPROTO	The GTR Proto is the pre-production version of the R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	NUMBER OF RARE CARS
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	DOMINATE REWARD
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} REPAIR MARKERS
+0	AUTO	CAR_SELECT_VIPERCOUPE	The 3rd version of the Viper; the V10 engine in Dodge's sports coupe and its distinctive sound push out 500 hp.
+0	AUTO	MAIN_MENU_TITLE	MAIN MENU
+0	AUTO	CUST_TINT_DARK	DARK
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	By setting a proper suspension setup, one which allows proper weight transfer during a launch, a driver will end up with a car that is both faster and has more traction.^
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Cannot Total Cars
+0	AUTO	CUST_APPLYING_BLUEPRINT	APPLYING BLUEPRINT
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	CHOOSE A RACE DAY SLOT
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	This is a mid-engine car, with performance that is close to the 911's
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	CAREER COMPLETION PERCENTAGE
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFFERENTIAL
+0	AUTO	CUST_WIND_TUNNEL_ON	Wind Tunnel On
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Repair Markers are disabled for Multiplayer Race Days. You can damage your car but damage is reset at the end of each race. You also cannot total your car in a race.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	The Blueprint does not match the mode of the car you are applying it to. All previous Blueprints will be deleted. Are you sure you wish to do this?
+0	AUTO	CUST_QUICK_POWER_DI3	This package focuses on making enough power to break the traction of the drive wheels. ^
+0	AUTO	RACE_MODE_DRAG_MODE	DRAG^MODE
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	This basic upgrade improves the overall appearance of the car. ^
+0	AUTO	CUST_QUICK_VISUAL_2	With the addition of the wing and front splitters your car will now experience significantly less lift at speed. The end result will be more stability at speed, and more traction through the corners.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Select play mode
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	There is already a Blueprint in the slot you selected. Do you want to overwrite it?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	MARKER MANAGEMENT
+0	AUTO	CAR_SELECT_FOCUSST	The MK2 Focus, which is sold outside of North America, has a turbo 2.5L motor and 225hp.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	AUTO	FE_MAIN_MENU	Main Menu
+0	AUTO	CUST_REGION_REAR_BUMPER	REAR BUMPER
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	DRIVE PULLEY
+0	AUTO	CAR_SELECT_BARRACUDA	The Hemi 'Cuda is a legend.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	HIGHEST RATED CAR
+0	AUTO	CUST_APPLY_PAINT_TITLE	APPLY PAINT
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	NUMBER OF CARS IN GARAGE
+0	AUTO	CUST_REGION_ALL_WHEELS	ALL WHEELS
+0	AUTO	CUST_QUICK_FORCED_2	This upgrade increases the amount of air forced into the engine, increasing the power across the board.^
+0	AUTO	FE_STATS_FASTEST_LAP	FASTEST LAP
+0	AUTO	FE_MARKERMAN_CASH_COUNT	${0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	In order to keep your tires firmly planted on the pavement, both your front and rear sway bars are stiffened, bushings replaced with urethane pieces, and shocks replaced with racing dampeners. ^
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	DNF PERCENTAGE
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	The B-body Charger was one of the most famous TV cars of all time.
+0	AUTO	CUST_QUICK_INTERNALS_1	This upgrade strengthens the engine and allows for more extensive upgrades later.^
+0	AUTO	CUST_QUICK_INTERNALS_2	This upgrade adds even stronger engine internals to allow it to take the strain of more power and higher RPMs.^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Are you sure you want to reset this Blueprint to its default state?
+0	AUTO	CUST_SLOT_RACING_SEATS	RACING SEATS
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZONE 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	BEST SECTOR POINTS
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	MOST VALUABLE CAR
+0	AUTO	CAR_SELECT_CIVICSI	Eighth gen Civic.
+0	AUTO	CAR_SELECT_CHEVELLESS	The Chevelle was Chevy's first muscle car. Chevy wouldn't allow a motor larger than 400ci, which changed in 1970 when the 402 Chevelle was introduced.
+0	AUTO	CUST_CAT_GRIP_FORCED	A low-lag, quick-spooling turbo will give you a useable power curve and an unparalleled advantage on the track or on the street.^
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Welcome to the Race Day Map
+0	AUTO	CUST_BLUEPRINT_APPLY	Apply Blueprint
+0	AUTO	CUST_SLOT_CAMSHAFTS	CAMSHAFTS
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Show All Races
+0	AUTO	CUST_SLOT_HEADERS	HEADERS
+0	AUTO	FE_STATS_FASTEST_TIME	FASTEST TIME
+0	AUTO	CUST_SUSPENSION_GROUP	SUSPENSION
+0	AUTO	CUST_BLUEPRINT_RESET	RESET BLUEPRINT
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	This upgrade goes a step further and takes power toward that of a true purpose built drag car.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	This upgrade goes a step further and takes power toward that of a true race car.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	This upgrade goes a step further and takes power toward that of a true race car.^
+0	AUTO	CUST_INSTALLED	INSTALLED
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Loading Race Day...
+0	AUTO	CUST_SLOT_CAMS_DESC	Short duration and low lift make for a nice daily driver cam. As the lift and duration is raised, the peak TQ RPM is moved higher in the RPM range. The best cam is the one that makes the most power in the RPM range that you typically drive at.^
+0	AUTO	CUST_QUICK_HANDLING_DI3	This upgrade uniquely tunes the suspension to allow it to slide easily though turns.^
+0	AUTO	CUST_QUICK_BRAKE_D3	This upgrade makes sure that maximum stopping time is attained and that the tires don't brake traction under deceleration.^
+0	AUTO	CUST_QUICK_BRAKE_G3	grip stage 3 brake package
+0	AUTO	CUST_QUICK_BRAKE_S3	This upgrade makes sure that maximum stopping time is attained from top speed and that the tires don't brake traction under deceleration.^
+0	AUTO	CUST_SLOT_BOTTLE_DESC	The larger the nitrous bottle, the more nitrous you can store. Also, you can have multiple bottles in a car. Each bottle must be refilled after use. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Evening
+0	AUTO	CUST_TINT_LIGHT	LIGHT
+0	AUTO	CUST_REPAIR_DAMAGE	DAMAGE
+0	AUTO	CUST_TINT_PEARL	PEARL
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	LONGEST DRIFT DISTANCE
+0	AUTO	CUST_SLOT_TIPS_DESC	These tips will give an aggressive look to your ride.^
+0	AUTO	CUST_SLOT_STEERING_DESC	A performance rack and pinion can add a little more steering angle while offering reduced steering wheel resistance over stock power steering units.   ^
+0	AUTO	CAR_SELECT_CORVETTEZ06	A true, super car killer, this Corvette has a 7.0L motor with titanium rods and a dry sump oil system.
+0	AUTO	HD_COMPATIBLE	HD Compatible for optimal gaming
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Delete Event
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	NUMBER OF KINGS BEATEN
+0	AUTO	CUST_WIND_TUNNEL	WIND TUNNEL
+0	AUTO	CUST_STAGE_NUMBER	STAGE {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	NUMBER OF WINS
+0	AUTO	CUST_FILTER_FRONT_BUMPER	FRONT BUMPER
+0	AUTO	MAIN_CAREER	CAREER
+0	AUTO	CUST_REGION_REAR_WHEEL	REAR WHEELS
+0	AUTO	CUST_QUICK_VISUAL_D3	This upgrade makes use of different aero parts for added downforce at speed.^
+0	AUTO	CUST_QUICK_VISUAL_G3	This upgrade makes use of different aero parts for added downforce at speed.^
+0	AUTO	CUST_QUICK_VISUAL_S3	This upgrade makes use of different aero parts for added downforce at top speed.^
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	AUTO	CUST_QUICK_INTERNALS_DI3	This upgrade adds race car engine internals to allow it to take the strain of still more power and higher RPMs.^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	NUMBER OF RANKED WINS
+0	AUTO	CUST_SLOT_BOV_DESC	To allow a turbo to attain and maintain maximum boost, a blow-off valve dumps excess pressure without slowing the engine down. ^
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	An update is available and required for online gameplay.  Visit NeedforSpeed.com for update information.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	BEST EVENT TYPE
+0	AUTO	HUB_BREAK_RECORD	BREAK RECORD
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	These bars will keep your front wheels planted on the ground and can withstand the torque your engine puts out.^
+0	AUTO	RACE_DAY_DIFFICULTY_1	Easy
+0	AUTO	RACE_DAY_DIFFICULTY_2	Medium
+0	AUTO	RACE_DAY_DIFFICULTY_3	Hard
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elite
+0	AUTO	CUST_SLOT_CLUTCH	CLUTCH
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Press the 2 Button to continue
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	FASTEST 0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Would you like to customize front tires or rear tires?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	CREATE RACE DAY
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	PERSONAL RECORDS
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnesses and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	SOLO
+0	AUTO	CUST_TUNE_DRAG_ENGINE	After the initial launch, power is the key to drag racing. More power will increase the speed down the track and raise the trap speed.^
+0	AUTO	RACEDAY_NO_DLC_CONTENT	This Race Day is incompatible with your version of Need for Speed™ ProStreet and can not be applied.  Visit NeedforSpeed.com for information on updates and new game content.
+0	AUTO	RD_PLAY	PLAY
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	IGNITION SYSTEM
+0	AUTO	FE_STATS_CAREER_WINS	NUMBER OF CAREER WINS
+0	AUTO	RACE_DAY_LOCATION	LOCATION
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	This upgrade will allow for quicker shifting and will more efficiently transfer the engine's power to wheels.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	This upgrade will allow for even faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels.^
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Are you sure you want to delete this shared Blueprint?
+0	AUTO	SHOW_FRIENDS	Show Friends
+0	AUTO	FE_STATS_HUBS_DOMINATED	RACE DAYS DOMINATED
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	FASTEST REACTION TIME
+0	AUTO	CODE_ENTRY_INVALID	The code you have entered is not valid. Please make sure the code you have entered is correct and try again.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	CHOOSE UP TO 8 EVENTS
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Repair Car
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	REPAIR MARKER
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	IRIDESCENT
+0	AUTO	CUST_SLOT_CAM_GEARS	CAM GEARS
+0	AUTO	CUST_SLOT_ROOF_SCOOP	ROOF SCOOP
+0	AUTO	CUST_COMPONENTS_TITLE	CUSTOMIZE COMPONENTS
+0	AUTO	CUST_BRAKES_GROUP	BRAKES
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Are you sure you want to quit?
+0	AUTO	CUST_SLOT_TRACTION_BARS	TRACTION BARS
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are essential in controlling and modulating a drift.^
+0	AUTO	MAIN_RACE_DAY	RACE DAY
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	SPEED CHALLENGE WIN PERCENTAGE
+0	AUTO	SELL_CAR_CONFIRMATION	The value of this car is {0:d}^If you choose to sell it you will lose all Blueprints for this car. Are you sure you want to sell it?^
+0	AUTO	RD_DELETE_RD	Delete Race Day?
+0	AUTO	CAR_SELECT_G35	The G35 shared its platform with the 350z.
+0	AUTO	CAR_SELECT_GXP	The GXP has a 2.0L 16v turbo motor putting out 260hp, a LSD and 18s stock.
+0	AUTO	CAR_SELECT_NSX	Designed to show off Honda's racing technology, this mid-engine car was incredibly ahead of its time.
+0	AUTO	CAR_SELECT_R35	This is the production version of the R35 GTR.
+0	AUTO	CAR_SELECT_S13	The S13 is one of the most iconic drift cars.
+0	AUTO	CAR_SELECT_S15	The S15 never originally made it to North America. However, it  has become an iconic car for tuner culture.
+0	AUTO	CAR_SELECT_RS4	The B7 RS4 features a 400hp V8, and is available as a sedan, wagon, or convertible.
+0	AUTO	CAR_SELECT_RSX	The replacement to the legendary Integra uses the new Honda K series motor.
+0	AUTO	CAR_SELECT_RX8	A front engine, rear-wheel-drive, rotary-powered 2+2 car, the RX-8 has almost a perfect 50:50 weight distribution and incredibly balanced handling.
+0	AUTO	CAR_SELECT_STI	A flat four, turbo, and 4-wheel-drive, the Sti is one of the cars that defines tuner cars. It can do it all, and do it well.
+0	AUTO	CAR_SELECT_Z4M	Sporting the same Inline 6 as the E46 m3, 0-60 time is reported to be 4.9 seconds, with a limited top speed of 250 km/h.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Drift stage 3 visuals
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZONE 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZONE 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZONE 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZONE 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZONE 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZONE 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZONE 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZONE 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZONE 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	HIGHEST RACE SCORE
+0	AUTO	FE_STATS_AVERAGE_SPEED	AVERAGE SPEED
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALLIC
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Press START button
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	DRIFT WIN PERCENTAGE
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	No Backup Cars Available
+0	AUTO	CUST_FILTER_FRONT	FRONT WHEELS
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	CAR LOT
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	The pre-production version of the 5th gen Camaro was introduced in '06.
+0	AUTO	CUST_QUICK_SUSPENSION_1	This upgrade will allow the car to corner faster and flatter.^
+0	AUTO	CUST_QUICK_SUSPENSION_2	This upgrade will allow the car to corner even faster and flatter, with even more control.^
+0	AUTO	CUST_QUICK_NITROUS_D3	This upgrade will, for a short moment, add 50-250  horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and last place.  ^
+0	AUTO	CUST_QUICK_NITROUS_G3	This upgrade will, for a short moment, add 50-250 horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	AUTO	CUST_QUICK_NITROUS_S3	This upgrade will, for a short moment, add 50-250 horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	AUTO	CUST_PERFORMANCE	PERFORMANCE
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Tightening up the sway bars adds extra rigidity in the corners, helping to prevent understeer.^
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Are you sure you want to delete this Blueprint?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Blueprints
+0	AUTO	CUST_QUICK_UPGRADE	QUICK UPGRADE
+0	AUTO	CAR_SELECT_CORVETTEC6	This is the newest version of the Corvette, and the first version in almost 35 years to have exposed headlights.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	REWARD
+0	AUTO	MAIN_QUIT_GAME	QUIT
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	NITROUS OXIDE
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTER
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	In addition to the safety benefits of a roll cage, it can also increase chassis rigidity while giving your car that racing look.^
+0	AUTO	CUST_SLOT_BC_DESC	The more boost an engine receives, the better. If an engine can handle higher boost without failing, than this device is a welcome addition to help get the most out of a turbo.^
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Hot trannys are a lot of trouble.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	FORCED INDUCTION
+0	AUTO	CAR_TYPE_SPEED	SPEED CHALLENGE
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	CYLINDER HEADS
+0	AUTO	CUST_SELL_CAR_WARNING	If you sell this car, you will not be able to enter any {0:s} race events until you buy another car of that type.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	No events of this type at this location.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	TIME OF DAY
+0	AUTO	RD_DELETED	Race Day deleted.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	AUTO	CUST_SLOT_AIR_INTAKE	AIR INTAKE
+0	AUTO	CUST_PART_PURCHASED	PURCHASED
+0	AUTO	CUST_BP_OPTION_UNDO	ABANDON
+0	AUTO	CUST_FILTER_BODY	BODY
+0	AUTO	CUST_FILTER_HOOD	HOOD
+0	AUTO	CUST_FILTER_REAR	REAR WHEELS
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you maximum power output when you need it most.^
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Brake lines reinforced with braided stainless steel increase hydraulic pressure and braking response.^
+0	AUTO	LS_SAVING	SAVING...
+0	AUTO	CUST_CUSTOM_UPGRADE	CUSTOM UPGRADE
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	You are ineligible to participate at this Race Day. You are lacking the following type of cars:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	By setting a proper suspension setup, one which doesn't have excessive understeer or oversteer, a driver will end up with a car that is both faster and easier to drive.^
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	CHOOSE RACE MODE
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	You cannot install an aftermarket exhaust tip on a stock body kit!
+0	AUTO	CUST_PURCHASE_CAR	Purchase Car
+0	AUTO	CODE_ENTRY_VERIFICATION	Verifying code on server...
+0	AUTO	MC_OLD_SAVE_REWARD	Thank you for playing previous Need For Speed™ titles. We have rewarded {0:d} Repair Markers and {1:d} Totaled Marker(s) in Career Mode.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	NUMBER OF TIMES FINISHED AHEAD OF HIGHER CLASS OPPONENT
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Drag stage 3 power
+0	AUTO	CUST_QUICK_POWER_G3	This package makes the transformation from streetcar to race car with even more power.^
+0	AUTO	CUST_QUICK_POWER_S3	Speed stage 3 power
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	NUMBER OF BLUEPRINTS
+0	AUTO	FE_STATS_BEST_RUN	BEST RUN
+0	AUTO	WINDTUNNEL_DOWNFORCE	DOWNFORCE
+0	AUTO	CUST_SLOT_COOLING_DESC	Not too hot, not too cool. Just right
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	BEST DRIFT SCORE
+0	AUTO	CUST_CAT_DRIFT_FORCED	This upgrade increases the amount of air forced into the engine, allowing for more fuel to burn and thus more power out of your engine.^
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Use Repair Marker
+0	AUTO	FE_STATS_FILTER_GENERAL	GENERAL STATS
+0	AUTO	CB_BLUEPRINTS_HEADER	BLUEPRINT TYPE
+0	AUTO	ENTER_SECRET_CODE	ENTER SECRET CODE
+0	AUTO	CUST_SLOT_BODYKIT_DESC	This will dramatically change the look of your vehicle and could possibly add some aerodynamic functionality.^
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	NUMBER OF CARS TOTALED
+0	AUTO	CUST_SLOT_WHEELS	WHEELS
+0	AUTO	CUST_SLOT_SUPERCHARGER	SUPERCHARGER
+0	AUTO	CAR_SELECT_SHELBYGT500	The GT500 is the first North American car with a roll bar, and one of the most famous Shelby cars.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	LONGEST SINGLE WHEELIE
+0	AUTO	FE_STATS_GRIP_WINS	NUMBER OF GRIP WINS
+0	AUTO	CL_MS_POINTS	Microsoft® points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	LONGEST DRIFT TIME
+0	AUTO	CUST_FILTER_REAR_BUMPER	REAR BUMPER
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	BEST 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	It costs {0:d} to purchase a car and apply this Blueprint to it. Do you wish to proceed?
+0	AUTO	GARAGE_REPAIR_DENIED	You do not have enough cash and have no marker to repair this car.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	CLICK to continue
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	NUMBER OF PUNKBUSTER RACES
+0	AUTO	GARAGE_NO_CAR_REPAIR	You don't have enough Cash or available Repair Markers to repair your car.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	NO CARS AVAILABLE
+0	AUTO	RDMAP_CREATE_PREVIEW	CREATE A CUSTOM RACE DAY
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	MOST CHAINED DRIFTS
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	PROPORTIONING VALVE
+0	AUTO	FE_STATS_CLUB_TAG	CLUB TAG
+0	AUTO	CUST_SLOT_EXHAUST	EXHAUST TIPS
+0	AUTO	CAR_SELECT_INTEGRATYPER	The Integra Type R is often regarded as the best handling front-wheel-drive car of all time.
+0	AUTO	CUST_CAT_DRAG_BRAKE	The emphasis here isn't on stopping, it's on going. The goal should be getting the lightest brake setup that you can in order to allow your car to accelerate as fast as possible.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Apply Paint
+0	AUTO	WINDTUNNEL_PEAK_HP	PEAK HP
+0	AUTO	CUST_BLUEPRINT_DELETE	Delete Blueprint
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	CAREER STATISTICS
+0	AUTO	CUST_VISUAL_TITLE	VISUAL
+0	AUTO	CUST_SLOT_DRIVESHAFT	DRIVESHAFT
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Purchase Blueprint
+0	AUTO	CAREER_COMPLETION_HEADER	CAREER COMPLETION
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	More engine power makes it easier to keep tires spinning and a drift going. Increase output to aid in powerslides.^
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	FASTEST 1/4 MILE
+0	AUTO	CL_NOT_ENOUGH_CASH	You do not have enough cash for this car.
+0	AUTO	CUST_SLOT_SC_DESC	This method of forced induction is driven by the motor itself and provides more power down low.^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	CLUB
+0	AUTO	CUST_SLOT_TIRES	TIRES
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	No existing Race Days found.
+0	AUTO	RACEDAY_EXIT_CONFIRM	This will abandon all the changes you have made to this Race Day. Abandon changes?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	SHOCKS AND SPRINGS
+0	AUTO	CUST_REGION_SKIRT	SKIRT
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	NITROUS BOTTLE
+0	AUTO	CUST_QUICK_FORCED_DI3	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	WHEELIE BARS
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	we cant talk about this car
+0	AUTO	CL_MAXIMUM_CARS_REACHED	You have reached the maximum of {0:d} cars.  ^Please sell a car from the Garage to allow room for purchase.
+0	AUTO	CUST_CUSTOMIZE_MAIN	CUSTOMIZATION
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the extra power you need to overtake a rival car coming out of a corner.^
+0	AUTO	CUST_BLUEPRINT_HEADER	CUSTOMIZE BLUEPRINT
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	DRAG WIN PERCENTAGE
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	EXHAUST SYSTEM
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	SELECT
+0	AUTO	CUST_PAINT_GROUP_CHROME	CHROME
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	NUMBER OF SHARED BLUEPRINTS
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	FORCED INDUCTION
+0	AUTO	FE_STATS_DRIFT_RACES	NUMBER OF DRIFT RACES
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	PERFORMANCE STATS
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBOCHARGER
+0	AUTO	CUST_SLOT_SHIFTER	SHIFTER
+0	AUTO	CUST_DYNO_TEST	DYNO TEST
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japanese drivers have taken over the industrial shipping hub of the Tokyo Dockyards. They've built some intense race routes using every conceivable piece of the urban landscape.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	SELECT CHALLENGE CARS
+0	AUTO	CUST_CAT_SPEED_NITROUS	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	AUTO	CAR_SELECT_MUSTANGGTN	The 5th gen Mustang is known for its "retro-futurism."
+0	AUTO	FE_STATS_WIN_PERCENTAGE	WIN PERCENTAGE
+0	AUTO	RD_CUSTOM_SELECT	Play Race Day?
+0	AUTO	KING_FLOW_CASH_REWARD	CASH REWARD
+0	AUTO	CUST_CAT_SPEED_BRAKE	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are an important element in a well-tuned vehicle.^
+0	AUTO	CUST_SPEED_TUT_AWD	By driving all four wheels, traction is increased, especially during starts and at corner exit acceleration. Be sure to take advantage of this fact.^
+0	AUTO	CUST_SPEED_TUT_FWD	Although you're fighting the laws of physics in a front-wheel-drive car, you can build a formidable track weapon if you make the right tuning choices. The first item on your agenda should be to reduce the amount of understeer inherent in an FF car by stiffening everything up front. Then you'll need a limited slip differential to help eliminate the torque steer. ^
+0	AUTO	CUST_SPEED_TUT_RWD	Balance and throttle steer are the clear advantages to a rear-wheel-drive setup. Be sure to avoid excessive oversteer in your setup.^
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	COOLING SYSTEM
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	The Cosworth was created for homoglamation purposes, and was never really an Escort. But the Escort RS turned into one of the most iconic cars and silhouettes of all time.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	FASTEST 0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs, known as the fastest road in the West, sits on a hillside in the California desert. Willow has constant elevation changes and high average speeds.
+0	AUTO	RACE_DAY_DIFFICULTY	DIFFICULTY
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	You do not have enough cash to buy all markers currently in your shopping cart.
+0	AUTO	CAR_SELECT_CHALLENGER	The first gen Challenger was Dodge's entry into the pony car market. It was based off of an older car design that was intended to be a turbine powered car.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Selecting an available Race Day slot allows you to create a new Custom Race Day. The icon you choose will represent that Race Day on the Race Day Map under My Race Day.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	By driving all four wheels, traction is increased, especially during starts and at corner exit acceleration. Be sure to take advantage of this fact.^
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Although you're fighting the laws of physics in a front-wheel-drive car, you can build a formidable track weapon if you make the right tuning choices. The first item on your agenda should be to reduce the amount of understeer inherent in an FF car by stiffening everything up front. Then you'll need a limited slip differential to help eliminate the torque steer. ^
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Balance and throttle steer are the clear advantages to a rear-wheel-drive drive setup. Be sure to avoid excessive oversteer in your setup.^
+0	AUTO	CUST_SELL_CAR	Sell Car
+0	AUTO	RACE_DAY_LOCATION_12_DESC	The elite Porsche test track in Leipzig, Germany, features reproductions of some of the most famous corners in racing.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	SIDE SKIRTS
+0	AUTO	CUST_SLOT_FUEL_DESC	Efficient fuel delivery is key in achieving high horsepower. A larger fuel pump combined with larger injectors and upgraded fuel lines will produce significant horsepower gains. ^
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	The key to a successful drift car is a car that's predictable at breaking loose, easy to maintain oversteered through the corner, and at the same time incredibly stable.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	FRIENDS
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Morning
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Matchmaking error occurred.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	This is a high-speed run through some of the miles of freeway in Tokyo, and includes loops, straightaways and a tunnel section.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	NUMBER OF RANKED GAMES PLAYED
+0	AUTO	CUST_TUNE	TUNE
+0	AUTO	CUST_VISUALS_TITLE	VISUALS
+0	AUTO	FE_STATS_CLUB_NAME	CLUB NAME
+0	AUTO	CUST_INSTALL	Install
+0	AUTO	RACEDAY_SAVE_CONFIRM	Are you sure you want to save your Race Day?
+0	AUTO	FE_MATCHMAKING_JOINING	Joining game session...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	BLOW OFF VALVE
+0	AUTO	CUST_SLOT_ROLL_CAGE	ROLL CAGE
+0	AUTO	CAR_LOT_NO_DRIFTING	NO DRIFTING
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	This upgrade replaces your existing engine internals with stronger, more durable parts, allowing for your engine to make more power and sustain higher RPMs.^
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	USE TOTAL REPAIR MARKER
+0	AUTO	CUST_PACKAGE_VISUAL	Visual Packages
+0	AUTO	CUST_EMPTY_BLUEPRINT	Create New Blueprint
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Enter your Secret Code or Promo Code here in order to receive your reward.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	With this rally-inspired upgrade, you'll look right at home playing in the dirt. ^
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Choose the difficulty level for your Race Day. The difficulty level you choose will define the AI difficulty and the maximum car tier for that Race Day.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	CAREER CARS
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	NUMBER OF 12 PLAYER RACES COMPLETED
+0	AUTO	CUST_REGION_FRONT_TIRE	FRONT TIRE
+0	AUTO	FE_STATS_DRAG_WINS	NUMBER OF DRAG WINS
+0	AUTO	RACE_DAY_SAVE_NAME	My Race Day
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	You do not have enough cash to make this purchase!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	HIGHEST WHEELIE ANGLE
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Turbos are air pumps.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Increasing cylinder bore raises engine displacement and thus the amount of fuel that can be burned to produce more power.^
+0	AUTO	CUST_CAT_GRIP_BRAKE	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are a crucial element in a well-tuned vehicle.^
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	RACE EVENTS
+0	AUTO	CUST_SLOT_STEERING_KIT	STEERING KIT
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	GRIP WIN PERCENTAGE
+0	AUTO	CUST_BLUEPRINT_RENAME	Renaming Blueprint...
+0	AUTO	RACE_DAY_SLOT_FILLED	FILLED
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	HIGHEST DRIFT SCORE
+0	AUTO	CUST_VINYLS	VINYLS
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Constructed from higher quality materials, performance control arms offer more camber options as well as better overall suspension geometry.^
+0	AUTO	FE_STATS_HUBS_WON	RACE DAYS WON
+0	AUTO	CUST_CAT_GRIP_NITROUS	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NOT ELIGIBLE TO RACE
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Choose the number of Repair Markers for your Race Day. When creating a Solo Race Day you will get an equal number of Repair Markers and Total Repair Markers.
+0	AUTO	CAR_SELECT_CAMAROSS	The first gen Camaro was described as a small, vicious animal that eats Mustangs.
+0	AUTO	FE_STATS_BEAT_MODERATOR	BEAT MODERATOR
+0	AUTO	CUST_SLOT_HANDBRAKE	HANDBRAKE
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels to a race car standard.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels to a race car standard.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels of a race car standard.^
+0	AUTO	COMMON_CLASS_HEADER	TIER
+0	AUTO	CAR_SELECT_FORDGT	The Ford GT was created as an homage to Ford's racing dominance in the late 60s and is the modern version of the classic GT40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	PERFORMANCE STATS
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ROTORS
+0	AUTO	CUST_QUICK_INTERNALS_D3	This upgrade allows the engine to sustain much higher power for a short amount of time.^
+0	AUTO	CUST_QUICK_INTERNALS_G3	This upgrade adds race car engine internals to allow it to take the strain of still more power and higher RPMs.^
+0	AUTO	CUST_QUICK_INTERNALS_S3	Speed stage 3 internals.
+0	AUTO	CUST_SLOT_PISTONS	PISTONS
+0	AUTO	CUST_CAT_DRIFT_NITROUS	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	AUTO	FE_STATS_BEST_LAP_TIME	BEST LAP TIME
+0	AUTO	FE_STATS_SKILLS_STATS	SKILLS STATS
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	CAREER OVERVIEW
+0	AUTO	CUST_DRIFT_TUT_RWD	Be able to smoothly initiate and hold large, tail out slides is the key to setting up an efficient drift car.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	This upgrade goes a step further and takes power toward that of a true race car.^
+0	AUTO	CUST_SELL_CAR_DENIED	You cannot sell your last car.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	These heavy duty suspension bits help keep your car from flexing under the strain of high torque, giving your tires maximum traction. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Noon
+0	AUTO	CUST_SLOT_PULLEY_DESC	By fitting a different size drive pulley, the supercharger will spin faster, thus proving more boost and more power.^
+0	AUTO	CUST_SLOT_IGNITION_DESC	A powerful, consistent spark is needed in high horsepower applications. Using ignition wires and sparkplugs made with highly conductive materials such as platinum and iridium can improve the overall performance of your engine.    ^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	OFF
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	BRAKE LINE KIT
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	BEST MULTIPLIER
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	NITROUS SYSTEM
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Stats ranking server is currently down. Please try again later.
+0	AUTO	RACE_DAY_TRACK_CONFIG	TRACK CONFIGURATION
+0	AUTO	CS_HEADER_DRAG_EVENT	DRAG EVENTS
+0	AUTO	CUST_QUICK_BRAKE_1	This upgrade will allow your car to stop in a shorter distance than with stock brakes.^
+0	AUTO	CUST_QUICK_BRAKE_2	stage 2 brakes
+0	AUTO	CUST_REPAIR_TITLE	REPAIR YOUR CAR
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Blueprint Summary
+0	AUTO	CUST_CAT_DRAG_FORCED	Here, the emphasis is on big power; these turbo components are designed for peak HP and WOT driving. These parts will have a dramatic impact on your trap speeds.^
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Do you want to play this race day now ?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Would you like to save the changes you have made to the Blueprint?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	AUTO	CUST_BP_EXIT_CONFIRM	This will abandon all the changes you have made to this Blueprint. Abandon changes?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Renaming Blueprint...
+0	AUTO	CUST_FILTER_MIRRORS	MIRRORS
+0	AUTO	ENTER_PRESELL_CODE	ENTER PROMO CODE
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	DOWNLOADING FAILED
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	NUMBER OF SHOWDOWNS WON
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	This upgrade further reprograms the engine computer to maximize performance.^
+0	AUTO	FE_STATS_BEST_REACTION_TIME	BEST REACTION TIME
+0	AUTO	CAR_SELECT_MK5GTI	The Mk5 GTI is the newest version of the original hot hatch. Its 2.0L FSi turbo motor starts out with over 200hp, and is easily modded beyond that.
+0	AUTO	CAR_SELECT_MK5R32	Take a hot hatch, add a narrow angle V6, then an all-wheel-drive system, and this is what you get.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	By setting a proper suspension setup, one which doesn't have excessive understeer or oversteer, a driver will end up with a car that is both faster and easier to drive.^
+0	AUTO	CUST_SLOT_CONTROL_ARMS	CONTROL ARMS
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	With so much power at stake, a rigid suspension is necessary to keep your car flying straight down the drag strip. ^
+0	AUTO	CUST_SLOT_BODY	BODY KIT
+0	AUTO	CUST_SLOT_HOOD	HOOD
+0	AUTO	CUST_SLOT_PADS	PADS
+0	AUTO	FE_STATS_DRIFT_WINS	NUMBER OF DRIFT WINS
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the power you need to break your tires loose and slide past the finish line.^
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	CUSTOMIZATION
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	CAREER TOTALED COUNT
+0	AUTO	RD_CREATE_RD	Create Race Day
+0	AUTO	FE_STATS_DRAG_RACES	NUMBER OF DRAG RACES
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	DISCONNECT PERCENTAGE
+0	AUTO	CUST_REGION_FRONT_WHEEL	FRONT WHEELS
+0	AUTO	CAR_SELECT_ECLIPSE	The 2G Eclipse is prone to crankwalk.
+0	AUTO	CAR_LOT_TITLE	CAR LOT
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Selecting a filled Race Day slot provides you with information about that Race Day and will allow you to delete that Race Day.
+0	AUTO	CAREER_MAP_TITLE	CAREER MAP
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	BEST DRIFT SCORE AS FOLLOWER
+0	AUTO	CUST_SLOT_CRANKSHAFT	CRANKSHAFT
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	CAR REWARD
+0	AUTO	CAR_SELECT_R34GTR	The car that defines the tuner scene and sets the bar for all others.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFT EVENTS
+0	AUTO	RACE_DAY_MULTIPLAYER	MULTIPLAYER
+0	AUTO	CUST_SLOT_CRANK_DESC	Stock crankshafts cannot take the strain of high horsepower. A forged crank is necessary for horsepower levels in excess of 500.^
+0	AUTO	CAR_SELECT_COBALTSS	With a superchaged 2.0L motor, the Cobalt was the replacement for the Cavalier and was intended to compete against cars like the Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} FT
+0	AUTO	CAR_SELECT_350Z	This is the 5th car in the Z line; a rear-wheel-drive, 2+2 sports coupe.
+0	AUTO	CAR_SELECT_997T	With a 3.6L turbo motor, this car goes from 40-60 mph in one second.
+0	AUTO	CAR_SELECT_AE86	The Hachi-Roku is one of the last of the compact rear-wheel-drive cars.
+0	AUTO	CAR_SELECT_CTSV	The CTSV was the first car launched under Cadillac's V-Series performance brand, and designed to compete against European sport sedans.
+0	AUTO	CAR_SELECT_EVO9	The EVO IX has a 2.0L, 16v turbo all-wheel-drive hot hatch. It's been the defining car for performance and handling within the tuner industry since its creation.
+0	AUTO	CAR_SELECT_EVOX	The EVO X is faster than the Stig.
+0	AUTO	CAR_SELECT_GTON	The Pontiac GTO was the North American version of the Holden V platform with the LS2 from the Corvette.
+0	AUTO	CAR_SELECT_GTOO	Some consider this the first muscle car.
+0	AUTO	CAR_SELECT_SHELBYGT500N	With the minds from Ford's SVT (Special Vehicle Team) unit and the legendary Carroll Shelby working together on this project, it was almost certainly a guaranteed success. The result of this collaboration will surely put goofy grins on the faces of Mustang and power lovers everywhere: 450 horsepower, 450 ft-lb of torque (oh yeah, baby!), Brembo calipers, 19-inch alloy wheels, and a price that should be in line with that of the previous Mustang Cobra model. And according to project designers, the 2006 Ford Mustang Shelby Cobra GT500 "will be the most powerful production Mustang ever built."
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	TO UNLOCK THIS SHOWDOWN
+0	AUTO	CUST_REPAIR_USE_CASH	Use Cash
+0	AUTO	FE_STATS_FILTER_SKILLS	SKILLS STATS
+0	AUTO	FE_STATS_SPEED_RACES	NUMBER OF SPEED RACES
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Define Events
+0	AUTO	RD_DELETE_SHARED_RD	Delete shared Race Day?
+0	AUTO	CAREER_OVERVIEW_HEADER	CAREER OVERVIEW
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	EXHAUST PIPES
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	AUTO	CUST_CAT_GRIP_INTERNALS	This upgrade replaces your existing engine internals with stronger, more durable parts, allowing for your engine to make more power and sustain higher RPMs.  ^
+0	AUTO	CL_DRIVETRAIN_ALL	All Types
+0	AUTO	CL_DRIVETRAIN_AWD	All Wheel Drive
+0	AUTO	CL_DRIVETRAIN_FWD	Front Wheel Drive
+0	AUTO	CL_DRIVETRAIN_RWD	Rear Wheel Drive
+0	AUTO	FE_COMMON_MODE	MODE
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	INTAKE MANIFOLD
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	EVENT RECORDS
+0	AUTO	CODE_ENTRY	CODE ENTRY
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Purchase all markers that are currently in your shopping cart?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	EXHAUST
+0	AUTO	RACE_DAY_SPLIT_SCREEN	SPLIT SCREEN
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Managing your speed throughout corners, as well as paying proper attention to corner exit acceleration, is key. More engine power increases the ability to rocket out from turns and reach higher speeds.^
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	NUMBER OF CLUB MEMBERS
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	ENGINE INTERNALS
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	AUTO	CUST_WIND_TUNNEL_OFF	Wind Tunnel Off
+0	AUTO	FE_COMMON_CONFIGURATION	CONFIGURATION
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} HP
+0	AUTO	CS_HEADER_GRIP_EVENT	GRIP EVENTS
+0	AUTO	CAR_SELECT_CIVIC	The 6th gen Civic is one of the most popular cars in tuner culture, whether for street, track, drag racing, or anything in between.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Race Day Deleted
+0	AUTO	CAR_SELECT_E46M3	The 3rd version of the M3, the E46 debutted with BMW's highest horsepower per liter of any BMW motor at that time.
+0	AUTO	CAR_SELECT_E92M3	The E92 M3 sports a carbon fibre roof and is  powered by a V8 (past M3s had inline 6s).
+0	AUTO	CAR_SELECT_ELISE	The 2nd gen Elise is a stripped-down, bare bones car with only the driving experience in mind.
+0	AUTO	CAR_SELECT_FDRX7	The FD RX-7 is one of the greatest tuner cars of all time, whether for drift or grip. A true legend.
+0	AUTO	CAR_SELECT_IS350	The 2nd gen IS is a rear-wheel-drive luxury coupe, with  sleeker coupe-like contours, and a fastback profile.
+0	AUTO	CAR_SELECT_LP640	With its 6.5L motor pushing 640hp, the LP640 is at the top end of super car performance.
+0	AUTO	CUST_SLOT_VALVE_DESC	By redistributing hydraulic fluid throughout the brake system, this device can allow for greater braking force in either the front or the rear. ^
+0	AUTO	CAR_SELECT_SUPRA	The 4th gen Supra is built to be lighter and more nimble than the previous gen car. It is capable of a .98g on the skid pad. The 99 was the last year for North America, with Japan having production through 2002.
+0	AUTO	CUST_FILTER_ALL_PARTS	ALL PARTS
+0	AUTO	CUST_QUICK_SUSPENSION_D3	This upgrade focuses on maximizing weight over the drive wheels and minimizing front wheel air-time.^
+0	AUTO	CUST_QUICK_SUSPENSION_G3	This upgrade will allow the car to corner even faster and flatter without losing its grip on the tarmac.^
+0	AUTO	CUST_QUICK_SUSPENSION_S3	This upgrade will allow the car to corner even faster and flatter at top speed without losing its grip on the tarmac.^
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	No suitable matches or players could be found.  Please try again.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Define Race Events
+0	AUTO	FE_STATS_CLUB_LEADER	CLUB LEADER
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Germany's Autobahnring is an interlocking web of high-speed roads that include sections of the Autobahn, as well as banked corners and tunnels.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Canceling search...
+0	AUTO	CUST_SLOT_DIFF_DESC	Here, the engine's power finally is transferred into side-to-side power and is sent to the wheels. ^
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Are you sure you want to overwrite this Race Day?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	MOST TIMES FINISHED AHEAD OF LEADER
+0	AUTO	CAR_SELECT_ZONDAF	Many motoring journalists say that the Zonda F is one of the best supercars in the world.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	In order to keep your tires firmly planted on the pavement, both your front and rear sway bars are stiffened, bushings replaced with urethane pieces, and shocks replaced with racing dampeners. ^
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	My Race Day^Create and design your own Race Day. Create a Solo Race Day or Multiplayer Race Day and compete with other players online. Create a Split Screen Race Day and challenge a friend.^^Share your Solo or Multiplayer Race Day with other players online and invite them to join your own personal Race Day competition.^^.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis is perched on a mountaintop in a remote part of Japan. Although the circuit has murky origins, the high-speed course is new and clean.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Stiffer shocks combined with the lower center of gravity that performance springs provide can greatly enhance a car's cornering ability.^
+0	AUTO	CUST_CAT_DRAG_NITROUS	This upgrade will give you a temporary boost in horsepower. Nitrous oxide is a must-have for drag racers.^
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Windy City drivers have taken over an abandoned airport and made it their own. Chicago Airfield has a wide runway, several grip and drift routes, and a drag strip.
+0	AUTO	FE_STATS_TOP_SPEED	TOP SPEED
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	PRESSURE CONTROL KIT
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	NUMBER OF TIMES ACHIEVED MAXIMUM GRIP IN STAGING
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	FASTEST 60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	BOOST CONTROLLER
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	A Japanese mountainside was carved out to house Ebisu, the spiritual home of drifting. The Fukuyama Challenge departs across the countryside turning onto an expressway.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	By lightening the gears or sprockets that drive your camshafts, you reduce the amount of energy needed to turn those cams and allow for more power to  be made.^
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X ${1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	TOTAL RACES WON WITHOUT DAMAGE
+0	AUTO	CUST_QUICK_HANDLING_1	This upgrade allows the car to corner better and be more stable at speeds.^
+0	AUTO	CUST_QUICK_HANDLING_2	stage 2 handling
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Though nitrous is great for a temporary increase in power, too much nitrous can stress the engine past the breaking point. A pressure control kit assures that the engine only receives as much pressure as it can handle.^
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Are you sure you want to change the location? That will clear all your existing event selections.
+0	AUTO	CUST_VINYL_LAYER_TITLE	LAYER MENU
+0	AUTO	CUST_CAT_DRAG_INTERNALS	This upgrade replaces your existing engine internals with forged pieces, giving them lasting strength and durability for those intense quarter mile runs.^
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Northern California's Infineon Raceway has a complex series of hilly twists and turns. One false move will slow you down or put you into one of the many walls.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	SPEED^CHALLENGE
+0	AUTO	FE_STATS_CLUB_POINTS	CLUB POINTS
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the extra power you need to overtake a rival car coming out of a corner.^
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Are you sure you want to remove the event %s ?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Race Day Saved
+0	AUTO	CUST_QUICK_NITROUS_DI3	This upgrade will, for a short moment, add 50 - 250  horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	AUTO	CUST_QUICK_POWER_1	This basic upgrade package will add power through the entire RPM range, as well as giving your once stock car, a more aggressive tone.
+0	AUTO	CUST_QUICK_POWER_2	This package builds on the milder upgrades from Stage 1 to provide increased power throughout the powerband and a more aggressive sound as well.^
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park is an incredibly twisty and compact course dropped in the middle of the Irish countryside.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	BACK UP CAR
+0	AUTO	FE_STATS_GRIP_RACES	NUMBER OF GRIP RACES
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAGE
+0	AUTO	CUST_PACKAGE_POWER	Power Packages
+0	AUTO	CUST_OWNED	OWNED
+0	AUTO	CUST_PAINT	PAINT
+0	AUTO	CUST_PARTS	BODY PARTS
+0	AUTO	CUST_PACKAGE_TITLE	PACKAGE
+0	AUTO	CS_OPTION_CAR_SELECT	Select Car
+0	AUTO	RACE_DAY_SLOT_EMPTY	AVAILABLE
+0	AUTO	FE_STATS_ACHIEVEMENTS	GOALS ACHIEVED
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Creating a Challenge Race Day allows you to specify the cars that can be used while playing that Race Day.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Handbrake so you can relive Rockford File episodes.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Highway Route 318 is a stretch of sun-baked tarmac deep in the Nevada desert. Speeds over 200 mph are possible, but watch out for the deceptively simple curves.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Performance brake rotors radiate heat better than stock. Larger-than-stock diameter rotors give more surface area for pads to clamp down on and thus more braking force.^
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	BEST DRIFT SCORE AS LEADER
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	This upgrade uniquely tunes the suspension to allow it to slide easily though turns.^
+0	AUTO	CUST_REGION_FRONT_BUMPER	FRONT BUMPER
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	ESTIMATED NET WORTH
+0	AUTO	CUST_SLOT_TRANSMISSION	TRANSMISSION
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Situated near Mt. Rainier in the lush greenery of the Pacific Northwest, Portland International Raceway, or PIR, is a demanding road-course with a top-quality drag strip.
+0	AUTO	CUST_BLUEPRINT_SAVE	UPDATE BLUEPRINT
+0	AUTO	CUST_QUICK_NITROUS_1	This upgrade will, for a short moment, add horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	AUTO	CUST_QUICK_NITROUS_2	This upgrade will, for a short moment, add even more horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	AUTO	RACE_DAY_LOCATION_9_DESC	Everything's bigger in Texas, and Texas World Speedway is no exception, where a twisting road-course snakes in and out of a banked oval.
+0	AUTO	CAR_SELECT_CORVETTE	The last of the Sting Rays, the 2nd gen Corvette was named as one of the top 5 sports cars of all time.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	MOST SECTORS CLAIMED
+0	AUTO	CL_DRIVETRAIN_HEADER	DRIVETRAIN
+0	AUTO	CUST_PACKAGE_HANDLING	Handling Packages
+0	AUTO	FE_STATS_SPEED_WINS	NUMBER OF SPEED RACE WINS
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	MOST CHECKPOINTS WON
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	The Top Tuner leaderboard represents the top Blueprint tuners in the game. You are ranked based on the win percentage of all your shared Blueprints. Your shared Blueprints must be used in at least 20 races before you will appear on the leaderboard.

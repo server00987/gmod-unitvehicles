@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Dutch_Frontend.bin
+#	File created on: 2025-05-24 11:11:53
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	TOTALE REPARATIEKOSTEN
+0	AUTO	MODE_ALL	Alle wagens
+0	AUTO	CUST_VINYL_MOVE_LAYER	Laag omhoog/omlaag
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	MOTORBLOK
+0	AUTO	CAR_SELECT_MUSTANGGT	De 4e generatie Mustang is met zijn 4.6 V8 de wagen waar de meeste mensen aan denken bij een pony car.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Deze upgrade vervangt je bestaande motoronderdelen door sterkere, duurzamere onderdelen, zodat je motor meer vermogen en hogere toeren aankan.
+0	AUTO	CUST_VISUAL_DECALS	NAAMSTICKERS
+0	AUTO	CUST_CUSTOMIZE	Ontwerp aanpassen
+0	AUTO	CODE_ENTRY_VALID	Gefeliciteerd! Je code is geaccepteerd en je hebt je beloning vrijgespeeld.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	REMKLAUWEN
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Je winkelwagen bevat kaarten die je nog niet hebt gekocht. Toch afsluiten?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	STABILISATORSTANGEN
+0	AUTO	CUST_QUICK_HANDLING_D3	Deze upgrade bevat onderdelen voor een stijvere wielophanging om de auto goed recht te houden.
+0	AUTO	CUST_QUICK_HANDLING_G3	Deze upgrade bevat onderdelen voor een stijvere wielophanging om de auto goed in de bochten en op het rechte stuk te houden.
+0	AUTO	CUST_QUICK_HANDLING_S3	Deze upgrade bevat onderdelen voor een stijvere wielophanging om de auto bij hoge snelheden goed in de bochten en op het rechte stuk te houden.
+0	AUTO	CUST_REGION_REAR_TIRE	ACHTERBAND
+0	AUTO	FE_STATS_BEST_SECTOR	BESTE SECTOR
+0	AUTO	CL_FREE_CAR_MARKER	GRATIS-WAGENKAART
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	RACE-EVENEMENTEN KIEZEN
+0	AUTO	CUST_QUICK_BRAKE_DI3	Deze upgrade zorgt voor een zo kort mogelijke remweg, maar zorgt ervoor (en stimuleert zelfs) dat de wielen tijdens het remmen gaan slippen.
+0	AUTO	CUST_BP_APPLY_CONFIRM	Het kost {0:d} om alle onderdelen te kopen die je nodig hebt om dit ontwerp op je wagen toe te passen. Wil je doorgaan?
+0	AUTO	CUST_SLOT_BUSHING_KIT	LAGERBUSSENKIT
+0	AUTO	FE_STATS_GAMES_PLAYED	SPELLEN GESPEELD
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUSWAGENS
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	LAAG {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	PAKKET INFORMATIE
+0	AUTO	CUST_SLOT_NITROUS_DESC	Nitro, of lachgas, is een zeer licht ontvlambaar gas, dat tijdens de verbranding in de cilinder kan worden gespoten om tijdelijk veel meer vermogen te krijgen.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Deze upgrade herprogrammeert de motorcomputer voor betere prestaties.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Deze upgrade herprogrammeert de motorcomputer voor betere prestaties.
+0	AUTO	CS_HEADER_SPEED_EVENT	SPEED-UITDAGING-EVENEMENTEN
+0	AUTO	CUST_SLOT_HEADS_DESC	Door de kleppen op de cilinderkop bij te stellen, kun je de luchtstroom naar de motor en de uitlaat van gassen uit de motor verhogen. Dat zorgt voor meer vermogen.
+0	AUTO	CUST_VINYL_ADDLAYER	NIEUWE LAAG TOEVOEGEN
+0	AUTO	CUST_CAT_SPEED_FORCED	Een snel spoolende turbo die zonder vertraging vermogen afgeeft zorgt voor een bruikbare vermogenscurve en een ongekend voordeel op het parcours of op straat.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	HOOGSTE VERMENIGVULDIGER
+0	AUTO	RACE_MODE_GRIP_MODE	RACETYPE^GRIP
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Nu kun je bepalen uit welke evenementen je racedag bestaat.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	AANTAL RACES
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Deze upgrade versterkt de onderdelen die het vermogen van je wagen op de wielen overbrengen: aandrijfas, differentieel en assen.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	GEREDEN CARRIÈRERACES
+0	AUTO	RACE_DAY_ADD_EVENT	EVENEMENT TOEVOEGEN
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Dit ontwerp is niet geschikt voor jouw versie van Need for Speed™ ProStreet en kan niet toegepast worden. Ga naar NeedforSpeed.com voor meer informatie over updates en nieuwe content.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	VELGLAK
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Ontwerp activeren
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	MOTORMANAGEMENT
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	BELONING KRIJGEN
+0	AUTO	CUST_PAINT_BODY	LAK
+0	AUTO	CUST_PAINT_RIMS	WIELEN
+0	AUTO	CUST_PAINT_TINT	GLASTINT
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Er is geen fout opgetreden.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Weet je zeker dat je deze racedag wilt verwijderen? Je eigen statistieken en records voor deze racedag gaan dan verloren.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	TAAL SELECTEREN
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Lagers van stijvere materialen als urethaan of aluminium zorgen ervoor dat je wagen strakker door de bochten gaat met minder rolneiging.
+0	AUTO	HUB_DIFFICULTY_2	NORMAAL
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Als je veel remt, wordt het remsysteem erg heet. Dit kan uiteindelijk leiden tot een langere remweg. Een groter remsysteem helpt de temperatuur binnen de perken te houden zodat je remkracht constant blijft.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	HOOGSTE TOPSNELHEID
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Selecteer betaalwijze
+0	AUTO	CUST_SLOT_INTAKE_DESC	Hoe meer koele lucht de motor krijgt, hoe beter hij presteert. En hoe koeler de lucht is, hoe meer vermogen de motor geeft.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	De grote stabilisatorstang achter, de aluminium lagers en het verwijderen van de voorste stabilisatorstang zorgen ervoor dat je overstuur krijgt en dat je de achterkant van je wagen dus makkelijker kunt laten uitbreken.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Wil je het scherm Wagen selecteren verlaten en terugkeren naar de carrièrekaart?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Racedag opslaan...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	HOOGST GEKLASSEERDE WAGENTUNER
+0	AUTO	RACE_MODE_DESCRIPTION	Het racetype bepaalt aan welke evenementen je met deze wagen kunt meedoen.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Je moet Autosculpt-onderdelen monteren om toegang te krijgen tot de windtunnel!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Hoe groter de capaciteit van de luchtinlaat, hoe meer lucht je motor per keer krijgt. Met een soepele inlaat met een hoge toevoer kan de motor veel meer uit zijn topvermogen halen.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	TOTALE CONTROLEPOSTTOPSNELHEID
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	BRANDSTOFSYSTEEM
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Met een 2.3-turbomotor die meer dan 260 pk levert, een beperkt slipdifferentieel en een 6-bak. De Speed 3 is een moderne hothatch.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Door deze upgrade kun je nog sneller en preciezer schakelen. De onderdelen die het vermogen op de wielen overbrengen zijn zo licht als in een racewagen.
+0	AUTO	CAR_SELECT_INTEGRA	De Kouki, met zijn hoogtoerige B serie-motor, is een ongelooflijk populaire wagen onder racefanaten dankzij de vele motoropties en het fantastische onderstel.
+0	AUTO	FE_HUBMAP_ETREE_CARS	WAGENS
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Deze upgrade verhoogt het algemene vermogen van de motor.
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Deze upgrade gaat nog een stapje verder en brengt het vermogen in de richting van een echte racewagen.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Let goed op je snelheid in de bocht en zorg voor de juiste acceleratie als je de bocht uitkomt. Meer vermogen betekent dat je razendsnel uit bochten kunt komen en hogere snelheden kunt bereiken.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Weet je zeker dat je deze wagen wilt repareren?
+0	AUTO	CAR_SELECT_S3	De tweede generatie S3 die niet in Noord-Amerika wordt verkocht.
+0	AUTO	CAR_SELECT_S4	De S4 is tammer dan de RS4, maar heeft ook een 4.2 V8
+0	AUTO	CAR_SELECT_TT	De Mark 2-versie van de TT heeft verschillende 'auto van het jaar'-prijzen in de wacht gesleept.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	NITRO
+0	AUTO	FE_STATS_DOWNLOADING_STATS	STATISTIEKEN DOWNLOADEN
+0	AUTO	CUST_QUICK_FORCED_D3	Geforceerde inductie niveau 3 - drag
+0	AUTO	CUST_QUICK_FORCED_G3	Deze upgrade verhoogt de hoeveelheid lucht die in de motor wordt gevoerd, waardoor het vermogen opnieuw toeneemt en de auto steeds meer op een racewagen begint te lijken.
+0	AUTO	CUST_QUICK_FORCED_S3	Deze upgrade verhoogt de hoeveelheid lucht die in de motor wordt gevoerd, waardoor het vermogen opnieuw toeneemt en de auto steeds meer op een racewagen begint te lijken.
+0	AUTO	CUST_PAINT_GROUP_CANDY	CANDY
+0	AUTO	CUST_PAINT_GROUP_GLOSS	GLANSLAK
+0	AUTO	CUST_PAINT_GROUP_MATTE	MAT
+0	AUTO	CUST_DRIVETRAIN_GROUP	AANDRIJFLIJN
+0	AUTO	CUST_PAINT_GROUP_PEARL	PARELMOER
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Deze upgrade herprogrammeert de motorcomputer nog beter om sneller te kunnen accelereren.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Deze upgrade herprogrammeert de motorcomputer nog beter voor optimale prestaties.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Deze upgrade herprogrammeert de motorcomputer nog beter voor optimale prestaties.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Remklauwen met grote of meerdere zuigers kunnen het oppervlak van een remblok op de schijf gelijkmatiger verdelen, wat voor meer remkracht zorgt.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Druk op de START-knop om te beginnen.
+0	AUTO	RACE_DAY_SLOT_ID	LOCATIE {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	UITLATEN
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Er is een fout opgetreden toen je probeerde deel te nemen aan de race. Probeer het nog eens.
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	KOELING VERSNELLINGSBAK
+0	AUTO	RACE_MODE_DRIFT_MODE	RACETYPE^DRIFT
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Welke wielen wil je aanpassen?
+0	AUTO	CUST_SLOT_FLYWHEEL	VLIEGWIEL
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Racestoelen houden je op je plaats.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Als je van racetype verandert, worden alle eerdere ontwerpen voor deze wagen gewist, inclusief alle styling- en stickeraanpassingen. Weet je zeker dat je dat wilt?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	TIJD BESTEED AAN CARRIÈRERACES
+0	AUTO	CUST_DRAG_TUT_AWD	Vierwielaandrijving is een groot voordeel. De grip is fenomenaal zodat elke pk ook echt wordt gebruikt om vooruit te komen.
+0	AUTO	CUST_DRAG_TUT_FWD	Het grootste probleem met voorwielaandrijving bij dragracen is grip behouden. Hoe meer vermogen je hebt, hoe moeilijker het is om je banden niet te laten slippen. Bij het bouwen van een snelle dragwagen met voorwielaandrijving is het essentieel vermogen te creëren en dat vermogen goed op de weg over te brengen. Zodra je de basisvermogensupgrades hebt geïnstalleerd, moet je ervoor zorgen dat je het vermogen en de grip weet te beheersen.
+0	AUTO	CUST_DRAG_TUT_RWD	Het belangrijkste bij het afstellen van je dragwagen is grip. Zorg ervoor dat de wielen op de weg blijven en houd de wielspin onder controle voor snelle tijden. Dat is nog belangrijker voor wagens met veel vermogen.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	De Need for Speed™ -server heeft de zoekopdracht geannuleerd.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Banden houden je op de weg.
+0	AUTO	CAR_SELECT_GTRPROTO	De GTR Proto is de preproductieversie van de R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	AANTAL ZELDZAME WAGENS
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	DOMINEERBELONING
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} REPARATIEKAARTEN
+0	AUTO	CAR_SELECT_VIPERCOUPE	De 3e versie van de Viper. De V10-motor in de sportcoupé van Dodge met zijn karakteristieke geluid levert 500 pk.
+0	AUTO	MAIN_MENU_TITLE	HOOFDMENU
+0	AUTO	CUST_TINT_DARK	DONKER
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Door de wielophanging zo af te stellen dat je een goede gewichtsoverdracht verkrijgt tijdens de start, wordt je wagen sneller en krijgt deze meer grip.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Wagens total loss rijden niet mogelijk
+0	AUTO	CUST_APPLYING_BLUEPRINT	ONTWERP TOEPASSEN
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	KIES EEN RACEDAG-OPSLAGLOCATIE
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Een wagen met middenmotor en prestaties die dicht in de buurt komen bij die van 911's.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	PERCENTAGE CARRIÈRE VOLTOOID
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFFERENTIEEL
+0	AUTO	CUST_WIND_TUNNEL_ON	Windtunnel aan
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Reparatiekaarten werken niet op racedagen voor meerdere spelers. Je wagen kun je beschadigen, maar hij wordt vanzelf hersteld na de race. Je wagen kun je niet total loss rijden.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Het ontwerp komt niet overeen met het racetype van de wagen waarop je het toepast. Alle eerdere ontwerpen worden gewist. Weet je zeker dat je dit wilt doen?
+0	AUTO	CUST_QUICK_POWER_DI3	Dit pakket is gericht op het leveren van meer vermogen om de grip van de aangedreven wielen te verbreken.
+0	AUTO	RACE_MODE_DRAG_MODE	RACETYPE^DRAG
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Deze basisupgrade verbetert het algehele uiterlijk van de wagen.
+0	AUTO	CUST_QUICK_VISUAL_2	Door de wing en voorsplitters ondervindt je wagen bij hoge snelheden veel minder lift. Dat resulteert in betere stabiliteit bij hoge snelheden en meer grip in de bochten.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Speltype selecteren
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Er is al een ontwerp opgeslagen op de geselecteerde opslaglocatie. Wil je dit overschrijven?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	KAARTBEHEER
+0	AUTO	CAR_SELECT_FOCUSST	De Focus Mk2 heeft een 2.5-turbomotor met 225 pk.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Deze upgrade versterkt de onderdelen die het vermogen van je wagen op de wielen overbrengen: aandrijfas, differentieel en assen.
+0	AUTO	FE_MAIN_MENU	Het hoofdmenu
+0	AUTO	CUST_REGION_REAR_BUMPER	ACHTERBUMPER
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	AANDRIJFRIEMSCHIJF
+0	AUTO	CAR_SELECT_BARRACUDA	De Hemi 'Cuda is een legende.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	HOOGST GEKLASSEERDE WAGEN
+0	AUTO	CUST_APPLY_PAINT_TITLE	LAK AANBRENGEN
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	AANTAL WAGENS IN GARAGE
+0	AUTO	CUST_REGION_ALL_WHEELS	ALLE WIELEN
+0	AUTO	CUST_QUICK_FORCED_2	Deze upgrade verhoogt de hoeveelheid lucht die in de motor wordt gevoerd, waardoor het vermogen over de hele linie toeneemt.
+0	AUTO	FE_STATS_FASTEST_LAP	SNELSTE RONDE
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Om je banden goed op het wegdek te houden, worden de stabilisatorstangen voor en achter stijver afgesteld, de lagers vervangen door exemplaren van urethaan en de schokbrekers vervangen door racedempers.
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	PERCENTAGE NIET VOLTOOID
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	De B-Body Charger was een van de bekendste tv-wagens ooit.
+0	AUTO	CUST_QUICK_INTERNALS_1	Deze upgrade versterkt de motor en maakt latere, uitgebreidere upgrades mogelijk.
+0	AUTO	CUST_QUICK_INTERNALS_2	Deze upgrade bevat nog sterkere motoronderdelen, waardoor de motor bestand is tegen meer vermogen en hogere toerentallen.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Weet je zeker dat je dit ontwerp in de originele staat wilt herstellen?
+0	AUTO	CUST_SLOT_RACING_SEATS	RACESTOELEN
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZONE 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	MEESTE SECTORPUNTEN
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	MEEST WAARDEVOLLE WAGEN
+0	AUTO	CAR_SELECT_CIVICSI	Achtste generatie Civic.
+0	AUTO	CAR_SELECT_CHEVELLESS	De Chevelle was de eerste musclecar van Chevrolet. Voor 1970 mocht de motor niet groter zijn dan 6,5 liter. Dat veranderde in 1970 toen de 402 Chevelle op de markt kwam.
+0	AUTO	CUST_CAT_GRIP_FORCED	Een snel spoolende turbo die zonder vertraging vermogen afgeeft zorgt voor een bruikbare vermogenscurve en een ongekend voordeel op het parcours of op straat.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Dit is de racedagkaart
+0	AUTO	CUST_BLUEPRINT_APPLY	Ontwerp toepassen
+0	AUTO	CUST_SLOT_CAMSHAFTS	NOKKENASSEN
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Alle races weergeven
+0	AUTO	CUST_SLOT_HEADERS	UITLAATBOCHTEN
+0	AUTO	FE_STATS_FASTEST_TIME	SNELSTE TIJD
+0	AUTO	CUST_SUSPENSION_GROUP	WIELOPHANGING
+0	AUTO	CUST_BLUEPRINT_RESET	ONTWERP RESETTEN
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Deze upgrade gaat nog een stapje verder en brengt het vermogen in de richting van een echte dragracewagen.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Deze upgrade gaat nog een stapje verder en brengt het vermogen in de richting van een echte racewagen.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Deze upgrade gaat nog een stapje verder en brengt het vermogen in de richting van een echte racewagen.
+0	AUTO	CUST_INSTALLED	AANGEBRACHT
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Racedag laden...
+0	AUTO	CUST_SLOT_CAMS_DESC	Een korte duur en weinig lift zorgen voor een prettige nokkenas voor dagelijks gebruik. Als je de lift en duur verhoogt, kun je in het hoogste toerenbereik meer toeren maken. De beste nokkenas is de nokkenas die het meeste vermogen afgeeft in het toerenbereik waarin je meestal rijdt.
+0	AUTO	CUST_QUICK_HANDLING_DI3	Deze upgrade past de wielophanging zodanig aan dat de wagen gemakkelijk door de bochten glijdt.
+0	AUTO	CUST_QUICK_BRAKE_D3	Deze upgrade zorgt voor een zo kort mogelijke remweg en zorgt ervoor dat de wielen tijdens het remmen grip houden.
+0	AUTO	CUST_QUICK_BRAKE_G3	Pakket remmen niveau 3 - grip
+0	AUTO	CUST_QUICK_BRAKE_S3	Deze upgrade zorgt voor een zo kort mogelijke remweg bij topsnelheden en zorgt ervoor dat de remmen tijdens het remmen grip houden.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Hoe groter de nitrofles, hoe meer nitro je kunt opslaan. Je kunt ook meerdere flessen in een wagen installeren. Elke fles moet na gebruik opnieuw worden gevuld.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Avond
+0	AUTO	CUST_TINT_LIGHT	LICHT
+0	AUTO	CUST_REPAIR_DAMAGE	SCHADE
+0	AUTO	CUST_TINT_PEARL	PAREL
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	LANGSTE DRIFTAFSTAND
+0	AUTO	CUST_SLOT_TIPS_DESC	Met deze tips kun je je wagen een agressief uiterlijk geven.
+0	AUTO	CUST_SLOT_STEERING_DESC	Heugel en rondsel van goede kwaliteit zorgen voor een iets grotere stuurhoek, terwijl ze ten opzichte van standaardstuurbekrachtiging minder stuurweerstand geven.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Een echte supercarkiller. Deze Corvette heeft een 7.0-motor met titanium stangen en een droog carteloliesysteem.
+0	AUTO	HD_COMPATIBLE	Ondersteunt HDTV voor de beste game-ervaring
+0	AUTO	PS_START_BUTTON	START-toets
+0	AUTO	RACEDAY_DELETE_EVENT	Evenement verwijderen
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	AANTAL VERSLAGEN KINGS
+0	AUTO	CUST_WIND_TUNNEL	WINDTUNNEL
+0	AUTO	CUST_STAGE_NUMBER	NIVEAU {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	AANTAL OVERWINNINGEN
+0	AUTO	CUST_FILTER_FRONT_BUMPER	VOORBUMPER
+0	AUTO	MAIN_CAREER	CARRIÈRE
+0	AUTO	CUST_REGION_REAR_WHEEL	ACHTERWIELEN
+0	AUTO	CUST_QUICK_VISUAL_D3	Deze upgrade maakt gebruik van verschillende aerodynamische onderdelen om bij hoge snelheden meer neerwaartse kracht te krijgen.
+0	AUTO	CUST_QUICK_VISUAL_G3	Deze upgrade maakt gebruik van verschillende aerodynamische onderdelen om bij hoge snelheden meer neerwaartse kracht te krijgen.
+0	AUTO	CUST_QUICK_VISUAL_S3	Deze upgrade maakt gebruik van verschillende aerodynamische onderdelen om op topsnelheid meer neerwaartse kracht te krijgen.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Als je veel remt, wordt het remsysteem erg heet. Dit kan uiteindelijk leiden tot een langere remweg. Een groter remsysteem helpt de temperatuur binnen de perken te houden zodat je remkracht constant blijft.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Deze upgrade voegt motoronderdelen van een racewagen toe, waardoor de motor bestand is tegen nog meer vermogen en nog hogere toerentallen.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	AANTAL KLASSEMENTS OVERWINNINGEN
+0	AUTO	CUST_SLOT_BOV_DESC	Een afblaasklep voert overtollige druk af zonder de motor af te remmen zodat een turbo maximale boost kan geven en behouden.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Er is een update beschikbaar en vereist voor online spelen. Ga naar NeedforSpeed.com voor update-informatie.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	BESTE EVENEMENTTYPE
+0	AUTO	HUB_BREAK_RECORD	RECORD VERBREKEN
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Deze stangen houden je voorwielen op de grond en zijn bestand tegen het koppel dat je motor levert.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Makkelijk
+0	AUTO	RACE_DAY_DIFFICULTY_2	Normaal
+0	AUTO	RACE_DAY_DIFFICULTY_3	Moeilijk
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elite
+0	AUTO	CUST_SLOT_CLUTCH	KOPPELING
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Druk op de 2-knop om door te gaan.
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	SNELSTE 0-60 MPU
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Wil je de voor- of achterbanden aanpassen?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	STEL EEN RACEDAG SAMEN
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	PERSOONLIJKE RECORDS
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Als je het vermogen van je motor verhoogt, moet je bepaalde onderdelen tunen om ervoor te zorgen dat het vermogen efficiënt wordt ingezet en goed op de aangedreven wielen wordt overgebracht. Koppeling, aandrijfas en beperkt slipdifferentieel spelen allemaal een rol.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	ÉÉN SPELER
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Bij dragracen is, na het starten, vermogen het allerbelangrijkst. Meer vermogen zorgt voor meer snelheid op het parcours en verhoogt de radarsnelheid.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Deze racedag is niet geschikt voor jouw versie van Need for Speed™ ProStreet en kan niet toegepast worden. Ga naar NeedforSpeed.com voor meer informatie over updates en nieuwe content.
+0	AUTO	RD_PLAY	SPELEN
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	ONTSTEKINGSSYSTEEM
+0	AUTO	FE_STATS_CAREER_WINS	GEWONNEN CARRIÈRERACES
+0	AUTO	RACE_DAY_LOCATION	LOCATIE
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Door deze upgrade kun je sneller schakelen en beschikt je wagen over een efficiëntere overbrenging van het vermogen op de wielen.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Door deze upgrade kun je nog sneller en preciezer schakelen. Ook zijn de onderdelen die het vermogen op de wielen overbrengen lichter.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Weet je zeker dat je dit gedeelde ontwerp wilt verwijderen?
+0	AUTO	SHOW_FRIENDS	Vrienden weergeven
+0	AUTO	FE_STATS_HUBS_DOMINATED	GEDOMINEERDE RACEDAGEN
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	SNELSTE REACTIETIJD
+0	AUTO	CODE_ENTRY_INVALID	De ingevoerde code is niet geldig. Controleer de ingevoerde code en probeer het opnieuw.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	KIES MAXIMAAL 8 EVENEMENTEN
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Wagen repareren
+0	AUTO	CUST_AUTOSCULPT	Autosculpt
+0	AUTO	CUST_REPAIR_MARKER	REPARATIEKAART
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	STRALEND
+0	AUTO	CUST_SLOT_CAM_GEARS	NOKKENASTANDWIELEN
+0	AUTO	CUST_SLOT_ROOF_SCOOP	DAKLUCHTHAPPER
+0	AUTO	CUST_COMPONENTS_TITLE	ONDERDELEN AANPASSEN
+0	AUTO	CUST_BRAKES_GROUP	REMMEN
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Weet je zeker dat je wilt stoppen?
+0	AUTO	CUST_SLOT_TRACTION_BARS	TRACTIESTANGEN
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Deze upgrade verbetert het remvermogen van je wagen door middel van remblokken en -schijven van hoge kwaliteit. Remmen zijn essentieel om een drift onder controle te houden en te reguleren.
+0	AUTO	MAIN_RACE_DAY	RACEDAG
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	WINST-% SPEED-UITDAGING
+0	AUTO	SELL_CAR_CONFIRMATION	De waarde van deze wagen is {0:d}^Als je de wagen verkoopt, gaan alle ontwerpen van deze wagen verloren. Weet je zeker dat je hem wilt verkopen?
+0	AUTO	RD_DELETE_RD	Racedag verwijderen?
+0	AUTO	CAR_SELECT_G35	De G35 heeft hetzelfde onderstel als de 350z.
+0	AUTO	CAR_SELECT_GXP	De GXP heeft een 2.0 16V-turbomotor met een vermogen van 260 pk, een beperkt slipdifferentieel en standaard 18"-velgen.
+0	AUTO	CAR_SELECT_NSX	Ontworpen om Honda's racetechnologie ten toon te stellen. Deze wagen met middenmotor was zijn tijd ver vooruit.
+0	AUTO	CAR_SELECT_R35	Dit is de productieversie van de R35 GTR.
+0	AUTO	CAR_SELECT_S13	De S13 is een van de beroemdste driftwagens.
+0	AUTO	CAR_SELECT_S15	De S15 is nooit in originele staat verkocht in Noord-Amerika, maar is toch een icoon in de tunerwereld geworden.
+0	AUTO	CAR_SELECT_RS4	De B7 RS4 heeft een V8 die 400 pk levert en is beschikbaar als sedan, stationcar of cabriolet.
+0	AUTO	CAR_SELECT_RSX	De opvolger van de legendarische Integra heeft de nieuwe K-seriemotor van Honda.
+0	AUTO	CAR_SELECT_RX8	Een 2+2-wagen met een wankelmotor voorin en achterwielaandrijving. De RX-8 heeft een bijna perfecte 50:50-gewichtsverdeling en een ongelooflijk gebalanceerd rijgedrag.
+0	AUTO	CAR_SELECT_STI	Een viercilinder boxermotor, een turbo en vierwielaandrijving. De Sti is een van de beroemste tunerwagens. Deze wagen kan alles, en kan alles goed.
+0	AUTO	CAR_SELECT_Z4M	Met dezelfde 6 in lijn als de E46 M3. Deze wagen gaat van 0-100 in 4,9 seconden. Hij is begrensd op 250 km/u.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Styling niveau 3 - drift
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZONE 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZONE 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZONE 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZONE 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZONE 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZONE 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZONE 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZONE 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZONE 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	HOOGSTE RACESCORE
+0	AUTO	FE_STATS_AVERAGE_SPEED	GEMIDDELDE SNELHEID
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALLIC
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Druk op de START-toets
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	PERCENTAGE DRIFTWINST
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Geen reservewagens beschikbaar
+0	AUTO	CUST_FILTER_FRONT	VOORWIELEN
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	WAGENPARK
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	De preproductieversie van de 5e generatie Camaro is in '06 op de markt gekomen.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Door deze upgrade gaat de wagen sneller en strakker door de bochten.
+0	AUTO	CUST_QUICK_SUSPENSION_2	Door deze upgrade gaat de wagen sneller en strakker door de bochten, met nog meer controle.
+0	AUTO	CUST_QUICK_NITROUS_D3	Deze upgrade levert kortstondig 50-250 pk extra motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de laatste plaats.
+0	AUTO	CUST_QUICK_NITROUS_G3	Deze upgrade levert kortstondig 50-250 pk extra motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de tweede plaats.
+0	AUTO	CUST_QUICK_NITROUS_S3	Deze upgrade levert kortstondig 50-250 pk extra motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de tweede plaats.
+0	AUTO	CUST_PERFORMANCE	PRESTATIE
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Als je de stabilisatorstangen stugger afstelt, krijg je meer stijfheid in de bochten, zodat je minder last hebt van onderstuur.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Weet je zeker dat je dit ontwerp wilt verwijderen?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Ontwerpen
+0	AUTO	CUST_QUICK_UPGRADE	SNELLE UPGRADE
+0	AUTO	CAR_SELECT_CORVETTEC6	Dit is de nieuwste versie van de Corvette en de eerste versie in bijna 35 jaar met blootliggende koplampen.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	BELONING
+0	AUTO	MAIN_QUIT_GAME	AFSLUITEN
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	NITRO
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTER
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	De veiligheidskooi zorgt niet alleen voor meer veiligheid, maar maakt je chassis ook stijver en geeft je wagen een echte racelook.
+0	AUTO	CUST_SLOT_BC_DESC	Hoe meer boost een motor krijgt, hoe beter. Als een motor zonder problemen een hogere boost kan hebben, is dit apparaat een welkom hulpmiddel om het maximale uit een turbo te halen.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Hete bakken zorgen voor veel problemen.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	GEFORCEERDE INDUCTIE
+0	AUTO	CAR_TYPE_SPEED	SPEED-UITDAGING
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	CILINDERKOPPEN
+0	AUTO	CUST_SELL_CAR_WARNING	Als je deze wagen verkoopt, kun je niet meedoen aan {0:s}-evenementen tot je een andere geschikte wagen voor dat soort races hebt gekocht.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Er zijn in dit gebied geen evenementen van dit type.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	TIJDSTIP
+0	AUTO	RD_DELETED	Racedag verwijderd.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Als je het vermogen van je motor verhoogt, moet je bepaalde onderdelen tunen om ervoor te zorgen dat het vermogen efficiënt wordt ingezet en goed op de aangedreven wielen wordt overgebracht. Koppeling, aandrijfas en beperkt slipdifferentieel spelen allemaal een rol.
+0	AUTO	CUST_SLOT_AIR_INTAKE	LUCHTINLAATSYSTEEM
+0	AUTO	CUST_PART_PURCHASED	GEKOCHT
+0	AUTO	CUST_BP_OPTION_UNDO	ONGEDAAN MAKEN
+0	AUTO	CUST_FILTER_BODY	CARROSSERIE
+0	AUTO	CUST_FILTER_HOOD	MOTORKAP
+0	AUTO	CUST_FILTER_REAR	ACHTERWIELEN
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Deze upgrade herprogrammeert je motorcomputer waardoor er meer brandstof en lucht kan worden verbrand. Je krijgt zo een maximale vermogensafgifte op het moment dat je die nodig hebt.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Remkabels die zijn versterkt met gevlochten roestvrij staal verhogen de hydraulische druk en de remrespons.
+0	AUTO	LS_SAVING	BEZIG MET OPSLAAN...
+0	AUTO	CUST_CUSTOM_UPGRADE	AANGEPASTE UPGRADE
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Je kunt niet deelnemen aan deze racedag. Je hebt geen wagen(s) van dit type:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Door een goede afstelling van de wielophanging, dus zonder veel onder- of overstuur, wordt je wagen sneller en beter bestuurbaar.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	RACETYPE KIEZEN
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Je kunt geen uitlaatsierstuk van de accessoiremarkt op een standaard carrosseriekit zetten!
+0	AUTO	CUST_PURCHASE_CAR	Wagen kopen
+0	AUTO	CODE_ENTRY_VERIFICATION	Code op server controleren...
+0	AUTO	MC_OLD_SAVE_REWARD	Bedankt voor het spelen van vorige spellen uit de Need for Speed™-reeks. We belonen je trouw met {0:d} reparatiekaarten en {1:d} totalloss-kaart(en) in het speltype Carrière.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	FINISH VOOR HOGERE TEGENSTANDER
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Vermogen niveau 3 - drag
+0	AUTO	CUST_QUICK_POWER_G3	Dit pakket zorgt voor de transformatie van straatwagen naar racewagen met nog meer vermogen.
+0	AUTO	CUST_QUICK_POWER_S3	Vermogen niveau 3 - snelheid
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	AANTAL ONTWERPEN
+0	AUTO	FE_STATS_BEST_RUN	BESTE RIT
+0	AUTO	WINDTUNNEL_DOWNFORCE	NEERWAARTSE KRACHT
+0	AUTO	CUST_SLOT_COOLING_DESC	Niet te heet, niet te koud. Precies goed.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	BESTE DRIFTSCORE
+0	AUTO	CUST_CAT_DRIFT_FORCED	Deze upgrade verhoogt de hoeveelheid lucht die in de motor wordt gevoerd, zodat er meer brandstof kan verbranden en je dus meer vermogen uit je motor kunt halen.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Reparatiekaart gebruiken
+0	AUTO	FE_STATS_FILTER_GENERAL	ALGEMENE STATISTIEKEN
+0	AUTO	CB_BLUEPRINTS_HEADER	TYPE ONTWERP
+0	AUTO	ENTER_SECRET_CODE	GEHEIME CODE INVOEREN
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Hierdoor verandert het uiterlijk van je wagen drastisch en wordt de aerodynamica mogelijk beter.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	AANTAL WAGENS TOTAL LOSS
+0	AUTO	CUST_SLOT_WHEELS	WIELEN
+0	AUTO	CUST_SLOT_SUPERCHARGER	SUPERCHARGER
+0	AUTO	CAR_SELECT_SHELBYGT500	De GT500 is de eerste Noord-Amerikaanse wagen met veiligheidskooi en een van de beroemdste Shelby-wagens.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	LANGSTE ENKELE WHEELIE
+0	AUTO	FE_STATS_GRIP_WINS	GEWONNEN GRIPRACES
+0	AUTO	CL_MS_POINTS	Microsoft® points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	LANGSTE DRIFTTIJD
+0	AUTO	CUST_FILTER_REAR_BUMPER	ACHTERBUMPER
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	BESTE 0-60 MPU
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Het kost {0:d} om een wagen te kopen en dit ontwerp erop toe te passen. Wil je doorgaan?
+0	AUTO	GARAGE_REPAIR_DENIED	Je hebt niet genoeg geld om deze wagen te repareren.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	KLIK om door te gaan
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	AANTAL PUNKBUSTER-RACES
+0	AUTO	GARAGE_NO_CAR_REPAIR	Je hebt niet genoeg geld of reparatiekaarten om je wagen te repareren.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	GEEN WAGENS BESCHIKBAAR
+0	AUTO	RDMAP_CREATE_PREVIEW	JE EIGEN RACEDAG MAKEN
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Als je veel remt, wordt het remsysteem erg heet. Dit kan uiteindelijk leiden tot een langere remweg. Een groter remsysteem helpt de temperatuur binnen de perken te houden zodat je remkracht constant blijft.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	MEESTE DRIFTS ACHTER ELKAAR
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	VERDEELKLEP
+0	AUTO	FE_STATS_CLUB_TAG	CLUBLABEL
+0	AUTO	CUST_SLOT_EXHAUST	UITLAATSIERSTUKKEN
+0	AUTO	CAR_SELECT_INTEGRATYPER	De Integra Type R wordt vaak beschouwd als de best rijdende wagen met voorwielaandrijving ooit.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Het gaat hier niet om het stoppen, maar om het rijden. Het doel is om de lichtst mogelijke reminstellingen te krijgen, zodat je wagen zo snel mogelijk kan optrekken.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Lak aanbrengen
+0	AUTO	WINDTUNNEL_PEAK_HP	PIEKVERMOGEN
+0	AUTO	CUST_BLUEPRINT_DELETE	Ontwerp verwijderen
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	CARRIÈRESTATISTIEKEN
+0	AUTO	CUST_VISUAL_TITLE	STYLING
+0	AUTO	CUST_SLOT_DRIVESHAFT	AANDRIJFAS
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Ontwerp kopen
+0	AUTO	CAREER_COMPLETION_HEADER	VOLTOOIING CARRIÈRE
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Met meer vermogen is het makkelijker de banden te laten spinnen en in een drift te blijven. Verhoog het vermogen om goede powerslides te kunnen maken.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	SNELSTE 1/4 MIJL
+0	AUTO	CL_NOT_ENOUGH_CASH	Je hebt niet genoeg geld voor deze wagen.
+0	AUTO	CUST_SLOT_SC_DESC	Deze vorm van geforceerde inductie wordt aangedreven door de motor zelf en zorgt voor meer vermogen bij weinig toeren.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	CLUB
+0	AUTO	CUST_SLOT_TIRES	BANDEN
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Geen bestaande racedagen gevonden.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Hierdoor gaan alle wijzigingen die je hebt aangebracht in deze racedag verloren. Wijzigingen annuleren?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	VERING EN SCHOKDEMPERS
+0	AUTO	CUST_REGION_SKIRT	SKIRT
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	NITROFLESSEN
+0	AUTO	CUST_QUICK_FORCED_DI3	Deze upgrade verhoogt de hoeveelheid lucht die in de motor wordt gevoerd, waardoor het vermogen opnieuw toeneemt en de auto steeds meer op een racewagen begint te lijken.
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	WHEELIE-STANGEN
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	Over deze wagen mogen we niks zeggen.
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Je hebt het maximum van {0:d} wagens bereikt. ^Je moet een wagen verkopen in de garage voordat je een nieuwe kunt kopen.
+0	AUTO	CUST_CUSTOMIZE_MAIN	AANPASSINGEN
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Deze upgrade herprogrammeert de motorcomputer waardoor er meer brandstof en lucht kan worden verbrand. Je krijgt zo het vermogen dat je nodig hebt om je tegenstander bij het uitgaan van de bocht in te halen.
+0	AUTO	CUST_BLUEPRINT_HEADER	ONTWERP AANPASSEN
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	PERCENTAGE DRAGWINST
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	UITLAATSYSTEEM
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	SELECTEREN
+0	AUTO	CUST_PAINT_GROUP_CHROME	CHROOM
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	AANTAL GEDEELDE ONTWERPEN
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	GEFORCEERDE INDUCTIE
+0	AUTO	FE_STATS_DRIFT_RACES	GEREDEN DRIFTRACES
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Als je het vermogen van je motor verhoogt, moet je bepaalde onderdelen tunen om ervoor te zorgen dat het vermogen efficiënt wordt ingezet en goed op de aangedreven wielen wordt overgebracht. Koppeling, aandrijfas en beperkt slipdifferentieel spelen allemaal een rol.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	PRESTATIESTATISTIEKEN
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBO
+0	AUTO	CUST_SLOT_SHIFTER	VERSNELLINGSBAK
+0	AUTO	CUST_DYNO_TEST	ROLLENBANK
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japanse racers hebben de Tokyo Dockyards overgenomen. Ze hebben intense raceparcours uitgezet, waarbij ze werkelijk alle elementen uit de omgeving hebben gebruikt.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	UITDAGINGSWAGENS SELECTEREN
+0	AUTO	CUST_CAT_SPEED_NITROUS	Door deze upgrade krijgt het vermogen van je wagen een tijdelijke oppepper die het verschil kan uitmaken tussen winnen en verliezen.
+0	AUTO	CAR_SELECT_MUSTANGGTN	De 5e generatie Mustang staat bekend om zijn 'retro-futurisme'.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	WINSTPERCENTAGE
+0	AUTO	RD_CUSTOM_SELECT	Racedag spelen?
+0	AUTO	KING_FLOW_CASH_REWARD	GELDBELONING
+0	AUTO	CUST_CAT_SPEED_BRAKE	Deze upgrade verbetert het remvermogen van je wagen door middel van remblokken en -schijven van hoge kwaliteit. Remmen vormen een belangrijk onderdeel van een goed getuned voertuig.
+0	AUTO	CUST_SPEED_TUT_AWD	Door alle vier de wielen aan te drijven, neemt de grip toe, vooral bij de start en tijdens het accelereren bij het uitkomen van de bocht. Profiteer daarvan.
+0	AUTO	CUST_SPEED_TUT_FWD	Hoewel een wagen met voorwielaandrijving de wetten van de fysica tart, kun je een fantastische racewagen maken als je de juiste tunekeuzes maakt. De eerste prioriteit is het verminderen van onderstuur, inherent aan een wagen met voorwielaandrijving. Dat doe je door alle onderdelen aan de voorkant stijver te maken. Vervolgens heb je een beperkt slipdifferentieel nodig om te voorkomen dat je stuur gaat trekken.
+0	AUTO	CUST_SPEED_TUT_RWD	Balans en 'sturen met het gaspedaal' zijn de grote voordelen van achterwielaandrijving. Let er bij het afstellen op dat je niet te veel overstuur verkrijgt.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	KOELSYSTEEM
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	De Cosworth is gemaakt voor homologatiedoeleinden. Is nooit een echte Escort geweest. Maar de Escort RS werd een icoon met een onmiskenbaar silhouet.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	SNELSTE 0-100 MPU
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs is de snelste weg van het westen en ligt tegen een heuvel in de woestijn van Californië. Deze route heeft veel hoogteverschillen en er wordt hard gereden.
+0	AUTO	RACE_DAY_DIFFICULTY	MOEILIJKHEIDSGRAAD
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Je hebt niet genoeg geld om alle kaarten in je winkelwagen te kopen.
+0	AUTO	CAR_SELECT_CHALLENGER	De eerste generatie Challenger was Dodge's eerste pony-wagen. Hij is gebaseerd op een ouder ontwerp voor een wagen met turbo.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Selecteer een beschikbare opslaglocatie om een nieuwe eigen racedag te maken. Het plaatje dat je selecteert wordt gebruikt voor die racedag op de racedagkaart onder Mijn racedag.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Door alle vier de wielen aan te drijven, neemt de grip toe, vooral bij de start en tijdens het accelereren bij het uitkomen van de bocht. Profiteer daarvan.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Hoewel een wagen met voorwielaandrijving de wetten van de fysica tart, kun je een fantastische racewagen maken als je de juiste tunekeuzes maakt. De eerste prioriteit is het verminderen van onderstuur, inherent aan een wagen met voorwielaandrijving. Dat doe je door alle onderdelen aan de voorkant stijver te maken. Vervolgens heb je een beperkt slipdifferentieel nodig om te voorkomen dat je stuur gaat trekken.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Balans en 'sturen met het gaspedaal' zijn de grote voordelen van achterwielaandrijving. Let er bij het afstellen op dat je niet te overstuur verkrijgt.
+0	AUTO	CUST_SELL_CAR	Wagen verkopen
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Op het bekende testparcours van Porsche in Leipzig, Duitsland, zijn veel bekende bochten uit andere racebanen nagebouwd.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	ZIJSKIRTS
+0	AUTO	CUST_SLOT_FUEL_DESC	Een efficiënte brandstoftoevoer is essentieel om veel vermogen te krijgen. Een grotere brandstofpomp in combinatie met grotere injectoren en betere brandstofleidingen zorgen voor veel vermogenswinst.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Een goede driftwagen moet op een voorspelbare manier uitbreken. Hij moet ook eenvoudig zijdelings in de bocht blijven, en tegelijkertijd extreem stabiel zijn.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	VRIENDEN
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Ochtend
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Matchmaking-fout opgetreden.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Deze razendsnelle route gaat over delen van de snelweg in Tokyo. Je komt hier onder andere lussen, rechte stukken en tunnels tegen.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	GESPEELDE KLASSEMENTS SPELLEN
+0	AUTO	CUST_TUNE	TUNEN
+0	AUTO	CUST_VISUALS_TITLE	STYLING
+0	AUTO	FE_STATS_CLUB_NAME	CLUBNAAM
+0	AUTO	CUST_INSTALL	Aanbrengen
+0	AUTO	RACEDAY_SAVE_CONFIRM	Weet je zeker dat je de racedag wilt opslaan?
+0	AUTO	FE_MATCHMAKING_JOINING	Meedoen aan spel...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	AFBLAASKLEP
+0	AUTO	CUST_SLOT_ROLL_CAGE	VEILIGHEIDSKOOI
+0	AUTO	CAR_LOT_NO_DRIFTING	NIET OM TE DRIFTEN
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Deze upgrade vervangt je bestaande motoronderdelen door sterkere, duurzamere onderdelen, zodat je motor meer vermogen en hogere toeren aankan.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	TOTALLOSS-KAART GEBRUIKEN
+0	AUTO	CUST_PACKAGE_VISUAL	Pakketten Styling
+0	AUTO	CUST_EMPTY_BLUEPRINT	Nieuw ontwerp maken
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Voer je geheime code of promotiecode hier in om je beloning te ontvangen.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Met deze rally-achtige upgrade voel je je snel thuis in de modder.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Kies een moeilijkheidsgraad voor je racedag. Hiermee bepaal je het niveau van de kunstmatige intelligentie en het wagenniveau van de racedag.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	CARRIÈREWAGENS
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	AANTAL 12-SPELERRACES VOLTOOID
+0	AUTO	CUST_REGION_FRONT_TIRE	VOORBAND
+0	AUTO	FE_STATS_DRAG_WINS	GEWONNEN DRAGRACES
+0	AUTO	RACE_DAY_SAVE_NAME	Mijn racedag
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Je hebt niet genoeg geld om dit onderdeel te kopen.
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	GROOTSTE WHEELIEHOEK
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Turbo's zijn luchtpompen.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Het vergroten van de cilinderboring verhoogt het slagvolume van de motor en dus de hoeveelheid brandstof die kan worden verbrand om meer vermogen te krijgen.
+0	AUTO	CUST_CAT_GRIP_BRAKE	Deze upgrade verbetert het remvermogen van je wagen door middel van remblokken en -schijven van hoge kwaliteit. Remmen vormen een essentieel onderdeel van een goed getuned voertuig.
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	RACE-EVENEMENTEN
+0	AUTO	CUST_SLOT_STEERING_KIT	STUUROVERBRENGINGSKIT
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	PERCENTAGE GRIPWINST
+0	AUTO	CUST_BLUEPRINT_RENAME	Naam ontwerp wijzigen...
+0	AUTO	RACE_DAY_SLOT_FILLED	BEZET
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	HOOGSTE DRIFTSCORE
+0	AUTO	CUST_VINYLS	STICKERS
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Stuurarmen gemaakt van kwaliteitsmaterialen bieden meer nokkenasopties en een in het algemeen betere configuratie van je wielophanging.
+0	AUTO	FE_STATS_HUBS_WON	GEWONNEN RACEDAGEN
+0	AUTO	CUST_CAT_GRIP_NITROUS	Door deze upgrade krijgt het vermogen van je wagen een tijdelijke oppepper die het verschil kan uitmaken tussen winnen en verliezen.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NIET BEVOEGD OM TE RACEN
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Bepaal het aantal reparatiekaarten voor je racedag. Als je een racedag voor één speler maakt, krijg je een gelijk aantal reparatiekaarten en totalloss-kaarten.
+0	AUTO	CAR_SELECT_CAMAROSS	De eerste generatie Camaro werd omschreven als een gemeen beestje dat Mustangs vreet.
+0	AUTO	FE_STATS_BEAT_MODERATOR	MODERATOR VERSLAGEN
+0	AUTO	CUST_SLOT_HANDBRAKE	HANDREM
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Door deze upgrade kun je nog sneller en preciezer schakelen. De onderdelen die het vermogen op de wielen overbrengen zijn net zo licht als in een racewagen.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Door deze upgrade kun je nog sneller en preciezer schakelen. De onderdelen die het vermogen op de wielen overbrengen zijn zo licht als in een racewagen.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Door deze upgrade kun je nog sneller en preciezer schakelen. De onderdelen die het vermogen op de wielen overbrengen zijn zo licht als in een racewagen.
+0	AUTO	COMMON_CLASS_HEADER	SERIE
+0	AUTO	CAR_SELECT_FORDGT	De Ford GT is een hommage aan Fords raceheerschappij aan het einde van de jaren 60 en is de moderne versie van de klassieke GT40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	PRESTATIESTATISTIEKEN
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ROTORS
+0	AUTO	CUST_QUICK_INTERNALS_D3	Deze upgrade zorgt ervoor dat de motor kortstondig veel meer vermogen kan hebben.
+0	AUTO	CUST_QUICK_INTERNALS_G3	Deze upgrade voegt motoronderdelen van een racewagen toe, waardoor de motor bestand is tegen nog meer vermogen en nog hogere toerentallen.
+0	AUTO	CUST_QUICK_INTERNALS_S3	Motoronderdelen niveau 3- snelheid
+0	AUTO	CUST_SLOT_PISTONS	ZUIGERS
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Door deze upgrade krijgt het vermogen van je wagen een tijdelijke oppepper die het verschil kan uitmaken tussen winnen en verliezen.
+0	AUTO	FE_STATS_BEST_LAP_TIME	BESTE RONDETIJD
+0	AUTO	FE_STATS_SKILLS_STATS	VAARDIGHEIDSTATISTIEKEN
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	CARRIÈREOVERZICHT
+0	AUTO	CUST_DRIFT_TUT_RWD	Bij het afstellen van een efficiënte driftwagen moet je ervoor zorgen dat je makkelijk kunt slippen en dat je die slip lang en ruim kunt houden.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Deze upgrade gaat nog een stapje verder en brengt het vermogen in de richting van een echte racewagen.
+0	AUTO	CUST_SELL_CAR_DENIED	Je kunt je laatste wagen niet verkopen.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Deze zware ophangingsonderdelen voorkomen dat je wagen buigt onder druk van een hoog koppel, zodat je banden maximale grip behouden.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Middag
+0	AUTO	CUST_SLOT_PULLEY_DESC	Door een aandrijfriemschijf met een andere grootte te monteren, kan de compressor sneller draaien, met als gevolg meer boost en meer vermogen.
+0	AUTO	CUST_SLOT_IGNITION_DESC	Er is een krachtige, constante vonk nodig bij hogere vermogens. Door het gebruik van ontstekingskabels en bougies van sterk geleidende materialen als platina en iridium kun je de algehele prestaties van je motor verbeteren.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	UIT
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	REMKABELKIT
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	BESTE VERMENIGVULDIGER
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	NITROSYSTEEM
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Klassementserver is momenteel buiten gebruik. Probeer het later nog eens.
+0	AUTO	RACE_DAY_TRACK_CONFIG	TRACKCONFIGURATIE
+0	AUTO	CS_HEADER_DRAG_EVENT	DRAGEVENEMENTEN
+0	AUTO	CUST_QUICK_BRAKE_1	Met deze upgrade kun je je wagen sneller tot stilstand brengen dan met standaardremmen.
+0	AUTO	CUST_QUICK_BRAKE_2	Remmen niveau 2
+0	AUTO	CUST_REPAIR_TITLE	WAGEN REPAREREN
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Als je het vermogen van je motor verhoogt, moet je bepaalde onderdelen tunen om ervoor te zorgen dat het vermogen efficiënt wordt ingezet en goed op de aangedreven wielen wordt overgebracht. Koppeling, aandrijfas en beperkt slipdifferentieel spelen allemaal een rol.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Overzicht ontwerp
+0	AUTO	CUST_CAT_DRAG_FORCED	Hier ligt de nadruk op veel vermogen. Deze turbo-onderdelen zijn ontworpen voor topvermogens en vol gas rijden. Ze hebben ook enorm veel invloed op je snelheden bij radarraces.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Wil je deze racedag nu spelen?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Wil je de wijzigingen die je hebt aangebracht in dit ontwerp opslaan?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Deze upgrade versterkt de onderdelen die het vermogen van je wagen op de wielen overbrengen: aandrijfas, differentieel en assen.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Hierdoor gaan alle wijzigingen die je hebt aangebracht in dit ontwerp verloren. Wijzigingen ongedaan maken?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Naam ontwerp wijzigen...
+0	AUTO	CUST_FILTER_MIRRORS	SPIEGELS
+0	AUTO	ENTER_PRESELL_CODE	PROMOTIECODE INVOEREN
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	DOWNLOADEN MISLUKT
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	AANTAL GEWONNEN SHOWDOWNS
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Deze upgrade herprogrammeert de motorcomputer nog beter voor optimale prestaties.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	BESTE REACTIETIJD
+0	AUTO	CAR_SELECT_MK5GTI	De Mk5 GTI is de nieuwste versie van de originele hothatch. De 2.0 FSi-turbomotor heeft standaard meer dan 200 pk en kan makkelijk worden opgevoerd.
+0	AUTO	CAR_SELECT_MK5R32	Neem een hothatch, zet er een smalle V6 onder een hoek in, geef hem vierwielaandrijving en je krijgt dit.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Door een goede afstelling van de wielophanging, dus zonder veel onder- of overstuur, wordt je wagen sneller en beter bestuurbaar.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	STUURARMEN
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Bij zoveel vermogen is een strakke vering nodig om je wagen recht te houden op de dragstrip.
+0	AUTO	CUST_SLOT_BODY	CARROSSERIEKIT
+0	AUTO	CUST_SLOT_HOOD	MOTORKAP
+0	AUTO	CUST_SLOT_PADS	BLOKKEN
+0	AUTO	FE_STATS_DRIFT_WINS	GEWONNEN DRIFTRACES
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Deze upgrade herprogrammeert de motorcomputer waardoor er meer brandstof en lucht kan worden verbrand. Je krijgt zo het vermogen dat je nodig hebt om je banden te laten slippen en je wagen over de finish te laten glijden.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	AANPASSINGEN
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	TOTAALSCORE CARRIÈRE
+0	AUTO	RD_CREATE_RD	Racedag maken
+0	AUTO	FE_STATS_DRAG_RACES	GEREDEN DRAGRACES
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	PERCENTAGE VERBROKEN VERBINDINGEN
+0	AUTO	CUST_REGION_FRONT_WHEEL	VOORWIELEN
+0	AUTO	CAR_SELECT_ECLIPSE	De 2G Eclipse staat bekend om zijn slechte krukas.
+0	AUTO	CAR_LOT_TITLE	WAGENPARK
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Als je een al gebruikte Racedag-opslaglocatie selecteert, krijg je informatie over die racedag en kun je de racedag verwijderen.
+0	AUTO	CAREER_MAP_TITLE	CARRIÈREKAART
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	BESTE DRIFTSCORE ALS VOLGER
+0	AUTO	CUST_SLOT_CRANKSHAFT	KRUKAS
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	WAGENBELONING
+0	AUTO	CAR_SELECT_R34GTR	De wagen die de tunerscene definieert. De standaard voor alle andere wagens.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFTEVENEMENTEN
+0	AUTO	RACE_DAY_MULTIPLAYER	MEERDERE SPELERS
+0	AUTO	CUST_SLOT_CRANK_DESC	Standaardnokkenassen kunnen de belasting van veel vermogen niet aan. In wagens met meer dan 500 pk heb je een gesmede nokkenas nodig.
+0	AUTO	CAR_SELECT_COBALTSS	De Cobalt met een 2.0-motor met supercharger was de opvolger van de Cavalier en was bedoeld om te concurreren met wagens als de Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} VT
+0	AUTO	CAR_SELECT_350Z	De 5e wagen in de Z-serie. Een 2+2-sportcoupé met achterwielaandrijving.
+0	AUTO	CAR_SELECT_997T	Met een 3.6-turbomotor gaat deze wagen in één seconde van 65-100 km/u.
+0	AUTO	CAR_SELECT_AE86	De Hachi-Roku is een van de laatste compacte wagens met achterwielaandrijving.
+0	AUTO	CAR_SELECT_CTSV	De CTSV was de eerste wagen van Cadillacs prestigieuze V-serie. Ontworpen om te concurreren met Europese sport-sedans.
+0	AUTO	CAR_SELECT_EVO9	De EVO IX heeft een 2.0 16V-turbomotor en vierwielaandrijving. Het was sinds zijn introductie dé wagen voor goede prestaties en rijgedrag in de tunerwereld.
+0	AUTO	CAR_SELECT_EVOX	De EVO X is sneller dan de Stig.
+0	AUTO	CAR_SELECT_GTON	De Pontiac GTO is de Amerikaanse versie van het Holden V-onderstel met de LS2 van de Corvette.
+0	AUTO	CAR_SELECT_GTOO	Wordt door sommigen beschouwd als de eerste musclecar.
+0	AUTO	CAR_SELECT_SHELBYGT500N	De knappe koppen van Fords SVT (Special Vehicle Team) hebben samen met de legendarische Carroll Shelby deze wagen ontworpen, dus dat kon niet fout gaan. Het resultaat tovert zeker een grijns op het gezicht van alle liefhebbers van Mustangs en wagens met veel vermogen: 450 pk, 610 Nm aan koppel (oh yeah, baby!), Brembo-remklauwen, 19" lichtmetalen velgen en dat alles voor bijna dezelfde prijs als het vorige Mustang Cobra-model. Volgens de ontwerpers is de Ford Mustang Shelby Cobra GT500 2006 "de krachtigste productie-Mustang die ooit is gebouwd".
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	OM DEZE SHOWDOWN VRIJ TE SPELEN
+0	AUTO	CUST_REPAIR_USE_CASH	Met geld betalen
+0	AUTO	FE_STATS_FILTER_SKILLS	STATISTIEKEN VAARDIGHEDEN
+0	AUTO	FE_STATS_SPEED_RACES	GEREDEN SPEEDRACES
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Evenementen bepalen
+0	AUTO	RD_DELETE_SHARED_RD	Gedeelde racedag verwijderen?
+0	AUTO	CAREER_OVERVIEW_HEADER	CARRIÈREOVERZICHT
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	UITLAATPIJPEN
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Als je veel remt, wordt het remsysteem erg heet. Dit kan uiteindelijk leiden tot een langere remweg. Een groter remsysteem helpt de temperatuur binnen de perken te houden zodat je remkracht constant blijft.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Deze upgrade vervangt de bestaande motoronderdelen door sterkere, duurzamere onderdelen, zodat je motor meer vermogen en hogere toeren aankan.
+0	AUTO	CL_DRIVETRAIN_ALL	Alle soorten
+0	AUTO	CL_DRIVETRAIN_AWD	Vierwielaandrijving
+0	AUTO	CL_DRIVETRAIN_FWD	Voorwielaandrijving
+0	AUTO	CL_DRIVETRAIN_RWD	Achterwielaandrijving
+0	AUTO	FE_COMMON_MODE	SPELTYPE
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	INLAATSPRUITSTUK
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	EVENEMENTSRECORDS
+0	AUTO	CODE_ENTRY	CODE-INVOER
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Alle kaarten in je winkelwagen kopen?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	UITLAAT
+0	AUTO	RACE_DAY_SPLIT_SCREEN	GESPLITST SCHERM
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Let goed op je snelheid in de bocht en zorg voor de juiste acceleratie als je de bocht uitkomt. Meer vermogen betekent dat je razendsnel uit bochten kunt komen en hogere snelheden kunt bereiken.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	AANTAL CLUBLEDEN
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	MOTORONDERDELEN
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Deze upgrade versterkt de onderdelen die het vermogen van je wagen op de wielen overbrengen: aandrijfas, differentieel en assen.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Windtunnel uit
+0	AUTO	FE_COMMON_CONFIGURATION	CONFIGURATIE
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} PK
+0	AUTO	CS_HEADER_GRIP_EVENT	GRIPEVENEMENTEN
+0	AUTO	CAR_SELECT_CIVIC	De 6e generatie Civic is een van de populairste wagens in de tunerwereld voor straat-, track- en dragracen, en alles daartussenin.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Racedag verwijderd
+0	AUTO	CAR_SELECT_E46M3	Deze 3e versie van de M3, de E46, maakte zijn debuut met een motor met de meeste pk's per liter die BMW tot dan toe had gebouwd.
+0	AUTO	CAR_SELECT_E92M3	De E92 M3 heeft een dak van koolstofvezel en is aangedreven door een 8V (eerdere M3's hadden een 6-cilindermotor in lijn).
+0	AUTO	CAR_SELECT_ELISE	De 2e generatie Elise is een gestripte wagen waarbij puur rijden centraal staat.
+0	AUTO	CAR_SELECT_FDRX7	De FD RX-7 is een van de meest fantastische tunerwagens ooit, voor drift en voor grip. Een ware legende.
+0	AUTO	CAR_SELECT_IS350	De 2e generatie IS is een luxe coupé met achterwielaandrijving, een gestroomlijnde coupé-achtige contour en een schuin aflopende achterkant.
+0	AUTO	CAR_SELECT_LP640	Met zijn 6.5-motor met 640 pk is de LP640 een van de snelste supercars.
+0	AUTO	CUST_SLOT_VALVE_DESC	Dit onderdeel verdeelt de hydraulische vloeistof opnieuw over het remsysteem en zorgt zo voor meer remkracht voor of achter.
+0	AUTO	CAR_SELECT_SUPRA	De 4e generatie Supra is gebouwd om lichter en wendbaarder te zijn dan zijn voorganger en komt tot 0,98g op de slipbaan. Het 99-model was het laatste jaar voor Noord-Amerika. In Japan ging de productie door tot 2002.
+0	AUTO	CUST_FILTER_ALL_PARTS	ALLE ONDERDELEN
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Deze upgrade is gericht op het plaatsen van zoveel mogelijk gewicht op de aangedreven wielen zonder dat de voorwielen omhoog komen.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Door deze upgrade gaat de wagen nog sneller en strakker door de bocht zonder grip te verliezen op het asfalt.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Door deze upgrade gaat de wagen op topsnelheid nog sneller en strakker door de bocht zonder grip te verliezen op het asfalt.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Er zijn geen geschikte wedstrijden of spelers gevonden. Probeer het nog eens.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Race-evenementen kiezen
+0	AUTO	FE_STATS_CLUB_LEADER	CLUBLEIDER
+0	AUTO	RACE_DAY_LOCATION_1_DESC	De Autobahnring is een netwerk van supersnelwegen in Duitsland, met hellende bochten en tunnels.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Zoeken wordt geannuleerd...
+0	AUTO	CUST_SLOT_DIFF_DESC	Hier wordt het vermogen van de motor uiteindelijk omgezet in zijvermogen en overgebracht op de wielen.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Weet je zeker dat je deze racedag wilt overschrijven?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	MEEST VOOR LEIDER GEFINISHT
+0	AUTO	CAR_SELECT_ZONDAF	Veel autojournalisten zeggen dat de Zonda F een van de beste supercars ter wereld is.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Om je banden goed op het wegdek te houden, worden de stabilisatorstangen voor en achter stijver afgesteld, de lagers vervangen door exemplaren van urethaan en de schokbrekers vervangen door racedempers.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Mijn racedag^Stel zelf een racedag samen. Maak een racedag voor één of voor meerdere spelers en race online tegen andere spelers. Maak een racedag voor een gesplitst scherm en daag een vriend uit.^^Deel je racedag voor één of meerdere spelers met andere online spelers en nodig ze uit mee te doen aan je eigen racedagcompetitie.^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis ligt op een bergtop in een afgelegen deel van Japan. Het circuit heeft een duistere oorsprong, maar de route voor speed-races is nieuw en perfect afgewerkt.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Stuggere schokbrekers in combinatie met het lagere zwaartepunt van prestatie-vering kunnen het bochtenwerk van een wagen sterk verbeteren.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Deze upgrade pept het vermogen van je wagen tijdelijk op. Nitro is onmisbaar voor dragracers.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Racers uit Windy City in de VS hebben dit verlaten vliegveld bezet. Chicago Airfield heeft een brede landingsbaan, meerdere grip- en driftroutes en een prima dragstrip.
+0	AUTO	FE_STATS_TOP_SPEED	TOPSNELHEID
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	DRUKREGELSYSTEEM
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	MAXIMALE GRIP BEREIKT IN STAGING
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	SNELSTE 60-0 MPU
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	BOOSTCONTROLLER
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Deze berg in Japan is omgevormd tot Ebisu, het spirituele huis van het driften. De Fukuyama-uitdaging begint op het platteland en gaat door tot op de snelweg.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Door de tand- of kettingwielen die je nokkenas aandrijven lichter te maken, verminder je de hoeveelheid energie die nodig is om die nokkenassen te laten draaien. Daardoor kan er dus meer vermogen worden opgebouwd.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	GEWONNEN RACES ZONDER SCHADE
+0	AUTO	CUST_QUICK_HANDLING_1	Deze upgrade verbetert het bochtenwerk en maakt de wagen stabieler bij hogere snelheden.
+0	AUTO	CUST_QUICK_HANDLING_2	Rijgedrag niveau 2
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Nitro is geweldig voor een tijdelijke vermogenstoename, maar te veel nitro kan de motor te sterk overbelasten. Een drukregelsysteem zorgt ervoor dat de motor niet meer druk krijgt dan hij aankan.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Weet je zeker dat je de locatie wilt wijzigen? Als je dat doet, worden alle huidige geselecteerde evenementen gewist.
+0	AUTO	CUST_VINYL_LAYER_TITLE	LAGENMENU
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Met deze upgrade worden je bestaande motoronderdelen vervangen door gesmede onderdelen die sterker en duurzamer zijn voor zware kwartmijlraces.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	De Infineon Raceway in Noord-Californië bestaat uit een serie scherpe bochten in een heuvelgebied. Eén fout en de vaart is eruit of je ligt tegen een van de vele muren.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	SPEED-^UITDAGING
+0	AUTO	FE_STATS_CLUB_POINTS	CLUBPUNTEN
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Deze upgrade herprogrammeert je motorcomputer waardoor er meer brandstof en lucht kan worden verbrand. Je krijgt zo het vermogen dat je nodig hebt om je tegenstander bij het uitgaan van de bocht in te halen.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Weet je zeker dat je het evenement %s wilt verwijderen?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Racedag opgeslagen
+0	AUTO	CUST_QUICK_NITROUS_DI3	Deze upgrade levert kortstondig 50-250 pk extra motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de tweede plaats.
+0	AUTO	CUST_QUICK_POWER_1	Dit basisupgradepakket levert extra vermogen over het hele toerenbereik en geeft je standaardwagen een agressiever geluid.
+0	AUTO	CUST_QUICK_POWER_2	Dit pakket bouwt voort op de lichte upgrades van niveau 1 om meer vermogen te leveren over het hele vermogensbereik en het zorgt voor een agressiever geluid.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park is een ongelofelijk kronkelige en compacte route dwars door het Ierse platteland.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	RESERVEWAGEN
+0	AUTO	FE_STATS_GRIP_RACES	GEREDEN GRIPRACES
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAGE
+0	AUTO	CUST_PACKAGE_POWER	Pakketten Vermogen
+0	AUTO	CUST_OWNED	IN BEZIT
+0	AUTO	CUST_PAINT	LAK
+0	AUTO	CUST_PARTS	CARROSSERIE-ONDERDELEN
+0	AUTO	CUST_PACKAGE_TITLE	PAKKET
+0	AUTO	CS_OPTION_CAR_SELECT	Wagen selecteren
+0	AUTO	RACE_DAY_SLOT_EMPTY	BESCHIKBAAR
+0	AUTO	FE_STATS_ACHIEVEMENTS	DOELSTELLINGEN BEREIKT
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Als je een uitdagingsracedag maakt, kun je zelf bepalen welke wagens mogen worden gebruikt op die racedag.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Gebruik je handrem net als in de Dukes of Hazzard.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Highway Route 318 is een strakke lijn dwars door de Nevada-woestijn. Snelheden boven 325 km/u worden er gehaald. Pas op voor flauwe bochtjes die er zó makkelijk uitzien.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Prestatie-remschijven voeren hitte beter af dan standaardschijven. Schijven met een grotere diameter zorgen ervoor dat de blokken meer oppervlak hebben om zich op vast te klemmen, waardoor je meer remkracht krijgt.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	BESTE DRIFTSCORE ALS LEIDER
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Deze upgrade past de wielophanging zodanig aan dat de wagen gemakkelijk door de bochten glijdt.
+0	AUTO	CUST_REGION_FRONT_BUMPER	VOORBUMPER
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	GESCHATTE NETTOWAARDE
+0	AUTO	CUST_SLOT_TRANSMISSION	VERSNELLINGSBAK
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Portland International Raceway, of PIR, ligt vlakbij de berg Rainier, in het weelderige groen in het noordwesten van de Verenigde Staten. Het is een veeleisende route met een fantastische dragstrip.
+0	AUTO	CUST_BLUEPRINT_SAVE	ONTWERP BIJWERKEN
+0	AUTO	CUST_QUICK_NITROUS_1	Deze upgrade levert kortstondig meer pk's aan motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de tweede plaats.
+0	AUTO	CUST_QUICK_NITROUS_2	Deze upgrade levert kortstondig nog meer pk's aan motorvermogen via droge nitro. Die pk's kunnen het verschil uitmaken tussen de eerste en de tweede plaats.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	Alles is groter in Texas en de Texas World Speedway is zeker geen uitzondering. Dit parcours over de weg kronkelt in en uit een hellende ovaalvormige route.
+0	AUTO	CAR_SELECT_CORVETTE	De laatste Stingray. De 2e generatie Corvette werd een van de 5 beste sportwagens ooit genoemd.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	MEESTE GECLAIMDE SECTOREN
+0	AUTO	CL_DRIVETRAIN_HEADER	AANDRIJFLIJN
+0	AUTO	CUST_PACKAGE_HANDLING	Pakketten Rijgedrag
+0	AUTO	FE_STATS_SPEED_WINS	GEWONNEN SPEEDRACES
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	MEESTE GEWONNEN CONTROLEPOSTEN
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Op het scorebord met toptuners staan de beste ontwerptuners. Je wordt geklasseerd op basis van het winstpercentage van al je gedeelde ontwerpen. Je gedeelde ontwerp moet in minstens 20 races zijn gebruikt voordat je op het scorebord verschijnt.

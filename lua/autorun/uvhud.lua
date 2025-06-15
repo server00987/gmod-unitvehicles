@@ -1886,7 +1886,7 @@ local function mw_pursuit_main( ... )
 			surface.SetDrawColor(0, 0, 0, 150) -- Milestone BG
 			surface.DrawRect(w * 0.71, h * 0.215, w * 0.2575, h * 0.035)
 			
-			draw.DrawText("#uv.hud.milestones","UVFont5UI",w * 0.71,h * 0.2125,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
+			draw.DrawText("#uv.hud.milestones","UVFont5UI",w * 0.7125,h * 0.2125,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
 			draw.DrawText(milestoneamount, "UVFont5UI", w * 0.965, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
 
 			for i = 1, math.min(milestoneamount, 5) do

@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Hungarian_Global_DLC.bin
+#	File created on: 2025-05-24 11:14:46
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Szuper Klub
+0	1A821602	0x1A821602	Gyorsasági hurok
+0	1A821603	0x1A821603	1-es útvonal: első fél
+0	1A821604	0x1A821604	2-es útvonal: második fél
+0	1A821605	0x1A821605	3-as útvonal: teljes
+0	1A82161D	0x1A82161D	Tokyo Bay Bridge
+0	1BB8601F	0x1BB8601F	A ProStreet verziód nem kompatibilis a versennyel amihez csatlakozni kívánsz. A legjobb, ha minden játékos rendelkezik az utolsó frissítésekkel. További részletekért látogasd meg a NeedforSpeed.com honlapot.
+0	35E21908	0x35E21908	Az INGYENES Energizer Lithium kiegészítő csomag letölthető az Xbox LIVE Piactérről!
+0	3EC4AB81	0x3EC4AB81	Jó szórakozást!
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKYO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKYO EXPRESSWAY II
+0	42781C20	0x42781C20	Letölthető az Xbox LIVE Piactérről
+0	525DCCC5	0x525DCCC5	Energizer Lithium kieg. csomag
+0	5959EB4C	0x5959EB4C	Ez a játékos még nem kapta meg a legújabb frissítést. Mielőtt megoszthatnád vele ezt a versenynapot, frissítenie kell Need for Speed verzióját.
+0	59C9AC1C	0x59C9AC1C	COCA-COLA ZERO KIEGÉSZĺTŐ CSOMAG.
+0	61098C88	0x61098C88	Ez a játékos még nem kapta meg a legújabb frissítést. Mielőtt megoszthatnád vele ezt a tervrajzot, frissítenie kell Need for Speed verzióját.
+0	6692EC80	0x6692EC80	A letölteni kívánt fájl letöltése sikertelen, mert a tartalomcsomag még nem érhető el.
+0	671480B8	0x671480B8	INGYENES - A lipcsei Porsche tesztpálya
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	INGYENES - 2007 SEAT Leon Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokyo Expressway
+0	71FD1C1D	0x71FD1C1D	Tokyo Expressway II
+0	7A83FDB7	0x7A83FDB7	Játék, ahogyan kell
+0	800472C1	0x800472C1	Köszönöm, nem.
+0	82E2BDAE	0x82E2BDAE	Az általad letöltött Tuningcsomag nyelve nem egyezik a jelen játéklemezével. Szeretnéd letölteni a megfelelő változatot?
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	Ingyenes
+0	88D1ECEE	0x88D1ECEE	INGYENES Coca-Cola Zero kiegészítő csomag.
+0	88E17FE9	0x88E17FE9	Szerezd meg ezt az INGYENES letöltést az Xbox LIVE Piactérről! Új pályák, új kocsik, kiterjesztett karriermód és versenynapi események!
+0	91F522D5	0x91F522D5	Keresd a kiterjesztett karrierfát, az új versenynapokat és az INGYENES kocsikat az autókereskedésben!
+0	930C8172	0x930C8172	Köszönjük, hogy letöltötted a következőt:
+0	A76603FD	0xA76603FD	az INGYENES Coca-Cola Zero kiegészítő csomaggal.
+0	BCFBDE9A	0xBCFBDE9A	A The Need for Speed™ ProStreet tuningcsomagot ezúttal nem lehetett letölteni.
+0	C174E20F	0xC174E20F	A Need for Speed™ ProStreet újrainditása szükséges az új tartalom használatához. A játék elindulása előtt rövid szünetet tapasztalhatsz. Kattints az OK gombra az újraindításhoz!
+0	E4AF851F	0xE4AF851F	INGYENES - A tokiói gyorsforgalmi út
+0	E5E32468	0xE5E32468	Látogasd meg a NeedforSpeed.com honlapot frissítésekért és közösségi eseményekért!
+0	E62B2319	0xE62B2319	INGYENES - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	14 új autó, például a Bugatti Veyron 16.4 és a Porsche 911 GT3! További részletek a NeedforSpeed.com honlapon.
+0	F39D0787	0xF39D0787	Töltsd le most ingyen!
+0	F5663CFA	0xF5663CFA	Tölts le ingyenesen új autókat, pályákat, kiterjesztett karriermódot és versenynapi eseményeket!
+0	FEEF54A9	0xFEEF54A9	Látogasd meg a NeedforSpeed.com honlapot frissítésekért és közösségi eseményekért!

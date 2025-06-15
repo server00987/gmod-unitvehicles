@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Hungarian_Frontend.bin
+#	File created on: 2025-05-24 11:14:34
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	ÖSSZES JAVÍTÁSI KÖLTSÉG
+0	AUTO	MODE_ALL	Összes autó
+0	AUTO	CUST_VINYL_MOVE_LAYER	Réteg fel/le mozgatása
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	MOTORBLOKK
+0	AUTO	CAR_SELECT_MUSTANGGT	Ha azt mondjuk, "pony car" (sport-kisautó), mindenkinek a negyedik generációs 4,6 literes V8-as Mustang ugrik be.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	A fejlesztés olyan motor-alkatrészeket tartalmaz, amelyek erősebbek a szokásosnál, így több erőt tud majd leadni magasabb fordulatszámnál.
+0	AUTO	CUST_VISUAL_DECALS	MATRICÁK
+0	AUTO	CUST_CUSTOMIZE	Tervrajz testre szabása
+0	AUTO	CODE_ENTRY_VALID	Gratulálunk! A kód elfogadva, a jutalom mostantól hozzáférhető.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	FÉKNYERGEK
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Olyan zsetonok vannak a kosaradban, ^amelyeket nem vettél meg. Mégis kilépsz?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	STABILIZÁTORRUDAK
+0	AUTO	CUST_QUICK_HANDLING_D3	A fejlesztés keményebbé teszi a rugózást, így javul az autó egyenesfutása.
+0	AUTO	CUST_QUICK_HANDLING_G3	A fejlesztés keményebbé teszi a rugózást, így javul az autó egyenesfutása és jobban is kanyarodik.
+0	AUTO	CUST_QUICK_HANDLING_S3	A fejlesztés keményebbé teszi a rugózást, így javul az autó egyenesfutása és jobban is kanyarodik.
+0	AUTO	CUST_REGION_REAR_TIRE	HÁTSÓ GUMI
+0	AUTO	FE_STATS_BEST_SECTOR	LEGJOBB SZEKTOR
+0	AUTO	CL_FREE_CAR_MARKER	AUTÓ ZSETON
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	VERSENYEK MEGHATÁROZÁSA
+0	AUTO	CUST_QUICK_BRAKE_DI3	A fejlesztés eredményeképpen a legjobb megállási idő érhető el, de az abroncsok elvesztik kapcsolatukat az úttal.
+0	AUTO	CUST_BP_APPLY_CONFIRM	A tervrajz alkalmazásához szükséges alkatrészek költsége: {0:d}. Folytatod?
+0	AUTO	CUST_SLOT_BUSHING_KIT	PERSELYKÉSZLET
+0	AUTO	FE_STATS_GAMES_PLAYED	LEJÁTSZOTT JÁTÉKOK
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BÓNUSZAUTÓK
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	{0:d} RÉTEG
+0	AUTO	CUST_PACKAGE_INFORMATION	CSOMAG INFORMÁCIÓ
+0	AUTO	CUST_SLOT_NITROUS_DESC	A nitro egy igen gyúlékony gáz, amelyet a hengerbe lehet fecskendezni a robbanási ütemben, így nagymértékben megnöveli a teljesítményt egy rövid időre.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	A fejlesztés átprogramozza a motorvezérlő számítógépet, maximalizálva így a teljesítményt.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	A fejlesztés átprogramozza a motorvezérlő számítógépet, maximalizálva így a teljesítményt.
+0	AUTO	CS_HEADER_SPEED_EVENT	SPRINTVERSENYEK
+0	AUTO	CUST_SLOT_HEADS_DESC	Az összekötött szelepek a hengerfejben megnövelik a bejutó levegő és a kiáramló kipufogógáz mennyiségét is, így növelik a teljesítményt.
+0	AUTO	CUST_VINYL_ADDLAYER	ÚJ RÉTEG
+0	AUTO	CUST_CAT_SPEED_FORCED	Az alacsony fordulatszámnál működésbe lépő turbófeltöltő jó teljesítménygörbét eredményez, amely óriási előnyt ad mind a pályán, mind az utcán.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	LEGMAGASABB SZORZÓ
+0	AUTO	RACE_MODE_GRIP_MODE	HAJSZA^MÓD
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	A következő lépés a versenyek meghatározása a versenynapod számára.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	VERSENYEK
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	A fejlesztés megerősíti a hajtáslánc alkatrészeit, beleértve a kardántengelyt, a differenciálművet és a tengelyeket.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	ÖSSZES KARRIERJÁTÉK
+0	AUTO	RACE_DAY_ADD_EVENT	VERSENY HOZZÁADÁSA
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Ez a tervrajz nem kompatibilis a Need for Speed™ ProStreet verzióddal, ezért nem alkalmazható. Frissítésekért és információkért látogass el a NeedforSpeed.com oldalra.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	KERÉKFESTÉS
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Aktív tervrajznak
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	MOTORKEZELÉS
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	GYŐZELMI JUTALOM
+0	AUTO	CUST_PAINT_BODY	FESTÉS
+0	AUTO	CUST_PAINT_RIMS	FELNIK
+0	AUTO	CUST_PAINT_TINT	ABLAK SZÍNEZETE
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Nem lépett fel hiba.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Biztosan szeretnéd törölni ezt a versenynapot? A versenynaphoz kapcsolódó beállítások és rekordok el fognak veszni.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	NYELV VÁLASZTÁSA
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Az uretánhoz vagy alumíniumhoz hasonló merevebb anyagokból készített perselyek lehetővé teszik, hogy autód precízebben vegye a kanyart.
+0	AUTO	HUB_DIFFICULTY_2	KÖZEPES
+0	AUTO	CUST_TUNE_SPEED_BRAKES	A kocsi gyakori megállítása miatt a fékrendszerben hő keletkezik, ami növelheti a féktávolságot. Nagyobb fékrendszer esetén a hőmérséklet kisebb mértékben növekszik és a fékerő állandó marad.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	LEGNAGYOBB CSÚCSSEBESSÉG
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Válassz vásárlási módot!
+0	AUTO	CUST_SLOT_INTAKE_DESC	Minél több levegő jut a motorba, annál jobban működik. Minél hidegebb annál nagyobb a teljesítmény.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	A túlkormányozottság fokozására szolgál a nagy hátsó stabilizátorrúd, az alumínium perselyek és az első stabilizátorrúd eltávolítása. Így egyszerűbb kilinccsel előre vezetni a kocsit.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Szeretnél kilépni az autó választó képernyőről, és visszatérni a karriertérképhez?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Versenynap mentése…
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	LEGTÖBBRE ÉRTÉKELT AUTÓTUNINGOLÓ
+0	AUTO	RACE_MODE_DESCRIPTION	A versenymód kiválasztása meghatározza, mely versenyeken indulhat ez az autó.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Csak AutoSculpt alkatrészekkel léphetsz be a szélcsatornába!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Minél nagyobb a a szívócsonk kapacitása, annál több levegő jut a motorba. A légáramlást elősegítő, sima szívócsonk tehát lehetővé teszi, hogy a motor teljesítményleadása nagyobb legyen.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	LEGMAGASABB MÉRT ÖSSZSEBESSÉG
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	ÜZEMANYAG-RENDSZER
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	2,3 literes 260+ lóerős turbómotorral, LSD-vel, hatsebességes váltóval a Speed 3 egy modern hot hatch.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	A fejlesztés eredményeképpen még gyorsabb és pontosabb lesz a váltás és még könnyebb alkatrészek közvetítésével jut el a motor ereje a kerekekhez, egészen egy igazi versenyautóhoz hasonlóan.
+0	AUTO	CAR_SELECT_INTEGRA	A Kouki, magas fordulatszámú B-szériás motorjával rendkívül népszerű a versenyzés megszállottjai között, köszönhetően nagy motorválasztékának és nagyszerűen kezelhető platformjának.
+0	AUTO	FE_HUBMAP_ETREE_CARS	KOCSIK
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	A fejlesztés eredményeképpen megnő a motor teljesítménye.
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	A fejlesztés eredményeképpen az autó teljesítménye egy igazi versenyautóéval vetekszik.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Ha jól választod meg sebességedet a kanyarokban, valamint figyelsz rá, hogy a kanyarból kifelé megfelelően gyorsulj, máris megtetted, ami a legfontosabb. Ha nagyobb motorod teljesítménye, kilőhetsz a kanyarokból és végsebességed is növekszik.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Biztos meg akarod javítani ezt az autót?
+0	AUTO	CAR_SELECT_S3	A második szériás S3-at nem árusították Észak-Amerikában.
+0	AUTO	CAR_SELECT_S4	Az RS4-nél szelídebb, de az S4 motorja is 4,2 literes V8.
+0	AUTO	CAR_SELECT_TT	A TT második szériája. Az új változat számos Év Autója díjat gyűjtött be.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	NITRÓ
+0	AUTO	FE_STATS_DOWNLOADING_STATS	ADATOK LETÖLTÉSE
+0	AUTO	CUST_QUICK_FORCED_D3	3. szintű gyorsulási turbók és légsűrítők
+0	AUTO	CUST_QUICK_FORCED_G3	A fejlesztés eredményeképpen több levegő jut a motorba, megnövelve a teljesítményt akár egy versenyautó szintjére.
+0	AUTO	CUST_QUICK_FORCED_S3	A fejlesztés eredményeképpen több levegő jut a motorba, megnövelve a teljesítményt akár egy versenyautó szintjére.
+0	AUTO	CUST_PAINT_GROUP_CANDY	CSILLÁMLÓ
+0	AUTO	CUST_PAINT_GROUP_GLOSS	FÉNYTELEN
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATT
+0	AUTO	CUST_DRIVETRAIN_GROUP	MEGHAJTÁS
+0	AUTO	CUST_PAINT_GROUP_PEARL	GYÖNGYHÁZFÉNYŰ
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	A fejlesztés átprogramozza a motorvezérlő számítógépet, jobb gyorsulást biztosítva.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	A fejlesztés nagy mértékben átprogramozza a motorvezérlő számítógépet, maximalizálva így a teljesítményt.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	A fejlesztés nagy mértékben átprogramozza a motorvezérlő számítógépet, maximalizálva így a teljesítményt.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	A nagyobb, vagy több szeleppel ellátott fékpofák egyenletesebben fogják a féktárcsát a fékbetéthez, így megnövelik a fékerőt.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	A kezdéshez nyomj START gombot
+0	AUTO	RACE_DAY_SLOT_ID	{0:d}. NAP
+0	AUTO	CUST_SLOT_MUFFLERS	KIPUFOGÓDOB
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Hiba történt a játékhoz való csatlakozás közben. Kérjük, próbáld újra!
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	VÁLTÓHŰTÉS
+0	AUTO	RACE_MODE_DRIFT_MODE	DRIFT^MÓD
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Melyik kerekeket szeretnéd állítani?
+0	AUTO	CUST_SLOT_FLYWHEEL	LENDKERÉK
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	A versenyülések a helyeden tartanak.
+0	AUTO	MODE_CHANGE_CONFIRMATION	A módváltás minden tervrajz törlésével jár ehhez az autóhoz, köztük a látvány- és fóliatervekkel. Biztosan szeretnéd folytatni?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	KARRIERVERSENYEKBEN TÖLTÖTT IDŐ
+0	AUTO	CUST_DRAG_TUT_AWD	Az összkerékhajtás nagy előnyt jelent a startnál, mert szinte minden egyes lóerőt az útra juttat.
+0	AUTO	CUST_DRAG_TUT_FWD	Az elsőkerék-hajtás legnagyobb hátránya, hogy gyorsulási versenyek folyamán nem könnyű elérni, hogy megfelelően húzzon. Minél erősebb a kocsi, annál fontosabb, hogy a kerekek ne pörögjenek ki. Gyors, elsőkerék-meghajtású kocsi építésekor elsőrendű fontosságú a megfelelő erő, de az is, hogy ezt sikerüljön az útra is vinni. A teljesítményleadásra ható fejlesztések után tehát érdemes arra törekedni, hogy ezt az erőt irányítani is lehessen.
+0	AUTO	CUST_DRAG_TUT_RWD	A gyorsulási kocsiknál a legfontosabb a tapadás. Ha jó időt akarsz futni, ne hagyd, hogy a kerék elemelkedjen a talajtól, vagy, hogy kipörögjön a kerék. Ez főleg a nagy teljesítményű kocsiknál igaz.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	A Need for Speed szerver megszakította a lekérdezést.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Az abroncsok tartanak a földön.
+0	AUTO	CAR_SELECT_GTRPROTO	A GTR Proto az R35 GTR sorozatgyártás előtti verziója.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	RITKA AUTÓK
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	LENYOMÁS JUTALOM
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} JAVÍTÁS ZSETON
+0	AUTO	CAR_SELECT_VIPERCOUPE	A Viper harmadik szériája. A Dodge sportkupé jellegzetes hangú V10-es motorja 500 lóerőre képes.
+0	AUTO	MAIN_MENU_TITLE	FŐMENÜ
+0	AUTO	CUST_TINT_DARK	SÖTÉT
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Jól beállított rugózással, amely megfelelő súlyátvitelt tesz lehetővé start közben, nagyobb sebesség és vonóerő érhető el.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Nincs totálkár
+0	AUTO	CUST_APPLYING_BLUEPRINT	TERVRAJZ ALKALMAZÁSA
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	VÁLASSZ EGY VERSENYNAPOT!
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Közepes méretű motorral felszerelt autó, teljesítménye közel áll a 911-eséhez.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	KARRIERTELJESÍTÉS SZÁZALÉKA
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFFERENCIÁLMŰ
+0	AUTO	CUST_WIND_TUNNEL_ON	Szélcsatorna Be
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	A többszemélyes versenynapokon a javítás zsetonok nem használhatóak. Autód megsérülhet, de a sérülés eltűnik minden verseny végén. Totálkárossá is törheted autódat.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	A tervrajz nincs összhangban annak az autónak a beállításaival, amelyre alkalmazni akarod. Minden korábbi tervrajz törlődni fog. Biztosan folytatni akarod?
+0	AUTO	CUST_QUICK_POWER_DI3	A fejlesztés elég erőt biztosít ahhoz, hogy a kormányzott kerekek felemelkedjenek a talajról.
+0	AUTO	RACE_MODE_DRAG_MODE	GYORSULÁSI^MÓD
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Az alapfejlesztések az autó általános kinézetét javítják.
+0	AUTO	CUST_QUICK_VISUAL_2	A szárny és az első spoilerek miatt az autó kevésbé emelkedik meg nagy sebességnél, így nagyobb stabilitás érhető el és több tapadás a kanyarokban.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Játékmód választása
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Már van egy tervrajz az általad kiválasztott rekeszben. Kívánod felülírni?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	ZSETONOK KEZELÉSE
+0	AUTO	CAR_SELECT_FOCUSST	Az MK2 Focust, amelyet az Észak-Amerikán kívül piacokon árulnak, 2,5 literes, 225 lóerős motorral szerelik.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	A fejlesztés megerősíti a hajtáslánc alkatrészeit, beleértve a kardántengelyt, a differenciálművet és a tengelyeket.
+0	AUTO	FE_MAIN_MENU	Főmenü
+0	AUTO	CUST_REGION_REAR_BUMPER	HÁTSÓ LÖKHÁRÍTÓ
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	HAJTÓ SZÍJTÁRCSÁK
+0	AUTO	CAR_SELECT_BARRACUDA	A Hemi 'Cuda egy Legenda.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	LEGTÖBBRE ÉRTÉKELT AUTÓ
+0	AUTO	CUST_APPLY_PAINT_TITLE	FESTÉK FELVITELE
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	AUTÓK A GARÁZSBAN
+0	AUTO	CUST_REGION_ALL_WHEELS	MINDEN KERÉK
+0	AUTO	CUST_QUICK_FORCED_2	A fejlesztés eredményeképpen több levegő jut a motorba, megnövelve a teljesítményt.
+0	AUTO	FE_STATS_FASTEST_LAP	LEGGYORSABB KÖR
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	GYORSULÁSI
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Hogy abroncsaid jól tapadjanak az aszfalthoz, meg kell erősítened mind az első, mind a hátsó stabilizátorrudat, ki kell cserélned a perselyeket uretánból készültekre és versenyzésre alkalmas lengéscsillapítókat kell beszerezned.
+0	AUTO	CAR_TYPE_GRIP	HAJSZA
+0	AUTO	FE_STATS_DNF_PERCENTAGE	BNF SZÁZALÉK
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	A Charger B-body verziója minden idők egyik legtöbet szerepeltetett autója volt a tévéműsorokban
+0	AUTO	CUST_QUICK_INTERNALS_1	A fejlesztés szilárdabbá teszi a motort, így az továbbfejleszthető.
+0	AUTO	CUST_QUICK_INTERNALS_2	A fejlesztés még szilárdabbá teszi a motort, így az elviseli a nagyobb teljesítményből és fordulatszámból adódó terhelést.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Biztosan szeretnéd visszaállítani a tervrajzot?
+0	AUTO	CUST_SLOT_RACING_SEATS	VERSENYÜLÉSEK
+0	AUTO	CUST_AUTOSCULPT_ZONE10	10. ZÓNA
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	LEGJOBB SZEKTORPONT
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	LEGÉRTÉKESEBB AUTÓ
+0	AUTO	CAR_SELECT_CIVICSI	Nyolcadik generációs Civic
+0	AUTO	CAR_SELECT_CHEVELLESS	A Chevelle a Chevy első izomautója volt. 1970 előtt a Chevy nem szerelt 400 köbhüvelyknél nagyobb motort, ez 1970-ben változott meg a Chevelle bevezetésével.
+0	AUTO	CUST_CAT_GRIP_FORCED	Az alacsony fordulatszámnál működésbe lépő turbófeltöltő jó teljesítménygörbét eredményez, amely óriási előnyt ad mind a pályán, mind az utcán.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Üdvözlünk a versenynap térképen!
+0	AUTO	CUST_BLUEPRINT_APPLY	Tervrajz alkalmazása
+0	AUTO	CUST_SLOT_CAMSHAFTS	VEZÉRMŰTENGELYEK
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Minden verseny megjelenítése
+0	AUTO	CUST_SLOT_HEADERS	ELOSZTÓCSÖVEK
+0	AUTO	FE_STATS_FASTEST_TIME	LEGGYORSABB IDŐ
+0	AUTO	CUST_SUSPENSION_GROUP	FELFÜGGESZTÉS
+0	AUTO	CUST_BLUEPRINT_RESET	TERVRAJZ VISSZAÁLLÍTÁSA
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	A fejlesztés eredményeképpen az autó teljesítménye egy igazi dragsterével vetekszik.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	A fejlesztés eredményeképpen az autó teljesítménye egy igazi versenyautóéval vetekszik.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	A fejlesztés eredményeképpen az autó teljesítménye egy igazi versenyautóéval vetekszik.
+0	AUTO	CUST_INSTALLED	FELHELYEZVE
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Versenynap betöltése…
+0	AUTO	CUST_SLOT_CAMS_DESC	A hétköznapi autók esetén jó, ha a vezérmű emelkedése alacsony, forgási ideje pedig rövid. Ha az emelkedés és az időtartam megnövekszik, a fordulatszám csúcsértéke magasabb tartományba kerül. A legjobb választás, ha az általánosan használt fordulatszám-tartományban adja le a vezérmű a legnagyobb nyomatékot.
+0	AUTO	CUST_QUICK_HANDLING_DI3	A fejlesztés lágyabbá teszi a rugózást, így könnyebben csúszik a kanyar ívén.
+0	AUTO	CUST_QUICK_BRAKE_D3	A fejlesztés eredményeképpen a legjobb megállási idő érhető el, az abroncsok pedig nem vesztik el kapcsolatukat az úttal.
+0	AUTO	CUST_QUICK_BRAKE_G3	3. szintű hajsza fékcsomag
+0	AUTO	CUST_QUICK_BRAKE_S3	A fejlesztés eredményeképpen a legrövidebb megállási idő érhető el csúcssebességről indulva, az abroncsok pedig nem vesztik el kapcsolatukat az úttal.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Minél nagyobb a nitropalack, annál több nitró fér bele, sőt, több darab is lehet belőle autódban. Használat után ezeket fel kell töltened.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Este
+0	AUTO	CUST_TINT_LIGHT	VILÁGOS
+0	AUTO	CUST_REPAIR_DAMAGE	SÉRÜLÉS
+0	AUTO	CUST_TINT_PEARL	GYÖNGYHÁZSZÍN
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	LEGHOSSZABB DRIFT-TÁVOLSÁG
+0	AUTO	CUST_SLOT_TIPS_DESC	Ezek a kipufogóvégek agresszívabbá teszik kocsid külsejét.
+0	AUTO	CUST_SLOT_STEERING_DESC	A különleges fogasléc és fogaskerék a kormányműben növeli a kormányzás érzékenységét és csökkenti az ellenállását.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Szuperautó-gyilkos a javából. 7 literes motor titán hajtókarokkal és szárazkarteres olajozással.
+0	AUTO	HD_COMPATIBLE	HD kompatibilis az optimális játékélményért
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Verseny törlése
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	LEGYŐZÖTT KIRÁLYOK
+0	AUTO	CUST_WIND_TUNNEL	SZÉLCSATORNA
+0	AUTO	CUST_STAGE_NUMBER	{0:d}. SZINT
+0	AUTO	FE_STATS_NUMBER_OF_WINS	GYŐZELMEK SZÁMA
+0	AUTO	CUST_FILTER_FRONT_BUMPER	ELSŐ LÖKHÁRÍTÓ
+0	AUTO	MAIN_CAREER	KARRIER
+0	AUTO	CUST_REGION_REAR_WHEEL	HÁTSÓ KEREREK
+0	AUTO	CUST_QUICK_VISUAL_D3	A fejlesztés spoilerekből áll, amelyek nagyobb leszorítóerőt eredményeznek.
+0	AUTO	CUST_QUICK_VISUAL_G3	A fejlesztés spoilerekből áll, amelyek nagyobb leszorítóerőt eredményeznek.
+0	AUTO	CUST_QUICK_VISUAL_S3	A fejlesztés spoilerekből áll, amelyek nagyobb leszorítóerőt eredményeznek.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	A kocsi gyakori megállítása miatt a fékrendszerben hő keletkezik, ami növelheti a féktávolságot. Nagyobb fékrendszer esetén a hőmérséklet kisebb mértékben növekszik és a fékerő állandó marad.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	A fejlesztés keretében versenyautók motoralkatrészeit kapja meg az autó, így az elviseli a nagyobb teljesítményből és fordulatszámból adódó terhelést.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	RANGSOROLT GYŐZELMEK
+0	AUTO	CUST_SLOT_BOV_DESC	Hogy a turbó a maximális teljesítményét hozza, a kipufogószelep kiereszti a túlnyomást, anélkül, hogy lelassítani a motort.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Az online játékhoz frissítés szükséges, amely már elérhető. Látogass el a NeedforSpeed.com honlapra frissítési információért!
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	LEGJOBB VERSENYTÍPUS
+0	AUTO	HUB_BREAK_RECORD	REKORD MEGDÖNTÉSE
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Ezek a rudak elősegítik, hogy az első kerék az úton maradjon a motor leadott nagy nyomatékától függetlenül is.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Könnyű
+0	AUTO	RACE_DAY_DIFFICULTY_2	Közepes
+0	AUTO	RACE_DAY_DIFFICULTY_3	Nehéz
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elit
+0	AUTO	CUST_SLOT_CLUTCH	KUPLUNG
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Nyomd meg a 2-es gombot a folytatáshoz.
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	LEGGYORSABB 0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Az első vagy a hátsó gumikat szeretnéd változtatni?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	VERSENYNAP LÉTREHOZÁSA
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	STATISZTIKÁK
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Ahogy növeled a motor teljesítményét, úgy kell fejlesztened azokat az elemeket is, amelyek a hajtómű erejét a meghajtott kerekekhez juttatják. Kuplung, kardántengely, differenciálmű, mind számít.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	EGYSZEMÉLYES
+0	AUTO	CUST_TUNE_DRAG_ENGINE	A gyorsulási versenyeknél a startolás után leginkább a nyers erő számít. Minél nagyobb a teljesítmény, annál nagyobb az elérhető legnagyobb sebesség.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Ez a versenynap nem kompatibilis a Need for Speed™ ProStreet verzióddal, ezért nem alkalmazható. Frissítésekért és információkért látogass el a NeedforSpeed.com oldalra.
+0	AUTO	RD_PLAY	JÁTÉK
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	GYÚJTÁSI RENDSZER
+0	AUTO	FE_STATS_CAREER_WINS	KARRIER-GYŐZELMEK
+0	AUTO	RACE_DAY_LOCATION	HELYSZÍN
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	A fejlesztés eredményeképpen gyorsabb lesz a váltás és a motor ereje hatékonyabban jut el a kerekekhez.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	A fejlesztés eredményeképpen gyorsabb és pontosabb lesz a váltás és könnyebb alkatrészek közvetítésével jut el a motor ereje a kerekekhez.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Biztosan törölni akarod ezt a megosztott tervrajzot?
+0	AUTO	SHOW_FRIENDS	Barátok megjelenítése
+0	AUTO	FE_STATS_HUBS_DOMINATED	LENYOMOTT VERSENYNAPOK
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	LEGGYORSABB REAKCIÓIDŐ
+0	AUTO	CODE_ENTRY_INVALID	A beírt kód helytelen. Győződj meg arról, hogy helyesen adtad meg a kódot, majd próbáld újra.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	VÁLASZ MAX. 8 VERSENYT
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Autó javítása
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	JAVÍTÁS ZSETON
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	IRIZÁLÓ
+0	AUTO	CUST_SLOT_CAM_GEARS	BORDÁSKEREKEK
+0	AUTO	CUST_SLOT_ROOF_SCOOP	TETŐ LÉGBEÖMLŐ
+0	AUTO	CUST_COMPONENTS_TITLE	ÖSSZETEVŐK TESTRE SZABÁSA
+0	AUTO	CUST_BRAKES_GROUP	FÉKEK
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Biztos ki akarsz lépni?
+0	AUTO	CUST_SLOT_TRACTION_BARS	TENGELYTARTÓK
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	A fejlesztés nagy teljesítményű féktárcsákat és fékpofákat tartalmaz, amelyek mindenképpen szükségesek egy drift végrehajtásánál.
+0	AUTO	MAIN_RACE_DAY	VERSENYNAP
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	SPRINTVERSENY GYŐZELMI SZÁZALÉK
+0	AUTO	SELL_CAR_CONFIRMATION	Ennek az autónak az értéke {0:d}^Ha eladod, elveszíted tervrajzait is. Biztosan szeretnéd eladni?
+0	AUTO	RD_DELETE_RD	Versenynap törlése
+0	AUTO	CAR_SELECT_G35	A G35 a 350Z-vel azonos platformra épült.
+0	AUTO	CAR_SELECT_GXP	A GXP 2 L-es, 16-szelepes, 260 LE-s turbómotorral, LSD-vel és 18-as gyári felnikkel van szerelve.
+0	AUTO	CAR_SELECT_NSX	Azért tervezték, hogy megmutassa a világnak a Honda versenyzési technológiáját. Ez a középmotoros autó döbbenetes mértékben meghaladta a korát.
+0	AUTO	CAR_SELECT_R35	Az R35 GTR gyártásba került változata.
+0	AUTO	CAR_SELECT_S13	Az S13 a legikonikusabb driftautók egyike.
+0	AUTO	CAR_SELECT_S15	Az S15 eredetileg sosem jutott el Észak-Amerikába. Ennek ellenére a tuningkultúra ikonja lett.
+0	AUTO	CAR_SELECT_RS4	A B7 RS4 400 lóerős V8 motorral, szedán, kombi és kabriolet változatban kapható.
+0	AUTO	CAR_SELECT_RSX	A legendás Integra utódja. A Honda új K szériás motorjával szerelik.
+0	AUTO	CAR_SELECT_RX8	Orrmotoros, hátsókerék-meghajtású, Wankel-motoros 2+2 üléses autó. Az RX-8 majdnem tökéletes 50-50 súlyelosztással rendelkezik, és rendkívül kiegyensúlyozottan irányítható.
+0	AUTO	CAR_SELECT_STI	Négyhengeres boxermotor, turbó, négykerékmeghajtás. Az Sti egyike a meghatározó tuningautóknak, ami mindent tud, és mindent jól tud.
+0	AUTO	CAR_SELECT_Z4M	Ugyanazzal a soros hatos motorral szerelik, mint az E46 m3-at, a híradások szerint 0-ról 60 mérföldre 4,9 másodperc alatt gyorsul, a legnagyobb sebesség 250 km/h-ra korlátozott.
+0	AUTO	CUST_QUICK_VISUAL_DI3	3. szintű drift vizuális kiegészítők
+0	AUTO	CUST_AUTOSCULPT_ZONE1	1. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE2	2. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE3	3. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE4	4. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE5	5. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE6	6. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE7	7. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE8	8. ZÓNA
+0	AUTO	CUST_AUTOSCULPT_ZONE9	9. ZÓNA
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	LEGMAGASABB VERSENY-EREDMÉNY
+0	AUTO	FE_STATS_AVERAGE_SPEED	ÁTLAGSEBESSÉG
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METÁL
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Nyomj START gombot
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	DRIFT GYŐZELEM SZÁZALÉK
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Nincs elérhető másodlagos autó
+0	AUTO	CUST_FILTER_FRONT	ELSŐ KEREKEK
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	AUTÓKERESKEDÉS
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Az ötödik generációs Camaro gyártás előtti változata. Ezt a változatot 2006-ban mutatták be.
+0	AUTO	CUST_QUICK_SUSPENSION_1	A fejlesztés miatt az autó gyorsabban és pontosabban kanyarodik.
+0	AUTO	CUST_QUICK_SUSPENSION_2	A fejlesztés miatt az autó még gyorsabban és pontosabban kanyarodik és könnyebbé válik kezelése is.
+0	AUTO	CUST_QUICK_NITROUS_D3	A fejlesztés pár pillanatig 50-250 lóerővel fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	CUST_QUICK_NITROUS_G3	A fejlesztés pár pillanatig 50-250 lóerővel fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	CUST_QUICK_NITROUS_S3	A fejlesztés pár pillanatig 50-250 lóerővel fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	CUST_PERFORMANCE	TELJESÍTMÉNY
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	A stabilizátorrúd merevebbé tételével a kocsi jobban veszi a kanyarokat és segít az alulkormányozottságon is.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Biztosan törölni akarod ezt a tervrajzot?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Tervrajzok
+0	AUTO	CUST_QUICK_UPGRADE	GYORS FEJLESZTÉS
+0	AUTO	CAR_SELECT_CORVETTEC6	A Corvette legújabb változata, 35 éve az első olyan változat 35 éve, aminek nincs bukólámpája.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	NYEREMÉNY
+0	AUTO	MAIN_QUIT_GAME	KILÉPÉS
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	NITRÓ
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	SZŰRŐ
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	A bukókeret nemcsak a biztonság miatt fontos, de merevebbé teszi a karosszériát és kocsid kinézetét is dögösebbé teszi.
+0	AUTO	CUST_SLOT_BC_DESC	Ez az alkatrész segít, hogy a turbó a lehető legoptimálisabban működjön. Minél több üzemanyag és levegő jut a motorba, annál jobb, persze, csak akkor, ha elviseli károsodás nélkül.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	A túlhevült váltó nagy bajt jelent.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	TURBÓK ÉS LÉGSŰRÍTŐK
+0	AUTO	CAR_TYPE_SPEED	SPRINT
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	HENGERFEJEK
+0	AUTO	CUST_SELL_CAR_WARNING	Ha eladod ezt az autót, nem tudsz majd résztvenni egy {0:s} versenyen sem, amíg nem veszel egy azonos tipusú autót.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Ezen a helyszínen nincs ilyen verseny.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	NAPSZAK
+0	AUTO	RD_DELETED	Versenynap törölve
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Ahogy növeled a motor teljesítményét, úgy kell fejlesztened azokat az elemeket is, amelyek a hajtómű erejét a meghajtott kerekekhez juttatják. Kuplung, kardántengely, differenciálmű, mind számít.
+0	AUTO	CUST_SLOT_AIR_INTAKE	LÉGBEÖMLŐ
+0	AUTO	CUST_PART_PURCHASED	MEGVÉVE
+0	AUTO	CUST_BP_OPTION_UNDO	ELVETÉS
+0	AUTO	CUST_FILTER_BODY	KAROSSZÉRIA
+0	AUTO	CUST_FILTER_HOOD	MOTORHÁZTETŐ
+0	AUTO	CUST_FILTER_REAR	HÁTSÓ KEREKEK
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	A motor számítógépének újraprogramozásával járó fejlesztés lehetővé teszi, hogy több levegő és üzemanyag jusson a motorba, így maximális teljesítményleadást kaphatsz, amikor a legnagyobb szükséged van rá.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Az összecsavart rozsdamentes acél kábelekkel megerősített fékvezetékek növelik a hidraulikus nyomást és erősítik a fékhatást.
+0	AUTO	LS_SAVING	MENTÉS...
+0	AUTO	CUST_CUSTOM_UPGRADE	EGYEDI FEJLESZTÉS
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Nem felelsz meg a versenynap követelményeinek. A következő típusú autóid nincsenek:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Megfelelő felfüggesztéssel, amely nem fokozza sem az alulkormányozottságot sem a túlkormányozottságot, gyorsabb és könnyebben vezethető autóhoz jutsz.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	VÁLASSZ VERSENYMÓDOT
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Nem szerelhetsz kiegészítő kipufogóvéget gyári karosszériakészletre!
+0	AUTO	CUST_PURCHASE_CAR	Autó megvásárlása
+0	AUTO	CODE_ENTRY_VERIFICATION	A kód ellenőrzése a szerveren...
+0	AUTO	MC_OLD_SAVE_REWARD	Köszönjük, hogy játszottál az előző Need For Speed™ játékokkal.^Ezért {0:d} javítás zsetont és {1:d} totálkár zsetont kaptál karriermódban.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	FELSŐBB OSZTÁLYBA SOROLT ELLENFÉL ELÖTTI CÉLBAÉRÉS
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	3. szintű gyorsulási teljesítménynövelők
+0	AUTO	CUST_QUICK_POWER_G3	A fejlesztés segítségével az utcai autó versenyautóvá válik, még több erővel.
+0	AUTO	CUST_QUICK_POWER_S3	3. szintű sprint teljesítménynövelők
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	TERVRAJZOK
+0	AUTO	FE_STATS_BEST_RUN	LEGJOBB FUTAM
+0	AUTO	WINDTUNNEL_DOWNFORCE	LESZORÍTÓERŐ
+0	AUTO	CUST_SLOT_COOLING_DESC	Ne legyen túl forró, se túl hideg. Éppen jó legyen.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	LEGJOBB DRIFT EREDMÉNY
+0	AUTO	CUST_CAT_DRIFT_FORCED	A fejlesztés megnöveli a motorba juttatott levegő mennyiségét, így több üzemanyag ég el, tehát erősebbé válik a motor.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Javítás zsetonnal
+0	AUTO	FE_STATS_FILTER_GENERAL	ÁLTALÁNOS STATISZTIKÁK
+0	AUTO	CB_BLUEPRINTS_HEADER	TERVRAJZTÍPUS
+0	AUTO	ENTER_SECRET_CODE	ADD MEG A TITKOS KÓDOT
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Ezzel drámai módon megváltoztathatod kocsid kinézetét és talán javíthatsz aerodinamikai tulajdonságain is.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	TOTÁLKÁROS AUTÓK
+0	AUTO	CUST_SLOT_WHEELS	FELNIK
+0	AUTO	CUST_SLOT_SUPERCHARGER	KOMPRESSZOR
+0	AUTO	CAR_SELECT_SHELBYGT500	A GT500 az első bukócsöves amerikai autó, és a leghíresebb Shelby-k egyike.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	LEGHOSSZABB EGYEDI KÉTKEREKEZÉS
+0	AUTO	FE_STATS_GRIP_WINS	HAJSZA GYŐZELMEK
+0	AUTO	CL_MS_POINTS	Microsoft® pontok
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	LEGHOSSZABB DRIFT-IDŐ
+0	AUTO	CUST_FILTER_REAR_BUMPER	HÁTSÓ LÖKHÁRÍTÓ
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	LEGJOBB 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Az autó megvásárlásának és a tervrajz alkalmazásának költsége: {0:d}. Folytatod?
+0	AUTO	GARAGE_REPAIR_DENIED	Nincs elegendő készpénzed és nincs javítás zsetonod az autó megjavításához.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	KATTINTS a továbblépéshez
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	PUNKBUSTERES VERSENYEK
+0	AUTO	GARAGE_NO_CAR_REPAIR	Nincs elegendő pénzed vagy elérhető javítás zsetonod az autó javíttatásához.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	NINCS ELÉRHETŐ AUTÓ
+0	AUTO	RDMAP_CREATE_PREVIEW	SAJÁT VERSENYNAP ÖSSZEÁLLÍTÁSA
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	A kocsi gyakori megállítása miatt a fékrendszerben hő keletkezik, ami növelheti a féktávolságot. Nagyobb fékrendszer esetén a hőmérséklet kisebb mértékben növekszik és a fékerő állandó marad.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	LEGTÖBB LÁNCOLT DRIFT
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	FÉKELOSZTÓ SZELEP
+0	AUTO	FE_STATS_CLUB_TAG	KLUBCÉDULA
+0	AUTO	CUST_SLOT_EXHAUST	KIPUFOGÓCSÚCSOK
+0	AUTO	CAR_SELECT_INTEGRATYPER	Az Integra Type R-t sokan minden idők legjobban kezelhető elsőkerék-meghajtású autójának tartják.
+0	AUTO	CUST_CAT_DRAG_BRAKE	A hangsúly itt nem a fékezésen van, sőt! A cél a legkönnyebb fékrendszer, hogy kocsid olyan jól gyorsuljon, amennyire csak lehetséges.
+0	AUTO	WINDTUNNEL_DRAG	LÉGELLENÁLLÁS
+0	AUTO	CUST_APPLY_PAINT	Festék felvitele
+0	AUTO	WINDTUNNEL_PEAK_HP	CSÚCS LE
+0	AUTO	CUST_BLUEPRINT_DELETE	Tervrajz törlése
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	KARRIER-STATISZTIKÁK
+0	AUTO	CUST_VISUAL_TITLE	LÁTVÁNYELEM
+0	AUTO	CUST_SLOT_DRIVESHAFT	KARDÁNTENGELY
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Tervrajz megvásárlása
+0	AUTO	CAREER_COMPLETION_HEADER	KARRIERTELJESÍTÉS
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	A nagyobb motorteljesítmény egyszerűbbé teszi a kerekek kipörgetését, így a driftelést is. Növeld meg, hogy segítsd a csúszások végrehajtását!
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	LEGGYORSABB 1/4 MÉRFÖLD
+0	AUTO	CL_NOT_ENOUGH_CASH	Nincs elég pénzed az autó megvásárlásához.
+0	AUTO	CUST_SLOT_SC_DESC	Ez töltőlevegő-sűrítési módszer, amit közvetlenül a motor hajt, alacsony fordulatszámon növeli a teljesítményt.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	KLUB
+0	AUTO	CUST_SLOT_TIRES	GUMIK
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Nem található létező versenynap. 
+0	AUTO	RACEDAY_EXIT_CONFIRM	Ezzel minden versenynapi eredmény és változás elveszik. Elveted a változásokat?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	LENGÉSCSILLAPÍTÓK ÉS RUGÓK
+0	AUTO	CUST_REGION_SKIRT	OLDALIDOM
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	NITRÓTARTÁLY
+0	AUTO	CUST_QUICK_FORCED_DI3	A fejlesztés eredményeképpen több levegő jut a motorba, megnövelve a teljesítményt akár egy versenyautó szintjére.
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	KÉTKEREKEZÉSI KERETEK
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	Erről az autóról nem beszélhetünk.
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Elérted a maximum {0:d} autót.  ^^Adj el egy autót a garázsból, hogy lehetővé tedd a vásárlást!
+0	AUTO	CUST_CUSTOMIZE_MAIN	TESTRE SZABÁS
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	A motor számítógépének újraprogramozásával járó fejlesztés lehetővé teszi, hogy több levegő és üzemanyag jusson a motorba, így meglesz az ahhoz szükséges erő, hogy megelőzd a kanyarból kilépő másik autót.
+0	AUTO	CUST_BLUEPRINT_HEADER	TERVRAJZ TESTRE SZABÁSA
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	GYORSULÁSI GYŐZELEM SZÁZALÉK
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	KIPUFOGÓ-RENDSZER
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	KIVÁLASZTÁS
+0	AUTO	CUST_PAINT_GROUP_CHROME	KRÓM
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	MEGOSZTOTT TERVRAJZOK SZÁMA
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	TURBÓK ÉS LÉGSŰRÍTŐK
+0	AUTO	FE_STATS_DRIFT_RACES	DRIFTVERSENYEK
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Ahogy növeled a motor teljesítményét, úgy kell fejlesztened azokat az elemeket is, amelyek a hajtómű erejét a meghajtott kerekekhez juttatják. Kuplung, kardántengely, differenciálmű, mind számít.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	TELJESÍTMÉNY-STATISZTIKÁK
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBÓFELTÖLTŐ
+0	AUTO	CUST_SLOT_SHIFTER	VÁLTÓK
+0	AUTO	CUST_DYNO_TEST	DYNO TESZT
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japán pilóták szállták meg a tokiói kikötő ipari területét, és intenzív útvonalakat alakítottak ki rajta, kihasználva a terep adottságait.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	AUTÓK VÁLASZTÁSA
+0	AUTO	CUST_CAT_SPEED_NITROUS	A fejlesztés ideiglenesen megnöveli a teljesítményt, és ez jelentheti a győzelem és a vereség közti különbséget.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Az ötödik generációs Mustang "retro-futurisztikus."
+0	AUTO	FE_STATS_WIN_PERCENTAGE	GYŐZELMI SZÁZALÉK
+0	AUTO	RD_CUSTOM_SELECT	Versenynap lejátszása
+0	AUTO	KING_FLOW_CASH_REWARD	PÉNZJUTALOM
+0	AUTO	CUST_CAT_SPEED_BRAKE	A fejlesztés nagy teljesítményű féktárcsákat és fékpofákat tartalmaz, amelyek mindenképpen szükségesek egy jól megépített autóhoz.
+0	AUTO	CUST_SPEED_TUT_AWD	Négykerékmeghajtásnál megnövekszik a vonóerő, különösen a startolásnál és a gyorsításnál a kanyarból való kilépéskor. Használd ki ezt a tényt előnyödre!
+0	AUTO	CUST_SPEED_TUT_FWD	Habár a fizika törvényei az elsőkerék-hajtású kocsik ellen dolgoznak, mégis döbbenetes versenyautót építhetsz ebből a fajtából, ha megfelelően tuningolod. Először is az elsőkerék-hajtású kocsikra jellemző alulkormányozottságot kell megszüntetned, a kocsi elülső részének merevítésével! Ezek után kis csúszású differenciálműre van szükséged, amely segít megszüntetni a nyomaték kormányzásra való hatását.
+0	AUTO	CUST_SPEED_TUT_RWD	A harmonikus vezetés és a gázzal kormányzás a hátsókerék-meghajtású autó vezetésének titka. Ügyelj a túlzott túlkormányozottság kerülésére beállításaidnál.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	HŰTŐRENDSZER
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Eredendően a versenyhatóságok általi jóváhagyásra készült, és sosem volt igazi Escort. Az RS ennek ellenére a legikonikusabb autók és sziluettek egyike lett.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	LEGGYORSABB 0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	A Nyugat leggyorsabb útjaként ismert Willow Springs a Kaliforniai sivatag egyik domboldalán található, és folyamatos szintkülönbségek és magas átlagsebesség jellemzik.
+0	AUTO	RACE_DAY_DIFFICULTY	NEHÉZSÉG
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Nincs elég pénzed ahhoz, hogy a kosaradban lévő összes zsetont megvedd!
+0	AUTO	CAR_SELECT_CHALLENGER	Az első generációs Challenger, a Dodge első próbálkozása volt a sportautó-piacon. Egy régebbi terven alapult, amelybe eredetileg turbinahajtást szántak.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Egy szabad nap kiválasztásával új egyéni versenynapot hozhatsz létre. A választott ikon jelképezi a versenynapot a versenynap térképen a saját versenynap alatt.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Az összkerékhajtás előnye, hogy a rajtoknál és a gyorsításnál a kanyarokból való kilépéskor nagyobb az erőátvitel. Használd ki ezt a tényt!
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Bár a fizika törvényei az elsőkerék-hajtású kocsik ellen dolgoznak, mégis, megfelelő tuningolással döbbenetes versenygépeket építhetsz belőlük. Először az elsőkerék-hajtású kocsikra jellemző alulkormányozottságot kell megszüntetned, a kocsi elülső részének merevítésével. Ezek után részlegesen záródó differenciálműre van szükséged, amely segít megszüntetni a nyomaték kormányzásra való hatását.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	A harmonikus vezetés és a gázzal kormányzás a hátsókerék-meghajtású autó vezetésének titka. Különösen ügyelni kell a túlzott túlkormányozottság kerülésére.
+0	AUTO	CUST_SELL_CAR	Autó eladása
+0	AUTO	RACE_DAY_LOCATION_12_DESC	A lipcsei elit Porsche tesztelő pálya a leghíresebb verseny kanyarok reprodukcióit tartalmazza.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	OLDALSÓ LÖKHÁRÍTÓ
+0	AUTO	CUST_SLOT_FUEL_DESC	A nagy teljesítmény csúcsa a megfelelő üzemanyag-befecskendezés. A nagyobb benzinszivattyú és a nagyobb befecskendezők, valamint a fejlesztett üzemanyag-vezetékek segítségével jelentősen több lóerőt eredményeznek.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	A sikeres driftkocsinak kiszámíthatóan kell kitörnie, könnyen túlkormányozottan tarthatónak kell lennie a kanyarokban, ugyanakkor rendkívül stabilnak kell maradnia.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	BARÁTOK
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Reggel
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Hiba lépett fel a párosítás során.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Ez a nagy sebességű pálya a tokiói autópálya pár mérföldjét foglalja magában és hurkokat, egyenes részeket és egy alagútszakaszt foglal magába.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	JÁTSZOTT RANGSOROLT JÁTÉKOK
+0	AUTO	CUST_TUNE	TUNING
+0	AUTO	CUST_VISUALS_TITLE	LÁTVÁNYELEMEK
+0	AUTO	FE_STATS_CLUB_NAME	KLUBNÉV
+0	AUTO	CUST_INSTALL	Felhelyezés
+0	AUTO	RACEDAY_SAVE_CONFIRM	Biztosan menteni akarod a versenynapot?
+0	AUTO	FE_MATCHMAKING_JOINING	Csatlakozás a játékalkalomhoz...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	LEFÚJÓSZELEP
+0	AUTO	CUST_SLOT_ROLL_CAGE	BUKÓKERET
+0	AUTO	CAR_LOT_NO_DRIFTING	NINCS DRIFTELÉS
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	A fejlesztés olyan motor-alkatrészeket tartalmaz, amelyek erősebbek a szokásosnál, így több erőt tud majd leadni magasabb fordulatszámnál.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	TOTÁLKÁR ZSETONNAL
+0	AUTO	CUST_PACKAGE_VISUAL	Látvány csomagok
+0	AUTO	CUST_EMPTY_BLUEPRINT	Új tervrajz létrehozása
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Írd be titkos kódodat vagy promóciós kódodat a jutalmadhoz.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Ez a rally versenykocsikra jellemző fejlesztés azt a látszatot kelti, hogy szeretsz a koszban játszani.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Válaszd ki versenynapod nehézségi szintjét! Ez fogja meghatározni az MI és a használható autók szintjét.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	KARRIER AUTÓK
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	BEFEJEZETT 12-SZEMÉLYES VERSENY
+0	AUTO	CUST_REGION_FRONT_TIRE	ELSŐ GUMI
+0	AUTO	FE_STATS_DRAG_WINS	GYORSULÁSI GYŐZELMEK
+0	AUTO	RACE_DAY_SAVE_NAME	Saját versenynap
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Nincs elég pénzed az alkatrész megvásárlásához!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	LEGNAGYOBB KÉTKEREKEZÉS-SZÖG
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	A turbók levegőpumpák.
+0	AUTO	CUST_SLOT_BLOCK_DESC	A motor furatának megnövelésével nő a hengerűrtartalom is, így több üzemanyag ég el, nagyobb teljesítményt állítva elő.
+0	AUTO	CUST_CAT_GRIP_BRAKE	A fejlesztés nagy teljesítményű féktárcsákat és fékpofákat tartalmaz, amelyek mindenképpen szükségesek egy jól megépített autóhoz.
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	VERSENYEK
+0	AUTO	CUST_SLOT_STEERING_KIT	KORMÁNYMŰ
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	HAJSZA GYŐZELMI SZÁZALÉK
+0	AUTO	CUST_BLUEPRINT_RENAME	Tervrajz átnevezése...
+0	AUTO	RACE_DAY_SLOT_FILLED	FOGLALT
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	LEGJOBB DRIFTELÉSI EREDMÉNY
+0	AUTO	CUST_VINYLS	FÓLIÁK
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	A jobb minőségű anyagokból készült, különleges lengőkarok nagyobb tartományú kerékdőlés is optimális teljesítményt nyújtanak és javítják a felfüggesztést.
+0	AUTO	FE_STATS_HUBS_WON	MEGNYERT NAPOK
+0	AUTO	CUST_CAT_GRIP_NITROUS	A fejlesztés megnöveli a teljesítményt, és ez jelentheti a győzelem és a vereség közti különbséget.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NEM FELEL MEG A VERSENYHEZ
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Válaszd meg a javítási zsetonok számát a versenynapodra. Egyszemélyes versenynap esetén egyenlő számú javítás- és totálkár zsetont kapsz.
+0	AUTO	CAR_SELECT_CAMAROSS	Az első generációs Camaro, amit kis, ádáz állatként jellemeztek, ami Mustangokat eszik.
+0	AUTO	FE_STATS_BEAT_MODERATOR	MEGVERT MODERÁTOR
+0	AUTO	CUST_SLOT_HANDBRAKE	KÉZIFÉK
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	A fejlesztés eredményeképpen még gyorsabb és pontosabb lesz a váltás és még könnyebb alkatrészek közvetítésével jut el a motor ereje a kerekekhez, egészen egy igazi versenyautóhoz hasonlóan.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	A fejlesztés eredményeképpen még gyorsabb és pontosabb lesz a váltás és még könnyebb alkatrészek közvetítésével jut el a motor ereje a kerekekhez, egészen egy igazi versenyautóhoz hasonlóan.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	A fejlesztés eredményeképpen még gyorsabb és pontosabb lesz a váltás és még könnyebb alkatrészek közvetítésével jut el a motor ereje a kerekekhez, egészen egy igazi versenyautóhoz hasonlóan.
+0	AUTO	COMMON_CLASS_HEADER	SZINT
+0	AUTO	CAR_SELECT_FORDGT	A klasszikus GT40 modern verziója, a Ford GT a Ford '60-as években uralkodó versenymodell előtti tisztelgés.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	TELJESÍTMÉNY-STATISZTIKÁK
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	FÉKTÁRCSÁK
+0	AUTO	CUST_QUICK_INTERNALS_D3	A fejlesztés lehetővé teszi, hogy a motor nagyobb teljesítményt adjon le rövid idő alatt.
+0	AUTO	CUST_QUICK_INTERNALS_G3	A fejlesztés keretében versenyautók motoralkatrészeit kapja meg az autó, így az elviseli a nagyobb teljesítményből és fordulatszámból adódó terhelést.
+0	AUTO	CUST_QUICK_INTERNALS_S3	3. szintű sprint belső alkatrészek
+0	AUTO	CUST_SLOT_PISTONS	DUGATTYÚK
+0	AUTO	CUST_CAT_DRIFT_NITROUS	A fejlesztés ideiglenesen megnöveli a teljesítményt, és ez jelentheti a győzelem és a vereség közti különbséget.
+0	AUTO	FE_STATS_BEST_LAP_TIME	LEGJOBB KÖRIDŐ
+0	AUTO	FE_STATS_SKILLS_STATS	SZAKÉRTELEM-STATISZTIKÁK
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	KARRIER ÁTTEKINTÉSE
+0	AUTO	CUST_DRIFT_TUT_RWD	A drift kocsinak képesnek kell lennie a simán megkezdett, de vadul kitörő farral befejezett kanyarok végrehajtására.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	A fejlesztés eredményeképpen az autó teljesítménye egy igazi versenyautóéval vetekszik.
+0	AUTO	CUST_SELL_CAR_DENIED	Nem adhatod el az utolsó autódat.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Az erősített felfüggesztés segít abban, hogy a kocsi karosszériája merev maradjon magas nyomaték esetén is, így a kerekek tapadása maximális lehet.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Dél
+0	AUTO	CUST_SLOT_PULLEY_DESC	Ha a kompresszor tárcsája kisebb, mint eredetileg, gyorsabban foroghat, így nagyobb nyomást biztosít a motornak.
+0	AUTO	CUST_SLOT_IGNITION_DESC	A nagy teljesítményhez állandó, erős szikra kell, így a platinához és irídiumhoz hasonló, jó vezetőképességű gyújtáskábelek és gyújtógyertyák növelhetik a motor teljesítményét.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	KI
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	FÉKVEZETÉKEK
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	LEGJOBB SZORZÓ
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	NITRÓRENDSZER
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	A rangsoroló szerver jelenleg nem elérhető. Kérjük, próbáld újra később!
+0	AUTO	RACE_DAY_TRACK_CONFIG	VERSENY KONFIGURÁCIÓ
+0	AUTO	CS_HEADER_DRAG_EVENT	GYORSULÁSI VERSENYEK
+0	AUTO	CUST_QUICK_BRAKE_1	A fejlesztés eredményeképpen autód rövidebb távolság alatt áll meg, mint normál fékekkel.
+0	AUTO	CUST_QUICK_BRAKE_2	2. szintű fékek
+0	AUTO	CUST_REPAIR_TITLE	AUTÓD MEGJAVÍTÁSA
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Ahogy növeled a motor teljesítményét, úgy kell fejlesztened azokat az elemeket is, amelyek a hajtómű erejét a meghajtott kerekekhez juttatják. Kuplung, kardántengely, differenciálmű, mind számít.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Tervrajz összefoglaló
+0	AUTO	CUST_CAT_DRAG_FORCED	A hangsúly itt a nyers erőn van, a turbó-alkatrészek a teljes gázzal vezetésre és a maximális teljesítmény leadására vannak tervezve, így drámaian megnövelik egy adott szakasz végén mért végsebességet.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Szeretnél most játszani ezzel a versenynappal?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Biztosan el akarod menteni a tervrajzod változtatásait?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Ez a fejlesztés megerősíti a hajtáslánc alkatrészeit, beleértve a kardántengelyt, a differenciálművet és a tengelyeket.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Ez minden, a tervrajzon tett változtatást semmissé tesz. Elveted a változásokat?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Tervrajz átnevezése...
+0	AUTO	CUST_FILTER_MIRRORS	TÜKRÖK
+0	AUTO	ENTER_PRESELL_CODE	ADD MEG A PROMÓCIÓS KÓDOT
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	SIKERTELEN LETÖLTÉS
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	MEGNYERT LESZÁMOLÁSOK
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	A fejlesztés nagy mértékben átprogramozza a motorvezérlő számítógépet, maximalizálva így a teljesítményt.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	LEGJOBB REAKCIÓIDŐ
+0	AUTO	CAR_SELECT_MK5GTI	Az Mk5 GTI az eredeti hot hatch legújabb változata. Kétliteres FSi turbó motorja több, mint 200 lóerős gyári állapotában, és könnyűszerrel tovább tuningolható.
+0	AUTO	CAR_SELECT_MK5R32	Vegyél egy hot hatch autót, tegyél bele egy kis szögű V6-os motort, majd toldd meg négykerék-meghajtással…
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Megfelelő felfüggesztéssel, amely nem fokozza sem az alulkormányozottságot sem a túlkormányozottságot, gyorsabb és könnyebben vezethető autóhoz jutsz.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	LENGŐKAROK
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Ekkora erőnél merev rugók kellenek ahhoz, hogy a kocsid egyenesen száguldjon át a gyorsulási pályán.
+0	AUTO	CUST_SLOT_BODY	KAROSSZÉRIA-KÉSZLET
+0	AUTO	CUST_SLOT_HOOD	MOTORHÁZTETŐ
+0	AUTO	CUST_SLOT_PADS	FÉKBETÉTEK
+0	AUTO	FE_STATS_DRIFT_WINS	DRIFT GYŐZELMEK
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	A motor számítógépének újraprogramozásával járó fejlesztés lehetővé teszi, hogy több levegő és üzemanyag jusson a motorba, így meglesz az ahhoz szükséges erő, hogy átcsússz a célvonalon.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	TESTRE SZABÁS
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	TOTÁLKÁROSRA TÖRT AUTÓK
+0	AUTO	RD_CREATE_RD	Versenynap létrehozása
+0	AUTO	FE_STATS_DRAG_RACES	GYORSULÁSI VERSENYEK
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	KAPCSOLATBONTÁSI SZÁZALÉK
+0	AUTO	CUST_REGION_FRONT_WHEEL	ELSŐ KEREKEK
+0	AUTO	CAR_SELECT_ECLIPSE	A 2G Eclipse a forgattyús tengelyek gyilkosa.
+0	AUTO	CAR_LOT_TITLE	AUTÓKERESKEDÉS
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Egy foglalt versenynap választásával információt kaphatsz arról a napról, ugyanakkor törölheted is.
+0	AUTO	CAREER_MAP_TITLE	KARRIERTÉRKÉP
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	LEGJOBB DRIFT EREDMÉNY KÖVETŐKÉNT
+0	AUTO	CUST_SLOT_CRANKSHAFT	FORGATTYÚSTENGELY
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	AUTÓ NYEREMÉNY
+0	AUTO	CAR_SELECT_R34GTR	Az autó, amely meghatározza a tuningszcénát. Felteszi a mércét mindenki másnak.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFTVERSENYEK
+0	AUTO	RACE_DAY_MULTIPLAYER	TÖBBSZEMÉLYES
+0	AUTO	CUST_SLOT_CRANK_DESC	A gyári vezérműtengelyek nem bírják a nagy teljesítményt. Kovácsolt vezérműtengely szükséges az 500 lóerőnél nagyobb teljesítményt leadó motorokhoz.
+0	AUTO	CAR_SELECT_COBALTSS	Kompresszoros 2 literes motorjával a Cobalt a Cavalier utódja volt, és a Honda Civichez hasonló autók konkurenciájának szánták.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} LÁB
+0	AUTO	CAR_SELECT_350Z	A Z sorozat ötödik autója. Hátsókerék-meghajtású, 2+2 üléses sportkupé.
+0	AUTO	CAR_SELECT_997T	3,6 literes turbómotorjával az autó 1 másodpercen belül gyorsul 60-ról 100 km/h sebességre.
+0	AUTO	CAR_SELECT_AE86	A Hachi-Roku. Az egyik utolsó kompakt hátsókerék-meghajtású autó.
+0	AUTO	CAR_SELECT_CTSV	A CTSV volt a Cadillac V-széria első darabja, amelyet az európai sportszedánok ellenfelének szántak.
+0	AUTO	CAR_SELECT_EVO9	Az EVO IX kétliteres, 16 szelepes, négykerékmeghajtású hot hatch. Teljesítménye és kezelhetősége miatt megalkotása óta meghatározó autó a tuning területén.
+0	AUTO	CAR_SELECT_EVOX	Az EVO X gyorsabb, mint a Stig.
+0	AUTO	CAR_SELECT_GTON	A Pontiac GTO a Holden V platformjára épülő észak-amerikai változat, amely a Corvette LS2-jét használja.
+0	AUTO	CAR_SELECT_GTOO	Egyesek ezt tartják az első izomautónak.
+0	AUTO	CAR_SELECT_SHELBYGT500N	A Ford SVT (Különleges Jármű Csoport) tervezői és a legendás Carroll Shelby összmunkája ebben a projektben szinte garantálta a sikert. Az együttműködés eredménye biztosan bárgyú vigyort csal minden Mustang- és lóerőimádónak szerte a világon: 450 lóerő, 610 Nm nyomaték (ez az, baby!), Brembo féknyergek, 19-es könnyűfém felnik, és olyan árfekvés, amely összhangban van a korábbi Mustang Cobra modellel. A tervezők szerint, a 2006-os Ford Mustang Shelby Cobra GT500 "a legerősebb, sorozatban gyártott Mustang lesz, amely valaha épült."
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	A LESZÁMOLÁS MEGNYITÁSÁNAK FELTÉTELEI
+0	AUTO	CUST_REPAIR_USE_CASH	Készpénzzel
+0	AUTO	FE_STATS_FILTER_SKILLS	SZAKÉRTELEM-STATISZTIKÁK
+0	AUTO	FE_STATS_SPEED_RACES	SPRINTVERSENYEK SZÁMA
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Versenyek meghatározása
+0	AUTO	RD_DELETE_SHARED_RD	Megosztott versenynap törlése
+0	AUTO	CAREER_OVERVIEW_HEADER	KARRIER ÁTTEKINTÉSE
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	KIPUFOGÓCSÖVEK
+0	AUTO	CUST_TUNE_GRIP_BRAKES	A kocsi gyakori megállítása miatt a fékrendszerben hő keletkezik, ami növelheti a féktávolságot. Nagyobb fékrendszer esetén a hőmérséklet kisebb mértékben növekszik és a fékerő állandó marad.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	A fejlesztés olyan motor-alkatrészeket tartalmaz, amelyek erősebbek a szokásosnál, így több erőt tud majd leadni magasabb fordulatszámnál.
+0	AUTO	CL_DRIVETRAIN_ALL	Minden típus
+0	AUTO	CL_DRIVETRAIN_AWD	Összes kerék
+0	AUTO	CL_DRIVETRAIN_FWD	Első kerék
+0	AUTO	CL_DRIVETRAIN_RWD	Hátsó kerék
+0	AUTO	FE_COMMON_MODE	MÓD
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	SZÍVÓCSONK
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	VERSENYREKORDOK
+0	AUTO	CODE_ENTRY	KÓD MEGADÁSA
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Megvásárolod a kosaradban lévő összes zsetont?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	KIPUFOGÓ
+0	AUTO	RACE_DAY_SPLIT_SCREEN	OSZTOTT KÉPERNYŐ
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Ha jól választod meg sebességedet a kanyarokban, valamint figyelsz rá, hogy a kanyarból kifelé megfelelően gyorsulj, máris megtetted, ami a legfontosabb. Ha nagyobb motorod teljesítménye, kilőhetsz a kanyarokból és végsebességed is növekszik.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	KLUBTAGOK
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	MOTORBELSŐ
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	A fejlesztés megerősíti a hajtáslánc alkatrészeit, beleértve a kardántengelyt, a differenciálművet és a tengelyeket.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Szélcsatorna Ki
+0	AUTO	FE_COMMON_CONFIGURATION	KONFIGURÁCIÓ
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} LE
+0	AUTO	CS_HEADER_GRIP_EVENT	HAJSZAVERSENYEK
+0	AUTO	CAR_SELECT_CIVIC	A hatodik generációs Civic a tuningkultúra legnépszerűbb autói közé tartozik, mindegy, hogy utcai, pálya-, gyorsulási vagy bármi hasonló versenyről van szó.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Versenynap törölve
+0	AUTO	CAR_SELECT_E46M3	Az M3 harmadik változata, az E46, a BMW akkori legmagasabb lóerő/űrméret arányú motorjával debütált.
+0	AUTO	CAR_SELECT_E92M3	Az E92 M3 szénszálas tetővel és v8-as motorral büszkélkedhet (a korábbiak soros hathengeresek voltak).
+0	AUTO	CAR_SELECT_ELISE	A második generációs Elise egy lecsupaszított minimalista autó, amely kizárólag a vezetési élményre koncentrál.
+0	AUTO	CAR_SELECT_FDRX7	Az FD RX-7 minden idők legjobb tuningautóinak egyike, legyen szó driftről vagy hajszáról. Valódi legenda.
+0	AUTO	CAR_SELECT_IS350	A második szériás IS hátsókerék-meghajtású luxuskupé. Az új IS áramvonalas, kupé-szerű körvonalú, ferdehátú profillal.
+0	AUTO	CAR_SELECT_LP640	6,5 literes, 640 lóerős motorjával az LP640 a szuperautók legerősebbjei közé tartozik.
+0	AUTO	CUST_SLOT_VALVE_DESC	Ez a rendszer átcsoportosítja a hidraulika-folyadékot a fékrendszeren belül, így elől és hátul is nagyobb fékerő érhető el.
+0	AUTO	CAR_SELECT_SUPRA	A negyedik szériás Suprát könnyebbre és mozgékonyabbra tervezték, mint az előző változatot, így 0,98G-t teljesített a tesztpályán. 1999 volt az utolsó év, amikor árulták Észak-Amerikában, míg Japánban 2002-ig gyártották.
+0	AUTO	CUST_FILTER_ALL_PARTS	MINDEN ÖSSZETEVŐ
+0	AUTO	CUST_QUICK_SUSPENSION_D3	A fejlesztés célja, hogy súlyt helyezzen a kormányzott kerekekre és, hogy minimumra csökkentse az időt, amit az első kerekek a levegőben töltenek.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	A fejlesztés lehetővé teszi, hogy az autó gyorsabban kanyarodjon, anélkül, hogy az abroncsok elveszítsék a tapadásukat.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	A fejlesztés lehetővé teszi, hogy az autó gyorsabban kanyarodjon, anélkül, hogy az abroncsok elveszítsék a tapadásukat.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Párosítás, avagy játékosok keresése sikertelen. Kérjük, próbáld újra.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Versenyek megadása
+0	AUTO	FE_STATS_CLUB_LEADER	KLUBVEZETŐ
+0	AUTO	RACE_DAY_LOCATION_1_DESC	A német Autobahnring gyorsforgalmi utak összekapcsolásából áll, amely magában foglalja az Autobahn részeit, éppúgy, mint döntött kanyarokat és alagutakat.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Játékkeresés leállítása...
+0	AUTO	CUST_SLOT_DIFF_DESC	Itt a motor ereje egyenletesen oszlik majd meg a két oldali kerekek között.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Biztos vagy benne, hogy szeretnéd felülírni ezt a versenynapot?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	LEGTÖBB VEZETŐ ELŐTTI CÉLBAÉRKEZÉS
+0	AUTO	CAR_SELECT_ZONDAF	Számos autós újságíró véleménye szerint a Zonda F a legjobb szupersportkocsik egyike.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Hogy abroncsaid jól tapadjanak az aszfalthoz, meg kell erősítened mind az első, mind a hátsó stabilizátorrudat, ki kell cserélned a perselyeket uretánból készültekre és versenyzésre alkalmas lengéscsillapítókat kell beszerezned.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Saját versenynap^Hozd létre és tervezd meg a saját versenynapod! Hozz létre egyszemélyes versenynapot, vagy többszemélyes versenynapot, hogy online versenyezhess más játékosokkal! Hozz létre osztott képernyős versenynapot, és hívd ki egy barátodat!^^Oszd meg egy- vagy többszemélyes versenynapodat másokkal és hívd meg őket, saját versenynapodra.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Az Autopolis egy távoli hegycsúcson található Japánban. Bár a kör eredete homályos, ez a nagy sebességű pálya új és tiszta.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	A merevebb lengéscsillapítók, és a minőségi rugók által biztosított alacsonyabb súlypont nagyban javítja a kanyarvételt.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Ez a fejlesztés ideiglenesen nagy mértékben megnöveli a teljesítményt. A nitrobefecskendezés okvetlenül szükséges a gyorsulási versenyekhez.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	A Szeles Város pilótái megszálltak egy elhagyatott repteret. A Chicago Airfield széles kifutóval rendelkezik, hajsza- és driftpályával, illetve gyorsulási szakasszal.
+0	AUTO	FE_STATS_TOP_SPEED	CSÚCSSEBESSÉG
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	NYOMÁSSZABÁLYOZÓ KÉSZLET
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	LEGNAGYOBB KERÉKTAPADÁS ELÉRÉSE ELŐKÉSZÍTÉSEN
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	LEGGYORSABB 60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	NYOMÁSVEZÉRLŐ
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	A japán hegyoldalba vájt Ebisu a driftelés lelki otthona. A Fukuyama kihívás végigmegy a vidéken és egy gyorsforgalmi útba torkollik.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	A vezérműtengelyt hajtó fogaskerekek súlyának csökkentése lehetővé teszi, hogy kevesebb energia menjen kárba a vezérmű forgatásakor, így megnövelhető a teljesítmény
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d}X{1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	SÉRÜLÉS NÉLKÜL MEGNYERT VERSENYEK
+0	AUTO	CUST_QUICK_HANDLING_1	A fejlesztés eredményeképpen az autó fordulékonyabbá és stabilabbá válik nagy sebességnél.
+0	AUTO	CUST_QUICK_HANDLING_2	2. szintű kezelhetőség
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Habár a nitro megnöveli a motor teljesítményét pár pillanatra, túlterhelheti a motort. Egy nyomásszabályzó-készlet biztosítja, hogy a motort csak akkora nyomás érje, amit még károsodás nélkül elvisel.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Biztosan szeretnéd megváltoztatni a helyszínt? Ez törli a már létező választásaidat!
+0	AUTO	CUST_VINYL_LAYER_TITLE	RÉTEG MENÜ
+0	AUTO	CUST_CAT_DRAG_INTERNALS	A fejlesztés kovácsolt motor-alkatrészeket tartalmaz, amelyek erősebbek a szokásosnál. Ez különösen a negyedmérföldes futamoknál hasznos.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Az észak kaliforniai Infineon versenypálya dombos fordulók sorozata. Egy rossz mozdulat lelassíthat, vagy felkenődhetsz egy falra.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	SPRINT-^VERSENY
+0	AUTO	FE_STATS_CLUB_POINTS	KLUB PONTOK
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	A motor számítógépének újraprogramozásával járó fejlesztés lehetővé teszi, hogy több levegő és üzemanyag jusson a motorba, így meglesz az ahhoz szükséges erő, hogy megelőzd a kanyarból kilépő másik autót.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Biztosan szeretnéd eltávolítani a(z) %s versenyt?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Versenynap mentve
+0	AUTO	CUST_QUICK_NITROUS_DI3	A fejlesztés pár pillanatig 50-250 lóerővel fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	CUST_QUICK_POWER_1	Az alap fejlesztőcsomag a teljes fordulatszám-tartományban plusz erőt biztosít, ráadásul agresszívabbá teszi az autód hangját.
+0	AUTO	CUST_QUICK_POWER_2	A csomag a mérsékeltebb 1-es fokozatú fejlesztéseken alapszik, így a motor nagyobb teljesítményt fejt ki és a hangja is agresszívabb lesz.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	A Mondello Park rendkívül kanyargós és összetett pálya az ír tájvidéken.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	MÁSODLAGOS AUTÓ
+0	AUTO	FE_STATS_GRIP_RACES	HAJSZÁK
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARÁZS
+0	AUTO	CUST_PACKAGE_POWER	Teljesítmény csomagok
+0	AUTO	CUST_OWNED	BIRTOKOLT
+0	AUTO	CUST_PAINT	FESTÉS
+0	AUTO	CUST_PARTS	KAROSSZÉRIA-RÉSZEK
+0	AUTO	CUST_PACKAGE_TITLE	CSOMAG
+0	AUTO	CS_OPTION_CAR_SELECT	Autó választása
+0	AUTO	RACE_DAY_SLOT_EMPTY	ELÉRHETŐ
+0	AUTO	FE_STATS_ACHIEVEMENTS	ELÉRT CÉLOK
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Kihívásos versenynap létrehozása révén kiválaszthatod azokat az autókat, amelyek ezen a versenynapon használhatsz.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Használd a kéziféket, hogy újrajátszd a Rockford File epizódjait.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	A 318-as autópálya napszítta aszfaltcsík mélyen a Nevadai sivatagban. Kétszáz mérföld felett is lehet száguldozni, de figyelj a megtévesztően könnyű kanyarokra.
+0	AUTO	CUST_SLOT_ROTORS_DESC	A különleges féktárcsák egyenletesebben oszlatják el a hőt, mint a gyáriak. A nagyobb felületű tárcsák megnövelik a felületet a fékpofáknak is, ezáltal növelve a fékerőt.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	LEGJOBB DRIFT EREDMÉNY VEZETŐKÉNT
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	A fejlesztés úgy hangolja a felfüggesztést, hogy az autó könnyebben csúszhasson a kanyarokba.
+0	AUTO	CUST_REGION_FRONT_BUMPER	ELSŐ LÖKHÁRÍTÓ
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	BECSÜLT NETTÓÉRTÉK
+0	AUTO	CUST_SLOT_TRANSMISSION	ERŐÁTVITEL
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Az északi csendes-óceáni partvidéken, a Rainier-hegy dús zöldje közelében található a "Portland International Raceway" avagy a PIR kemény pályája, csúcsminőségű gyorsulási szakasszal.
+0	AUTO	CUST_BLUEPRINT_SAVE	TERVRAJZ FRISSÍTÉSE
+0	AUTO	CUST_QUICK_NITROUS_1	A fejlesztés pár pillanatig fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	CUST_QUICK_NITROUS_2	A fejlesztés pár pillanatig fokozza az autó teljesítményét nitrobefecskendezés segítségével. Ez jelentheti a különbséget az első és a második hely között.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	Texasban minden nagyobb, és ez alól nem kivétel a Texas World Speedway sem, ahol kanyargós útvonalat alakítottak ki egy döntött ovális pálya mentén.
+0	AUTO	CAR_SELECT_CORVETTE	A második generációs Corvette-et, az utolsó Sting Ray-t minden idők legjobb öt sportautója közé választották.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	LEGTÖBB MEGSZERZETT SZEKTOR
+0	AUTO	CL_DRIVETRAIN_HEADER	MEGHAJTÁS
+0	AUTO	CUST_PACKAGE_HANDLING	Kezelhetőségi csomagok
+0	AUTO	FE_STATS_SPEED_WINS	SPRINTVERSENY GYŐZELMEK SZÁMA
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	LEGTÖBB MEGNYERT MÉRŐPONT
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	A legjobb tuningoló ranglista jelzi a legjobb tervrajz-tuningolókat a játékban. Rangsorodat a megosztott tervrajzaid összesített győzelmi százaléka adja. Megosztott tervrajzaidat legalább 20 versenyben kell használni, mielőtt felkerülhetnél a ranglistára.

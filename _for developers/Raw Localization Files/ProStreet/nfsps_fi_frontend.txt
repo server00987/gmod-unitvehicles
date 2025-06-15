@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Finnish_Frontend.bin
+#	File created on: 2025-05-24 11:13:15
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	KORJAUSKUSTANNUKSET
+0	AUTO	MODE_ALL	Kaikki autot
+0	AUTO	CUST_VINYL_MOVE_LAYER	Siirrä kerrosta ylös/alas
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	SYLINTERILOHKO
+0	AUTO	CAR_SELECT_MUSTANGGT	4,6-litraisella V8-moottorilla varustettu neljännen sukupolven Mustang on maailman kuuluisin poniauto.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Tämä paketti korvaa moottorin osat vahvemmilla, jotka kestävät suurta tehoa ja kovia kierrosnopeuksia.^
+0	AUTO	CUST_VISUAL_DECALS	TUNNUKSET
+0	AUTO	CUST_CUSTOMIZE	Muokkaa
+0	AUTO	CODE_ENTRY_VALID	Onneksi olkoon! Antamasi koodi on hyväksytty ja palkintosi avattu.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	JARRUSATULAT
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Ostoskorissasi on merkkejä, joita ei ole vielä ostettu. Haluatko silti poistua
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	KALLISTUKSENVAKAIN
+0	AUTO	CUST_QUICK_HANDLING_D3	Tämä jäykemmät alustan osat sisältävä paketti parantaa auton vakautta suurissa nopeuksissa. ^
+0	AUTO	CUST_QUICK_HANDLING_G3	Tämä kovaan kilpakäyttöön tarkoitettu paketti sisältää jäykemmät alustan osat, jotka parantavat auton vakautta niin mutkissa kuin suorillakin. ^
+0	AUTO	CUST_QUICK_HANDLING_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti sisältää jäykemmät alustan osat, jotka parantavat auton vakautta suurissa nopeuksissa niin mutkissa kuin suorillakin.^
+0	AUTO	CUST_REGION_REAR_TIRE	TAKARENGAS
+0	AUTO	FE_STATS_BEST_SECTOR	PARAS SEKTORI
+0	AUTO	CL_FREE_CAR_MARKER	AUTOMERKKI
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	MÄÄRITÄ KISAT
+0	AUTO	CUST_QUICK_BRAKE_DI3	Tämä kilpakäyttöön tarkoitettu paketti lyhentää jarrutusmatkaa, mutta sallii kuitenkin jarrujen lukkiutumisen kovassa jarrutuksessa.^
+0	AUTO	CUST_BP_APPLY_CONFIRM	Tämän piirustuksen vaatimat osat maksavat {0:d}. Haluatko jatkaa?
+0	AUTO	CUST_SLOT_BUSHING_KIT	PUSLAT
+0	AUTO	FE_STATS_GAMES_PLAYED	PELATUT PELIT
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUSAUTOT
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	KERROS {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	PAKETIN KUVAUS
+0	AUTO	CUST_SLOT_NITROUS_DESC	Ilokaasu on hyvin herkästi syttyvä kaasu, jota voidaan syöttää sylinterikannen palotilaan tehon hetkelliseksi lisäämiseksi.^
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Tämä paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi.^
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Tämä paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi.^
+0	AUTO	CS_HEADER_SPEED_EVENT	NOPEUSHAASTEET
+0	AUTO	CUST_SLOT_HEADS_DESC	Kohdistamalla eli porttaamalla sylinterikannen kanavat voidaan kasvattaa moottoriin virtaavan ilman määrää ja edistää pakokaasujen poistumista moottorista, mikä parantaa moottorin suorituskykyä.^
+0	AUTO	CUST_VINYL_ADDLAYER	LISÄÄ KERROS
+0	AUTO	CUST_CAT_SPEED_FORCED	Nopeasti käynnistyvä ahdin takaa hyvän tehokäyrän, mikä antaa etulyöntiaseman niin radalla kuin kadulla.^
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	SUURIN KERROIN
+0	AUTO	RACE_MODE_GRIP_MODE	RATA
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Seuraavaksi sinun on valittava kisapäivääsi kuuluvat kisat.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	AJETUT KISAT
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Tämä paketti sisältää vahvemmat voimansiirron osat, mukaan lukien vetoakselin, vetopyörästön ja vetonivelet.^
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	URALLA PELATUT PELIT
+0	AUTO	RACE_DAY_ADD_EVENT	LISÄÄ KISA
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Tämä piirustus ei ole yhteensopiva käytössä olevan Need for Speed™ ProStreet -version kanssa eikä sitä voi käyttää. Lisätietoja päivityksistä ja uudesta pelisisällöstä on osoitteessa NeedforSpeed.com.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	VANTEIDEN VÄRI
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Aseta aktiiviseksi
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	MOOTTORINOHJAUS
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	VOITTOPALKINTO
+0	AUTO	CUST_PAINT_BODY	VÄRI
+0	AUTO	CUST_PAINT_RIMS	VANTEET
+0	AUTO	CUST_PAINT_TINT	IKKUNAKALVOT
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Ei virhettä.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Haluatko varmasti poistaa tämän kisapäivän? Kisapäivän muokatut asetukset ja ajamasi ennätykset menetetään.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	VALITSE KIELI
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Uretaanista, alumiinista tai muusta jäykästä materiaalista valmistetut alustan puslat lisäävät alustan jäykkyyttä ja mahdollistavat tiukemmat käännökset.^
+0	AUTO	HUB_DIFFICULTY_2	KOHTALAINEN
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Jarrut kuumenevat voimakkaissa jarrutuksissa. Jarrujen kuumetessa niiden teho heikkenee, mikä puolestaan pidentää jarrutusmatkaa. Isot jarrut kuumenevat hitaammin, mikä takaa jarrujen toiminnan tiukassakin tilanteessa.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	SUURIN HUIPPUNOPEUS
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Valitse ostotapa:
+0	AUTO	CUST_SLOT_INTAKE_DESC	Mitä enemmän moottori saa ilmaa, sitä parempi on sen suorituskyky. Mitä viileämpää moottoriin syötetty ilma puolestaan on, sitä enemmän tehoa moottori kehittää. ^
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Tämä paketti lisää yliohjautuvuutta, mikä helpottaa driftausta. Muutostöiden yhteydessä edestä poistetaan kallistuksenvakain, taakse asennetaan isompi vakain ja alustan puslat vaihdetaan alumiinisiin.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Haluatko poistua auton valinnasta ja palata urakartalle?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Tallennetaan kisapäivää...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	PARAS VIRITTÄJÄ
+0	AUTO	RACE_MODE_DESCRIPTION	Kisamuoto vaikuttaa siihen, millaisiin kisoihin autolla voi osallistua.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Voit käyttää tuulitunnelia vasta AutoSculpt™-osia asennettuasi.
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Mitä tehokkaampi moottorin ilmanotto on, sitä enemmän ilmaa moottori saa. Moottorin viimeisetkin tehorippeet saadaan käyttöön asentamalla moottoriin vapaasti virtaava ilmanottojärjestelmä.^
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	SUURIN KOKONAISNOPEUS PISTEILLÄ
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	POLTTOAINEJÄRJESTELMÄ
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Yli 260 hevosvoimaa tuottavalla, 2,3-litraisella turbomoottorilla, lukkoperällä ja kuusiportaisella vaihteistolla varustettu Mazdaspeed3 on nykyaikainen pikkusportti.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Tämä kilpakäyttöön tarkoitettu paketti nopeuttaa ja tarkentaa vaihtoja. Lisäksi se keventää voimansiirtoon kuuluvia osia, mikä tehostaa voimansiirtoa.^
+0	AUTO	CAR_SELECT_INTEGRA	Kovaa ja korkealle kiertävällä B-tyypin moottorilla varustettu Kouki on hyvin suosittu valinta radalle sen helpon viritettävyyden ja erinomaisen ajettavuuden ansiosta.
+0	AUTO	FE_HUBMAP_ETREE_CARS	AUTOT
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Tämä paketti lisää moottorin tehoa koko kierrosalueella. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Tämä kilpakäyttöön tarkoitettu paketti lisää moottorin tehoa koko kierrosalueella.^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Mutkissa on tärkeintä pitää yllä vauhtia ja päästä kiihdyttämään ulos mutkasta hyvissä ajoin. Tehokkaalla autolla pääset kiihdyttämään mutkasta vauhdilla, joten saavutat suoralla suuremman nopeuden.^
+0	AUTO	GARAGE_REPAIR_CONFIRM	Haluatko varmasti korjata tämän auton?
+0	AUTO	CAR_SELECT_S3	Toisen sukupolven S3 ei koskaan ollut myynnissä Pohjois-Amerikassa.
+0	AUTO	CAR_SELECT_S4	S4 on hiukan kesympi kuin RS4, vaikka siinäkin on 4,2-litrainen V8-moottori.
+0	AUTO	CAR_SELECT_TT	Toisen sukupolven TT on valittu useita kertoja vuoden autoksi.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	ILOKAASU
+0	AUTO	FE_STATS_DOWNLOADING_STATS	LADATAAN TILASTOJA
+0	AUTO	CUST_QUICK_FORCED_D3	Tason 3 ahdinpaketti stripille
+0	AUTO	CUST_QUICK_FORCED_G3	Tämä kovaan kilpakäyttöön tarkoitettu paketti parantaa moottorin ilmanottoa, mikä parantaa moottorin toimintaa kaikilla kierrosalueilla.^
+0	AUTO	CUST_QUICK_FORCED_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti parantaa moottorin ilmanottoa, mikä parantaa moottorin toimintaa kaikilla kierrosalueilla.^
+0	AUTO	CUST_PAINT_GROUP_CANDY	KARKKI
+0	AUTO	CUST_PAINT_GROUP_GLOSS	KIILTO
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATTA
+0	AUTO	CUST_DRIVETRAIN_GROUP	VOIMANSIIRTO
+0	AUTO	CUST_PAINT_GROUP_PEARL	HELMIÄINEN
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Tämä paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi kovassa kiihdytyksessä.^
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Tämä kilpakäyttöön tarkoitettu paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi.^
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi.^
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Isompien tai useammilla männillä varustettujen jarrusatuloiden ansiosta jarrupalan puristusvoima jakautuu tasaisesti jarrulevylle, mikä tehostaa jarrujen toimintaa.^
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Aloita painamalla START-näppäintä
+0	AUTO	RACE_DAY_SLOT_ID	PAIKKA {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	ÄÄNENVAIMENTIMET
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Virhe kisaan liityttäessä. Yritä uudelleen.
+0	AUTO	COMMON_START	Aloita
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	VAIHTEISTON JÄÄHDYTYS
+0	AUTO	RACE_MODE_DRIFT_MODE	DRIFTAUS
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Mitkä vanteet haluat vaihtaa?
+0	AUTO	CUST_SLOT_FLYWHEEL	VAUHTIPYÖRÄ
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Kilpapenkeissä kuski pysyy paikallaan.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Muodon vaihtaminen johtaa auton aikaisempien piirustusten poistamiseen. Tällöin myös kaikki ulkoasuun tehdyt muutokset ja muokatut tarrat poistetaan. Haluatko varmasti jatkaa?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	AIKA URAPELIN KISOISSA
+0	AUTO	CUST_DRAG_TUT_AWD	Nelivedosta on suuri etu lähdöissä, sillä sen tarjoaman huikean pidon ansiosta moottorin tuottama teho saadaan käytettyä hyväksi viimeiseen hevosvoimaan asti.^
+0	AUTO	CUST_DRAG_TUT_FWD	Etuvetoisen suurin vaara kiihdytyskisoissa on pidon menettäminen. Mitä enemmän tehoa autossa on, sitä helpommin menetät pidon. Etuvetoista kiihdytysautoa rakennettaessa tärkeintä on varmistaa, että moottorin tuottama teho saadaan siirrettyä tehokkaasti radan pintaan. Moottoritehoa lisäävien viritysten jälkeen kannattaakin keskittyä parantamaan pitoa.
+0	AUTO	CUST_DRAG_TUT_RWD	Kiihdytysajoon sopivia säätöjä tehdessä on tärkeintä varmistaa hyvä pito. Onnistut nopeissa vedoissa, kun saat pidettyä pyörät maassa ja estettyä sutimisen. Tämä pitää paikkansa varsinkin hyvin tehokkaiden autojen kohdalla.^
+0	AUTO	CUST_ENGINE_GROUP	MOOTTORI
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Need for Speed™ -palvelin peruutti pyyntösi.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Renkaat pitävät autosi radalla.
+0	AUTO	CAR_SELECT_GTRPROTO	GTR Proto on R35 GTR:n esituotantomalli.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	HARVINAISET AUTOT
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	HALLINTAPALKINTO
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	KORJAUSMERKKEJÄ: {0:d}
+0	AUTO	CAR_SELECT_VIPERCOUPE	Viperin kolmatta tulemista vauhdittaa Dodgen tunnistettavalla käyntiäänellä varustettu V10-moottori ja sen 500 heppaa.
+0	AUTO	MAIN_MENU_TITLE	PÄÄVALIKKO
+0	AUTO	CUST_TINT_DARK	TUMMA
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Auton alusta on säädetty oikein silloin, kun dynaaminen painon siirtymä lähdössä on ihanteellinen. Tämä parantaa kiihtyvyyttä ja pitoa.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Autoja ei voi romuttaa
+0	AUTO	CUST_APPLYING_BLUEPRINT	KÄYTETÄÄN PIIRUSTUSTA
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	VALITSE KISAPÄIVÄN PAIKKA
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Tämän keskimoottorisen auton suorituskyky on miltei samalla tasolla kuin 911 Porschen.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	URAN SUORITUSPROSENTTI
+0	AUTO	CUST_SLOT_DIFFERENTIAL	TASAUSPYÖRÄSTÖ
+0	AUTO	CUST_WIND_TUNNEL_ON	Tuulitunneli päälle
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokion satama
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Korjausmerkit poistetaan käytöstä moninpelin kisapäivien ajaksi. Autosi voi vahingoittua, mutta se palautetaan kisan päätteeksi alkutilaan. Lisäksi autoa ei voi romuttaa.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Tämä piirustus on tarkoitettu eri kisamuodon autolle. Kaikki aiemmat piirustukset poistetaan. Haluatko varmasti jatkaa?
+0	AUTO	CUST_QUICK_POWER_DI3	Tämä paketti on suunniteltu nostamaan moottorin tehoa niin paljon, että vetävien pyörien pito on helppo rikkoa. ^
+0	AUTO	RACE_MODE_DRAG_MODE	KIIHDYTYS
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Tämä paketti kohentaa auton ulkonäköä. ^
+0	AUTO	CUST_QUICK_VISUAL_2	Takasiiven ja etusplitterin ansiosta auto pysyy tiukasti radassa suurissakin nopeuksissa. Muutoksen ansiosta auto on suurissakin nopeuksissa vakaa ja pito mutkissa on parempi.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Valitse pelimuoto
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Valitsemassasi paikassa on jo piirustus. Haluatko korvata sen?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	MERKKIENHALLINTA
+0	AUTO	CAR_SELECT_FOCUSST	MK2 Focus on Euroopassa myytävä toisen sukupolven Focus, jonka 2,5-litraisesta voimanpesästä irtoaa 225 hevosvoimaa.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Tämä paketti sisältää vahvemmat voimansiirron osat, mukaan lukien vetoakselin, vetopyörästön ja vetonivelet.^
+0	AUTO	FE_MAIN_MENU	Päävalikko
+0	AUTO	CUST_REGION_REAR_BUMPER	TAKAPUSKURI
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	HIHNAPYÖRÄ
+0	AUTO	CAR_SELECT_BARRACUDA	Hemi 'Cuda on legendaarinen muskelijenkki.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	PARAS AUTO
+0	AUTO	CUST_APPLY_PAINT_TITLE	MAALAA AUTO
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	OMISTETUT AUTOT
+0	AUTO	CUST_REGION_ALL_WHEELS	KAIKKI VANTEET
+0	AUTO	CUST_QUICK_FORCED_2	Tämä katukäyttöön tarkoitettu paketti parantaa moottorin ilmanottoa, mikä parantaa moottorin toimintaa kaikilla kierrosalueilla.^
+0	AUTO	FE_STATS_FASTEST_LAP	NOPEIN KIERROS
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	KIIHDYTYS
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Tämä paketti varmistaa, että autosi pysyy tiukasti radassa. Paketti sisältää jäykemmät kallistuksenvakaimet eteen ja taakse, alustan uretaanipuslat ja kilpakäyttöön tarkoitetut iskunvaimentimet.
+0	AUTO	CAR_TYPE_GRIP	RATA
+0	AUTO	FE_STATS_DNF_PERCENTAGE	KESKEYTYSPROSENTTI
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	B-mallin Charger oli yksi kaikkien aikojen kuuluisimmista tv-autoista.
+0	AUTO	CUST_QUICK_INTERNALS_1	Tämä paketti sisältää vahvemmat moottorin osat, jotka kestävät suurta rasitusta ja mahdollistavat myöhemmän parantelun.^
+0	AUTO	CUST_QUICK_INTERNALS_2	Tämä paketti sisältää vahvemmat moottorin osat, jotka kestävät huomattavaa rasitusta ja suuria kierrosnopeuksia.^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Haluatko varmasti palauttaa tämän piirustuksen alkutilaan?
+0	AUTO	CUST_SLOT_RACING_SEATS	KILPAPENKIT
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ALUE 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	PARHAAT SEKTORIPISTEET
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	ARVOKKAIN AUTO
+0	AUTO	CAR_SELECT_CIVICSI	Tämä on kahdeksannen sukupolven Civic.
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle oli Chevyn ensimmäinen muskeliauto. Vuoteen 1970 asti Chevy kieltäytyi valmistamasta autoa yli 400 kuutiotuuman koneella. Asiaan saatiin korjaus, kun vuonna 1970 esiteltiin 402 kuutiotuuman moottorilla varustettu Chevelle.
+0	AUTO	CUST_CAT_GRIP_FORCED	Ahtoviipeeltään pieni, nopeasti ahtamaan alkava ahdin takaa hyvän tehokäyrän, mikä antaa etulyöntiaseman niin radalla kuin kaduilla.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Tervetuloa kisapäiväkartalle
+0	AUTO	CUST_BLUEPRINT_APPLY	Käytä piirustusta
+0	AUTO	CUST_SLOT_CAMSHAFTS	NOKKA-AKSELIT
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Näytä kaikki kisat
+0	AUTO	CUST_SLOT_HEADERS	PAKOSARJA
+0	AUTO	FE_STATS_FASTEST_TIME	NOPEIN AIKA
+0	AUTO	CUST_SUSPENSION_GROUP	JOUSITUS
+0	AUTO	CUST_BLUEPRINT_RESET	PYYHI PIIRUSTUS
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Tämä kiihdytysautoon suunniteltu paketti lisää moottorin tehoa koko kierrosalueella.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Tämä kovaan kilpakäyttöön tarkoitettu paketti lisää moottorin tehoa koko kierrosalueella.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti lisää moottorin tehoa koko kierrosalueella.^
+0	AUTO	CUST_INSTALLED	ASENNETTU
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Ladataan kisapäivää...
+0	AUTO	CUST_SLOT_CAMS_DESC	Käyttöautoon sopii hyvin nokka-akseli, jonka nosto on pieni ja venttiilien aukioloaika lyhyt. Nokan nostoa suurennettaessa ja venttiilien aukioloaikaa pidennettäessä moottorin huipputeho siirtyy korkeammalle kierrosalueelle. Ihanteellinen nokka on sellainen, joka tuottaa suurimman mahdollisen tehon kierrosalueella, jota käytät eniten.^
+0	AUTO	CUST_QUICK_HANDLING_DI3	Tämä paketti on suunniteltu helpottamaan driftaamista.
+0	AUTO	CUST_QUICK_BRAKE_D3	Tämä katukäyttöön tarkoitettu paketti lyhentää jarrutusmatkaa ja estää jarrujen lukkiutumisen kovassa jarrutuksessa.^
+0	AUTO	CUST_QUICK_BRAKE_G3	Tason 3 jarrupaketti radalle
+0	AUTO	CUST_QUICK_BRAKE_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti lyhentää jarrutusmatkaa suurista nopeuksista ja estää jarrujen lukkiutumisen jarrutuksessa.^
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Mitä suurempi ilokaasupullo on, sitä enemmän ilokaasua siihen mahtuu. Voit asentaa autoosi myös useamman ilokaasupullon. Pullot on täytettävä käytön jälkeen. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Ilta
+0	AUTO	CUST_TINT_LIGHT	VAALEA
+0	AUTO	CUST_REPAIR_DAMAGE	VAURIOT
+0	AUTO	CUST_TINT_PEARL	HELMIÄINEN
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	PISIN DRIFTAUSMATKA
+0	AUTO	CUST_SLOT_TIPS_DESC	Näillä putkenpäillä annat autollesi hyökkäävän ilmeen.^
+0	AUTO	CUST_SLOT_STEERING_DESC	Asentamalla kilpakäyttöön tarkoitetun hammastangon voit pienentää auton kääntösädettä ja lisätä ohjauksen herkkyyttä.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Corvette on melkoinen tykki. Seitsenlitraisen myllyn sisuksissa on titaanista valmistetut kiertokanget, ja se käyttää kuivasumppuvoitelua.
+0	AUTO	HD_COMPATIBLE	Teräväpiirto takaa pelinautinnon
+0	AUTO	PS_START_BUTTON	START-painike
+0	AUTO	RACEDAY_DELETE_EVENT	Poista kisa
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	LYÖDYT KUNKUT
+0	AUTO	CUST_WIND_TUNNEL	TUULITUNNELI
+0	AUTO	CUST_STAGE_NUMBER	TASO {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	VOITOT
+0	AUTO	CUST_FILTER_FRONT_BUMPER	ETUPUSKURI
+0	AUTO	MAIN_CAREER	URA
+0	AUTO	CUST_REGION_REAR_WHEEL	TAKAVANTEET
+0	AUTO	CUST_QUICK_VISUAL_D3	Tämä paketti lisää autoon kohdistuvaa downforcea.^
+0	AUTO	CUST_QUICK_VISUAL_G3	Tämä paketti lisää autoon suurissa nopeuksissa kohdistuvaa downforcea.^
+0	AUTO	CUST_QUICK_VISUAL_S3	Tämä paketti lisää autoon hyvin suurissa nopeuksissa kohdistuvaa downforcea.^
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Jarrut kuumenevat voimakkaissa jarrutuksissa. Jarrujen kuumetessa niiden teho heikkenee, mikä puolestaan pidentää jarrutusmatkaa. Isot jarrut kuumenevat hitaammin, mikä takaa jarrujen toiminnan tiukassakin tilanteessa.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Tämä kilpakäyttöön tarkoitettu paketti sisältää vahvemmat moottorin osat, jotka kestävät erinomaisesti huomattavaa rasitusta ja suuria kierrosnopeuksia.^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	VOITETUT ARVOPELIT
+0	AUTO	CUST_SLOT_BOV_DESC	Vaihtoilmaventtiili eli dumppi estää ahtopaineen nousun liian suureksi moottorin pyörimisnopeutta hidastamatta, mikä estää ahtimen ennenaikaisen rikkoutumisen. ^
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Peliin on saatavilla verkkopeleissä vaadittu päivitys. Katso lisätietoja osoitteesta NeedforSpeed.com.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	PARAS KISAMUOTO
+0	AUTO	HUB_BREAK_RECORD	LYÖ ENNÄTYS
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Keulimisrautojen avulla varmistat, että autosi etupyörät eivät nouse ilmaan kovassakaan vedossa. Raudat on suunniteltu kestämään suurta rasitusta.^
+0	AUTO	RACE_DAY_DIFFICULTY_1	Helppo
+0	AUTO	RACE_DAY_DIFFICULTY_2	Keskivaikea
+0	AUTO	RACE_DAY_DIFFICULTY_3	Vaikea
+0	AUTO	RACE_DAY_DIFFICULTY_4	Eliitti
+0	AUTO	CUST_SLOT_CLUTCH	KYTKIN
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Jatka painamalla 2-näppäintä
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	NOPEIN 0 - 60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Haluatko vaihtaa etu- vai takarenkaita?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	LUO KISAPÄIVÄ
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	OMAT TILASTOT
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Moottorin tehon kasvaessa autoon on tehtävä muutoksia, jotta teho saadaan tehokkaasti välitettyä vetäville pyörille. Kuritusta sietävä kytkin, kestävät vetoakselit ja kitkalukollinen tasauspyörästö ovat kaikki tärkeitä hankintoja.^
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	YKSINPELI
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Lähdön jälkeen kiihdytyskisassa on eniten merkitystä teholla, sillä teholla on kaikkein suurin vaikutus loppunopeuteesi.^
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Tämä kisapäivä ei ole yhteensopiva käytössä olevan Need for Speed™ ProStreet -version kanssa eikä sitä voi käyttää. Lisätietoja päivityksistä ja uudesta pelisisällöstä on osoitteessa NeedforSpeed.com.
+0	AUTO	RD_PLAY	PELAA
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	SYTYTYSJÄRJESTELMÄ
+0	AUTO	FE_STATS_CAREER_WINS	VOITOT URALLA
+0	AUTO	RACE_DAY_LOCATION	SIJAINTI
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Tämä katukäyttöön tarkoitettu paketti nopeuttaa vaihtoja ja tehostaa voimansiirtoa.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Tämä katukäyttöön tarkoitettu paketti nopeuttaa ja tarkentaa vaihtoja. Lisäksi se keventää voimansiirtoon kuuluvia osia, mikä tehostaa voimansiirtoa.^
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Haluatko varmasti poistaa jaetun piirustuksen?
+0	AUTO	SHOW_FRIENDS	Näytä ystävät
+0	AUTO	FE_STATS_HUBS_DOMINATED	HALLITUT KISAPÄIVÄT
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	LYHYIN REAKTIOAIKA
+0	AUTO	CODE_ENTRY_INVALID	Antamasi koodi on virheellinen. Tarkista koodi ja yritä uudelleen.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	VALITSE ENINTÄÄN 8 KISAA
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Korjaa auto
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt™
+0	AUTO	CUST_REPAIR_MARKER	KORJAUSMERKKI
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	HOHTO
+0	AUTO	CUST_SLOT_CAM_GEARS	NOKKAPYÖRÄT
+0	AUTO	CUST_SLOT_ROOF_SCOOP	KATTOSKUUPPI
+0	AUTO	CUST_COMPONENTS_TITLE	VAIHDA OSIA
+0	AUTO	CUST_BRAKES_GROUP	JARRUT
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Are you sure you want to quit?9WWWWWWWWW
+0	AUTO	CUST_SLOT_TRACTION_BARS	KIERTOTANGOT
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Tämä paketti sisältää kilpakäyttöön tarkoitetut jarrulevyt ja -palat. Niiden avulla varmistat, että autosi pysähtyy tehokkaasti. Tehokkaat jarrut ovat lisäksi erittäin tärkeät driftien hallinnassa.^
+0	AUTO	MAIN_RACE_DAY	KISAPÄIVÄ
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	NOPEUSHAASTEIDEN VOITTOPROSENTTI
+0	AUTO	SELL_CAR_CONFIRMATION	Tämän auton arvo on {0:d}.^Jos myyt sen, menetät kaikki sen piirustukset. Haluatko varmasti myydä auton?
+0	AUTO	RD_DELETE_RD	Poistetaanko kisapäivä?
+0	AUTO	CAR_SELECT_G35	G35 on rakennettu samalle alustalle kuin 350Z.
+0	AUTO	CAR_SELECT_GXP	GXP:n kaksilitrainen, 16-venttiilinen turbomylly kehittää 260 hevosvoimaa. Lukkoperä ja 18-tuumaiset vanteet kuuluvat auton vakiovarusteisiin.
+0	AUTO	CAR_SELECT_NSX	NSX luotiin esittelemään Hondan osaamista moottoritekniikan saralla. Tämä keskimoottorinen auto oli selkeästi aikaansa edellä.
+0	AUTO	CAR_SELECT_R35	Tämä on R35 GTR:n tuotantomalli.
+0	AUTO	CAR_SELECT_S13	S13 on yksi kuuluisimmista driftausautoista.
+0	AUTO	CAR_SELECT_S15	Vaikka S15 ei koskaan ehtinytkään Pohjois-Amerikan markkinoille, se on nykyisin yksi tuunaajien suosikkirasseista.
+0	AUTO	CAR_SELECT_RS4	B7 RS4:n voimanlähteenä toimii 400 hevosvoimaa hönkivä V8-moottori, ja se on saatavilla joko sedanina, farkkuna tai avona.
+0	AUTO	CAR_SELECT_RSX	RSX on tarunhohtoisen Integran seuraaja. Autossa käytetään Hondan uutta K-sarjan moottoria.
+0	AUTO	CAR_SELECT_RX8	RX-8 on edessä sijaitsevalla kiertomoottorilla eli niin sanotulla Wankel-moottorilla varustettu nelipaikkainen takaveto. Miltei täydellisen painojakauman ansiosta RX-8:n ohjattavuus on uskomattoman hyvä.
+0	AUTO	CAR_SELECT_STI	STi:ssa on vastaiskumoottori, turboahdin ja neliveto. Se on yksi tuunauskulttuurin tunnetuimmista edustajista, joka pystyy kaikkeen.
+0	AUTO	CAR_SELECT_Z4M	E46 M3 -mallista tuttu suora kutonen siivittää kärryn nollasta sataseen 4,9 sekunnissa. Huippunopeus on tosin rajoitettu 250 kilometriin tunnissa.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Tason 3 ulkonäköpaketti driftaukseen
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ALUE 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ALUE 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ALUE 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ALUE 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ALUE 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ALUE 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ALUE 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ALUE 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ALUE 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	PARHAAT KISAPISTEET
+0	AUTO	FE_STATS_AVERAGE_SPEED	KESKINOPEUS
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALLI
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Paina START-painiketta
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	DRIFTAUSKISOJEN VOITTOPROSENTTI
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Vara-autoja ei löydy
+0	AUTO	CUST_FILTER_FRONT	ETUVANTEET
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	AUTOKAUPPA
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Viidennen sukupolven Camaron esituotantomalli esiteltiin vuonna 2006.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Tämä katukäyttöön tarkoitettu paketti mahdollistaa mutkien ajamisen nopeasti ja suoremmin.^
+0	AUTO	CUST_QUICK_SUSPENSION_2	Tämä katukäyttöön tarkoitettu paketti mahdollistaa mutkien ajamisen nopeasti ja entistäkin suoremmin.^
+0	AUTO	CUST_QUICK_NITROUS_D3	Tämä paketti lisää ilokaasun avulla moottorin tehoa hetkellisesti 50 - 250 hevosvoiman verran. Teholisä saattaa ratkaista kilpailun eduksesi.
+0	AUTO	CUST_QUICK_NITROUS_G3	Tämä paketti lisää ilokaasun avulla moottorin tehoa hetkellisesti 50 - 250 hevosvoiman verran. Teholisä saattaa ratkaista kilpailun eduksesi.
+0	AUTO	CUST_QUICK_NITROUS_S3	Tämä paketti lisää ilokaasun avulla moottorin tehoa hetkellisesti 50 - 250 hevosvoiman verran. Teholisä saattaa ratkaista kilpailun eduksesi.
+0	AUTO	CUST_PERFORMANCE	SUORITUSKYKY
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Vaihtamalla autoon jäykemmät kallistuksenvakaimet voidaan lisätä alustan jäykkyyttä ja vähentää aliohjautuvuutta.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Haluatko varmasti poistaa tämän piirustuksen?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Piirustukset
+0	AUTO	CUST_QUICK_UPGRADE	PIKAVIRITYS
+0	AUTO	CAR_SELECT_CORVETTEC6	Corvetten tuorein malli on miltei 35 vuoteen ensimmäinen Corvette, jonka ajovalot ovat jatkuvasti näkyvissä.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	EI VERKOSSA
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	PALKINTO
+0	AUTO	MAIN_QUIT_GAME	QUIT1W
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	ILOKAASU
+0	AUTO	CAR_TYPE_DRIFT	DRIFTAUS
+0	AUTO	FE_HUBMAP_ETREE_FILTER	SUODATA
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Turvakehikko kohentaa kuljettajan turvallisuutta, jäykistää koria ja antaa autolle ripauksen oikean kilpa-auton ilmettä.^
+0	AUTO	CUST_SLOT_BC_DESC	Mitä suurempi ahtopaine on, sitä parempi. Mikäli autosi moottori kestää suurta ahtopainetta, tämän osan avulla varmistat, että saat kaiken irti ahtimestasi.^
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Vaihteistoa ei kannata polttaa piloille!
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	AHDIN
+0	AUTO	CAR_TYPE_SPEED	NOPEUS
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	SYLINTERIKANNET
+0	AUTO	CUST_SELL_CAR_WARNING	Jos myyt auton, et voi osallistua tiettyihin kisoihin ({0:s}), ennen kuin olet ostanut uuden samantyyppisen auton.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Kohteessa ei ajeta tämän kisamuodon kisoja.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	VUOROKAUDENAIKA
+0	AUTO	RD_DELETED	Kisapäivä poistettu.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Moottorin tehon kasvaessa autoon on tehtävä muutoksia, jotta teho saadaan tehokkaasti välitettyä vetäville pyörille. Kuritusta sietävä kytkin, kestävät vetoakselit ja kitkalukollinen tasauspyörästö ovat kaikki oleellisia hankintoja.^
+0	AUTO	CUST_SLOT_AIR_INTAKE	ILMANOTTO
+0	AUTO	CUST_PART_PURCHASED	OSTETTU
+0	AUTO	CUST_BP_OPTION_UNDO	HYLKÄÄ
+0	AUTO	CUST_FILTER_BODY	KORI
+0	AUTO	CUST_FILTER_HOOD	KONEPELTI
+0	AUTO	CUST_FILTER_REAR	TAKAVANTEET
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Tämä paketti sisältää moottorinohjauksen uudelleenohjelmoinnin. Ohjelmoinnin jälkeen moottoriin syötetään enemmän polttoainetta ja ilmaa, mikä varmistaa parhaan mahdollisen suorituskyvyn.^
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Teräsvahvisteiset jarruletkut nostavat jarrujärjestelmän painetta, mikä puolestaan lisää jarrujen herkkyyttä.^
+0	AUTO	LS_SAVING	TALLENNETAAN...
+0	AUTO	CUST_CUSTOM_UPGRADE	MUOKKAA
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Et täytä tämän kisapäivän vaatimuksia. Sinulla ei ole tämän kisatyypin autoja:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Auton alusta on säädetty oikein silloin, kun auto ei pyri yli- tai aliohjautumaan liikaa. Auto on tällöin sekä nopeampi että helpompi ajaa.^
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	VALITSE KISAMUOTO
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Et voi asentaa pakoputkenpäätä ennen korisarjaa!
+0	AUTO	CUST_PURCHASE_CAR	Osta auto
+0	AUTO	CODE_ENTRY_VERIFICATION	Tarkistetaan koodia palvelimelta...
+0	AUTO	MC_OLD_SAVE_REWARD	Kiitokseksi siitä, että olet pelannut myös muita Need for Speed™ -pelejä, saat palkinnon urapeliin.^Korjausmerkkejä: {0:d} ja täyskorjausmerkkejä: {1:d}.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	VOITOT YLEMMÄN LUOKAN VASTUSTAJASTA
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicagon lentokenttä
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevadan valtatie
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Tason 3 tehopaketti kiihdytyskisoihin
+0	AUTO	CUST_QUICK_POWER_G3	Tämä paketti lisää tehoa ja muuttaa katuauton täysiveriseksi kilpa-autoksi. ^
+0	AUTO	CUST_QUICK_POWER_S3	Tason 3 tehopaketti nopeuskisoihin
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	PIIRUSTUKSET
+0	AUTO	FE_STATS_BEST_RUN	PARAS VETO
+0	AUTO	WINDTUNNEL_DOWNFORCE	DOWNFORCE
+0	AUTO	CUST_SLOT_COOLING_DESC	Ei liian kylmä tai kuuma vaan juuri sopiva.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	PARAS DRIFTAUSTULOS
+0	AUTO	CUST_CAT_DRIFT_FORCED	Tämä paketti parantaa moottorin ilmanottoa. Tämän ansiosta moottoriin voidaan syöttää enemmän polttoainetta, mikä parantaa suorituskykyä.^
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Käytä korjausmerkki
+0	AUTO	FE_STATS_FILTER_GENERAL	YLEISET TILASTOT
+0	AUTO	CB_BLUEPRINTS_HEADER	PIIRUSTUSTYYPPI
+0	AUTO	ENTER_SECRET_CODE	KIRJOITA SALAINEN KOODI
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Tämä paketti muuttaa täysin autosi ulkonäön. Se voi lisäksi tarjota keinoja säätää auton aerodynamiikkaa.^
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	ROMUTETUT AUTOT
+0	AUTO	CUST_SLOT_WHEELS	VANTEET
+0	AUTO	CUST_SLOT_SUPERCHARGER	AHDIN
+0	AUTO	CAR_SELECT_SHELBYGT500	GT500 oli ensimmäinen amerikkalainen auto, jossa varusteisiin kuului turvakaari. Se on myös yksi Shelbyn tunnetuimpia luomuksia.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	PISIN YKSITTÄINEN KEULINTA
+0	AUTO	FE_STATS_GRIP_WINS	VOITETUT RATAKISAT
+0	AUTO	CL_MS_POINTS	Microsoft® Points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	PISIN DRIFTAUSAIKA
+0	AUTO	CUST_FILTER_REAR_BUMPER	TAKAPUSKURI
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	PARAS 0 - 60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Auton osto ja muokkaus piirustuksen mukaiseksi maksaa {0:d}. Haluatko jatkaa?
+0	AUTO	GARAGE_REPAIR_DENIED	Sinulla ei ole riittävästi rahaa auton korjaamiseen eikä sinulla ole korjausmerkkiä.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	CLICK to continue5WWWWW
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	AJETUT PUNKBUSTER-KISAT
+0	AUTO	GARAGE_NO_CAR_REPAIR	Sinulla ei ole tarpeeksi rahaa tai korjausmerkkejä auton vaurioiden korjauttamiseen.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	AUTOJA EI OLE KÄYTETTÄVISSÄ
+0	AUTO	RDMAP_CREATE_PREVIEW	LUO OMA KISAPÄIVÄ
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Jarrut kuumenevat voimakkaissa jarrutuksissa. Jarrujen kuumetessa niiden teho heikkenee, mikä puolestaan pidentää jarrutusmatkaa. Isot jarrut kuumenevat hitaammin, mikä takaa jarrujen toiminnan tiukassakin tilanteessa.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	PISIN DRIFTIKETJU
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	JARRUPAINEVENTTIILI
+0	AUTO	FE_STATS_CLUB_TAG	KERHON TUNNUS
+0	AUTO	CUST_SLOT_EXHAUST	PAKOPUTKENPÄÄT
+0	AUTO	CAR_SELECT_INTEGRATYPER	Integra Type R on auto, jota pidetään yleisesti ohjattavuudeltaan etuvetoisista autoista parhaana.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Kisoissa tärkeintä ei ole pysähtyminen, vaan nopeus. Jarrujärjestelmän onkin oltava mahdollisimman kevyt, jotta kiihtyvyys pysyy hyvänä.
+0	AUTO	WINDTUNNEL_DRAG	ILMANVASTUS
+0	AUTO	CUST_APPLY_PAINT	Maalaa auto
+0	AUTO	WINDTUNNEL_PEAK_HP	HUIPPUTEHO
+0	AUTO	CUST_BLUEPRINT_DELETE	Poista piirustus
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	URAN TILASTOT
+0	AUTO	CUST_VISUAL_TITLE	ULKOASU
+0	AUTO	CUST_SLOT_DRIVESHAFT	VETOAKSELIT
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Osta piirustus
+0	AUTO	CAREER_COMPLETION_HEADER	EDISTYS URALLA
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Mitä tehokkaampi auto on, sitä helpompi on pitää pyörät sutimassa ja auto luisussa. Voit helpottaa driftausta tehoa lisäämällä.^
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	NOPEIN VARTTIMAILI
+0	AUTO	CL_NOT_ENOUGH_CASH	Rahasi eivät riitä tämän auton ostoon.
+0	AUTO	CUST_SLOT_SC_DESC	Tällä ahtotavalla moottoriin ahdettava ilma tuotetaan moottorin avulla. Tämän tyyppinen ahdin lisää moottorin tehoa erityisesti matalilla kierroksilla.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	KERHO
+0	AUTO	CUST_SLOT_TIRES	RENKAAT
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Kisapäiviä ei löytynyt.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Kaikki kisapäivään tekemäsi muutokset perutaan.^Haluatko peruuttaa muutokset?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	ISKUNVAIMENTIMET JA JOUSET
+0	AUTO	CUST_REGION_SKIRT	HELMA
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	ILOKAASUPULLO
+0	AUTO	CUST_QUICK_FORCED_DI3	Tämä kilpakäyttöön tarkoitettu paketti parantaa moottorin ilmanottoa, mikä parantaa moottorin toimintaa kaikilla kierrosalueilla.^
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	KEULIMISRAUDAT
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	Tästä autosta on oltava hiljaa
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Voit omistaa enintään {0:d} autoa. ^Myy yksi autoistasi, jotta voit ostaa uuden.
+0	AUTO	CUST_CUSTOMIZE_MAIN	MUOKKAUS
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Tämä paketti sisältää moottorinohjauksen uudelleenohjelmoinnin. Ohjelmoinnin jälkeen moottoriin syötetään enemmän polttoainetta ja ilmaa, minkä ansiosta ohitukset sujuvat heittämällä.^
+0	AUTO	CUST_BLUEPRINT_HEADER	MUOKKAA PIIRUSTUSTA
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	KIIHDYTYSKISOJEN VOITTOPROSENTTI
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	PAKOPUTKISTO
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	VALITSE
+0	AUTO	CUST_PAINT_GROUP_CHROME	KROMI
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	JAETUT PIIRUSTUKSET
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	AHDIN
+0	AUTO	FE_STATS_DRIFT_RACES	AJETUT DRIFTAUSKISAT
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Moottorin tehon kasvaessa autoon on tehtävä muutoksia, jotta teho saadaan tehokkaasti välitettyä vetäville pyörille. Kuritusta sietävä kytkin, kestävät vetoakselit ja kitkalukollinen tasauspyörästö ovat kaikki tärkeitä hankintoja.^
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	SUORITUSTILASTOT
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBOAHDIN
+0	AUTO	CUST_SLOT_SHIFTER	VAIHTEENVAIHTAJA
+0	AUTO	CUST_DYNO_TEST	PENKITYS
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japanilaiset kuskit ovat ottaneet haltuunsa teollisuusalueen Tokion satamassa. Alueelle on rakennettu ratoja, joissa käytetään hyväksi kaikkia moderneja elementtejä.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	VALITSE HAASTEAUTOT
+0	AUTO	CUST_CAT_SPEED_NITROUS	Tämä paketti lisää moottorin tehoa hetkellisesti. Teholisä saattaa ratkaista kilpailun eduksesi.^
+0	AUTO	CAR_SELECT_MUSTANGGTN	Viidennen sukupolven Mustang huokuu retrofuturismia.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	VOITTOPROSENTTI
+0	AUTO	RD_CUSTOM_SELECT	Haluatko pelata kisapäivää?
+0	AUTO	KING_FLOW_CASH_REWARD	RAHAPALKINTO
+0	AUTO	CUST_CAT_SPEED_BRAKE	Tämä paketti sisältää kilpakäyttöön tarkoitetut jarrulevyt ja -palat. Niiden avulla varmistat, että autosi pysähtyy tehokkaasti. Tehokkaat jarrut ovat tärkeä osa huolella viritettyä autoa.^
+0	AUTO	CUST_SPEED_TUT_AWD	Nelivedon tarjoamasta erinomaisesta pidosta on hyötyä varsinkin lähdössä ja mutkista ulos kiihdytettäessä. Muista käyttää tämä tieto hyväksesi.^
+0	AUTO	CUST_SPEED_TUT_FWD	Vaikka luonnonlait aina rajoittavatkin jonkin verran etuvetoisen auton suorituskykyä, huolella tehtyjen säätöjen avulla saat käsiisi kunnioitusta herättävän ratatykin. Etuvetoisilla autoilla on taipumus aliohjautua. Ensimmäiseksi kannattaakin yrittää vähentää tätä taipumusta jäykistämällä etupään jousitusta. Lisäksi kannattaa vähentää etupyörien vetelyä kovassa kiihdytyksessä asentamalla lukollinen tasauspyörästö. ^
+0	AUTO	CUST_SPEED_TUT_RWD	Tasapainoisuus ja hyvä ohjattavuus kovassakin kiihdytyksessä ovat takavetoisen auton selkeitä etuja. Muista kuitenkin välttää sopivilla säädöillä liiallinen yliohjautuvuus.^
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	JÄÄHDYTYSJÄRJESTELMÄ
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Cosworth luotiin pääasiassa vastaamaan tiukkoja rallisääntöjä ja se ei oikeastaan ollut edes Escort. Escort RS on kuitenkin yksi kaikkien aikojen kuuluisimmista ralliautoista.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	NOPEIN 0 - 100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Kalifornian auringossa sijaitseva Willow Springs tunnetaan lännen vauhdikkaimpana kadunpätkänä. Radalla on suuria korkeuseroja, ja keskinopeudet nousevat koviksi.
+0	AUTO	RACE_DAY_DIFFICULTY	VAIKEUSTASO
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Rahasi eivät riitä kaikkien ostoskorissasi olevien merkkien ostamiseen.
+0	AUTO	CAR_SELECT_CHALLENGER	Ensimmäisen sukupolven Challenger oli Dodgen lahja poniautojen markkinoille. Sen pohjana oli turbiinimoottorilla varustettu auto, joka kuitenkin jäi suunnitelma-asteelle.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Valitsemalla tyhjän kisapäivän paikan voit luoda oman kisapäiväsi. Valitsemasi kuvake kuvaa luomaasi kisapäivää omien kisapäivien kisakartalla.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Nelivedon hyvästä pidosta on etua varsinkin lähdössä ja mutkista ulos kiihdytettäessä. Muista käyttää tätä hyväksesi.^
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Vaikka luonnonlait aina rajoittavatkin jonkin verran etuvetoisen auton suorituskykyä, huolella tehtyjen säätöjen avulla saat käsiisi kunnioitusta herättävän ratatykin. Etuvetoisilla autoilla on taipumus aliohjautua. Ensimmäiseksi kannattaakin yrittää vähentää tätä taipumusta jäykistämällä etupään jousitusta. Lisäksi kannattaa vähentää etupyörien vetelyä kovassa kiihdytyksessä asentamalla lukollinen tasauspyörästö. ^
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Tasapainoisuus ja hyvä ohjattavuus kovassakin kiihdytyksessä ovat takavetoisen auton selkeimpiä etuja. Muista kuitenkin välttää sopivilla säädöillä liiallinen yliohjautuvuus.
+0	AUTO	CUST_SELL_CAR	Myy auto
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Porschen huippuluokan testiradalle Leipzigiin on rakennettu kopioita kilpa-autoilun kuuluisimmista kurveista.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	HELMAT
+0	AUTO	CUST_SLOT_FUEL_DESC	Viritetty moottori vaatii tehokkaan polttoaineensyötön. Tehokkaampi polttoainepumppu, isommat suuttimet ja paremmin virtaava polttoaineputkisto parantavat moottorin suorituskykyä. ^
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Hyvä drifteri on sellainen, jolla ajettaessa pidon katoaminen on ennakoitavissa. Lisäksi se on vakaa ajettava ja helppo pitää luisussa.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	YSTÄVÄT
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Aamu
+0	AUTO	CUST_FILTER_SPOILER	TAKASIIPI
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Matchmaking-virhe.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Tämä huippuvauhdikas reitti kulkee Tokion moottoriteiden läpi, ja siihen kuuluu niin mutkaisia ramppeja, pitkiä suoria kuin tunneleitakin.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	PELATUT ARVOKISAT
+0	AUTO	CUST_TUNE	VIRITÄ
+0	AUTO	CUST_VISUALS_TITLE	ULKOASU
+0	AUTO	FE_STATS_CLUB_NAME	KERHON NIMI
+0	AUTO	CUST_INSTALL	Asenna
+0	AUTO	RACEDAY_SAVE_CONFIRM	Haluatko tallentaa kisapäiväsi?
+0	AUTO	FE_MATCHMAKING_JOINING	Liitytään peliin...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	VAIHTOILMAVENTTIILI
+0	AUTO	CUST_SLOT_ROLL_CAGE	TURVAKEHIKKO
+0	AUTO	CAR_LOT_NO_DRIFTING	EI DRIFTAAMISEEN
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Tämä paketti korvaa moottorin sisuskalut vahvemmilla osilla, jotka kestävät suurta tehoa ja kovia kierrosnopeuksia.^
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	KÄYTÄ TÄYSKORJAUSMERKKI
+0	AUTO	CUST_PACKAGE_VISUAL	Ulkonäköpaketit
+0	AUTO	CUST_EMPTY_BLUEPRINT	Luo uusi piirustus
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Kirjoita tähän salainen koodi tai mainoskoodi, niin saat palkinnon.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Kattoskuupin ansiosta autosi on kuin suoraan rallipoluilta repäisty. ^
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Valitse kisapäiväsi vaikeusaste. Vaikeusasteesta riippuu, kuinka taitavan vastuksen tietokoneen kuljettajat tarjoavat ja millaisilla autoilla kisapäivään voi osallistua.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	URAN AUTOT
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	PELATUT 12 PELAAJAN KISAT
+0	AUTO	CUST_REGION_FRONT_TIRE	ETURENGAS
+0	AUTO	FE_STATS_DRAG_WINS	VOITETUT KIIHDYTYSKISAT
+0	AUTO	RACE_DAY_SAVE_NAME	Oma kisapäivä
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Rahasi eivät riitä ostoksiin!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	SUURIN KEULINTAKULMA
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Ahdin on periaatteessa ilmapumppu.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Sylintereiden poraaminen suuremmaksi kasvattaa moottorin sylinteritilavuutta ja lisää näin moottorista saatavaa tehoa.^
+0	AUTO	CUST_CAT_GRIP_BRAKE	Tämä paketti sisältää kilpakäyttöön tarkoitetut jarrulevyt ja -palat. Niiden avulla varmistat, että autosi pysähtyy tehokkaasti. Tehokkaat jarrut ovat tärkeä osa viritettyä autoa.^
+0	AUTO	CUST_SLOT_SPOILER	TAKASIIPI
+0	AUTO	RACE_DAY_RACE_EVENTS	KISAT
+0	AUTO	CUST_SLOT_STEERING_KIT	HAMMASTANKOSARJA
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	RATAKISOJEN VOITTOPROSENTTI
+0	AUTO	CUST_BLUEPRINT_RENAME	Nimetään piirustusta uudelleen.
+0	AUTO	RACE_DAY_SLOT_FILLED	KÄYTÖSSÄ
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	PARHAAT DRIFTAUSPISTEET
+0	AUTO	CUST_VINYLS	TARRAT
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Laadukkaasta materiaalista valmistetut tukivarret mahdollistavat pyöränkulmien tarkan säätämisen ja parantavat pyöräntuennan geometriaa.^
+0	AUTO	FE_STATS_HUBS_WON	VOITETUT KISAPÄIVÄT
+0	AUTO	CUST_CAT_GRIP_NITROUS	Tämä paketti lisää moottorin tehoa hetkellisesti. Teholisä saattaa ratkaista kilpailun eduksesi.^
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	ET KELPAA KISAAN
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Valitse kisapäivän korjausmerkkien määrä. Yksinpelin kisapäivässä saat yhtäläisen määrän korjausmerkkejä ja täyskorjausmerkkejä.
+0	AUTO	CAR_SELECT_CAMAROSS	Ensimmäisen sukupolven Camaro suunniteltiin pieneksi, pahansisuiseksi pedoksi, joka lähettää Mustangin liimatehtaalle.
+0	AUTO	FE_STATS_BEAT_MODERATOR	LYÖDYT VALVOJAT
+0	AUTO	CUST_SLOT_HANDBRAKE	KÄSIJARRU
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Tämä kilpakäyttöön tarkoitettu paketti nopeuttaa ja tarkentaa vaihtoja. Lisäksi se keventää voimansiirtoon kuuluvia osia, mikä tehostaa voimansiirtoa.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Tämä kovaan kilpakäyttöön tarkoitettu paketti nopeuttaa ja tarkentaa vaihtoja. Lisäksi se keventää voimansiirtoon kuuluvia osia, mikä tehostaa voimansiirtoa.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Tämä kovaan kilpakäyttöön tarkoitettu paketti nopeuttaa ja tarkentaa vaihtoja. Lisäksi se keventää voimansiirtoon kuuluvia osia, mikä tehostaa voimansiirtoa.^
+0	AUTO	COMMON_CLASS_HEADER	TASO
+0	AUTO	CAR_SELECT_FORDGT	Ford GT luotiin Fordin 60-luvun kilpa-autoilumenestyksen kunniaksi. Se on kilparatoja hallinneen GT40:n moderni versio.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	SUORITUSTILASTOT
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	JARRULEVYT
+0	AUTO	CUST_QUICK_INTERNALS_D3	Tämän paketin ansiosta moottori kestää hetkellisesti paljon suurempia tehoja.^
+0	AUTO	CUST_QUICK_INTERNALS_G3	Tämä kovaan kilpakäyttöön tarkoitettu paketti sisältää vahvemmat moottorin osat, jotka kestävät erinomaisesti huomattavaa rasitusta ja suuria kierrosnopeuksia.^
+0	AUTO	CUST_QUICK_INTERNALS_S3	Tason 3 moottoripaketti nopeuskisoihin
+0	AUTO	CUST_SLOT_PISTONS	JARRUSATULAN MÄNNÄT
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Tämä paketti lisää moottorin tehoa hetkellisesti. Teholisä saattaa ratkaista kilpailun eduksesi.^
+0	AUTO	FE_STATS_BEST_LAP_TIME	PARAS KIERROSAIKA
+0	AUTO	FE_STATS_SKILLS_STATS	TAITOTILASTOT
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	URAKEHITYS
+0	AUTO	CUST_DRIFT_TUT_RWD	Driftausautoa rakentaessa on tärkeintä löytää säädöt, joiden avulla näyttävät, sulavat driftit onnistuvat helposti.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Tämä kilpakäyttöön tarkoitettu paketti lisää moottorin tehoa koko kierrosalueella.^
+0	AUTO	CUST_SELL_CAR_DENIED	Et voi myydä ainoaa autoasi.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Näiden kilpakäyttöön suunniteltujen alustan osien avulla varmistat, että autosi alusta ei pyri vääntymään kovassakaan vedossa, mikä puolestaan parantaa pitoa. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Keskipäivä
+0	AUTO	CUST_SLOT_PULLEY_DESC	Hihnapyörän kokoa suurentamalla voidaan pienentää remmiahtimen ahtoviivettä ja täten lisätä ahtimesta saatavaa tehoa.^
+0	AUTO	CUST_SLOT_IGNITION_DESC	Tehokas moottori vaatii toimiakseen tehokkaan sytytysjärjestelmän. Moottorin suorituskykyä voidaan parantaa käyttämällä platinasta, iridiumista tai muusta erinomaisesti sähköä johtavasta materiaalista valmistettuja sytytysjohtoja ja -tulppia.^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	POIS
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	JARRULETKUT
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	SUURIN KERROIN
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	ILOKAASUJÄRJESTELMÄ
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Tilastopalvelimeen ei juuri nyt saada yhteyttä. Yritä myöhemmin uudelleen.
+0	AUTO	RACE_DAY_TRACK_CONFIG	RATAOSIO
+0	AUTO	CS_HEADER_DRAG_EVENT	KIIHDYTYSKISAT
+0	AUTO	CUST_QUICK_BRAKE_1	Tämä katukäyttöön tarkoitettu paketti lyhentää jarrutusmatkaa.^
+0	AUTO	CUST_QUICK_BRAKE_2	Tason 2 jarrupaketti
+0	AUTO	CUST_REPAIR_TITLE	KORJAA AUTO
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Moottorin tehon kasvaessa autoon on tehtävä muutoksia, jotta teho saadaan tehokkaasti välitettyä vetäville pyörille. Kuritusta kestävä kytkin, kunnon vetoakselit ja lukkoperä ovat kaikki oleellisia hankintoja.^
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Piirustuksen tiedot
+0	AUTO	CUST_CAT_DRAG_FORCED	Tämä paketti keskittyy voiman lisäämiseen. Nämä ahtimen osat on suunniteltu lisäämään pelkästään huipputehoa. Niillä on suuri vaikutus loppunopeuteesi.^
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Haluatko nyt pelata tätä kisapäivää?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Haluatko varmasti tallentaa tämän piirustuksen?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Tämä paketti sisältää vahvemmat voimansiirron osat, mukaan lukien vetoakselin, vetopyörästön ja vetonivelet.^
+0	AUTO	CUST_BP_EXIT_CONFIRM	Tämä hylkää kaikki piirustukseen tekemäsi muutokset. Haluatko varmasti hylätä muutokset?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Nimetään piirustusta uudelleen.
+0	AUTO	CUST_FILTER_MIRRORS	PEILIT
+0	AUTO	ENTER_PRESELL_CODE	KIRJOITA MAINOSKOODI
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	LATAUS EPÄONNISTUI
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	VOITETUT YHTEENOTOT
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Tämä kilpakäyttöön tarkoitettu paketti sisältää moottorinohjauksen lastutuksen suorituskyvyn maksimoimiseksi.^
+0	AUTO	FE_STATS_BEST_REACTION_TIME	LYHYIN REAKTIOAIKA
+0	AUTO	CAR_SELECT_MK5GTI	Mk5 GTI on sen alkuperäisen pikkusportin uusin malli. Tehdasvireessäkin tämän auton myllystä irtoaa yli 200 hevosvoimaa, ja tarvittaessa lisää on helppo kutitella.
+0	AUTO	CAR_SELECT_MK5R32	Kun pikkusporttiin lisätään kapea V6-moottori ja neliveto, lopputulos on tämä.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Auton alusta on säädetty oikein silloin, kun auto ei pyri yli- tai aliohjautumaan liikaa. Auto on tällöin sekä nopeampi että helpompi ajaa.^
+0	AUTO	CUST_SLOT_CONTROL_ARMS	REAKTIOTANGOT
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Tehokkaassa autossa on syytä olla mahdollisimman jäykkä alusta, jotta se pysyy suorassa kovien kiihdytysten aikana. ^
+0	AUTO	CUST_SLOT_BODY	KORISARJA
+0	AUTO	CUST_SLOT_HOOD	KONEPELTI
+0	AUTO	CUST_SLOT_PADS	JARRUPALAT
+0	AUTO	FE_STATS_DRIFT_WINS	VOITETUT DRIFTAUSKISAT
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Tämä paketti sisältää moottorinohjauksen uudelleenohjelmoinnin. Ohjelmoinnin jälkeen moottoriin syötetään enemmän polttoainetta ja ilmaa, mikä varmistaa suorituskyvyn, jolla saat renkaat irti radasta ja voit driftata maaliviivan yli.^
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	MUOKKAUS
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	URALLA ROMUTETUT AUTOT
+0	AUTO	RD_CREATE_RD	Luo kisapäivä
+0	AUTO	FE_STATS_DRAG_RACES	AJETUT KIIHDYTYSKISAT
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	KESKEYTYSPROSENTTI
+0	AUTO	CUST_REGION_FRONT_WHEEL	ETUVANTEET
+0	AUTO	CAR_SELECT_ECLIPSE	Toisen sukupolven Eclipsen moottori on kuin seula.
+0	AUTO	CAR_LOT_TITLE	AUTOKAUPPA
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Valitse käytössä oleva kisapäivän paikka, niin voit tarkastella kisapäivän tietoja ja halutessasi poistaa kisapäivän.
+0	AUTO	CAREER_MAP_TITLE	URAKARTTA
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	PARAS DRIFTAUSTULOS SEURAAJANA
+0	AUTO	CUST_SLOT_CRANKSHAFT	KAMPIAKSELI
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	AUTOPALKINTO
+0	AUTO	CAR_SELECT_R34GTR	Tuunauskulttuurin syvin olemus kiteytyy tähän autoon. Muut autot pyrkivät vastaamaan sen esikuvaan.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFTAUSKISAT
+0	AUTO	RACE_DAY_MULTIPLAYER	Moninpeli
+0	AUTO	CUST_SLOT_CRANK_DESC	Vakioviritteisen moottorin kampiakseli ei kestä suurten tehojen aiheuttamaa rasitusta. Kun moottorin teho ylittää 500 hevosvoimaa, moottoriin on syytä asentaa taottu kampiakseli.^
+0	AUTO	CAR_SELECT_COBALTSS	Ahdetulla kaksilitraisella voimanpesällä varustettu Cobalt korvasi vanhemman Cavalierin. Cobaltin tarkoituksena oli vastata Honda Civicin kaltaisten autojen tarjoamaan haasteeseen.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} FT
+0	AUTO	CAR_SELECT_350Z	350Z on Z-sarjan viides malli. Se on takavetoinen, nelipaikkainen coupé.
+0	AUTO	CAR_SELECT_997T	3,6-litraisesta turbomoottorista ei lopu puhti kesken kovassakaan kyydissä.
+0	AUTO	CAR_SELECT_AE86	Lempinimellä Hachi-Roku tunnettu ritsa on viimeinen pienikokoisista takavedoista.
+0	AUTO	CAR_SELECT_CTSV	CTSV on ensimmäinen auto Cadillacin V-sarjassa, joka perustettiin panemaan kampoihin eurooppalaisten autotehtaiden urheilullisille perheautoille.
+0	AUTO	CAR_SELECT_EVO9	EVO IX on kaksilitraisella, 16-venttiilisellä turbomotilla ja nelivedolla varustettu pikkusportti, jonka uskomaton suorituskyky ja loistava ajettavuus ovat olleet auton esittelystä lähtien tuunausteollisuuden esikuvana.
+0	AUTO	CAR_SELECT_EVOX	EVO X on jopa nopeampi kuin Stig.
+0	AUTO	CAR_SELECT_GTON	Pontiac GTO pohjautuu australialaisen Holden Monaron alustalle, ja sen voimanlähteenä toimii Corvetten maineikas LS2-moottori.
+0	AUTO	CAR_SELECT_GTOO	Tämä on monien mielestä maailman ensimmäinen oikea muskeliauto.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Kun auton toteutuksesta vastaa Fordin erikoisautojen ryhmä SVT yhdessä tarunhohtoisen Carroll Shelbyn kanssa, se on vuorenvarma menestys. Yhteistyön hedelmä saa takuulla muikean hymyn kaikkien Mustangin ystävien kasvoille: tehoa 450 hevosvoimaa, vääntöä 612 Nm, Brembon valmistamat jarrusatulat, 19-tuumaiset alumiinivanteet ja hinta, jonka pitäisi ennakkotietojen mukaan olla varsin lähellä aiemman Mustang Cobran hintaa. Hankkeen puuhamiesten mukaan vuoden 2006 Ford Mustang Shelby Cobra GT500 on kaikkien aikojen tehokkain sarjavalmisteinen Mustang.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	VAATIMUKSET
+0	AUTO	CUST_REPAIR_USE_CASH	KÄYTÄ KÄTEISTÄ
+0	AUTO	FE_STATS_FILTER_SKILLS	TAITOTILASTOT
+0	AUTO	FE_STATS_SPEED_RACES	AJETUT NOPEUSKISAT
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Määritä kisat
+0	AUTO	RD_DELETE_SHARED_RD	Poistetaanko jaettu kisapäivä?
+0	AUTO	CAREER_OVERVIEW_HEADER	URAKEHITYS
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	PAKOPUTKISTO
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Jarrut kuumenevat voimakkaissa jarrutuksissa. Jarrujen kuumetessa niiden teho heikkenee, mikä puolestaan pidentää jarrutusmatkaa. Isot jarrut kuumenevat hitaammin, mikä takaa jarrujen toiminnan tiukassakin tilanteessa.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Tämä paketti korvaa moottorin osat vahvemmilla, jotka kestävät suurta tehoa ja kovia kierrosnopeuksia.^
+0	AUTO	CL_DRIVETRAIN_ALL	Mikä tahansa
+0	AUTO	CL_DRIVETRAIN_AWD	Neliveto
+0	AUTO	CL_DRIVETRAIN_FWD	Etuveto
+0	AUTO	CL_DRIVETRAIN_RWD	Takaveto
+0	AUTO	FE_COMMON_MODE	KISAMUOTO
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	IMUSARJA
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	KISATILASTOT
+0	AUTO	CODE_ENTRY	ANNA KOODI
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Haluatko ostaa ostoskorissasi olevat merkit?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	PAKOPUTKISTO
+0	AUTO	RACE_DAY_SPLIT_SCREEN	JAETTU RUUTU
+0	AUTO	CUST_SLOT_INTERCOOLER	VÄLIJÄÄHDYTIN
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Mutkissa on tärkeintä pitää yllä vauhtia ja päästä kiihdyttämään ulos mutkasta hyvissä ajoin. Tehokkaalla autolla pääset kiihdyttämään mutkasta vauhdilla, joten saavutat suoralla suuremman nopeuden.^
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	KERHON JÄSENET
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	MOOTTORIN OSAT
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Tämä paketti sisältää vahvemmat voimansiirron osat, mukaan lukien vetoakselin, vetopyörästön ja vetonivelet.^
+0	AUTO	CUST_WIND_TUNNEL_OFF	Tuulitunneli pois
+0	AUTO	FE_COMMON_CONFIGURATION	RATAOSIO
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} HV
+0	AUTO	CS_HEADER_GRIP_EVENT	RATAKISAT
+0	AUTO	CAR_SELECT_CIVIC	Kuudennen sukupolven Civic on yksi tuunaajien suosikkiaihioista, rakennettiin rassia sitten kadulle, radalle tai muualle.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Kisapäivä poistettu
+0	AUTO	CAR_SELECT_E46M3	Kolmannen sukupolven E46-korimalliin perustuvan M3:n moottorissa oli enemmän tehoa litraa kohden kuin missään aiemmassa BMW:n myllyssä.
+0	AUTO	CAR_SELECT_E92M3	E92 M3:ssa on hiilikuidusta valmistettu katto ja voimanlähteenä aito V8-pata aiempien M3-mallien suoran kutosen sijaan.
+0	AUTO	CAR_SELECT_ELISE	Toisen sukupolven Elise on äärimmilleen pelkistetty urheiluauto, jonka suunnittelussa lähtökohtana on ollut ajonautinto.
+0	AUTO	CAR_SELECT_FDRX7	FD RX-7 on yksi kaikkien aikojen legendaarisimmista tuning-autoista.
+0	AUTO	CAR_SELECT_IS350	Toisen sukupolven IS on takavetoinen luksuscoupé, jonka uuden mallin linjat ovat entistä sulavammat.
+0	AUTO	CAR_SELECT_LP640	LP640 on huimat 640 hevosvoimaa kehittävän 6,5-litraisen moottorinsa ansiosta suorituskyvyltään superautojen kärkikastissa.
+0	AUTO	CUST_SLOT_VALVE_DESC	Tämä viritysosa parantaa valintasi mukaan jarrujen tehoa joko edessä tai takana.
+0	AUTO	CAR_SELECT_SUPRA	Neljännen sukupolven Supra on edellisiä malleja kevyempi ja ketterämpi. Testiradalla auton matkustajiin kohdistui kaarteessa 0,98 G:n vetovoima. Supraa myytiin Pohjois-Amerikassa viimeisen kerran vuonna 1999, vaikka Japanissa valmistus jatkuikin vuoteen 2002 asti.
+0	AUTO	CUST_FILTER_ALL_PARTS	KAIKKI OSAT
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Tämä paketti lisää vetävien pyörien päällä olevaa painoa ja vähentää taipumusta keulimiseen.^
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Tämä paketti mahdollistaa mutkien ajamisen hyvin suurella nopeudella ilman pidon menetystä.^
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Tämä paketti mahdollistaa mutkien ajamisen huippunopeudella ilman pidon menetystä.^
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Sopivia kisoja tai pelaajia ei löytynyt. Yritä uudelleen.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Määritä kisat
+0	AUTO	FE_STATS_CLUB_LEADER	KERHON JOHTAJA
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Saksan Autobahnring on tieverkoston muodostama rata, johon kuuluu niin moottoritien pätkiä kuin tiukkoja kurveja ja tunneleitakin.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Keskeytetään haku...
+0	AUTO	CUST_SLOT_DIFF_DESC	Voimansiirtojärjestelmän välityksellä moottorin kehittämä teho siirretään pyörille. ^
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Haluatko varmasti korvata tämän kisapäivän?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	ENITEN VOITTOJA JOHTAJASTA
+0	AUTO	CAR_SELECT_ZONDAF	Monien autoilutoimittajien mukaan Zonda F on yksi maailman parhaista superautoista.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Tämä paketti varmistaa, että autosi pysyy tiukasti radassa. Paketti sisältää jäykemmät kallistuksenvakaimet eteen ja taakse, alustan uretaanipuslat ja kilpakäyttöön tarkoitetut iskunvaimentimet.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Oma kisapäivä^Suunnittele ja luo oma kisapäiväsi. Luo kisapäivä yksin- tai moninpeliin ja ota muista pelaajista mittaa Xbox LIVE -palvelussa, tai luo jaetun ruudun kisapäivä ja haasta ystäväsi kisaan.^^Jaa yksinpelin tai moninpelin kisapäivä Xbox LIVE -palvelussa ja kutsu muut pelaajat mittelemään taitojaan kisapäivillesi.^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis on rakennettu Japanin vuoristoiselle maaseudulle. Alkeellisista lähtökohdistaan huolimatta rata on huippumoderni.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Voit parantaa auton käyttäytymistä mutkissa asentamalla jäykemmät iskunvaimentimet ja laskemalla auton painopistettä kilpakäyttöön tarkoitetuilla jousilla.^
+0	AUTO	CUST_CAT_DRAG_NITROUS	Tämä paketti lisää moottorin tehoa hetkellisesti. Ilokaasujärjestelmä on jokaisen kiihdytyskuskin pakkohankinta.^
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Tuulisen Chicagon kuljettajat ovat tehneet hylätystä lentokentästä oman leikkikenttänsä. Kentällä on leveä kiitorata, useita kilpa- ja driftausratoja sekä kiihdytysstrippi.
+0	AUTO	FE_STATS_TOP_SPEED	HUIPPUNOPEUS
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	PAINEENSÄÄDIN
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	ONNISTUNEET LÄMMITTELYT
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	NOPEIN 60 - 0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	AHTOPAINEENSÄÄDIN
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Vuorenrinteeseen rakennettu Ebisun rata on driftauksen henkinen kehto. Fukuyaman reitti kulkee maaseudun halki moottoritielle.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Kevyempien nokkapyörien avulla voidaan vähentää nokka-akseleiden pyörittämiseen vaadittavaa voimaa ja täten parantaa moottorin suorituskykyä.^
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} x {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	KOLAROIMATTA VOITETUT KISAT
+0	AUTO	CUST_QUICK_HANDLING_1	Tämä katukäyttöön tarkoitettu paketti parantaa auton käyttäytymistä mutkissa ja vakautta suurissa nopeuksissa.^
+0	AUTO	CUST_QUICK_HANDLING_2	Tason 2 ohjauspaketti
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Ilokaasu sopii erinomaisesti tehon hetkelliseen lisäämiseen, mutta sen liiallinen käyttö voi rasittaa moottoria siinä määrin, että se rikkoutuu. Moottoriin syötettävän ilokaasun määrää voidaan kuitenkin rajoittaa paineensäätöohjauksen avulla.^
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Haluatko varmasti vaihtaa paikkaa? Kaikki valitsemasi kisat poistetaan.
+0	AUTO	CUST_VINYL_LAYER_TITLE	KERROKSET
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Tämä paketti sisältää taotut männät, kiertokanget ja kampiakselin. Näillä osilla varmistat, ettei moottori rikkoudu kovissakaan varttimailin vedoissa.^
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Pohjois-Kaliforniassa sijaitseva Infineon Raceway mutkittelee halki kukkulaisen maaston. Yksikin virheliike pudottaa sinut kärjestä tai sysää sinut seinää päin.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	NOPEUS
+0	AUTO	FE_STATS_CLUB_POINTS	KERHON PISTEET
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Tämä paketti sisältää moottorinohjauksen uudelleenohjelmoinnin. Ohjelmoinnin jälkeen moottoriin syötetään enemmän polttoainetta ja ilmaa, minkä ansiosta ohitukset sujuvat heittämällä.^
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Haluatko varmasti poistaa kisan %s?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Kisapäivä tallennettu
+0	AUTO	CUST_QUICK_NITROUS_DI3	Tämä paketti lisää ilokaasun avulla moottorin tehoa hetkellisesti 50 - 250 hevosvoiman verran. Teholisä saattaa ratkaista kilpailun eduksesi.
+0	AUTO	CUST_QUICK_POWER_1	Tämä katukäyttöön tarkoitettu paketti lisää moottorin tehoa koko kierrosalueella ja muuttaa auton käyntiäänen rankemmaksi.
+0	AUTO	CUST_QUICK_POWER_2	Tämä kilpapaketti jatkaa siitä, mihin ykköstason paketti jäi ja lisää tehoa kierrosalueen huipulla. Se muuttaa auton käyntiäänen aggressiivisemmaksi.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Parkin pieni ja kiemurainen rata sijaitsee keskellä Irlannin vihreää maaseutua.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	VARA-AUTO
+0	AUTO	FE_STATS_GRIP_RACES	AJETUT RATAKISAT
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	AUTOTALLI
+0	AUTO	CUST_PACKAGE_POWER	Tehopaketit
+0	AUTO	CUST_OWNED	HYLLYSSÄ
+0	AUTO	CUST_PAINT	VÄRI
+0	AUTO	CUST_PARTS	KORIN OSAT
+0	AUTO	CUST_PACKAGE_TITLE	PAKETTI
+0	AUTO	CS_OPTION_CAR_SELECT	Valitse auto
+0	AUTO	RACE_DAY_SLOT_EMPTY	TYHJÄ
+0	AUTO	FE_STATS_ACHIEVEMENTS	SAAVUTUKSET
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Luomalla haastekisapäivän voit itse valita autot, joilla kisapäivään osallistutaan.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Käsijarrulla voit tehdä näyttäviä käännöksiä.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Valtatie 318 on pätkä auringon paahtamaa asfalttia Nevadan autiomaassa. Suorilla on mitattu yli 320 kilometrin tuntinopeuksia, joten varo petollisen vaikeita mutkia.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Kilpakäyttöön tarkoitetut jarrulevyt jäähtyvät nopeammin kuin tavalliset. Lisäksi tavanomaisia jarrulevyjä suuremmat jarrulevyt tarjoavat jarrupaloille suuremman kitkapinnan ja parantavat näin jarrujen tehokkuutta.^
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	PARAS DRIFTAUSTULOS JOHTAJANA
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Tämä alustapaketti on suunniteltu helpottamaan driftaamista.^
+0	AUTO	CUST_REGION_FRONT_BUMPER	ETUPUSKURI
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	ARVIOITU KOKONAISARVO
+0	AUTO	CUST_SLOT_TRANSMISSION	VAIHTEISTO
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Mt. Rainierin kupeeseen rakennettu Portland International Raceway on vaativa katurata, johon kuuluu ensiluokkainen kiihdytysstrippi.
+0	AUTO	CUST_BLUEPRINT_SAVE	PÄIVITÄ PIIRUSTUS
+0	AUTO	CUST_QUICK_NITROUS_1	Tämä paketti lisää ilokaasun avulla hetkellisesti moottorin tehoa. Teholisä saattaa ratkaista kilpailun eduksesi.^
+0	AUTO	CUST_QUICK_NITROUS_2	Tämä paketti lisää ilokaasun avulla moottorin tehoa entisestään. Hetkellinen teholisä saattaa ratkaista kilpailun eduksesi.^
+0	AUTO	RACE_DAY_LOCATION_9_DESC	Teksasissa kaikki on suurempaa, ja Texas World Speedway ei ole poikkeus. Mutkitteleva katurata liittyy kallistettuun ovaalirataan.
+0	AUTO	CAR_SELECT_CORVETTE	Toisen sukupolven Corvette oli viimeinen Sting Ray ja se valittiin yhdeksi maailman viidestä parhaasta urheiluautosta.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	ENITEN VOITETTUJA SEKTOREITA
+0	AUTO	CL_DRIVETRAIN_HEADER	VETOTAPA
+0	AUTO	CUST_PACKAGE_HANDLING	Ohjauspaketit
+0	AUTO	FE_STATS_SPEED_WINS	VOITETUT NOPEUSKISAT
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	ENITEN TARKISTUSPISTEVOITTOJA
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Parhaiden virittäjien leaderboardilta näet parhaat piirustusten väsääjät. Sijoituksesi perustuu kaikkien suunnittelemiesi autojen yhteiseen voittoprosenttiin. Ennen kuin jakamasi piirustus kelpuutetaan leaderboardille, on jonkun ajettava siihen perustuvalla autolla vähintään 20 kisassa.

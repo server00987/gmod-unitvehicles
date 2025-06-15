@@ -1,0 +1,292 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Russian_InGame.bin
+#	File created on: 2025-05-24 11:18:11
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - InGame
+0	AUTO	HUB_REPAIR_EXITHUB	Выход с уик-энда
+0	AUTO	HUD_BURNOUT_INCREDIBLE	Отличный прогрев!
+0	AUTO	HUD_DRIFT_DOMINATING	Великолепно!
+0	AUTO	HUD_DRIFT_KEEP_MOVING	ДАЛЬШЕ!
+0	AUTO	HUD_DRIFT_DRIFT_ENDED	ЗАНОС ЗАВЕРШЕН
+0	AUTO	HUD_LOST_TRACTION	ПОТЕРЯ СЦЕПЛЕНИЯ
+0	AUTO	HUB_REPAIR_SCREEN_STATUS_REPAIRED	ОТРЕМОНТИРОВАН
+0	AUTO	FE_POSTRACE_CLASS_B_HEADER	ГРУППА B
+0	AUTO	HUD_MATCHUP	Класс соперников:
+0	AUTO	HUD_ENGINE_BLOWN	ПЕРЕГРЕВ ДВИГАТЕЛЯ!
+0	AUTO	HUB_SCREEN_CAR_REPAIR_USE_MARKER	Ремонт за жетон
+0	AUTO	FE_POSTRACE_TOTAL_SPEED	ОБЩАЯ СКОРОСТЬ
+0	AUTO	HUB_SPLITSCREEN_EVENT_NOCARS_BOTH	Автомобили обоих участников не соответствуют требованиям заезда.
+0	AUTO	HUB_MARKERSELECT_BONUS	ПРИЗ
+0	AUTO	FE_POSTRACE_TABLE_HEADER_BEST_WHEELIE	ЛУЧШИЙ ВИЛЛИ
+0	AUTO	HUB_MARKERSELECT_PARTS	ДЕТАЛИ
+0	AUTO	HUD_DRIFT_PERFECT_ENTRY	БЕЗУКОРИЗНЕННО!
+0	AUTO	HUD_DRIFT_FOLLOWER	Вы - ведомый
+0	AUTO	HUD_DAMAGE_HEAVY	ТЯЖЕЛЫЕ ПОВРЕЖДЕНИЯ!
+0	AUTO	HUD_DAMAGE_LIGHT	ЛЕГКИЕ ПОВРЕЖДЕНИЯ
+0	AUTO	HUB_SPLITSCREEN_EVENT_PLAYED	Вы уже участвовали в этих гонках.
+0	AUTO	HUD_DRIFT_POINTS_EARNED	ЗАРАБОТАННЫЕ ОЧКИ
+0	AUTO	ON_HIDE_SETTINGS	Скрыть параметры
+0	AUTO	HUD_TOTALLED	АВАРИЯ!
+0	AUTO	DRAG_RESULTS_DISPLAY_FORMAT	{0:s} @ {1:s}
+0	AUTO	HUB_MARKERSELECT_WONCONGRATS	Поздравляем, вы стали победителем уик-энда! Выберите награду.
+0	AUTO	FE_POSTRACE_ZERO_TO_HUNDRED	ВРЕМЯ 0-100
+0	AUTO	HUB_SHADOW_LOCAL	ЛОКАЛЬНЫЙ ДВОЙНИК
+0	AUTO	HUD_DRAG_TIME	ВРЕМЯ ДРЭГА
+0	AUTO	FE_POSTRACE_WHEELIE_BONUS	ПРИЗ ЗА ДИСТАНЦИЮ "ВИЛЛИ"
+0	AUTO	HUB_ONLINE_LEADER	ЛИДЕР
+0	AUTO	HUB_MARKERSELECT_CONGRATS_PART_2	Поздравляем, вы выиграли деталь ({1:s}, ур. {0:d}) для {2:s}.
+0	AUTO	FE_POSTRACE_BEST_WHEELIE	Лучший "Вилли":
+0	AUTO	FE_HUB_DIALOG_DAMAGED_CAR_FOR_EVENT_CONFIRM	Вы собираетесь выступать на поврежденном автомобиле. Продолжить?
+0	AUTO	HUD_DRAG_EIGHTH_MILE	Время на 1/8 мили:
+0	AUTO	FE_POSTRACE_CLASS_A_HEADER	ГРУППА A
+0	AUTO	HUD_SECTOR_CLAIMED	^ПОБИТ РЕКОРД УЧАСТКА!^+{1:f.0} очк.
+0	AUTO	HUD_DISTANCE_REMAINING	ОСТАЛОСЬ:
+0	AUTO	HUB_SCREEN_P1	И1
+0	AUTO	HUB_SCREEN_P2	И2
+0	AUTO	FE_TOTAL_TIME_TO_COMPLETE	ВРЕМЯ УЧАСТИЯ В СОРЕВНОВАНИЯХ
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_SWITCH_BUTTON	СМЕНИТЬ
+0	AUTO	HUD_DRIFT_SCORING_ZONE_START	НАЧАЛО ЗАЧЕТНОЙ ЗОНЫ!
+0	AUTO	HUB_RETIRE_NOTWON_CONFIRM	Вы набрали недостаточно очков для достижения лидерства. Если вы прервете уик-энд, все очки, заработанные вами в нем, будут утрачены. Прервать уик-энд?
+0	AUTO	ASSIST_LEVEL_KING_CAPS	КОРОЛЬ
+0	AUTO	HUD_DRIFT_GREAT_DRIFT	ОТЛИЧНЫЙ ЗАНОС
+0	AUTO	HUB_SCREEN_CAR_REPAIR_CAREER_ONLY_TOTAL_REPAIR_MARKERS	Вы пытаетесь починить разбитый автомобиль. Для этого нужен жетон полного ремонта.
+0	AUTO	ONLINE_ROOM_STATUS_RACE_IN_PROGRESS	Идет заезд
+0	AUTO	FE_POSTRACE_TABLE_HEADER_FINAL	ФИНАЛ
+0	AUTO	HUD_DRIFT_NICE_DRIFT	НЕПЛОХОЙ ЗАНОС
+0	AUTO	FE_HUB_DIALOG_CONFIRM_REPAIR_NOMONEY	Недостаточно средств для ремонта.
+0	AUTO	HUD_NICE_WHEELIE	Хороший "вилли"!
+0	AUTO	HUB_QUIT	ВЫХОД
+0	AUTO	HUB_RACE	ЗАЕЗДЫ
+0	AUTO	HUD_PREPARE_TO_HEAT_TIRES1	Приготовьтесь
+0	AUTO	HUD_PREPARE_TO_HEAT_TIRES2	к прогреву
+0	AUTO	HUB_SCREEN_CAR_REPAIR_CAREER_ONLY_CASH	У вас нет жетонов ремонта. Вы можете отремонтировать этот автомобиль за деньги.
+0	AUTO	HUB_SCREEN_CAR_REPAIR_CAREER_ONLY_MARKERS	У вас недостаточно денег для ремонта. Вы можете отремонтировать этот автомобиль за жетон.
+0	AUTO	FE_POSTRACE_ZERO_TO_SIXTY	ВРЕМЯ 0-60
+0	AUTO	HUB_RACE_MODE_PRACTICE	Тренировка
+0	AUTO	HUD_ROUND_MATCHUP	РАУНД {0:d} ИЗ {1:d}
+0	AUTO	HUD_BURNOUT_GOOD	Хороший прогрев!
+0	AUTO	HUD_BURNOUT_WEAK	Слабый прогрев
+0	AUTO	GAMEPLAY_DRAG_FALSESTART	ФАЛЬСТАРТ!
+0	AUTO	HUD_ONLINE_HURRY_UP	БЫСТРЕЕ!
+0	AUTO	HUD_CHECKPOINT	КП:
+0	AUTO	FE_HUB_DIALOG_CONFIRM_REPAIR_NOTOTALED	Вы не можете восстановить разбитый автомобиль во время уик-энда.
+0	AUTO	HUD_REACHED_75_GRIP_BONUS	Сцепление с трассой +75%
+0	AUTO	FE_POSTRACE_FINISH_TIME	Время финиша:
+0	AUTO	HUD_LAUNCHED_PERFECT	Отличный старт!
+0	AUTO	PR_MATCHUP_CLASS_B_TITLE	РЕЗУЛЬТАТЫ ГРУППЫ B
+0	AUTO	HUD_NEXT_CHECKPOINT_MILES	Следующий КП^{0:s} мили
+0	AUTO	HUD_DRIFT_RACE_OVER	ЗАЕЗД ОКОНЧЕН!
+0	AUTO	DIALOG_MSG_CONFIRM_RESTART_RACE	Начать заезд заново?
+0	AUTO	HUD_FINISH_FIRST	ПЕРВОЕ МЕСТО!
+0	AUTO	DAMAGE_DIALOG_REPAIR_WITH_MARKER	ЖЕТОН
+0	AUTO	HUD_FINISH_THIRD	ТРЕТЬЕ МЕСТО!
+0	AUTO	FE_STATISTICS_LABEL	Статистика
+0	AUTO	SHADOW_UPLOAD_SUCCESS_TEXT	Публикация завершена
+0	AUTO	FE_POSTRACE_TARGET_TIME	Треб. время:
+0	AUTO	FE_PR_CONFIRM_RESTART	Вы действительно хотите начать заезд заново?
+0	AUTO	FE_PAUSE_CONFIRM_EXIT	Прервав заезд, вы утратите все игровые достижения. Продолжить?
+0	AUTO	FE_POSTRACE_DAMAGE_TOTALED	Автомобиль разбит
+0	AUTO	HUD_BEST_LAP_TIME_LOST	ВАШ РЕКОРД КРУГА ПОБИТ!
+0	AUTO	HUB_EXIT_AFTER_REPAIRSCREEN_CONFIRM	Вы действительно хотите выйти?
+0	AUTO	MENU_PAUSE_TITLE	ПАУЗА
+0	AUTO	HUB_REPAIRALL_NOMONEY	Недостаточно средств для ремонта: требуется не менее {0:d}.
+0	AUTO	FE_POSTRACE_TABLE_HEADER_INTERIM	ТЕКУЩИЙ РЕЗУЛЬТАТ
+0	AUTO	HUB_SHADOW_SERVER_SAME_CLUB	Двойник: мой клуб
+0	AUTO	HUB_SHADOW_SERVER_SAME_TIER	Двойник: мой этап
+0	AUTO	PR_MATCHUP_RESULTS_FINAL_TITLE	РЕЗУЛЬТАТЫ ФИНАЛА
+0	AUTO	HUB_TRACKPREVIEW_YOUR_CURRENT	Текущий
+0	AUTO	HUD_DRAG_0_TO_60	Время 0-60:
+0	AUTO	FE_POSTRACE_AVERAGE_SPEED	СРЕДНЯЯ СКОРОСТЬ
+0	AUTO	FE_POSTRACE_DAMAGE_HEAVY	Тяжелые повреждения
+0	AUTO	FE_POSTRACE_DAMAGE_LIGHT	Легкие повреждения
+0	AUTO	HUB_REPAIRALL_INFO	Некоторые из ваших автомобилей повреждены. Отремонтируйте их до выхода из уик-энда, или они будут помещены в гараж.
+0	AUTO	HUD_SHIFTED_PERFECT	Идеально!
+0	AUTO	FE_POSTRACE_DAMAGE_STATE	ПОВРЕЖДЕНИЯ
+0	AUTO	DDAY_OPP_01	Эдди Каргоу
+0	AUTO	DDAY_OPP_02	Бенни Гольд
+0	AUTO	DDAY_OPP_03	Саманта Кросс
+0	AUTO	DDAY_OPP_04	Бил Вейн
+0	AUTO	DDAY_OPP_05	Марк Манн
+0	AUTO	DDAY_OPP_06	Роджер Соул
+0	AUTO	DDAY_OPP_07	Уилсон Вон
+0	AUTO	SHADOW_WAITING_FOR_LEADERBOARD_DATA	Ожидание рейтинговых данных.
+0	AUTO	HUB_REPAIR_SCREEN_STATUS_TOTALED	РАЗБИТ
+0	AUTO	MENU_POSTRACE_BACK_TO_GAMEROOM	До возвращения:
+0	AUTO	HUB_ONLINE_NEXT_EVENT	СЛЕДУЮЩИЙ ЗАЕЗД
+0	AUTO	HUB_TRACKPREVIEW_TOP_FRIEND	Лучший знакомый
+0	AUTO	HUD_COMPLETE	ПРОЙДЕНО:
+0	AUTO	FE_POSTRACE_TOTALED	РАЗБИТ
+0	AUTO	HUD_WHEELIE_DISTANCE	ДИСТАНЦИЯ "ВИЛЛИ"
+0	AUTO	FE_HUB_DIALOG_TOTALED_CAR_FOR_EVENT	Вы разбили автомобиль, подходящий для этого заезда.
+0	AUTO	FE_POSTRACE_REACTION_TIME	ВРЕМЯ РЕАКЦИИ
+0	AUTO	ONLINE_ROOM_STATUS_OPEN	Открыта
+0	AUTO	HUD_BURNOUT_MAX	Идеальный прогрев!
+0	AUTO	HUB_MARKERSELECT_CONGRATS_FREE_TOTALREPAIR	Поздравляем, вы выиграли бесплатный жетон полного ремонта от компании Progressive Insurance.
+0	AUTO	HUD_GO	СТАРТ!
+0	AUTO	HUD_VS	-
+0	AUTO	HUD_OVERHEADTING	ПЕРЕГРЕВ!
+0	AUTO	HUB_REPAIR_SCREEN_STATUS_DAMAGED	ПОВРЕЖДЕН
+0	AUTO	DAMAGE_DIALOG_TITLE	РЕМОНТ АВТОМОБИЛЯ
+0	AUTO	HUD_SYMBOL_MINUS	-
+0	AUTO	HUD_POSITION	МЕСТО:
+0	AUTO	HUD_OPPONENT_BLEW_THEIR_ENGINE	^{0:s}^ПЕРЕГРЕВАЕТ ДВИГАТЕЛЬ
+0	AUTO	HUD_DRAG_0_TO_100	Время 0-100:
+0	AUTO	HUB_RACE_MODE_NORMAL	ЗАЕЗД
+0	AUTO	FE_POSTRACE_FALSE_START	ФАЛЬСТАРТ
+0	AUTO	HUB_SCREEN_NO_TOTAL_REPAIR_MARKERS_AVAILABLE	У вас нет жетонов полного ремонта.
+0	AUTO	HUB_QUIT_MESSAGE	Покинуть гоночный уик-энд? Все очки, заработанные вами в нем, будут утрачены.
+0	AUTO	FE_POSTRACE_DISCONNECTED	ОТСОЕДИНЕНИЕ
+0	AUTO	HUB_SCREEN_NO_MARKERS_AVAILABLE	У вас нет жетонов ремонта.
+0	AUTO	FE_POSTRACE_SIXTY_FEET_TIME	ВРЕМЯ (20 М)
+0	AUTO	ONLINE_ROOM_STATUS_LOCKED	Закрыта
+0	AUTO	HUB_EXIT_CAREER	ВЫХОД ИЗ РЕЖИМА КАРЬЕРЫ
+0	AUTO	HUB_RACE_MODE_SHADOW	Заезд с двойником
+0	AUTO	HUD_DRIFT_SPUN_OUT	РАЗВОРОТ!
+0	AUTO	HUB_EXIT_CAREER_CONFIRM	Выйти из режима карьеры? Если автосохранение отключено, то все несохраненные достижения будут утрачены.
+0	AUTO	HUD_NEXT_CHECKPOINT_METERS	Следующий КП^{0:f.0} м
+0	AUTO	FE_POSTRACE_BEST_TIME	Лучшее время:
+0	AUTO	HUD_DRIFT_AMAZING_DRIFT	ПОРАЗИТЕЛЬНЫЙ ЗАНОС!
+0	AUTO	FE_TOP_SPEED_REACHED	РЕКОРД СКОРОСТИ НА СОРЕВНОВАНИЯХ
+0	AUTO	HUD_LAP_TIME	ВРЕМЯ КРУГА:
+0	AUTO	HUD_CAR_MATCHUP	{0:s} @ {1:f.0} л.с.
+0	AUTO	ONLINE_ROOM_STATUS_WAITING_FOR_PLAYERS	Ожидание игроков
+0	AUTO	PRACTICE_BEST_LAP	ЛУЧШИЙ КРУГ
+0	AUTO	HUB_SHADOW_SERVER_10_UP	Двойник: 10 лучших
+0	AUTO	FE_POSTRACE_TIME_DIFFERENCE_FORMAT	{0:s} {0:d}
+0	AUTO	HUB_SCREEN_CAR_REPAIR_CAREER_CASH_MARKERS	Вы можете отремонтировать этот автомобиль за деньги или жетон.
+0	AUTO	HUD_DRAG_REACTION_TIME	Время отклика:
+0	AUTO	HUD_DRIFT_POINTS_LOST	ПОТЕРЯННЫЕ ОЧКИ
+0	AUTO	FE_HUB_DIALOG_CONFIRM_REPAIR_COST	Ремонт обойдется вам в %$d. Продолжить?
+0	AUTO	HUD_LAP	КРУГ:
+0	AUTO	HUB_MARKERSELECT_CONGRATS_FREE_CAR	Поздравляем, вы получили жетон, который можно обменять на любой автомобиль, доступный в автосалоне.
+0	AUTO	PRACTICE_LAST_LAP	ПОСЛЕДНИЙ КРУГ
+0	AUTO	HUB_TRACKPREVIEW_YOUR_BEST	Ваш рекорд
+0	AUTO	HUD_READY	ГОТОВ
+0	AUTO	HUD_SCORE	СЧЕТ
+0	AUTO	HUD_START	СТАРТ
+0	AUTO	HUD_OPPONENT_TOTALLED	^%s^РАЗБИВАЕТ МАШИНУ
+0	AUTO	HUB_RETIRE	ВЫХОД ИЗ УИК-ЭНДА
+0	AUTO	POST_RACE_KNOCKED_OUT	ВЫБЫВАНИЕ
+0	AUTO	HUD_DRIFT_GOOD_DRIFT	ХОРОШИЙ ЗАНОС
+0	AUTO	HUD_SHIFTED_GOOD	Хорошо
+0	AUTO	HUD_DRIFT_AWESOME_DRIFT	НЕВЕРОЯТНЫЙ ЗАНОС!
+0	AUTO	HUD_DRIFT_BONUS_ZONE	ПРИЗОВАЯ ЗОНА
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE1	Вы собираетесь выступать на разбитой машине. Используйте жетон для ее ремонта или выберите "Продолжить", чтобы перейти к запасному автомобилю.
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE2	Вы собираетесь выступать на разбитой машине. Жетонов ремонта у вас нет. Выберите запасной автомобиль.
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE3	Вы собираетесь выступать на разбитой машине. Используйте жетон полного ремонта. Запасных автомобилей у вас нет.
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE4	Вы собираетесь выступать на поврежденной машине. Использовать жетон для ее ремонта?
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE5	Вы собираетесь выступать на поврежденной машине. Жетонов ремонта у вас нет. Выбрать запасной автомобиль?
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_CASE6	Вы собираетесь выступать на поврежденной машине. Жетонов для ремонта и запасных автомобилей у вас нет. Придется ехать так.
+0	AUTO	FE_POSTRACE_TABLE_HEADER_ROUND1	РАУНД 1
+0	AUTO	FE_POSTRACE_TABLE_HEADER_ROUND2	РАУНД 2
+0	AUTO	FE_POSTRACE_TABLE_HEADER_ROUND3	РАУНД 3
+0	AUTO	ONLINE_ROOM_STATUS_FINALIZED	Завершена
+0	AUTO	HUB_MARKERSELECT_DOMINATEDCONGRATS	Поздравляем, вы стали лидером уик-энда! Выберите награду.
+0	AUTO	FE_POSTRACE_DAMAGE_NONE	Нет повреждений
+0	AUTO	HUB_MARKERSELECT_CONGRATS_FREE_REPAIR	Поздравляем, вы выиграли бесплатный жетон ремонта от компании Progressive Insurance.
+0	AUTO	HUD_SHIFTED_MISSED	Плохо
+0	AUTO	REPAIR_COST_HEADER	СТОИМОСТЬ
+0	AUTO	FE_POSTRACE_NA	Н/Д
+0	AUTO	FE_POSTRACE_TABLE_HEADER_BEST_SCORE	ЛУЧШИЙ СЧЕТ
+0	AUTO	DAMAGE_DIALOG_REPAIR_WITH_TOTMARKER	Ваш автомобиль разбит. Использовать жетон полного ремонта?
+0	AUTO	HUD_LAUNCHED_GOOD	Хороший старт
+0	AUTO	HUD_DRIFT_GREAT_DRIFTING	Замечательно!
+0	AUTO	HUB_SHADOW_SERVER_LEADER	Двойник: лидер
+0	AUTO	FE_HUB_DIALOG_CONFIRM_REPAIR_EXITHUB_NO	Недостаточно средств для ремонта автомобилей. Пока вы не отремонтируете их, они будут непригодны к использованию.
+0	AUTO	HUD_DRIFT_COMBO_MULTIPLIER	МНОЖИТЕЛЬ
+0	AUTO	FE_HIGHEST_RECORDED_SPEED	РЕКОРДНАЯ СКОРОСТЬ
+0	AUTO	HUD_DRIFT_SCORING_ZONE_FINISH	КОНЕЦ ЗАЧЕТНОЙ ЗОНЫ!
+0	AUTO	HUD_DRIFT_OFF_TRACK	ВЫХОД ИЗ ЗАЧЕТНОЙ ЗОНЫ
+0	AUTO	HUB_SCREEN_ROOT_MENU_REPAIR	РЕМОНТ АВТОМОБИЛЕЙ
+0	AUTO	HUD_TIME_TO_BEAT	РЕКОРДНОЕ ВРЕМЯ
+0	AUTO	HUD_REACHED_50_GRIP_BONUS	Сцепление с трассой +50%
+0	AUTO	HUD_TACH_ABBREV_NEUTRAL	Н
+0	AUTO	FE_POSTRACE_SCORE_BONUS	ПРИЗОВЫЕ ОЧКИ
+0	AUTO	DIALOG_MSG_CONFIRM_EXIT	Выйти в главное меню?
+0	AUTO	ASSIST_LEVEL_FAMILY_CAPS	НОВИЧОК
+0	AUTO	DAMAGE_DIALOG_REPAIR_WITH_CASH	ДЕНЬГИ
+0	AUTO	HUB_TRACKPREVIEW_COMPARE_SCORE	Сравнить
+0	AUTO	HUD_DRIFT_HIGH_SPEED	^Приз за скорость!^ +{0:f.0} очк.
+0	AUTO	HUD_BEST_LAP_LOST	{0:s}^УДЕРЖИВАЕТ РЕКОРД КРУГА!^{1:s}
+0	AUTO	HUD_BEST_LAP_TIME	РЕКОРД КРУГА
+0	AUTO	HUD_FINISH_FOURTH	ЧЕТВЕРТОЕ МЕСТО!
+0	AUTO	HUD_REACHED_25_GRIP_BONUS	Сцепление с трассой +25%
+0	AUTO	INGAME_PAUSE	Пауза
+0	AUTO	HUD_REACHED_MAX_GRIP_BONUS	Максимальное сцепление с трассой
+0	AUTO	HUB_WONACAR_DIALOG	ВЫБЕРИТЕ ПРИЗОВОЙ АВТОМОБИЛЬ
+0	AUTO	HUD_DRAG_60_FEET	Время на 60 фут.:
+0	AUTO	HUB_SPLITSCREEN_CARREPAIR_CONFIRM_REPAIR_BUTTON	РЕМОНТИРОВАТЬ
+0	AUTO	PR_EVENT_MATCHUP_SEPARATOR	&
+0	AUTO	HUD_RACE_MATCHUP	ЗАЕЗД
+0	AUTO	DAMAGE_DIALOG_DONT_REPAIR	БЕЗ РЕМОНТА
+0	AUTO	DEMO_TOTALED_DIALOG_TEXT	Автомобиль разбит! Начать заново?
+0	AUTO	HUD_DRIFT_HIT_THE_WALL	КАСАНИЕ!
+0	AUTO	HUD_DRIFT_NITROUS	^НИТРОДРИФТ!^ +{0:f.0} очк.
+0	AUTO	HUB_TRACKPREVIEW_SCORE	СЧЕТ
+0	AUTO	PAUSE_PHOTO_MODE	РЕЖИМ СЪЕМКИ
+0	AUTO	HUD_STAGING_GRIP	СЦЕПЛЕНИЕ
+0	AUTO	HUB_SCREEN_CAR_REPAIR_USE_CASH	Ремонт за деньги
+0	AUTO	HUB_MARKERSELECT_WILDCARDPART	СЛУЧАЙНАЯ ЗАПЧАСТЬ
+0	AUTO	HUD_GROUP_A_MATCHUP	ГРУППА А
+0	AUTO	PR_MATCHUP_RESULTS_TITLE	РЕЗУЛЬТАТЫ РАУНДА {0:d}
+0	AUTO	HUD_LAP_TIME_FLASHER	ВРЕМЯ КРУГА
+0	AUTO	HUB_SPLITSCREEN_PLAYER_WON	Уик-энд окончен. Победитель - игрок %$d!
+0	AUTO	HUD_TOTAL_SPEED	СУММАРНАЯ СКОРОСТЬ:
+0	AUTO	FE_POSTRACE_BLOWN_ENGINE	ДВИГАТЕЛЬ ПОВРЕЖДЕН
+0	AUTO	POSTRACE_SECTORS_CLAIMED	УЧАСТКОВ ПРОЙДЕНО
+0	AUTO	HUD_NIS_DRIFT_SCORE	ОЧКИ ЗА ДРИФТ
+0	AUTO	FE_POSTRACE_EMPTY_RESULT	-
+0	AUTO	HUD_DRIFT_DOING_WELL	Хорошо
+0	AUTO	HUD_DRIFT_OUTRAGEOUS_DRIFT	ВОСХИТИТЕЛЬНЫЙ ЗАНОС!
+0	AUTO	HUD_DRIFT_HURRY_UP	БЫСТРЕЕ!
+0	AUTO	HUD_SECTOR_FAILED	ДО РЕКОРДА УЧАСТКА НЕ ХВАТИЛО {0:f.0} ОЧК.
+0	AUTO	HUD_FINISH_SECOND	ВТОРОЕ МЕСТО!
+0	AUTO	FE_HUB_DIALOG_CONFIRM_REPAIR_EXITHUB_YES	Если вы покинете уик-энд, все ваши автомобили будут автоматически отремонтированы.
+0	AUTO	HUD_DRIFT_LEADER	Вы - ведущий
+0	AUTO	PR_MATCHUP_TITLE	РЕЗУЛЬТАТЫ ЗАЕЗДА
+0	AUTO	FE_POSTRACE_TABLE_HEADER_BEST_TIME	РЕКОРД
+0	AUTO	POSTRACE_TOTAL_SECTOR_POINTS	ВСЕГО ОЧКОВ НА УЧАСТКАХ
+0	AUTO	FE_HUB_DIALOG_FAILURE_EVENTCHANGE	Не удалось выбрать заезд!
+0	AUTO	HUD_POINTS_AT_STAKE	БАНК ОЧКОВ
+0	AUTO	HUD_DRIFT_POINTS	ОЧКИ:
+0	AUTO	ASSIST_LEVEL_RACER_CAPS	ГОНЩИК
+0	AUTO	HUB_SHADOW_SERVER_OWN	Двойник: мой сервер
+0	AUTO	HUD_TOTAL_POINTS	ВСЕГО ОЧКОВ
+0	AUTO	HUD_TARGET_TIME_LAP	ТРЕБУЕМОЕ ВРЕМЯ КРУГА
+0	AUTO	HUB_SCREEN_BLUEPRINT_NA	Для этого автомобиля нет конфигураций.
+0	AUTO	HUD_DISTANCE_METER	{0:f.0} м
+0	AUTO	HUD_SCORE_TO_BEAT	РЕКОРД
+0	AUTO	HUD_WHEELIE_DSIATANCE	ДИСТАНЦИЯ
+0	AUTO	HUD_TACH_ABBREV_REVERSE	З
+0	AUTO	HUB_TRACKPREVIEW_HEADER	ПРОСМОТР ТРАССЫ
+0	AUTO	FE_POSTRACE_DNF	НФ
+0	AUTO	HUD_SYMBOL_PLUS	+
+0	AUTO	HUD_NEW_BEST_LAP_TIME	НОВЫЙ РЕКОРД КРУГА
+0	AUTO	HUD_TIME_REMAINING	ОСТАВШЕЕСЯ ВРЕМЯ
+0	AUTO	HUD_DRIFT_STAYED_ON_TRACK	Аккуратность +{0:f.0} очк.
+0	AUTO	HUD_BEST_WHEELIE	ЛУЧШИЙ "ВИЛЛИ"
+0	AUTO	HUD_DRAG_QUARTER_MILE	Время на 1/4 мили:
+0	AUTO	PR_MATCHUP_STATS_TITLE	СТАТИСТИКА РАУНДА {0:d}
+0	AUTO	HUB_TRACKPREVIEW_LEADER	Лидер
+0	AUTO	HUB_SPLITSCREEN_EVENT_NOCARS_PLAYER1	Автомобиль игрока 1 не соответствует требованиям заезда.
+0	AUTO	HUB_SPLITSCREEN_EVENT_NOCARS_PLAYER2	Автомобиль игрока 2 не соответствует требованиям заезда.
+0	AUTO	HUB_SPLITSCREEN_NO_WINNER	Уик-энд завершился вничью.
+0	AUTO	HUB_MARKERSELECT_CONGRATS_CASH	Поздравляем! Вы получили денежный приз: {0:d}!
+0	AUTO	HUB_MARKERSELECT_CONGRATS_PART	Поздравляем, вы получили призовую деталь ({0:s}).
+0	AUTO	HUB_REPAIR_DAMAGE	Ремонтировать автомобиль
+0	AUTO	HUD_DRIFT_BEHIND_THE_PACE	Слабый дрифт
+0	AUTO	HUD_DISTANCE_FT	{0:f.0} фут.
+0	AUTO	FE_HUB_DIALOG_FAILURE_CARCHANGE	Не удалось выбрать автомобиль!
+0	AUTO	HUB_REPAIR_FIXALL	Ремонтировать все
+0	AUTO	HUD_PREPARE_TO_HEAT_TIRES	Приготовьтесь к прогреву шин
+0	AUTO	PR_MATCHUP_CLASS_A_TITLE	РЕЗУЛЬТАТЫ ГРУППЫ A
+0	AUTO	HUD_WHEELIE_ROUND_MATCHUP	РАУНД {0:d} - СОПЕРНИК
+0	AUTO	HUD_TARGET_TIME	ТРЕБУЕМОЕ ВРЕМЯ
+0	AUTO	FE_POSTRACE_CLASS_C_HEADER	ГРУППА C
+0	AUTO	HUD_DRIFT_SEAMLESS	^Приз за дистанцию!^ +{0:f.0} очк.
+0	AUTO	POSTRACE_BEST_SECTOR	ЛУЧШИЙ УЧАСТОК
+0	AUTO	POSTRACE_SECTORS_DOMINATED	ЛИДЕРСТВО НА УЧАСТКАХ
+0	AUTO	HUD_LAP_TIME_TO_BEAT	РЕКОРД:
+0	AUTO	HUD_CHECKPOINT_SPEED_KPH	Скорость на КП^{0:f.0} км/ч
+0	AUTO	HUD_CHECKPOINT_SPEED_MPH	Скорость на КП^{0:f.0} миль/ч
