@@ -1856,73 +1856,11 @@ local function mw_pursuit_main( ... )
             end
         end
     end
-    
+
     if not UVHUDRace then
         local ResourceText = UVResourcePoints
-        
-        -- [[ Commander Stuff ]]
-        if UVOneCommanderActive then
-            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
-                UVHUDCommanderLastHealth = 0
-                UVHUDCommanderLastMaxHealth = 0
-            end
-            if IsValid(UVHUDCommander) then
-                if UVHUDCommander.IsSimfphyscar then
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
-                    UVHUDCommanderLastMaxHealth =
-                    UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
-                elseif UVHUDCommander.IsGlideVehicle then
-                    local enginehealth = UVHUDCommander:GetEngineHealth()
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                elseif vcmod_main then
-                    UVHUDCommanderLastHealth =
-                    UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                else
-                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                end
-            end
-            local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
-            local healthcolor
-            if healthratio >= 0.5 then
-                healthcolor = Color(255, 255, 255, 200)
-            elseif healthratio >= 0.25 then
-                if math.floor(RealTime() * 2) == math.Round(RealTime() * 2) then
-                    healthcolor = Color(255, 0, 0)
-                else
-                    healthcolor = Color(255, 255, 255)
-                end
-            else
-                if math.floor(RealTime() * 4) == math.Round(RealTime() * 4) then
-                    healthcolor = Color(255, 0, 0)
-                else
-                    healthcolor = Color(255, 255, 255)
-                end
-            end
-            ResourceText = "⛊"
-            local element3 = {
-                {x = w / 3, y = 0},
-                {x = w / 3 + 12 + w / 3, y = 0},
-                {x = w / 3 + 12 + w / 3 - 25, y = h / 20},
-                {x = w / 3 + 25, y = h / 20}
-            }
-            surface.SetDrawColor(0, 0, 0, 200)
-            draw.NoTexture()
-            surface.DrawPoly(element3)
-            if healthratio > 0 then
-                surface.SetDrawColor(Color(109, 109, 109, 200))
-                surface.DrawRect(w / 3 + 25, h / 20, w / 3 - 38, 8)
-                surface.SetDrawColor(healthcolor)
-                local T = math.Clamp((healthratio) * (w / 3 - 38), 0, w / 3 - 38)
-                surface.DrawRect(w / 3 + 25, h / 20, T, 8)
-            end
-            draw.DrawText("⛊ " .. lang("uv.unit.commander") .. " ⛊","UVFont5UI-BottomBar",w / 2,0,Color(0, 161, 255),TEXT_ALIGN_CENTER)
-        end
-		
         local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-		
+
         -- [ Upper Right Info Box ] --
         -- Full BG
 		if UVHUDCopMode then
@@ -1940,7 +1878,25 @@ local function mw_pursuit_main( ... )
         surface.SetDrawColor(0, 0, 0, 255) -- Bounty BG
 		surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTTOM"])
         surface.DrawTexturedRect(w * 0.707, h * 0.16, w * 0.2625, h * 0.05)
-        
+
+		local milestoneamount = 0
+		local milestoneh = 0
+		
+		if milestoneamount > 0 and not UVHUDCopMode then
+			surface.SetDrawColor(0, 0, 0, 150) -- Milestone BG
+			surface.DrawRect(w * 0.71, h * 0.215, w * 0.2575, h * 0.035)
+			
+			draw.DrawText("#uv.hud.milestones","UVFont5UI",w * 0.71,h * 0.2125,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
+			draw.DrawText(milestoneamount, "UVFont5UI", w * 0.965, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
+
+			for i = 1, math.min(milestoneamount, 5) do
+				surface.SetDrawColor(223, 184, 127, 150) -- Milestone Icon BG's
+				surface.DrawRect(w * 0.71 + (i - 1) * (w * 0.05175), h * 0.25, w * 0.05075, h * 0.065)
+				DrawIcon(UVMaterials["CLOCK_BG"], w * 0.735 + (i - 1) * (w * 0.05175), h * 0.28, .075, Color(255, 255, 255, 100))
+			end
+			milestoneh = h * 0.1025
+		end
+
         -- Timer
         DrawIcon(UVMaterials["CLOCK"], w * 0.735, h * 0.1325, .0625, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent) -- Icon
         draw.DrawText(UVTimer, "UVFont5UI", w * 0.965, h * 0.115, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent, TEXT_ALIGN_RIGHT)
@@ -1948,10 +1904,10 @@ local function mw_pursuit_main( ... )
         -- Bounty
         draw.DrawText("#uv.hud.bounty","UVFont5UI",w * 0.7175,h * 0.1625,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
         draw.DrawText(UVBounty, "UVFont5UI", w * 0.965, h * 0.1625, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
-        
+
         -- Heat Level
         surface.SetDrawColor(0, 0, 0, 200)
-        surface.DrawRect(w * 0.7075, h * 0.2175, w * 0.035, h * 0.035)
+        surface.DrawRect(w * 0.71, h * 0.2175 + milestoneh, w * 0.033, h * 0.035)
         
         if UVHeatLevel == 1 then
             UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
@@ -1973,11 +1929,11 @@ local function mw_pursuit_main( ... )
             UVHeatBountyMax = math.huge
         end
         
-        DrawIcon(UVMaterials["HEAT"], w * 0.7175, h * 0.2325, .0375, Color(255, 255, 255)) -- Icon
-        draw.DrawText(UVHeatLevel, "UVFont5UI", w * 0.7375, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+        DrawIcon(UVMaterials["HEAT"], w * 0.7175, h * 0.2325 + milestoneh, .0375, Color(255, 255, 255)) -- Icon
+        draw.DrawText(UVHeatLevel, "UVFont5UI", w * 0.7375, h * 0.214 + milestoneh, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
         
         surface.SetDrawColor(Color(109, 109, 109, 200))
-        surface.DrawRect(w * 0.745, h * 0.2175, w * 0.2225, h * 0.035)
+        surface.DrawRect(w * 0.745, h * 0.2175 + milestoneh, w * 0.2225, h * 0.035)
         surface.SetDrawColor(Color(255, 255, 255))
         local HeatProgress = 0
         if MaxHeatLevel:GetInt() ~= UVHeatLevel then
@@ -2019,8 +1975,64 @@ local function mw_pursuit_main( ... )
             surface.SetDrawColor(Color(255, 0, 0))
         end
 
-        surface.DrawRect(w * 0.745, h * 0.2175, B, h * 0.035)
-        
+        surface.DrawRect(w * 0.745, h * 0.2175 + milestoneh, B, h * 0.035)
+
+        -- [[ Commander Stuff ]]
+        if UVOneCommanderActive then
+			ResourceText = "⛊"
+
+			surface.SetDrawColor(0, 0, 0, 150) -- Milestone BG
+			surface.DrawRect(w * 0.71, h * 0.26 + milestoneh, w * 0.2575, h * 0.035)
+
+            draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.71, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_LEFT)
+            draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.965, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_RIGHT)
+
+            draw.DrawText("#uv.unit.commander","UVFont5UI-BottomBar",w * 0.8375, h * 0.255 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_CENTER)
+
+            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
+                UVHUDCommanderLastHealth = 0
+                UVHUDCommanderLastMaxHealth = 0
+            end
+            if IsValid(UVHUDCommander) then
+                if UVHUDCommander.IsSimfphyscar then
+                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
+                    UVHUDCommanderLastMaxHealth =
+                    UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
+                elseif UVHUDCommander.IsGlideVehicle then
+                    local enginehealth = UVHUDCommander:GetEngineHealth()
+                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                elseif vcmod_main then
+                    UVHUDCommanderLastHealth =
+                    UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                else
+                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                end
+            end
+            local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
+            local healthcolor
+			local blink = 255 * math.abs(math.sin(RealTime() * 4))
+			local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+			local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+			
+            if healthratio >= 0.5 then
+                healthcolor = Color(255, 255, 255, 200)
+            elseif healthratio >= 0.25 then
+				healthcolor = Color(255, blink, blink, 200)
+            else
+				healthcolor = Color(255, blink2, blink2, 200)
+            end
+            if healthratio > 0 then
+                surface.SetDrawColor(Color(109, 109, 109, 200))
+                surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, w * 0.2575, h * 0.0125)
+                surface.SetDrawColor(healthcolor)
+                local T = math.Clamp((healthratio) * (w * 0.2575), 0, w * 0.2575)
+				surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, T, h * 0.0125)
+            end
+        end
+		
         -- [ Bottom Info Box ] --
         local middlergb = {
             r = 255,
@@ -2028,13 +2040,7 @@ local function mw_pursuit_main( ... )
             b = 255,
             a = 255 * math.abs(math.sin(RealTime() * 4))
         }
-        local bottomy = h * 0.86
-        local bottomy2 = h * 0.9
-        local bottomy3 = h * 0.91
-        local bottomy4 = h * 0.81
-        local bottomy5 = h * 0.83
-        local bottomy6 = h * 0.79
-        
+
         if not UVHUDDisplayCooldown then
             -- General Icons
             draw.DrawText( UVWrecks, "UVFont5UI", w * 0.64, h * 0.825, UVWrecksColor, TEXT_ALIGN_RIGHT)
@@ -2048,7 +2054,7 @@ local function mw_pursuit_main( ... )
             
             -- Evade Box, All BG
             surface.SetDrawColor(200, 200, 200, 100)
-            surface.DrawRect(w * 0.333, bottomy2, w * 0.34, h * 0.01)
+            surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
             
             -- Evade Box, Busted Meter
             if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
@@ -2084,7 +2090,7 @@ local function mw_pursuit_main( ... )
                 local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1515), 0, w * 0.1515)
 				T = math.floor(T)
                 surface.SetDrawColor(255, 0, 0)
-                surface.DrawRect(w * 0.333 + (w * 0.1515 - T), bottomy2, T, h * 0.01)
+                surface.DrawRect(w * 0.333 + (w * 0.1515 - T), h * 0.9, T, h * 0.01)
                 middlergb = {
                     r = 255,
                     g = 0,
@@ -2106,7 +2112,7 @@ local function mw_pursuit_main( ... )
                 
                 local T = math.Clamp((UVEvadingProgress) * (w * 0.16225), 0, w * 0.16225)
                 surface.SetDrawColor(155, 207, 0)
-                surface.DrawRect(w * 0.51, bottomy2, T, h * 0.01)
+                surface.DrawRect(w * 0.51, h * 0.9, T, h * 0.01)
                 middlergb = {
                     r = 155,
                     g = 207,
@@ -2121,15 +2127,15 @@ local function mw_pursuit_main( ... )
             
             -- Evade Box, Middle
             surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, middlergb.a)
-            surface.DrawRect(w * 0.49, bottomy2, w * 0.021, h * 0.01)
+            surface.DrawRect(w * 0.49, h * 0.9, w * 0.021, h * 0.01)
             
             -- Evade Box, Dividers
             surface.SetDrawColor(255, 255, 255, 255)
-            surface.DrawRect(w * 0.485, bottomy2, w * 0.005, h * 0.01)
-            surface.DrawRect(w * 0.4, bottomy2, w * 0.005, h * 0.01)
+            surface.DrawRect(w * 0.485, h * 0.9, w * 0.005, h * 0.01)
+            surface.DrawRect(w * 0.4, h * 0.9, w * 0.005, h * 0.01)
             
-            surface.DrawRect(w * 0.51, bottomy2, w * 0.005, h * 0.01)
-            surface.DrawRect(w * 0.6, bottomy2, w * 0.005, h * 0.01)
+            surface.DrawRect(w * 0.51, h * 0.9, w * 0.005, h * 0.01)
+            surface.DrawRect(w * 0.6, h * 0.9, w * 0.005, h * 0.01)
             
             -- Upper Box
             surface.SetDrawColor(0, 0, 0, 255)
@@ -2188,7 +2194,7 @@ local function mw_pursuit_main( ... )
                 lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
             end
             
-            draw.DrawText(lbtext,"UVFont5UI",w * 0.5,bottomy3 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+            draw.DrawText(lbtext,"UVFont5UI", w * 0.5, h * 0.91 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
         else
             -- Lower Box
             -- Evade Box, All BG (Moved to inner if clauses)
@@ -2230,19 +2236,8 @@ local function mw_pursuit_main( ... )
                 else
                     local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
                     local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-                    
-                    -- surface.SetDrawColor( shade_theme_color:Unpack() )
-                    -- surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
-                    
-                    -- shade_theme_color.a = shade_theme_color.a - 35
-                    -- theme_color.a = theme_color.a - 35
-                    
                     local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
-                    -- color = Color(blink, blink, 255)
-                    
-                    -- surface.SetDrawColor(shade_theme_color:Unpack())
-                    -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    
+					
                     surface.SetDrawColor(theme_color:Unpack())
                     surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
 					surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)

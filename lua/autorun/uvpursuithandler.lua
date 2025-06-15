@@ -3473,11 +3473,11 @@ else --HUD/Options
 		if IsValid(ent) then
 			if !UVHUDDisplayPursuit then return end
 			
-			local callsign = lang("uv.unit.commander") .. "\n⛊"
+			local callsign = "\n" .. lang("uv.unit.commander") .. "\n⛊"
 			local driver = UVGetDriver(ent)
 			
 			if driver and driver:IsPlayer() then
-				callsign = driver:GetName() .. "\n⛊"
+				callsign = driver:GetName() .. "\n" .. lang("uv.unit.commander") .. "\n⛊"
 				if localPlayer == driver then
 					if not ent.lplayernotified then
 						ent.lplayernotified = true
