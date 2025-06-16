@@ -603,19 +603,7 @@ function UVResetStats()
 	uvroadblocksdodged = 0
 	uvspikestripsdodged = 0
 	if uvbounty == 0 then
-		if MinHeatLevel:GetInt() <= 1 then 
-			uvheatlevel = 1
-		elseif MinHeatLevel:GetInt() <= 2 then
-			uvheatlevel = 2
-		elseif MinHeatLevel:GetInt() <= 3 then
-			uvheatlevel = 3
-		elseif MinHeatLevel:GetInt() <= 4 then
-			uvheatlevel = 4
-		elseif MinHeatLevel:GetInt() <= 5 then
-			uvheatlevel = 5
-		else
-			uvheatlevel = 6
-		end
+		uvheatlevel = MinHeatLevel:GetInt()
 	end
 	if uvenemyescaping then
 		uvenemyescaping = nil
