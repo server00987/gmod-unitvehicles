@@ -298,11 +298,45 @@ if SERVER then
         end
         
     end)
+
+    function UVReplicatePT( car, slot )
+        if not car.PursuitTech then return end
+
+        local ptSlot = car.PursuitTech[slot]
+
+        if ptSlot then
+            local isPtActive = false 
+
+            if ptSlot.Tech then
+                isPtActive = true
+            end
+
+            net.Start( "UV_SendPursuitTech" )
+            
+            net.WriteEntity( car )
+            net.WriteUInt( slot, 2 )
+            net.WriteBool( isPtActive )
+
+            if isPtActive then
+                net.WriteString( ptSlot.Tech )
+                net.WriteUInt( ptSlot.Ammo, 8 )
+                net.WriteUInt( ptSlot.Cooldown, 16 )
+                net.WriteFloat( ptSlot.LastUsed )
+                net.WriteBool( ptSlot.Upgraded )
+            end
+
+            net.Broadcast()
+            -- net.Start("UV_SendPursuitTech")
+            --     net.WriteEntity(car)
+            --     net.WriteTable(car.PursuitTech)
+            -- net.Broadcast()
+        end
+    end
     
     function UVDeployWeapon(car, slot)
-        if !car or !IsValid(car) then return end
-        if uvjammerdeployed and !car.jammerexempt then return end
-        if !car.PursuitTech then return end
+        --if !car or !IsValid(car) then return end
+        if uvjammerdeployed and not car.jammerexempt then return end
+        if not car.PursuitTech then return end
         
         if car.uvraceparticipant then
             if UVRaceInEffect and not UVRaceInProgress then return end
@@ -314,6 +348,8 @@ if SERVER then
         if pursuit_tech.Ammo <= 0 then return end
         
         local driver = car:GetDriver()
+
+        local used = false
         
         if pursuit_tech.Tech == "Shockwave" then --SHOCKWAVE
             local Cooldown = pursuit_tech.Cooldown
@@ -325,6 +361,7 @@ if SERVER then
             
             UVDeployShockwave(car)
             
+            used = true
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
         elseif pursuit_tech.Tech == "ESF" then --ESF
@@ -336,7 +373,8 @@ if SERVER then
             
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
-            
+            used = true
+
             if IsValid(driver) then
                 driver:PrintMessage( HUD_PRINTCENTER, "ESF deployed!")
             end
@@ -363,6 +401,8 @@ if SERVER then
             
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            used = true
+
         elseif pursuit_tech.Tech == "Jammer" then --JAMMER
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
@@ -375,6 +415,8 @@ if SERVER then
             
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            used = true
+
         elseif pursuit_tech.Tech == "Spikestrip" then --SPIKESTRIP
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
@@ -390,6 +432,8 @@ if SERVER then
             
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            used = true
+
             
             if IsValid(driver) then
                 driver:PrintMessage( HUD_PRINTCENTER, "Spike strip deployed!")
@@ -399,11 +443,12 @@ if SERVER then
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
             local repaired = UVDeployRepairKit(car)
-            
+
             if repaired then
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
-                
+                used = true
+
                 if IsValid(driver) then
                     driver:PrintMessage( HUD_PRINTCENTER, "Repair Kit deployed!")
                 end
@@ -415,9 +460,14 @@ if SERVER then
             local result = UVDeployKillSwitch(car)
             
             if result then
+                used = true
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
             end
+        end
+
+        if used then
+            UVReplicatePT( car, slot )
         end
     end
     
@@ -517,7 +567,7 @@ if SERVER then
                     v:_restore()
                 end
             end
-            
+
             if !repaired and car:GetChassisHealth() >= car.MaxChassisHealth then return end
             is_repaired = true
             car:EmitSound('ui/pursuit/repair.wav')

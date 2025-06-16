@@ -203,17 +203,18 @@ function TOOL:LeftClick( trace )
 				end
 
 				-- Clear PursuitTech on clients too
-				net.Start("UV_SendPursuitTech")
-					net.WriteEntity(car)
-					net.WriteTable({})
-				net.Broadcast()
+				-- net.Start("UV_SendPursuitTech")
+				-- 	net.WriteEntity(car)
+				-- 	net.WriteTable({})
+				-- net.Broadcast()
 			end)
 
             -- Network the PursuitTech to all clients
-            net.Start("UV_SendPursuitTech")
-                net.WriteEntity(car)
-                net.WriteTable(car.PursuitTech)
-            net.Broadcast()
+            -- net.Start("UV_SendPursuitTech")
+            --     net.WriteEntity(car)
+            --     net.WriteTable(car.PursuitTech)
+            -- net.Broadcast()
+			UVReplicatePT( car, slot )
 
 			return true
 		end
@@ -259,14 +260,14 @@ end
 
 if CLIENT then
 
-	net.Receive("UV_SendPursuitTech", function()
-		local car = net.ReadEntity()
-		local data = net.ReadTable()
+	-- net.Receive("UV_SendPursuitTech", function()
+	-- 	local car = net.ReadEntity()
+	-- 	local data = net.ReadTable()
 
-		if IsValid(car) then
-			car.PursuitTech = data
-		end
-	end)
+	-- 	if IsValid(car) then
+	-- 		car.PursuitTech = data
+	-- 	end
+	-- end)
 
 	function TOOL.BuildCPanel(CPanel)
 

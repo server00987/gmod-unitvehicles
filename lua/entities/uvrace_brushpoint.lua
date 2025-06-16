@@ -114,7 +114,7 @@ if SERVER then
 					net.WriteEntity(vehicle)
 					//net.WriteString(vehicle_array.Name)
 					net.WriteInt(place, 32)
-					net.WriteFloat(CurTime() - vehicle.racestart)
+					net.WriteFloat(CurTime() - UVRaceTable.Info.Time)
 					net.Broadcast()
 					
 					UVRaceRemoveParticipant( vehicle, 'Finished' )

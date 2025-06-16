@@ -170,6 +170,9 @@ if SERVER then
 			if table.HasValue(uvwantedtablevehicle, self.e) and !uvenemyescaped then
 				table.RemoveByValue(uvwantedtablevehicle, self.e)
 			end
+			net.Start( "UV_RemoveWantedVehicle" )
+			net.WriteEntity( self.e )
+			net.Broadcast()
 			self.e = nil
 		end
 		if self.edriver then
@@ -822,7 +825,7 @@ if SERVER then
 	end
 	
 	function ENT:Think()
-
+		-- if uvtargeting then return end
 		self:SetPos(self.v:GetPos() + Vector(0,0,50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 		if !IsValid(uvenemylocation) then
@@ -1003,7 +1006,7 @@ if SERVER then
 					end)
 					self.toofar = nil
 					self.aggressive = nil
-					if (uvbounty >= UVUHeatMinimumBounty1:GetInt() or self.e.uvraceparticipant) and !uvtargeting and !uvenemybusted then
+					if (uvbounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt():GetInt() or self.e.uvraceparticipant) and !uvtargeting and !uvenemybusted then
 						timer.Simple(0.1, function()
 							uvtargeting = true
 							if Chatter:GetBool() and IsValid(self) then

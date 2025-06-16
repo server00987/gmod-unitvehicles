@@ -120,6 +120,8 @@ function ENT:DoUpdate()
 		end
 	end
 
+	local reported = false
+
 	for _, array in pairs(found) do
 		if !array[1].IsGlideVehicle then continue end
 		if !self.racerdeployed and IsValid(array[1].UnitVehicle) then continue end
@@ -181,14 +183,21 @@ function ENT:DoUpdate()
 			end
 		end
 
-		if hit then
-			if array[1].UnitVehicle then
+		if hit and not self.reported then
+
+			if not array[1].UnitVehicle then
+
+				self.reported = true
+
 				timer.Simple(1, function()
 					if IsValid(self.Entity) then
+						self.reported = false
 						self:UVSpikeStripHit()
 					end
 				end)
+
 			end
+
 		end
 	end
 end

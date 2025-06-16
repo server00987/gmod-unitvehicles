@@ -242,7 +242,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	end
 	
 	if uvtargeting then
-		if !rhinoattack then
+		if not rhinoattack then
 			local mathangle = math.random(1,2)
 			if mathangle == 2 then
 				uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
@@ -295,190 +295,228 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	
 	if uvheatlevel < 1 then
 		uvheatlevel = 1
-	elseif uvheatlevel > 6 then
-		uvheatlevel = 6
+	elseif uvheatlevel > MAX_HEAT_LEVEL then
+		uvheatlevel = MAX_HEAT_LEVEL
 	end
 	
-	local appliedunits
+	local appliedUnits = nil
+	
 	if rhinoattack then
-		if uvheatlevel == 1 then
-			appliedunits = string.Trim(UVURhinos1:GetString())
-		elseif uvheatlevel == 2 then
-			appliedunits = string.Trim(UVURhinos2:GetString())
-		elseif uvheatlevel == 3 then
-			appliedunits = string.Trim(UVURhinos3:GetString())
-		elseif uvheatlevel == 4 then
-			appliedunits = string.Trim(UVURhinos4:GetString())
-		elseif uvheatlevel == 5 then
-			appliedunits = string.Trim(UVURhinos5:GetString())
-		elseif uvheatlevel == 6 then
-			appliedunits = string.Trim(UVURhinos6:GetString())
-		end
+		appliedUnits = string.Trim( GetConVar( 'unitvehicle_unit_rhinos' .. uvheatlevel ):GetString() )
+		if appliedUnits == "" then return end
 	else
-		if uvheatlevel == 1 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol1:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport1:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit1:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor1:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial1:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander1:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end				
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
-		elseif uvheatlevel == 2 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol2:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport2:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit2:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor2:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial2:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander2:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
-		elseif uvheatlevel == 3 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol3:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport3:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit3:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor3:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial3:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander3:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
-		elseif uvheatlevel == 4 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol4:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport4:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit4:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor4:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial4:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander4:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
-		elseif uvheatlevel == 5 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol5:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport5:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit5:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor5:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial5:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander5:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
-		elseif uvheatlevel == 6 then
-			local UnitsPatrol = string.Trim(UVUUnitsPatrol6:GetString())
-			local UnitsSupport = string.Trim(UVUUnitsSupport6:GetString())
-			local UnitsPursuit = string.Trim(UVUUnitsPursuit6:GetString())
-			local UnitsInterceptor = string.Trim(UVUUnitsInterceptor6:GetString())
-			local UnitsSpecial = string.Trim(UVUUnitsSpecial6:GetString())
-			local UnitsCommander = string.Trim(UVUUnitsCommander6:GetString())
-			if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-				UnitsCommander = ""
-			end
-			givenunitstable = {
-				UnitsPatrol,
-				UnitsSupport,
-				UnitsPursuit,
-				UnitsInterceptor,
-				UnitsSpecial,
-				UnitsCommander,
-			}
-			for k, v in pairs(givenunitstable) do
-				if !string.match(v, "^%s*$") then --not an empty string
-					table.insert(availableunitstable, givenunitstable[k])
-					table.insert(availableclasses, givenclasses[k])
-				end
-			end
-			local randomclassunit = math.random(1, #availableclasses)
-			appliedunits = availableunitstable[randomclassunit]
-			uvnextclasstospawn = availableclasses[randomclassunit]
+		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. uvheatlevel ):GetString() )
+		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. uvheatlevel ):GetString() )
+		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. uvheatlevel ):GetString() )
+		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. uvheatlevel ):GetString() )
+		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. uvheatlevel ):GetString() )
+		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. uvheatlevel ):GetString() )
+
+		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+			UnitsCommander = ""
 		end
+
+		givenunitstable = {
+			UnitsPatrol,
+			UnitsSupport,
+			UnitsPursuit,
+			UnitsInterceptor,
+			UnitsSpecial,
+			UnitsCommander,
+		}
+
+		for k, v in pairs(givenunitstable) do
+			if not string.match(v, "^%s*$") then --not an empty string
+				table.insert(availableunitstable, givenunitstable[k])
+				table.insert(availableclasses, givenclasses[k])
+			end
+		end
+
+		local randomclassunit = math.random(1, #availableclasses)
+		appliedunits = availableunitstable[randomclassunit]
+		uvnextclasstospawn = availableclasses[randomclassunit]
 	end
+	
+	-- local appliedunits
+	-- if rhinoattack then
+	-- 	if uvheatlevel == 1 then
+	-- 		appliedunits = string.Trim(UVURhinos1:GetString())
+	-- 	elseif uvheatlevel == 2 then
+	-- 		appliedunits = string.Trim(UVURhinos2:GetString())
+	-- 	elseif uvheatlevel == 3 then
+	-- 		appliedunits = string.Trim(UVURhinos3:GetString())
+	-- 	elseif uvheatlevel == 4 then
+	-- 		appliedunits = string.Trim(UVURhinos4:GetString())
+	-- 	elseif uvheatlevel == 5 then
+	-- 		appliedunits = string.Trim(UVURhinos5:GetString())
+	-- 	elseif uvheatlevel == 6 then
+	-- 		appliedunits = string.Trim(UVURhinos6:GetString())
+	-- 	end
+	-- else
+	-- 	if uvheatlevel == 1 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol1:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport1:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit1:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor1:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial1:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander1:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end				
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	elseif uvheatlevel == 2 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol2:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport2:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit2:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor2:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial2:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander2:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	elseif uvheatlevel == 3 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol3:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport3:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit3:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor3:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial3:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander3:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	elseif uvheatlevel == 4 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol4:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport4:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit4:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor4:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial4:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander4:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	elseif uvheatlevel == 5 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol5:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport5:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit5:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor5:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial5:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander5:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	elseif uvheatlevel == 6 then
+	-- 		local UnitsPatrol = string.Trim(UVUUnitsPatrol6:GetString())
+	-- 		local UnitsSupport = string.Trim(UVUUnitsSupport6:GetString())
+	-- 		local UnitsPursuit = string.Trim(UVUUnitsPursuit6:GetString())
+	-- 		local UnitsInterceptor = string.Trim(UVUUnitsInterceptor6:GetString())
+	-- 		local UnitsSpecial = string.Trim(UVUUnitsSpecial6:GetString())
+	-- 		local UnitsCommander = string.Trim(UVUUnitsCommander6:GetString())
+	-- 		if uvonecommanderactive or uvonecommanderdeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 			UnitsCommander = ""
+	-- 		end
+	-- 		givenunitstable = {
+	-- 			UnitsPatrol,
+	-- 			UnitsSupport,
+	-- 			UnitsPursuit,
+	-- 			UnitsInterceptor,
+	-- 			UnitsSpecial,
+	-- 			UnitsCommander,
+	-- 		}
+	-- 		for k, v in pairs(givenunitstable) do
+	-- 			if !string.match(v, "^%s*$") then --not an empty string
+	-- 				table.insert(availableunitstable, givenunitstable[k])
+	-- 				table.insert(availableclasses, givenclasses[k])
+	-- 			end
+	-- 		end
+	-- 		local randomclassunit = math.random(1, #availableclasses)
+	-- 		appliedunits = availableunitstable[randomclassunit]
+	-- 		uvnextclasstospawn = availableclasses[randomclassunit]
+	-- 	end
+	-- end
 	
 	if !isstring(appliedunits) then
 		PrintMessage( HUD_PRINTTALK, "There's currently no assigned Units to spawn. Use the Unit Manager tool to assign Units at that particular Heat Level!")
@@ -1631,7 +1669,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 	local racer_name = (ply and ply:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())
 	
 	ply = ply or Entity(1)
-
+	
 	local vname = Memory.SpawnName
 	local Update = false
 	local VehicleList = list.Get( "simfphys_vehicles" )
@@ -1884,9 +1922,9 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 			end
 		end
 	end)
-
+	
 	UVRaceReplaceParticipant( entrantvehicle, Ent )
-
+	
 	timer.Simple(1, function()
 		entrantvehicle:Remove()
 	end)
@@ -1914,7 +1952,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 	timer.Simple( .5, function()
 		if IsValid(Ent) then
 			if aienabled then 
-
+				
 				local uv = ents.Create(Ent.uvclasstospawnon)
 				uv:SetPos(Ent:GetPos())
 				uv.uvscripted = true
@@ -1922,7 +1960,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 				uv:Spawn()
 				uv:Activate()
 				ply = uv
-
+				
 			else
 				if Ent.IsSimfphyscar then
 					ply:EnterVehicle( Ent.DriverSeat )
@@ -1937,7 +1975,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 			end
 		end
 	end)
-
+	
 	return Ent
 end
 

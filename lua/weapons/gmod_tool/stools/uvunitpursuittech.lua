@@ -57,10 +57,6 @@ if CLIENT then
 end
 
 function TOOL:LeftClick( trace )
-	if SERVER then
-		util.AddNetworkString("UV_SendPursuitTech")
-	end
-
 	local car = trace.Entity
 
 	if car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
@@ -107,17 +103,18 @@ function TOOL:LeftClick( trace )
 				end
 
 				-- Clear PursuitTech on clients too
-				net.Start("UV_SendPursuitTech")
-					net.WriteEntity(car)
-					net.WriteTable({})
-				net.Broadcast()
+				-- net.Start("UV_SendPursuitTech")
+				-- 	net.WriteEntity(car)
+				-- 	net.WriteTable({})
+				-- net.Broadcast()
 			end)
 
             -- Network the PursuitTech to all clients
-            net.Start("UV_SendPursuitTech")
-                net.WriteEntity(car)
-                net.WriteTable(car.PursuitTech)
-            net.Broadcast()
+            -- net.Start("UV_SendPursuitTech")
+            --     net.WriteEntity(car)
+            --     net.WriteTable(car.PursuitTech)
+            -- net.Broadcast()
+			UVReplicatePT( car, slot )
 
 			return true
 		end

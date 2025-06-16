@@ -166,271 +166,790 @@ if SERVER then
 	end
 	
 	--return 5 = no sound chatter
-	function UVSoundChatter(self, voice, chattertype, parameters)
+	-- function UVSoundChatter(self, voice, chattertype, parameters, ...)
+	-- 	--[[ Voice Type
+	-- 	1 = Undercover Dispatch
+	-- 	2 = Undercover Helicopter (Air)
+	-- 	3-8 = Undercover Local (Patrol, Support)
+	-- 	9-10 = Undercover Federal (Special, Commander(one commander disabled))
+	-- 	11 = Payback/Heat Rhino
+	-- 	12 = Most Wanted Cross (Commander(one commander enabled))
+	-- 	13-18 = Most Wanted Local (Pursuit, Interceptor)
+	-- 	19 = Most Wanted Helicopter (Air)
+	-- 	*Others are non-engaging support units. If both are included in the same folder(chattertype), it'd be a 50/50 chance.
+	-- 	]]
+	
+	-- 	if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
+	-- 		return 5 
+	-- 	end
+	
+	-- 	print(voice, chattertype, parameters)
+	
+	-- 	local soundtable
+	-- 	voice = tostring(voice)
+	
+	-- 	-- Handle nested folder structure
+	-- 	local nestedFolders = {...}
+	-- 	local basePath = "sound/chatter/"..chattertype
+	-- 	local fullPath = basePath
+	
+	-- 	-- Build the full path from nested folders
+	-- 	for _, folder in ipairs(nestedFolders) do
+	-- 		fullPath = fullPath.."/"..folder
+	-- 	end
+	
+	-- 	-- Handle jammer case first
+	-- 	if uvjammerdeployed then
+	-- 		local staticFiles = file.Find("sound/chatter/!static/*", "GAME")
+	-- 		if next(staticFiles) == nil then return 5 end
+	
+	-- 		local soundFile = "chatter/!static/"..staticFiles[math.random(1, #staticFiles)]
+	-- 		UVRelayToClients(soundFile, parameters, true)
+	-- 		return 5
+	-- 	end
+	
+	-- 	--[[ Parameters
+	-- 	1 = No voice restriction
+	-- 	2 = Bullhorn
+	-- 	3 = Static
+	-- 	4 = Emergency
+	-- 	5 = Identify
+	-- 	6 = Call
+	-- 	7 = Losing
+	-- 	8 = Emergency (No voice restriction)
+	-- 	]]
+	
+	-- 	-- Helper function to find and play sounds with nested folder support
+	-- 	local function PlayNestedSound(baseType, voiceParam, isGeneric)
+	-- 		local searchPath = baseType
+	-- 		if not isGeneric then
+	-- 			searchPath = searchPath..(voiceParam and ("/"..voiceParam) or "")
+	-- 			if #nestedFolders > 0 then
+	-- 				searchPath = searchPath.."/"..table.concat(nestedFolders, "/")
+	-- 			end
+	-- 		end
+	
+	-- 		print('dsak')
+	-- 		print(baseType, voiceParam, isGeneric, searchPath)
+	
+	-- 		local _, files = file.Find("sound/"..searchPath.."/*", "GAME")
+	-- 		if next(files) == nil then return nil end
+	
+	-- 		local soundFile = searchPath:gsub("^sound/", "").."/"..files[math.random(1, #files)]
+	-- 		return soundFile, SoundDuration(soundFile)
+	-- 	end
+	
+	-- 	-- 	local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+	
+	-- -- 	if next(basedirectories) == nil then return 5 end
+	-- -- 	local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	
+	-- -- 	soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- -- 	if next(soundtable) == nil then return 5 end
+	-- -- 	local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	-- -- 	local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
+	-- -- 	if next(soundtable2) == nil then return 5 end
+	-- -- 	local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
+	-- -- 	UVRelayToClients(soundfile2, parameters, true)
+	-- -- 	UVRelayToClients(soundfile, parameters, false)
+	
+	-- 	-- Helper function for call-based sounds
+	-- 	local function HandleCallSounds()
+	-- 		local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
+	
+	-- 		if next(basedirectories) == nil then return 5 end
+	
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	-- 		local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		local chirpFile = "chatter/!call/"..basedirectory.."/chirpgeneric/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME"))]
+	
+	-- 		UVRelayToClients(chirpFile, parameters, true)
+	-- 		UVRelayToClients(soundFile, parameters, false)
+	
+	-- 		return UVDelayChatter((soundDuration + math.random(1, 2)))
+	-- 	end
+	
+	
+	-- 	-- Parameter-based sound handling
+	-- 	if parameters == 1 then -- No voice restriction
+	-- 		return HandleCallSounds()
+	
+	-- 	elseif parameters == 2 then -- Bullhorn
+	-- 		local soundFile = PlayNestedSound("chatter/!bullhorn/"..chattertype, voice)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		self:EmitSound(soundFile, 5000, 100, 1, CHAN_STATIC)
+	-- 		return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
+	
+	-- 	elseif parameters == 3 then -- Static
+	-- 		local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		local staticFile = "chatter/!static/"..
+	-- 		file.Find("sound/chatter/!static/*", "GAME")[math.random(1, #file.Find("sound/chatter/!static/*", "GAME"))]
+	
+	-- 		UVRelayToClients(staticFile, parameters, true)
+	-- 		timer.Simple(SoundDuration(staticFile), function()
+	-- 			UVRelayToClients(soundFile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter(soundDuration + SoundDuration(staticFile) + math.random(1, 2))
+	
+	-- 	elseif parameters == 4 then -- Emergency
+	-- 		local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		local emergencyFile = "chatter/!emergency/copresponse.mp3"
+	-- 		local emergencyDuration = SoundDuration(emergencyFile)
+	
+	-- 		UVRelayToClients(emergencyFile, parameters, true)
+	-- 		timer.Simple(emergencyDuration, function()
+	-- 			UVRelayToClients(soundFile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundDuration + emergencyDuration + math.random(1, 2)))
+	
+	-- 	elseif parameters == 5 then -- Identify
+	-- 		local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		local identifyFile = "chatter/!identify/"..voice.."/"..
+	-- 		file.Find("sound/chatter/!identify/"..voice.."/*", "GAME")[math.random(1, #file.Find("sound/chatter/!identify/"..voice.."/*", "GAME"))]
+	
+	-- 		UVRelayToClients(identifyFile, parameters, true)
+	-- 		timer.Simple(SoundDuration(identifyFile), function()
+	-- 			UVRelayToClients(soundFile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter(soundDuration + SoundDuration(identifyFile) + math.random(1, 2))
+	
+	-- 	elseif parameters == 6 then -- Call
+	-- 		local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
+	-- 		if next(basedirectories) == nil then return 5 end
+	
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	-- 		local callPath = "chatter/!call/"..basedirectory.."/"..chattertype
+	
+	-- 		-- Handle nested folders for call type
+	-- 		if #nestedFolders > 0 then
+	-- 			callPath = callPath.."/"..table.concat(nestedFolders, "/")
+	-- 		end
+	
+	-- 		local _, callFiles = file.Find("sound/"..callPath.."/*", "GAME")
+	-- 		if next(callFiles) == nil then return 5 end
+	
+	-- 		local soundFile = callPath.."/"..callFiles[math.random(1, #callFiles)]
+	-- 		local soundDuration = SoundDuration(soundFile)
+	
+	-- 		-- Other required call sounds
+	-- 		local emergencyFile = "chatter/!emergency/copresponse.mp3"
+	-- 		local addressFile = "chatter/!call/"..basedirectory.."/addressgroup/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME"))]
+	-- 		local locationFile = "chatter/!call/"..basedirectory.."/d_location/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME"))]
+	-- 		local requestFile = "chatter/!call/"..basedirectory.."/unitrequest/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME"))]
+	
+	-- 		-- Play the sequence of sounds
+	-- 		UVRelayToClients(emergencyFile, parameters, true)
+	-- 		timer.Simple(SoundDuration(emergencyFile), function()
+	-- 			UVRelayToClients(addressFile, parameters, true)
+	-- 			timer.Simple(SoundDuration(addressFile), function()
+	-- 				UVRelayToClients(soundFile, parameters, true)
+	-- 				timer.Simple(soundDuration, function()
+	-- 					UVRelayToClients(locationFile, parameters, true)
+	-- 					timer.Simple(SoundDuration(locationFile), function()
+	-- 						UVRelayToClients(requestFile, parameters, true)
+	-- 					end)
+	-- 				end)
+	-- 			end)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundDuration + SoundDuration(emergencyFile) + SoundDuration(addressFile) + 
+	-- 		SoundDuration(locationFile) + SoundDuration(requestFile) + math.random(1, 2)))
+	
+	-- 	elseif parameters == 7 then -- Losing
+	-- 		if not uvenemyescaping then return 5 end
+	
+	-- 		local basedirectories = file.Find("sound/chatter/!call/*", "GAME")
+	-- 		if next(basedirectories) == nil then return 5 end
+	
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	-- 		local emergencyFile = "chatter/!emergency/copresponse.mp3"
+	-- 		local breakawayFile = "chatter/!call/"..basedirectory.."/dispbreakaway/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME"))]
+	-- 		local locationFile = "chatter/!call/"..basedirectory.."/d_location/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME"))]
+	-- 		local quadrantFile = "chatter/!call/"..basedirectory.."/quadrant/"..
+	-- 		file.Find("sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME")[math.random(1, #file.Find("sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME"))]
+	
+	-- 		UVRelayToClients(emergencyFile, parameters, true)
+	-- 		timer.Simple(SoundDuration(emergencyFile), function()
+	-- 			if not uvenemyescaping then return end
+	-- 			UVRelayToClients(breakawayFile, parameters, true)
+	-- 			timer.Simple(SoundDuration(breakawayFile), function()
+	-- 				if not uvenemyescaping then return end
+	-- 				UVRelayToClients(locationFile, parameters, true)
+	-- 				timer.Simple(SoundDuration(locationFile), function()
+	-- 					if not uvenemyescaping then return end
+	-- 					UVRelayToClients(quadrantFile, parameters, true)
+	-- 				end)
+	-- 			end)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((SoundDuration(emergencyFile) + SoundDuration(breakawayFile) + 
+	-- 		SoundDuration(locationFile) + SoundDuration(quadrantFile) + math.random(1, 2)))
+	
+	-- 	elseif parameters == 8 then -- Emergency (No voice restriction)
+	-- 		local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype)
+	-- 		if not soundFile then return 5 end
+	
+	-- 		local emergencyFile = "chatter/!emergency/copresponse.mp3"
+	-- 		UVRelayToClients(emergencyFile, parameters, true)
+	-- 		timer.Simple(SoundDuration(emergencyFile), function()
+	-- 			UVRelayToClients(soundFile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundDuration + SoundDuration(emergencyFile) + math.random(1, 2)))
+	-- 	end
+	
+	-- 	-- Default case (similar to parameter 1)
+	-- 	return HandleCallSounds()
+	-- end
+	
+	function UVSoundChatter(self, voice, chattertype, parameters, ...)
+		if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
+			return 5 
+		end
 		
-		--[[Voice Type
-		1 = Undercover Dispatch
-		2 = Undercover Helicopter (Air)
-		3-8 = Undercover Local (Patrol, Support)
-		9-10 = Undercover Federal (Special, Commander(one commander disabled))
-		11 = Payback/Heat Rhino
-		12 = Most Wanted Cross (Commander(one commander enabled))
-		13-18 = Most Wanted Local (Pursuit, Interceptor)
-		19 = Most Wanted Helicopter (Air)
-		*Others are non-engaging support units. If both are included in the same folder(chattertype), it'd be a 50/50 chance.
-		]]
-		
-		if !self or !voice or !chattertype or !(GetConVar("unitvehicle_chatter"):GetBool() and !GetConVar("unitvehicle_chattertext"):GetBool()) then return 5 end
+		print(voice, chattertype, parameters)
 		
 		local soundtable
 		voice = tostring(voice)
+		local nestedFolders = {...}
+		local basePath = "chatter/"..chattertype
+		local fullPath = basePath
+		for _, folder in ipairs(nestedFolders) do
+			fullPath = fullPath.."/"..folder
+		end
 		
-		if uvjammerdeployed then --Jammer deployed
-			local soundtable2 = file.Find( "sound/chatter/!static/*", "GAME" )
-			if next(soundtable2) == nil then return 5 end
-			local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
-			local soundduration2 = SoundDuration(soundfile2)
+		if uvjammerdeployed then
+			local staticFiles = file.Find("sound/chatter/!static/*", "GAME")
+			if next(staticFiles) == nil then return 5 end
 			
-			UVRelayToClients(soundfile2, parameters, true)
-			
+			local soundFile = "chatter/!static/"..staticFiles[math.random(1, #staticFiles)]
+			UVRelayToClients(soundFile, parameters, true)
 			return 5
 		end
 		
-		--[[Parameters
-		1 = No voice restriction
-		2 = Bullhorn
-		3 = Static
-		4 = Emergency
-		5 = Identify
-		6 = Call
-		7 = Losing
-		8 = Emergency (No voice restriction)
-		]]
+		-- local function PlayNestedSound(baseType, voiceParam, isGeneric)
+		-- 	local searchPath = baseType
+		-- 	if not isGeneric then
+		-- 		searchPath = searchPath..(voiceParam and ("/"..voiceParam) or "")
+		-- 		if #nestedFolders > 0 then
+		-- 			searchPath = searchPath.."/"..table.concat(nestedFolders, "/")
+		-- 		end
+		-- 	end
 		
-		if parameters == 1 then --No voice restriction
-
-			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
-
-			if next(basedirectories) == nil then return 5 end
-			local basedirectory = basedirectories[math.random(1, #basedirectories)]
+		-- 	local files = file.Find("sound/"..searchPath.."/*", "GAME")
+		-- 	if next(files) == nil then return nil end
+		
+		-- 	local soundFile = searchPath.."/"..files[math.random(1, #files)]
+		-- 	return soundFile, SoundDuration(soundFile)
+		-- end
+		
+		-- local function PlayNestedSound(baseType, voiceParam, isGeneric)
+		-- 	print(baseType, voiceParam)
+		-- 	local function getFilesFromPath(path)
+		-- 		local files = file.Find("sound/" .. path .. "/*", "GAME")
+		-- 		if next(files) ~= nil then
+		-- 			return path .. "/" .. files[math.random(1, #files)], SoundDuration(path .. "/" .. files[math.random(1, #files)])
+		-- 		end
+		-- 	end
+		
+		-- 	if isGeneric then
+		-- 		return getFilesFromPath(baseType)
+		-- 	end
+		
+		-- 	local searchPath = baseType .. "/" .. voiceParam
+		-- 	if #nestedFolders > 0 then
+		-- 		searchPath = searchPath .. "/" .. table.concat(nestedFolders, "/")
+		-- 	end
+		
+		-- 	local file, dur = getFilesFromPath(searchPath)
+		-- 	if file then return file, dur end
+		
+		-- 	searchPath = baseType
+		-- 	if #nestedFolders > 0 then
+		-- 		searchPath = searchPath .. "/" .. table.concat(nestedFolders, "/")
+		-- 	end
+		
+		-- 	return getFilesFromPath(searchPath)
+		-- end
+		
+		local function PlayNestedSound(baseType, voiceParam, isGeneric)
+			local function getFilesFromPath(path)
+				local files = file.Find("sound/" .. path .. "/*", "GAME")
+				if next(files) ~= nil then
+					local file = files[math.random(1, #files)]
+					return path .. "/" .. file, SoundDuration(path .. "/" .. file)
+				end
+			end
 			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
+			if isGeneric then
+				return getFilesFromPath(baseType)
+			end
 			
-			local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
-			if next(soundtable2) == nil then return 5 end
-			local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
-			
-			UVRelayToClients(soundfile2, parameters, true)
-			UVRelayToClients(soundfile, parameters, false)
-			
-			return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
-			
-		elseif parameters == 2 then --Bullhorn
-			
-			soundtable = file.Find( "sound/chatter/!bullhorn/"..chattertype.."/"..voice.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/!bullhorn/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-			
-			self:EmitSound(soundfile, 5000, 100, 1, CHAN_STATIC)
-			
-			return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
-			
-		elseif parameters == 3 then --Static
-			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-			local soundduration = SoundDuration(soundfile)
-			
-			local soundtable2 = file.Find( "sound/chatter/!static/*", "GAME" )
-			if next(soundtable2) == nil then return 5 end
-			local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
-			local soundduration2 = SoundDuration(soundfile2)
-			
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				UVRelayToClients(soundfile, parameters, true)
-			end)
-			
-			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
-			
-		elseif parameters == 4 then --Emergency
-			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-			local soundduration = SoundDuration(soundfile)
-			
-			local soundfile2 = "chatter/!emergency/copresponse.mp3"
-			local soundduration2 = SoundDuration(soundfile2)
-			
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				UVRelayToClients(soundfile, parameters, true)
-			end)
-			
-			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
-			
-		elseif parameters == 5 then --Identify
-			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-			local soundduration = SoundDuration(soundfile)
-			
-			local soundtable2 = file.Find( "sound/chatter/!identify/"..voice.."/*", "GAME" )
-			if next(soundtable2) == nil then return 5 end
-			local soundfile2 = "chatter/!identify/"..voice.."/"..soundtable2[math.random(1, #soundtable2)]
-			local soundduration2 = SoundDuration(soundfile2)
-			
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				UVRelayToClients(soundfile, parameters, true)
+			-- Try with voiceParam if valid
+			if voiceParam and voiceParam ~= "" then
+				local searchPath = baseType .. "/" .. voiceParam
+				if #nestedFolders > 0 then
+					searchPath = searchPath .. "/" .. table.concat(nestedFolders, "/")
+				end
 				
+				local file, dur = getFilesFromPath(searchPath)
+				if file then return file, dur end
+			end
+			
+			-- Try without voiceParam (fallback)
+			local fallbackPath = baseType
+			if #nestedFolders > 0 then
+				fallbackPath = fallbackPath .. "/" .. table.concat(nestedFolders, "/")
+			end
+			
+			return getFilesFromPath(fallbackPath)
+		end
+		
+		local function HandleCallSounds()
+			local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
+			if next(basedirectories) == nil then print("hi") return 5 end
+			
+			local basedirectory = basedirectories[math.random(1, #basedirectories)]
+			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+			if not soundFile then print("maybe") return 5 end
+			
+			local chirpFiles = file.Find("sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME")
+			if next(chirpFiles) == nil then print("bye") return 5 end
+			local chirpFile = "chatter/!call/"..basedirectory.."/chirpgeneric/"..chirpFiles[math.random(1, #chirpFiles)]
+			
+			UVRelayToClients(chirpFile, parameters, true)
+			UVRelayToClients(soundFile, parameters, false)
+			
+			return UVDelayChatter((soundDuration + math.random(1, 2)))
+		end
+		
+		if parameters == 1 then
+			return HandleCallSounds()
+			
+		elseif parameters == 2 then
+			local soundFile = PlayNestedSound("chatter/!bullhorn/"..chattertype, voice)
+			if not soundFile then return 5 end
+			
+			self:EmitSound(soundFile, 5000, 100, 1, CHAN_STATIC)
+			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
+			
+		elseif parameters == 3 then
+			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+			if not soundFile then return 5 end
+			
+			local staticFiles = file.Find("sound/chatter/!static/*", "GAME")
+			if next(staticFiles) == nil then return 5 end
+			local staticFile = "chatter/!static/"..staticFiles[math.random(1, #staticFiles)]
+			
+			UVRelayToClients(staticFile, parameters, true)
+			timer.Simple(SoundDuration(staticFile), function()
+				UVRelayToClients(soundFile, parameters, true)
 			end)
 			
-			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
+			return UVDelayChatter(soundDuration + SoundDuration(staticFile) + math.random(1, 2))
 			
-		elseif parameters == 6 then --Call
-
-			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
-
+		elseif parameters == 4 then
+			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+			if not soundFile then return 5 end
+			
+			local emergencyFile = "chatter/!emergency/copresponse.mp3"
+			local emergencyDuration = SoundDuration(emergencyFile)
+			
+			UVRelayToClients(emergencyFile, parameters, true)
+			timer.Simple(emergencyDuration, function()
+				UVRelayToClients(soundFile, parameters, true)
+			end)
+			
+			return UVDelayChatter((soundDuration + emergencyDuration + math.random(1, 2)))
+			
+		elseif parameters == 5 then
+			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
+			if not soundFile then return 5 end
+			
+			local identifyFiles = file.Find("sound/chatter/!identify/"..voice.."/*", "GAME")
+			if next(identifyFiles) == nil then return 5 end
+			local identifyFile = "chatter/!identify/"..voice.."/"..identifyFiles[math.random(1, #identifyFiles)]
+			
+			UVRelayToClients(identifyFile, parameters, true)
+			timer.Simple(SoundDuration(identifyFile), function()
+				UVRelayToClients(soundFile, parameters, true)
+			end)
+			
+			return UVDelayChatter(soundDuration + SoundDuration(identifyFile) + math.random(1, 2))
+			
+		elseif parameters == 6 then
+			local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
 			if next(basedirectories) == nil then return 5 end
+			
 			local basedirectory = basedirectories[math.random(1, #basedirectories)]
+			local callPath = "chatter/!call/"..basedirectory.."/"..chattertype
+			if #nestedFolders > 0 then
+				callPath = callPath.."/"..table.concat(nestedFolders, "/")
+			end
 			
-			soundtable = file.Find( "sound/chatter/!call/"..basedirectory.."/"..chattertype.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/!call/"..basedirectory.."/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
-			local soundduration = SoundDuration(soundfile)
+			local _, callFiles = file.Find("sound/"..callPath.."/*", "GAME")
+			if next(callFiles) == nil then return 5 end
+			local soundFile = callPath.."/"..callFiles[math.random(1, #callFiles)]
+			local soundDuration = SoundDuration(soundFile)
 			
-			local soundfile2 = "chatter/!emergency/copresponse.mp3"
-			local soundduration2 = SoundDuration(soundfile2)
+			local emergencyFile = "chatter/!emergency/copresponse.mp3"
+			local addressFiles = file.Find("sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME")
+			local addressFile = "chatter/!call/"..basedirectory.."/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
 			
-			local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME" )
-			if next(soundtable3) == nil then return 5 end
-			local soundfile3 = "chatter/!call/"..basedirectory.."/addressgroup/"..soundtable3[math.random(1, #soundtable3)]
-			local soundduration3 = SoundDuration(soundfile3)
+			local locationFiles = file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME")
+			local locationFile = "chatter/!call/"..basedirectory.."/d_location/"..locationFiles[math.random(1, #locationFiles)]
 			
-			local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
-			if next(soundtable4) == nil then return 5 end
-			local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
-			local soundduration4 = SoundDuration(soundfile4)
+			local requestFiles = file.Find("sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME")
+			local requestFile = "chatter/!call/"..basedirectory.."/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
 			
-			local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME" )
-			if next(soundtable5) == nil then return 5 end
-			local soundfile5 = "chatter/!call/"..basedirectory.."/unitrequest/"..soundtable5[math.random(1, #soundtable5)]
-			local soundduration5 = SoundDuration(soundfile5)
-
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				UVRelayToClients(soundfile3, parameters, true)
-				
-				timer.Simple(soundduration3, function()
-					UVRelayToClients(soundfile, parameters, true)
-					
-					timer.Simple(soundduration, function()
-						UVRelayToClients(soundfile4, parameters, true)
-						
-						timer.Simple(soundduration4, function()
-							UVRelayToClients(soundfile5, parameters, true)
-							
+			UVRelayToClients(emergencyFile, parameters, true)
+			timer.Simple(SoundDuration(emergencyFile), function()
+				UVRelayToClients(addressFile, parameters, true)
+				timer.Simple(SoundDuration(addressFile), function()
+					UVRelayToClients(soundFile, parameters, true)
+					timer.Simple(soundDuration, function()
+						UVRelayToClients(locationFile, parameters, true)
+						timer.Simple(SoundDuration(locationFile), function()
+							UVRelayToClients(requestFile, parameters, true)
 						end)
 					end)
 				end)
 			end)
 			
-			return UVDelayChatter((soundduration+soundduration2+soundduration3+soundduration4+soundduration5+math.random(1,2)))
+			return UVDelayChatter((soundDuration + SoundDuration(emergencyFile) + SoundDuration(addressFile) + SoundDuration(locationFile) + SoundDuration(requestFile) + math.random(1, 2)))
 			
-		elseif parameters == 7 then --Losing
-
-			local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
-
+		elseif parameters == 7 then
+			if not uvenemyescaping then return 5 end
+			
+			local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
 			if next(basedirectories) == nil then return 5 end
 			local basedirectory = basedirectories[math.random(1, #basedirectories)]
 			
-			local soundfile2 = "chatter/!emergency/copresponse.mp3"
-			local soundduration2 = SoundDuration(soundfile2)
+			local emergencyFile = "chatter/!emergency/copresponse.mp3"
+			local breakawayFiles = file.Find("sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME")
+			local breakawayFile = "chatter/!call/"..basedirectory.."/dispbreakaway/"..breakawayFiles[math.random(1, #breakawayFiles)]
 			
-			local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME" )
-			if next(soundtable3) == nil then return 5 end
-			local soundfile3 = "chatter/!call/"..basedirectory.."/dispbreakaway/"..soundtable3[math.random(1, #soundtable3)]
-			local soundduration3 = SoundDuration(soundfile3)
+			local locationFiles = file.Find("sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME")
+			local locationFile = "chatter/!call/"..basedirectory.."/d_location/"..locationFiles[math.random(1, #locationFiles)]
 			
-			local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
-			if next(soundtable4) == nil then return 5 end
-			local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
-			local soundduration4 = SoundDuration(soundfile4)
+			local quadrantFiles = file.Find("sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME")
+			local quadrantFile = "chatter/!call/"..basedirectory.."/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
 			
-			local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME" )
-			if next(soundtable5) == nil then return 5 end
-			local soundfile5 = "chatter/!call/"..basedirectory.."/quadrant/"..soundtable5[math.random(1, #soundtable5)]
-			local soundduration5 = SoundDuration(soundfile5)
-			
-			if !uvenemyescaping then return end
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				if !uvenemyescaping then return end
-				UVRelayToClients(soundfile3, parameters, true)
-				
-				timer.Simple(soundduration3, function()
-					if !uvenemyescaping then return end
-					UVRelayToClients(soundfile4, parameters, true)
-					
-					timer.Simple(soundduration4, function()
-						if !uvenemyescaping then return end
-						UVRelayToClients(soundfile5, parameters, true)
-						
+			UVRelayToClients(emergencyFile, parameters, true)
+			timer.Simple(SoundDuration(emergencyFile), function()
+				if not uvenemyescaping then return end
+				UVRelayToClients(breakawayFile, parameters, true)
+				timer.Simple(SoundDuration(breakawayFile), function()
+					if not uvenemyescaping then return end
+					UVRelayToClients(locationFile, parameters, true)
+					timer.Simple(SoundDuration(locationFile), function()
+						if not uvenemyescaping then return end
+						UVRelayToClients(quadrantFile, parameters, true)
 					end)
 				end)
 			end)
 			
-			return UVDelayChatter((soundduration2+soundduration3+soundduration4+soundduration5+math.random(1,2)))
+			return UVDelayChatter((SoundDuration(emergencyFile) + SoundDuration(breakawayFile) + SoundDuration(locationFile) + SoundDuration(quadrantFile) + math.random(1, 2)))
 			
-		elseif parameters == 8 then --Emergency (No voice restriction)
+		elseif parameters == 8 then
+			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype)
+			if not soundFile then return 5 end
 			
-			soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
-			if next(soundtable) == nil then return 5 end
-			local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
-			local soundduration = SoundDuration(soundfile)
-			
-			local soundfile2 = "chatter/!emergency/copresponse.mp3"
-			local soundduration2 = SoundDuration(soundfile2)
-			UVRelayToClients(soundfile2, parameters, true)
-			
-			timer.Simple(soundduration2, function()
-				UVRelayToClients(soundfile, parameters, true)
-				
+			local emergencyFile = "chatter/!emergency/copresponse.mp3"
+			UVRelayToClients(emergencyFile, parameters, true)
+			timer.Simple(SoundDuration(emergencyFile), function()
+				UVRelayToClients(soundFile, parameters, true)
 			end)
 			
-			return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
-			
+			return UVDelayChatter((soundDuration + SoundDuration(emergencyFile) + math.random(1, 2)))
 		end
-
-		local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
-
-		if next(basedirectories) == nil then return 5 end
-		local basedirectory = basedirectories[math.random(1, #basedirectories)]
 		
-		soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
-		if next(soundtable) == nil then return 5 end
-		local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
-		local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
-		if next(soundtable2) == nil then return 5 end
-		local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
-		UVRelayToClients(soundfile2, parameters, true)
-		UVRelayToClients(soundfile, parameters, false)
-		
-		
-		return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
-		
+		return HandleCallSounds()
 	end
+	
+	-- function UVSoundChatter(self, voice, chattertype, parameters, ...)
+	
+	-- 	--[[Voice Type
+	-- 	1 = Undercover Dispatch
+	-- 	2 = Undercover Helicopter (Air)
+	-- 	3-8 = Undercover Local (Patrol, Support)
+	-- 	9-10 = Undercover Federal (Special, Commander(one commander disabled))
+	-- 	11 = Payback/Heat Rhino
+	-- 	12 = Most Wanted Cross (Commander(one commander enabled))
+	-- 	13-18 = Most Wanted Local (Pursuit, Interceptor)
+	-- 	19 = Most Wanted Helicopter (Air)
+	-- 	*Others are non-engaging support units. If both are included in the same folder(chattertype), it'd be a 50/50 chance.
+	-- 	]]
+	
+	-- 	if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then return 5 end
+	
+	-- 	local soundtable
+	-- 	voice = tostring(voice)
+	
+	-- 	if uvjammerdeployed then --Jammer deployed
+	-- 		local soundtable2 = file.Find( "sound/chatter/!static/*", "GAME" )
+	-- 		if next(soundtable2) == nil then return 5 end
+	-- 		local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		return 5
+	-- 	end
+	
+	-- 	--[[Parameters
+	-- 	1 = No voice restriction
+	-- 	2 = Bullhorn
+	-- 	3 = Static
+	-- 	4 = Emergency
+	-- 	5 = Identify
+	-- 	6 = Call
+	-- 	7 = Losing
+	-- 	8 = Emergency (No voice restriction)
+	-- 	]]
+	
+	-- 	if parameters == 1 then --No voice restriction
+	
+	-- 		local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+	
+	-- 		if next(basedirectories) == nil then return 5 end
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	
+	-- 		soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
+	
+	-- 		local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
+	-- 		if next(soundtable2) == nil then return 5 end
+	-- 		local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	-- 		UVRelayToClients(soundfile, parameters, false)
+	
+	-- 		return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
+	
+	-- 	elseif parameters == 2 then --Bullhorn
+	
+	-- 		soundtable = file.Find( "sound/chatter/!bullhorn/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/!bullhorn/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	
+	-- 		self:EmitSound(soundfile, 5000, 100, 1, CHAN_STATIC)
+	
+	-- 		return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
+	
+	-- 	elseif parameters == 3 then --Static
+	
+	-- 		soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	-- 		local soundduration = SoundDuration(soundfile)
+	
+	-- 		local soundtable2 = file.Find( "sound/chatter/!static/*", "GAME" )
+	-- 		if next(soundtable2) == nil then return 5 end
+	-- 		local soundfile2 = "chatter/!static/"..soundtable2[math.random(1, #soundtable2)]
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			UVRelayToClients(soundfile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
+	
+	-- 	elseif parameters == 4 then --Emergency
+	
+	-- 		soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	-- 		local soundduration = SoundDuration(soundfile)
+	
+	-- 		local soundfile2 = "chatter/!emergency/copresponse.mp3"
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			UVRelayToClients(soundfile, parameters, true)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
+	
+	-- 	elseif parameters == 5 then --Identify
+	
+	-- 		soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	-- 		local soundduration = SoundDuration(soundfile)
+	
+	-- 		local soundtable2 = file.Find( "sound/chatter/!identify/"..voice.."/*", "GAME" )
+	-- 		if next(soundtable2) == nil then return 5 end
+	-- 		local soundfile2 = "chatter/!identify/"..voice.."/"..soundtable2[math.random(1, #soundtable2)]
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			UVRelayToClients(soundfile, parameters, true)
+	
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
+	
+	-- 	elseif parameters == 6 then --Call
+	
+	-- 		local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+	
+	-- 		if next(basedirectories) == nil then return 5 end
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	
+	-- 		soundtable = file.Find( "sound/chatter/!call/"..basedirectory.."/"..chattertype.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/!call/"..basedirectory.."/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
+	-- 		local soundduration = SoundDuration(soundfile)
+	
+	-- 		local soundfile2 = "chatter/!emergency/copresponse.mp3"
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/addressgroup/*", "GAME" )
+	-- 		if next(soundtable3) == nil then return 5 end
+	-- 		local soundfile3 = "chatter/!call/"..basedirectory.."/addressgroup/"..soundtable3[math.random(1, #soundtable3)]
+	-- 		local soundduration3 = SoundDuration(soundfile3)
+	
+	-- 		local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
+	-- 		if next(soundtable4) == nil then return 5 end
+	-- 		local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
+	-- 		local soundduration4 = SoundDuration(soundfile4)
+	
+	-- 		local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME" )
+	-- 		if next(soundtable5) == nil then return 5 end
+	-- 		local soundfile5 = "chatter/!call/"..basedirectory.."/unitrequest/"..soundtable5[math.random(1, #soundtable5)]
+	-- 		local soundduration5 = SoundDuration(soundfile5)
+	
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			UVRelayToClients(soundfile3, parameters, true)
+	
+	-- 			timer.Simple(soundduration3, function()
+	-- 				UVRelayToClients(soundfile, parameters, true)
+	
+	-- 				timer.Simple(soundduration, function()
+	-- 					UVRelayToClients(soundfile4, parameters, true)
+	
+	-- 					timer.Simple(soundduration4, function()
+	-- 						UVRelayToClients(soundfile5, parameters, true)
+	
+	-- 					end)
+	-- 				end)
+	-- 			end)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration+soundduration2+soundduration3+soundduration4+soundduration5+math.random(1,2)))
+	
+	-- 	elseif parameters == 7 then --Losing
+	
+	-- 		local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+	
+	-- 		if next(basedirectories) == nil then return 5 end
+	-- 		local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	
+	-- 		local soundfile2 = "chatter/!emergency/copresponse.mp3"
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	
+	-- 		local soundtable3 = file.Find( "sound/chatter/!call/"..basedirectory.."/dispbreakaway/*", "GAME" )
+	-- 		if next(soundtable3) == nil then return 5 end
+	-- 		local soundfile3 = "chatter/!call/"..basedirectory.."/dispbreakaway/"..soundtable3[math.random(1, #soundtable3)]
+	-- 		local soundduration3 = SoundDuration(soundfile3)
+	
+	-- 		local soundtable4 = file.Find( "sound/chatter/!call/"..basedirectory.."/d_location/*", "GAME" )
+	-- 		if next(soundtable4) == nil then return 5 end
+	-- 		local soundfile4 = "chatter/!call/"..basedirectory.."/d_location/"..soundtable4[math.random(1, #soundtable4)]
+	-- 		local soundduration4 = SoundDuration(soundfile4)
+	
+	-- 		local soundtable5 = file.Find( "sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME" )
+	-- 		if next(soundtable5) == nil then return 5 end
+	-- 		local soundfile5 = "chatter/!call/"..basedirectory.."/quadrant/"..soundtable5[math.random(1, #soundtable5)]
+	-- 		local soundduration5 = SoundDuration(soundfile5)
+	
+	-- 		if !uvenemyescaping then return end
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			if !uvenemyescaping then return end
+	-- 			UVRelayToClients(soundfile3, parameters, true)
+	
+	-- 			timer.Simple(soundduration3, function()
+	-- 				if !uvenemyescaping then return end
+	-- 				UVRelayToClients(soundfile4, parameters, true)
+	
+	-- 				timer.Simple(soundduration4, function()
+	-- 					if !uvenemyescaping then return end
+	-- 					UVRelayToClients(soundfile5, parameters, true)
+	
+	-- 				end)
+	-- 			end)
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration2+soundduration3+soundduration4+soundduration5+math.random(1,2)))
+	
+	-- 	elseif parameters == 8 then --Emergency (No voice restriction)
+	
+	-- 		soundtable = file.Find( "sound/chatter/"..chattertype.."/*", "GAME" )
+	-- 		if next(soundtable) == nil then return 5 end
+	-- 		local soundfile = "chatter/"..chattertype.."/"..soundtable[math.random(1, #soundtable)]
+	-- 		local soundduration = SoundDuration(soundfile)
+	
+	-- 		local soundfile2 = "chatter/!emergency/copresponse.mp3"
+	-- 		local soundduration2 = SoundDuration(soundfile2)
+	-- 		UVRelayToClients(soundfile2, parameters, true)
+	
+	-- 		timer.Simple(soundduration2, function()
+	-- 			UVRelayToClients(soundfile, parameters, true)
+	
+	-- 		end)
+	
+	-- 		return UVDelayChatter((soundduration+soundduration2+math.random(1,2)))
+	
+	-- 	end
+	
+	-- 	local basedfiles, basedirectories = file.Find( "sound/chatter/!call/*", "GAME" )
+	
+	-- 	if next(basedirectories) == nil then return 5 end
+	-- 	local basedirectory = basedirectories[math.random(1, #basedirectories)]
+	
+	-- 	soundtable = file.Find( "sound/chatter/"..chattertype.."/"..voice.."/*", "GAME" )
+	-- 	if next(soundtable) == nil then return 5 end
+	-- 	local soundfile = "chatter/"..chattertype.."/"..voice.."/"..soundtable[math.random(1, #soundtable)]
+	-- 	local soundtable2 = file.Find( "sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME" )
+	-- 	if next(soundtable2) == nil then return 5 end
+	-- 	local soundfile2 = "chatter/!call/"..basedirectory.."/chirpgeneric/"..soundtable2[math.random(1, #soundtable2)]
+	-- 	UVRelayToClients(soundfile2, parameters, true)
+	-- 	UVRelayToClients(soundfile, parameters, false)
+	
+	
+	-- 	return UVDelayChatter((SoundDuration(soundfile)+math.random(1,2)))
+	
+	-- end
 	
 	-- 	List of variables:
 	-- 	self.callsign = UNIT_CALLSIGN
@@ -443,7 +962,7 @@ if SERVER then
 	-- 	unit.callsign = UNIT_SECONDARYCALLSIGN
 	-- 	color = UNIT_SUSPECTCOLOR
 	-- 	model = UNIT_SUSPECTMAKE
-
+	
 	function _getFormatParam(param, unit, args)
 		local variable_list = {
 			['UNIT_CALLSIGN'] = {(unit and unit.callsign) or 'Unit', Color(53, 134, 255)},
@@ -463,7 +982,7 @@ if SERVER then
 	
 	function UVTextChatter(unit, args, ...) -- ... = directory to array with text/variables, since some entries are dictionaries
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then return end
-
+		
 		local format_arg_list = {}
 		
 		local sub_dir_count = select('#', ...)
@@ -476,13 +995,13 @@ if SERVER then
 				array_pointer = _target
 			else break end
 		end
-		if type(array_pointer) != 'table' then error('Improperly formatted JSON') return end
+		if type(array_pointer) ~= 'table' then error('Improperly formatted JSON') return end
 		
 		--
 		
 		local option = array_pointer[math.random(1, #array_pointer)]
 		local format_var_list = {}
-
+		
 		if !option then return end
 		
 		local txt = string.Split(option.text, "%s")
@@ -492,9 +1011,9 @@ if SERVER then
 			if i == 1 then
 				table.insert(array, Color(255,255,255))
 			end
-
+			
 			local entry = _getFormatParam(v, unit, args)
-
+			
 			local color = entry[2]
 			for _, v in pairs({txt[i], color, entry[1], Color(242,242,242)}) do
 				table.insert(array, v)
@@ -506,7 +1025,7 @@ if SERVER then
 				end
 			end
 		end
-
+		
 		if #option.variables <  1 then
 			for _, v in pairs({Color(189,189,189), option.text}) do
 				table.insert(array, v)
@@ -548,7 +1067,7 @@ if SERVER then
 		UVDelayChatter()
 		if !IsValid(self.e) then return end
 		local e = UVGetVehicleMakeAndModel(self.e)
-
+		
 		if self.v then
 			if self.v.UVPatrol then
 				UVTextChatter(self, {['suspectmodel'] = e}, 'Arrest', 'UVPatrol')
@@ -982,7 +1501,6 @@ if SERVER then
 			end
 		end)
 		UVTextChatter(self, {}, 'HeatSix')
-		
 	end
 	
 	function UVChatterPursuitStartRanAway(self)
@@ -1174,7 +1692,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVPursuit then
@@ -1195,7 +1713,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVPursuit then
@@ -1216,7 +1734,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVPursuit then
@@ -1237,7 +1755,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVInterceptor then
@@ -1258,7 +1776,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVPatrol then
@@ -1287,7 +1805,7 @@ if SERVER then
 		if IsValid(self.e) then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
-
+		
 		if !self.v then return end
 		
 		if self.v.UVPatrol then
@@ -1981,8 +2499,9 @@ if SERVER then
 	end
 	
 	function UVChatterAirSpikeStripHit(unit)
-		if UVChatterDelayed then return end
-		if !GetConVar("unitvehicle_chattertext"):GetBool() then
+		--if UVChatterDelayed then return end
+		print("aaa")
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(unit, unit.voice, "airspikestriphit")
 		end
 		UVDelayChatter()
@@ -2026,7 +2545,7 @@ if SERVER then
 	end
 	
 	function UVChatterSpikeStripHit(unit)
-		if UVChatterDelayed then return end
+		--if UVChatterDelayed then return end
 		if !GetConVar("unitvehicle_chattertext"):GetBool() then
 			local airrandomno = math.random(1,2)
 			local airunits = ents.FindByClass("uvair")
@@ -3234,7 +3753,7 @@ if SERVER then
 			UVTextChatter(self, args, 'PursuitStartWanted', 'UVCommander')
 		end
 	end
-
+	
 	function UVChatterStuntJump(self)
 		if UVChatterDelayed then return end
 		UVDelayChatter()
@@ -3242,7 +3761,7 @@ if SERVER then
 			return UVSoundChatter(self, self.voice, "stuntjump")
 		end
 	end
-
+	
 	function UVChatterStuntRoll(self)
 		if UVChatterDelayed then return end
 		UVDelayChatter()
@@ -3250,7 +3769,7 @@ if SERVER then
 			return UVSoundChatter(self, self.voice, "stuntroll")
 		end
 	end
-
+	
 	function UVChatterStuntSpin(self)
 		if UVChatterDelayed then return end
 		UVDelayChatter()

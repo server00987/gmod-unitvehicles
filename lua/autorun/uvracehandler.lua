@@ -266,8 +266,6 @@ if SERVER then
         --Unfreeze all participants
         for _, vehicle in pairs( UVRaceCurrentParticipants ) do
             vehicle:GetPhysicsObject():EnableMotion( true )
-            vehicle.racestart = CurTime()
-
             if vehicle.PursuitTech then
                 for _, v in pairs(vehicle.PursuitTech) do
                     v.LastUsed = CurTime()

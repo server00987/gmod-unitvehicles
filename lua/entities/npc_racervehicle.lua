@@ -644,6 +644,7 @@ if SERVER then
 	end
 	
 	function ENT:Think()
+		--if uvtargeting then return end
 		self:SetPos(self.v:GetPos() + Vector(0,0,50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 		

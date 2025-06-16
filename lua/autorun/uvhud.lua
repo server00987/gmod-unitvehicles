@@ -90,6 +90,15 @@ UVMaterials = {
     ["EVADE_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/EVADE_ICON_GLOW.png", "smooth mips"),
 }
 
+UV_UI_Events = {
+    ['Wrecks'] = 'onUnitWreck',
+	['Deploys'] = 'onUnitDeploy',
+	['Tags'] = 'onUnitTag',
+	['ResourcePoints'] = 'onResourceChange',
+	['UnitsChasing'] = 'onChasingUnitsChange',
+	['Heat'] = 'onHeatLevelUpdate',
+}
+
 function Carbon_FormatRaceTime(curTime)
     local minutes = math.floor(curTime / 60)
     local seconds = math.floor(curTime % 60)
@@ -122,6 +131,12 @@ local function uv_general( ... )
 		KeyBindButtons = {}
 	end
 
+    if vehicle == NULL then
+        UVHUDPursuitTech = nil
+    else
+        UVHUDPursuitTech = vehicle.PursuitTech or (IsValid(vehicle:GetParent()) and vehicle:GetParent().PursuitTech) or nil
+    end
+    
 	if UVHUDPursuitTech then
 		local PT_Replacement_Strings = {
 			['ESF'] = '#uv.ptech.esf.short',
@@ -954,25 +969,31 @@ local function carbon_pursuit_main( ... )
         -- surface.SetDrawColor(0, 0, 0, 200)
         -- surface.DrawRect(w * 0.7, h * 0.21, w * 0.275, h * 0.05)
         
-        if UVHeatLevel == 1 then
-            UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        elseif UVHeatLevel == 2 then
-            UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        elseif UVHeatLevel == 3 then
-            UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        elseif UVHeatLevel == 4 then
-            UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        elseif UVHeatLevel == 5 then
-            UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        elseif UVHeatLevel == 6 then
-            UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-            UVHeatBountyMax = math.huge
-        end
+        -- if UVHeatLevel == 1 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+        -- elseif UVHeatLevel == 2 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+        -- elseif UVHeatLevel == 3 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+        -- elseif UVHeatLevel == 4 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+        -- elseif UVHeatLevel == 5 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+        -- elseif UVHeatLevel == 6 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+        --     UVHeatBountyMax = math.huge
+        -- end
+
+        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+
+        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
 
         DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8, h * 0.28, .045, Colors.Carbon_Accent) -- Icon
         draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.81 + 2, h * 0.26 + 2, Color(0,0,0), TEXT_ALIGN_LEFT)
@@ -1953,25 +1974,31 @@ local function mw_pursuit_main( ... )
         surface.SetDrawColor(0, 0, 0, 200)
         surface.DrawRect(w * 0.7075, h * 0.2175, w * 0.035, h * 0.035)
         
-        if UVHeatLevel == 1 then
-            UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        elseif UVHeatLevel == 2 then
-            UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        elseif UVHeatLevel == 3 then
-            UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        elseif UVHeatLevel == 4 then
-            UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        elseif UVHeatLevel == 5 then
-            UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        elseif UVHeatLevel == 6 then
-            UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-            UVHeatBountyMax = math.huge
-        end
+        -- if UVHeatLevel == 1 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+        -- elseif UVHeatLevel == 2 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+        -- elseif UVHeatLevel == 3 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+        -- elseif UVHeatLevel == 4 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+        -- elseif UVHeatLevel == 5 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+        -- elseif UVHeatLevel == 6 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+        --     UVHeatBountyMax = math.huge
+        -- end
+
+        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+
+        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
         
         DrawIcon(UVMaterials["HEAT"], w * 0.7175, h * 0.2325, .0375, Color(255, 255, 255)) -- Icon
         draw.DrawText(UVHeatLevel, "UVFont5UI", w * 0.7375, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
@@ -3018,25 +3045,30 @@ local function undercover_pursuit_main( ... )
         DrawIcon(UVMaterials["HEAT"], w * 0.76, h * 0.295, .06, Colors.Undercover_Accent1) -- Icon
         draw.DrawText("x" .. UVHeatLevel, "UVUndercoverWhiteFont", w * 0.775, h * 0.275, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT)
 
-        if UVHeatLevel == 1 then
-            UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        elseif UVHeatLevel == 2 then
-            UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        elseif UVHeatLevel == 3 then
-            UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        elseif UVHeatLevel == 4 then
-            UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        elseif UVHeatLevel == 5 then
-            UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-            UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        elseif UVHeatLevel == 6 then
-            UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-            UVHeatBountyMax = math.huge
-        end
+        -- if UVHeatLevel == 1 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+        -- elseif UVHeatLevel == 2 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+        -- elseif UVHeatLevel == 3 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+        -- elseif UVHeatLevel == 4 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+        -- elseif UVHeatLevel == 5 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+        -- elseif UVHeatLevel == 6 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+        --     UVHeatBountyMax = math.huge
+        -- end
+        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+
+        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
 
         surface.SetDrawColor(Color(109, 109, 109, 200))
         surface.DrawRect(w * 0.805, h * 0.2815, w * 0.1375, h * 0.035)
@@ -3982,25 +4014,31 @@ local function original_pursuit_main( ... )
 			surface.DrawText( "#uv.hud.bounty" )
 			draw.DrawText( UVBounty, "UVFont5",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 
-			if UVHeatLevel == 1 then
-				UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-				UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-			elseif UVHeatLevel == 2 then
-				UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-				UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-			elseif UVHeatLevel == 3 then
-				UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-				UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-			elseif UVHeatLevel == 4 then
-				UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-				UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-			elseif UVHeatLevel == 5 then
-				UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-				UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-			elseif UVHeatLevel == 6 then
-				UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-				UVHeatBountyMax = math.huge
-			end
+			-- if UVHeatLevel == 1 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+			-- 	UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+			-- elseif UVHeatLevel == 2 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+			-- 	UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+			-- elseif UVHeatLevel == 3 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+			-- 	UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+			-- elseif UVHeatLevel == 4 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+			-- 	UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+			-- elseif UVHeatLevel == 5 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+			-- 	UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+			-- elseif UVHeatLevel == 6 then
+			-- 	UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+			-- 	UVHeatBountyMax = math.huge
+			-- end
+
+            local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+            local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+
+            UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+            UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
 
 			draw.DrawText( UVHeatLevel.." ", "UVFont5", w/1.099, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
 

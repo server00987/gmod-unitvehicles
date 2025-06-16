@@ -28,47 +28,47 @@ local RacerTags = GetConVar("unitvehicle_racertags")
 --unit convars
 local UVUHelicopterBusting = GetConVar("unitvehicle_unit_helicopterbusting")
 
-local UVUMaxUnits1 = GetConVar("unitvehicle_unit_maxunits1")
-local UVUUnitsAvailable1 = GetConVar("unitvehicle_unit_unitsavailable1")
-local UVUBackupTimer1 = GetConVar("unitvehicle_unit_backuptimer1")
-local UVUCooldownTimer1 = GetConVar("unitvehicle_unit_cooldowntimer1")
-local UVURoadblocks1 = GetConVar("unitvehicle_unit_roadblocks1")
-local UVUHelicopters1 = GetConVar("unitvehicle_unit_helicopters1")
+-- local UVUMaxUnits1 = GetConVar("unitvehicle_unit_maxunits1")
+-- local UVUUnitsAvailable1 = GetConVar("unitvehicle_unit_unitsavailable1")
+-- local UVUBackupTimer1 = GetConVar("unitvehicle_unit_backuptimer1")
+-- local UVUCooldownTimer1 = GetConVar("unitvehicle_unit_cooldowntimer1")
+-- local UVURoadblocks1 = GetConVar("unitvehicle_unit_roadblocks1")
+-- local UVUHelicopters1 = GetConVar("unitvehicle_unit_helicopters1")
 
-local UVUMaxUnits2 = GetConVar("unitvehicle_unit_maxunits2")
-local UVUUnitsAvailable2 = GetConVar("unitvehicle_unit_unitsavailable2")
-local UVUBackupTimer2 = GetConVar("unitvehicle_unit_backuptimer2")
-local UVUCooldownTimer2 = GetConVar("unitvehicle_unit_cooldowntimer2")
-local UVURoadblocks2 = GetConVar("unitvehicle_unit_roadblocks2")
-local UVUHelicopters2 = GetConVar("unitvehicle_unit_helicopters2")
+-- local UVUMaxUnits2 = GetConVar("unitvehicle_unit_maxunits2")
+-- local UVUUnitsAvailable2 = GetConVar("unitvehicle_unit_unitsavailable2")
+-- local UVUBackupTimer2 = GetConVar("unitvehicle_unit_backuptimer2")
+-- local UVUCooldownTimer2 = GetConVar("unitvehicle_unit_cooldowntimer2")
+-- local UVURoadblocks2 = GetConVar("unitvehicle_unit_roadblocks2")
+-- local UVUHelicopters2 = GetConVar("unitvehicle_unit_helicopters2")
 
-local UVUMaxUnits3 = GetConVar("unitvehicle_unit_maxunits3")
-local UVUUnitsAvailable3 = GetConVar("unitvehicle_unit_unitsavailable3")
-local UVUBackupTimer3 = GetConVar("unitvehicle_unit_backuptimer3")
-local UVUCooldownTimer3 = GetConVar("unitvehicle_unit_cooldowntimer3")
-local UVURoadblocks3 = GetConVar("unitvehicle_unit_roadblocks3")
-local UVUHelicopters3 = GetConVar("unitvehicle_unit_helicopters3")
+-- local UVUMaxUnits3 = GetConVar("unitvehicle_unit_maxunits3")
+-- local UVUUnitsAvailable3 = GetConVar("unitvehicle_unit_unitsavailable3")
+-- local UVUBackupTimer3 = GetConVar("unitvehicle_unit_backuptimer3")
+-- local UVUCooldownTimer3 = GetConVar("unitvehicle_unit_cooldowntimer3")
+-- local UVURoadblocks3 = GetConVar("unitvehicle_unit_roadblocks3")
+-- local UVUHelicopters3 = GetConVar("unitvehicle_unit_helicopters3")
 
-local UVUMaxUnits4 = GetConVar("unitvehicle_unit_maxunits4")
-local UVUUnitsAvailable4 = GetConVar("unitvehicle_unit_unitsavailable4")
-local UVUBackupTimer4 = GetConVar("unitvehicle_unit_backuptimer4")
-local UVUCooldownTimer4 = GetConVar("unitvehicle_unit_cooldowntimer4")
-local UVURoadblocks4 = GetConVar("unitvehicle_unit_roadblocks4")
-local UVUHelicopters4 = GetConVar("unitvehicle_unit_helicopters4")
+-- local UVUMaxUnits4 = GetConVar("unitvehicle_unit_maxunits4")
+-- local UVUUnitsAvailable4 = GetConVar("unitvehicle_unit_unitsavailable4")
+-- local UVUBackupTimer4 = GetConVar("unitvehicle_unit_backuptimer4")
+-- local UVUCooldownTimer4 = GetConVar("unitvehicle_unit_cooldowntimer4")
+-- local UVURoadblocks4 = GetConVar("unitvehicle_unit_roadblocks4")
+-- local UVUHelicopters4 = GetConVar("unitvehicle_unit_helicopters4")
 
-local UVUMaxUnits5 = GetConVar("unitvehicle_unit_maxunits5")
-local UVUUnitsAvailable5 = GetConVar("unitvehicle_unit_unitsavailable5")
-local UVUBackupTimer5 = GetConVar("unitvehicle_unit_backuptimer5")
-local UVUCooldownTimer5 = GetConVar("unitvehicle_unit_cooldowntimer5")
-local UVURoadblocks5 = GetConVar("unitvehicle_unit_roadblocks5")
-local UVUHelicopters5 = GetConVar("unitvehicle_unit_helicopters5")
+-- local UVUMaxUnits5 = GetConVar("unitvehicle_unit_maxunits5")
+-- local UVUUnitsAvailable5 = GetConVar("unitvehicle_unit_unitsavailable5")
+-- local UVUBackupTimer5 = GetConVar("unitvehicle_unit_backuptimer5")
+-- local UVUCooldownTimer5 = GetConVar("unitvehicle_unit_cooldowntimer5")
+-- local UVURoadblocks5 = GetConVar("unitvehicle_unit_roadblocks5")
+-- local UVUHelicopters5 = GetConVar("unitvehicle_unit_helicopters5")
 
-local UVUMaxUnits6 = GetConVar("unitvehicle_unit_maxunits6")
-local UVUUnitsAvailable6 = GetConVar("unitvehicle_unit_unitsavailable6")
-local UVUBackupTimer6 = GetConVar("unitvehicle_unit_backuptimer6")
-local UVUCooldownTimer6 = GetConVar("unitvehicle_unit_cooldowntimer6")
-local UVURoadblocks6 = GetConVar("unitvehicle_unit_roadblocks6")
-local UVUHelicopters6 = GetConVar("unitvehicle_unit_helicopters6")
+-- local UVUMaxUnits6 = GetConVar("unitvehicle_unit_maxunits6")
+-- local UVUUnitsAvailable6 = GetConVar("unitvehicle_unit_unitsavailable6")
+-- local UVUBackupTimer6 = GetConVar("unitvehicle_unit_backuptimer6")
+-- local UVUCooldownTimer6 = GetConVar("unitvehicle_unit_cooldowntimer6")
+-- local UVURoadblocks6 = GetConVar("unitvehicle_unit_roadblocks6")
+-- local UVUHelicopters6 = GetConVar("unitvehicle_unit_helicopters6")
 
 local dvd = DecentVehicleDestination
 
@@ -214,273 +214,381 @@ concommand.Add("uv_clearbounty", function(ply)
 end)
 
 function UVApplyHeatLevel()
-	if MinHeatLevel:GetInt() <= 1 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 1!")
-		uvheatlevel = 1
-	elseif !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 2!")
-		uvheatlevel = 2
-	elseif !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 3!")
-		uvheatlevel = 3
-	elseif !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 4!")
-		uvheatlevel = 4
-	elseif !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 5!")
-		uvheatlevel = 5
-	elseif !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
-		-- PrintMessage( HUD_PRINTTALK, "You are currently at Heat Level 6!")
-		uvheatlevel = 6
+	local minHeat = MinHeatLevel:GetInt()
+	local maxHeat = MaxHeatLevel:GetInt()
+	
+	if minHeat > maxHeat then
+		uvheatlevel = MaxHeatLevel:GetInt()
 	end
 end
 
 function UVUpdateHeatLevel()
-	
-	local bounty = uvbounty
-	
-	if UVUTimeTillNextHeatEnabled:GetInt() != 1 then
-		if bounty < UVUHeatMinimumBounty2:GetInt() and !(MaxHeatLevel:GetInt() < 1) and MinHeatLevel:GetInt() <= 1 then
-		elseif bounty < UVUHeatMinimumBounty3:GetInt() and !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then
-			if uvheatlevel < 2 then 
-				uvheatlevel = 2
-				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 2!")
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					if !uvtargeting then return end
-					UVChatterHeatTwo(unit)
-				end
-				if uvtargeting then
-					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-				end
-				net.Start("UVHUDHeatLevelIncrease")
-				net.Broadcast()
-			end
-		elseif bounty < UVUHeatMinimumBounty4:GetInt() and !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
-			if uvheatlevel < 3 then 
-				uvheatlevel = 3
-				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 3!")
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					if !uvtargeting then return end
-					UVChatterHeatThree(unit)
-				end
-				if uvtargeting then
-					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-				end
-				net.Start("UVHUDHeatLevelIncrease")
-				net.Broadcast()
-			end
-		elseif bounty < UVUHeatMinimumBounty5:GetInt() and !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
-			if uvheatlevel < 4 then 
-				uvheatlevel = 4
-				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 4!")
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					if !uvtargeting then return end
-					UVChatterHeatFour(unit)
-				end
-				if uvtargeting then
-					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-				end
-				net.Start("UVHUDHeatLevelIncrease")
-				net.Broadcast()
-			end
-		elseif bounty < UVUHeatMinimumBounty6:GetInt() and !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
-			if uvheatlevel < 5 then 
-				uvheatlevel = 5
-				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 5!")
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					if !uvtargeting then return end
-					UVChatterHeatFive(unit)
-				end
-				if uvtargeting then
-					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-				end
-				net.Start("UVHUDHeatLevelIncrease")
-				net.Broadcast()
-			end
-		elseif !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
-			if uvheatlevel < 6 then 
-				uvheatlevel = 6
-				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 6!")
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					if !uvtargeting then return end
-					UVChatterHeatSix(unit)
-				end
-				if uvtargeting then
-					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-				end
-				net.Start("UVHUDHeatLevelIncrease")
-				net.Broadcast()
-			end
-		end
-	end
-	
 	local ply = Entity(1)
-	if !ply then 
-		return 
+	if !ply then return end
+	
+	uvheatlevel = CalculateHeatLevel(uvbounty, uvheatlevel)
+	ApplyHeatSettings(uvheatlevel)
+	HandleVehicleSpawning(ply)
+end
+
+function CalculateHeatLevel(bounty, currentHeat)
+	if UVUTimeTillNextHeatEnabled:GetInt() == 1 then
+		return currentHeat or 1
 	end
 	
-	if uvheatlevel == 1 then --Heat Level 1
-		uvmaxunits = UVUMaxUnits1:GetInt()
-		uvbountymultiplier = 1
-		uvbountytime = UVUBountyTime1:GetInt()
-		uvroadblockcount = 2
-		uvbustspeed = 30976
-		uvcooldowntimer = UVUCooldownTimer1:GetInt()
-		uvbackuptimermax = UVUBackupTimer1:GetInt()
-		if UVURoadblocks1:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters1:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
-		end
-	elseif uvheatlevel == 2 then --Heat Level 2
-		uvmaxunits = UVUMaxUnits2:GetInt()
-		uvbountymultiplier = 2
-		uvbountytime = UVUBountyTime2:GetInt()
-		uvroadblockcount = 4
-		uvbustspeed = 30976
-		uvcooldowntimer = UVUCooldownTimer2:GetInt()
-		uvbackuptimermax = UVUBackupTimer2:GetInt()
-		if UVURoadblocks2:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters2:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
-		end
-	elseif uvheatlevel == 3 then --Heat Level 3
-		uvmaxunits = UVUMaxUnits3:GetInt()
-		uvbountymultiplier = 3
-		uvbountytime = UVUBountyTime3:GetInt()
-		uvroadblockcount = 6
-		uvbustspeed = 69696
-		uvcooldowntimer = UVUCooldownTimer3:GetInt()
-		uvbackuptimermax = UVUBackupTimer3:GetInt()
-		if UVURoadblocks3:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters3:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
-		end
-	elseif uvheatlevel == 4 then --Heat Level 4
-		uvmaxunits = UVUMaxUnits4:GetInt()
-		uvbountymultiplier = 4
-		uvbountytime = UVUBountyTime4:GetInt()
-		uvroadblockcount = 8
-		uvbustspeed = 69696
-		uvcooldowntimer = UVUCooldownTimer4:GetInt()
-		uvbackuptimermax = UVUBackupTimer4:GetInt()
-		if UVURoadblocks4:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters4:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
-		end
-	elseif uvheatlevel == 5 then --Heat Level 5
-		uvmaxunits = UVUMaxUnits5:GetInt()
-		uvbountymultiplier = 5
-		uvbountytime = UVUBountyTime5:GetInt()
-		uvroadblockcount = 10
-		uvbustspeed = 123904
-		uvcooldowntimer = UVUCooldownTimer5:GetInt()
-		uvbackuptimermax = UVUBackupTimer5:GetInt()
-		if UVURoadblocks5:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters5:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
-		end
-	else --Heat Level 6
-		uvmaxunits = UVUMaxUnits6:GetInt()
-		uvbountymultiplier = 6
-		uvbountytime = UVUBountyTime6:GetInt()
-		uvroadblockcount = 12
-		uvbustspeed = 123904
-		uvcooldowntimer = UVUCooldownTimer6:GetInt()
-		uvbackuptimermax = UVUBackupTimer6:GetInt()
-		if UVURoadblocks6:GetInt() == 1 then
-			uvroadblockdeployable = true
-		else
-			uvroadblockdeployable = nil
-		end
-		if UVUHelicopters6:GetInt() == 1 then
-			uvhelicopterdeployable = true
-		else
-			uvhelicopterdeployable = nil
+	local maxHeat = MaxHeatLevel:GetInt()
+	local minHeat = MinHeatLevel:GetInt()
+	local newHeat = currentHeat or 1
+	
+	for level = (currentHeat or 0) + 1, maxHeat do
+		if level < minHeat then continue end
+
+		local convar = GetConVar("unitvehicle_unit_heatminimumbounty" .. level)
+		if not convar then continue end
+
+		local minBounty = convar:GetInt()
+		if bounty >= minBounty then
+			newHeat = level
+			TriggerHeatLevelEffects(level)
+		else break 
 		end
 	end
+
+	if newHeat < minHeat then
+		newHeat = minHeat
+		TriggerHeatLevelEffects(newHeat)
+	end
+
+	return newHeat
+end
+
+
+function TriggerHeatLevelEffects(level)
+	if level < 2 then return end
 	
+	-- if level == 6 then
+	--     PrintMessage(HUD_PRINTCENTER, "HEAT LEVEL 6!")
+	-- end
+	
+	if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and uvtargeting then
+		local units = ents.FindByClass("npc_uv*")
+		local unit = units[math.random(#units)]
+		
+		-- local chatterFunc = _G["UVChatterHeat"..(level == 6 and "Six" or NumberToWords(level))]
+		-- if chatterFunc then
+		--     chatterFunc(unit)
+		-- end
+	end
+	
+	if uvtargeting then
+		UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+	end
+	
+	net.Start("UVHUDHeatLevelIncrease")
+	net.Broadcast()
+end
+
+function NumberToWords(num)
+	local words = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"}
+	return words[num] or tostring(num)
+end
+
+function ApplyHeatSettings(heatLevel)
+	heatLevel = math.Clamp(heatLevel or 1, 1, MaxHeatLevel:GetInt())
+	
+	uvmaxunits = GetConVar("unitvehicle_unit_maxunits"..heatLevel):GetInt()
+	uvbountymultiplier = heatLevel
+	uvbountytime = GetConVar("unitvehicle_unit_bountytime"..heatLevel):GetInt()
+	uvcooldowntimer = GetConVar("unitvehicle_unit_cooldowntimer"..heatLevel):GetInt()
+	uvbackuptimermax = GetConVar("unitvehicle_unit_backuptimer"..heatLevel):GetInt()
+	
+	uvbustspeed = heatLevel >= 5 and 123904 or (heatLevel >= 3 and 69696 or 30976)
+	
+	uvroadblockdeployable = GetConVar("unitvehicle_unit_roadblocks"..heatLevel):GetInt() == 1
+	uvhelicopterdeployable = GetConVar("unitvehicle_unit_helicopters"..heatLevel):GetInt() == 1
+end
+
+-- Helper function for vehicle spawning logic
+function HandleVehicleSpawning(ply)
 	local function CheckVehicleLimit()
 		return (#ents.FindByClass("npc_uv*") + #uvwreckedvehicles) < uvmaxunits or #ents.FindByClass("npc_uv*") < 1
 	end
 	
-	if uvtargeting and !uvjammerdeployed then
-		if CheckVehicleLimit() then
-			if uvracerpresencemode then
-				local racerchance = math.random(1,2)
-				if racerchance == 1 and #ents.FindByClass("npc_racervehicle") < uvheatlevel then
-					UVAutoSpawnRacer(ply)
-					return
-				end
-			end
-			local specialchance = math.random(1,10)
-			if uvcommanderrespawning then
-				UVAutoSpawn(nil, nil, nil, nil, uvcommanderrespawning) --COMMANDER RESPAWN
-			elseif specialchance == 1 and !uvenemyescaping then
-				UVAutoSpawn(ply, true) --RHINO
-			elseif specialchance >= 2 and specialchance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvroadblockdeployable then
-				local units = ents.FindByClass("npc_uv*")
-				local random_entry = math.random(#units)	
-				local unit = units[random_entry]
-				UVDeployRoadblock(unit) --ROADBLOCK
-			elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable and CurTime() - uvhelicooldown > 120 then
-				UVAutoSpawn(ply, nil, true) --HELICOPTER
-			elseif SpawnMainUnits:GetBool() and uvresourcepoints > (#ents.FindByClass("npc_uv*")) then
-				UVAutoSpawn(ply) --NORMAL
-			end
+	if !uvtargeting or uvjammerdeployed then return end
+	if !CheckVehicleLimit() then return end
+	
+	-- Handle racer spawning
+	if uvracerpresencemode then
+		local racerchance = math.random(1,2)
+		if racerchance == 1 and #ents.FindByClass("npc_racervehicle") < uvheatlevel then
+			UVAutoSpawnRacer(ply)
+			return
 		end
 	end
 	
+	-- Handle other special spawns
+	local specialchance = math.random(1,10)
+	if uvcommanderrespawning then
+		UVAutoSpawn(nil, nil, nil, nil, uvcommanderrespawning) --COMMANDER RESPAWN
+	elseif specialchance == 1 and !uvenemyescaping then
+		UVAutoSpawn(ply, true) --RHINO
+	elseif specialchance >= 2 and specialchance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvroadblockdeployable then
+		local units = ents.FindByClass("npc_uv*")
+		local unit = units[math.random(#units)]
+		UVDeployRoadblock(unit) --ROADBLOCK
+	elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable and CurTime() - uvhelicooldown > 120 then
+		UVAutoSpawn(ply, nil, true) --HELICOPTER
+	elseif SpawnMainUnits:GetBool() and uvresourcepoints > (#ents.FindByClass("npc_uv*")) then
+		UVAutoSpawn(ply) --NORMAL
+	end
 end
+
+-- function UVUpdateHeatLevel()
+
+-- 	local bounty = uvbounty
+
+-- 	if UVUTimeTillNextHeatEnabled:GetInt() != 1 then
+-- 		if bounty < UVUHeatMinimumBounty2:GetInt() and !(MaxHeatLevel:GetInt() < 1) and MinHeatLevel:GetInt() <= 1 then
+-- 		elseif bounty < UVUHeatMinimumBounty3:GetInt() and !(MaxHeatLevel:GetInt() < 2) and MinHeatLevel:GetInt() <= 2 then
+-- 			if uvheatlevel < 2 then 
+-- 				uvheatlevel = 2
+-- 				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 2!")
+-- 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+-- 					local units = ents.FindByClass("npc_uv*")
+-- 					local random_entry = math.random(#units)	
+-- 					local unit = units[random_entry]
+-- 					if !uvtargeting then return end
+-- 					UVChatterHeatTwo(unit)
+-- 				end
+-- 				if uvtargeting then
+-- 					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+-- 					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+-- 				end
+-- 				net.Start("UVHUDHeatLevelIncrease")
+-- 				net.Broadcast()
+-- 			end
+-- 		elseif bounty < UVUHeatMinimumBounty4:GetInt() and !(MaxHeatLevel:GetInt() < 3) and MinHeatLevel:GetInt() <= 3 then
+-- 			if uvheatlevel < 3 then 
+-- 				uvheatlevel = 3
+-- 				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 3!")
+-- 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+-- 					local units = ents.FindByClass("npc_uv*")
+-- 					local random_entry = math.random(#units)	
+-- 					local unit = units[random_entry]
+-- 					if !uvtargeting then return end
+-- 					UVChatterHeatThree(unit)
+-- 				end
+-- 				if uvtargeting then
+-- 					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+-- 					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+-- 				end
+-- 				net.Start("UVHUDHeatLevelIncrease")
+-- 				net.Broadcast()
+-- 			end
+-- 		elseif bounty < UVUHeatMinimumBounty5:GetInt() and !(MaxHeatLevel:GetInt() < 4) and MinHeatLevel:GetInt() <= 4 then
+-- 			if uvheatlevel < 4 then 
+-- 				uvheatlevel = 4
+-- 				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 4!")
+-- 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+-- 					local units = ents.FindByClass("npc_uv*")
+-- 					local random_entry = math.random(#units)	
+-- 					local unit = units[random_entry]
+-- 					if !uvtargeting then return end
+-- 					UVChatterHeatFour(unit)
+-- 				end
+-- 				if uvtargeting then
+-- 					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+-- 					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+-- 				end
+-- 				net.Start("UVHUDHeatLevelIncrease")
+-- 				net.Broadcast()
+-- 			end
+-- 		elseif bounty < UVUHeatMinimumBounty6:GetInt() and !(MaxHeatLevel:GetInt() < 5) and MinHeatLevel:GetInt() <= 5 then
+-- 			if uvheatlevel < 5 then 
+-- 				uvheatlevel = 5
+-- 				-- PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 5!")
+-- 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+-- 					local units = ents.FindByClass("npc_uv*")
+-- 					local random_entry = math.random(#units)	
+-- 					local unit = units[random_entry]
+-- 					if !uvtargeting then return end
+-- 					UVChatterHeatFive(unit)
+-- 				end
+-- 				if uvtargeting then
+-- 					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+-- 					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+-- 				end
+-- 				net.Start("UVHUDHeatLevelIncrease")
+-- 				net.Broadcast()
+-- 			end
+-- 		elseif !(MaxHeatLevel:GetInt() < 6) and MinHeatLevel:GetInt() <= 6 then
+-- 			if uvheatlevel < 6 then 
+-- 				uvheatlevel = 6
+-- 				PrintMessage( HUD_PRINTCENTER, "HEAT LEVEL 6!")
+-- 				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+-- 					local units = ents.FindByClass("npc_uv*")
+-- 					local random_entry = math.random(#units)	
+-- 					local unit = units[random_entry]
+-- 					if !uvtargeting then return end
+-- 					UVChatterHeatSix(unit)
+-- 				end
+-- 				if uvtargeting then
+-- 					UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+-- 					--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+-- 				end
+-- 				net.Start("UVHUDHeatLevelIncrease")
+-- 				net.Broadcast()
+-- 			end
+-- 		end
+-- 	end
+
+-- 	local ply = Entity(1)
+-- 	if !ply then 
+-- 		return 
+-- 	end
+
+-- 	if uvheatlevel == 1 then --Heat Level 1
+-- 		uvmaxunits = UVUMaxUnits1:GetInt()
+-- 		uvbountymultiplier = 1
+-- 		uvbountytime = UVUBountyTime1:GetInt()
+-- 		uvroadblockcount = 2
+-- 		uvbustspeed = 30976
+-- 		uvcooldowntimer = UVUCooldownTimer1:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer1:GetInt()
+-- 		if UVURoadblocks1:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters1:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	elseif uvheatlevel == 2 then --Heat Level 2
+-- 		uvmaxunits = UVUMaxUnits2:GetInt()
+-- 		uvbountymultiplier = 2
+-- 		uvbountytime = UVUBountyTime2:GetInt()
+-- 		uvroadblockcount = 4
+-- 		uvbustspeed = 30976
+-- 		uvcooldowntimer = UVUCooldownTimer2:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer2:GetInt()
+-- 		if UVURoadblocks2:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters2:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	elseif uvheatlevel == 3 then --Heat Level 3
+-- 		uvmaxunits = UVUMaxUnits3:GetInt()
+-- 		uvbountymultiplier = 3
+-- 		uvbountytime = UVUBountyTime3:GetInt()
+-- 		uvroadblockcount = 6
+-- 		uvbustspeed = 69696
+-- 		uvcooldowntimer = UVUCooldownTimer3:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer3:GetInt()
+-- 		if UVURoadblocks3:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters3:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	elseif uvheatlevel == 4 then --Heat Level 4
+-- 		uvmaxunits = UVUMaxUnits4:GetInt()
+-- 		uvbountymultiplier = 4
+-- 		uvbountytime = UVUBountyTime4:GetInt()
+-- 		uvroadblockcount = 8
+-- 		uvbustspeed = 69696
+-- 		uvcooldowntimer = UVUCooldownTimer4:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer4:GetInt()
+-- 		if UVURoadblocks4:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters4:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	elseif uvheatlevel == 5 then --Heat Level 5
+-- 		uvmaxunits = UVUMaxUnits5:GetInt()
+-- 		uvbountymultiplier = 5
+-- 		uvbountytime = UVUBountyTime5:GetInt()
+-- 		uvroadblockcount = 10
+-- 		uvbustspeed = 123904
+-- 		uvcooldowntimer = UVUCooldownTimer5:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer5:GetInt()
+-- 		if UVURoadblocks5:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters5:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	else --Heat Level 6
+-- 		uvmaxunits = UVUMaxUnits6:GetInt()
+-- 		uvbountymultiplier = 6
+-- 		uvbountytime = UVUBountyTime6:GetInt()
+-- 		uvroadblockcount = 12
+-- 		uvbustspeed = 123904
+-- 		uvcooldowntimer = UVUCooldownTimer6:GetInt()
+-- 		uvbackuptimermax = UVUBackupTimer6:GetInt()
+-- 		if UVURoadblocks6:GetInt() == 1 then
+-- 			uvroadblockdeployable = true
+-- 		else
+-- 			uvroadblockdeployable = nil
+-- 		end
+-- 		if UVUHelicopters6:GetInt() == 1 then
+-- 			uvhelicopterdeployable = true
+-- 		else
+-- 			uvhelicopterdeployable = nil
+-- 		end
+-- 	end
+
+-- 	local function CheckVehicleLimit()
+-- 		return (#ents.FindByClass("npc_uv*") + #uvwreckedvehicles) < uvmaxunits or #ents.FindByClass("npc_uv*") < 1
+-- 	end
+
+-- 	if uvtargeting and !uvjammerdeployed then
+-- 		if CheckVehicleLimit() then
+-- 			if uvracerpresencemode then
+-- 				local racerchance = math.random(1,2)
+-- 				if racerchance == 1 and #ents.FindByClass("npc_racervehicle") < uvheatlevel then
+-- 					UVAutoSpawnRacer(ply)
+-- 					return
+-- 				end
+-- 			end
+-- 			local specialchance = math.random(1,10)
+-- 			if uvcommanderrespawning then
+-- 				UVAutoSpawn(nil, nil, nil, nil, uvcommanderrespawning) --COMMANDER RESPAWN
+-- 			elseif specialchance == 1 and !uvenemyescaping then
+-- 				UVAutoSpawn(ply, true) --RHINO
+-- 			elseif specialchance >= 2 and specialchance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvroadblockdeployable then
+-- 				local units = ents.FindByClass("npc_uv*")
+-- 				local random_entry = math.random(#units)	
+-- 				local unit = units[random_entry]
+-- 				UVDeployRoadblock(unit) --ROADBLOCK
+-- 			elseif specialchance == 6 and #ents.FindByClass("uvair") < 1 and uvhelicopterdeployable and CurTime() - uvhelicooldown > 120 then
+-- 				UVAutoSpawn(ply, nil, true) --HELICOPTER
+-- 			elseif SpawnMainUnits:GetBool() and uvresourcepoints > (#ents.FindByClass("npc_uv*")) then
+-- 				UVAutoSpawn(ply) --NORMAL
+-- 			end
+-- 		end
+-- 	end
+
+-- end
 
 function UVResetStats()
 	if next(uvwantedtablevehicle) == nil and next(uvwantedtabledriver) == nil then
@@ -529,19 +637,23 @@ function UVRestoreResourcePoints()
 			uvresourcepointsrefreshing = false
 		end
 	end)
-	if uvheatlevel == 1 then --Heat Level 1
-		uvresourcepoints = UVUUnitsAvailable1:GetInt()
-	elseif uvheatlevel == 2 then --Heat Level 2
-		uvresourcepoints = UVUUnitsAvailable2:GetInt()
-	elseif uvheatlevel == 3 then --Heat Level 3
-		uvresourcepoints = UVUUnitsAvailable3:GetInt()
-	elseif uvheatlevel == 4 then --Heat Level 4
-		uvresourcepoints = UVUUnitsAvailable4:GetInt()
-	elseif uvheatlevel == 5 then --Heat Level 5
-		uvresourcepoints = UVUUnitsAvailable5:GetInt()
-	else --Heat Level 6
-		uvresourcepoints = UVUUnitsAvailable6:GetInt()
-	end
+	-- if uvheatlevel == 1 then --Heat Level 1
+	-- 	uvresourcepoints = UVUUnitsAvailable1:GetInt()
+	-- elseif uvheatlevel == 2 then --Heat Level 2
+	-- 	uvresourcepoints = UVUUnitsAvailable2:GetInt()
+	-- elseif uvheatlevel == 3 then --Heat Level 3
+	-- 	uvresourcepoints = UVUUnitsAvailable3:GetInt()
+	-- elseif uvheatlevel == 4 then --Heat Level 4
+	-- 	uvresourcepoints = UVUUnitsAvailable4:GetInt()
+	-- elseif uvheatlevel == 5 then --Heat Level 5
+	-- 	uvresourcepoints = UVUUnitsAvailable5:GetInt()
+	-- else --Heat Level 6
+	-- 	uvresourcepoints = UVUUnitsAvailable6:GetInt()
+	-- end
+
+	local unitsAvailableConVar = GetConVar( "unitvehicle_unit_unitsavailable" .. uvheatlevel )
+
+	uvresourcepoints = (unitsAvailableConVar and unitsAvailableConVar:GetInt()) or 5
 	uvbackupontheway = nil
 end
 
@@ -1460,8 +1572,14 @@ function UVAddToWantedListVehicle(vehicle)
 		vehicle.UVWanted = vehicle
 	end
 	local driver = UVGetDriver(vehicle)
+	
 	if !table.HasValue(uvwantedtablevehicle, vehicle) then
 		table.insert(uvwantedtablevehicle, vehicle)
+		
+		net.Start( "UV_AddWantedVehicle" )
+		net.WriteEntity( vehicle )
+		net.Broadcast()
+		
 		if driver:IsPlayer() and !table.HasValue(uvwantedtabledriver, driver) then
 			UVAddToWantedListDriver(driver)
 		end
@@ -1504,6 +1622,10 @@ function UVAddToWantedListVehicle(vehicle)
 			if table.HasValue(uvwantedtablevehicle, ent) then
 				table.RemoveByValue(uvwantedtablevehicle, ent)
 			end
+			
+			net.Start( "UV_RemoveWantedVehicle" )
+			net.WriteEntity( ent )
+			net.Broadcast()
 		end)
 	end
 end
@@ -1547,9 +1669,9 @@ function UVAddToPlayerUnitListVehicle(vehicle, ply)
 			if table.HasValue(uvplayerunittablevehicle, ent) then
 				table.RemoveByValue(uvplayerunittablevehicle, ent)
 			end
-			if table.HasValue(uvunitschasing, ent) then
-				table.RemoveByValue(uvunitschasing, ent)
-			end
+			-- if table.HasValue(uvunitschasing, ent) then
+			-- 	table.RemoveByValue(uvunitschasing, ent)
+			-- end
 		end)
 	end
 end
@@ -1787,6 +1909,11 @@ function UVBustEnemy(self, enemy)
 	if table.HasValue(uvwantedtablevehicle, enemy) then
 		table.RemoveByValue(uvwantedtablevehicle, enemy)
 	end
+	
+	net.Start( "UV_RemoveWantedVehicle" )
+	net.WriteEntity( enemy )
+	net.Broadcast()
+	
 	if table.HasValue(uvpotentialsuspects, enemy) then
 		table.RemoveByValue(uvpotentialsuspects, enemy)
 	end
@@ -2310,11 +2437,12 @@ function UVCheckIfBeingBusted(enemy)
 		enemy.uvbustinglastprogress2 = enemy.uvbustingprogress
 	end
 	
-	net.Start('UVHUDUpdateBusting')
-	net.WriteEntity(enemy)
-	net.WriteFloat(enemy.uvbustingprogress)
-	net.Broadcast()
-	
+	if enemy.uvbustingprogress ~= 0 then
+		net.Start('UVHUDUpdateBusting')
+		net.WriteEntity(enemy)
+		net.WriteFloat(enemy.uvbustingprogress)
+		net.Broadcast()
+	end
 	
 	if UVCheckIfWrecked(enemy) or !enemy.uvbusted and enemy:WaterLevel() > 2 or IsValid(UVGetDriver(enemy)) and UVGetDriver(enemy):Health() <= 0 then --Bust conditions.
 		UVBustEnemy(closestunit, enemy)
@@ -2323,11 +2451,16 @@ function UVCheckIfBeingBusted(enemy)
 	local enemyph = enemy:GetPhysicsObject()
 	if !enemyph then return end
 	
+	local enemyAngles = enemyph:GetAngles()
+	local enemyVelo = enemyph:GetVelocity()
+	local enemyAnglesVelo = enemyph:GetAngleVelocity()
+	
 	--Stunt jump
-	if !uvenemyescaping and uvtargeting then
-		if !enemy.UVStuntJump then
+	if not uvenemyescaping and uvtargeting then
+		if not enemy.UVStuntJump then
 			local onground = util.QuickTrace(enemy:WorldSpaceCenter(), -vector_up * 500, {enemy})
-			if !onground.Hit then
+			
+			if not onground.Hit then
 				enemy.UVStuntJump = true
 				timer.Simple(10, function()
 					enemy.UVStuntJump = nil
@@ -2346,7 +2479,7 @@ function UVCheckIfBeingBusted(enemy)
 		
 		--Stunt roll
 		if !enemy.UVStuntRoll then
-			if enemyph:GetAngles().z > 90 and enemyph:GetAngles().z < 270 and enemy:GetVelocity():LengthSqr() < 10000 then
+			if enemyAngles.z > 90 and enemyAngles.z < 270 and enemyVelo:LengthSqr() < 10000 then
 				enemy.UVStuntRoll = true
 				timer.Simple(10, function()
 					enemy.UVStuntRoll = nil
@@ -2365,7 +2498,7 @@ function UVCheckIfBeingBusted(enemy)
 		
 		--Stunt roll
 		if !enemy.UVStuntSpin then
-			if enemyph:GetAngleVelocity().y > 180 then
+			if enemyAnglesVelo.y > 180 then
 				enemy.UVStuntSpin = true
 				timer.Simple(10, function()
 					enemy.UVStuntSpin = nil
@@ -2524,15 +2657,15 @@ function UVPlayerWreck(vehicle)
 		
 	end
 	uvwrecks = uvwrecks + 1
-
+	
 	if not uvresourcepointsrefreshing and uvresourcepoints > 1 and not uvonecommanderactive then
 		uvresourcepoints = (uvresourcepoints - 1)
 	end	
-
+	
 	net.Start("UVHUDRemoveUV")
 	net.WriteInt(vehicle:EntIndex(), 32)
 	net.Broadcast()
-
+	
 	local driver = UVGetDriver(vehicle)
 	if driver:IsPlayer() then
 		local bustedtable = {}
