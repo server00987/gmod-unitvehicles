@@ -2282,52 +2282,52 @@ if SERVER then
 	net.Broadcast()
 	
 	gameevent.Listen( "player_activate" )
-	hook.Add( "player_activate", "player_activate_example", function( data ) 
-		local id = data.userid				// Same as Player:UserID() for the speaker
-		local ply = Player(id)
+	-- hook.Add( "player_activate", "player_activate_example", function( data ) 
+	-- 	local id = data.userid				// Same as Player:UserID() for the speaker
+	-- 	local ply = Player(id)
 		
-		print('Unit Vehicles:', 'Initializing for -', ply)
+	-- 	print('Unit Vehicles:', 'Initializing for -', ply)
 		
-		net.Start('UVGet_PursuitTable')
-		net.WriteTable(PursuitTable)
-		net.Send(ply)
+	-- 	net.Start('UVGet_PursuitTable')
+	-- 	net.WriteTable(PursuitTable)
+	-- 	net.Send(ply)
 		
-		// Called when a player is fully connected and loaded
+	-- 	// Called when a player is fully connected and loaded
 		
-		-- for _, v in pairs(uvwantedtablevehicle) do
-		-- 	net.Start( "UVUpdateSuspectVisibility" )
+	-- 	-- for _, v in pairs(uvwantedtablevehicle) do
+	-- 	-- 	net.Start( "UVUpdateSuspectVisibility" )
 		
-		-- 	net.WriteEntity(v)
-		-- 	net.WriteBool(v.inunitview)
+	-- 	-- 	net.WriteEntity(v)
+	-- 	-- 	net.WriteBool(v.inunitview)
 		
-		-- 	net.Send(ply)
-		-- end
+	-- 	-- 	net.Send(ply)
+	-- 	-- end
 		
-		-- local convar_table = {}
+	-- 	-- local convar_table = {}
 		
-		-- for convar_name, convar_type in pairs(local_convars) do
-		-- 	local convar = GetConVar(convar_name)
-		-- 	local value = nil
+	-- 	-- for convar_name, convar_type in pairs(local_convars) do
+	-- 	-- 	local convar = GetConVar(convar_name)
+	-- 	-- 	local value = nil
 		
-		-- 	if convar_type == 'boolean' then
-		-- 		value = convar:GetBool()
-		-- 	elseif convar_type == 'integer' then
-		-- 		value = convar:GetInt()
-		-- 	elseif convar_type == 'string' then
-		-- 		value = convar:GetString()
-		-- 	end
+	-- 	-- 	if convar_type == 'boolean' then
+	-- 	-- 		value = convar:GetBool()
+	-- 	-- 	elseif convar_type == 'integer' then
+	-- 	-- 		value = convar:GetInt()
+	-- 	-- 	elseif convar_type == 'string' then
+	-- 	-- 		value = convar:GetString()
+	-- 	-- 	end
 		
-		-- 	if not value then continue end
+	-- 	-- 	if not value then continue end
 		
-		-- 	--convar_name = string.gsub(convar_name, "_local", "")
-		-- 	convar_table[convar_name] = value
-		-- end
+	-- 	-- 	--convar_name = string.gsub(convar_name, "_local", "")
+	-- 	-- 	convar_table[convar_name] = value
+	-- 	-- end
 		
-		-- net.Start("UVGetSettings_Local")
-		-- net.WriteTable(convar_table)
-		-- net.Send(ply)
+	-- 	-- net.Start("UVGetSettings_Local")
+	-- 	-- net.WriteTable(convar_table)
+	-- 	-- net.Send(ply)
 		
-	end )	
+	-- end )	
 	
 	net.Receive("UVUpdateSettings", function(len, ply)
 		if !ply:IsSuperAdmin() then return end
