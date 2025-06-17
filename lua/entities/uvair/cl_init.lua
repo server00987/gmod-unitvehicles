@@ -14,7 +14,7 @@ function ENT:Initialize()
 		"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
 	}
 
-	self.Model = modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
+	self.Model = self:GetModel()--modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
 
 	if self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
 		self.SpotlightPos = Vector(85,0,25)

@@ -185,20 +185,20 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
 
-			RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat())
 
 			for _, v in pairs(pttable) do
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
 				convar_table['unitvehicle_unitpursuittech_maxammo_'..sanitized_pt] = GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt()
 				convar_table['unitvehicle_unitpursuittech_cooldown_'..sanitized_pt] = GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt()
-				RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt())
-				RunConsoleCommand("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt, GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt, GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt())
 			end
 
 			net.Start("UVUpdateSettings")

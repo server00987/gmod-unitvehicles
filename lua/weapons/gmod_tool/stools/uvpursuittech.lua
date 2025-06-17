@@ -302,19 +302,19 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
 
 
-			RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
 
 			
 
@@ -322,8 +322,8 @@ if CLIENT then
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
 				convar_table['unitvehicle_pursuittech_maxammo_'..sanitized_pt] = GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt()
 				convar_table['unitvehicle_pursuittech_cooldown_'..sanitized_pt] = GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt()
-				RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
-				RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
 			end
 
 			net.Start("UVUpdateSettings")

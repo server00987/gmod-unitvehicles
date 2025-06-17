@@ -290,7 +290,10 @@ UV_UI.pursuit.carbon.states = {
 
 UV_UI.racing.carbon.events = {
     onRaceEnd = function(...)
-        print( 'onRaceEnd', ... )
+
+    end,
+    onParticipantFinished = function(...)
+        PrintTable( select( 1, ... ) )
     end
 }
 

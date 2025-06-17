@@ -527,10 +527,7 @@ else
 		}
 
 		if not string.find(track, "/race/") then return end
-		track = track:gsub("uvracemusic/" .. theme .. "/race/", "")
-					 :gsub("%.mp3", "")
-					 :gsub("%.wav", "")
-					 :gsub("%.ogg", "")
+		track = track:gsub("uvracemusic/" .. theme .. "/race/", ""):gsub("%.mp3", ""):gsub("%.wav", ""):gsub("%.ogg", "")
 
 		-- Rebuild the full normalized path for lookup (lowercase, forward slash)
 		local full_path = normalizePath("sound/uvracemusic/" .. theme .. "/race/" .. track .. ".mp3")
@@ -562,22 +559,7 @@ else
 				immediate = true,
 			})
 		else
-			chat.AddText(
-				Color(255, 255, 255),
-				"[",
-				Color(255, 126, 126),
-				language.GetPhrase("uv.race.radio"),
-				Color(255, 255, 255),
-				"] ",
-				Color(255, 255, 0),
-				(artist and title) and (title .. " - " .. artist) or track,
-				Color(255, 255, 255),
-				" (",
-				Color(200, 200, 200),
-				theme,
-				Color(255, 255, 255),
-				")"
-			)
+			chat.AddText( Color(255, 255, 255), "[", Color(255, 126, 126), language.GetPhrase("uv.race.radio"), Color(255, 255, 255), "] ", Color(255, 255, 0), (artist and title) and (title .. " - " .. artist) or track, Color(255, 255, 255), " (", Color(200, 200, 200), theme, Color(255, 255, 255), ")")
 		end
 	end
 
@@ -931,10 +913,7 @@ else
     net.Receive( "uvrace_decline", function() 
 	    local lang = language.GetPhrase
 	
-	    chat.AddText(
-		    Color(255, 126, 126),
-		    lang( net.ReadString() )
-	    )
+	    chat.AddText(Color(255, 126, 126),lang( net.ReadString() ))
     end)
     
     net.Receive( "uvrace_announcebestlaptime", function()
@@ -1131,7 +1110,12 @@ else
         
         if UVHUDRaceInfo then
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
-                UVHUDRaceInfo['Participants'][participant].Finished = true 
+                local participantInfo = UVHUDRaceInfo['Participants'][participant]
+
+                UVHUDRaceInfo['Participants'][participant].Finished = true
+                UVHUDRaceInfo['Participants'][participant].TotalTime = time
+
+                print('hi', UVHUDRaceInfo['Participants'][participant].TotalTime)
                 
                 if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
@@ -1151,9 +1135,20 @@ else
                 }
                 
                 local place_array = PlaceStrings[place] or PlaceStrings[4]
-                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], lang("uv.race.pos.num." .. place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))        
+                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], lang("uv.race.pos.num." .. place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))
+
+                local driver = participant:GetDriver()
+                local is_local_player = IsValid(driver) and driver == LocalPlayer()
+                
+                hook.Run( 'UIEventHook', 'racing', 'onParticipantFinished', {
+                    ['Participant'] = participant,
+                    ['is_local_player'] = is_local_player,
+                    ['Place'] = place,
+                    ['TotalTime'] = time,
+                    ['BestTime'] = participantInfo.BestLapTime
+                } )
             end
-        end        
+        end
     end)
     
     net.Receive( "uvrace_disqualify", function()

@@ -210,8 +210,8 @@ if CLIENT then
 
 			convar_table['unitvehicle_pursuitbreaker_maxpb'] = GetConVar("uvpursuitbreaker_maxpb"):GetInt()
 			convar_table['unitvehicle_pursuitbreaker_pbcooldown'] = GetConVar("uvpursuitbreaker_pbcooldown"):GetInt()
-			RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
-			RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
+			-- RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
+			-- RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
 
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
