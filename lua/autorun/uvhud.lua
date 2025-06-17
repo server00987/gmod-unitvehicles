@@ -118,11 +118,231 @@ for _, v in pairs( {'racing', 'pursuit'} ) do
 end
 
 -- Universal
+function UVRenderCommander(ent)
+	local localPlayer = LocalPlayer()
+	local box_color = Color(0, 161, 255)
+	local lang = language.GetPhrase
+	
+	if IsValid(ent) then
+		if !UVHUDDisplayPursuit then return end
+		
+		local callsign = lang("uv.unit.commander")
+		local driver = UVGetDriver(ent)
+
+		if driver and driver:IsPlayer() then
+			callsign = driver:GetName()
+			if localPlayer == driver then
+				if not ent.lplayernotified then
+					ent.lplayernotified = true
+					if Glide then
+						Glide.Notify( {
+							text = "<color=61, 183, 255>" .. language.GetPhrase("uv.unit.commander.notification"),
+							icon = "unitvehicles/icons/MINIMAP_ICON_EVENT_RIVAL.png",
+							lifetime = 5
+						} )
+					else
+						chat.AddText(
+						Color(0, 81, 161), "[Unit Vehicles] ",
+						Color(61, 183, 255),
+						language.GetPhrase("uv.unit.commander.notification"))
+					end
+				end
+				return
+			end
+		end
+
+		local pos = ent:GetPos()
+		
+		local mins, maxs = ent:GetCollisionBounds()
+		local points = {
+			Vector(maxs.x, maxs.y, maxs.z),
+			Vector(maxs.x, maxs.y, mins.z),
+			Vector(maxs.x, mins.y, mins.z),
+			Vector(maxs.x, mins.y, maxs.z),
+			Vector(mins.x, mins.y, mins.z),
+			Vector(mins.x, mins.y, maxs.z),
+			Vector(mins.x, maxs.y, mins.z),
+			Vector(mins.x, maxs.y, maxs.z)
+		}
+		
+		local MaxX, MinX, MaxY, MinY
+		local isVisible = false
+		
+		for i = 1, #points do
+			local v = points[i]
+			local p = pos + v
+			local screenPos = p:ToScreen()
+			isVisible = screenPos.visible
+			
+			if MaxX ~= nil then
+				MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
+				MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
+			else
+				MaxX, MaxY = screenPos.x, screenPos.y
+				MinX, MinY = screenPos.x, screenPos.y
+			end
+		end
+				
+		local dist = localPlayer:GetPos():Distance(ent:GetPos())
+		local distInMeters = dist * 0.01905
+		
+		local textX = (MinX + MaxX) / 2
+		local textY = MinY - 125
+		local w = ScrW()
+		local h = ScrH()
+		
+		-- Distance in meters
+		local fadeAlpha = 255
+		local fadeDist = 200
+
+		if distInMeters <= fadeDist then
+			fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
+		elseif distInMeters > fadeDist then
+			fadeAlpha = 0
+		end
+
+		cam.Start2D()
+			local bustdist = math.Round(distInMeters) .. " m"
+			
+			local cname = lang("uv.unit.commander")
+			if IsValid(UVHUDCommander) then
+				local driver = UVHUDCommander:GetDriver()
+				if IsValid(driver) and driver:IsPlayer() then
+					cname = driver:Nick()
+				end
+			end
+
+			local rectlen = string.len(cname) + 2
+			local rectxpos = textX - (w * (0.00375 * rectlen))
+			local rectypos = textY + (w * 0.0125)
+			
+			surface.SetDrawColor( 0, 161, 255, fadeAlpha )
+			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
+			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen)), rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Up
+
+			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			
+			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
+			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+
+			-- draw.DrawText("\n" .. "#uv.unit.commander" .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+
+			draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+		cam.End2D()
+	end
+end
+
+function UVRenderEnemySquare(ent)
+	local localPlayer = LocalPlayer()
+	local box_color = (!UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 100, 100)
+	local blink = 255 * math.abs(math.sin(RealTime() * 4))
+	local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+	local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+	
+	local lang = language.GetPhrase
+	
+	local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-(ent.uvbustingprogress or 0)),3)
+	
+	if ent.beingbusted then
+		if (entbustedtimeleft > 2 and entbustedtimeleft < 3) then
+			box_color = Color( 255, blink, blink)
+		elseif entbustedtimeleft < 2 then
+			box_color = Color( 255, blink2, blink2)
+		elseif entbustedtimeleft < 1 then
+			box_color = Color( 255, blink3, blink3)
+		else
+			box_color = Color( 255, 255, 255 )
+		end
+	end
+	
+	if IsValid(ent) then
+		if !UVHUDDisplayPursuit then return end
+		if UVHUDDisplayCooldown or 
+		(UVHUDCopMode and 
+		(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+		not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) 
+		and UVOneCommanderActive)) 
+		then return end
+		
+		local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
+		local enemydriver = ent:GetDriver()
+		if enemydriver:IsPlayer() then
+			enemycallsign = enemydriver:GetName()
+			if localPlayer == enemydriver then
+				return
+			end
+		end
+		
+		local pos = ent:GetPos()
+		
+		local MaxX, MinX, MaxY, MinY
+		local isVisible = false
+		
+		local p = pos
+		local screenPos = p:ToScreen()
+		isVisible = screenPos.visible
+		
+		if MaxX ~= nil then
+			MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
+			MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
+		else
+			MaxX, MaxY = screenPos.x, screenPos.y
+			MinX, MinY = screenPos.x, screenPos.y
+		end
+		
+		local dist = localPlayer:GetPos():Distance(ent:GetPos())
+		local distInMeters = dist * 0.01905
+		
+		local textX = (MinX + MaxX) / 2
+		local textY = MinY - 150
+		local w = ScrW()
+		local h = ScrH()
+		
+		-- Distance in meters
+		local fadeAlpha = 255
+		local fadeDist = 100
+
+		if distInMeters <= fadeDist then
+			fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
+		elseif distInMeters > fadeDist then
+			fadeAlpha = 0
+		end
+
+		cam.Start2D()
+			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+			local bustdist = math.Round(distInMeters) .. " m"
+			
+			local rectlen = string.len(enemycallsign)
+			local rectxpos = textX - (w * (0.00375 * rectlen))
+			local rectypos = textY + (w * 0.0125)
+			
+			surface.SetDrawColor( 255, 255, 255, fadeAlpha )
+			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
+			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen)), rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Up
+
+			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			
+			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
+			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+
+			draw.DrawText("\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			
+			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
+		cam.End2D()
+	end
+end
+	
 UV_UI.general = {}
 
 local function uv_general( ... )
 	local w = ScrW()
-    local h = ScrH()		
+    local h = ScrH()
 	local vehicle = LocalPlayer():GetVehicle()
 	local localPlayer = LocalPlayer()
     local lang = language.GetPhrase
@@ -869,7 +1089,7 @@ local function carbon_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -1012,7 +1232,15 @@ local function carbon_pursuit_main( ... )
             draw.DrawText("⛊","UVCarbonFont",w * 0.7925, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
             draw.DrawText("⛊","UVCarbonFont",w * 0.975, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
 
-            draw.DrawText("#uv.unit.commander","UVCarbonLeaderboardFont",w * 0.875, h * 0.3515, Colors.Carbon_Accent,TEXT_ALIGN_CENTER)
+			local cname = "#uv.unit.commander"
+			if IsValid(UVHUDCommander) then
+				local driver = UVHUDCommander:GetDriver()
+				if IsValid(driver) and driver:IsPlayer() then
+					cname = driver:Nick()
+				end
+			end
+
+            draw.DrawText(cname, "UVCarbonLeaderboardFont",w * 0.8825, h * 0.3515, Colors.Carbon_Accent,TEXT_ALIGN_CENTER)
 
             if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
                 UVHUDCommanderLastHealth = 0
@@ -1865,7 +2093,7 @@ local function mw_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -2009,7 +2237,15 @@ local function mw_pursuit_main( ... )
             draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.71, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_LEFT)
             draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.965, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_RIGHT)
 
-            draw.DrawText("#uv.unit.commander","UVFont5UI-BottomBar",w * 0.8375, h * 0.255 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_CENTER)
+			local cname = "#uv.unit.commander"
+			if IsValid(UVHUDCommander) then
+				local driver = UVHUDCommander:GetDriver()
+				if IsValid(driver) and driver:IsPlayer() then
+					cname = driver:Nick()
+				end
+			end
+
+            draw.DrawText(cname,"UVFont5UI-BottomBar",w * 0.8375, h * 0.255 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_CENTER)
 
             if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
                 UVHUDCommanderLastHealth = 0
@@ -2914,7 +3150,7 @@ local function undercover_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, 100, 100, blink)
@@ -2951,21 +3187,18 @@ local function undercover_pursuit_main( ... )
             end
             local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
             local healthcolor
+			local blink = 255 * math.abs(math.sin(RealTime() * 4))
+			local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+			local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+			
             if healthratio >= 0.5 then
                 healthcolor = Color(255, 255, 255, 200)
             elseif healthratio >= 0.25 then
-                if math.floor(RealTime() * 2) == math.Round(RealTime() * 2) then
-                    healthcolor = Color(255, 0, 0)
-                else
-                    healthcolor = Color(255, 255, 255)
-                end
+				healthcolor = Color(255, blink, blink, 200)
             else
-                if math.floor(RealTime() * 4) == math.Round(RealTime() * 4) then
-                    healthcolor = Color(255, 0, 0)
-                else
-                    healthcolor = Color(255, 255, 255)
-                end
+				healthcolor = Color(255, blink2, blink2, 200)
             end
+			
             ResourceText = "⛊"
             local element3 = {
                 {x = w / 3, y = 0},
@@ -2987,7 +3220,15 @@ local function undercover_pursuit_main( ... )
             draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.35, 0, Colors.Undercover_Accent2, TEXT_ALIGN_LEFT)
             draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.65, 0, Colors.Undercover_Accent2, TEXT_ALIGN_RIGHT)
 			
-            draw.DrawText("#uv.unit.commander","UVUndercoverWhiteFont", w / 2, 0, Colors.Undercover_Accent2,TEXT_ALIGN_CENTER)
+			local cname = "#uv.unit.commander"
+			if IsValid(UVHUDCommander) then
+				local driver = UVHUDCommander:GetDriver()
+				if IsValid(driver) and driver:IsPlayer() then
+					cname = driver:Nick()
+				end
+			end
+
+            draw.DrawText(cname,"UVUndercoverWhiteFont", w / 2, 0, Colors.Undercover_Accent2,TEXT_ALIGN_CENTER)
         end
         
         -- [ Upper Right Info Box ] --
@@ -3967,7 +4208,7 @@ local function original_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -4112,21 +4353,18 @@ local function original_pursuit_main( ... )
 				end
 				local healthratio = UVHUDCommanderLastHealth/UVHUDCommanderLastMaxHealth
 				local healthcolor
+				local blink = 255 * math.abs(math.sin(RealTime() * 4))
+				local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+				local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+				
 				if healthratio >= 0.5 then
-					healthcolor = Color(255,255,255,200)
+					healthcolor = Color(255, 255, 255, 200)
 				elseif healthratio >= 0.25 then
-					if math.floor(RealTime()*2)==math.Round(RealTime()*2) then
-						healthcolor = Color( 255, 0, 0)
-					else
-						healthcolor = Color( 255, 255, 255)
-					end
+					healthcolor = Color(255, blink, blink, 200)
 				else
-					if math.floor(RealTime()*4)==math.Round(RealTime()*4) then
-						healthcolor = Color( 255, 0, 0)
-					else
-						healthcolor = Color( 255, 255, 255)
-					end
+					healthcolor = Color(255, blink2, blink2, 200)
 				end
+				
 				ResourceText = "⛊\n∞"
 				local element3 = {
 					{ x = w/3, y = 0 },
@@ -4144,7 +4382,16 @@ local function original_pursuit_main( ... )
 					local T = math.Clamp((healthratio)*(w/3-38),0,w/3-38)
 					surface.DrawRect(w/3+25,h/20,T,8)
 				end
-				draw.DrawText( "⛊ " .. lang("uv.unit.commander") .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
+				
+				local cname = lang("uv.unit.commander")
+				if IsValid(UVHUDCommander) then
+					local driver = UVHUDCommander:GetDriver()
+					if IsValid(driver) and driver:IsPlayer() then
+						cname = driver:Nick()
+					end
+				end
+
+				draw.DrawText( "⛊ " .. cname .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
 			end
 
 			local iconhigh = 0
