@@ -267,8 +267,9 @@ if SERVER then
         for _, vehicle in pairs( UVRaceCurrentParticipants ) do
             vehicle:GetPhysicsObject():EnableMotion( true )
             if vehicle.PursuitTech then
-                for _, v in pairs(vehicle.PursuitTech) do
+                for i, v in pairs(vehicle.PursuitTech) do
                     v.LastUsed = CurTime()
+                    UVReplicatePT( vehicle, i )
                 end
             end
             

@@ -866,7 +866,7 @@ local function carbon_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -1862,7 +1862,7 @@ local function mw_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -2911,7 +2911,7 @@ local function undercover_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, 100, 100, blink)
@@ -3964,7 +3964,7 @@ local function original_pursuit_main( ... )
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress
+                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)

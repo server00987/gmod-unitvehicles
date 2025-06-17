@@ -2380,6 +2380,8 @@ else --HUD/Options
 		KeyBindButtons = {}
 	end
 	
+	UVBustingProgress = 0
+
 	local UVHUDBlipSoundTime = CurTime()
 	UVHUDScannerPos = Vector(0,0,0)
 	
@@ -2717,7 +2719,7 @@ else --HUD/Options
 			car.PursuitTech[slot].Upgraded = net.ReadBool()
 			
 		elseif car.PursuitTech then
-			car.PursuitTech[slot] = {}
+			car.PursuitTech[slot] = nil
 		end
 	end)
 	

@@ -114,7 +114,11 @@ function TOOL:LeftClick( trace )
             --     net.WriteEntity(car)
             --     net.WriteTable(car.PursuitTech)
             -- net.Broadcast()
-			UVReplicatePT( car, slot )
+			-- In case one pt is replaced
+			for i=1,2 do
+				print(i)
+				UVReplicatePT( car, i )
+			end
 
 			return true
 		end

@@ -577,7 +577,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			
 			if UVUPursuitTech:GetBool() then
 				Ent.PursuitTech = {}
-				
+				print("okkk")
 				local pool = {}
 				
 				if UVUPursuitTech_ESF:GetBool() then
@@ -614,6 +614,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 								table.remove(pool, i)
 							end
 						end
+						--UVReplicatePT( Ent, i )
 					end
 				end
 			end
@@ -649,6 +650,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			end)
 		else
 			table.insert(uvsimfphysvehicleinitializing, Ent)
+		end
+
+		if Ent.PursuitTech then
+			timer.Simple(1, function()
+				for i=1,2 do
+					UVReplicatePT( Ent, i )
+				end
+			end)
 		end
 		
 	elseif vehiclebase == 2 then --simfphys
@@ -942,6 +951,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 								table.remove(pool, i)
 							end
 						end
+
+						--UVReplicatePT( Ent, i )
 					end
 				end
 			end
@@ -986,7 +997,15 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		if disperse then
 			Ent.disperse = true
 		end
-		
+
+		if Ent.PursuitTech then
+			timer.Simple(1, function()
+				for i=1,2 do
+					UVReplicatePT( Ent, i )
+				end
+			end)
+		end	
+
 	elseif vehiclebase == 1 then --Default Vehicle Base
 		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/units/*.txt", "DATA")
 		
@@ -1141,6 +1160,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 								table.remove(pool, i)
 							end
 						end
+						
+						--UVReplicatePT( Ent, i )
 					end
 				end
 			end
@@ -1175,6 +1196,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			end)
 		else
 			table.insert(uvsimfphysvehicleinitializing, Ent)
+		end
+
+		if Ent.PursuitTech then
+			timer.Simple(1, function()
+				for i=1,2 do
+					UVReplicatePT( Ent, i )
+				end
+			end)
 		end
 		
 	else
@@ -1941,6 +1970,10 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 	
 	if Ent.PursuitTech then
 		table.insert(uvrvwithpursuittech, Ent)
+
+		for i=1,2 do
+			UVReplicatePT( Ent, i )
+		end
 	end
 	
 	Ent:CallOnRemove( "UVRVWithPursuitTechRemoved", function(Ent)
@@ -2385,6 +2418,10 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	
 	if Ent.PursuitTech then
 		table.insert(uvrvwithpursuittech, Ent)
+
+		for i=1,2 do
+			UVReplicatePT( Ent, i )
+		end
 	end
 	
 	Ent:CallOnRemove( "UVRVWithPursuitTechRemoved", function(Ent)

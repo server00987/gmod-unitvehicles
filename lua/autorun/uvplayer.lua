@@ -312,7 +312,7 @@ if SERVER then
             end
 
             net.Start( "UV_SendPursuitTech" )
-            
+
             net.WriteEntity( car )
             net.WriteUInt( slot, 2 )
             net.WriteBool( isPtActive )
@@ -330,6 +330,14 @@ if SERVER then
             --     net.WriteEntity(car)
             --     net.WriteTable(car.PursuitTech)
             -- net.Broadcast()
+        else
+            net.Start( "UV_SendPursuitTech" )
+            
+            net.WriteEntity( car )
+            net.WriteUInt( slot, 2 )
+            net.WriteBool( false )
+
+            net.Broadcast()
         end
     end
     
