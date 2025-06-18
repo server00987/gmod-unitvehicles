@@ -533,11 +533,339 @@ UV_UI.pursuit.carbon.states = {
 }
 
 UV_UI.racing.carbon.events = {
-    onRaceEnd = function(...)
-        PrintTable( select( 1, ... ) )
+    ShowResults = function(sortedRacers) -- Carbon
+        if UVHUDRace then return end
+        if IsValid(ResultPanel) then ResultPanel:Remove() end
+
+        local w = ScrW()
+        local h = ScrH()
+        
+        --------------------------------------
+
+        ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
+        ResultPanel:SetSize(w, h)
+        -- ResultPanel:SetPos(0, 0)
+        ResultPanel:SetMouseInputEnabled(true)
+        ResultPanel:SetKeyboardInputEnabled(false)
+        ResultPanel:SetZPos(32767)
+        
+        local targetY = 0
+        local overshootY = h * 0.1  -- drops 10% below target before bouncing back
+        local startY = -h           -- start fully above the screen
+        
+        ResultPanel:SetPos(0, startY)
+        
+        local animTime = 0.33
+        local bounceTime = 0.1
+        local startTime = CurTime()
+        
+        hook.Add("Think", "ResultPanelEntranceAnim", function()
+            local elapsed = CurTime() - startTime
+            
+            if elapsed < animTime then
+                if elapsed < animTime - bounceTime then
+                    local frac = elapsed / (animTime - bounceTime)
+                    local y = Lerp(frac, startY, overshootY)
+                    ResultPanel:SetPos(0, y)
+                else
+                    local frac = (elapsed - (animTime - bounceTime)) / bounceTime
+                    local y = Lerp(frac, overshootY, targetY)
+                    ResultPanel:SetPos(0, y)
+                end
+            else
+                ResultPanel:SetPos(0, targetY)
+                hook.Remove("Think", "ResultPanelEntranceAnim")
+            end
+        end)
+        
+        local function AnimateAndRemovePanel(panel)
+            if not IsValid(panel) then return end
+            
+            local startY = panel:GetY()
+            local endY = ScrH()  -- off-screen below
+            local animTime = 0.33
+            local startTime = CurTime()
+            
+            -- Play sounds ONCE at start
+            surface.PlaySound("uvui/carbon/openmenu.wav")
+            surface.PlaySound("uvui/carbon/exitmenu.wav")
+            
+            -- Disable interactivity
+            panel:SetMouseInputEnabled(false)
+            gui.EnableScreenClicker(false)
+            
+            hook.Add("Think", "ResultPanelExitAnim", function()
+                if not IsValid(panel) then
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                    return
+                end
+                
+                local elapsed = CurTime() - startTime
+                if elapsed < animTime then
+                    local frac = elapsed / animTime
+                    local y = Lerp(frac, startY, endY)
+                    panel:SetPos(0, y)
+                else
+                    panel:Remove()
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                end
+            end)
+        end
+        
+        gui.EnableScreenClicker(true)
+        
+        local OK = vgui.Create("DButton", ResultPanel)
+        OK:SetText("X")
+        OK:SetSize(w*0.015, h*0.03)
+        OK:SetPos(w*0.725, h*0.205)
+        
+        local timetotal = 30
+        local timestart = CurTime()
+        local exitStarted = false -- prevent repeated trigger
+        
+        local finalTitle = "★" .. language.GetPhrase("uv.results.standings") .. "★"
+        local charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()[]{}<>,./?|"
+        local revealSpeed = 0.05
+        local displayStart = CurTime()
+        local scrambleSound
+        local isScrambling = true
+        local revealedChars = 0
+        
+        sound.Add({
+            name = "UV.Carbon.Scramble",
+            channel = CHAN_STATIC,
+            volume = 1.0,
+            level = 70,
+            pitch = { 100 },
+            sound = "uvui/carbon/textfold.wav"
+        })
+        
+        -- Start reveal timer
+        timer.Create("ScrambleTextUpdate", revealSpeed, #finalTitle, function()
+            revealedChars = revealedChars + 1
+            
+            -- Start the loop sound
+            if isScrambling and not scrambleSound then
+                scrambleSound = CreateSound(LocalPlayer(), "UV.Carbon.Scramble")
+                if scrambleSound then
+                    scrambleSound:Play()
+                end
+            end
+            
+            -- Stop when done
+            if revealedChars >= #finalTitle then
+                isScrambling = false
+                if scrambleSound then
+                    scrambleSound:FadeOut(0.2)
+                    scrambleSound = nil
+                end
+            end
+        end)
+        
+		local entriesToShow = 13
+		local scrollOffset = 0
+		
+		ResultPanel.OnMouseWheeled = function(self, delta)
+			local maxOffset = math.max(0, #sortedRacers - entriesToShow)
+			scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
+		end
+        
+        -- Data and labels
+		local racersArray = {}
+
+		for _, dict in pairs(sortedRacers) do
+			table.insert(racersArray, dict)
+		end
+
+		table.sort(racersArray, function(a, b)
+			local timeA = a.array and a.array.TotalTime
+			local timeB = b.array and b.array.TotalTime
+
+			-- Treat missing or non-numeric TotalTime as a large number (DNF)
+			local tA = (type(timeA) == "number") and timeA or math.huge
+			local tB = (type(timeB) == "number") and timeB or math.huge
+
+			return tA < tB
+		end)
+
+        ResultPanel.Paint = function(self, w, h)
+            local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            -- Main black BG
+            surface.SetMaterial(UVMaterials['BG_BIG_CARBON'])
+            surface.SetDrawColor( 0, 0, 0, 225 )
+            surface.DrawTexturedRect( 0, 0, w, h)
+            
+            -- Upper Results Tab
+            surface.SetDrawColor( 0, 0, 0, 200 )
+            surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+            
+            surface.SetMaterial(UVMaterials['EOC_FRAME_CARBON'])
+            surface.SetDrawColor(86, 214, 205)
+            surface.DrawTexturedRect( w*0.26, h*0.17825, w*0.485, h*0.09)
+            
+            DrawIcon( UVMaterials['X_OUTER_CARBON'], w*0.255, h*0.215, 0.2, Color(0,0,0) ) -- Icon
+            DrawIcon( Material("unitvehicles/hud_carbon/x_anim"), w*0.255, h*0.215, 0.2, Color(255,255,255) ) -- Animated Icon; TBD
+            
+            local timePassed = CurTime() - displayStart
+            local charsToReveal = math.min(#finalTitle, math.floor(timePassed / revealSpeed))
+            
+            local animatedTitle = ""
+            
+            for i = 1, #finalTitle do
+                if i <= charsToReveal then
+                    animatedTitle = animatedTitle .. finalTitle:sub(i, i)
+                else
+                    local randIndex = math.random(#charset)
+                    local randChar = charset:sub(randIndex, randIndex)
+                    animatedTitle = animatedTitle .. randChar
+                end
+            end
+            
+            draw.DrawText(animatedTitle, "UVCarbonFont", w * 0.3, h * 0.2, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+            
+            -- Next Lower, results subtext
+            -- surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+            surface.SetDrawColor( 0, 0, 0, 235 )
+            surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
+            
+            draw.DrawText( "#uv.results.race.pos.caps", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+            draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.4, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+            
+            draw.DrawText( "#uv.results.race.time.caps", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+
+			-- Draw visible racer entries
+			local startIndex = scrollOffset + 1
+			local endIndex = math.min(startIndex + entriesToShow - 1, #sortedRacers)
+
+			local rowYStart = h * 0.34
+			local rowHeight = h * 0.035
+
+			for i = startIndex, endIndex do
+				local racer = racersArray[i]
+				local y = rowYStart + ((i - startIndex) * rowHeight)
+
+				local info = racer.array or racer  -- fallback if 'array' doesn't exist
+
+				local name = info["Name"] or "Unknown"
+				local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+
+				if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+
+				-- Background for zebra striping
+				local bgAlpha = (i % 2 == 0) and 100 or 50
+                surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
+				surface.SetDrawColor(86, 214, 205, bgAlpha)
+				surface.DrawTexturedRect(w * 0.25, y, w * 0.485, rowHeight)
+				                
+                surface.SetMaterial(UVMaterials['ARROW_CARBON'])
+                surface.DrawTexturedRect( w * 0.735, y, w * 0.015, rowHeight)
+
+				draw.SimpleText(tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+				draw.SimpleText(name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+				draw.SimpleText(totalTime, "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+			end
+
+            -- Time remaining and closing
+            local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue")
+            local conttextl = string.len(conttext)
+            
+            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
+            local autotextl = string.len(autotext)
+			local blink = 255 * math.abs(math.sin(RealTime() * 8))
+            
+            surface.SetDrawColor( 150, 150, 150, 175 )
+            
+            surface.DrawRect( w*0.2565, h*0.9, (w*0.00575 * conttextl), h*0.035)
+            draw.DrawText( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.9025, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            
+            surface.DrawRect( w*0.26 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
+            draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2625 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+                            
+			if scrollOffset > 0 then
+				draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.3, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+			end
+
+			if scrollOffset < #sortedRacers - entriesToShow then
+				draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.79, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+			end
+
+            if not exitStarted and timeremaining < 1 then
+                exitStarted = true
+                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                AnimateAndRemovePanel(ResultPanel)
+            end
+            
+        end
+        
+        function OK:DoClick() 
+            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            AnimateAndRemovePanel(ResultPanel)
+        end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForDebrief", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping then
+                    wasJumping = true
+                    if IsValid(ResultPanel) then
+                        AnimateAndRemovePanel(ResultPanel)
+                        hook.Remove("Think", "CheckJumpKeyForDebrief")
+                    end
+                end
+            else
+                wasJumping = false
+            end
+        end)
     end,
-    onParticipantFinished = function(...)
-        PrintTable( select( 1, ... ) )
+    
+    onRaceEnd = function( sortedRacers, stringArray )
+        local triggerTime = CurTime()
+        local duration = 10
+        
+        -----------------------------------------
+        
+        print( "onRaceEnd triggered!" )
+		
+        local function _main()
+            print( 'Displaying results ...' )
+            
+            for place, dict in pairs( sortedRacers ) do
+                local vehicleArray = dict.vehicle
+                local infoArray = dict.array
+                local is_local_player = dict.LocalPlayer
+                
+                --------------------------------------------
+                
+                print( place )
+                PrintTable( infoArray )
+            end
+        end
+        if Glide then
+            Glide.Notify({
+                text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
+                lifetime = duration,
+                immediate = true,
+				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+            }) 
+        end
+        
+        hook.Add( "Think", "RaceResultDisplay", function()
+            if CurTime() - triggerTime > duration then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                return
+            end
+            
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                -- _main()
+				UV_UI.racing.carbon.events.ShowResults(sortedRacers)
+            end
+        end)
     end
 }
 
@@ -1501,8 +1829,6 @@ UV_UI.pursuit.mostwanted.states = {
 
 UV_UI.racing.mostwanted.events = {
     ShowResults = function(sortedRacers) -- Most Wanted
-        if UVHUDRace then return end
-
         local debriefcolor = Color(255, 183, 61)
         
         local w = ScrW()
@@ -1873,6 +2199,7 @@ end,
                 text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
                 lifetime = duration,
                 immediate = true,
+				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
             }) 
         end
         
@@ -2954,6 +3281,376 @@ UV_UI.pursuit.undercover.states = {
     UnitsColor = Color(255,255,255,150),
     BustedColor = Color(255, 255, 255, 50),
     EvasionColor = Color(255, 255, 255, 50),
+}
+
+UV_UI.racing.undercover.events = {
+    ShowResults = function(sortedRacers) -- Undercover
+        if UVHUDRace then return end
+        
+        local w = ScrW()
+        local h = ScrH()
+        
+        --------------------------------------
+
+        local debrieflinedata
+
+        local BackgroundPanel = vgui.Create("DPanel")
+        local ResultPanel = vgui.Create("DFrame")
+        -- local OK = vgui.Create("DButton")
+        
+        BackgroundPanel:SetSize(w, h)
+        BackgroundPanel:SetZPos(0)
+        
+        -- ResultPanel:Add(OK)
+        ResultPanel:SetSize(w, h)
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        ResultPanel:SetVisible(false)
+        
+        -- OK:SetText("X")
+        -- OK:SetSize(w*0.015, h*0.03)
+        -- OK:SetPos(w*0.635, h*0.225)
+        -- OK:SetPaintedManually(true)
+        
+        local fadeStart = CurTime()
+        local backgroundAlpha = 0
+        local backgroundFadeDuration = 0.5  -- seconds
+        local fadeComplete = false
+        
+        local function CloseResults()
+            if IsValid(ResultPanel) then ResultPanel:Close() end
+            if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
+            hook.Remove("Think", "CheckJumpKeyForDebrief")
+        end
+        
+        local closing = false
+        local closeStart = 0
+        local closeDuration = 0.5
+        
+        local zoomStart = CurTime() + backgroundFadeDuration
+        local zoomDuration = 0.5
+        local rowDelay = 0.15
+        local numTotalRows = 16
+        
+        local autoCloseDelay = 30
+        local animationStartTime = CurTime()
+        local autoCloseStartTime = animationStartTime + ((numTotalRows - 1) * rowDelay) + zoomDuration
+
+        -- Then your timer start time:
+        local timestart = autoCloseStartTime
+        
+        local function startCloseAnimation()
+            if closing then return end
+            closing = true
+            closeStart = CurTime()
+        end
+        
+        BackgroundPanel.Paint = function(self, w, h)
+            local elapsed = CurTime() - fadeStart
+            local alpha
+            
+            if not fadeComplete then
+                alpha = math.min(175, (elapsed / backgroundFadeDuration) * 175)
+                if alpha >= 175 then
+                    fadeComplete = true
+                    if IsValid(ResultPanel) then
+                        ResultPanel:SetVisible(true)
+                    end
+                end
+            elseif closing then
+                local fadeOutElapsed = CurTime() - closeStart
+                alpha = math.max(0, 175 * (1 - (fadeOutElapsed / closeDuration)))
+            else
+                alpha = 175
+            end
+            
+            backgroundAlpha = alpha
+            surface.SetDrawColor(5, 25, 150, backgroundAlpha)
+            surface.DrawRect(0, 0, w, h)
+        end
+		
+		local entriesToShow = 16
+		local scrollOffset = 0
+		
+		ResultPanel.OnMouseWheeled = function(self, delta)
+			local maxOffset = math.max(0, #sortedRacers - entriesToShow)
+			scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
+		end
+		
+		local racersArray = {}
+
+		-- Convert sortedRacers (whatever form) to a flat array if needed
+		for _, racer in pairs(sortedRacers) do
+			table.insert(racersArray, racer)
+		end
+
+		-- Sort by TotalTime (DNF = math.huge)
+		table.sort(racersArray, function(a, b)
+			local timeA = a.array and a.array.TotalTime
+			local timeB = b.array and b.array.TotalTime
+
+			-- Treat missing or non-numeric TotalTime as a large number (DNF)
+			local tA = (type(timeA) == "number") and timeA or math.huge
+			local tB = (type(timeB) == "number") and timeB or math.huge
+
+			return tA < tB
+		end)
+
+		local racersDisplayData = {}
+
+		for i = 1, #racersArray do
+			local racer = racersArray[i]
+			local info = racer.array or racer  -- fallback if 'array' doesn't exist
+			local LBCol = Color(255, 255, 255)
+
+			local name = info["Name"] or "Unknown"
+			local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+
+			if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+
+			if info["LocalPlayer"] then
+				LBCol = Color(255, 200, 50)
+			end
+
+			-- Combine pos and name for left column text
+			local text = i .. "    " .. name
+
+			table.insert(racersDisplayData, { text = text, value = totalTime, color = LBCol })
+		end
+
+		-- Now assign this to the data your paint function uses:
+		debrieflinedata = {}
+
+		-- Fill with racer data for existing racers
+		for i = 1, math.min(#racersDisplayData, numTotalRows) do
+			debrieflinedata[i] = racersDisplayData[i]
+		end
+
+		-- Fill remaining rows with empty placeholders
+		for i = #racersDisplayData + 1, numTotalRows do
+			debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
+		end
+		
+		local statusString = "#uv.results.lost" -- default fallback
+
+		local localIndex = nil
+		local localTime = nil
+		local secondPlaceTime = nil
+
+		for i, info in ipairs(racersArray) do
+			local racer = racersArray[i]
+			local info = racer.array or racer  -- fallback if 'array' doesn't exist
+			
+			if info["LocalPlayer"] then
+				localIndex = i
+				localTime = tonumber(info["TotalTime"]) or math.huge
+			elseif i == 2 then
+				secondPlaceTime = tonumber(info["TotalTime"]) or math.huge
+			end
+		end
+
+		if localIndex == 1 then
+			local timeDiff = (secondPlaceTime or 0) - (localTime or 0)
+			if timeDiff >= 10 then
+				statusString = "#uv.results.dominated"
+			else
+				statusString = "#uv.results.won"
+			end
+		end
+
+        ResultPanel.Paint = function(self, w, h)
+            local now = CurTime()
+            
+            local zoomElapsed = closing and (now - closeStart) or (now - zoomStart)
+            local zoomFrac = math.Clamp(zoomElapsed / zoomDuration, 0, 1)
+            
+            local function easeOutCubic(t) return 1 - (1 - t)^3 end
+            local function easeInCubic(t) return t^3 end
+            
+            local easedFrac = closing and easeInCubic(zoomFrac) or easeOutCubic(zoomFrac)
+            local zoomScale = Lerp(easedFrac, closing and 1.0 or 2.0, closing and 2.0 or 1.0)
+            local panelAlpha = closing and (1 - easedFrac) or 1
+            
+            if closing and zoomFrac >= 1 then
+                CloseResults()
+                return
+            end
+            
+            local mat = Matrix()
+            mat:Translate(Vector(w*0.5, h*0.5, 0))
+            mat:Scale(Vector(zoomScale, zoomScale, 1))
+            mat:Translate(Vector(-(w*0.5), -(h*0.5), 0))
+            
+            local tabAlpha = math.floor(panelAlpha * 235)
+            local textAlpha = math.floor(panelAlpha * 255)
+            
+            cam.Start2D()
+            cam.PushModelMatrix(mat)
+            local timeremaining = math.ceil(autoCloseDelay - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            -- Upper Results Tab
+            surface.SetDrawColor( 0, 0, 0, tabAlpha )
+            surface.DrawRect( w*0.33, h*0.15, w*0.33, h*0.06)
+
+            draw.DrawText(statusString, "UVUndercoverWhiteFont", w*0.332, h*0.155, Color( 255, 200, 50, textAlpha ), TEXT_ALIGN_LEFT )
+            
+            -- Text
+            local rowYOffsetBase = h * 0.21
+            local rowYOffsetBaseAlt = h * (0.21 + 0.0325)
+            
+            local labelStartX, valueStartX = w * 0.25, w * 0.75 -- Offscreen starting points
+            local labelTargetX, valueTargetX = w * 0.332, w * 0.6575
+            
+            for i = 1, numTotalRows do
+                local rowStartTime = zoomStart + zoomDuration + (i - 1) * rowDelay
+                local rowEndTime = rowStartTime + rowDelay
+                local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
+                local ease = 1 - math.pow(1 - rowProgress, 2)
+                
+                local isDark = i % 2 == 0
+                local baseAlpha = isDark and 150 or 75
+                local rowColor = isDark and Color(50, 50, 50) or Color(150, 150, 150)
+                
+                local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
+                local rowHeight = h * 0.035
+                local rowWidth = w * 0.33
+                local rowX = w * 0.33
+                local halfWidth = rowWidth / 2
+                local alpha = ease * baseAlpha * panelAlpha
+                
+                -- Animate left half
+                local leftX = Lerp(ease, labelStartX, rowX)
+                surface.SetDrawColor(rowColor.r, rowColor.g, rowColor.b, alpha)
+                surface.DrawRect(leftX, yOffset, halfWidth + (h * 0.001), rowHeight)
+                
+                -- Animate right half
+                local rightX = Lerp(ease, valueStartX, rowX + halfWidth)
+                surface.DrawRect(rightX, yOffset, halfWidth, rowHeight)
+            end
+
+			for i = 1, entriesToShow do
+				local dataIndex = i + scrollOffset
+				local line = debrieflinedata[dataIndex]
+				if not line then continue end -- Skip if no data for this row
+
+				local rowStartTime = zoomStart + zoomDuration + (dataIndex - 1) * rowDelay
+				local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
+				local alpha = rowProgress * 255
+				local ease = 1 - math.pow(1 - rowProgress, 2) -- smooth end
+
+				local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
+
+				local labelX = Lerp(ease, labelStartX, labelTargetX)
+				local valueX = Lerp(ease, valueStartX, valueTargetX)
+
+				draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
+					Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
+					Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			end
+
+
+            -- Time remaining and closing					
+            surface.SetDrawColor( 0, 0, 0, tabAlpha )
+            surface.DrawRect( w*0.33, h*0.745, w*0.33, h*0.06)
+            
+            if timeremaining > autoCloseDelay then
+                timeremaining = autoCloseDelay
+            end
+
+			local blink = 255 * math.abs(math.sin(RealTime() * 8))
+
+			if scrollOffset > 0 then
+				draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.1775, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+			end
+
+			if scrollOffset < #sortedRacers - entriesToShow then
+				draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+			end
+
+            draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
+            
+            if timeremaining < 1 then
+                startCloseAnimation()
+            end
+            
+            cam.PopModelMatrix()
+            cam.End2D()
+        end
+        
+        -- function OK:DoClick() 
+        -- startCloseAnimation()
+        -- end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForDebrief", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping then
+                    wasJumping = true
+                    if IsValid(ResultPanel) then
+                        startCloseAnimation()
+                    end
+                end
+            else
+                wasJumping = false
+            end
+        end)
+    end,
+
+    onRaceEnd = function( sortedRacers, stringArray )
+        local triggerTime = CurTime()
+        local duration = 10
+        
+        -----------------------------------------
+        
+        print( "onRaceEnd triggered!" )
+		
+        local function _main()
+            print( 'Displaying results ...' )
+            
+            for place, dict in pairs( sortedRacers ) do
+                local vehicleArray = dict.vehicle
+                local infoArray = dict.array
+                local is_local_player = dict.LocalPlayer
+                
+                --------------------------------------------
+                
+                print( place )
+                PrintTable( infoArray )
+            end
+        end
+        if Glide then
+            Glide.Notify({
+                text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
+                lifetime = duration,
+                immediate = true,
+				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+            }) 
+        end
+        
+        hook.Add( "Think", "RaceResultDisplay", function()
+            if CurTime() - triggerTime > duration then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                return
+            end
+            
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                -- _main()
+				UV_UI.racing.undercover.events.ShowResults(sortedRacers)
+            end
+        end)
+    end
 }
 
 UV_UI.pursuit.undercover.events = {
