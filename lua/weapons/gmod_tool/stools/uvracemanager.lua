@@ -304,15 +304,21 @@ if SERVER then
 elseif CLIENT then
 
 	TOOL.Information = {
-		{ name = "info"},
-		{ name = "left" },
-		{ name = "right" },
-		{ name = "reload" }
+		{ name = "info", stage = 0},
+		{ name = "left", stage = 0 },
+		{ name = "right", stage = 0 },
+		{ name = "reload", stage = 0 },
+		
+		{ name = "info", stage = 1},
+		{ name = "left", stage = 1 },
+		{ name = "use", stage = 1 },
 	}
 
 	//CreateClientConVar("unitvehicle_racelaps", "3")
 	CreateClientConVar("unitvehicle_racetheme", "carbon - bending light")
 	CreateClientConVar("unitvehicle_sfxtheme", "unbound")
+	
+	CreateClientConVar("unitvehicle_cpheight", 64)
 
 	local ang0 = Angle(0, 0, 0)
 	local vec0 = Vector(0, 0, 0)
@@ -458,16 +464,19 @@ elseif CLIENT then
 	concommand.Add("uvrace_queryexport", QueryExport)
 end
 
-
 function TOOL:LeftClick(trace)
-	if !trace.Hit then return end
+	if not trace.Hit then return end
 	local ply = self:GetOwner()
-	if !ply:IsSuperAdmin() then return end
+	if not ply:IsSuperAdmin() then return end
 
 	local pos
 
 	if secondClick then
 		pos = trace.HitPos
+
+		if ply:KeyDown(IN_USE) then
+			pos.z = pos.z + (GetConVar("unitvehicle_cpheight"):GetInt() or 64)
+		end
 
 		if game.SinglePlayer() or SERVER then
 			local cPoint = ents.Create("uvrace_checkpoint")
@@ -477,18 +486,20 @@ function TOOL:LeftClick(trace)
 			cPoint:Spawn()
 
 			undo.Create("UVRaceEnt")
-			undo.AddEntity(cPoint)
-			undo.SetPlayer(ply)
+				undo.AddEntity(cPoint)
+				undo.SetPlayer(ply)
 			undo.Finish()
 
 			ply:AddCleanup("uvrace_ents", cPoint)
 		end
 
-		-- table.insert(checkpointTable, {pos1 = pos1, pos2 = pos, id = #checkpointTable})
+		-- Reset
 		pos1 = nil
+		self:SetStage(0)
 	else
 		pos1 = trace.HitPos
 		pos = pos1
+		self:SetStage(1)
 	end
 
 	if game.SinglePlayer() then
@@ -499,7 +510,7 @@ function TOOL:LeftClick(trace)
 	end
 
 	pos = nil
-	secondClick = !secondClick
+	secondClick = not secondClick
 
 	return true
 end
@@ -583,8 +594,6 @@ function TOOL.BuildCPanel(panel)
 		end
 	end
 
-	local speed_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
-
 	local racetheme, label = panel:ComboBox( "#tool.uvracemanager.settings.raceo.music", "unitvehicle_racetheme" )
 	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
 	if folders != nil then
@@ -600,7 +609,11 @@ function TOOL.BuildCPanel(panel)
 			sfxtheme:AddChoice( v )
 		end
 	end
-	
+
+	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racecreate"})
+	local speed_slider = panel:NumSlider("#tool.uvracemanager.settings.racecreate.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
+	local cpheight_slider = panel:NumSlider("#tool.uvracemanager.settings.racecreate.cpheight", "unitvehicle_cpheight", 1, 500, 0)
+
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.clearassets"})
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.cp", Command = "uvrace_killcps"})
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.startpos", Command = "uvrace_killspawns"})
