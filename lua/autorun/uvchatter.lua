@@ -425,8 +425,6 @@ if SERVER then
 			return 5 
 		end
 		
-		print(voice, chattertype, parameters)
-		
 		local soundtable
 		voice = tostring(voice)
 		local nestedFolders = {...}
@@ -525,14 +523,14 @@ if SERVER then
 		
 		local function HandleCallSounds()
 			local _, basedirectories = file.Find("sound/chatter/!call/*", "GAME")
-			if next(basedirectories) == nil then print("hi") return 5 end
+			if next(basedirectories) == nil then return 5 end
 			
 			local basedirectory = basedirectories[math.random(1, #basedirectories)]
 			local soundFile, soundDuration = PlayNestedSound("chatter/"..chattertype, voice)
-			if not soundFile then print("maybe") return 5 end
+			if not soundFile then return 5 end
 			
 			local chirpFiles = file.Find("sound/chatter/!call/"..basedirectory.."/chirpgeneric/*", "GAME")
-			if next(chirpFiles) == nil then print("bye") return 5 end
+			if next(chirpFiles) == nil then return 5 end
 			local chirpFile = "chatter/!call/"..basedirectory.."/chirpgeneric/"..chirpFiles[math.random(1, #chirpFiles)]
 			
 			UVRelayToClients(chirpFile, parameters, true)

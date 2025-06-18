@@ -508,9 +508,9 @@ if SERVER then
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 	
-	UVUCommanderEvade = CreateConVar("unitvehicle_unit_onecommanderevading", 0, {FCVAR_ARCHIVE}, "If enabled, will allow racers to escape while commander is on scene.")
-	UVUOneCommander = CreateConVar("unitvehicle_unit_onecommander", 0, {FCVAR_ARCHIVE})
-	UVUOneCommanderHealth = CreateConVar("unitvehicle_unit_onecommanderhealth", 1, {FCVAR_ARCHIVE})
+	UVUCommanderEvade = CreateConVar("unitvehicle_unit_onecommanderevading", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If enabled, will allow racers to escape while commander is on scene.")
+	UVUOneCommander = CreateConVar("unitvehicle_unit_onecommander", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	UVUOneCommanderHealth = CreateConVar("unitvehicle_unit_onecommanderhealth", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	
 	UVUPursuitTech = CreateConVar("unitvehicle_unit_pursuittech", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
 	UVUPursuitTech_ESF = CreateConVar("unitvehicle_unit_pursuittech_esf", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
@@ -560,7 +560,7 @@ if SERVER then
 			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
 			local check = (conVar == "timetillnextheat")
 			
-			CreateConVar( "unitvehicle_unit_" .. conVarKey, HeatDefaults[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, {FCVAR_ARCHIVE})
+			CreateConVar( "unitvehicle_unit_" .. conVarKey, HeatDefaults[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 		end
 	end
 	
@@ -1924,11 +1924,12 @@ if SERVER then
 			-- } )
 			
 			if timer.Exists("UVTimeTillNextHeat") then
-				-- if timer.TimeLeft("UVTimeTillNextHeat") >= 0 then
-				-- 	net.Start( "UVHUDTimeTillNextHeat" )
-				-- 	net.WriteString(timer.TimeLeft("UVTimeTillNextHeat"))
-				-- 	net.Broadcast()
-				-- end
+				if not _last_timed_heat_update then _last_timed_heat_update = 0 end				
+				if timer.TimeLeft("UVTimeTillNextHeat") >= 0 and CurTime() - _last_timed_heat_update > 1 then
+					net.Start( "UVHUDTimeTillNextHeat" )
+					net.WriteFloat( timer.TimeLeft("UVTimeTillNextHeat") )
+					net.Broadcast()
+				end
 			elseif UVUTimeTillNextHeatEnabled:GetInt() == 1 then
 				local TimeTillNextHeat = 120
 
@@ -2337,7 +2338,27 @@ if SERVER then
 		for key, value in pairs(array) do
 			local valid = string.match(key, 'unitvehicle_')
 			if not valid then continue end
-			RunConsoleCommand(key, value)
+
+			local convar_type = type( value )
+			local convar = GetConVar( key )
+
+			if not convar then continue end
+			
+			if convar_type == 'boolean' then
+				convar:SetBool( value )
+			elseif convar_type == 'number' then
+				convar:SetFloat( value )
+			elseif convar_type == 'string' then
+				convar:SetString( value )
+			end
+			--[[
+				So for some fucking reason unbeknownst to me, RunConsoleCommand convars refuse to work for certain strings, 
+				yet it works if you set it using the ConVar::SetX functions, bullshit.
+			]]
+
+			--print(key, value)
+			--RunConsoleCommand(key, value)
+			--GetConVar( key ):SetString( value )
 		end
 		
 		local convar_table = {}
@@ -2431,6 +2452,10 @@ else --HUD/Options
 	-- UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth", 1, true, false)
 	-- UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading", 0, true, false, "If enabled, will allow racers to escape while commander is on scene.")
 	
+	UVUOneCommander = GetConVar("unitvehicle_unit_onecommander")
+	UVUOneCommanderHealth = GetConVar("unitvehicle_unit_onecommanderhealth")
+	UVUCommanderEvade = GetConVar("unitvehicle_unit_onecommanderevading")
+
 	-- UVUPursuitTech = CreateClientConVar("unitvehicle_unit_pursuittech", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
 	-- UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
 	-- UVUPursuitTech_Spikestrip = CreateClientConVar("unitvehicle_unit_pursuittech_spikestrip", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
@@ -2451,35 +2476,35 @@ else --HUD/Options
 	-- UVUBountyCommander = CreateClientConVar("unitvehicle_unit_bountycommander", 100000, true, false)
 	-- UVUBountyRhino = CreateClientConVar("unitvehicle_unit_bountyrhino", 50000, true, false)
 
-	-- for i = 1, MAX_HEAT_LEVEL do
-	-- 	local prevIterator = i - 1
+	for i = 1, MAX_HEAT_LEVEL do
+		local prevIterator = i - 1
 		
-	-- 	local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
+		local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
 		
-	-- 	--CreateConVar("unitvehicle_unit_bountytime1", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	-- 	--CreateConVar( "unitvehicle_unit_bountytime" .. i, HeatDefaults['bountytime'][tostring( i )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	-- 	--CreateConVar( "unitvehicle_unit_timetillnextheat" .. timeTillNextHeatId, HeatDefaults['timetillnextheat'][tostring( timeTillNextHeatId )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		--CreateConVar("unitvehicle_unit_bountytime1", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		--CreateConVar( "unitvehicle_unit_bountytime" .. i, HeatDefaults['bountytime'][tostring( i )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		--CreateConVar( "unitvehicle_unit_timetillnextheat" .. timeTillNextHeatId, HeatDefaults['timetillnextheat'][tostring( timeTillNextHeatId )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 		
-	-- 	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
-	-- 		local lowercaseUnit = string.lower( v )
-	-- 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
+			local lowercaseUnit = string.lower( v )
+			local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 			
-	-- 		-------------------------------------------
+			-------------------------------------------
 			
-	-- 		CreateClientConVar( "unitvehicle_unit_" .. conVarKey, "", true, false)
-	-- 	end
+			CreateClientConVar( "unitvehicle_unit_" .. conVarKey, "", true, false)
+		end
 		
-	-- 	-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
-	-- 	-- poor guy, now he's lonely outside of the for loop : (
-	-- 	CreateClientConVar( "unitvehicle_unit_rhinos" .. i, "", true, false)
+		-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
+		-- poor guy, now he's lonely outside of the for loop : (
+		CreateClientConVar( "unitvehicle_unit_rhinos" .. i, "", true, false)
 
-	-- 	for _, conVar in pairs( HeatSettings ) do
-	-- 		local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
-	-- 		local check = (conVar == "timetillnextheat")
+		for _, conVar in pairs( HeatSettings ) do
+			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
+			local check = (conVar == "timetillnextheat")
 			
-	-- 		CreateClientConVar( "unitvehicle_unit_" .. conVarKey, HeatDefaults[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, true, false)
-	-- 	end
-	-- end
+			CreateClientConVar( "unitvehicle_unit_" .. conVarKey, HeatDefaults[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, true, false)
+		end
+	end
 	
 	-- UVUBountyTime1 = CreateClientConVar("unitvehicle_unit_bountytime1", 1000, true, false)
 	-- UVUBountyTime2 = CreateClientConVar("unitvehicle_unit_bountytime2", 5000, true, false)
@@ -3198,9 +3223,9 @@ else --HUD/Options
 	
 	net.Receive("UVHUDTimeTillNextHeat", function()
 		
-		local timestring = net.ReadString()
-		if !timestring then return end
-		UVTimeTillNextHeat = tonumber(timestring)
+		local time = net.ReadFloat()
+		if not time then return end
+		UVTimeTillNextHeat = time
 		
 	end)
 	
@@ -3695,6 +3720,7 @@ else --HUD/Options
 		if (not UVHUDDisplayPursuit) and ((not UVHUDDisplayRacing) or (not UVHUDRace)) then
 			UVStopSound()
 			
+			UVHUDDisplayBackupTimer = nil
 			UVLoadedSounds = nil
 			
 			if UVSoundLoop then

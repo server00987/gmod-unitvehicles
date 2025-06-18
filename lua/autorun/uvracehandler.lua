@@ -368,6 +368,8 @@ if SERVER then
     end)
     
     hook.Add("PostCleanupMap", "UVRaceCleanup", function()
+        if not UVRaceInEffect then return end
+        
         UVRaceEnd()
         
         net.Start( "uvrace_end" )

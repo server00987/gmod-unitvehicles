@@ -1006,7 +1006,7 @@ if SERVER then
 					end)
 					self.toofar = nil
 					self.aggressive = nil
-					if (uvbounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt():GetInt() or self.e.uvraceparticipant) and !uvtargeting and !uvenemybusted then
+					if (uvbounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt() or self.e.uvraceparticipant) and !uvtargeting and !uvenemybusted then
 						timer.Simple(0.1, function()
 							uvtargeting = true
 							if Chatter:GetBool() and IsValid(self) then

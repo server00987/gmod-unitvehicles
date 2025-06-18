@@ -1575,6 +1575,8 @@ if CLIENT then
 			local function _onChange( self )
 				local text = self:GetText()
 				local unitConvarString = string.format( "uvunitmanager_units%s%s", undercaseName, GetConVar( 'uvunitmanager_selected_heat' ):GetInt() )
+
+				print(unitConvarString)
 				
 				if ( text == "" ) then self:SetText( emptydefault ) end
 				RunConsoleCommand( unitConvarString, text )

@@ -293,7 +293,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local availableunitstable = {}
 	local availableclasses = {}
 	
-	if uvheatlevel < 1 then
+	if uvheatlevel <= 1 then
 		uvheatlevel = 1
 	elseif uvheatlevel > MAX_HEAT_LEVEL then
 		uvheatlevel = MAX_HEAT_LEVEL
@@ -302,8 +302,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local appliedUnits = nil
 	
 	if rhinoattack then
-		appliedUnits = string.Trim( GetConVar( 'unitvehicle_unit_rhinos' .. uvheatlevel ):GetString() )
-		if appliedUnits == "" then return end
+		appliedunits = string.Trim( GetConVar( 'unitvehicle_unit_rhinos' .. uvheatlevel ):GetString() )
+		if appliedunits == "" then return end
 	else
 		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. uvheatlevel ):GetString() )
 		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. uvheatlevel ):GetString() )
@@ -570,14 +570,16 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		if !IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableunit.."' is missing!") return end
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
+
 		if rhinoattack then
+			print('rhino', appliedunits)
 			Ent.uvclasstospawnon = "npc_uvspecial"
 			Ent.rhino = true
 		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then
 			
 			if UVUPursuitTech:GetBool() then
 				Ent.PursuitTech = {}
-				print("okkk")
+
 				local pool = {}
 				
 				if UVUPursuitTech_ESF:GetBool() then
