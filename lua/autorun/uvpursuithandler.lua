@@ -22,7 +22,8 @@ local Control_Strings = {
 	[1] = "#uv.ptech.slot.left",
 	[2] = "#uv.ptech.slot.right",
 	[3] = "#uv.settings.music.skipsong",
-	[4] = "#uv.settings.race.resetposition"
+	[4] = "#uv.settings.race.resetposition",
+	[5] = "#uv.settings.race.showresults"
 }
 
 local Colors = {
@@ -2588,6 +2589,8 @@ else --HUD/Options
 	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
 	
 	UVKeybindResetPosition = CreateClientConVar("unitvehicle_keybind_resetposition", KEY_M, true, false)
+	UVKeybindShowRaceResults = CreateClientConVar("unitvehicle_keybind_raceresults", KEY_N, true, false)
+
 	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
 	
 	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
@@ -4309,6 +4312,11 @@ else --HUD/Options
 			KeyBindButtons[4] = {
 				UVKeybindResetPosition:GetName(),
 				panel:Button(language.GetPhrase(Control_Strings[4]) .. " - "..string.upper(input.GetKeyName(UVKeybindResetPosition:GetInt())), "uv_keybinds", '4')
+			}
+
+			KeyBindButtons[5] = {
+				UVKeybindShowRaceResults:GetName(),
+				panel:Button(language.GetPhrase(Control_Strings[5]) .. " - "..string.upper(input.GetKeyName(UVKeybindShowRaceResults:GetInt())), "uv_keybinds", '5')
 			}
 			
 			panel:Help("#uv.settings.ptech")

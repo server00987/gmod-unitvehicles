@@ -1068,7 +1068,7 @@ else
 			end
         end
 
-        hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', table.Copy( UVHUDRaceInfo ) )
+        hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', UVFormLeaderboard( UVHUDRaceInfo.Participants ) )
         
         UVHUDRace = false
         UVHUDRaceInfo = nil
@@ -1114,10 +1114,10 @@ else
 
                 UVHUDRaceInfo['Participants'][participant].Finished = true
                 UVHUDRaceInfo['Participants'][participant].TotalTime = time
-
-                print('hi', UVHUDRaceInfo['Participants'][participant].TotalTime)
                 
                 if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
+                    UVHUDRaceInfo['Participants'][participant].LocalPlayer = true
+                    
                     local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
                     local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/*", "GAME" )
                     if soundfiles and #soundfiles > 0 then
