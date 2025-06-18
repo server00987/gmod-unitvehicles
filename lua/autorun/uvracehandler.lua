@@ -845,8 +845,8 @@ else
         UVSoundRacingStop()
 
         --UVHUDRaceCurrentCheckpoint = nil;
-        --UVHUDDisplayRacing = false;
-        UVHUDRace = false;
+        UVHUDDisplayRacing = false;
+        --UVHUDRace = false;
 
         if _UVCurrentCheckpoint and _UVCurrentCheckpoint.blip then
             _UVCurrentCheckpoint.blip.alpha = 0

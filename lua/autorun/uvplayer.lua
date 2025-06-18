@@ -99,7 +99,7 @@ end)
 
 if SERVER then
     
-    util.AddNetworkString('UVNotification')
+    util.AddNetworkString('UVUnitTakedown')
     
     util.AddNetworkString('UVGetNewKeybind')
     util.AddNetworkString('UVPTKeybindRequest')
@@ -117,11 +117,19 @@ if SERVER then
     function UVNotifyCenter( ply_array, frmt, icon_name, ... )
         for _, v in pairs( ply_array ) do
             
-            net.Start('UVNotification')
+            net.Start('UVUnitTakedown')
             
-            net.WriteTable( {
-                frmt, icon_name, { ... }
-            } )
+            --[[
+                1. Unit Type
+                2. Name
+                3. Bounty
+                4. Combo
+            ]]
+            net.WriteString( select( 1, ... ) )
+            net.WriteString( select( 2, ... ) )
+
+            net.WriteUInt( select( 3, ... ), 32 )
+            net.WriteUInt( select( 4, ... ), 7 )
             
             net.Send( v )
             
@@ -944,33 +952,40 @@ if SERVER then
     
 else
     
-    net.Receive("UVNotification", function()
-        local lang = language.GetPhrase
+    net.Receive("UVUnitTakedown", function()
+        local unitType = net.ReadString()
+        local name = net.ReadString()
+        local bounty = net.ReadUInt( 32 )
+        local bountyCombo = net.ReadUInt( 7 )
+
+        hook.Run( 'UIEventHook', 'pursuit', 'onUnitTakedown', unitType, name, string.Comma( bounty ), bountyCombo )
+
+        -- local lang = language.GetPhrase
         
-        -- local format = net.ReadString()
-        -- local icon = net.ReadString()
-        -- local args = net.ReadTable()
-        local array = net.ReadTable()
+        -- -- local format = net.ReadString()
+        -- -- local icon = net.ReadString()
+        -- -- local args = net.ReadTable()
+        -- local array = net.ReadTable()
         
-        local args = array[3]
-        local icon = array[2]
-        local format = array[1]
+        -- local args = array[3]
+        -- local icon = array[2]
+        -- local format = array[1]
         
-        for k, v in pairs (args) do
-            args[k]=lang (v)
-        end
+        -- for k, v in pairs (args) do
+        --     args[k]=lang (v)
+        -- end
         
-        UVCenterNotification = string.format( lang(format), unpack ( args ) )
-        UVCenterNotificationIcon = array[2]
+        -- UVCenterNotification = string.format( lang(format), unpack ( args ) )
+        -- UVCenterNotificationIcon = array[2]
         
-        if timer.Exists("UVNotificationTimer") then
-            timer.Remove("UVNotificationTimer")
-        end
+        -- if timer.Exists("UVNotificationTimer") then
+        --     timer.Remove("UVNotificationTimer")
+        -- end
         
-        timer.Create("UVNotificationTimer", 5, 1, function()
-            UVCenterNotificationIcon = nil
-            UVCenterNotification = nil
-        end)
+        -- timer.Create("UVNotificationTimer", 5, 1, function()
+        --     UVCenterNotificationIcon = nil
+        --     UVCenterNotification = nil
+        -- end)
         
         --LocalPlayer():PrintMessage( HUD_PRINTCENTER, string.format( lang(format), unpack ( args ) ) )
     end)
@@ -1025,41 +1040,17 @@ else
         halo.Add( UVWithESF, Color(255,255,255), 10, 10, 1 )
     end)
     
-    local function noti_draw(text, font, x, y, color)
-        surface.SetFont(font)
-        local lines = string.Explode("\n", text)
-        
-        local lH = {}
-        local mW = 0
-        local tH = 0
-        
-        for _, line in ipairs(lines) do
-            local w, h = surface.GetTextSize(line)
-            table.insert( lH, h )
-            mW = math.max( mW, w )
-            tH = tH + h
-        end
-        
-        local currentY = y - tH/2
-        
-        for i, line in ipairs(lines) do
-            local w,h = surface.GetTextSize(line)
-            draw.SimpleText(line, font, x - w/2, currentY, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            currentY = currentY + h
-        end
-    end
-    
-    hook.Add( "HUDPaint", "UVNotifications", function()
-        if UVCenterNotification then 
-            local h = ScrH()/2.7
-            local w = ScrW()/2
+    -- hook.Add( "HUDPaint", "UVNotifications", function()
+    --     if UVCenterNotification then 
+    --         local h = ScrH()/2.7
+    --         local w = ScrW()/2
             
-            //noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-            noti_draw (UVCenterNotification, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+    --         //noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+    --         noti_draw (UVCenterNotification, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
             
-            if UVCenterNotificationIcon then
-                DrawIcon( UVMaterials[UVCenterNotificationIcon], ScrW() / 2, ScrH() / 3.2, 0.06, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-            end
-        end
-    end)
+    --         if UVCenterNotificationIcon then
+    --             DrawIcon( UVMaterials[UVCenterNotificationIcon], ScrW() / 2, ScrH() / 3.2, 0.06, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+    --         end
+    --     end
+    -- end)
 end

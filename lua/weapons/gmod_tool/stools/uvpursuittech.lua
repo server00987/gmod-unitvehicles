@@ -216,7 +216,6 @@ function TOOL:LeftClick( trace )
             -- net.Broadcast()
 			-- In case one pt is replaced
 			for i=1,2 do
-				print(i)
 				UVReplicatePT( car, i )
 			end
 

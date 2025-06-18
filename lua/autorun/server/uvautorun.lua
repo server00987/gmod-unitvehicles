@@ -2444,7 +2444,7 @@ function UVCheckIfBeingBusted(enemy)
 	local enemyAnglesVelo = enemyph:GetAngleVelocity()
 	
 	--Stunt jump
-	if not uvenemyescaping and uvtargeting then
+	if not (uvenemyescaping or uvevadingprogress ~= 0) and uvtargeting then
 		if not enemy.UVStuntJump then
 			local onground = util.QuickTrace(enemy:WorldSpaceCenter(), -vector_up * 500, {enemy})
 			
@@ -2641,7 +2641,7 @@ function UVPlayerWreck(vehicle)
 	local bounty = string.Comma(bountyplus)
 	if IsValid(vehicle.e) and isfunction(vehicle.e.GetDriver) and IsValid(UVGetDriver(vehicle.e)) and UVGetDriver(vehicle.e):IsPlayer() then 
 		--UVGetDriver(vehicle.e):PrintMessage( HUD_PRINTCENTER, name.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-		UVNotifyCenter({UVGetDriver(vehicle.e)}, "uv.hud.combo", "UNITS_DISABLED", name, '', bounty, uvcombobounty)
+		UVNotifyCenter({UVGetDriver(vehicle.e)}, "uv.hud.combo", "UNITS_DISABLED", '', name, bountyplus, uvcombobounty)
 		
 	end
 	uvwrecks = uvwrecks + 1

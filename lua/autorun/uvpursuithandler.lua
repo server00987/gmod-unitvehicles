@@ -3198,7 +3198,7 @@ else --HUD/Options
 			UVCooldownProgress = 0
 		end
 		
-		if !UVHUDDisplayCooldown then
+		if !UVHUDDisplayCooldown and not UVBustedState then
 			if UVTimerFroze then
 				UVTimerFroze = nil
 			end
@@ -3324,9 +3324,11 @@ else --HUD/Options
 					bustedtext = language.GetPhrase("uv.race.shutdown")
 				end
 			end
+			UVBustedState = true
 			UVNotification = "/// " .. bustedtext .. " ///"
 			UVHUDDisplayNotification = true
 			timer.Simple(5.1, function()
+				UVBustedState = false
 				UVHUDDisplayNotification = nil
 			end)
 		end
@@ -3666,7 +3668,7 @@ else --HUD/Options
 		if UVHUDDisplayPursuit then
 			if not UVCooldownProgress then UVCooldownProgress = 0 end
 			
-			if UVHUDDisplayCooldown then
+			if UVHUDDisplayCooldown or UVBustedState then
 				if not UVTimerFroze then
 					UVTimerWhenFroze = CurTime() - UVCooldownProgress
 					UVTimerFroze = true

@@ -254,9 +254,9 @@ if SERVER then
 			local bounty = string.Comma(bountyplus)
 			if IsValid(self.e) and isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then
 				if self.v.rhino then
-					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.rhino", v, bounty, uvcombobounty)
+					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.rhino", v, bountyplus, uvcombobounty)
 				else
-					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.special", v, bounty, uvcombobounty)
+					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.special", v, bountyplus, uvcombobounty)
 				end
 			end
 			uvwrecks = uvwrecks + 1

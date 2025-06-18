@@ -338,6 +338,30 @@ function UVRenderEnemySquare(ent)
     end
 end
 
+local function mw_noti_draw(text, font, x, y, color)
+    surface.SetFont(font)
+    local lines = string.Explode("\n", text)
+    
+    local lH = {}
+    local mW = 0
+    local tH = 0
+    
+    for _, line in ipairs(lines) do
+        local w, h = surface.GetTextSize(line)
+        table.insert( lH, h )
+        mW = math.max( mW, w )
+        tH = tH + h
+    end
+    
+    local currentY = y - tH/2
+    
+    for i, line in ipairs(lines) do
+        local w,h = surface.GetTextSize(line)
+        draw.SimpleText(line, font, x - w/2, currentY, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        currentY = currentY + h
+    end
+end
+
 UV_UI.general = {}
 
 local function uv_general( ... )
@@ -1471,6 +1495,8 @@ UV_UI.pursuit.mostwanted.states = {
     UnitsColor = Color(255,255,255,150),
     BustedColor = Color(255, 255, 255, 50),
     EvasionColor = Color(255, 255, 255, 50),
+    
+    TakedownText = nil,
 }
 
 UV_UI.racing.mostwanted.events = {
@@ -1528,6 +1554,32 @@ UV_UI.pursuit.mostwanted.events = {
     --         UV_UI.pursuit.mostwanted.callbacks.onChasingUnitsChange( ... )
     --     end
     -- end,
+    onUnitTakedown = function( unitType, name, bounty, bountyCombo )
+        
+        -- UV_UI.pursuit.mostwanted.states.Takedown.Unit = select( 1, ... )
+        -- UV_UI.pursuit.mostwanted.states.Takedown.Name = select( 2, ... )
+        -- UV_UI.pursuit.mostwanted.states.Takedown.Bounty = select( 3, ... )
+        -- UV_UI.pursuit.mostwanted.states.Takedown.BountyCombo = select( 3, ... )
+        
+        UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), language.GetPhrase( unitType ), name, bounty, bountyCombo )
+        
+        ----------------------------------------------------------------------------
+        
+        if timer.Exists( 'MW_NOTIFICATION_TAKEDOWN_TIMER' ) then timer.Remove( "MW_NOTIFICATION_TAKEDOWN_TIMER" ) end 
+        
+        timer.Create( "MW_NOTIFICATION_TAKEDOWN_TIMER", 5, 1, function()
+            hook.Remove( "HUDPaint", "MW_NOTIFICATION_TAKEDOWN" )
+        end)
+        
+        local hooks = hook.GetTable()
+        if hooks.HUDPaint and hooks.HUDPaint.MW_NOTIFICATION_TAKEDOWN then return end
+        
+        hook.Add("HUDPaint", "MW_NOTIFICATION_TAKEDOWN", function()
+            //noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+            mw_noti_draw( UV_UI.pursuit.mostwanted.states.TakedownText, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)) )
+            DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, ScrH() / 3.2, 0.06, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+        end)
+    end,
     onUnitWreck = function(...)
         
         hook.Remove("Think", "MW_WRECKS_COLOR_PULSE")

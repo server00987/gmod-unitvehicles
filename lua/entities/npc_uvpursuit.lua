@@ -249,7 +249,7 @@ if SERVER then
 			local bounty = string.Comma(bountyplus)
 			if IsValid(self.e) and isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
 				--UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "Pursuit "..v.." ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-				UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.pursuit", v, bounty, uvcombobounty)
+				UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.pursuit", v, bountyplus, uvcombobounty)
 			end
 			uvwrecks = uvwrecks + 1
 			if self.v.IsGlideVehicle then

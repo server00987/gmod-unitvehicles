@@ -572,7 +572,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		Ent.uvclasstospawnon = uvnextclasstospawn
 
 		if rhinoattack then
-			print('rhino', appliedunits)
 			Ent.uvclasstospawnon = "npc_uvspecial"
 			Ent.rhino = true
 		elseif Ent.uvclasstospawnon != "npc_uvpatrol" and Ent.uvclasstospawnon != "npc_uvsupport" then

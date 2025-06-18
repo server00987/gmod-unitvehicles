@@ -2498,7 +2498,6 @@ if SERVER then
 	
 	function UVChatterAirSpikeStripHit(unit)
 		--if UVChatterDelayed then return end
-		print("aaa")
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(unit, unit.voice, "airspikestriphit")
 		end
