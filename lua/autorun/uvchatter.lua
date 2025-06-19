@@ -421,6 +421,8 @@ if SERVER then
 	-- end
 	
 	function UVSoundChatter(self, voice, chattertype, parameters, ...)
+
+		print(self, voice, chattertype, parameters, ...)
 		if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 5 
 		end
@@ -603,8 +605,9 @@ if SERVER then
 				callPath = callPath.."/"..table.concat(nestedFolders, "/")
 			end
 			
-			local _, callFiles = file.Find("sound/"..callPath.."/*", "GAME")
-			if next(callFiles) == nil then return 5 end
+			local callFiles = file.Find("sound/"..callPath.."/*", "GAME")
+			if next(callFiles) == nil then print("?") return 5 end
+
 			local soundFile = callPath.."/"..callFiles[math.random(1, #callFiles)]
 			local soundDuration = SoundDuration(soundFile)
 			
