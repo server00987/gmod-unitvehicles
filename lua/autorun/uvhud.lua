@@ -828,11 +828,8 @@ UV_UI.racing.carbon.events = {
         local duration = 10
         
         -----------------------------------------
-        
-        print( "onRaceEnd triggered!" )
 		
         local function _main()
-            print( 'Displaying results ...' )
             
             for place, dict in pairs( sortedRacers ) do
                 local vehicleArray = dict.vehicle
@@ -2177,11 +2174,8 @@ end,
         local duration = 10
         
         -----------------------------------------
-        
-        print( "onRaceEnd triggered!" )
 		
         local function _main()
-            print( 'Displaying results ...' )
             
             for place, dict in pairs( sortedRacers ) do
                 local vehicleArray = dict.vehicle
@@ -3612,11 +3606,8 @@ UV_UI.racing.undercover.events = {
         local duration = 10
         
         -----------------------------------------
-        
-        print( "onRaceEnd triggered!" )
 		
         local function _main()
-            print( 'Displaying results ...' )
             
             for place, dict in pairs( sortedRacers ) do
                 local vehicleArray = dict.vehicle
