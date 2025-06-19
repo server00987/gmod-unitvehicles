@@ -1070,6 +1070,11 @@ else
 			end
         end
 
+        for vehicle, array in pairs( UVHUDRaceInfo.Participants ) do
+            if not IsValid( vehicle ) then continue end
+            if vehicle:GetDriver() == LocalPlayer() then array.LocalPlayer = true end
+        end
+
         hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', UVFormLeaderboard( UVHUDRaceInfo.Participants ) )
         
         UVHUDRace = false
