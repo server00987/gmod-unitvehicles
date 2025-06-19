@@ -2447,14 +2447,14 @@ else --HUD/Options
 	RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	
 	-- unit convars
-	-- UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
-	-- UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 0, true, false)
-	-- UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth", 1, true, false)
-	-- UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading", 0, true, false, "If enabled, will allow racers to escape while commander is on scene.")
+	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+	UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 0, true, false)
+	UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth", 1, true, false)
+	UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading", 0, true, false, "If enabled, will allow racers to escape while commander is on scene.")
 	
-	UVUOneCommander = GetConVar("unitvehicle_unit_onecommander")
-	UVUOneCommanderHealth = GetConVar("unitvehicle_unit_onecommanderhealth")
-	UVUCommanderEvade = GetConVar("unitvehicle_unit_onecommanderevading")
+	-- UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 1, true, false)
+	-- UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth")
+	-- UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading")
 
 	-- UVUPursuitTech = CreateClientConVar("unitvehicle_unit_pursuittech", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
 	-- UVUPursuitTech_ESF = CreateClientConVar("unitvehicle_unit_pursuittech_esf", 1, true, false, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
