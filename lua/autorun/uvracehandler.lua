@@ -655,7 +655,9 @@ else
             })
         end
         
-        if not lArray then return "You are not in a race vehicle." end
+        if not lArray then 
+            return sorted_table
+        end
         
         local lCheckpointCount = #lArray.Checkpoints
         local leaderboardLines = {}

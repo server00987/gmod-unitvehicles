@@ -2806,6 +2806,7 @@ local function mw_pursuit_main( ... )
     
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
+    if UVHUDDisplayRacing then return end
     
     local vehicle = LocalPlayer():GetVehicle()
     
@@ -4214,6 +4215,8 @@ local function undercover_pursuit_main( ... )
     
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
+    if UVHUDDisplayRacing then return end
+
     
     local vehicle = LocalPlayer():GetVehicle()
     
@@ -5267,6 +5270,8 @@ local function original_pursuit_main( ... )
     
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
+    if UVHUDDisplayRacing then return end
+
     
     local vehicle = LocalPlayer():GetVehicle()
     

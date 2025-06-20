@@ -593,6 +593,8 @@ end
 function UVResetStats()
 	if next(uvwantedtablevehicle) == nil and next(uvwantedtabledriver) == nil then
 		uvbounty = 0
+		uvheatlevel = 1
+		
 		if timer.Exists("UVTimeTillNextHeat") then
 			timer.Remove("UVTimeTillNextHeat")
 		end

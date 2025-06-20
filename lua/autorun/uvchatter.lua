@@ -422,7 +422,6 @@ if SERVER then
 	
 	function UVSoundChatter(self, voice, chattertype, parameters, ...)
 
-		print(self, voice, chattertype, parameters, ...)
 		if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 5 
 		end
