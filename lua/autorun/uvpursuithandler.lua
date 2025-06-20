@@ -2293,6 +2293,19 @@ if SERVER then
 		net.Start('UVGet_PursuitTable')
 		net.WriteTable(PursuitTable)
 		net.Send(ply)
+
+		for _, v in pairs( uvunitvehicles ) do
+			net.Start( "UVHUDAddUV" )
+			net.WriteInt( v:EntIndex(), 32 )
+			net.WriteString( "unit" )
+			net.Send( ply )
+		end
+
+		for _, v in pairs( uvwantedtablevehicle ) do
+			net.Start( "UV_AddWantedVehicle" )
+			net.WriteEntity( v )
+			net.Send( ply )
+		end
 		
 		// Called when a player is fully connected and loaded
 		
