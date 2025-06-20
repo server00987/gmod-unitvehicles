@@ -132,6 +132,7 @@ if CLIENT then
 
 		elseif UVHUDRace then
 			
+			if not UVHUDDisplayRacing then return end
 			if !UVHUDRaceCurrentCheckpoint then return end
 			--Show current checkpoint and the checkpoint after that
 			local currentcheckpoint = UVHUDRaceCurrentCheckpoint + 1

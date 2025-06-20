@@ -842,6 +842,8 @@ else
     end
 
     function UVStopRacing()
+        if not UVHUDDisplayRacing then return end
+        
         UVSoundRacingStop()
 
         --UVHUDRaceCurrentCheckpoint = nil;
@@ -1214,6 +1216,9 @@ else
         local timecur = net.ReadFloat()
         local lang = language.GetPhrase
 
+        if not UVHUDRaceInfo then return end
+        if not UVHUDRaceInfo.Participants[participant] then return end
+
         local old_lap = UVHUDRaceInfo['Participants'][participant].Lap
         local new_lap = old_lap + 1
 
@@ -1433,10 +1438,7 @@ else
         end
 
         UVHUDDisplayRacing = true
-        
-        if not UVHUDDisplayBusting then
-            UVSoundRacing( my_vehicle )
-        end
+        UVSoundRacing( my_vehicle )
 
         local var = UVKeybindResetPosition:GetInt()
 						

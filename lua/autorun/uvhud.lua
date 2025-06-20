@@ -293,9 +293,6 @@ function UVRenderEnemySquare(ent)
             MinX, MinY = screenPos.x, screenPos.y
         end
         
-        local dist = localPlayer:GetPos():Distance(ent:GetPos())
-        local distInMeters = dist * 0.01905
-        
         local textX = (MinX + MaxX) / 2
         local textY = MinY - 150
         local w = ScrW()
@@ -304,11 +301,16 @@ function UVRenderEnemySquare(ent)
         -- Distance in meters
         local fadeAlpha = 255
         local fadeDist = 100
+
+        local dist = localPlayer:GetPos():Distance(ent:GetPos())
+        local distInMeters = dist * 0.01905
         
-        if distInMeters <= fadeDist then
-            fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
-        elseif distInMeters > fadeDist then
-            fadeAlpha = 0
+        if not UVHUDCopMode then
+            if distInMeters <= fadeDist then
+                fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
+            elseif distInMeters > fadeDist then
+                fadeAlpha = 0
+            end
         end
         
         cam.Start2D()
@@ -534,14 +536,14 @@ UV_UI.pursuit.carbon.states = {
 
 UV_UI.racing.carbon.events = {
     ShowResults = function(sortedRacers) -- Carbon
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         if IsValid(ResultPanel) then ResultPanel:Remove() end
-
+        
         local w = ScrW()
         local h = ScrH()
         
         --------------------------------------
-
+        
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
         ResultPanel:SetSize(w, h)
         -- ResultPanel:SetPos(0, 0)
@@ -662,32 +664,32 @@ UV_UI.racing.carbon.events = {
             end
         end)
         
-		local entriesToShow = 13
-		local scrollOffset = 0
-		
-		ResultPanel.OnMouseWheeled = function(self, delta)
-			local maxOffset = math.max(0, #sortedRacers - entriesToShow)
-			scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
-		end
+        local entriesToShow = 13
+        local scrollOffset = 0
+        
+        ResultPanel.OnMouseWheeled = function(self, delta)
+            local maxOffset = math.max(0, #sortedRacers - entriesToShow)
+            scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
+        end
         
         -- Data and labels
-		local racersArray = {}
-
-		for _, dict in pairs(sortedRacers) do
-			table.insert(racersArray, dict)
-		end
-
-		table.sort(racersArray, function(a, b)
-			local timeA = a.array and a.array.TotalTime
-			local timeB = b.array and b.array.TotalTime
-
-			-- Treat missing or non-numeric TotalTime as a large number (DNF)
-			local tA = (type(timeA) == "number") and timeA or math.huge
-			local tB = (type(timeB) == "number") and timeB or math.huge
-
-			return tA < tB
-		end)
-
+        local racersArray = {}
+        
+        for _, dict in pairs(sortedRacers) do
+            table.insert(racersArray, dict)
+        end
+        
+        table.sort(racersArray, function(a, b)
+            local timeA = a.array and a.array.TotalTime
+            local timeB = b.array and b.array.TotalTime
+            
+            -- Treat missing or non-numeric TotalTime as a large number (DNF)
+            local tA = (type(timeA) == "number") and timeA or math.huge
+            local tB = (type(timeB) == "number") and timeB or math.huge
+            
+            return tA < tB
+        end)
+        
         ResultPanel.Paint = function(self, w, h)
             local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
             local lang = language.GetPhrase
@@ -734,46 +736,46 @@ UV_UI.racing.carbon.events = {
             draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.4, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
             
             draw.DrawText( "#uv.results.race.time.caps", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
-
-			-- Draw visible racer entries
-			local startIndex = scrollOffset + 1
-			local endIndex = math.min(startIndex + entriesToShow - 1, #sortedRacers)
-
-			local rowYStart = h * 0.34
-			local rowHeight = h * 0.035
-
-			for i = startIndex, endIndex do
-				local racer = racersArray[i]
-				local y = rowYStart + ((i - startIndex) * rowHeight)
-
-				local info = racer.array or racer  -- fallback if 'array' doesn't exist
-
-				local name = info["Name"] or "Unknown"
-				local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
-
-				if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-
-				-- Background for zebra striping
-				local bgAlpha = (i % 2 == 0) and 100 or 50
+            
+            -- Draw visible racer entries
+            local startIndex = scrollOffset + 1
+            local endIndex = math.min(startIndex + entriesToShow - 1, #sortedRacers)
+            
+            local rowYStart = h * 0.34
+            local rowHeight = h * 0.035
+            
+            for i = startIndex, endIndex do
+                local racer = racersArray[i]
+                local y = rowYStart + ((i - startIndex) * rowHeight)
+                
+                local info = racer.array or racer  -- fallback if 'array' doesn't exist
+                
+                local name = info["Name"] or "Unknown"
+                local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+                
+                if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+                
+                -- Background for zebra striping
+                local bgAlpha = (i % 2 == 0) and 100 or 50
                 surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
-				surface.SetDrawColor(86, 214, 205, bgAlpha)
-				surface.DrawTexturedRect(w * 0.25, y, w * 0.485, rowHeight)
-				                
+                surface.SetDrawColor(86, 214, 205, bgAlpha)
+                surface.DrawTexturedRect(w * 0.25, y, w * 0.485, rowHeight)
+                
                 surface.SetMaterial(UVMaterials['ARROW_CARBON'])
                 surface.DrawTexturedRect( w * 0.735, y, w * 0.015, rowHeight)
-
-				draw.SimpleText(tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-				draw.SimpleText(name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-				draw.SimpleText(totalTime, "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
-			end
-
+                
+                draw.SimpleText(tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+                draw.SimpleText(name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+                draw.SimpleText(totalTime, "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+            end
+            
             -- Time remaining and closing
             local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue")
             local conttextl = string.len(conttext)
             
             local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
             local autotextl = string.len(autotext)
-			local blink = 255 * math.abs(math.sin(RealTime() * 8))
+            local blink = 255 * math.abs(math.sin(RealTime() * 8))
             
             surface.SetDrawColor( 150, 150, 150, 175 )
             
@@ -782,15 +784,15 @@ UV_UI.racing.carbon.events = {
             
             surface.DrawRect( w*0.26 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
             draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2625 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-                            
-			if scrollOffset > 0 then
-				draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.3, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-			end
-
-			if scrollOffset < #sortedRacers - entriesToShow then
-				draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.79, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-			end
-
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.3, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+            end
+            
+            if scrollOffset < #sortedRacers - entriesToShow then
+                draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.79, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+            end
+            
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
@@ -828,7 +830,7 @@ UV_UI.racing.carbon.events = {
         local duration = 10
         
         -----------------------------------------
-		
+        
         local function _main()
             
             for place, dict in pairs( sortedRacers ) do
@@ -847,7 +849,7 @@ UV_UI.racing.carbon.events = {
                 text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
                 lifetime = duration,
                 immediate = true,
-				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+                icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
             }) 
         end
         
@@ -860,7 +862,7 @@ UV_UI.racing.carbon.events = {
             if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
-				UV_UI.racing.carbon.events.ShowResults(sortedRacers)
+                UV_UI.racing.carbon.events.ShowResults(sortedRacers)
             end
         end)
     end
@@ -952,7 +954,7 @@ UV_UI.pursuit.carbon.events = {
     end,
     
     ShowDebrief = function(params) -- Carbon
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         if IsValid(ResultPanel) then ResultPanel:Remove() end
         
         local debriefdata = params.dataTable or escapedtable
@@ -1444,366 +1446,366 @@ local function carbon_pursuit_main( ... )
         end
     end
     
-    if not UVHUDRace then
-        local ResourceText = UVResourcePoints
+    --if not UVHUDRace then
+    local ResourceText = UVResourcePoints
+    
+    -- [ Upper Right Info Box ] --
+    -- Timer
+    if not UVHUDDisplayBackupTimer then
+        surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+        surface.SetDrawColor(Colors.Carbon_AccentTransparent)
+        surface.DrawTexturedRect(w * 0.8, h * 0.111, w * 0.025, h * 0.033)
+    else
+        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
+        surface.SetDrawColor(Color(193, 66, 0))
+        surface.DrawTexturedRect(w * 0.795, h * 0.111, w * 0.085, h * 0.033)
         
-        -- [ Upper Right Info Box ] --
-        -- Timer
-        if not UVHUDDisplayBackupTimer then
-            surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-            surface.SetDrawColor(Colors.Carbon_AccentTransparent)
-            surface.DrawTexturedRect(w * 0.8, h * 0.111, w * 0.025, h * 0.033)
+        surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+        surface.DrawTexturedRectRotated(w * 0.84, h * 0.1512, w * 0.01, h * 0.02, -90)
+        
+        draw.DrawText(UVBackupTimer,"UVCarbonLeaderboardFont",w * 0.865,h*0.111 * 1.001,Color(0,0,0),TEXT_ALIGN_RIGHT)
+    end
+    
+    DrawIcon(UVMaterials["CLOCK_BG"], w * 0.8, h * 0.124, .0625, Colors.Carbon_Accent) -- Icon
+    draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97 + 2, h * 0.105 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
+    draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97, h * 0.105, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
+    
+    -- if UVHeatLevel == 1 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+    -- elseif UVHeatLevel == 2 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+    -- elseif UVHeatLevel == 3 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+    -- elseif UVHeatLevel == 4 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+    -- elseif UVHeatLevel == 5 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+    -- elseif UVHeatLevel == 6 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+    --     UVHeatBountyMax = math.huge
+    -- end
+    
+    local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+    local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+    
+    UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+    UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
+    
+    local hl10 = 0
+    if UVHeatLevel > 9 then hl10 = w * 0.01 end
+    
+    DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.28, .045, Colors.Carbon_Accent) -- Icon
+    
+    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83 + 2, h * 0.26 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
+    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.26, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
+    
+    surface.SetDrawColor(Color(0,0,0))
+    surface.DrawRect(w * 0.835 - 4, h * 0.275 - 3, w * 0.145 + 8.5, h * 0.015 + 6)
+    surface.SetDrawColor(Colors.Carbon_AccentDarker)
+    surface.DrawRect(w * 0.835, h * 0.275, w * 0.145, h * 0.015)
+    surface.SetDrawColor(Color(255, 255, 255))
+    local HeatProgress = 0
+    if MaxHeatLevel:GetInt() ~= UVHeatLevel then
+        if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
+            local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
+            
+            local maxtime = timedHeatConVar:GetInt()
+            HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- if UVHeatLevel == 1 then
+            --     local maxtime = UVUTimeTillNextHeat1:GetInt()
+            --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- elseif UVHeatLevel == 2 then
+            --     local maxtime = UVUTimeTillNextHeat2:GetInt()
+            --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- elseif UVHeatLevel == 3 then
+            --     local maxtime = UVUTimeTillNextHeat3:GetInt()
+            --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- elseif UVHeatLevel == 4 then
+            --     local maxtime = UVUTimeTillNextHeat4:GetInt()
+            --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- elseif UVHeatLevel == 5 then
+            --     local maxtime = UVUTimeTillNextHeat5:GetInt()
+            --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            -- elseif UVHeatLevel == 6 then
+            --     HeatProgress = 0
+            -- end
         else
-            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
-            surface.SetDrawColor(Color(193, 66, 0))
-            surface.DrawTexturedRect(w * 0.795, h * 0.111, w * 0.085, h * 0.033)
-            
-            surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-            surface.DrawTexturedRectRotated(w * 0.84, h * 0.1512, w * 0.01, h * 0.02, -90)
-            
-            draw.DrawText(UVBackupTimer,"UVCarbonLeaderboardFont",w * 0.865,h*0.111 * 1.001,Color(0,0,0),TEXT_ALIGN_RIGHT)
+            HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
         end
+    end
+    local B = math.Clamp((HeatProgress) * w * 0.145, 0, w * 0.145)
+    local blink = 255 * math.abs(math.sin(RealTime() * 4))
+    local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+    local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+    
+    -- if HeatProgress >= 0.6 and HeatProgress < 0.75 then
+    -- surface.SetDrawColor(Color(255, blink, blink))
+    -- elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
+    -- surface.SetDrawColor(Color(255, blink2, blink2))
+    -- elseif HeatProgress >= 0.9 and HeatProgress < 1 then
+    -- surface.SetDrawColor(Color(255, blink3, blink3))
+    -- elseif HeatProgress >= 1 then
+    surface.SetDrawColor(Colors.Carbon_Accent)
+    -- end
+    
+    surface.DrawRect(w * 0.835, h * 0.275, B, h * 0.015)
+    
+    -- General Icons
+    surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL_INVERTED"])
+    surface.SetDrawColor(Color(255, 255, 255, 50))
+    surface.DrawTexturedRect(w * 0.9, h * 0.16, w * 0.075, h * 0.033)
+    
+    DrawIcon(UVMaterials["UNITS_DISABLED_CARBON"], w * 0.97, h * 0.175, .05, Colors.Carbon_Accent)
+    draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_LEFT)
+    draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
+    
+    -- draw.DrawText(UVTags, "UVFont5WeightShadow", w * 0.36, bottomy4, UVTagsColor, TEXT_ALIGN_LEFT)
+    -- DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.345, bottomy5, 0.06, UVTagsColor)
+    
+    surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL"])
+    surface.SetDrawColor(Color(255, 255, 255, 50))
+    surface.DrawTexturedRect(w * 0.79, h * 0.16, w * 0.075, h * 0.033)
+    
+    DrawIcon(UVMaterials["UNITS_CARBON"], w * 0.8, h * 0.175, .05, Colors.Carbon_Accent)
+    draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_RIGHT) -- Shadow
+    draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+    
+    -- [[ Commander Stuff ]]
+    if UVOneCommanderActive then
+        ResourceText = "⛊"
         
-        DrawIcon(UVMaterials["CLOCK_BG"], w * 0.8, h * 0.124, .0625, Colors.Carbon_Accent) -- Icon
-        draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97 + 2, h * 0.105 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
-        draw.DrawText(UVTimer,"UVCarbonFont",w * 0.97, h * 0.105, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
+        surface.SetDrawColor(0, 0, 0, 200) -- Milestone BG
+        surface.DrawRect(w * 0.79, h * 0.35, w * 0.19, h * 0.03)
         
-        -- if UVHeatLevel == 1 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        -- elseif UVHeatLevel == 2 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        -- elseif UVHeatLevel == 3 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        -- elseif UVHeatLevel == 4 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        -- elseif UVHeatLevel == 5 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        -- elseif UVHeatLevel == 6 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-        --     UVHeatBountyMax = math.huge
-        -- end
+        draw.DrawText("⛊","UVCarbonFont",w * 0.7925, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
+        draw.DrawText("⛊","UVCarbonFont",w * 0.975, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
         
-        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
-        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
-        
-        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
-        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
-        
-        local hl10 = 0
-        if UVHeatLevel > 9 then hl10 = w * 0.01 end
-        
-        DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.28, .045, Colors.Carbon_Accent) -- Icon
-        
-        draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83 + 2, h * 0.26 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
-        draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.26, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
-        
-        surface.SetDrawColor(Color(0,0,0))
-        surface.DrawRect(w * 0.835 - 4, h * 0.275 - 3, w * 0.145 + 8.5, h * 0.015 + 6)
-        surface.SetDrawColor(Colors.Carbon_AccentDarker)
-        surface.DrawRect(w * 0.835, h * 0.275, w * 0.145, h * 0.015)
-        surface.SetDrawColor(Color(255, 255, 255))
-        local HeatProgress = 0
-        if MaxHeatLevel:GetInt() ~= UVHeatLevel then
-            if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
-                local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
-                
-                local maxtime = timedHeatConVar:GetInt()
-                HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- if UVHeatLevel == 1 then
-                --     local maxtime = UVUTimeTillNextHeat1:GetInt()
-                --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- elseif UVHeatLevel == 2 then
-                --     local maxtime = UVUTimeTillNextHeat2:GetInt()
-                --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- elseif UVHeatLevel == 3 then
-                --     local maxtime = UVUTimeTillNextHeat3:GetInt()
-                --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- elseif UVHeatLevel == 4 then
-                --     local maxtime = UVUTimeTillNextHeat4:GetInt()
-                --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- elseif UVHeatLevel == 5 then
-                --     local maxtime = UVUTimeTillNextHeat5:GetInt()
-                --     HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-                -- elseif UVHeatLevel == 6 then
-                --     HeatProgress = 0
-                -- end
-            else
-                HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
+        local cname = "#uv.unit.commander"
+        if IsValid(UVHUDCommander) then
+            local driver = UVHUDCommander:GetDriver()
+            if IsValid(driver) and driver:IsPlayer() then
+                cname = driver:Nick()
             end
         end
-        local B = math.Clamp((HeatProgress) * w * 0.145, 0, w * 0.145)
+        
+        draw.DrawText(cname, "UVCarbonLeaderboardFont",w * 0.8825, h * 0.3515, Colors.Carbon_Accent,TEXT_ALIGN_CENTER)
+        
+        if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
+            UVHUDCommanderLastHealth = 0
+            UVHUDCommanderLastMaxHealth = 0
+        end
+        if IsValid(UVHUDCommander) then
+            if UVHUDCommander.IsSimfphyscar then
+                UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
+                UVHUDCommanderLastMaxHealth =
+                UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
+            elseif UVHUDCommander.IsGlideVehicle then
+                local enginehealth = UVHUDCommander:GetEngineHealth()
+                UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+            elseif vcmod_main then
+                UVHUDCommanderLastHealth =
+                UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+            else
+                UVHUDCommanderLastHealth = UVHUDCommander:Health()
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+            end
+        end
+        local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
+        local healthcolor
         local blink = 255 * math.abs(math.sin(RealTime() * 4))
         local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
         local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
         
-        -- if HeatProgress >= 0.6 and HeatProgress < 0.75 then
-        -- surface.SetDrawColor(Color(255, blink, blink))
-        -- elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
-        -- surface.SetDrawColor(Color(255, blink2, blink2))
-        -- elseif HeatProgress >= 0.9 and HeatProgress < 1 then
-        -- surface.SetDrawColor(Color(255, blink3, blink3))
-        -- elseif HeatProgress >= 1 then
-        surface.SetDrawColor(Colors.Carbon_Accent)
-        -- end
-        
-        surface.DrawRect(w * 0.835, h * 0.275, B, h * 0.015)
-        
-        -- General Icons
-        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL_INVERTED"])
-        surface.SetDrawColor(Color(255, 255, 255, 50))
-        surface.DrawTexturedRect(w * 0.9, h * 0.16, w * 0.075, h * 0.033)
-        
-        DrawIcon(UVMaterials["UNITS_DISABLED_CARBON"], w * 0.97, h * 0.175, .05, Colors.Carbon_Accent)
-        draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_LEFT)
-        draw.DrawText(UVWrecks,"UVCarbonFont",w * 0.9125,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
-        
-        -- draw.DrawText(UVTags, "UVFont5WeightShadow", w * 0.36, bottomy4, UVTagsColor, TEXT_ALIGN_LEFT)
-        -- DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.345, bottomy5, 0.06, UVTagsColor)
-        
-        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL"])
-        surface.SetDrawColor(Color(255, 255, 255, 50))
-        surface.DrawTexturedRect(w * 0.79, h * 0.16, w * 0.075, h * 0.033)
-        
-        DrawIcon(UVMaterials["UNITS_CARBON"], w * 0.8, h * 0.175, .05, Colors.Carbon_Accent)
-        draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853 + 1.5,h * 0.1525 + 1.5,Color(0,0,0),TEXT_ALIGN_RIGHT) -- Shadow
-        draw.DrawText(ResourceText,"UVCarbonFont",w * 0.853,h * 0.1525,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
-        
-        -- [[ Commander Stuff ]]
-        if UVOneCommanderActive then
-            ResourceText = "⛊"
+        if healthratio >= 0.5 then
+            healthcolor = Colors.Carbon_Accent
+        elseif healthratio >= 0.25 then
+            healthcolor = Color(255, blink, blink, 200)
+        else
+            healthcolor = Color(255, blink2, blink2, 200)
+        end
+        if healthratio > 0 then
+            surface.SetDrawColor(Color(0,0,0))
+            surface.DrawRect(w * 0.79 - 4, h * 0.385 - 3, w * 0.19 + 8.5, h * 0.015 + 6)
+            surface.SetDrawColor(Colors.Carbon_AccentDarker)
+            surface.DrawRect(w * 0.79, h * 0.385, w * 0.19, h * 0.015)
             
-            surface.SetDrawColor(0, 0, 0, 200) -- Milestone BG
-            surface.DrawRect(w * 0.79, h * 0.35, w * 0.19, h * 0.03)
-            
-            draw.DrawText("⛊","UVCarbonFont",w * 0.7925, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
-            draw.DrawText("⛊","UVCarbonFont",w * 0.975, h * 0.3375, Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
-            
-            local cname = "#uv.unit.commander"
-            if IsValid(UVHUDCommander) then
-                local driver = UVHUDCommander:GetDriver()
-                if IsValid(driver) and driver:IsPlayer() then
-                    cname = driver:Nick()
-                end
+            surface.SetDrawColor(healthcolor)
+            local T = math.Clamp((healthratio) * (w * 0.19), 0, w * 0.19)
+            surface.DrawRect(w * 0.79, h * 0.385, T, h * 0.015)
+        end
+    end
+    
+    -- [ Bottom Info Box ] --
+    local middlergb = {
+        r = 255,
+        g = 255,
+        b = 0,
+        a = 255
+    }
+    
+    if not UVHUDDisplayCooldown then
+        -- Evade Box, Coloured Backgrounds
+        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"]) -- Busted
+        surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
+        surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
+        
+        surface.SetDrawColor(Color(193, 66, 0, 175))
+        surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.085, h * 0.015)
+        
+        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"]) -- Evade
+        surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
+        surface.DrawTexturedRect(w * 0.8925 - 25, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
+        
+        surface.SetDrawColor(Color(0, 200, 0, 175))
+        surface.DrawTexturedRect(w * 0.8925, h * 0.215, w * 0.085, h * 0.015)
+        
+        -- Evade Box, Busted Meter
+        if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
+            if not BustingProgress or BustingProgress == 0 then
+                BustingProgress = CurTime()
             end
             
-            draw.DrawText(cname, "UVCarbonLeaderboardFont",w * 0.8825, h * 0.3515, Colors.Carbon_Accent,TEXT_ALIGN_CENTER)
-            
-            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
-                UVHUDCommanderLastHealth = 0
-                UVHUDCommanderLastMaxHealth = 0
-            end
-            if IsValid(UVHUDCommander) then
-                if UVHUDCommander.IsSimfphyscar then
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
-                    UVHUDCommanderLastMaxHealth =
-                    UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
-                elseif UVHUDCommander.IsGlideVehicle then
-                    local enginehealth = UVHUDCommander:GetEngineHealth()
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                elseif vcmod_main then
-                    UVHUDCommanderLastHealth =
-                    UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                else
-                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                end
-            end
-            local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
-            local healthcolor
             local blink = 255 * math.abs(math.sin(RealTime() * 4))
             local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
             local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
             
-            if healthratio >= 0.5 then
-                healthcolor = Colors.Carbon_Accent
-            elseif healthratio >= 0.25 then
-                healthcolor = Color(255, blink, blink, 200)
+            local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+            
+            local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
+            
+            if timeLeft >= UVBustTimer * 0.5 then
+                states.BustedColor = Color(193, 66, 0, blink)
+                -- UVSoundBusting()
+            elseif timeLeft >= UVBustTimer * 0.2 then
+                states.BustedColor = Color(193, 66, 0, blink2)
+                if playbusting then
+                    UVSoundBusting()
+                end
+            elseif timeLeft >= 0 then
+                states.BustedColor = Color(193, 66, 0, blink3)
+                if playbusting then
+                    UVSoundBusting()
+                end
             else
-                healthcolor = Color(255, blink2, blink2, 200)
+                states.BustedColor = Color(193, 66, 0)
             end
-            if healthratio > 0 then
-                surface.SetDrawColor(Color(0,0,0))
-                surface.DrawRect(w * 0.79 - 4, h * 0.385 - 3, w * 0.19 + 8.5, h * 0.015 + 6)
-                surface.SetDrawColor(Colors.Carbon_AccentDarker)
-                surface.DrawRect(w * 0.79, h * 0.385, w * 0.19, h * 0.015)
-                
-                surface.SetDrawColor(healthcolor)
-                local T = math.Clamp((healthratio) * (w * 0.19), 0, w * 0.19)
-                surface.DrawRect(w * 0.79, h * 0.385, T, h * 0.015)
-            end
+            
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.085), 0, w * 0.085)
+            T = math.floor(T)
+            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
+            surface.SetDrawColor(255, 0, 0)
+            surface.DrawTexturedRect(w * 0.79 + (w * 0.085 - T), h * 0.215, T, h * 0.015)
+            middlergb = {
+                r = 175,
+                g = 175,
+                b = 0,
+            }
+        else
+            UVBustedColor = Color(193, 66, 0, 0)
+            BustingProgress = 0
         end
         
-        -- [ Bottom Info Box ] --
-        local middlergb = {
-            r = 255,
-            g = 255,
-            b = 0,
-            a = 255
-        }
-        
-        if not UVHUDDisplayCooldown then
-            -- Evade Box, Coloured Backgrounds
-            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"]) -- Busted
-            surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
-            surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
-            
-            surface.SetDrawColor(Color(193, 66, 0, 175))
-            surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.085, h * 0.015)
-            
-            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"]) -- Evade
-            surface.SetDrawColor(Color(0, 0, 0, 255)) -- Shadow
-            surface.DrawTexturedRect(w * 0.8925 - 25, h * 0.215 - 3.5, w * 0.085 + 30, h * 0.015 + 8.5)
-            
-            surface.SetDrawColor(Color(0, 200, 0, 175))
-            surface.DrawTexturedRect(w * 0.8925, h * 0.215, w * 0.085, h * 0.015)
-            
-            -- Evade Box, Busted Meter
-            if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
-                if not BustingProgress or BustingProgress == 0 then
-                    BustingProgress = CurTime()
-                end
-                
-                local blink = 255 * math.abs(math.sin(RealTime() * 4))
-                local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-                local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-                
-                local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
-                
-                local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
-                
-                if timeLeft >= UVBustTimer * 0.5 then
-                    states.BustedColor = Color(193, 66, 0, blink)
-                    -- UVSoundBusting()
-                elseif timeLeft >= UVBustTimer * 0.2 then
-                    states.BustedColor = Color(193, 66, 0, blink2)
-                    if playbusting then
-                        UVSoundBusting()
-                    end
-                elseif timeLeft >= 0 then
-                    states.BustedColor = Color(193, 66, 0, blink3)
-                    if playbusting then
-                        UVSoundBusting()
-                    end
-                else
-                    states.BustedColor = Color(193, 66, 0)
-                end
-                
-                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.085), 0, w * 0.085)
-                T = math.floor(T)
-                surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
-                surface.SetDrawColor(255, 0, 0)
-                surface.DrawTexturedRect(w * 0.79 + (w * 0.085 - T), h * 0.215, T, h * 0.015)
-                middlergb = {
-                    r = 175,
-                    g = 175,
-                    b = 0,
-                }
-            else
-                UVBustedColor = Color(193, 66, 0, 0)
-                BustingProgress = 0
+        -- Evade Box, Evade Meter
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
+            --UVSoundHeat(UVHeatLevel)
+            if not EvadingProgress or EvadingProgress == 0 then
+                EvadingProgress = CurTime()
+                UVEvadingProgress = EvadingProgress
             end
             
-            -- Evade Box, Evade Meter
-            if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
-                --UVSoundHeat(UVHeatLevel)
-                if not EvadingProgress or EvadingProgress == 0 then
-                    EvadingProgress = CurTime()
-                    UVEvadingProgress = EvadingProgress
-                end
-                
-                local T = math.Clamp((UVEvadingProgress) * (w * 0.082), 0, w * 0.082)
-                surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
-                surface.SetDrawColor(0, 255, 0)
-                surface.DrawTexturedRect(w * 0.895, h * 0.215, T, h * 0.015)
-                middlergb = {
-                    r = 175,
-                    g = 175,
-                    b = 0,
-                }
-                
-                states.EvasionColor = Color(0, 255, 0, blink)
-            else
-                EvadingProgress = 0
-            end
+            local T = math.Clamp((UVEvadingProgress) * (w * 0.082), 0, w * 0.082)
+            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
+            surface.SetDrawColor(0, 255, 0)
+            surface.DrawTexturedRect(w * 0.895, h * 0.215, T, h * 0.015)
+            middlergb = {
+                r = 175,
+                g = 175,
+                b = 0,
+            }
             
-            -- Evade Box, Middle Piece
-            surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, 255)
-            surface.DrawRect(w * 0.875, h * 0.215, w * 0.0195, h * 0.015)
-            
-            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795 + 2,h* 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_LEFT)
-            draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_RIGHT)
-            
-            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,Color(193, 66, 0, 100),TEXT_ALIGN_LEFT)
-            draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Color(0, 255, 0, 100),TEXT_ALIGN_RIGHT)
-            
-            draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,states.BustedColor,TEXT_ALIGN_LEFT)
-            draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,states.EvasionColor,TEXT_ALIGN_RIGHT)
-            
-            -- Lower Box
-            local lbtext = "REPLACEME"
-            local uloc, utype = "uv.chase.unit", UnitsChasing
-            if not UVHUDCopMode then
-                if UnitsChasing ~= 1 then
-                    uloc = "uv.chase.units"
-                end
-            else
-                utype = UVHUDWantedSuspectsNumber
-                uloc = "uv.chase.suspects"
-            end
-            
-            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825 + 2,h * 0.3 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
-            draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825,h * 0.3,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+            states.EvasionColor = Color(0, 255, 0, blink)
         else
-            -- Lower Box
-            -- Evade Box, All BG (Moved to inner if clauses)
-            
-            -- Evade Box, Cooldown Meter
-            if UVHUDDisplayCooldown then
-                if not CooldownProgress or CooldownProgress == 0 then
-                    CooldownProgress = CurTime()
-                end
-                
-                UVSoundCooldown()
-                EvadingProgress = 0
-                
-                -- Upper Box
-                if not UVHUDCopMode then
-                    -- if UVHUDDisplayHidingPrompt then
-                    -- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_LEFT)
-                    -- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 ,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
-                    -- end
-                    
-                    local T = math.Clamp((UVCooldownTimer) * (w * 0.19), 0, w * 0.19)
-                    T = math.floor(T)
-                    
-                    surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
-                    surface.SetDrawColor(Color(0,0,0)) -- Shadow
-                    surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.19 + 10, h * 0.015 + 8.5)
-                    
-                    surface.SetDrawColor(Colors.Carbon_AccentDarker)
-                    surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.19, h * 0.015)
-                    
-                    surface.SetDrawColor(Colors.Carbon_Accent)
-                    surface.DrawTexturedRect(w * 0.79 + (w * 0.19 - T), h * 0.215, T, h * 0.015)
-                    
-                    draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
-                    draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
-                else
-                    draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
-                    draw.DrawText("#uv.chase.cooldown", "UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
-                end
-            else
-                CooldownProgress = 0
+            EvadingProgress = 0
+        end
+        
+        -- Evade Box, Middle Piece
+        surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, 255)
+        surface.DrawRect(w * 0.875, h * 0.215, w * 0.0195, h * 0.015)
+        
+        draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795 + 2,h* 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0,100),TEXT_ALIGN_RIGHT)
+        
+        draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,Color(193, 66, 0, 100),TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Color(0, 255, 0, 100),TEXT_ALIGN_RIGHT)
+        
+        draw.DrawText("#uv.chase.busted","UVCarbonLeaderboardFont",w * 0.795,h* 0.23,states.BustedColor,TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.chase.evade","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,states.EvasionColor,TEXT_ALIGN_RIGHT)
+        
+        -- Lower Box
+        local lbtext = "REPLACEME"
+        local uloc, utype = "uv.chase.unit", UnitsChasing
+        if not UVHUDCopMode then
+            if UnitsChasing ~= 1 then
+                uloc = "uv.chase.units"
             end
+        else
+            utype = UVHUDWantedSuspectsNumber
+            uloc = "uv.chase.suspects"
+        end
+        
+        draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825 + 2,h * 0.3 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+        draw.DrawText(string.format(lang(uloc), utype),"UVCarbonFont",w * 0.9825,h * 0.3,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+    else
+        -- Lower Box
+        -- Evade Box, All BG (Moved to inner if clauses)
+        
+        -- Evade Box, Cooldown Meter
+        if UVHUDDisplayCooldown then
+            if not CooldownProgress or CooldownProgress == 0 then
+                CooldownProgress = CurTime()
+            end
+            
+            UVSoundCooldown()
+            EvadingProgress = 0
+            
+            -- Upper Box
+            if not UVHUDCopMode then
+                -- if UVHUDDisplayHidingPrompt then
+                -- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_LEFT)
+                -- draw.DrawText("#uv.chase.hiding","UVCarbonLeaderboardFont",w * 0.795 ,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_LEFT)
+                -- end
+                
+                local T = math.Clamp((UVCooldownTimer) * (w * 0.19), 0, w * 0.19)
+                T = math.floor(T)
+                
+                surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID_INVERTED"])
+                surface.SetDrawColor(Color(0,0,0)) -- Shadow
+                surface.DrawTexturedRect(w * 0.79 - 5, h * 0.215 - 3.5, w * 0.19 + 10, h * 0.015 + 8.5)
+                
+                surface.SetDrawColor(Colors.Carbon_AccentDarker)
+                surface.DrawTexturedRect(w * 0.79, h * 0.215, w * 0.19, h * 0.015)
+                
+                surface.SetDrawColor(Colors.Carbon_Accent)
+                surface.DrawTexturedRect(w * 0.79 + (w * 0.19 - T), h * 0.215, T, h * 0.015)
+                
+                draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+                draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+            else
+                draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+                draw.DrawText("#uv.chase.cooldown", "UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+            end
+        else
+            CooldownProgress = 0
         end
     end
+    --end
 end
 
 UV_UI.pursuit.carbon.main = carbon_pursuit_main
@@ -1832,7 +1834,7 @@ UV_UI.racing.mostwanted.events = {
         local h = ScrH()
         
         --------------------------------------
-
+        
         local ResultPanel = vgui.Create("DFrame")
         local OK = vgui.Create("DButton")
         
@@ -1856,60 +1858,60 @@ UV_UI.racing.mostwanted.events = {
         local displaySequence = {}
         
         -- Data and labels
-		local racersArray = {}
-
-		for _, dict in pairs(sortedRacers) do
-			table.insert(racersArray, dict)
-		end
-
-		table.sort(racersArray, function(a, b)
-			local timeA = a.array and a.array.TotalTime
-			local timeB = b.array and b.array.TotalTime
-
-			-- Treat missing or non-numeric TotalTime as a large number (DNF)
-			local tA = (type(timeA) == "number") and timeA or math.huge
-			local tB = (type(timeB) == "number") and timeB or math.huge
-
-			return tA < tB
-		end)
-
+        local racersArray = {}
+        
+        for _, dict in pairs(sortedRacers) do
+            table.insert(racersArray, dict)
+        end
+        
+        table.sort(racersArray, function(a, b)
+            local timeA = a.array and a.array.TotalTime
+            local timeB = b.array and b.array.TotalTime
+            
+            -- Treat missing or non-numeric TotalTime as a large number (DNF)
+            local tA = (type(timeA) == "number") and timeA or math.huge
+            local tB = (type(timeB) == "number") and timeB or math.huge
+            
+            return tA < tB
+        end)
+        
         local h1, h2 = h*0.2475, h*0.2875
         local xLeft = w * 0.205
         local xMiddle = w * 0.3
         local xRight = w * 0.795
         local revealInterval = 0.033
-
-		local entriesToShow = 13
-		local scrollOffset = 0
-
-		local i = 0
-		for place, dict in ipairs(racersArray) do
-			local info = dict.array or {}
-			i = i + 1
-
-			local revealTime = revealStartTime + (i - 1) * revealInterval
-
-			-- Staggered vertical layout
-			local visibleIndex = i -- 1 to entriesToShow
-			local yPos = (visibleIndex % 2 == 1) and h1 + math.floor(visibleIndex / 2) * h * 0.08
-						or h2 + math.floor((visibleIndex - 1) / 2) * h * 0.08
-
-			local name = info["Name"] or "Unknown"
-			local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
-
-			if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-
-			local entry = {
-				y = yPos,
-				leftText = tostring(i),
-				middleText = name,
-				rightText = totalTime,
-				revealTime = revealTime
-			}
-
-			table.insert(displaySequence, entry)
-		end
-		
+        
+        local entriesToShow = 13
+        local scrollOffset = 0
+        
+        local i = 0
+        for place, dict in ipairs(racersArray) do
+            local info = dict.array or {}
+            i = i + 1
+            
+            local revealTime = revealStartTime + (i - 1) * revealInterval
+            
+            -- Staggered vertical layout
+            local visibleIndex = i -- 1 to entriesToShow
+            local yPos = (visibleIndex % 2 == 1) and h1 + math.floor(visibleIndex / 2) * h * 0.08
+            or h2 + math.floor((visibleIndex - 1) / 2) * h * 0.08
+            
+            local name = info["Name"] or "Unknown"
+            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            
+            if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+            
+            local entry = {
+                y = yPos,
+                leftText = tostring(i),
+                middleText = name,
+                rightText = totalTime,
+                revealTime = revealTime
+            }
+            
+            table.insert(displaySequence, entry)
+        end
+        
         local flashDuration = 0.2 -- total time for flash animation
         local flashStartTime = nil
         local allRevealed = false
@@ -1921,18 +1923,18 @@ UV_UI.racing.mostwanted.events = {
         local closeStartTime = 0
         
         local totalRevealTime = (revealInterval * entriesToShow) + flashDuration
-		
-		function ResultPanel:OnMouseWheeled(delta)
-			if delta > 0 then
-				scrollOffset = math.max(scrollOffset - 1, 0)
-			elseif delta < 0 then
-				local maxOffset = math.max(0, #displaySequence - entriesToShow)
-				scrollOffset = math.min(scrollOffset + 1, maxOffset)
-			end
-
-			return true -- prevent further processing
-		end
-
+        
+        function ResultPanel:OnMouseWheeled(delta)
+            if delta > 0 then
+                scrollOffset = math.max(scrollOffset - 1, 0)
+            elseif delta < 0 then
+                local maxOffset = math.max(0, #displaySequence - entriesToShow)
+                scrollOffset = math.min(scrollOffset + 1, maxOffset)
+            end
+            
+            return true -- prevent further processing
+        end
+        
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
             
@@ -2003,51 +2005,51 @@ UV_UI.racing.mostwanted.events = {
             local hStep = h * 0.04
             local elapsed, revealProgress, flashProgress
             local entriesCount = #displaySequence
-			
-			if closing then
-				elapsed = curTime - closeStartTime
-				revealProgress = math.Clamp(1 - (elapsed / totalRevealTime), 0, 1)
-				flashProgress = math.Clamp(revealProgress * (flashDuration / totalRevealTime), 0, 1)
-
-				-- Limit entriesToShow to the scrolling window
-				entriesToShow = math.min(math.ceil(entriesCount * revealProgress), 13)
-			else
-				elapsed = curTime - revealStartTime
-				revealProgress = math.Clamp(elapsed / (totalRevealTime - flashDuration), 0, 1)
-				flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
-
-				-- Limit entriesToShow to the scrolling window
-				entriesToShow = math.min(math.floor(entriesCount * revealProgress), 13)
-			end
-
-			local startIndex = scrollOffset + 1
-			local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
-
-			for i = startIndex, endIndex do
-				local entry = displaySequence[i]
-				local localIndex = i - startIndex + 1
-				local yPos = (localIndex % 2 == 1)
-					and h1 + math.floor(localIndex / 2) * h * 0.08
-					or h2 + math.floor((localIndex - 1) / 2) * h * 0.08
-
-				if localIndex % 2 == 0 then
-					surface.SetDrawColor(0, 0, 0, 50)
-				else
-					surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, 25)
-				end
-				surface.DrawRect(w * 0.2, yPos, w * 0.6, hStep)
-
-				if entry.leftText then
-					draw.SimpleText(entry.leftText, "UVFont5UI", xLeft, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-				end
-				if entry.middleText then
-					draw.SimpleText(entry.middleText, "UVFont5UI", xMiddle, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-				end
-				if entry.rightText then
-					draw.SimpleText(entry.rightText, "UVFont5UI", xRight, yPos, Colors.MW_Racer, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-				end
-			end
-
+            
+            if closing then
+                elapsed = curTime - closeStartTime
+                revealProgress = math.Clamp(1 - (elapsed / totalRevealTime), 0, 1)
+                flashProgress = math.Clamp(revealProgress * (flashDuration / totalRevealTime), 0, 1)
+                
+                -- Limit entriesToShow to the scrolling window
+                entriesToShow = math.min(math.ceil(entriesCount * revealProgress), 13)
+            else
+                elapsed = curTime - revealStartTime
+                revealProgress = math.Clamp(elapsed / (totalRevealTime - flashDuration), 0, 1)
+                flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
+                
+                -- Limit entriesToShow to the scrolling window
+                entriesToShow = math.min(math.floor(entriesCount * revealProgress), 13)
+            end
+            
+            local startIndex = scrollOffset + 1
+            local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
+            
+            for i = startIndex, endIndex do
+                local entry = displaySequence[i]
+                local localIndex = i - startIndex + 1
+                local yPos = (localIndex % 2 == 1)
+                and h1 + math.floor(localIndex / 2) * h * 0.08
+                or h2 + math.floor((localIndex - 1) / 2) * h * 0.08
+                
+                if localIndex % 2 == 0 then
+                    surface.SetDrawColor(0, 0, 0, 50)
+                else
+                    surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, 25)
+                end
+                surface.DrawRect(w * 0.2, yPos, w * 0.6, hStep)
+                
+                if entry.leftText then
+                    draw.SimpleText(entry.leftText, "UVFont5UI", xLeft, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.middleText then
+                    draw.SimpleText(entry.middleText, "UVFont5UI", xMiddle, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.rightText then
+                    draw.SimpleText(entry.rightText, "UVFont5UI", xRight, yPos, Colors.MW_Racer, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+                end
+            end
+            
             if flashStartTime then
                 -- Top tab background flash
                 surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
@@ -2071,14 +2073,14 @@ UV_UI.racing.mostwanted.events = {
                 draw.DrawText("#uv.results.race.name", "UVFont5UI", w * 0.3, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 draw.DrawText("#uv.results.race.time", "UVFont5UI", w * 0.795, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
                 
-				if scrollOffset > 0 then
-					draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255), TEXT_ALIGN_CENTER)
-				end
-
-				if scrollOffset < #displaySequence - entriesToShow then
-					draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255), TEXT_ALIGN_CENTER)
-				end
-
+                if scrollOffset > 0 then
+                    draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255), TEXT_ALIGN_CENTER)
+                end
+                
+                if scrollOffset < #displaySequence - entriesToShow then
+                    draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255), TEXT_ALIGN_CENTER)
+                end
+                
                 draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             end
             
@@ -2118,7 +2120,7 @@ UV_UI.racing.mostwanted.events = {
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
                 if not closing then
-					surface.PlaySound( "uvui/mw/closemenu.wav" )
+                    surface.PlaySound( "uvui/mw/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
                 end
@@ -2145,7 +2147,7 @@ end
 
 function OK:DoClick()
     if not closing then
-		surface.PlaySound( "uvui/mw/closemenu.wav" )
+        surface.PlaySound( "uvui/mw/closemenu.wav" )
         closing = true
         closeStartTime = CurTime()
     end
@@ -2168,48 +2170,48 @@ hook.Add("Think", "CheckJumpKeyForDebrief", function()
     end
 end)
 end,
-	
-    onRaceEnd = function( sortedRacers, stringArray )
-        local triggerTime = CurTime()
-        local duration = 10
+
+onRaceEnd = function( sortedRacers, stringArray )
+    local triggerTime = CurTime()
+    local duration = 10
+    
+    -----------------------------------------
+    
+    local function _main()
         
-        -----------------------------------------
-		
-        local function _main()
+        for place, dict in pairs( sortedRacers ) do
+            local vehicleArray = dict.vehicle
+            local infoArray = dict.array
+            local is_local_player = dict.LocalPlayer
             
-            for place, dict in pairs( sortedRacers ) do
-                local vehicleArray = dict.vehicle
-                local infoArray = dict.array
-                local is_local_player = dict.LocalPlayer
-                
-                --------------------------------------------
-                
-                print( place )
-                PrintTable( infoArray )
-            end
-        end
-        if Glide then
-            Glide.Notify({
-                text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
-                lifetime = duration,
-                immediate = true,
-				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
-            }) 
-        end
-        
-        hook.Add( "Think", "RaceResultDisplay", function()
-            if CurTime() - triggerTime > duration then
-                hook.Remove( 'Think', 'RaceResultDisplay' )
-                return
-            end
+            --------------------------------------------
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
-                hook.Remove( 'Think', 'RaceResultDisplay' )
-                -- _main()
-				UV_UI.racing.mostwanted.events.ShowResults(sortedRacers)
-            end
-        end)
+            print( place )
+            PrintTable( infoArray )
+        end
     end
+    if Glide then
+        Glide.Notify({
+            text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
+            lifetime = duration,
+            immediate = true,
+            icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+        }) 
+    end
+    
+    hook.Add( "Think", "RaceResultDisplay", function()
+        if CurTime() - triggerTime > duration then
+            hook.Remove( 'Think', 'RaceResultDisplay' )
+            return
+        end
+        
+        if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            hook.Remove( 'Think', 'RaceResultDisplay' )
+            -- _main()
+            UV_UI.racing.mostwanted.events.ShowResults(sortedRacers)
+        end
+    end)
+end
 }
 
 UV_UI.pursuit.mostwanted.events = {
@@ -2320,7 +2322,7 @@ UV_UI.pursuit.mostwanted.events = {
     end,
     
     ShowDebrief = function(params) -- Most Wanted
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         
         local debriefdata = params.dataTable or escapedtable
         local debriefcolor = params.color or Color(255, 183, 61)
@@ -2865,400 +2867,400 @@ local function mw_pursuit_main( ... )
         end
     end
     
-    if not UVHUDRace then
-        local ResourceText = UVResourcePoints
-        local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+    --if not UVHUDRace then
+    local ResourceText = UVResourcePoints
+    local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+    
+    -- [ Upper Right Info Box ] --
+    -- Full BG
+    if UVHUDCopMode then
+        surface.SetDrawColor(61, 184, 255, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+    else
+        surface.SetDrawColor(223, 184, 127, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+    end
+    surface.SetMaterial(UVMaterials["PURSUIT_BG_PULSE"])
+    surface.DrawTexturedRect(w * 0.7, h * 0.101, w * 0.275, h * 0.1175)
+    
+    surface.SetDrawColor(0, 0, 0, 255) -- Timer BG
+    surface.SetMaterial(UVMaterials["PURSUIT_BG_TOP"])
+    surface.DrawTexturedRect(w * 0.7125, h * 0.1075, w * 0.2575, h * 0.05)
+    
+    surface.SetDrawColor(0, 0, 0, 255) -- Bounty BG
+    surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTTOM"])
+    surface.DrawTexturedRect(w * 0.707, h * 0.16, w * 0.2625, h * 0.05)
+    
+    local milestoneamount = 0
+    local milestoneh = 0
+    
+    if milestoneamount > 0 and not UVHUDCopMode then
+        surface.SetDrawColor(0, 0, 0, 150) -- Milestone BG
+        surface.DrawRect(w * 0.71, h * 0.215, w * 0.2575, h * 0.035)
         
-        -- [ Upper Right Info Box ] --
-        -- Full BG
-        if UVHUDCopMode then
-            surface.SetDrawColor(61, 184, 255, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+        draw.DrawText("#uv.hud.milestones","UVFont5UI",w * 0.7125,h * 0.2125,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
+        draw.DrawText(milestoneamount, "UVFont5UI", w * 0.965, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
+        
+        for i = 1, math.min(milestoneamount, 5) do
+            surface.SetDrawColor(223, 184, 127, 150) -- Milestone Icon BG's
+            surface.DrawRect(w * 0.71 + (i - 1) * (w * 0.05175), h * 0.25, w * 0.05075, h * 0.065)
+            DrawIcon(UVMaterials["CLOCK_BG"], w * 0.735 + (i - 1) * (w * 0.05175), h * 0.28, .075, Color(255, 255, 255, 100))
+        end
+        milestoneh = h * 0.1025
+    end
+    
+    -- Timer
+    DrawIcon(UVMaterials["CLOCK"], w * 0.735, h * 0.1325, .0625, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent) -- Icon
+    draw.DrawText(UVTimer, "UVFont5UI", w * 0.965, h * 0.115, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent, TEXT_ALIGN_RIGHT)
+    
+    -- Bounty
+    draw.DrawText("#uv.hud.bounty","UVFont5UI",w * 0.7175,h * 0.1625,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
+    draw.DrawText(UVBounty, "UVFont5UI", w * 0.965, h * 0.1625, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
+    
+    -- Heat Level
+    surface.SetDrawColor(0, 0, 0, 200)
+    surface.DrawRect(w * 0.71, h * 0.2175 + milestoneh, w * 0.036, h * 0.035)
+    
+    -- if UVHeatLevel == 1 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+    -- elseif UVHeatLevel == 2 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+    -- elseif UVHeatLevel == 3 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+    -- elseif UVHeatLevel == 4 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+    -- elseif UVHeatLevel == 5 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+    -- elseif UVHeatLevel == 6 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+    --     UVHeatBountyMax = math.huge
+    -- end
+    
+    local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+    local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+    
+    UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+    UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
+    
+    DrawIcon(UVMaterials["HEAT"], w * 0.7175, h * 0.2325 + milestoneh, .0375, Color(255, 255, 255)) -- Icon
+    draw.DrawText(UVHeatLevel, "UVFont5UI", w * 0.733, h * 0.214 + milestoneh, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+    
+    surface.SetDrawColor(Color(109, 109, 109, 200))
+    surface.DrawRect(w * 0.7475, h * 0.2175 + milestoneh, w * 0.22, h * 0.035)
+    surface.SetDrawColor(Color(255, 255, 255))
+    local HeatProgress = 0
+    if MaxHeatLevel:GetInt() ~= UVHeatLevel then
+        if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
+            local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
+            
+            local maxtime = timedHeatConVar:GetInt()
+            HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
-            surface.SetDrawColor(223, 184, 127, 100 * math.abs(math.sin(RealTime() * 2.75))) -- Main border
+            HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
         end
-        surface.SetMaterial(UVMaterials["PURSUIT_BG_PULSE"])
-        surface.DrawTexturedRect(w * 0.7, h * 0.101, w * 0.275, h * 0.1175)
+    end
+    local B = math.Clamp((HeatProgress) * w * 0.22, 0, w * 0.22)
+    local blink = 255 * math.abs(math.sin(RealTime() * 4))
+    local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+    local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+    
+    if HeatProgress >= 0.6 and HeatProgress < 0.75 then
+        surface.SetDrawColor(Color(255, blink, blink))
+    elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
+        surface.SetDrawColor(Color(255, blink2, blink2))
+    elseif HeatProgress >= 0.9 and HeatProgress < 1 then
+        surface.SetDrawColor(Color(255, blink3, blink3))
+    elseif HeatProgress >= 1 then
+        surface.SetDrawColor(Color(255, 0, 0))
+    end
+    
+    surface.DrawRect(w * 0.7475, h * 0.2175 + milestoneh, B, h * 0.035)
+    
+    -- [[ Commander Stuff ]]
+    if UVOneCommanderActive then
+        ResourceText = "⛊"
         
-        surface.SetDrawColor(0, 0, 0, 255) -- Timer BG
-        surface.SetMaterial(UVMaterials["PURSUIT_BG_TOP"])
-        surface.DrawTexturedRect(w * 0.7125, h * 0.1075, w * 0.2575, h * 0.05)
+        surface.SetDrawColor(0, 0, 0, 200) -- Milestone BG
+        surface.DrawRect(w * 0.71, h * 0.26 + milestoneh, w * 0.2575, h * 0.035)
         
-        surface.SetDrawColor(0, 0, 0, 255) -- Bounty BG
-        surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTTOM"])
-        surface.DrawTexturedRect(w * 0.707, h * 0.16, w * 0.2625, h * 0.05)
+        draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.71, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_LEFT)
+        draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.965, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_RIGHT)
         
-        local milestoneamount = 0
-        local milestoneh = 0
-        
-        if milestoneamount > 0 and not UVHUDCopMode then
-            surface.SetDrawColor(0, 0, 0, 150) -- Milestone BG
-            surface.DrawRect(w * 0.71, h * 0.215, w * 0.2575, h * 0.035)
-            
-            draw.DrawText("#uv.hud.milestones","UVFont5UI",w * 0.7125,h * 0.2125,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
-            draw.DrawText(milestoneamount, "UVFont5UI", w * 0.965, h * 0.2125, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
-            
-            for i = 1, math.min(milestoneamount, 5) do
-                surface.SetDrawColor(223, 184, 127, 150) -- Milestone Icon BG's
-                surface.DrawRect(w * 0.71 + (i - 1) * (w * 0.05175), h * 0.25, w * 0.05075, h * 0.065)
-                DrawIcon(UVMaterials["CLOCK_BG"], w * 0.735 + (i - 1) * (w * 0.05175), h * 0.28, .075, Color(255, 255, 255, 100))
+        local cname = "#uv.unit.commander"
+        if IsValid(UVHUDCommander) then
+            local driver = UVHUDCommander:GetDriver()
+            if IsValid(driver) and driver:IsPlayer() then
+                cname = driver:Nick()
             end
-            milestoneh = h * 0.1025
         end
         
-        -- Timer
-        DrawIcon(UVMaterials["CLOCK"], w * 0.735, h * 0.1325, .0625, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent) -- Icon
-        draw.DrawText(UVTimer, "UVFont5UI", w * 0.965, h * 0.115, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent, TEXT_ALIGN_RIGHT)
+        draw.DrawText(cname,"UVFont5UI-BottomBar",w * 0.8375, h * 0.255 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_CENTER)
         
-        -- Bounty
-        draw.DrawText("#uv.hud.bounty","UVFont5UI",w * 0.7175,h * 0.1625,Color(255, 255, 255),TEXT_ALIGN_LEFT) -- Bounty Text
-        draw.DrawText(UVBounty, "UVFont5UI", w * 0.965, h * 0.1625, Color(255, 255, 255), TEXT_ALIGN_RIGHT) -- Bounty Counter
-        
-        -- Heat Level
-        surface.SetDrawColor(0, 0, 0, 200)
-        surface.DrawRect(w * 0.71, h * 0.2175 + milestoneh, w * 0.036, h * 0.035)
-        
-        -- if UVHeatLevel == 1 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        -- elseif UVHeatLevel == 2 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        -- elseif UVHeatLevel == 3 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        -- elseif UVHeatLevel == 4 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        -- elseif UVHeatLevel == 5 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        -- elseif UVHeatLevel == 6 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-        --     UVHeatBountyMax = math.huge
-        -- end
-        
-        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
-        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
-        
-        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
-        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
-        
-        DrawIcon(UVMaterials["HEAT"], w * 0.7175, h * 0.2325 + milestoneh, .0375, Color(255, 255, 255)) -- Icon
-        draw.DrawText(UVHeatLevel, "UVFont5UI", w * 0.733, h * 0.214 + milestoneh, Color(255, 255, 255), TEXT_ALIGN_CENTER)
-        
-        surface.SetDrawColor(Color(109, 109, 109, 200))
-        surface.DrawRect(w * 0.7475, h * 0.2175 + milestoneh, w * 0.22, h * 0.035)
-        surface.SetDrawColor(Color(255, 255, 255))
-        local HeatProgress = 0
-        if MaxHeatLevel:GetInt() ~= UVHeatLevel then
-            if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
-                local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
-                
-                local maxtime = timedHeatConVar:GetInt()
-                HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+        if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
+            UVHUDCommanderLastHealth = 0
+            UVHUDCommanderLastMaxHealth = 0
+        end
+        if IsValid(UVHUDCommander) then
+            if UVHUDCommander.IsSimfphyscar then
+                UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
+                UVHUDCommanderLastMaxHealth =
+                UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
+            elseif UVHUDCommander.IsGlideVehicle then
+                local enginehealth = UVHUDCommander:GetEngineHealth()
+                UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+            elseif vcmod_main then
+                UVHUDCommanderLastHealth =
+                UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
             else
-                HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
+                UVHUDCommanderLastHealth = UVHUDCommander:Health()
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
             end
         end
-        local B = math.Clamp((HeatProgress) * w * 0.22, 0, w * 0.22)
+        local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
+        local healthcolor
         local blink = 255 * math.abs(math.sin(RealTime() * 4))
         local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
         local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
         
-        if HeatProgress >= 0.6 and HeatProgress < 0.75 then
-            surface.SetDrawColor(Color(255, blink, blink))
-        elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
-            surface.SetDrawColor(Color(255, blink2, blink2))
-        elseif HeatProgress >= 0.9 and HeatProgress < 1 then
-            surface.SetDrawColor(Color(255, blink3, blink3))
-        elseif HeatProgress >= 1 then
-            surface.SetDrawColor(Color(255, 0, 0))
+        if healthratio >= 0.5 then
+            healthcolor = Color(255, 255, 255, 200)
+        elseif healthratio >= 0.25 then
+            healthcolor = Color(255, blink, blink, 200)
+        else
+            healthcolor = Color(255, blink2, blink2, 200)
         end
+        if healthratio > 0 then
+            surface.SetDrawColor(Color(109, 109, 109, 200))
+            surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, w * 0.2575, h * 0.0125)
+            surface.SetDrawColor(healthcolor)
+            local T = math.Clamp((healthratio) * (w * 0.2575), 0, w * 0.2575)
+            surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, T, h * 0.0125)
+        end
+    end
+    
+    -- [ Bottom Info Box ] --
+    local middlergb = {
+        r = 255,
+        g = 255,
+        b = 255,
+        a = 255 * math.abs(math.sin(RealTime() * 4))
+    }
+    
+    if not UVHUDDisplayCooldown then
+        -- General Icons
+        draw.DrawText( UVWrecks, "UVFont5UI", w * 0.64, h * 0.825, UVWrecksColor, TEXT_ALIGN_RIGHT)
+        DrawIcon(UVMaterials["UNITS_DISABLED"], w * 0.6525, h * 0.84, 0.06, UVWrecksColor)
         
-        surface.DrawRect(w * 0.7475, h * 0.2175 + milestoneh, B, h * 0.035)
+        draw.DrawText(UVTags, "UVFont5UI", w * 0.3625, h * 0.825, UVTagsColor, TEXT_ALIGN_LEFT)
+        DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.35, h * 0.84, 0.06, UVTagsColor)
         
-        -- [[ Commander Stuff ]]
-        if UVOneCommanderActive then
-            ResourceText = "⛊"
-            
-            surface.SetDrawColor(0, 0, 0, 200) -- Milestone BG
-            surface.DrawRect(w * 0.71, h * 0.26 + milestoneh, w * 0.2575, h * 0.035)
-            
-            draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.71, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_LEFT)
-            draw.DrawText("⛊","UVFont5UI-BottomBar",w * 0.965, h * 0.2525 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_RIGHT)
-            
-            local cname = "#uv.unit.commander"
-            if IsValid(UVHUDCommander) then
-                local driver = UVHUDCommander:GetDriver()
-                if IsValid(driver) and driver:IsPlayer() then
-                    cname = driver:Nick()
-                end
+        draw.DrawText(ResourceText,"UVFont5UI-BottomBar",w * 0.5,h * 0.825,UVUnitsColor,TEXT_ALIGN_CENTER)
+        DrawIcon(UVMaterials["UNITS"], w * 0.5, h * 0.8, .07, UVUnitsColor)
+        
+        -- Evade Box, All BG
+        surface.SetDrawColor(200, 200, 200, 100)
+        surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
+        
+        -- Evade Box, Busted Meter
+        if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
+            if not BustingProgress or BustingProgress == 0 then
+                BustingProgress = CurTime()
             end
             
-            draw.DrawText(cname,"UVFont5UI-BottomBar",w * 0.8375, h * 0.255 + milestoneh, UVHUDCopMode and Colors.MW_Cop or Colors.MW_Accent,TEXT_ALIGN_CENTER)
-            
-            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
-                UVHUDCommanderLastHealth = 0
-                UVHUDCommanderLastMaxHealth = 0
-            end
-            if IsValid(UVHUDCommander) then
-                if UVHUDCommander.IsSimfphyscar then
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
-                    UVHUDCommanderLastMaxHealth =
-                    UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
-                elseif UVHUDCommander.IsGlideVehicle then
-                    local enginehealth = UVHUDCommander:GetEngineHealth()
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                elseif vcmod_main then
-                    UVHUDCommanderLastHealth =
-                    UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                else
-                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                end
-            end
-            local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
-            local healthcolor
             local blink = 255 * math.abs(math.sin(RealTime() * 4))
             local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
             local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
             
-            if healthratio >= 0.5 then
-                healthcolor = Color(255, 255, 255, 200)
-            elseif healthratio >= 0.25 then
-                healthcolor = Color(255, blink, blink, 200)
+            local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+            
+            local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
+            
+            if timeLeft >= UVBustTimer * 0.5 then
+                states.BustedColor = Color(255, 0, 0, blink)
+                -- UVSoundBusting()
+            elseif timeLeft >= UVBustTimer * 0.2 then
+                states.BustedColor = Color(255, 0, 0, blink2)
+                if playbusting then
+                    UVSoundBusting()
+                end
+            elseif timeLeft >= 0 then
+                states.BustedColor = Color(255, 0, 0, blink3)
+                if playbusting then
+                    UVSoundBusting()
+                end
             else
-                healthcolor = Color(255, blink2, blink2, 200)
+                states.BustedColor = Color(255, 0, 0)
             end
-            if healthratio > 0 then
-                surface.SetDrawColor(Color(109, 109, 109, 200))
-                surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, w * 0.2575, h * 0.0125)
-                surface.SetDrawColor(healthcolor)
-                local T = math.Clamp((healthratio) * (w * 0.2575), 0, w * 0.2575)
-                surface.DrawRect(w * 0.71, h * 0.294 + milestoneh, T, h * 0.0125)
-            end
+            
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1515), 0, w * 0.1515)
+            T = math.floor(T)
+            surface.SetDrawColor(255, 0, 0)
+            surface.DrawRect(w * 0.333 + (w * 0.1515 - T), h * 0.9, T, h * 0.01)
+            middlergb = {
+                r = 255,
+                g = 0,
+                b = 0,
+                a = 255
+            }
+        else
+            UVBustedColor = Color(255, 255, 255, 50)
+            BustingProgress = 0
         end
         
-        -- [ Bottom Info Box ] --
-        local middlergb = {
-            r = 255,
-            g = 255,
-            b = 255,
-            a = 255 * math.abs(math.sin(RealTime() * 4))
-        }
+        -- Evade Box, Evade Meter
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
+            --UVSoundHeat(UVHeatLevel)
+            if not EvadingProgress or EvadingProgress == 0 then
+                EvadingProgress = CurTime()
+                UVEvadingProgress = EvadingProgress
+            end
+            
+            local T = math.Clamp((UVEvadingProgress) * (w * 0.16225), 0, w * 0.16225)
+            surface.SetDrawColor(155, 207, 0)
+            surface.DrawRect(w * 0.51, h * 0.9, T, h * 0.01)
+            middlergb = {
+                r = 155,
+                g = 207,
+                b = 0,
+                a = 255
+            }
+            
+            states.EvasionColor = Color(blink, 255, blink)
+        else
+            EvadingProgress = 0
+        end
         
-        if not UVHUDDisplayCooldown then
-            -- General Icons
-            draw.DrawText( UVWrecks, "UVFont5UI", w * 0.64, h * 0.825, UVWrecksColor, TEXT_ALIGN_RIGHT)
-            DrawIcon(UVMaterials["UNITS_DISABLED"], w * 0.6525, h * 0.84, 0.06, UVWrecksColor)
-            
-            draw.DrawText(UVTags, "UVFont5UI", w * 0.3625, h * 0.825, UVTagsColor, TEXT_ALIGN_LEFT)
-            DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.35, h * 0.84, 0.06, UVTagsColor)
-            
-            draw.DrawText(ResourceText,"UVFont5UI-BottomBar",w * 0.5,h * 0.825,UVUnitsColor,TEXT_ALIGN_CENTER)
-            DrawIcon(UVMaterials["UNITS"], w * 0.5, h * 0.8, .07, UVUnitsColor)
-            
-            -- Evade Box, All BG
-            surface.SetDrawColor(200, 200, 200, 100)
-            surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
-            
-            -- Evade Box, Busted Meter
-            if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
-                if not BustingProgress or BustingProgress == 0 then
-                    BustingProgress = CurTime()
+        -- Evade Box, Middle
+        surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, middlergb.a)
+        surface.DrawRect(w * 0.49, h * 0.9, w * 0.021, h * 0.01)
+        
+        -- Evade Box, Dividers
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.DrawRect(w * 0.485, h * 0.9, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.4, h * 0.9, w * 0.005, h * 0.01)
+        
+        surface.DrawRect(w * 0.51, h * 0.9, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.6, h * 0.9, w * 0.005, h * 0.01)
+        
+        -- Upper Box
+        surface.SetDrawColor(0, 0, 0, 255)
+        surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
+        surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
+        
+        draw.DrawText("#uv.chase.busted","UVFont5UI",w * 0.34,h * 0.8625,states.BustedColor,TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.chase.evade","UVFont5UI",w * 0.66,h * 0.8625,states.EvasionColor,TEXT_ALIGN_RIGHT)
+        
+        -- Lower Box
+        local shade_theme_color =
+        (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
+        local theme_color =
+        (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+        
+        surface.SetDrawColor(theme_color:Unpack())
+        surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
+        surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+        
+        local lbtext = "REPLACEME"
+        local uloc, utype = "uv.chase.unit", UnitsChasing
+        if not UVHUDCopMode then
+            if UnitsChasing ~= 1 then
+                uloc = "uv.chase.units"
+            end
+        else
+            utype = UVHUDWantedSuspectsNumber
+            uloc = "uv.chase.suspects"
+        end
+        
+        --local color = Color(255,255,255)
+        if not UVBackupColor then
+            UVBackupColor = Color(255, 255, 255)
+        end
+        local num = UVBackupTimerSeconds
+        
+        if not UVHUDDisplayBackupTimer then
+            lbtext = string.format(lang(uloc), utype)
+        else
+            if num then
+                if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
+                    _last_backup_pulse_second = math.floor(num)
+                    
+                    hook.Remove("Think", "UVBackupColorPulse")
+                    UVBackupColor = Color(255, 255, 0)
+                    
+                    hook.Add("Think","UVBackupColorPulse",function()
+                        UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
+                        if UVBackupColor.b >= 255 then
+                            hook.Remove("Think", "UVBackupColorPulse")
+                        end
+                    end)
                 end
-                
-                local blink = 255 * math.abs(math.sin(RealTime() * 4))
-                local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-                local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-                
-                local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
-                
-                local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
-                
-                if timeLeft >= UVBustTimer * 0.5 then
-                    states.BustedColor = Color(255, 0, 0, blink)
-                    -- UVSoundBusting()
-                elseif timeLeft >= UVBustTimer * 0.2 then
-                    states.BustedColor = Color(255, 0, 0, blink2)
-                    if playbusting then
-                        UVSoundBusting()
-                    end
-                elseif timeLeft >= 0 then
-                    states.BustedColor = Color(255, 0, 0, blink3)
-                    if playbusting then
-                        UVSoundBusting()
-                    end
-                else
-                    states.BustedColor = Color(255, 0, 0)
-                end
-                
-                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1515), 0, w * 0.1515)
-                T = math.floor(T)
-                surface.SetDrawColor(255, 0, 0)
-                surface.DrawRect(w * 0.333 + (w * 0.1515 - T), h * 0.9, T, h * 0.01)
-                middlergb = {
-                    r = 255,
-                    g = 0,
-                    b = 0,
-                    a = 255
-                }
-            else
-                UVBustedColor = Color(255, 255, 255, 50)
-                BustingProgress = 0
             end
             
-            -- Evade Box, Evade Meter
-            if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
-                --UVSoundHeat(UVHeatLevel)
-                if not EvadingProgress or EvadingProgress == 0 then
-                    EvadingProgress = CurTime()
-                    UVEvadingProgress = EvadingProgress
-                end
-                
-                local T = math.Clamp((UVEvadingProgress) * (w * 0.16225), 0, w * 0.16225)
-                surface.SetDrawColor(155, 207, 0)
-                surface.DrawRect(w * 0.51, h * 0.9, T, h * 0.01)
-                middlergb = {
-                    r = 155,
-                    g = 207,
-                    b = 0,
-                    a = 255
-                }
-                
-                states.EvasionColor = Color(blink, 255, blink)
-            else
-                EvadingProgress = 0
+            lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
+        end
+        
+        draw.DrawText(lbtext,"UVFont5UI", w * 0.5, h * 0.91 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+    else
+        -- Lower Box
+        -- Evade Box, All BG (Moved to inner if clauses)
+        
+        -- Evade Box, Cooldown Meter
+        if UVHUDDisplayCooldown then
+            if not CooldownProgress or CooldownProgress == 0 then
+                CooldownProgress = CurTime()
             end
             
-            -- Evade Box, Middle
-            surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, middlergb.a)
-            surface.DrawRect(w * 0.49, h * 0.9, w * 0.021, h * 0.01)
-            
-            -- Evade Box, Dividers
-            surface.SetDrawColor(255, 255, 255, 255)
-            surface.DrawRect(w * 0.485, h * 0.9, w * 0.005, h * 0.01)
-            surface.DrawRect(w * 0.4, h * 0.9, w * 0.005, h * 0.01)
-            
-            surface.DrawRect(w * 0.51, h * 0.9, w * 0.005, h * 0.01)
-            surface.DrawRect(w * 0.6, h * 0.9, w * 0.005, h * 0.01)
+            UVSoundCooldown()
+            EvadingProgress = 0
             
             -- Upper Box
-            surface.SetDrawColor(0, 0, 0, 255)
-            surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
-            surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
-            
-            draw.DrawText("#uv.chase.busted","UVFont5UI",w * 0.34,h * 0.8625,states.BustedColor,TEXT_ALIGN_LEFT)
-            draw.DrawText("#uv.chase.evade","UVFont5UI",w * 0.66,h * 0.8625,states.EvasionColor,TEXT_ALIGN_RIGHT)
-            
-            -- Lower Box
-            local shade_theme_color =
-            (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-            local theme_color =
-            (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-            
-            surface.SetDrawColor(theme_color:Unpack())
-            surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-            surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
-            
-            local lbtext = "REPLACEME"
-            local uloc, utype = "uv.chase.unit", UnitsChasing
             if not UVHUDCopMode then
-                if UnitsChasing ~= 1 then
-                    uloc = "uv.chase.units"
-                end
-            else
-                utype = UVHUDWantedSuspectsNumber
-                uloc = "uv.chase.suspects"
-            end
-            
-            --local color = Color(255,255,255)
-            if not UVBackupColor then
-                UVBackupColor = Color(255, 255, 255)
-            end
-            local num = UVBackupTimerSeconds
-            
-            if not UVHUDDisplayBackupTimer then
-                lbtext = string.format(lang(uloc), utype)
-            else
-                if num then
-                    if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
-                        _last_backup_pulse_second = math.floor(num)
-                        
-                        hook.Remove("Think", "UVBackupColorPulse")
-                        UVBackupColor = Color(255, 255, 0)
-                        
-                        hook.Add("Think","UVBackupColorPulse",function()
-                            UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
-                            if UVBackupColor.b >= 255 then
-                                hook.Remove("Think", "UVBackupColorPulse")
-                            end
-                        end)
-                    end
+                if UVHUDDisplayHidingPrompt then
+                    local blink = 200 * math.abs(math.sin(RealTime() * 2))
+                    
+                    surface.SetDrawColor(0, 175, 0, 200)
+                    surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
+                    surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
+                    
+                    DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.835, .07, Color(blink, 255, blink))
+                    draw.DrawText( "#uv.chase.hiding", "UVFont5UI", w * 0.5, h * 0.8625, Color(255,255,255), TEXT_ALIGN_CENTER)
                 end
                 
-                lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
+                surface.SetDrawColor(255, 255, 255, 50)
+                surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
+                
+                local T = math.Clamp((UVCooldownTimer) * (w * 0.34), 0, w * 0.34)
+                surface.SetDrawColor(75, 75, 255)
+                surface.DrawRect(w * 0.333, h * 0.9, T, h * 0.01)
+                
+                surface.SetDrawColor(0, 0, 0)
+                surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
+                surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+                
+                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+            else
+                local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
+                local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+                local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
+                
+                surface.SetDrawColor(theme_color:Unpack())
+                surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
+                surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+                
+                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+                
+                DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.875, .07, Colors.MW_Cop)
             end
-            
-            draw.DrawText(lbtext,"UVFont5UI", w * 0.5, h * 0.91 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
         else
-            -- Lower Box
-            -- Evade Box, All BG (Moved to inner if clauses)
-            
-            -- Evade Box, Cooldown Meter
-            if UVHUDDisplayCooldown then
-                if not CooldownProgress or CooldownProgress == 0 then
-                    CooldownProgress = CurTime()
-                end
-                
-                UVSoundCooldown()
-                EvadingProgress = 0
-                
-                -- Upper Box
-                if not UVHUDCopMode then
-                    if UVHUDDisplayHidingPrompt then
-                        local blink = 200 * math.abs(math.sin(RealTime() * 2))
-                        
-                        surface.SetDrawColor(0, 175, 0, 200)
-                        surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
-                        surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
-                        
-                        DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.835, .07, Color(blink, 255, blink))
-                        draw.DrawText( "#uv.chase.hiding", "UVFont5UI", w * 0.5, h * 0.8625, Color(255,255,255), TEXT_ALIGN_CENTER)
-                    end
-                    
-                    surface.SetDrawColor(255, 255, 255, 50)
-                    surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
-                    
-                    local T = math.Clamp((UVCooldownTimer) * (w * 0.34), 0, w * 0.34)
-                    surface.SetDrawColor(75, 75, 255)
-                    surface.DrawRect(w * 0.333, h * 0.9, T, h * 0.01)
-                    
-                    surface.SetDrawColor(0, 0, 0)
-                    surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-                    surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
-                    
-                    draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
-                else
-                    local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-                    local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-                    local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
-                    
-                    surface.SetDrawColor(theme_color:Unpack())
-                    surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-                    surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
-                    
-                    draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
-                    
-                    DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.875, .07, Colors.MW_Cop)
-                end
-            else
-                CooldownProgress = 0
-            end
+            CooldownProgress = 0
         end
     end
+    --end
 end
 
 UV_UI.pursuit.mostwanted.main = mw_pursuit_main
@@ -3279,15 +3281,15 @@ UV_UI.pursuit.undercover.states = {
 
 UV_UI.racing.undercover.events = {
     ShowResults = function(sortedRacers) -- Undercover
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         
         local w = ScrW()
         local h = ScrH()
         
         --------------------------------------
-
+        
         local debrieflinedata
-
+        
         local BackgroundPanel = vgui.Create("DPanel")
         local ResultPanel = vgui.Create("DFrame")
         -- local OK = vgui.Create("DButton")
@@ -3334,7 +3336,7 @@ UV_UI.racing.undercover.events = {
         local autoCloseDelay = 30
         local animationStartTime = CurTime()
         local autoCloseStartTime = animationStartTime + ((numTotalRows - 1) * rowDelay) + zoomDuration
-
+        
         -- Then your timer start time:
         local timestart = autoCloseStartTime
         
@@ -3367,96 +3369,96 @@ UV_UI.racing.undercover.events = {
             surface.SetDrawColor(5, 25, 150, backgroundAlpha)
             surface.DrawRect(0, 0, w, h)
         end
-		
-		local entriesToShow = 16
-		local scrollOffset = 0
-		
-		ResultPanel.OnMouseWheeled = function(self, delta)
-			local maxOffset = math.max(0, #sortedRacers - entriesToShow)
-			scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
-		end
-		
-		local racersArray = {}
-
-		-- Convert sortedRacers (whatever form) to a flat array if needed
-		for _, racer in pairs(sortedRacers) do
-			table.insert(racersArray, racer)
-		end
-
-		-- Sort by TotalTime (DNF = math.huge)
-		table.sort(racersArray, function(a, b)
-			local timeA = a.array and a.array.TotalTime
-			local timeB = b.array and b.array.TotalTime
-
-			-- Treat missing or non-numeric TotalTime as a large number (DNF)
-			local tA = (type(timeA) == "number") and timeA or math.huge
-			local tB = (type(timeB) == "number") and timeB or math.huge
-
-			return tA < tB
-		end)
-
-		local racersDisplayData = {}
-
-		for i = 1, #racersArray do
-			local racer = racersArray[i]
-			local info = racer.array or racer  -- fallback if 'array' doesn't exist
-			local LBCol = Color(255, 255, 255)
-
-			local name = info["Name"] or "Unknown"
-			local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
-
-			if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-
-			if info["LocalPlayer"] then
-				LBCol = Color(255, 200, 50)
-			end
-
-			-- Combine pos and name for left column text
-			local text = i .. "    " .. name
-
-			table.insert(racersDisplayData, { text = text, value = totalTime, color = LBCol })
-		end
-
-		-- Now assign this to the data your paint function uses:
-		debrieflinedata = {}
-
-		-- Fill with racer data for existing racers
-		for i = 1, math.min(#racersDisplayData, numTotalRows) do
-			debrieflinedata[i] = racersDisplayData[i]
-		end
-
-		-- Fill remaining rows with empty placeholders
-		for i = #racersDisplayData + 1, numTotalRows do
-			debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
-		end
-		
-		local statusString = "#uv.results.lost" -- default fallback
-
-		local localIndex = nil
-		local localTime = nil
-		local secondPlaceTime = nil
-
-		for i, info in ipairs(racersArray) do
-			local racer = racersArray[i]
-			local info = racer.array or racer  -- fallback if 'array' doesn't exist
-			
-			if info["LocalPlayer"] then
-				localIndex = i
-				localTime = tonumber(info["TotalTime"]) or math.huge
-			elseif i == 2 then
-				secondPlaceTime = tonumber(info["TotalTime"]) or math.huge
-			end
-		end
-
-		if localIndex == 1 then
-			local timeDiff = (secondPlaceTime or 0) - (localTime or 0)
-			if timeDiff >= 10 then
-				statusString = "#uv.results.dominated"
-			else
-				statusString = "#uv.results.won"
-			end
-		end
-
+        
+        local entriesToShow = 16
+        local scrollOffset = 0
+        
+        ResultPanel.OnMouseWheeled = function(self, delta)
+            local maxOffset = math.max(0, #sortedRacers - entriesToShow)
+            scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
+        end
+        
+        local racersArray = {}
+        
+        -- Convert sortedRacers (whatever form) to a flat array if needed
+        for _, racer in pairs(sortedRacers) do
+            table.insert(racersArray, racer)
+        end
+        
+        -- Sort by TotalTime (DNF = math.huge)
+        table.sort(racersArray, function(a, b)
+            local timeA = a.array and a.array.TotalTime
+            local timeB = b.array and b.array.TotalTime
+            
+            -- Treat missing or non-numeric TotalTime as a large number (DNF)
+            local tA = (type(timeA) == "number") and timeA or math.huge
+            local tB = (type(timeB) == "number") and timeB or math.huge
+            
+            return tA < tB
+        end)
+        
+        local racersDisplayData = {}
+        
+        for i = 1, #racersArray do
+            local racer = racersArray[i]
+            local info = racer.array or racer  -- fallback if 'array' doesn't exist
+            local LBCol = Color(255, 255, 255)
+            
+            local name = info["Name"] or "Unknown"
+            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            
+            if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+            
+            if info["LocalPlayer"] then
+                LBCol = Color(255, 200, 50)
+            end
+            
+            -- Combine pos and name for left column text
+            local text = i .. "    " .. name
+            
+            table.insert(racersDisplayData, { text = text, value = totalTime, color = LBCol })
+        end
+        
+        -- Now assign this to the data your paint function uses:
+        debrieflinedata = {}
+        
+        -- Fill with racer data for existing racers
+        for i = 1, math.min(#racersDisplayData, numTotalRows) do
+            debrieflinedata[i] = racersDisplayData[i]
+        end
+        
+        -- Fill remaining rows with empty placeholders
+        for i = #racersDisplayData + 1, numTotalRows do
+            debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
+        end
+        
+        local statusString = "#uv.results.lost" -- default fallback
+        
+        local localIndex = nil
+        local localTime = nil
+        local secondPlaceTime = nil
+        
+        for i, info in ipairs(racersArray) do
+            local racer = racersArray[i]
+            local info = racer.array or racer  -- fallback if 'array' doesn't exist
+            
+            if info["LocalPlayer"] then
+                localIndex = i
+                localTime = tonumber(info["TotalTime"]) or math.huge
+            elseif i == 2 then
+                secondPlaceTime = tonumber(info["TotalTime"]) or math.huge
+            end
+        end
+        
+        if localIndex == 1 then
+            local timeDiff = (secondPlaceTime or 0) - (localTime or 0)
+            if timeDiff >= 10 then
+                statusString = "#uv.results.dominated"
+            else
+                statusString = "#uv.results.won"
+            end
+        end
+        
         ResultPanel.Paint = function(self, w, h)
             local now = CurTime()
             
@@ -3491,7 +3493,7 @@ UV_UI.racing.undercover.events = {
             -- Upper Results Tab
             surface.SetDrawColor( 0, 0, 0, tabAlpha )
             surface.DrawRect( w*0.33, h*0.15, w*0.33, h*0.06)
-
+            
             draw.DrawText(statusString, "UVUndercoverWhiteFont", w*0.332, h*0.155, Color( 255, 200, 50, textAlpha ), TEXT_ALIGN_LEFT )
             
             -- Text
@@ -3527,29 +3529,29 @@ UV_UI.racing.undercover.events = {
                 local rightX = Lerp(ease, valueStartX, rowX + halfWidth)
                 surface.DrawRect(rightX, yOffset, halfWidth, rowHeight)
             end
-
-			for i = 1, entriesToShow do
-				local dataIndex = i + scrollOffset
-				local line = debrieflinedata[dataIndex]
-				if not line then continue end -- Skip if no data for this row
-
-				local rowStartTime = zoomStart + zoomDuration + (dataIndex - 1) * rowDelay
-				local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
-				local alpha = rowProgress * 255
-				local ease = 1 - math.pow(1 - rowProgress, 2) -- smooth end
-
-				local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
-
-				local labelX = Lerp(ease, labelStartX, labelTargetX)
-				local valueX = Lerp(ease, valueStartX, valueTargetX)
-
-				draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
-					Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-				draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
-					Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-			end
-
-
+            
+            for i = 1, entriesToShow do
+                local dataIndex = i + scrollOffset
+                local line = debrieflinedata[dataIndex]
+                if not line then continue end -- Skip if no data for this row
+                
+                local rowStartTime = zoomStart + zoomDuration + (dataIndex - 1) * rowDelay
+                local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
+                local alpha = rowProgress * 255
+                local ease = 1 - math.pow(1 - rowProgress, 2) -- smooth end
+                
+                local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
+                
+                local labelX = Lerp(ease, labelStartX, labelTargetX)
+                local valueX = Lerp(ease, valueStartX, valueTargetX)
+                
+                draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
+                Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
+                Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            end
+            
+            
             -- Time remaining and closing					
             surface.SetDrawColor( 0, 0, 0, tabAlpha )
             surface.DrawRect( w*0.33, h*0.745, w*0.33, h*0.06)
@@ -3557,17 +3559,17 @@ UV_UI.racing.undercover.events = {
             if timeremaining > autoCloseDelay then
                 timeremaining = autoCloseDelay
             end
-
-			local blink = 255 * math.abs(math.sin(RealTime() * 8))
-
-			if scrollOffset > 0 then
-				draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.1775, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-			end
-
-			if scrollOffset < #sortedRacers - entriesToShow then
-				draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-			end
-
+            
+            local blink = 255 * math.abs(math.sin(RealTime() * 8))
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.1775, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+            end
+            
+            if scrollOffset < #sortedRacers - entriesToShow then
+                draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
+            end
+            
             draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
             
@@ -3600,13 +3602,13 @@ UV_UI.racing.undercover.events = {
             end
         end)
     end,
-
+    
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
         
         -----------------------------------------
-		
+        
         local function _main()
             
             for place, dict in pairs( sortedRacers ) do
@@ -3625,7 +3627,7 @@ UV_UI.racing.undercover.events = {
                 text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
                 lifetime = duration,
                 immediate = true,
-				icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+                icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
             }) 
         end
         
@@ -3638,7 +3640,7 @@ UV_UI.racing.undercover.events = {
             if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
-				UV_UI.racing.undercover.events.ShowResults(sortedRacers)
+                UV_UI.racing.undercover.events.ShowResults(sortedRacers)
             end
         end)
     end
@@ -3721,7 +3723,7 @@ UV_UI.pursuit.undercover.events = {
     end,
     
     ShowDebrief = function(params) -- Undercover
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         
         local w = ScrW()
         local h = ScrH()
@@ -4273,427 +4275,427 @@ local function undercover_pursuit_main( ... )
         end
     end
     
-    if not UVHUDRace then
-        local ResourceText = UVResourcePoints
-        
-        -- [[ Commander Stuff ]]
-        if UVOneCommanderActive then
-            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
-                UVHUDCommanderLastHealth = 0
-                UVHUDCommanderLastMaxHealth = 0
-            end
-            if IsValid(UVHUDCommander) then
-                if UVHUDCommander.IsSimfphyscar then
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
-                    UVHUDCommanderLastMaxHealth =
-                    UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
-                elseif UVHUDCommander.IsGlideVehicle then
-                    local enginehealth = UVHUDCommander:GetEngineHealth()
-                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                elseif vcmod_main then
-                    UVHUDCommanderLastHealth =
-                    UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                else
-                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
-                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
-                end
-            end
-            local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
-            local healthcolor
-            local blink = 255 * math.abs(math.sin(RealTime() * 4))
-            local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-            local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-            
-            if healthratio >= 0.5 then
-                healthcolor = Color(255, 255, 255, 200)
-            elseif healthratio >= 0.25 then
-                healthcolor = Color(255, blink, blink, 200)
+    --if not UVHUDRace then
+    local ResourceText = UVResourcePoints
+    
+    -- [[ Commander Stuff ]]
+    if UVOneCommanderActive then
+        if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
+            UVHUDCommanderLastHealth = 0
+            UVHUDCommanderLastMaxHealth = 0
+        end
+        if IsValid(UVHUDCommander) then
+            if UVHUDCommander.IsSimfphyscar then
+                UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
+                UVHUDCommanderLastMaxHealth =
+                UVUOneCommanderHealth:GetInt() - (UVHUDCommander:GetMaxHealth() * 0.3)
+            elseif UVHUDCommander.IsGlideVehicle then
+                local enginehealth = UVHUDCommander:GetEngineHealth()
+                UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth() * enginehealth
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+            elseif vcmod_main then
+                UVHUDCommanderLastHealth =
+                UVUOneCommanderHealth:GetInt() * (UVHUDCommander:VC_getHealth() / 100) --vcmod returns % health clientside
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
             else
-                healthcolor = Color(255, blink2, blink2, 200)
-            end
-            
-            ResourceText = "⛊"
-            local element3 = {
-                {x = w / 3, y = 0},
-                {x = w / 3 + 12 + w / 3, y = 0},
-                {x = w / 3 + 12 + w / 3 - 25, y = h / 20},
-                {x = w / 3 + 25, y = h / 20}
-            }
-            surface.SetDrawColor(0, 0, 0, 100)
-            draw.NoTexture()
-            -- surface.DrawPoly(element3)
-            surface.DrawRect(w / 3 + 25, 0, w / 3 - 38, h * 0.05)
-            if healthratio > 0 then
-                surface.SetDrawColor(Color(109, 109, 109, 200))
-                surface.DrawRect(w / 3 + 25, h / 20, w / 3 - 38, 8)
-                surface.SetDrawColor(healthcolor)
-                local T = math.Clamp((healthratio) * (w / 3 - 38), 0, w / 3 - 38)
-                surface.DrawRect(w / 3 + 25, h / 20, T, 8)
-            end
-            draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.35, 0, Colors.Undercover_Accent2, TEXT_ALIGN_LEFT)
-            draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.65, 0, Colors.Undercover_Accent2, TEXT_ALIGN_RIGHT)
-            
-            local cname = "#uv.unit.commander"
-            if IsValid(UVHUDCommander) then
-                local driver = UVHUDCommander:GetDriver()
-                if IsValid(driver) and driver:IsPlayer() then
-                    cname = driver:Nick()
-                end
-            end
-            
-            draw.DrawText(cname,"UVUndercoverWhiteFont", w / 2, 0, Colors.Undercover_Accent2,TEXT_ALIGN_CENTER)
-        end
-        
-        -- [ Upper Right Info Box ] --
-        -- Divider
-        surface.SetDrawColor(Colors.Undercover_Accent2:Unpack())
-        surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005)
-        
-        -- Timer
-        draw.DrawText("#uv.race.hud.time","UVUndercoverAccentFont",w * 0.75,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_LEFT)
-        draw.DrawText(UVTimer,"UVUndercoverWhiteFont",w * 0.75,h * 0.15,Colors.Undercover_Accent1,TEXT_ALIGN_LEFT)
-        
-        -- Bounty
-        DrawIcon(UVMaterials["CTS_UC"], w * 0.76, h * 0.235, .06, Colors.Undercover_Accent1) -- Icon
-        draw.DrawText(UVBounty, "UVFont5", w * 0.775, h * 0.21, Color(255, 255, 255), TEXT_ALIGN_LEFT) -- Bounty Counter
-        
-        -- General Icons
-        DrawIcon(UVMaterials["UNITS"], w * 0.76, h * 0.355, .06, Colors.Undercover_Accent1)
-        draw.DrawText(ResourceText,"UVFont5WeightShadow",w * 0.78,h * 0.335,Colors.Undercover_Accent1,TEXT_ALIGN_LEFT)
-        
-        if UVHUDDisplayBackupTimer then
-            if not UVBackupColor then
-                UVBackupColor = Color(255, 255, 255)
-            end
-            if num then
-                if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
-                    _last_backup_pulse_second = math.floor(num)
-                    
-                    hook.Remove("Think", "UVBackupColorPulse")
-                    UVBackupColor = Color(255, 255, 0)
-                    
-                    hook.Add("Think","UVBackupColorPulse",function()
-                        UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
-                        if UVBackupColor.b >= 255 then
-                            hook.Remove("Think", "UVBackupColorPulse")
-                        end
-                    end)
-                end
-            end
-            draw.DrawText("        (" .. UVBackupTimer .. ")","UVFont5WeightShadow",w * 0.78,h * 0.335,UVBackupColor,TEXT_ALIGN_LEFT)
-        end
-        
-        DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.76, h * 0.415, .07, Colors.Undercover_Accent1)
-        draw.DrawText(UVTags, "UVFont5WeightShadow", w * 0.78, h * 0.395, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT)
-        
-        DrawIcon(UVMaterials["UNITS_DISABLED_UC"], w * 0.76, h * 0.475, .07, Colors.Undercover_Accent1)
-        draw.DrawText( UVWrecks, "UVFont5WeightShadow", w * 0.78, h * 0.455, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT)
-        
-        -- Heat Level
-        DrawIcon(UVMaterials["HEAT"], w * 0.76, h * 0.295, .06, Colors.Undercover_Accent1) -- Icon
-        draw.DrawText("x" .. UVHeatLevel, "UVUndercoverWhiteFont", w * 0.8, h * 0.275, Colors.Undercover_Accent1, TEXT_ALIGN_RIGHT)
-        
-        -- if UVHeatLevel == 1 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-        -- elseif UVHeatLevel == 2 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-        -- elseif UVHeatLevel == 3 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-        -- elseif UVHeatLevel == 4 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-        -- elseif UVHeatLevel == 5 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-        -- elseif UVHeatLevel == 6 then
-        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-        --     UVHeatBountyMax = math.huge
-        -- end
-        
-        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
-        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
-        
-        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
-        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
-        
-        surface.SetDrawColor(Color(109, 109, 109, 200))
-        surface.DrawRect(w * 0.805, h * 0.2815, w * 0.1375, h * 0.035)
-        surface.SetDrawColor(Color(255, 255, 255))
-        local HeatProgress = 0
-        if MaxHeatLevel:GetInt() ~= UVHeatLevel then
-            if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
-                local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
-                
-                local maxtime = timedHeatConVar:GetInt()
-                HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
-            else
-                HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
+                UVHUDCommanderLastHealth = UVHUDCommander:Health()
+                UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
             end
         end
-        local B = math.Clamp((HeatProgress) * w * 0.1375, 0, w * 0.1375)
+        local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
+        local healthcolor
         local blink = 255 * math.abs(math.sin(RealTime() * 4))
         local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
         local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
         
-        if HeatProgress >= 0.6 and HeatProgress < 0.75 then
-            surface.SetDrawColor(Color(255, blink, blink))
-        elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
-            surface.SetDrawColor(Color(255, blink2, blink2))
-        elseif HeatProgress >= 0.9 and HeatProgress < 1 then
-            surface.SetDrawColor(Color(255, blink3, blink3))
-        elseif HeatProgress >= 1 then
-            surface.SetDrawColor(Color(255, 0, 0))
+        if healthratio >= 0.5 then
+            healthcolor = Color(255, 255, 255, 200)
+        elseif healthratio >= 0.25 then
+            healthcolor = Color(255, blink, blink, 200)
+        else
+            healthcolor = Color(255, blink2, blink2, 200)
         end
         
-        surface.DrawRect(w * 0.805, h * 0.2815, B, h * 0.035)
+        ResourceText = "⛊"
+        local element3 = {
+            {x = w / 3, y = 0},
+            {x = w / 3 + 12 + w / 3, y = 0},
+            {x = w / 3 + 12 + w / 3 - 25, y = h / 20},
+            {x = w / 3 + 25, y = h / 20}
+        }
+        surface.SetDrawColor(0, 0, 0, 100)
+        draw.NoTexture()
+        -- surface.DrawPoly(element3)
+        surface.DrawRect(w / 3 + 25, 0, w / 3 - 38, h * 0.05)
+        if healthratio > 0 then
+            surface.SetDrawColor(Color(109, 109, 109, 200))
+            surface.DrawRect(w / 3 + 25, h / 20, w / 3 - 38, 8)
+            surface.SetDrawColor(healthcolor)
+            local T = math.Clamp((healthratio) * (w / 3 - 38), 0, w / 3 - 38)
+            surface.DrawRect(w / 3 + 25, h / 20, T, 8)
+        end
+        draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.35, 0, Colors.Undercover_Accent2, TEXT_ALIGN_LEFT)
+        draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.65, 0, Colors.Undercover_Accent2, TEXT_ALIGN_RIGHT)
         
-        -- [ Bottom Info Box ] --
-        local bottomy = h * 0.86
-        local bottomy2 = h * 0.9
-        local bottomy3 = h * 0.91
-        local bottomy4 = h * 0.81
-        local bottomy5 = h * 0.83
-        local bottomy6 = h * 0.79
+        local cname = "#uv.unit.commander"
+        if IsValid(UVHUDCommander) then
+            local driver = UVHUDCommander:GetDriver()
+            if IsValid(driver) and driver:IsPlayer() then
+                cname = driver:Nick()
+            end
+        end
         
-        if not UVHUDDisplayCooldown then
-            -- Evade Box, All BG
-            -- surface.SetDrawColor(255,255,255,25)
-            -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
-            
-            draw.NoTexture()
-            surface.SetDrawColor(200, 200, 200, 255)
-            surface.DrawRect(w * 0.333, bottomy - (h*0.004), w * 0.34, h * 0.004)
-            surface.DrawRect(w * 0.333, bottomy + (h*0.034), w * 0.34, h * 0.004)
-            surface.DrawTexturedRectRotated(w * 0.333, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
-            surface.DrawTexturedRectRotated(w * 0.6735, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
-            
-            surface.SetDrawColor(100, 100, 100, 230)
-            surface.DrawRect(w * 0.333  , bottomy, w * 0.34, h * 0.035)
-            
-            -- Evade Box, Evade BG
-            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
-            surface.SetDrawColor(50, 214, 255, 100)
-            surface.DrawTexturedRect(w * 0.5, bottomy, w * 0.1725, h * 0.035)
-            
-            -- Evade Box, Busted BG
-            surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
-            surface.SetDrawColor(255, 0, 0, 100)
-            surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.1725, h * 0.035)
-            
-            -- surface.SetDrawColor(200, 200, 200, 100)
-            -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.035)
-            
-            -- Evade Box, Busted Meter
-            if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
-                if not BustingProgress or BustingProgress == 0 then
-                    BustingProgress = CurTime()
-                end
+        draw.DrawText(cname,"UVUndercoverWhiteFont", w / 2, 0, Colors.Undercover_Accent2,TEXT_ALIGN_CENTER)
+    end
+    
+    -- [ Upper Right Info Box ] --
+    -- Divider
+    surface.SetDrawColor(Colors.Undercover_Accent2:Unpack())
+    surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005)
+    
+    -- Timer
+    draw.DrawText("#uv.race.hud.time","UVUndercoverAccentFont",w * 0.75,h * 0.123,Colors.Undercover_Accent2,TEXT_ALIGN_LEFT)
+    draw.DrawText(UVTimer,"UVUndercoverWhiteFont",w * 0.75,h * 0.15,Colors.Undercover_Accent1,TEXT_ALIGN_LEFT)
+    
+    -- Bounty
+    DrawIcon(UVMaterials["CTS_UC"], w * 0.76, h * 0.235, .06, Colors.Undercover_Accent1) -- Icon
+    draw.DrawText(UVBounty, "UVFont5", w * 0.775, h * 0.21, Color(255, 255, 255), TEXT_ALIGN_LEFT) -- Bounty Counter
+    
+    -- General Icons
+    DrawIcon(UVMaterials["UNITS"], w * 0.76, h * 0.355, .06, Colors.Undercover_Accent1)
+    draw.DrawText(ResourceText,"UVFont5WeightShadow",w * 0.78,h * 0.335,Colors.Undercover_Accent1,TEXT_ALIGN_LEFT)
+    
+    if UVHUDDisplayBackupTimer then
+        if not UVBackupColor then
+            UVBackupColor = Color(255, 255, 255)
+        end
+        if num then
+            if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
+                _last_backup_pulse_second = math.floor(num)
                 
-                local blink = 255 * math.abs(math.sin(RealTime() * 4))
-                local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-                local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+                hook.Remove("Think", "UVBackupColorPulse")
+                UVBackupColor = Color(255, 255, 0)
                 
-                local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
-                
-                local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
-                
-                if timeLeft >= UVBustTimer * 0.5 then
-                    states.BustedColor = Color(255, 100, 100, blink)
-                    -- UVSoundBusting()
-                elseif timeLeft >= UVBustTimer * 0.2 then
-                    states.BustedColor = Color(255, 100, 100, blink2)
-                    if playbusting then
-                        UVSoundBusting()
+                hook.Add("Think","UVBackupColorPulse",function()
+                    UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
+                    if UVBackupColor.b >= 255 then
+                        hook.Remove("Think", "UVBackupColorPulse")
                     end
-                elseif timeLeft >= 0 then
-                    states.BustedColor = Color(255, 100, 100, blink3)
-                    if playbusting then
-                        UVSoundBusting()
-                    end
-                else
-                    states.BustedColor = Color(255, 100, 100)
-                end
-                
-                local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1675), 0, w * 0.1675)
-                T = math.floor(T)
-                surface.SetDrawColor(255, 0, 0)
-                surface.DrawRect(w * 0.333 + (w * 0.1675 - T), bottomy, T, h * 0.035)
-            else
-                UVBustedColor = Color(255, 100, 100, 125)
-                BustingProgress = 0
+                end)
             end
+        end
+        draw.DrawText("        (" .. UVBackupTimer .. ")","UVFont5WeightShadow",w * 0.78,h * 0.335,UVBackupColor,TEXT_ALIGN_LEFT)
+    end
+    
+    DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.76, h * 0.415, .07, Colors.Undercover_Accent1)
+    draw.DrawText(UVTags, "UVFont5WeightShadow", w * 0.78, h * 0.395, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT)
+    
+    DrawIcon(UVMaterials["UNITS_DISABLED_UC"], w * 0.76, h * 0.475, .07, Colors.Undercover_Accent1)
+    draw.DrawText( UVWrecks, "UVFont5WeightShadow", w * 0.78, h * 0.455, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT)
+    
+    -- Heat Level
+    DrawIcon(UVMaterials["HEAT"], w * 0.76, h * 0.295, .06, Colors.Undercover_Accent1) -- Icon
+    draw.DrawText("x" .. UVHeatLevel, "UVUndercoverWhiteFont", w * 0.8, h * 0.275, Colors.Undercover_Accent1, TEXT_ALIGN_RIGHT)
+    
+    -- if UVHeatLevel == 1 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+    -- elseif UVHeatLevel == 2 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+    -- elseif UVHeatLevel == 3 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+    -- elseif UVHeatLevel == 4 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+    -- elseif UVHeatLevel == 5 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+    --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+    -- elseif UVHeatLevel == 6 then
+    --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+    --     UVHeatBountyMax = math.huge
+    -- end
+    
+    local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+    local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+    
+    UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+    UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
+    
+    surface.SetDrawColor(Color(109, 109, 109, 200))
+    surface.DrawRect(w * 0.805, h * 0.2815, w * 0.1375, h * 0.035)
+    surface.SetDrawColor(Color(255, 255, 255))
+    local HeatProgress = 0
+    if MaxHeatLevel:GetInt() ~= UVHeatLevel then
+        if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
+            local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
             
-            -- Evade Box, Evade Meter
-            if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
-                --UVSoundHeat(UVHeatLevel)
-                if not EvadingProgress or EvadingProgress == 0 then
-                    EvadingProgress = CurTime()
-                    UVEvadingProgress = EvadingProgress
-                end
-                
-                local T = math.Clamp((UVEvadingProgress) * (w * 0.1725), 0, w * 0.1725)
-                surface.SetDrawColor(50, 173, 255)
-                surface.DrawRect(w * 0.5, bottomy, T, h * 0.035)
-                states.EvasionColor = Color(50, 173, 255, blink)
-            else
-                EvadingProgress = 0
-            end
-            
-            -- Evade Box, Icons
-            DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.315, bottomy + (h*0.015), .05, states.BustedColor) -- Icon, Glow
-            DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.315, bottomy + (h*0.015), .05, Color(255,0,0, 125)) -- Icon
-            DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, states.EvasionColor) -- Icon, Glow
-            DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 173, 255, 125)) -- Icon
-            
-            -- Evade Box, Dividers
-            surface.SetDrawColor(255, 255, 255, 255)
-            surface.DrawRect(w * 0.499, bottomy, w * 0.0015, h * 0.035)
-            
-            -- Lower Box
-            -- local shade_theme_color =
-            -- (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-            -- local theme_color =
-            -- (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-            
-            -- shade_theme_color.a = shade_theme_color.a - 35
-            -- theme_color.a = theme_color.a - 35
-            
-            -- surface.SetDrawColor(shade_theme_color:Unpack())
-            -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-            
-            -- surface.SetDrawColor(theme_color:Unpack())
-            -- surface.SetMaterial(UVMaterials["BACKGROUND"])
-            -- surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-            
-            -- surface.SetDrawColor( 0, 0, 0, 200)
-            -- surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
-            
-            -- local lbtext = "REPLACEME"
-            -- local uloc, utype = "uv.chase.unit", UnitsChasing
-            -- if not UVHUDCopMode then
-            -- if UnitsChasing ~= 1 then
-            -- uloc = "uv.chase.units"
-            -- end
-            -- else
-            -- utype = UVHUDWantedSuspectsNumber
-            -- uloc = "uv.chase.suspects"
-            -- end
-            
-            -- if not UVBackupColor then
-            -- UVBackupColor = Color(255, 255, 255)
-            -- end
-            -- local num = UVBackupTimerSeconds
-            
-            -- if not UVHUDDisplayBackupTimer then
-            -- lbtext = string.format(lang(uloc), utype)
-            -- else
-            -- if num then
-            -- if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
-            -- _last_backup_pulse_second = math.floor(num)
-            
-            -- hook.Remove("Think", "UVBackupColorPulse")
-            -- UVBackupColor = Color(255, 255, 0)
-            
-            -- hook.Add("Think","UVBackupColorPulse",function()
-            -- UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
-            -- if UVBackupColor.b >= 255 then
-            -- hook.Remove("Think", "UVBackupColorPulse")
-            -- end
-            -- end)
-            -- end
-            -- end
-            
-            -- lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
-            -- end
-            
-            -- draw.DrawText(lbtext,"UVFont5UI-BottomBar",w * 0.5,bottomy3 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+            local maxtime = timedHeatConVar:GetInt()
+            HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
-            -- Lower Box
-            -- Evade Box, Cooldown Meter
-            if UVHUDDisplayCooldown then
-                
-                local blink = 255 * math.abs(math.sin(RealTime() * 4))
-                local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-                local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-                
-                if not CooldownProgress or CooldownProgress == 0 then
-                    CooldownProgress = CurTime()
-                end
-                
-                UVSoundCooldown()
-                EvadingProgress = 0
-                
-                -- Upper Box
-                if not UVHUDCopMode then
-                    -- if UVHUDDisplayHidingPrompt then
-                    -- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-                    -- surface.SetDrawColor(0, 175, 0, 200)
-                    -- surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                    
-                    -- local blink = 255 * math.Clamp(math.abs(math.sin(RealTime() * 2)), .7, 1)
-                    -- color = Color(blink, 255, blink)
-                    
-                    -- surface.SetDrawColor(130, 199, 74, 124)
-                    -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                    -- draw.DrawText(
-                    -- "#uv.chase.hiding",
-                    -- "UVFont5UI-BottomBar",
-                    -- w * 0.5,
-                    -- bottomy,
-                    -- color,
-                    -- TEXT_ALIGN_CENTER)
-                    -- end
-                    
-                    DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
-                    DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
-                    
-                    -- surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
-                    surface.SetDrawColor(200, 200, 200, 125)
-                    surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
-                    
-                    local T = math.Clamp((UVCooldownTimer) * (w * 0.344), 0, w * 0.344)
-                    surface.SetDrawColor(50, 173, 255, 255)
-                    
-                    surface.DrawRect(w * 0.333, bottomy, T, h * 0.03)
-                    
-                    -- surface.SetDrawColor(0, 0, 0, 200)
-                    -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
-                    -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    -- draw.DrawText("#uv.chase.cooldown","UVFont5UI-BottomBar",w * 0.5,bottomy3,Color(255, 255, 255),TEXT_ALIGN_CENTER)
-                else
-                    local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-                    local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-                    
-                    -- surface.SetDrawColor( shade_theme_color:Unpack() )
-                    -- surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
-                    
-                    shade_theme_color.a = shade_theme_color.a - 35
-                    theme_color.a = theme_color.a - 35
-                    
-                    local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
-                    color = Color(blink, blink, 255)
-                    
-                    surface.SetDrawColor(shade_theme_color:Unpack())
-                    surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    
-                    surface.SetDrawColor(theme_color:Unpack())
-                    
-                    surface.SetMaterial(UVMaterials["BACKGROUND"])
-                    surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                    
-                    local text = lang("uv.chase.cooldown")
-                    draw.DrawText(text, "UVFont5UI-BottomBar", w / 2, bottomy3, color, TEXT_ALIGN_CENTER)
-                end
-            else
-                CooldownProgress = 0
-            end
+            HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
         end
     end
+    local B = math.Clamp((HeatProgress) * w * 0.1375, 0, w * 0.1375)
+    local blink = 255 * math.abs(math.sin(RealTime() * 4))
+    local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+    local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+    
+    if HeatProgress >= 0.6 and HeatProgress < 0.75 then
+        surface.SetDrawColor(Color(255, blink, blink))
+    elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
+        surface.SetDrawColor(Color(255, blink2, blink2))
+    elseif HeatProgress >= 0.9 and HeatProgress < 1 then
+        surface.SetDrawColor(Color(255, blink3, blink3))
+    elseif HeatProgress >= 1 then
+        surface.SetDrawColor(Color(255, 0, 0))
+    end
+    
+    surface.DrawRect(w * 0.805, h * 0.2815, B, h * 0.035)
+    
+    -- [ Bottom Info Box ] --
+    local bottomy = h * 0.86
+    local bottomy2 = h * 0.9
+    local bottomy3 = h * 0.91
+    local bottomy4 = h * 0.81
+    local bottomy5 = h * 0.83
+    local bottomy6 = h * 0.79
+    
+    if not UVHUDDisplayCooldown then
+        -- Evade Box, All BG
+        -- surface.SetDrawColor(255,255,255,25)
+        -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
+        
+        draw.NoTexture()
+        surface.SetDrawColor(200, 200, 200, 255)
+        surface.DrawRect(w * 0.333, bottomy - (h*0.004), w * 0.34, h * 0.004)
+        surface.DrawRect(w * 0.333, bottomy + (h*0.034), w * 0.34, h * 0.004)
+        surface.DrawTexturedRectRotated(w * 0.333, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
+        surface.DrawTexturedRectRotated(w * 0.6735, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
+        
+        surface.SetDrawColor(100, 100, 100, 230)
+        surface.DrawRect(w * 0.333  , bottomy, w * 0.34, h * 0.035)
+        
+        -- Evade Box, Evade BG
+        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
+        surface.SetDrawColor(50, 214, 255, 100)
+        surface.DrawTexturedRect(w * 0.5, bottomy, w * 0.1725, h * 0.035)
+        
+        -- Evade Box, Busted BG
+        surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
+        surface.SetDrawColor(255, 0, 0, 100)
+        surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.1725, h * 0.035)
+        
+        -- surface.SetDrawColor(200, 200, 200, 100)
+        -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.035)
+        
+        -- Evade Box, Busted Meter
+        if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
+            if not BustingProgress or BustingProgress == 0 then
+                BustingProgress = CurTime()
+            end
+            
+            local blink = 255 * math.abs(math.sin(RealTime() * 4))
+            local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+            local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+            
+            local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+            
+            local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
+            
+            if timeLeft >= UVBustTimer * 0.5 then
+                states.BustedColor = Color(255, 100, 100, blink)
+                -- UVSoundBusting()
+            elseif timeLeft >= UVBustTimer * 0.2 then
+                states.BustedColor = Color(255, 100, 100, blink2)
+                if playbusting then
+                    UVSoundBusting()
+                end
+            elseif timeLeft >= 0 then
+                states.BustedColor = Color(255, 100, 100, blink3)
+                if playbusting then
+                    UVSoundBusting()
+                end
+            else
+                states.BustedColor = Color(255, 100, 100)
+            end
+            
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1675), 0, w * 0.1675)
+            T = math.floor(T)
+            surface.SetDrawColor(255, 0, 0)
+            surface.DrawRect(w * 0.333 + (w * 0.1675 - T), bottomy, T, h * 0.035)
+        else
+            UVBustedColor = Color(255, 100, 100, 125)
+            BustingProgress = 0
+        end
+        
+        -- Evade Box, Evade Meter
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
+            --UVSoundHeat(UVHeatLevel)
+            if not EvadingProgress or EvadingProgress == 0 then
+                EvadingProgress = CurTime()
+                UVEvadingProgress = EvadingProgress
+            end
+            
+            local T = math.Clamp((UVEvadingProgress) * (w * 0.1725), 0, w * 0.1725)
+            surface.SetDrawColor(50, 173, 255)
+            surface.DrawRect(w * 0.5, bottomy, T, h * 0.035)
+            states.EvasionColor = Color(50, 173, 255, blink)
+        else
+            EvadingProgress = 0
+        end
+        
+        -- Evade Box, Icons
+        DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.315, bottomy + (h*0.015), .05, states.BustedColor) -- Icon, Glow
+        DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.315, bottomy + (h*0.015), .05, Color(255,0,0, 125)) -- Icon
+        DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, states.EvasionColor) -- Icon, Glow
+        DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 173, 255, 125)) -- Icon
+        
+        -- Evade Box, Dividers
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.DrawRect(w * 0.499, bottomy, w * 0.0015, h * 0.035)
+        
+        -- Lower Box
+        -- local shade_theme_color =
+        -- (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
+        -- local theme_color =
+        -- (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+        
+        -- shade_theme_color.a = shade_theme_color.a - 35
+        -- theme_color.a = theme_color.a - 35
+        
+        -- surface.SetDrawColor(shade_theme_color:Unpack())
+        -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
+        
+        -- surface.SetDrawColor(theme_color:Unpack())
+        -- surface.SetMaterial(UVMaterials["BACKGROUND"])
+        -- surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
+        
+        -- surface.SetDrawColor( 0, 0, 0, 200)
+        -- surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
+        
+        -- local lbtext = "REPLACEME"
+        -- local uloc, utype = "uv.chase.unit", UnitsChasing
+        -- if not UVHUDCopMode then
+        -- if UnitsChasing ~= 1 then
+        -- uloc = "uv.chase.units"
+        -- end
+        -- else
+        -- utype = UVHUDWantedSuspectsNumber
+        -- uloc = "uv.chase.suspects"
+        -- end
+        
+        -- if not UVBackupColor then
+        -- UVBackupColor = Color(255, 255, 255)
+        -- end
+        -- local num = UVBackupTimerSeconds
+        
+        -- if not UVHUDDisplayBackupTimer then
+        -- lbtext = string.format(lang(uloc), utype)
+        -- else
+        -- if num then
+        -- if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
+        -- _last_backup_pulse_second = math.floor(num)
+        
+        -- hook.Remove("Think", "UVBackupColorPulse")
+        -- UVBackupColor = Color(255, 255, 0)
+        
+        -- hook.Add("Think","UVBackupColorPulse",function()
+        -- UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
+        -- if UVBackupColor.b >= 255 then
+        -- hook.Remove("Think", "UVBackupColorPulse")
+        -- end
+        -- end)
+        -- end
+        -- end
+        
+        -- lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
+        -- end
+        
+        -- draw.DrawText(lbtext,"UVFont5UI-BottomBar",w * 0.5,bottomy3 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+    else
+        -- Lower Box
+        -- Evade Box, Cooldown Meter
+        if UVHUDDisplayCooldown then
+            
+            local blink = 255 * math.abs(math.sin(RealTime() * 4))
+            local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+            local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+            
+            if not CooldownProgress or CooldownProgress == 0 then
+                CooldownProgress = CurTime()
+            end
+            
+            UVSoundCooldown()
+            EvadingProgress = 0
+            
+            -- Upper Box
+            if not UVHUDCopMode then
+                -- if UVHUDDisplayHidingPrompt then
+                -- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
+                -- surface.SetDrawColor(0, 175, 0, 200)
+                -- surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
+                
+                -- local blink = 255 * math.Clamp(math.abs(math.sin(RealTime() * 2)), .7, 1)
+                -- color = Color(blink, 255, blink)
+                
+                -- surface.SetDrawColor(130, 199, 74, 124)
+                -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
+                -- draw.DrawText(
+                -- "#uv.chase.hiding",
+                -- "UVFont5UI-BottomBar",
+                -- w * 0.5,
+                -- bottomy,
+                -- color,
+                -- TEXT_ALIGN_CENTER)
+                -- end
+                
+                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
+                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
+                
+                -- surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
+                surface.SetDrawColor(200, 200, 200, 125)
+                surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
+                
+                local T = math.Clamp((UVCooldownTimer) * (w * 0.344), 0, w * 0.344)
+                surface.SetDrawColor(50, 173, 255, 255)
+                
+                surface.DrawRect(w * 0.333, bottomy, T, h * 0.03)
+                
+                -- surface.SetDrawColor(0, 0, 0, 200)
+                -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
+                -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
+                -- draw.DrawText("#uv.chase.cooldown","UVFont5UI-BottomBar",w * 0.5,bottomy3,Color(255, 255, 255),TEXT_ALIGN_CENTER)
+            else
+                local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
+                local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+                
+                -- surface.SetDrawColor( shade_theme_color:Unpack() )
+                -- surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
+                
+                shade_theme_color.a = shade_theme_color.a - 35
+                theme_color.a = theme_color.a - 35
+                
+                local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
+                color = Color(blink, blink, 255)
+                
+                surface.SetDrawColor(shade_theme_color:Unpack())
+                surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
+                
+                surface.SetDrawColor(theme_color:Unpack())
+                
+                surface.SetMaterial(UVMaterials["BACKGROUND"])
+                surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
+                
+                local text = lang("uv.chase.cooldown")
+                draw.DrawText(text, "UVFont5UI-BottomBar", w / 2, bottomy3, color, TEXT_ALIGN_CENTER)
+            end
+        else
+            CooldownProgress = 0
+        end
+    end
+    --end
 end
 
 UV_UI.pursuit.undercover.main = undercover_pursuit_main
@@ -4990,7 +4992,7 @@ UV_UI.pursuit.original.events = {
         end)
     end,
     onRacerEscapedDebrief = function(...)
-        if UVHUDRace then return end
+        if UVHUDDisplayRacing then return end
         
         local w = ScrW()
         local h = ScrH()

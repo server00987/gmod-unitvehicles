@@ -77,6 +77,12 @@ function ENT:Repair(vehicle)
 		end
 	end
 
+	if ptrefilled then
+		for i=1, 2 do
+			UVReplicatePT( vehicle, i )
+		end
+	end
+
 	if vehicle:GetClass() == "prop_vehicle_jeep" then
 		if vcmod_main then
 			if !ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
