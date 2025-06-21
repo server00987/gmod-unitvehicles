@@ -2073,12 +2073,14 @@ UV_UI.racing.mostwanted.events = {
                 draw.DrawText("#uv.results.race.name", "UVFont5UI", w * 0.3, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 draw.DrawText("#uv.results.race.time", "UVFont5UI", w * 0.795, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
                 
+				local blink = 255 * math.abs(math.sin(RealTime() * 8))
+				
                 if scrollOffset > 0 then
-                    draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255), TEXT_ALIGN_CENTER)
+                    draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
                 end
                 
                 if scrollOffset < #displaySequence - entriesToShow then
-                    draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255), TEXT_ALIGN_CENTER)
+                    draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
                 end
                 
                 draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
@@ -4185,7 +4187,7 @@ local function undercover_racing_main( ... )
         end
         
         local text = alt and (status_text) or (racer_name)
-        text = string.upper(text)
+        -- text = string.upper(text)
         
         -- This should only draw on LocalPlayer() but couldn't figure it out
         if is_local_player then
@@ -5840,6 +5842,268 @@ UV_UI.racing.underground.events = {
         if timer.Exists( "_UG_TIME_FROZEN_DELAY" ) then timer.Remove( "_UG_TIME_FROZEN_DELAY" ) end
         timer.Create("_UG_TIME_FROZEN_DELAY", 3, 1, function()
             UV_UI.racing.underground.states.FrozenTime = false
+        end)
+    end,
+
+    ShowResults = function(sortedRacers) -- Underground 1
+        local debriefcolor = Color(255, 183, 61)
+        
+        local w = ScrW()
+        local h = ScrH()
+        
+        --------------------------------------
+        
+        local ResultPanel = vgui.Create("DFrame")
+        -- local OK = vgui.Create("DButton")
+        
+        -- ResultPanel:Add(OK)
+        ResultPanel:SetSize(w, h)
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        
+        -- OK:SetText("X")
+        -- OK:SetSize(w*0.015, h*0.03)
+        -- OK:SetPos(w*0.775, h*0.1425)
+        -- OK:SetAlpha(0)
+        -- OK:SetVisible(false)
+        -- OK:SetEnabled(false)
+        
+        local timestart = CurTime()
+        local displaySequence = {}
+        
+        -- Data and labels
+        local racersArray = {}
+        
+        for _, dict in pairs(sortedRacers) do
+            table.insert(racersArray, dict)
+        end
+        
+        table.sort(racersArray, function(a, b)
+            local timeA = a.array and a.array.TotalTime
+            local timeB = b.array and b.array.TotalTime
+            
+            -- Treat missing or non-numeric TotalTime as a large number (DNF)
+            local tA = (type(timeA) == "number") and timeA or math.huge
+            local tB = (type(timeB) == "number") and timeB or math.huge
+            
+            return tA < tB
+        end)
+
+        local entriesToShow = 9
+        local scrollOffset = 0
+        
+        local i = 0
+        for place, dict in ipairs(racersArray) do
+            local info = dict.array or {}
+            i = i + 1
+            
+            -- Staggered vertical layout
+            local visibleIndex = i -- 1 to entriesToShow
+            local rowHeight = h * 0.09
+			local yPos = h*0.08 + (i - 1) * rowHeight
+
+            local name = info["Name"] or "Unknown"
+            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            
+            if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
+            
+            local entry = {
+                y = yPos,
+                posText = tostring(i),
+                nameText = name,
+                timeText = totalTime
+            }
+            
+            table.insert(displaySequence, entry)
+        end
+        
+        local closing = false
+        local closeStartTime = 0
+
+        function ResultPanel:OnMouseWheeled(delta)
+            if delta > 0 then
+                scrollOffset = math.max(scrollOffset - 1, 0)
+            elseif delta < 0 then
+                local maxOffset = math.max(0, #displaySequence - entriesToShow)
+                scrollOffset = math.min(scrollOffset + 1, maxOffset)
+            end
+            
+            return true -- prevent further processing
+        end
+        
+        ResultPanel.Paint = function(self, w, h)
+            local curTime = CurTime()
+			local fadeDuration = 0.5 -- seconds
+			local fadeAlpha = 1
+
+			if closing then
+				local elapsedFade = curTime - closeStartTime
+				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
+				
+				if elapsedFade >= fadeDuration then
+					hook.Remove("Think", "CheckJumpKeyForDebrief")
+					if IsValid(ResultPanel) then
+						ResultPanel:Close()
+					end
+					return -- early exit, avoid drawing anymore
+				end
+			end
+
+            -- Main black background
+            surface.SetDrawColor(0, 0, 0, 150)
+            surface.DrawRect(0, 0, w, h)
+            
+            -- Draw rows and alternating backgrounds fully visible when revealed
+            local startIndex = scrollOffset + 1
+            local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
+            				
+			-- Upper blue BG
+			surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
+			surface.DrawRect(w * 0.7, 0, w * 0.33, h * 0.075)
+
+			-- Lower blue BG
+			surface.DrawRect(w * 0.7, h * 0.9, w * 0.33, h * 0.125)
+
+            for i = startIndex, endIndex do
+				local entry = displaySequence[i]
+				local localIndex = i - startIndex + 1
+				local yPos = h * 0.08 + (localIndex - 1) * (h * 0.09)
+				
+				surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
+				surface.DrawRect(w * 0.7, yPos, w * 0.33, h * 0.085)
+				
+				surface.SetDrawColor(104, 172, 255, math.floor(200 * fadeAlpha))
+				surface.DrawRect(w * 0.7025, yPos + (h * 0.005), w * 0.33, h * 0.0375)
+
+                if entry.posText then
+                    draw.SimpleText(entry.posText, "UVFont", w * 0.715, yPos + (h * 0.04), Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.nameText then
+                    draw.SimpleText(entry.nameText, "UVFont", w * 0.99, yPos, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+                end
+                if entry.timeText then
+                    draw.SimpleText(entry.timeText, "UVFont4", w * 0.99, yPos + (h * 0.05), Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+                end
+            end
+			
+            local blink = 255 * math.abs(math.sin(RealTime() * 8))
+
+			if scrollOffset > 0 then
+				draw.SimpleText("▲", "UVFont3", w * 0.86, h * 0.0175, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+			end
+			
+			if scrollOffset < #displaySequence - entriesToShow then
+				draw.SimpleText("▼", "UVFont3", w * 0.86, h * 0.9, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+			end
+
+            -- Time since panel was created
+            local elapsed = CurTime() - timestart
+            
+            -- Only start auto-close countdown after reveal + flash
+            local autoCloseDuration = 10  -- 30 seconds countdown
+            
+            local autoCloseTimer = 0
+            local autoCloseRemaining = autoCloseDuration
+            
+			autoCloseTimer = elapsed
+			autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+						
+            local conttext = "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
+            local conttextl = string.len(conttext)
+            local conttexts = (w * 0.0065 * conttextl)
+            
+            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
+            local autotextl = string.len(autotext)
+			local autotexts = (w * 0.00575 * autotextl)
+            
+            surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha) )
+            
+            surface.DrawRect( w*0.6975 - conttexts, h*0.9, conttexts, h*0.025)
+            draw.DrawText( conttext, "UVFont4", w*0.6945, h*0.9005, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
+            
+            surface.DrawRect( w*0.6975 - autotexts, h*0.925, autotexts, h*0.025)
+            draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
+
+            if autoCloseRemaining <= 0 then
+                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                if not closing then
+                    surface.PlaySound( "uvui/mw/closemenu.wav" )
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            end
+		end
+
+	-- function OK:DoClick()
+		-- if not closing then
+			-- surface.PlaySound( "uvui/mw/closemenu.wav" )
+			-- closing = true
+			-- closeStartTime = CurTime()
+		-- end
+	-- end
+
+	local wasJumping = false
+	hook.Add("Think", "CheckJumpKeyForDebrief", function()
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+		
+		if ply:KeyDown(IN_JUMP) then
+			if not wasJumping and not closing then
+				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				wasJumping = true
+				closing = true
+				closeStartTime = CurTime()
+			end
+		else
+			wasJumping = false
+		end
+	end)
+end,
+
+    onRaceEnd = function( sortedRacers, stringArray )
+        local triggerTime = CurTime()
+        local duration = 10
+        
+        -----------------------------------------
+        
+        local function _main()
+            
+            for place, dict in pairs( sortedRacers ) do
+                local vehicleArray = dict.vehicle
+                local infoArray = dict.array
+                local is_local_player = dict.LocalPlayer
+                
+                --------------------------------------------
+                
+                print( place )
+                PrintTable( infoArray )
+            end
+        end
+        if Glide then
+            Glide.Notify({
+                text = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>'),
+                lifetime = duration,
+                immediate = true,
+                icon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png",
+            }) 
+        end
+        
+        hook.Add( "Think", "RaceResultDisplay", function()
+            if CurTime() - triggerTime > duration then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                return
+            end
+            
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+                hook.Remove( 'Think', 'RaceResultDisplay' )
+                -- _main()
+                UV_UI.racing.underground.events.ShowResults(sortedRacers)
+            end
         end)
     end
 }
