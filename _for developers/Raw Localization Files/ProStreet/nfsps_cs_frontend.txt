@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Czech_Frontend.bin
+#	File created on: 2025-05-24 11:10:39
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	CELKOVÁ ČÁSTKA ZA OPRAVY
+0	AUTO	MODE_ALL	Všechna auta
+0	AUTO	CUST_VINYL_MOVE_LAYER	Posunout vrstvu Nahoru/Dolu
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	BLOK MOTORU
+0	AUTO	CAR_SELECT_MUSTANGGT	Čtvrtá generace vozu Mustang má 4,6l motor s osmi válci. Tento vůz to, co si představíte, když slyšíte slovo mustang.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Toto vylepšení nahrazuje stávající součásti motoru silnějšími, se zvýšenou životností, což umožňuje dostat z motoru větší výkon a udržet vyšší otáčky.
+0	AUTO	CUST_VISUAL_DECALS	POTISKY
+0	AUTO	CUST_CUSTOMIZE	Upravit Projekt
+0	AUTO	CODE_ENTRY_VALID	Gratulujeme! Váš kód byl přijat a vaše odměna byla odemknuta.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	BRZDOVÉ ČELISTI
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Máte v nákupním vozíku žetony, které nebyly zakoupeny. Chcete přesto odejít?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	STABILIZÁTORY
+0	AUTO	CUST_QUICK_HANDLING_D3	Toto vylepšení využívá tvrdší pérování pro zajištění větší stability v přímé jízdě.
+0	AUTO	CUST_QUICK_HANDLING_G3	Toto vylepšení využívá tvrdší pérování pro zajištění větší stability v přímé jízdě i v zatáčkách.
+0	AUTO	CUST_QUICK_HANDLING_S3	Toto vylepšení využívá tvrdšího pérování k zajištění lepší ovladatelnosti vozu v zatáčkách ve vysokých rychlostech.
+0	AUTO	CUST_REGION_REAR_TIRE	ZADNÍ PNEUMATIKA
+0	AUTO	FE_STATS_BEST_SECTOR	NEJLEPŠÍ ÚZEMÍ
+0	AUTO	CL_FREE_CAR_MARKER	ŽETON NA AUTO ZDARMA
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	DEFINOVAT ZÁVODY
+0	AUTO	CUST_QUICK_BRAKE_DI3	Toto vylepšení zajistí, že bude dosažena maximální brzdná doba, ale umožní a doknce podpoří ztrátu trakce při zpomalování.
+0	AUTO	CUST_BP_APPLY_CONFIRM	Zakoupení všech požadovaných dílů, které jsou potřeba, pokud chcete použít tento projekt, vás bude stát {0:d}. Chcete pokračovat?
+0	AUTO	CUST_SLOT_BUSHING_KIT	SADA SILENT BLOKŮ
+0	AUTO	FE_STATS_GAMES_PLAYED	POČ. ODEHRANÝCH HER
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUSOVÉ VOZY
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	VRSTVA {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	INFORMACE O BALÍČKU
+0	AUTO	CUST_SLOT_NITROUS_DESC	N2O, vysoce vznětlivý plyn, může být vstřikován do válce v průběhu zážehu, což krátkodobě zvýší výkon.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Toto vylepšení slouží k přeprogramování procesoru na maximální výkon.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Toto vylepšení slouží k přeprogramování procesoru na maximální výkon.
+0	AUTO	CS_HEADER_SPEED_EVENT	RYCHLOSTNÍ VÝZVY
+0	AUTO	CUST_SLOT_HEADS_DESC	Úpravou ventilů v hlavě válců můžete docílit zvýšení přívodu vzduchu do motoru a odvodu výfukových plynů ven z motoru. Toto má za následek vyšší výkon.
+0	AUTO	CUST_VINYL_ADDLAYER	PŘIDAT DALŠÍ VRSTVU
+0	AUTO	CUST_CAT_SPEED_FORCED	Turbo, které zabírá již při nízkých otáčkách, vám poskytne užitečnou výkonovou charakteristiku a jedinečnou výhodu na závodní dráze či na silnici.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	NEJVĚTŠÍ NÁSOBEK
+0	AUTO	RACE_MODE_GRIP_MODE	REŽIM^GRIP
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Dalším krokem je nadefinování jednotlivých závodů pro váš závodní den.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	POČET ZÁVOVDŮ
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Toto vylepšení zahrnuje zesílené komponenty přenášející sílu motoru na kola, jako je hnací hřídel, diferenciál a osy.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	POČET HRY KARIÉRY
+0	AUTO	RACE_DAY_ADD_EVENT	PŘIDAT ZÁVOD
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Tento projekt není kompatibilní s vaší verzí hry Need for Speed™ ProStreet, a proto nemůže být použit. Více informací o aktualizacích a novém obsahu hry najdete na webových stránkách NeedforSpeed.com.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	BARVA KOL
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Nastavit jako Aktivní Projekt
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	NASTAVENÍ MOTORU
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	ODMĚNA ZA VÝHRU
+0	AUTO	CUST_PAINT_BODY	LAK
+0	AUTO	CUST_PAINT_RIMS	KOLA
+0	AUTO	CUST_PAINT_TINT	FÓLIE
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Nedošlo k žádné chybě.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Opravdu chcete odstranit tento závodní den? Vaše nastavení a vytvořené rekordy tohoto závodního dne budou ztraceny.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	VÝBĚR JAZYKA
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Silent bloky vyrobené z tvrdších materiálů jako je uretan nebo hliník umožňují vašemu vozu zatáčet prudčeji s menším přetáčením.
+0	AUTO	HUB_DIFFICULTY_2	STŘEDNÍ
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Opakovaným zastavováním vozidla se v brzdném systému vytváří nadbytečné teplo a po čase hrozí zvýšení brzdných drah. Větší brzdný systém pomáhá snižovat teploty a brzdy jsou konzistentní.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	NEJVYŠŠÍ MAX. RYCHLOST
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Zvolte způsob nákupu
+0	AUTO	CUST_SLOT_INTAKE_DESC	Čím více studeného vzduchu se motoru dostává, tím lépe pracuje. A čím je vzduch chladnější, tím větší výkon motor produkuje.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	S důrazem kladeným na přetáčivost vozu byl dozadu umístěn velký stabilizátor, hliníkové silent bloky a odstraněn přední stabilizátor. To umožní snadnější přechod do driftu.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Přejete si zavřít Obrazovku pro výběr auta a vrátit se zpět na Mapu kariéry?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Probíhá ukládání závodního dne...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	NEJOCEŇOVANĚJŠÍ TUNER
+0	AUTO	RACE_MODE_DESCRIPTION	Výběrem závodního režimu* ovlivníte typy závodů, ve kterých budete v tomto autě moci soutěžit.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Pro vstup do větrného tunelu musíte mít nainstalovány díly AutoSculpt!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Čím větší je kapacita sání, tím více vzduchu se do motoru dostává. Čím více vzduchu proudí do motoru, tím lépe lze využít jeho potenciálu.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	NEJVYŠŠÍ CELKOVÁ RYCHL. - KB*
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	PALIVOVÝ SYSTÉM
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Vybavena turbo motorem o objemu 2,3 l, výkonem 260+ koní a šestistupňovou převodovkou je Speed 3 moderní hatchback.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Toto vylepšení umožňuje ještě rychlejší a přesnější řazení a zároveň poskytuje odlehčené součásti, které přenášejí výkon motoru na kola na úrovni standardu závodního vozu.
+0	AUTO	CAR_SELECT_INTEGRA	Kouki je neuvěřitelně populární auto mezi závodními nadšenci zejména díky široké škále nabízených motorů a kvalitnímu podvozku.
+0	AUTO	FE_HUBMAP_ETREE_CARS	AUTA
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Toto vylepšení zvyšuje celkový výkon motoru. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Toto vylepšení je dalším krokem zvyšování výkonuk pravému závodnímu vozu.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Řízení rychlosti po celé délce zatáčky a věnování dostatečné pozornosti akceleraci při opouštění zatáčky je zásadní. Vyšší výkon motoru zvyšuje schopnost vystřelit ze zatáčky a dosáhnout vyšších rychlostí.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Opravdu si přejete opravit toto auto?
+0	AUTO	CAR_SELECT_S3	Druhá generace S3 se neprodává v Severní Americe.
+0	AUTO	CAR_SELECT_S4	Běžnější než RS4, S4 má také osmiválec s objemem 4,2 l.
+0	AUTO	CAR_SELECT_TT	Druhá generace TT získala spoustu ocenění jako auto roku.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	NITRO
+0	AUTO	FE_STATS_DOWNLOADING_STATS	STAHOVÁNÍ STATISTIK
+0	AUTO	CUST_QUICK_FORCED_D3	Drag fáze 3 - indukce
+0	AUTO	CUST_QUICK_FORCED_G3	Toto vylepšení zvyšuje množství vzduchu přivedeného do motoru a ještě více tak zvyšuje výkon a přibližuje se tak závodnímu vozu.
+0	AUTO	CUST_QUICK_FORCED_S3	Toto vylepšení zvyšuje množství vzduchu přivedeného do motoru a ještě více tak zvyšuje výkon a přibližuje se tak závodnímu vozu.
+0	AUTO	CUST_PAINT_GROUP_CANDY	CUKRÁTKO
+0	AUTO	CUST_PAINT_GROUP_GLOSS	LESKLÉ
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATNÉ
+0	AUTO	CUST_DRIVETRAIN_GROUP	POHON
+0	AUTO	CUST_PAINT_GROUP_PEARL	PERLEŤOVÉ
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Toto vylepšení slouží k dalšímu přeprogramování procesoru pro maximální výkon při akceleraci.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Toto vylepšní umožňuje další přeprogramování procesoru pro maximální výkon.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Toto vylepšní umožňuje další přeprogramování procesoru pro maximální výkon.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Brzdy s většími nebo více písty poskytují rovnoměrnější rozložení přítlačné síly brzdových destiček na kotouče, což má za následek lepší brzdné schopnosti.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Stiskněte tlačítko START pro zahájení hry
+0	AUTO	RACE_DAY_SLOT_ID	SLOT {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	TLUMIČE
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Při pokusu o připojení ke hře nastala chyba. Zkuste to prosím znovu.
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	CHLAZENÍ PŘEVODOVKY
+0	AUTO	RACE_MODE_DRIFT_MODE	REŽIM^DRIFT
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Která kola chcete upravit?
+0	AUTO	CUST_SLOT_FLYWHEEL	SETRVAČNÍK
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Závodní sedadla vás udržují na místě.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Pokud nyní změníte mód, smažou se všechny dosavadní projekty. Opravdu chcete pokračovat?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	ČAS ODEHRANÝ V ZÁVODECH KARIÉRY
+0	AUTO	CUST_DRAG_TUT_AWD	Pohon na čtyři kola je veliká výhoda, umožňuje vám obrovskou trakci a zabraňuje snižování výkonu.
+0	AUTO	CUST_DRAG_TUT_FWD	Největším problémem jsou, pokud jde o udržení trakce při dragovém závodění, přední kola. Čím více máte síly, tím větší musí být důraz na omezení rotace kol. Postavení rychlého FWD drag vozu znamená vytvořit sílu a dostat ji na zem. Jakmile jednou zvládnete základní vylepšení síly, musíte se soustředit na ovládání síly a trakce.
+0	AUTO	CUST_DRAG_TUT_RWD	Klíčem při nastavení dragu je trakce. Eliminujte poskakování kol a zvládněte rotaci kol pro dobu, kdy máte velkou rychlost. Toto platí ještě více pro vozy s vysokým výkonem.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Server Need for Speed zrušil váš požadavek.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Pneumatiky vás přilepí na zem
+0	AUTO	CAR_SELECT_GTRPROTO	GTR Proto je předprodukční verze R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	POČET VZÁCNÝCH AUT
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	ODMĚNA ZA OVLÁDNUTÍ
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} OPRAVNÉ ŽETONY
+0	AUTO	CAR_SELECT_VIPERCOUPE	Třetí generace vozu Viper. Je vybaven V10 motorem s velmi výrazným zvukem a výkonem 500 koňských sil.
+0	AUTO	MAIN_MENU_TITLE	HLAVNÍ MENU
+0	AUTO	CUST_TINT_DARK	TMAVÝ
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Vhodným nastavením závěsu tak, aby neměl příliš vysoké přetáčení ani nedotáčení, získá řidič vůz, který je zároveň rychlejší i snadněji ovladatelný.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Není možno zničit auta
+0	AUTO	CUST_APPLYING_BLUEPRINT	NASTAVOVÁNÍ PROJEKTU
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	VYBRAT SLOT ZÁVODNÍHO DNE
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Tohle je auto s motorem ve středu, vlastnostmi se blíží 911.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	POSTUP KARIÉRY V PROCENTECH
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFERENCIÁL
+0	AUTO	CUST_WIND_TUNNEL_ON	Aerodyn. tunel zapnut
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Opravné žetony jsou pro Dny závodů v mulitplayeru vypnuty. Můžete rozbít auto, ale poškození je resetováno na konci závodu. Taktéž nelze auto odrovnat.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Projekt nesouhlasí s režimem auta, který používáte. Všechny předcházející projekty budou smazány. Opravdu to chcete udělat?
+0	AUTO	CUST_QUICK_POWER_DI3	Tento balíček se zaměřuje na vyvinutí dostatečné síly pro přerušení trakce hnané nápravy.
+0	AUTO	RACE_MODE_DRAG_MODE	REŽIM^DRAG
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Základní vylepšení celkového vzhledu auta.
+0	AUTO	CUST_QUICK_VISUAL_2	Dodáním křídla a předních spojlerů způsobí, že bude vaše auto méně nadnášeno ve vysokých rychlostech. Důsledkem bude vyšší stabilita při vysokých rychlostech a lepší držení stopy v zatáčkách.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Zvolte počet hráčů
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Ve vybraném slotu je již projekt. Chcete jej přepsat?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	SPRÁVA ŽETONŮ
+0	AUTO	CAR_SELECT_FOCUSST	Focus MK2, který se prodává mimo Severní Ameriku je vybaven 2,5l motorem s výkonem 225 koní.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Toto vylepšení zahrnuje zesílené komponenty přenášející sílu motoru na kola, jako je hnací hřídel, diferenciál a osy.
+0	AUTO	FE_MAIN_MENU	Hlavní menu
+0	AUTO	CUST_REGION_REAR_BUMPER	ZADNÍ NÁRAZNÍK
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	ŘEMENICE A KLÍNOVÉ ŘEMENY
+0	AUTO	CAR_SELECT_BARRACUDA	Hemi 'Cuda je legenda.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	NEJOCEŇOVANĚJŠÍ AUTO*
+0	AUTO	CUST_APPLY_PAINT_TITLE	POUŽÍT LAK
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	POČET AUT V GARÁŽI
+0	AUTO	CUST_REGION_ALL_WHEELS	VŠECHNA KOLA
+0	AUTO	CUST_QUICK_FORCED_2	Toto vylepšení zvyšuje množství vzduchu přivedeného do motoru a zvyšuje tak celkový výkon.
+0	AUTO	FE_STATS_FASTEST_LAP	NEJRYCHLEJŠÍ KOLO
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Aby vaše kola pevně seděla na vozovce, jsou potřeba tvrdší přední i zadní stabilizátory a standardní tlumiče jsou nahrazeny závodními.
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	STATISTIKA DNF*
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	B-body Charger bylo jedno z nejznámějších TV aut.
+0	AUTO	CUST_QUICK_INTERNALS_1	Toto vylepšení zvýší sílu motoru a umožní pozdější aplikaci dalších následných vylepšení.
+0	AUTO	CUST_QUICK_INTERNALS_2	Toto vylepšení zvýší ještě více sílu motoru a umožní větší výkon a vyšší otáčky.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Chcete nastavit tento projekt do jeho výchozího stavu?
+0	AUTO	CUST_SLOT_RACING_SEATS	ZÁVODNÍ SEDADLA
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZÓNA 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	BODY ZA NEJLEPŠÍ ÚZEMÍ
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	NEJCENĚJŠÍ AUTO
+0	AUTO	CAR_SELECT_CIVICSI	Osmá generace vozu Civic.
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle byl první muscle od Chevy. Před rokem 1970 Chevy neumožňovalo větší motor než 400ci. To se změnilo až v roce 70 s příchodem Chevelle 402.
+0	AUTO	CUST_CAT_GRIP_FORCED	Turbo, které zabírá již při nízkých otáčkách, vám poskytne užitečnou výkonovou charakteristiku a jedinečnou výhodu na závodní dráce či na silnici.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Vítejte na mapě závodního dne
+0	AUTO	CUST_BLUEPRINT_APPLY	Použít Projekt
+0	AUTO	CUST_SLOT_CAMSHAFTS	VAČKOVÉ HŘÍDELE
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Zobrazit všechny závody
+0	AUTO	CUST_SLOT_HEADERS	SVODY
+0	AUTO	FE_STATS_FASTEST_TIME	NEJRYCHLEJŠÍ ČAS
+0	AUTO	CUST_SUSPENSION_GROUP	PÉROVÁNÍ
+0	AUTO	CUST_BLUEPRINT_RESET	RESETOVAT PROJEKT
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Toto vylepšení je dalším krokem k pravému specializovanému dragovému vozu.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Toto vylepšení je dalším krokem zvyšování výkonu k pravému závodnímu vozu.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Toto vylepšení je dalším krokem zvyšování výkonu k pravému závodnímu vozu.
+0	AUTO	CUST_INSTALLED	NAINSTALOVANÉ
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Probíhá nahrávání Závodního dne...
+0	AUTO	CUST_SLOT_CAMS_DESC	Krátké otevření ventilu a nízký zdvih jsou typické pro běžná auta s klasickou vačkovou hřídelí. Zvýšením zdvihu a doby otevření ventilu je posunut nejvyšší točivý moment do vyšších otáček. Ideální je stav, kdy se nejvyšší točivý moment nachází v oblasti otáček, ve kterých nejčastěji jezdíte.
+0	AUTO	CUST_QUICK_HANDLING_DI3	Toto vylepšení zahrnuje jedinečné vyladění podvozku, které umožňuje jednodušší přecházení do skluzu během zatáček.
+0	AUTO	CUST_QUICK_BRAKE_D3	Toto vylepšení zajistí, že bude dosažena maximální brzdná doba a že pneumatiky neztratí trakci při snižování rychlosti.
+0	AUTO	CUST_QUICK_BRAKE_G3	grip úroveň 3 - balíček brzd
+0	AUTO	CUST_QUICK_BRAKE_S3	Toto vylepšení zajistí, že bude dosažena maximální brzdná doba z nejvyšší rychlosti a že pneumatiky neztratí trakci při snižování rychlosti.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Čím větší tlaková láhev, tím více N2O se do ní vejde. Také můžete mít více lahví s N2O. Každou z těchto tlakových lahví je nutno po použití zase naplnit.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Večer
+0	AUTO	CUST_TINT_LIGHT	SVĚTLÝ
+0	AUTO	CUST_REPAIR_DAMAGE	POŠKOZENÍ
+0	AUTO	CUST_TINT_PEARL	PERLEŤOVÝ
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	NEJDELŠÍ VZDÁLENOST DRIFTEM
+0	AUTO	CUST_SLOT_TIPS_DESC	tyto hroty vaší jízdě dodají agresivní vzhled.
+0	AUTO	CUST_SLOT_STEERING_DESC	Závodní řízení umožňuje mírně zvětšit úhel vytočení kol, přičemž volant klade menší odpor než ve voze vybaveném továrním posilovačem řízení.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Pravé auto zabiják. Tato Corvette má 7,0l motor z titanových komponent
+0	AUTO	HD_COMPATIBLE	HD kompatibilní pro nejlepší zážitek ze hry
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Smazat závod
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	POČET PORAŽENÝCH KRÁLŮ
+0	AUTO	CUST_WIND_TUNNEL	VZDUCHOVÝ TUNEL
+0	AUTO	CUST_STAGE_NUMBER	FÁZE {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	POČET VÍTĚZSTVÍ
+0	AUTO	CUST_FILTER_FRONT_BUMPER	PŘEDNÍ NÁRAZNÍK
+0	AUTO	MAIN_CAREER	KARIÉRA
+0	AUTO	CUST_REGION_REAR_WHEEL	ZADNÍ KOLA
+0	AUTO	CUST_QUICK_VISUAL_D3	Toto vylepšení používá různé aerodynamické prvky pro zvýšení přítlačné síly ve vysokých rychlostech.
+0	AUTO	CUST_QUICK_VISUAL_G3	Toto vylepšení používá různé aerodynamické prvky pro zvýšení přítlačné síly ve vysokých rychlostech.
+0	AUTO	CUST_QUICK_VISUAL_S3	Toto vylepšení používá různé aerodynamické prvky pro zvýšení přítlačné síly při maximální rychlosti.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Opakovaným zastavováním vozidla se v brzdném systému vytváří nadbytečné teplo a po čase hrozí zvýšení brzdných drah. Větší brzdný systém pomáhá snižovat teploty a brzdy jsou konzistentní.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Toto vylepšení dodává motoru výkon závodního vozu a umožňuje ještě více zvýšit počet otáček.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	POČET HODNOCENÝCH VÍTĚZSTVÍ
+0	AUTO	CUST_SLOT_BOV_DESC	Umožňuje, aby turbo dosáhlo a udrželo maximální posílení motoru. Výfukovým ventilem se pak motor zbavuje přebytečného tlaku, aniž by došlo ke zpomalení motoru.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Update je dostupný a požadován pro online hru. Navštivte stránky NeedforSpeed.com pro další informace.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	NEJLEPŠÍ V (TYP ZÁVODU)
+0	AUTO	HUB_BREAK_RECORD	TRHNĚTE REKORD
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Tyto vzpěry udržují vaše kola pevně přilepené k vozovce a umožňují zvládnout točivý moment, který váš motor vyvine.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Snadná
+0	AUTO	RACE_DAY_DIFFICULTY_2	Střední
+0	AUTO	RACE_DAY_DIFFICULTY_3	Težká
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elitní
+0	AUTO	CUST_SLOT_CLUTCH	SPOJKA
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Stiskněte tlačítko 2 pro pokračování
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	NEJRYCHLEJŠÍ 0-60 mph
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Chcete upravit přední nebo zadní pneumatiky?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	VYTVOŘIT ZÁVODNÍ DEN
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	OSOBNÍ ÚDAJE
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Při zvyšování výkonu motoru je též potřeba provádět vylepšení, který zajistí účinné zužitkování výkonu a jeho přenost na pohon kol. Zde hrají svou roli spojky, hnací hřídele a diferenciální soukolí.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	JEDEN HRÁČ
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Po počátečním rozjezdu závisí při závodění hlavně na výkonu. Vyšší výkon znamená vyšší rychlost na trati a měřenou rychlost.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Tento závodní den není kompatibilní s vaší verzí hry Need for Speed™ ProStreet, a proto nemůže být použit. Více informací o aktualizacích a novém obsahu hry najdete na webových stránkách NeedforSpeed.com.
+0	AUTO	RD_PLAY	HRÁT
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	ZAPALOVÁNÍ
+0	AUTO	FE_STATS_CAREER_WINS	POČET VYHRANÝCH KARIÉR
+0	AUTO	RACE_DAY_LOCATION	LOKACE
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Toto vylepšení umožňuje rychlejší řazení a efektivnější přenesení výkonu motoru na kola.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Toto vylepšení umožňuje ještě rychlejší a přesnější řazení a zároveň poskytuje odlehčené součásti, které přenášejí výkon motoru na kola.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Opravdu chcete smazat tento sdílený projekt?
+0	AUTO	SHOW_FRIENDS	Zobrazit přátele
+0	AUTO	FE_STATS_HUBS_DOMINATED	OVLÁDNUTÉ HUBY
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	NEJRYCHLEJŠÍ REAKCE*
+0	AUTO	CODE_ENTRY_INVALID	Kód, který jste vložili je neplatný. Ujistěte se, že váš kód je správný a zkuste to znova.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	VYBRAT AŽ 8 ZÁVODŮ
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Opravit auto
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	OPRAVNÝ ŽETON
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	DUHOVÉ
+0	AUTO	CUST_SLOT_CAM_GEARS	VAČKOVÉ ROZVODY
+0	AUTO	CUST_SLOT_ROOF_SCOOP	STŘEŠNÍ SÁNÍ
+0	AUTO	CUST_COMPONENTS_TITLE	VLASTNÍ NASTAVENÍ DÍLŮ
+0	AUTO	CUST_BRAKES_GROUP	BRZDY
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Opravdu chcete odejít?
+0	AUTO	CUST_SLOT_TRACTION_BARS	TAŽNÉ TYČE
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Toto vylepšení zvyšuje brzdící schopnosti vašeho vozu použitím vysoce účinných brzdových destiček a kotoučů. Brzdy jsou nezbytné pro ovládání driftu.
+0	AUTO	MAIN_RACE_DAY	ZÁVODNÍ DEN
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	PROC. ÚSPĚŠN. V RYCHL. VÝZVÁCH
+0	AUTO	SELL_CAR_CONFIRMATION	Cena tohoto auta je {0:d}^Pokud jej prodáte, ztratíte všechny jeho projekty. Opravdu chcete toto auto prodat?
+0	AUTO	RD_DELETE_RD	Smazat Den závodu?
+0	AUTO	CAR_SELECT_G35	G35 má totožný podvozek jako 350z.
+0	AUTO	CAR_SELECT_GXP	GXP má 2,0l 16v turbo motor s výkonem 260 koní, LSD a 18palcová kola.
+0	AUTO	CAR_SELECT_NSX	Navržena jako ukázka závodních technologií značky Honda. Toto auto s motorem posazeným ve středu byla ve své době velmi nadčasovým vozem.
+0	AUTO	CAR_SELECT_R35	Tohle je produkční verze R35 GTR.
+0	AUTO	CAR_SELECT_S13	S13 je jednou z největších ikon driftu.
+0	AUTO	CAR_SELECT_S15	S15 je auto, které nebylo původně určeno pro americký trh, ale stalo se oblíbencem zdejších tunerů.
+0	AUTO	CAR_SELECT_RS4	B7 RS4 je vybavena osmiválcovým motorem s 400 koňskými silami. K dispozici je jako sedan, kombi nebo kabriolet.
+0	AUTO	CAR_SELECT_RSX	Náhrada za legendární auto Integra. Používá nový motor Honda série K.
+0	AUTO	CAR_SELECT_RX8	Motor vpředu, náhon na zadní kola, Wankelův motor a 2+2 sedadla. RX-8 má téměř dokonalé rozmístění váhy 50:50 a neuvěřitelně vyvážené řízení.
+0	AUTO	CAR_SELECT_STI	Ležatý čtyřválec, turbo a pohon všech 4 kol. Toto Sti je jedním z aut, které udávají směr ve světě tuningu. To je auto, které umí všechno a umí to dobře.
+0	AUTO	CAR_SELECT_Z4M	Má stejný šestiválcový motor jako E46 M3, zrychlení 0-60 mil zvládne za 4,9 sekundy. Rychlost je omezena na 250 km/h.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Drift fáze 3 - vzhled
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZÓNA 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZÓNA 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZÓNA 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZÓNA 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZÓNA 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZÓNA 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZÓNA 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZÓNA 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZÓNA 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	NEJVYŠŠÍ SKÓRE ZA ZÁVOD
+0	AUTO	FE_STATS_AVERAGE_SPEED	PRŮMĚRNÁ RYCHLOST
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALÍZA
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Stiskněte tlačítko START
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	PROCENTO ÚSPĚŠNOSTI V DRIFTU
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Záložní auta nejsou k dispozici
+0	AUTO	CUST_FILTER_FRONT	PŘEDNÍ KOLA
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	OBCHOD
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Předprodukční verze páté generace vozu Camaro byla představena v roce 2006.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Toto vylepšení umožňuje autu projet zatáčkou rychleji a stabilněji.
+0	AUTO	CUST_QUICK_SUSPENSION_2	Toto vylepšení umožňuje autu projet zatáčkou ještě rychleji a stabilněji s lepší ovladatelností.
+0	AUTO	CUST_QUICK_NITROUS_D3	Toto vylepšení zvýší na krátký čas výkon motoru  o 50-250 koní dodáním N2O. Toto může znamenat rozdíl mezi prvním a posledním místem.
+0	AUTO	CUST_QUICK_NITROUS_G3	Toto vylepšení zvýší na krátký čas výkon motoru  o 50-250 koní dodáním N2O. Toto může znamenat rozdíl mezi prvním a druhým místem.
+0	AUTO	CUST_QUICK_NITROUS_S3	Toto vylepšení zvýší na krátký čas výkon motoru  o 50-250 koní dodáním N2O. Toto může znamenat rozdíl mezi prvním a druhým místem.
+0	AUTO	CUST_PERFORMANCE	VÝKON
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Tvrdší stabilizátory zlepšují tuhost vozu v zatáčkách a pomáhají tak zabránit nedotáčivosti vozidla.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Opravdu chcete smazat tento projekt?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Projekty
+0	AUTO	CUST_QUICK_UPGRADE	RYCHLÉ VYLEPŠENÍ
+0	AUTO	CAR_SELECT_CORVETTEC6	Tohle je poslední verze vozu Corvette. První verze je stará  bezmála 35 let.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	ODMĚNA
+0	AUTO	MAIN_QUIT_GAME	ODEJÍT
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	NITRO
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTR
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Vedle bezpečnostních výhod ochranné kovové zábrany může také zvýšit tuhost podvozku a vašemu autu to dodá ten správný závodní vzhled.
+0	AUTO	CUST_SLOT_BC_DESC	Čím větší posílení motoru, tím líp. Jestliže váš motor vydrží vyšší zátěž bez poškození, pak je toto zařízení vítaným doplňkem vašeho vozu, který dostane z vašeho turba maximum.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Přehřátá převodovka je vážný problém.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	KOMPRESOR
+0	AUTO	CAR_TYPE_SPEED	RYCHLOSTNÍ VÝZVA
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	HLAVY VÁLCŮ
+0	AUTO	CUST_SELL_CAR_WARNING	Pokud prodáte toto auto, nebudete schopni se zúčastnit žádného {0:s} závodu, dokud si nekoupíte jiné auto stejné třídy.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Žádný závod daného typu v této oblasti
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	DENNÍ DOBA
+0	AUTO	RD_DELETED	Den závodu smazán.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Při zvyšování výkonu motoru je též potřeba provádět vylepšení, který zajistí účinné zužitkování výkonu a jeho přenos na kola. Zde hrají svou roli spojky, hnací hřídele a diferenciální soukolí.
+0	AUTO	CUST_SLOT_AIR_INTAKE	VZDUCHOVÉ SÁNÍ
+0	AUTO	CUST_PART_PURCHASED	ZAKOUPENO
+0	AUTO	CUST_BP_OPTION_UNDO	ODEJÍT
+0	AUTO	CUST_FILTER_BODY	KAROSÉRIE
+0	AUTO	CUST_FILTER_HOOD	KAPOTA
+0	AUTO	CUST_FILTER_REAR	ZADNÍ KOLA
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Přeprogramování procesorové jednotky motoru umožní spalování většího množství benzínu a vzduchu, což vám umožní dosáhnout maximálního výkonu, když jej nejvíc potřebujete.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Brzdové vedení zesílené oplétáním z nerezové oceli zvyšuje hydraulický tlak a citlivost brzd.
+0	AUTO	LS_SAVING	UKLÁDÁNÍ...
+0	AUTO	CUST_CUSTOM_UPGRADE	VLASTNÍ VYLEPŠENÍ
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Na tento závod se nemůžete kvalifikovat. Potřebujete následující auta:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Vhodným nastavením závěsu tak, aby neměl příliš vysoké přetáčení ani nedotáčení, získá řidič vůz, který je zároveň rychlejší i snadněji ovladatelný.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	VYBERTE REŽIM ZÁVODU
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Není možné instalovat speciální výfukové koncovky na sériový vůz.
+0	AUTO	CUST_PURCHASE_CAR	Koupit auto
+0	AUTO	CODE_ENTRY_VERIFICATION	Ověřování kódu...
+0	AUTO	MC_OLD_SAVE_REWARD	Děkujeme vám, že jste si zahráli i předcházející díly série Need For Speed™. Za to získáváte odměnu {0:d} opravných žetonů a {1:d} žeton(ů) celkové opravy v režimu kariéry.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	POČET VÍTĚZSTVÍ NAD VYŠŠÍ TŘÍDOU
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Drag fáze 3 - výkon
+0	AUTO	CUST_QUICK_POWER_G3	Tento balíček vám umožní udělat ze silničního auto závodní s ještě větším výkonem.
+0	AUTO	CUST_QUICK_POWER_S3	Rychlost úroveň 3 - výkon
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	POČET PROJEKTŮ
+0	AUTO	FE_STATS_BEST_RUN	NEJLEPŠÍ KOLO
+0	AUTO	WINDTUNNEL_DOWNFORCE	PŘÍTLAK
+0	AUTO	CUST_SLOT_COOLING_DESC	Ne příliš horký, ne příliš studený. Prostě akorát
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	NEJLEPŠÍ SKÓRE ZA DRIFT
+0	AUTO	CUST_CAT_DRIFT_FORCED	Toto vylepšení umožňuje vehnat do motoru větší množství vzduchu a spalovat větší množství benzínu, takže motor vyprodukuje větší výkon.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Použít opravný žeton
+0	AUTO	FE_STATS_FILTER_GENERAL	VŠEOBECNÉ STATISTIKY
+0	AUTO	CB_BLUEPRINTS_HEADER	TYP PROJEKTU
+0	AUTO	ENTER_SECRET_CODE	VLOŽIT TAJNÝ KÓD
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Toto vylepšení dramaticky mění vzhled vašeho vozu a poskytuje některé prvky zlepšující aerodynamiku.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	POČET ZNIČENÝCH AUT
+0	AUTO	CUST_SLOT_WHEELS	KOLA
+0	AUTO	CUST_SLOT_SUPERCHARGER	KOMPRESOR
+0	AUTO	CAR_SELECT_SHELBYGT500	GT500 je první severoamerické auto se stabilizátorem a jedno z nejoblíbenějších Shellby.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	NEJDELŠÍ JÍZDA PO ZADNÍCH
+0	AUTO	FE_STATS_GRIP_WINS	VYHRANÝCH ZÁVODŮ V GRIPU
+0	AUTO	CL_MS_POINTS	Body Microsoft®
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	NEJDELŠÍ DRIFT
+0	AUTO	CUST_FILTER_REAR_BUMPER	ZADNÍ NÁRAZNÍK
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	NEJLEPŠÍ 0-60 mph
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Zakoupení auta a použití tohoto projektu vás bude stát {0:d}. Chcete pokračovat?
+0	AUTO	GARAGE_REPAIR_DENIED	Nemáte dostatek prostředů ani žádné opravné žetony pro opravu tohoto auta.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	pokračujte KLIKNUTÍM
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	POČET ZÁVODŮ S PUNKBUSTEREM
+0	AUTO	GARAGE_NO_CAR_REPAIR	Nemáte dostatek hotovosti ani opravné žetony pro opravu vašeho auta.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	ŽÁDNÁ AUTA NEJSOU K DISPOZICI
+0	AUTO	RDMAP_CREATE_PREVIEW	VYTVOŘIT VLASTNÍ DEN ZÁVODŮ
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Opakovaným zastavováním vozidla se v brzdném systému vytváří nadbytečné teplo a po čase hrozí zvýšení brzdných drah. Větší brzdný systém pomáhá snižovat teploty a brzdy jsou konzistentní.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	NEJVÍCE ZŘETĚZENÝCH DRIFTŮ
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	DÁVKOVACÍ VENTIL
+0	AUTO	FE_STATS_CLUB_TAG	ZKRATKA KLUBU
+0	AUTO	CUST_SLOT_EXHAUST	VÝFUKOVÉ KONCOVKY
+0	AUTO	CAR_SELECT_INTEGRATYPER	Integra Type R je často považován za nejlépe ovladatelné auto s náhonem na přední kola.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Zde není kladen důraz na brzdy, ale na jízdu. Záměrem je co nejlehčí brzdový systém, aby vaše auto mohlo akcelerovat tak rychle, jak jen to je možné.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Použít lak
+0	AUTO	WINDTUNNEL_PEAK_HP	ŠPIČKOVÝ VÝKON
+0	AUTO	CUST_BLUEPRINT_DELETE	Smazat Projekt
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	STATISTIKA KARIÉRY
+0	AUTO	CUST_VISUAL_TITLE	VZHLED
+0	AUTO	CUST_SLOT_DRIVESHAFT	HNACÍ HŘÍDEL
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Koupit projekt
+0	AUTO	CAREER_COMPLETION_HEADER	DOKONČENÍ KARIÉRY
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Vyšší výkon motoru usnadňuje udržování smyku a rotace kol. Zvýšení výkonu napomáhá driftování.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	NEJRYCHLEJŠÍ 1/4 MÍLE
+0	AUTO	CL_NOT_ENOUGH_CASH	Na tento vůz nemáte dostatečnou hotovost.
+0	AUTO	CUST_SLOT_SC_DESC	Sání s kompresorem je řízeno přímo motorem a má za následek větší výkon.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	KLUB
+0	AUTO	CUST_SLOT_TIRES	PNEUMATIKY
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Nebyly nalezeny žádné dny závodů.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Tato volba zruší všechny změny, které jste v tomto závodním dnu provedli. Chcete zrušit změny?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	TLUMIČE A PRUŽINY
+0	AUTO	CUST_REGION_SKIRT	PRÁH
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	LÁHEV S N2O
+0	AUTO	CUST_QUICK_FORCED_DI3	Toto vylepšení zvyšuje množství vzduchu přivedeného do motoru a ještě více tak zvyšuje výkon a přibližuje se tak závodnímu vozu.
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	PODPŮRNÁ ZADNÍ KOLEČKA
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	nemůžeme mluvit o tomhle autě
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Máte již maximální počet aut ({0:d}). Prodejte některé ze svých aut v garáži, abyste udělali místo pro nové.
+0	AUTO	CUST_CUSTOMIZE_MAIN	VLASTNÍ NASTAVENÍ
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Přeprogramování procesorové jednotky motoru umožní spalování většího množství benzínu a vzduchu, což dodá vašemu vozu výkon, který potřebujete, abyste mohli v zatáčce předjet svého protivníka.
+0	AUTO	CUST_BLUEPRINT_HEADER	UPRAVIT PROJEKT
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	PROCENTO ÚSPĚŠNOSTI V DRAGU
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	VÝFUKOVÝ SYSTÉM
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	ZVOLIT
+0	AUTO	CUST_PAINT_GROUP_CHROME	CHROMOVÉ
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	POČET SDÍLENÝCH PROJEKTŮ
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	KOMPRESOR
+0	AUTO	FE_STATS_DRIFT_RACES	POČET ZÁVODŮ V DRIFTU
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Při zvyšování výkonu motoru je též potřeba provádět vylepšení, který zajistí účinné zužitkování výkonu a jeho přenos na kola. Zde hrají svou roli spojky, hnací hřídele a diferenciální soukolí.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	STATISTIKY VÝKONU
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBO
+0	AUTO	CUST_SLOT_SHIFTER	ŘADICÍ PÁKA
+0	AUTO	CUST_DYNO_TEST	DYNO TEST
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japonští řidiči se zmocnili průmyslového lodního uzlu - Tokyo Dockyards. Využili zde každý kus městského pozemku, který proměnili v součást závodní dráhy.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	VYBRAT AUTA PRO VÝZVU
+0	AUTO	CUST_CAT_SPEED_NITROUS	Toto vylepšení vám dodá krátkodobé zvýšení výkonu, které může v cíli znamenat rozdíl mezi vítězem a poraženým.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Pátá generace vozu Mustang je známá svým retro-futuristickým stylem.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	PROCENTO ÚSPĚŠNOSTI
+0	AUTO	RD_CUSTOM_SELECT	Hrát den závodu?
+0	AUTO	KING_FLOW_CASH_REWARD	FINANČNÍ ODMĚNA
+0	AUTO	CUST_CAT_SPEED_BRAKE	Toto vylepšení zvyšuje brzdící schopnosti vašeho vozu použitím vysoce účinných brzdových destiček a kotoučů. Brzdy jsou důležitým prvkem dobře vyladěného vozu.
+0	AUTO	CUST_SPEED_TUT_AWD	Pohonem na všechna čtyři kola je zvýšena trakce, zvláště při startech a zrychlení v zatáčkách. Určitě toho využijte.
+0	AUTO	CUST_SPEED_TUT_FWD	Ačkoli s vozem na přední kola bojujete s fyzikálními zákony, můžete postavit úžasnou zbraň na dráhu když se rozhodnete pro to pravé ladění. Nejprve byste měli zredukovat nedotáčivost v FF vozu utažením všeho vepředu. Poté budete potřebovate omezený rozdíl ve skluzu abyste tak omezili točivý moment volantu.
+0	AUTO	CUST_SPEED_TUT_RWD	Stabilita a ubraný plyn jsou jasné výhody nastavení pohonu zadních kol. Ujistěte se, že jste se vyhnuli přetáčivosti.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	CHLADICÍ SYSTÉM
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Cosworth byl vytvořen pro závodní účely a ve skutečnosti nikdy nebyl Escortem. Nicméně Escort RS se stal jednou z ikon tunerského světa.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	NEJRYCHLEJŠÍ 0-100 mph
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs, známý jako nejrychlejší cesta na Západě, se nachází na úbočí kalifornské pouště. Má stálé změny převýšení a vysoké průměrné rychlosti.
+0	AUTO	RACE_DAY_DIFFICULTY	OBTÍŽNOST
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Nemáte dostatek hotovosti pro koupi všech žetonů, které máte v nákupním vozíku.
+0	AUTO	CAR_SELECT_CHALLENGER	První generací vozu Challenger vstoupil Dodge na trh pony aut. Je založena na designu starších aut a je vybavena silným motorem.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Vybrání volného slotu závodního dne vám umožní vytvořit nový závodní den. Ikona, kterou si zvolíte, jej bude reprezentovat na mapě pod názvem můj závodní den.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Jízdou na všechna čtyři kola je zvýšena trakce, zvláště při startech a zrychlení v zatáčkách. Určitě toho využijte.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Ačkoli s pohonem na přední kola bojujete s fyzikálními zákony, můžete na trať postavit úžasnou zbraň, když se rozhodnete pro to pravé ladění. Nejprve byste měli zredukovat nedotáčivost v FF vozu utažením všeho vepředu. Poté budete potřebovate omezený rozdíl ve skluzu abyste tak omezili točivý moment volantu.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Stabilita a ubraný plyn jsou jasné výhody nastavení zadního pohonu. Ujistěte se, že jste se vyhnuli přetáčivosti.
+0	AUTO	CUST_SELL_CAR	Prodat auto
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Tato elitní testovací dráha Porsche nacházející se v německém Leipzig a zahrnuje některé z nejznámějších tratí světa.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	POSTRANNÍ PRAHY
+0	AUTO	CUST_SLOT_FUEL_DESC	Efektivní rozvod paliva je klíč k vysokému výkonu. Výkonnější palivové čerpadlo v kombinaci s výkonnějším vstřikováním a vylepšeným palivovým potrubím poskytuje znatelné navýšení výkonu.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Klíčem k úspěšnému driftovému vozu je předvídatelnost při smykovém řízení, snadná udržitelnost smyku a zároveň velmi vysoká stabilita.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	PŘÁTELÉ
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Ráno
+0	AUTO	CUST_FILTER_SPOILER	SPOJLER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Vyskytla se chyba při vytváření závodu.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Tento rychlostní závod na tokijských dálnicích zahrnuje roviny, dálniční uzly a tunely.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	POČET HODNOCENÝCH ZÁVODŮ
+0	AUTO	CUST_TUNE	LADIT
+0	AUTO	CUST_VISUALS_TITLE	VZHLED - DESIGNY
+0	AUTO	FE_STATS_CLUB_NAME	JMÉNO KLUBU
+0	AUTO	CUST_INSTALL	Instalovat
+0	AUTO	RACEDAY_SAVE_CONFIRM	Opravdu chcete uložit svůj závodní den?
+0	AUTO	FE_MATCHMAKING_JOINING	Připojování ke hře...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	VÝFUKOVÝ VENTIL
+0	AUTO	CUST_SLOT_ROLL_CAGE	VÝZTUHA KOKPITU
+0	AUTO	CAR_LOT_NO_DRIFTING	BEZ DRIFTU
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Toto vylepšení nahrazuje stávající součásti motoru silnějšími, se zvýšenou životností, což umožňuje dostat z motoru větší výkon a vydržet vyšší otáčky.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	POUŽÍT ŽETON CELKOVÉ OPRAVY
+0	AUTO	CUST_PACKAGE_VISUAL	Balíčky pro vzhled
+0	AUTO	CUST_EMPTY_BLUEPRINT	Vytvořit Nový Projekt
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Vložte váš tajný kód nebo propagační kód zde pro získání odměny.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	S tímto vylepšením, inspirovaným rally, budete vypadat, že jste tu jako doma.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Vyberte úroveň obtížnosti pro váš zavodní den. Obtížnost, kterou zvolíte, určí úroveň umělé inteligence protivníků a maximální počet aut pro tento závodní den.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	VOZY KARIÉRY
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	DOKONČENÝCH ZÁVODŮ S 12 HRÁČI
+0	AUTO	CUST_REGION_FRONT_TIRE	PŘEDNÍ PNEUMATIKA
+0	AUTO	FE_STATS_DRAG_WINS	VYHRANÝCH ZÁVODŮ V DRAGU
+0	AUTO	RACE_DAY_SAVE_NAME	Můj den závodu
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Nemáte dostatek peněz k provedení tohoto nákupu!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	NEJVĚTŠÍ ÚHEL NA ZADNÍCH KOLECH
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Tturba jsou vzduchové pumpy.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Odvrtání válce zvyšuje objem, takže dochází ke spalování většího množství benzínu a tím i ke zvýšení výkonu motoru.
+0	AUTO	CUST_CAT_GRIP_BRAKE	Toto vylepšení zvyšuje brzdící schopnosti vašeho vozu použitím vysoce účinných brzdových destiček a kotoučů. U dobře vyladěných vozů hrají brzdy klíčovou úlohu.
+0	AUTO	CUST_SLOT_SPOILER	SPOJLER
+0	AUTO	RACE_DAY_RACE_EVENTS	ZÁVODY
+0	AUTO	CUST_SLOT_STEERING_KIT	SOUPRAVA PRO ŘÍZENÍ
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	PROCENTO ÚSPĚŠNOSTI V GRIPU
+0	AUTO	CUST_BLUEPRINT_RENAME	Měním jméno Projektu...
+0	AUTO	RACE_DAY_SLOT_FILLED	ZAPLNĚNÝ
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	NEJVYŠŠÍ SKÓRE ZA DRIFT
+0	AUTO	CUST_VINYLS	VINYLY
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Použitím kvalitnějších materiálů pro výrobu ramen nápravy docílíte lepšího sklonu kol a celkové geometrie vozu.
+0	AUTO	FE_STATS_HUBS_WON	VYRANÉ HUBY
+0	AUTO	CUST_CAT_GRIP_NITROUS	Toto vylepšení vám dodá krátkodobé zvýšení výkonu, které může v cíli znamenat rozdíl mezi vítězem a poraženým.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NEJSTE KVALIFIKOVANÍ NA TENTO ZÁVOD
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Vyberte počet opravných žetonů pro váš závodní den. Pokud vytváříte závodní den pro jednoho hráče, dostanete shodný počet opravných žetonů a žetonů pro celkovou opravu.
+0	AUTO	CAR_SELECT_CAMAROSS	První generace vozu Camaro je popisována jako malé nebezpečné zvíře pojídající mustangy.
+0	AUTO	FE_STATS_BEAT_MODERATOR	*
+0	AUTO	CUST_SLOT_HANDBRAKE	RUČNÍ BRZDA
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Toto vylepšení umožňuje ještě rychlejší a přesnější řazení a zároveň poskytuje odlehčené součásti, které přenášejí výkon motoru na kola na úrovni standardu závodního vozu.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Toto vylepšení umožňuje ještě rychlejší a přesnější řazení a zároveň poskytuje odlehčené součásti, které přenášejí výkon motoru na kola na úrovni standardu závodního vozu.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Toto vylepšení umožňuje ještě rychlejší a přesnější řazení a zároveň poskytuje odlehčené součásti, které přenášejí výkon motoru na kola na úrovni standardu závodního vozu.^
+0	AUTO	COMMON_CLASS_HEADER	ÚROVEŇ
+0	AUTO	CAR_SELECT_FORDGT	Ford GT byl vytvořen jako symbol závodních úspěchů vozů Ford na konci šedesátých let. Ford GT je moderní verze tehdejší klasiky GT40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	STATISTIKY VÝKONU
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ROTORY
+0	AUTO	CUST_QUICK_INTERNALS_D3	Umožňuje motoru vydržet mnohem větší zátěž na krátký čas.
+0	AUTO	CUST_QUICK_INTERNALS_G3	Toto vylepšení dodává motoru výkon závodního vozu a umožňuje ještě více zvýšit počet otáček.
+0	AUTO	CUST_QUICK_INTERNALS_S3	Rychlost úroveň 3 - vnitřní součásti.
+0	AUTO	CUST_SLOT_PISTONS	PÍSTY
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Toto vylepšení vám dodá krátkodobé zvýšení výkonu, které může v cíli znamenat rozdíl mezi vítězem a poraženým.
+0	AUTO	FE_STATS_BEST_LAP_TIME	NEJLEPŠÍ ČAS KOLA
+0	AUTO	FE_STATS_SKILLS_STATS	STATISTIKY SCHOPNOSTÍ
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	PŘEHLED KARIÉRY
+0	AUTO	CUST_DRIFT_TUT_RWD	Koncové smyky jsou klíčem k postavení výkonného driftového vozu. Umožní vám hladce začít a udržet se.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Toto vylepšení je dalším krokem zvyšování výkonu k pravému závodnímu vozu.
+0	AUTO	CUST_SELL_CAR_DENIED	Nelze prodat poslední auto.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Toto speciální pérování pomáhá udržovat stabilitu auta s vysokým točivým momentem a umožňuje pneumatikám dosáhnout maximální trakce.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Poledne
+0	AUTO	CUST_SLOT_PULLEY_DESC	Díky optimalizovaným převodům je kompresor poháněn rychleji, což vytváří silnější posílení motoru.
+0	AUTO	CUST_SLOT_IGNITION_DESC	Výkonný spalovací motor potřebuje výkonnou jiskru. Použití kabelů a svíček vyrobených z vysoce vodivých materiálů jako je platina nebo iridium může zvýšit celkový výkon.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	VYPNUTO
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	SADA BRZDOVÉHO VEDENÍ
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	NEJLEPŠÍ NÁSOBITEL
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	SYSTÉM N2O
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Statistický server je momentálně nedostupný. Zkuste to prosím později.
+0	AUTO	RACE_DAY_TRACK_CONFIG	KONFIGURACE TRATI
+0	AUTO	CS_HEADER_DRAG_EVENT	ZÁVODY V DRAGU
+0	AUTO	CUST_QUICK_BRAKE_1	Toto vylepšení umožňuje vašemu autu zastavit v kratší vzdálenosti než při použití továrních brzd.
+0	AUTO	CUST_QUICK_BRAKE_2	brzdy úrovně 2
+0	AUTO	CUST_REPAIR_TITLE	OPRAVIT AUTO
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Při zvyšování výkonu motoru je též potřeba provádět vylepšení, který zajistí účinné zužitkování výkonu a jeho přenos na kola. Zde hrají svou roli spojky, hnací hřídele a diferenciální soukolí.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Přehled Projektů
+0	AUTO	CUST_CAT_DRAG_FORCED	Zde je kladen důraz na co největší výkon. Tyto turbo komponenty byly navrženy pro špičkový výkon při jízdě na plný plyn. Toto vylepšení bude hrát klíčovou roli při jízdě na hranici možností.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Přejete si nyní zahrát tento závodní den?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Chcete uložit změny, které jste na tomto projektu provedli?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Toto vylepšení zahrnuje zesílené komponenty přenášející sílu motoru na kola, jako je hnací hřídel, diferenciál a osy.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Tato volba zruší všechny změny, které jste na projektu provedli. Chcete zrušit změny?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Změna jména Projektu...
+0	AUTO	CUST_FILTER_MIRRORS	ZPĚTNÁ ZRCÁTKA
+0	AUTO	ENTER_PRESELL_CODE	VLOŽIT PROPAGAČNÍ KÓD
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	STAHOVÁNÍ SELHALO
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	POČET VYHRANÝCH ZÚČTOVÁNÍ
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Toto vylepšní umožňuje další přeprogramování procesoru pro maximální výkon.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	NEJRYCHELJŠÍ REAKCE
+0	AUTO	CAR_SELECT_MK5GTI	Mk5 GTI je nejnovější verzí originálního hatchbacku. Její 2,0l FSi turbo motor začíná s výkonem přes 200 koní a jednoduchou úpravou získá mnohem víc.
+0	AUTO	CAR_SELECT_MK5R32	Vezměte působivě vypadající hatchback, šestiválec a pohon na všechna kola a získáte to, co zde vidíte.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Vhodným nastavením závěsu tak, aby neměl příliš vysoké přetáčení ani nedotáčení, získá řidič vůz, který je zároveň rychlejší i snadněji ovladatelný.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	RAMENA NÁPRAVY
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	S výkonným motorem pod kapotou potřebujete trvdé pérování, aby vaše auto drželo stabilitu, když se při závodech v dragu řítí obrovskou rychlostí.
+0	AUTO	CUST_SLOT_BODY	BODY KIT
+0	AUTO	CUST_SLOT_HOOD	KAPOTA
+0	AUTO	CUST_SLOT_PADS	DESTIČKY
+0	AUTO	FE_STATS_DRIFT_WINS	VYHRANÝCH ZÁVODŮ V DRIFTU
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Přeprogramování procesorové jednotky motoru umožní spalování většího množství benzínu a vzduchu, což vám poskytne dostatek výkonu pro protáčení kol a drift až do cíle.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	VLASTNÍ NASTAVENÍ
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	SOUČET BODŮ ZA KARIÉRU
+0	AUTO	RD_CREATE_RD	Vytvořit den závodu
+0	AUTO	FE_STATS_DRAG_RACES	POČET ZÁVODŮ V DRAGU
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	STATISTIKA ODPOJENÍ
+0	AUTO	CUST_REGION_FRONT_WHEEL	PŘEDNÍ KOLA
+0	AUTO	CAR_SELECT_ECLIPSE	Druhá generace vozů Eclipse měla často problém s hřídelí.
+0	AUTO	CAR_LOT_TITLE	GARÁŽ
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Vybráním obsazeného slotu závodního dne zobrazíte informace o tomto závodním dnu a bude vám umožněno tento závodní den smazat.
+0	AUTO	CAREER_MAP_TITLE	PRŮBĚH KARIÉRY
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	NEJ. SKÓRE DRIFTU NÁSLEDOVÁNÍM
+0	AUTO	CUST_SLOT_CRANKSHAFT	KLIKOVÁ HŘÍDEL
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	AUTO ZA ODMĚNU
+0	AUTO	CAR_SELECT_R34GTR	Auto, které udává směr ve světě tuningu a je inspirací pro ostatní značky.
+0	AUTO	CS_HEADER_DRIFT_EVENT	ZÁVODY V DRIFTU
+0	AUTO	RACE_DAY_MULTIPLAYER	VÍCE HRÁČŮ
+0	AUTO	CUST_SLOT_CRANK_DESC	Tovární kliková hřídel není stavěná na velmi vysoké výkony. Kovaná hřídel je nezbytností pro výkony nad 500 koní.
+0	AUTO	CAR_SELECT_COBALTSS	S 2,0l motorem byl Cobalt náhradou za Cavaliera a měl se stát konkurencí pro vozy jako je Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} ST
+0	AUTO	CAR_SELECT_350Z	Tohle je páté auto série Z. Pohon na zadní kola, sportovní kupé 2+2.
+0	AUTO	CAR_SELECT_997T	S 3,6l motorem toto auto zrychlí z 40 na 60 mil v hodině za 1 sekundu.
+0	AUTO	CAR_SELECT_AE86	Hachi-Roku je posledním z kompaktních aut s poháněnou zadní nápravou.
+0	AUTO	CAR_SELECT_CTSV	CTSV byl první vůz vyrobený pod označením Cadillac série V, který byl navržen jako konkurence evropským sportovním sedanům.
+0	AUTO	CAR_SELECT_EVO9	EVO IX má 2,0l 16V turbopohon na všechna kola. Toto je symbolem výkonu a skvělých jízdních vlastností mezi tunery už od svého vzniku.
+0	AUTO	CAR_SELECT_EVOX	EVO X je rychlejší než vítr.
+0	AUTO	CAR_SELECT_GTON	Pontiac GTO byl severoamerickou verzí vozu Holden V s užitím LS2 z auta Corvette.
+0	AUTO	CAR_SELECT_GTOO	Někdo tohle považuje za prvního zástupce vozů muscle.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Vezmeme-li v úvahu, že na tomto voze společně pracovali SVT Fordu (Special Vehicle Team) a legendární Carroll Shelby, je téměř jisté, že úspěch byl zaručen. Výsledek zcela  jistě vyvolá spokojený úsměv na tvářích milovníků všech Mustangů a silných vozů. 450 koní, točivý moment 450 liber na stopu, 19" hliníková kola a cena, která by neměla převyšovat předchozí model Mustang Cobra. Podle designérů projektu, 2006 Ford Mustang Shelby Cobra GT500 bude nejvýkonnějším sériově vyráběným Mustangem všech dob.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	PRO ZPŘISTUPNĚNÍ ZÚČTOVÁNÍ
+0	AUTO	CUST_REPAIR_USE_CASH	Použít hotovost
+0	AUTO	FE_STATS_FILTER_SKILLS	STATISTIKY SCHOPNOSTÍ
+0	AUTO	FE_STATS_SPEED_RACES	POČET RYCHLOSTNÍCH ZÁVODŮ
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Definovat závody
+0	AUTO	RD_DELETE_SHARED_RD	Smazat sdílený den závodu?
+0	AUTO	CAREER_OVERVIEW_HEADER	PŘEHLED KARIÉRY
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	VÝFUKY
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Opakované zastavování auta způsobuje nárůst přebytečného tepla v brzdovém systému, proto se může postupně prodlužovat brzdná dráha. Vetší brzdový systém pomáhá těmto jevům předcházet.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Toto vylepšení nahrazuje stávající součásti motoru silnějšími, se zvýšenou životností, což umožňuje dostat z motoru větší výkon a vydržet vyšší otáčky.
+0	AUTO	CL_DRIVETRAIN_ALL	Všechny typy
+0	AUTO	CL_DRIVETRAIN_AWD	Pohon všech kol
+0	AUTO	CL_DRIVETRAIN_FWD	Náhon na přední kola
+0	AUTO	CL_DRIVETRAIN_RWD	Náhon na zadní kola
+0	AUTO	FE_COMMON_MODE	TYP ZÁVODU
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	SACÍ POTRUBÍ
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	TABULKY ZÁVODŮ
+0	AUTO	CODE_ENTRY	VLOŽENÍ KÓDU
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Koupit všechny žetony, které jsou ve vašem nákupním vozíku?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	VÝFUK
+0	AUTO	RACE_DAY_SPLIT_SCREEN	ROZDĚLENÁ OBRAZOVKA
+0	AUTO	CUST_SLOT_INTERCOOLER	CHLADIČ
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Řízení rychlosti po celé délce zatáčky a věnování dostatečné pozornosti akceleraci při opouštění zatáčky je zásadní. Vyšší výkon motoru zvyšuje schopnost vystřelit ze zatáčky a dosáhnout vyšších rychlostí.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	POČET ČLENŮ KLUBU
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	SOUČÁSTKY MOTORŮ
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Toto vylepšení zahrnuje zesílené komponenty přenášející sílu motoru na kola, jako je hnací hřídel, diferenciál a osy.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Aerodyn. tunel vypnut
+0	AUTO	FE_COMMON_CONFIGURATION	KONFIGURACE
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} koní
+0	AUTO	CS_HEADER_GRIP_EVENT	ZÁVODY V GRIPU
+0	AUTO	CAR_SELECT_CIVIC	Šestá generace vozu Civic je jedním z nejpoužívanějších aut mezi tunery, ať už jde o silniční tuning, závodní nebo něco mezi tím
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Závodní den byl vymazán
+0	AUTO	CAR_SELECT_E46M3	Třetí verze M3, E46 začínal s nejvýkonnějším motorem v přepočtu na litr, který do té doby BMW vyrobilo.
+0	AUTO	CAR_SELECT_E92M3	Další verze M3 E92. Je vybavená střechou z uhlíkových vláken a motorem V8 (předchozí M3 měly 6 válců v řadě)
+0	AUTO	CAR_SELECT_ELISE	Druhá generace vozů Elise je účelně postavený vůz s důrazem kladeným na jednoduchost.
+0	AUTO	CAR_SELECT_FDRX7	FD RX-7 je jedním z nejoblíbenějších mezi tunery. Ať už se jedná o grip nebo o drift. Opravdová legenda.
+0	AUTO	CAR_SELECT_IS350	Druhá generace IS je luxusní kupé s pohonem zadních kol, které má elegantní design a agresivně působící profil.
+0	AUTO	CAR_SELECT_LP640	S motorem o obsahu 6,5 l a 640 koňskými silami patří toto LP640 ke špičce v kategorii výkonných vozů.
+0	AUTO	CUST_SLOT_VALVE_DESC	Přerozdělením kapaliny v brzdovém systému je toto zařízení schopno dosáhnout větší brzdné síly u přední i zadní nápravy.
+0	AUTO	CAR_SELECT_SUPRA	Čtvrtá generace vozu Supra. Záměr byl postavit lehčí a úspornější vůz než jeho předchůdce. Je schopen vyvinout přetížení 0,98g. V roce 99 skončila jeho výroba pro Severní Ameriku a v roce 2002 pro Japonsko.
+0	AUTO	CUST_FILTER_ALL_PARTS	VŠECHNY DÍLY
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Toto vylepšení se zaměřuje na zatížení hnací nápravy a zkrácení doby, kdy jsou přední kola ve vzduchu.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Toto vylepšení umožní autu projet zatáčkou ještě rychleji bez ztráty kontaktu s vozovkou.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Toto vylepšení umožní autu projet zatáčkou ještě rychleji bez ztráty kontaktu s vozovkou při nejvyšší rychlosti.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Žádné vhodné závody nebo hráči nebyly nalezeny. Zkuste to prosím znovu.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Definovat závody
+0	AUTO	FE_STATS_CLUB_LEADER	LÍDR KLUBU
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Německá dráha je propletená síť rychlostních komunikací, která zahrnuje dálnice, kopcovitý terén, zatáčky i tunely.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Zrušení vyhledávání hry...
+0	AUTO	CUST_SLOT_DIFF_DESC	Zde je síla motoru rozdělena na jednotlivé strany a přenesena na kola.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Opravdu si přejete tento závodní den přepsat?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	ZÁVODY DOKONČENÉ PŘED LÍDREM
+0	AUTO	CAR_SELECT_ZONDAF	Mnoho novinářů z oblasti motorismu říká, že Zonda F je jedno z nejlepších superaut na světě.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Aby vaše kola pevně seděla na vozovce, jsou potřeba tvrdší přední i zadní stabilizátory a standardní tlumiče jsou nahrazeny závodními.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Můj závodní den^Navrhněte a vytvořte si svůj vlastní závodní den. Vytvořte si závodní den pro jednoho nebo více hráčů a utkejte se s hráči on-line. Vytvořte si závodní den s dělenou obrazovkou a vyzvěte kamaráda.^^Sdílejte závodní den s dalšími hráči online a pozvěte je, ať si zazávodí s vámi.^^.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis se nachází na vrcholcích hor ve vzdálených oblastech Japonska. Přestože má okruh za sebou temnou minulost, jeho rychlostní dráha je nová a kvalitní.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Tvrdší tlumiče v kombinaci s níže položeným těžištěm vysoce zvyšují stabilitu vozu při průjezdu zatáčkami.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Toto vylepšení vám dodá krátkodobé zvýšení výkonu. Nitro je nezbytností pro závodníka v dragu.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Řidiči z Windy City zabrali opuštěné letiště a používají ho ke svým účelům. Chicago Airfield má širokou přistávací dráhu, několik drah pro Grip, Drift a dráhu pro Drag.
+0	AUTO	FE_STATS_TOP_SPEED	NEJVYŠŠÍ RYCHLOST
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	BALÍČEK OVLÁDÁNÍ TLAKU
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	POČET MAX. GRIPŮ PŘI ZAHŘÍVÁNÍ
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	NEJRYCHLEJŠÍ 0-60 mph
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	OVLADAČ TURBA
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Japonské úbočí se táhne až k Ebisu, spirituálnímu domovu driftu. Fukuyama Challenge vede napříč venkovskou krajinou a dále pokračuje na dálnici.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Odlehčením hnacího ústrojí a ozubených koleček, které pohání vačkovou hřídel, snížíte množství energie potřebné k otáčení vaček, což umožní produkovat vyšší výkon.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	POČET ZÁVODŮ VYHR. BEZ POŠKOZENÍ
+0	AUTO	CUST_QUICK_HANDLING_1	Toto vylepšení umožňuje autu lépe zatáčet a zajišťuje vyšší stabilitu ve vysokých rychlostech.
+0	AUTO	CUST_QUICK_HANDLING_2	úroveň 2 - řízení
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Ačkoliv je nitro skvělý prostředek k dosažení krátkodobého zvýšení výkonu, příliš mnoho tohoto plynu může kriticky přetěžovat motor. Souprava pro regulaci tlaku N2O zajistí, že se motoru dostane jen tolik nitra, kolik je schopen zvládat.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Opravdu si přejete změnit lokaci? Tato operace smaže existující výběr závodů.
+0	AUTO	CUST_VINYL_LAYER_TITLE	MENU VRSTEV
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Toto vylepšení nahradí stávající součásti motoru kovanými, což zvýší jejich životnost při prudkých čtvrtmílových sprintech.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Závodní dráha Infineon v Severní Karolině obsahuje řadu kopcovitých serpentin a zatáček. Jediný špatný pohyb vás může zpomalit, nebo rovnou poslat do zdi.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	RYCHLOSTNÍ^VÝZVA
+0	AUTO	FE_STATS_CLUB_POINTS	BODY KLUBU
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Přeprogramování procesorové jednotky motoru umožní spalování většího množství benzínu a vzduchu, což dodá vašemu vozu výkon, který potřebujete, abyste mohli v zatáčce předjet svého protivníka.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Opravdu chcete závod %s smazat?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Závodní den byl uložen
+0	AUTO	CUST_QUICK_NITROUS_DI3	Toto vylepšení zvýší na krátký čas výkon motoru  o 50-250 koní dodáním N2O. Toto může znamenat rozdíl mezi prvním a druhým místem.
+0	AUTO	CUST_QUICK_POWER_1	Základní balíček vylepšení, který zvýší výkon v celém rozsahu otáček a stejně tak dodá vašemu autu více agresivní nádech.
+0	AUTO	CUST_QUICK_POWER_2	Tento balíček vychází z vylepšení prvního stupně,  které poskytují zvýšený výkon při různých otáčkách a stejně tak výraznější zvuk.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park je trasa plná zatáček, která se náchází v samotném srdci Irska.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	ZÁLOŽNÍ AUTO
+0	AUTO	FE_STATS_GRIP_RACES	POČET ZÁVODŮ V GRIPU
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARÁŽ
+0	AUTO	CUST_PACKAGE_POWER	Balíčky pro zlepšení výkonu
+0	AUTO	CUST_OWNED	KOUPENO
+0	AUTO	CUST_PAINT	BARVA
+0	AUTO	CUST_PARTS	DÍLY KAROSERIE
+0	AUTO	CUST_PACKAGE_TITLE	BALÍČEK
+0	AUTO	CS_OPTION_CAR_SELECT	Zvolte auto
+0	AUTO	RACE_DAY_SLOT_EMPTY	K DISPOZICI
+0	AUTO	FE_STATS_ACHIEVEMENTS	SPLNĚNÉ ÚKOLY
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Vytvoření Výzvy Dne závodů vám umožní vybrat auta, která mohou být užívána ve Dni závodů.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Zatáhněte za ruční brzdu a zopakujete si zážitky z pouti.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Dálnice číslo 318 se nachází ve žhavé Nevadské poušti. Umožňuje rychlosti nad 200 mil v hodině, ale je třeba dbát opatrnosti při projíždění zdánlivě jednoduchých zatáček.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Závodní brzdové kotouče odvádí teplo lépe než tovární. Větší průměr kotouče nabízí větší třecí plochu pro brzdové destičky, což znamená větší brzdnou sílu.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	NEJLEPŠÍ SKÓRE ZA DRIFT - LÍDR
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Toto vylepšení zahrnuje jedinečné vyladění podvozku, které umožňuje jednodušší přecházení do skluzu během zatáček.
+0	AUTO	CUST_REGION_FRONT_BUMPER	PŘEDNÍ NÁRAZNÍK
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	ODHADOVANÁ CENA
+0	AUTO	CUST_SLOT_TRANSMISSION	PŘEVODOVKA
+0	AUTO	RACE_DAY_LOCATION_8_DESC	V severozápadní pacifické oblasti poblíž hory Mt. Rainier, obklopené hustou vegetací, se nachází Portland International raceway, dráha té nejvyšší kvality.
+0	AUTO	CUST_BLUEPRINT_SAVE	ULOŽIT PROJEKT
+0	AUTO	CUST_QUICK_NITROUS_1	Toto vylepšení zvýší na krátký čas výkon motoru dodáním N2O. Toto může znamenat rozdíl mezi prvním a druhým místem.
+0	AUTO	CUST_QUICK_NITROUS_2	Toto vylepšení zvýší na krátký čas ještě více výkon motoru dodáním N2O. Toto může znamenat rozdíl mezi prvním a druhým místem.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	V Texasu je všechno velké a ani Texas World Speedway, trasa tvořící nakloněný ovál, není vyjímkou.
+0	AUTO	CAR_SELECT_CORVETTE	Poslední ze Sting Rays, druhá generace vozu Corvette byla označena jako jeden z 5 nejslavnějších sporťáků všech dob.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	NEJVÍC VYHRANÝCH ÚZEMÍ
+0	AUTO	CL_DRIVETRAIN_HEADER	POHONNÁ JEDNOTKA
+0	AUTO	CUST_PACKAGE_HANDLING	Balíčky pro zlepšení ovládání
+0	AUTO	FE_STATS_SPEED_WINS	VYHRANÝCH RYCHLOSTNÍCH ZÁVODŮ
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	NEJVÍCE VYHRANÝCH KONTR. BODŮ
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Žebříček nejlepších tunerů zobrazuje nejlepší autory projektů ve hře. Jste hodnoceni na základě procentuálního vítězství všech sdílených projektů. Váš sdílený projekt musí být použit minimálně ve dvaceti závodech než se budete moci objevit v žebříčku.

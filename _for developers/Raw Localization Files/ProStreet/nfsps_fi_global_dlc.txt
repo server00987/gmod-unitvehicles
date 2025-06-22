@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Finnish_Global_DLC.bin
+#	File created on: 2025-05-24 11:13:28
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Vaativa kerhorata
+0	1A821602	0x1A821602	Vauhtisilmukka
+0	1A821603	0x1A821603	Reitti 1: Ensimmäinen puolisko
+0	1A821604	0x1A821604	Reitti 2: Toinen puolisko
+0	1A821605	0x1A821605	Reitti 3: Koko rata
+0	1A82161D	0x1A82161D	Tokionlahden silta
+0	1BB8601F	0x1BB8601F	Need for Speed™ ProStreet -pelisi versio ei ole yhteensopiva sen pelin kanssa, johon yrität liittyä. Parhaan yhteensopivuuden takaa viimeisimpien päivitysten käyttäminen. Lisätietoja on osoitteessa NeedforSpeed.com.
+0	35E21908	0x35E21908	Voit nyt ladata Xbox LIVE Kauppapaikalta ILMAISEN Energizer Lithium -lisäpaketin!
+0	3EC4AB81	0x3EC4AB81	Peli-iloa!
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKYO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKYO EXPRESSWAY II
+0	42781C20	0x42781C20	nyt ladattavana Xbox LIVE Kauppapaikalta
+0	525DCCC5	0x525DCCC5	Energizer Lithium -lisäpaketti
+0	5959EB4C	0x5959EB4C	Pelaajalla, jonka kanssa yrität jakaa sisältöä, ei ole käytössä pelin viimeisintä päivitystä. Hänen on päivitettävä Need for Speed™ -pelinsä, jotta hänelle voi jakaa tämän kisapäivän.
+0	59C9AC1C	0x59C9AC1C	Coca-Cola Zero -buusteripaketti.
+0	61098C88	0x61098C88	Pelaajalla, jonka kanssa yrität jakaa sisältöä, ei ole käytössä pelin viimeisintä päivitystä. Hänen on päivitettävä Need for Speed™ -pelinsä, jotta hänelle voi jakaa tämän piirustuksen.
+0	6692EC80	0x6692EC80	Haluamasi tiedoston lataaminen ei onnistu, koska sisältöpaketti ei ole saatavilla
+0	671480B8	0x671480B8	ILMAINEN - Porsche Leipzig -testirata
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	ILMAINEN - 2007 SEAT Leon Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokyo Expressway
+0	71FD1C1D	0x71FD1C1D	Tokyo Expressway II
+0	7A83FDB7	0x7A83FDB7	Älä tingi pelin tasosta
+0	800472C1	0x800472C1	Ei kiitos
+0	82E2BDAE	0x82E2BDAE	Ladatun buusteripaketin kieli ei ole yhteensopiva tämän levyn kanssa. Haluatko ladata yhteensopivan version?
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	Ilmainen
+0	88D1ECEE	0x88D1ECEE	ILMAINEN Coca-Cola Zero -buusteripaketti.
+0	88E17FE9	0x88E17FE9	Hae Xbox Live Kauppapaikalta ILMAINEN sisältöpaketti , joka sisältää uusia ratoja, autoja ja kisapäiviä sekä laajennetun urapelin!
+0	91F522D5	0x91F522D5	Katsasta urapelin laajennetut vaihtoehdot, kisapäivien laajennukset sekä urapelisi autotalliin lisätyt ILMAISET autot
+0	930C8172	0x930C8172	Kiitos, että latasit tiedoston
+0	A76603FD	0xA76603FD	ILMAISEN Coca-Cola Zero -buusteripaketin avulla.
+0	BCFBDE9A	0xBCFBDE9A	Need for Speed™ ProStreet -buusteripakettia ei voitu ladata.
+0	C174E20F	0xC174E20F	Need for Speed™ ProStreet on käynnistettävä uudelleen, jotta uusi sisältö saadaan käyttöön. Pelin uudelleenkäynnistymistä edeltää lyhyt tauko. Käynnistä uudelleen napsauttamalla OK.
+0	E4AF851F	0xE4AF851F	ILMAINEN - Japanin Tokyo Expressway
+0	E5E32468	0xE5E32468	Tarkasta päivitykset ja yhteisön tapahtumat osoitteesta NeedforSpeed.com
+0	E62B2319	0xE62B2319	ILMAINEN - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	Uusia autoja on yhteensä 14, mukana mm. Bugatti Veyron 16.4 ja Porsche 911 GT3! Katso lisätietoja osoitteesta NeedforSpeed.com
+0	F39D0787	0xF39D0787	Lataa nyt – ilmaiseksi!
+0	F5663CFA	0xF5663CFA	Lataa nyt tämä ILMAINEN paketti, joka sisältää lisää ratoja ja autoja, laajennuksen urapeliin sekä lisää kisapäiviä!
+0	FEEF54A9	0xFEEF54A9	Tarkasta päivitykset ja yhteisön tapahtumat osoitteesta NeedforSpeed.com!

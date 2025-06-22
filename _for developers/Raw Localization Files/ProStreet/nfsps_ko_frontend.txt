@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Korean_Frontend.bin
+#	File created on: 2025-05-24 11:16:01
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	총 수리 비용
+0	AUTO	MODE_ALL	모든 차량
+0	AUTO	CUST_VINYL_MOVE_LAYER	레이어 위/아래 이동
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	엔진 블록
+0	AUTO	CAR_SELECT_MUSTANGGT	4세대 Mustang으로서 4.6l V8이 장착됐으며 세상 사람들이 포니 자동차라면 가장 먼저 떠올리게 되는 차량입니다.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	이 업그레이드를 적용하면 기존 엔진 내부가 보다 강력하고 내구성이 우수한 부품으로 교체되므로 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	CUST_VISUAL_DECALS	스티커
+0	AUTO	CUST_CUSTOMIZE	청사진 사용자 정의
+0	AUTO	CODE_ENTRY_VALID	축하합니다!  코드가 접수되어 보상 잠금이 해제됐습니다.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	캘리퍼스
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	장바구니에 구매하지 않은 마커가 남아 있습니다.  그래도 나가겠습니까?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	구름방지 막대
+0	AUTO	CUST_QUICK_HANDLING_D3	이 업그레이드를 적용하면 서스펜션 부품들이 더욱 견고하게 조합되어 직선로에서 차량의 안정감이 극대화됩니다.
+0	AUTO	CUST_QUICK_HANDLING_G3	이 업그레이드를 적용하면 서스펜션 부품들이 더욱 견고하게 조합되어 곡선로와 직선로에서 차량의 안정감이 극대화됩니다.
+0	AUTO	CUST_QUICK_HANDLING_S3	이 업그레이드를 적용하면 서스펜션 부품들이 더욱 견고하게 조합되어 곡선로와 직선로에서 고속 주행 중인 차량의 안정감이 극대화됩니다.
+0	AUTO	CUST_REGION_REAR_TIRE	후방 타이어
+0	AUTO	FE_STATS_BEST_SECTOR	최고 구간
+0	AUTO	CL_FREE_CAR_MARKER	자유 자동차 마커
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	레이스 이벤트 정의
+0	AUTO	CUST_QUICK_BRAKE_DI3	이 업그레이드를 적용하면 최대 제동 시간을 확보할 수 있지만 감속 시 타이어의 정지 마찰 능력이 상실됩니다.
+0	AUTO	CUST_BP_APPLY_CONFIRM	이 청사진을 차량에 적용하려면 모든 필요 부품을 구입하는 데 {0:d}이(가) 소요됩니다. 계속하시겠습니까?
+0	AUTO	CUST_SLOT_BUSHING_KIT	부싱 키트
+0	AUTO	FE_STATS_GAMES_PLAYED	플레이한 게임
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	보너스 차량
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	레이어 {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	패키지 정보
+0	AUTO	CUST_SLOT_NITROUS_DESC	고도의 가연성 가스인 질소를 연소 과정에서 실린더에 주입하면 엔진의 출력을 일시적으로 대폭 증가시킬 수 있습니다.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	이 업그레이드를 적용하면 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	이 업그레이드를 적용하면 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	CS_HEADER_SPEED_EVENT	스피드 챌린지 이벤트
+0	AUTO	CUST_SLOT_HEADS_DESC	실린더 헤드에 있는 밸브를 왼쪽으로 돌려서 엔진에 주입되는 공기의 양을 늘려서 엔진에 있는 가스를 모두 배출할 수 있습니다. 이렇게 하면 마력이 향상됩니다.
+0	AUTO	CUST_VINYL_ADDLAYER	새 레이어 추가
+0	AUTO	CUST_CAT_SPEED_FORCED	스풀 타임 및 반응 속도가 빠른 터보를 장착하면 동력 상승 효과가 있을 뿐 아니라 트랙이나 거리에서 주행 시 놀라운 이점이 있습니다.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	최고 멀티플라이어
+0	AUTO	RACE_MODE_GRIP_MODE	그립 모드
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	다음 단계에서는 레이스 데이의 레이스 이벤트를 지정해야 합니다.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	레이스 횟수
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	이 업그레이드를 적용하면 구동축, 차동 장치 및 차축 등 차량의 동력을 바퀴에 전달하는 부품이 강화됩니다.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	커리어 게임 횟수
+0	AUTO	RACE_DAY_ADD_EVENT	이벤트 추가
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	이 청사진은 현재 사용자의 니드 포 스피드의 버전과 맞지 않습니다. 새로운 게임 컨텐츠를 활용하기 위해서는 NeedforSpeed.com에서 업데이트에 대한 정보를 구하십시오.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	바퀴 페인트
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	활성 청사진으로 설정
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	엔진 관리
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	승리 보상
+0	AUTO	CUST_PAINT_BODY	페인트
+0	AUTO	CUST_PAINT_RIMS	바퀴
+0	AUTO	CUST_PAINT_TINT	창문 코팅
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	오류가 발생하지 않았습니다.
+0	AUTO	RACEDAY_CONFIRM_DELETE	정말로 이 레이스 데이를 삭제하시겠습니까?
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	언어 선택:
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	우레탄이나 알루미늄 같은 튼튼한 재질로 만든 투관을 사용하면 차량이 더욱 안정감 있게 회전할 수 있습니다.
+0	AUTO	HUB_DIFFICULTY_2	중간
+0	AUTO	CUST_TUNE_SPEED_BRAKES	빈번하게 제동을 걸면 브레이크 시스템에 과도한 열이 누적되어 시간이 지날수록 제동 거리가 길어질 우려가 있습니다.  대형 브레이크 시스템을 사용하면 온도를 낮추고 일관적인 제동 성능을 유지하는 데 도움이 됩니다.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	최고 톱 스피드
+0	AUTO	CL_SELECT_PURCHASE_METHOD	구입 방법을 선택하십시오.
+0	AUTO	CUST_SLOT_INTAKE_DESC	엔진은 차가운 공기가 많이 공급될수록 우수한 성능을 발휘합니다. 또한 공급되는 공기가 차가울수록 엔진이 생산하는 동력 역시 증가합니다.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	오버스티어, 대형 후면 흔들림 방지 막대, 알루미늄 투관 및 전면 흔들림 방지 막대가 주안점이 되는 경우, 이 업그레이드를 적용하면 차량의 측면 접근이 훨씬 용이해집니다.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	차량 선택 화면을 떠나서 커리어 지도로 이동하시겠습니까?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	레이스 데이 저장 중…
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	최고 등급 차량 튜너
+0	AUTO	RACE_MODE_DESCRIPTION	선택한 레이스 모드에 따라 이 차량이 참가할 수 있는 이벤트가 결정됩니다.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	풍동을 이용하려면 오토스컬프트 부품을 설치해야 합니다!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	공기 흡입 용량이 클수록 한 번에 엔진에 공급되는 공기의 양도 많아집니다.  매끄러운 대량 흡입 능력을 갖춘 엔진은 한계 이상의 동력을 생산할 수 있습니다.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	최대 종합 체크포인트 속도
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	연료 시스템
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	260+hp를 발휘하는 터보 2.3l, LSD 및 6단 변속을 특징으로 하는 Speed 3는 현대식 해치백 자동차입니다.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	이 업그레이드를 적용하면 보다 신속하고 정확한 변속이 가능하면서도 표준 경주용 차량에 맞게 엔진의 동력을 바퀴의 회전력으로 전환하는 부품들의 부담을 줄일 수 있습니다.
+0	AUTO	CAR_SELECT_INTEGRA	고성능 B 시리즈 모터가 장착된 Kouki는 다양한 모터 선택사양과 뛰어난 핸들링 때문에 레이싱 애호가들이 가장 선호하는 자동차입니다.
+0	AUTO	FE_HUBMAP_ETREE_CARS	차량
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	이 업그레이드를 적용하면 엔진의 전체적인 출력이 증가합니다.
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	이 업그레이드를 적용하면 진정한 경주용 차량에 더욱 근접한 동력을 확보할 수 있습니다.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	모든 코너에서 속도를 제어하면서 코너를 벗어난 직후에 적절하게 가속을 하는 것이 관건입니다. 엔진의 동력이 우수할수록 코너에서 가속해서 최고 속도에 도달하기가 용이합니다.
+0	AUTO	GARAGE_REPAIR_CONFIRM	이 차량을 수리하시겠습니까?
+0	AUTO	CAR_SELECT_S3	2세대 3S인 이 자동차는 북미에서는 시판되지 않고 있습니다.
+0	AUTO	CAR_SELECT_S4	S4는 RS4와 마찬가지로 4.2l V8이 장착됐으면서도 핸들링이 더욱 부드럽습니다.
+0	AUTO	CAR_SELECT_TT	새로운 TT 2 버전으로서 다수의 자동차 시상 행사에서 수상 경력을 자랑한 바 있습니다.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	니트로
+0	AUTO	FE_STATS_DOWNLOADING_STATS	통계 다운로드
+0	AUTO	CUST_QUICK_FORCED_D3	드래그 3단계 강제 흡기
+0	AUTO	CUST_QUICK_FORCED_G3	이 업그레이드를 적용하면 엔진에 주입되는 공기의 양이 증가하여 차량의 동력이 향상됨과 동시에 더욱 다양한 장점을 갖춘 경주용 차량으로 거듭나게 됩니다
+0	AUTO	CUST_QUICK_FORCED_S3	이 업그레이드를 적용하면 엔진에 주입되는 공기의 양이 증가하여 차량의 동력이 향상됨과 동시에 더욱 다양한 장점을 갖춘 경주용 차량으로 거듭나게 됩니다
+0	AUTO	CUST_PAINT_GROUP_CANDY	캔디
+0	AUTO	CUST_PAINT_GROUP_GLOSS	글로스
+0	AUTO	CUST_PAINT_GROUP_MATTE	무광택
+0	AUTO	CUST_DRIVETRAIN_GROUP	차축
+0	AUTO	CUST_PAINT_GROUP_PEARL	펄 광택
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	이 업그레이드를 적용하면 격렬한 가속 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	이 업그레이드를 적용하면 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	이 업그레이드를 적용하면 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	피스톤 클리퍼스의 크기가 크거나 수가 많을수록 로터에 브레이크 패드의 표면 부위를 더욱 균등하게 배분할 수 있기 때문에 제동력이 향상됩니다.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	시작하려면 [시작]을 누르십시오.
+0	AUTO	RACE_DAY_SLOT_ID	슬롯 {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	머플러
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	게임 참가 시간이 만료됐습니다.
+0	AUTO	COMMON_START	시작
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	트랜스미션 냉각
+0	AUTO	RACE_MODE_DRIFT_MODE	드리프트 모드
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	맞춤식 제작할 바퀴를 선택하십시오.
+0	AUTO	CUST_SLOT_FLYWHEEL	플라이 휠
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	플레이어를 제자리에 있게 해주는 레이싱 시트
+0	AUTO	MODE_CHANGE_CONFIRMATION	모드를 변경하면 이전의 청사진이 모드 삭제됩니다.  정말로 진행하시겠습니까?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	커리어 플레이 시간
+0	AUTO	CUST_DRAG_TUT_AWD	4륜 구동은 마력을 극대화하여 엄청난 정지 마찰력을 발휘하므로 주행로를 벗어났을 때 엄청난 이점이 있습니다.
+0	AUTO	CUST_DRAG_TUT_FWD	전륜 구동의 최대 단점은 드래그 레이싱에서 정지 마찰력을 유지하기 어렵다는 점입니다.  사용하는 동력이 많을수록 타이어가 헛바퀴를 돌지 않도록 하는 데 주안점을 둬야 합니다.   고속 전륜 구동 드래그 차량을 제작하는 경우 반드시 동력 생성과 지면과의 밀착도의 역학 관계를 고려해야 합니다. 기본적인 동력 업그레이드를 완료한 이후에는 동력과 정지 마찰력을 제어하는 데 주안점을 둬야 합니다.
+0	AUTO	CUST_DRAG_TUT_RWD	드래그 장치의 핵심 요소는 정지 마찰력입니다. 차량의 상하진동을 제거하고 바퀴의 회전력이 높은 수준을 유지하도록 관리하십시오. 엔진의 출력이 높은 차량을 사용하는 경우 특히 이 점을 유의해야 합니다.
+0	AUTO	CUST_ENGINE_GROUP	엔진
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	서버에 의해 대진표 작성이 취소됐습니다.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	타이어는 지상과 차량의 밀착력에 결정적인 영향을 미칩니다.
+0	AUTO	CAR_SELECT_GTRPROTO	R35 GTR의 출시전 버전입니다.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	레이스 차량 대수
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	정복 보상
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} 수리 마커
+0	AUTO	CAR_SELECT_VIPERCOUPE	3세대 Viper로서 Dodges의 V10엔진이 구페형 자동차의 멋을 더하고 뛰어난 음향이 500 hp의 성능을 더욱 돋보이게 합니다.
+0	AUTO	MAIN_MENU_TITLE	메인 메뉴
+0	AUTO	CUST_TINT_DARK	어두움
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	출발하는 동안 하중을 적절하게 전달하는 데 적합한 서스펜션 부품을 설치하면 보다 우수한 속도 및 정지 마찰력을 갖춘 차량이 완성됩니다.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	완파할 수 없습니다
+0	AUTO	CUST_APPLYING_BLUEPRINT	청사진 적용 중
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	레이스 데이 슬롯 선택
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	구조활동 차량에 맞먹는 성능을 자랑하며 중앙에 엔진이 탑재된 자동차입니다.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	커리어 완료율
+0	AUTO	CUST_SLOT_DIFFERENTIAL	차동 장치
+0	AUTO	CUST_WIND_TUNNEL_ON	풍동 켜기
+0	AUTO	RACE_DAY_LOCATION_10_MC	도쿄 조선소
+0	AUTO	RACE_DAY_LOCATION_11_MC	윌로우 스프링스
+0	AUTO	RACE_DAY_LOCATION_12_MC	라이프치히
+0	AUTO	RACE_DAY_LOCATION_13_MC	도쿄 고속도로
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	멀티 플레이 레이스 데이에는 수리 마커를 사용할 수 없습니다. 레이스 도중 입은 손상은 각 레이스 종료 후 자동 복구됩니다. 레이스 도중 차량이 완파되지도 않습니다.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	청사진이 적용하려는 차량 모드에 맞지 않습니다. 이전의 청사진이 모두 삭제됩니다. 정말로 진행하시겠습니까?
+0	AUTO	CUST_QUICK_POWER_DI3	이 패키지의 용도는 바퀴의 정지 마찰력을 줄이는 데 필요한 동력을 제공하는 것입니다.
+0	AUTO	RACE_MODE_DRAG_MODE	드래그 모드
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	이 기본 업그레이드를 적용되면 차량의 전체적인 외관이 개선됩니다.
+0	AUTO	CUST_QUICK_VISUAL_2	펜더와 전면 스프린터를 장착하면 고속 주행 시 차량의 들림 현상이 대폭 감소됩니다. 결과적으로, 고속 주행에도 안정감이 향상되고 코너링의 정지 마찰력도 증가합니다.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	플레이 모드 선택
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	선택하신 슬롯에 이미 청사진이 존재합니다. 덮어쓰시겠습니까?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	마커 관리
+0	AUTO	CAR_SELECT_FOCUSST	북미 이외의 지역에서 시판된 MK2 Focus는 2.5l 터보 모터 및 225hp를 특징으로 합니다.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	이 업그레이드를 적용하면 구동축, 차동 장치 및 차축 등 차량의 파워를 바퀴에 전달하는 부품이 강화됩니다.
+0	AUTO	FE_MAIN_MENU	메인 메뉴
+0	AUTO	CUST_REGION_REAR_BUMPER	후방 범퍼
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	드라이브 풀리
+0	AUTO	CAR_SELECT_BARRACUDA	자동차의 전설 Hemi 'Cuda입니다.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	최고 등급 차량
+0	AUTO	CUST_APPLY_PAINT_TITLE	페인트 적용
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	차고의 차량 대수
+0	AUTO	CUST_REGION_ALL_WHEELS	모든 휠
+0	AUTO	CUST_QUICK_FORCED_2	이 업그레이드를 적용하면 엔진에 주입되는 공기의 양이 증가하여 차량의 동력이 향상됩니다.
+0	AUTO	FE_STATS_FASTEST_LAP	가장 빠른 랩
+0	AUTO	FE_MARKERMAN_CASH_COUNT	${0:d}
+0	AUTO	CAR_TYPE_DRAG	드래그
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	타이어가 도로면에 밀착한 상태를 지속적으로 유지하기 위해 전면 및 후면 흔들림 방지 막대를 강화하고 투관을 우레탄 재질로 교체하며 쇼크업소버를 레이싱용 댐프너로 교체합니다.
+0	AUTO	CAR_TYPE_GRIP	그립
+0	AUTO	FE_STATS_DNF_PERCENTAGE	DNF %
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	B-body Charger는 티비 자동차 중 가장 유명한 자동차입니다.
+0	AUTO	CUST_QUICK_INTERNALS_1	이 업그레이드를 적용하면 엔진이 강화되고 향후에 업그레이드를 추가로 적용할 수 있습니다.
+0	AUTO	CUST_QUICK_INTERNALS_2	이 업그레이드를 적용하면 엔진 내부가 크게 강화되어 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	정말 이 청사진을 기본 상태로 초기화하시겠습니까?
+0	AUTO	CUST_SLOT_RACING_SEATS	레이싱용 시트
+0	AUTO	CUST_AUTOSCULPT_ZONE10	구역 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	최고 구간 포인트
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	최고가 차량
+0	AUTO	CAR_SELECT_CIVICSI	8세대 Civic
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle는 Chevy 최초의 머슬카입니다. 1970년 이전만 해도 Chevy의 방침은 400ci 이상의 자동차를 생산하지 않는 것이었지만 1970년에 들어서면서 402 Chevelle를 선보였습니다.
+0	AUTO	CUST_CAT_GRIP_FORCED	스풀 타임 및 반응 속도가 빠른 터보를 장착하면 동력 상승 효과가 있을 뿐 아니라 트랙이나 거리에서 주행 시 놀라운 이점이 있습니다.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	레이스 데이 지도에 오신 것을 환영합니다.
+0	AUTO	CUST_BLUEPRINT_APPLY	청사진 적용
+0	AUTO	CUST_SLOT_CAMSHAFTS	캠축
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	모든 레이스 표시
+0	AUTO	CUST_SLOT_HEADERS	헤더
+0	AUTO	FE_STATS_FASTEST_TIME	최고 시간
+0	AUTO	CUST_SUSPENSION_GROUP	서스펜션
+0	AUTO	CUST_BLUEPRINT_RESET	청사진 초기화
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	이 업그레이드를 적용하면 진정한 드래그 전용 차량에 더욱 근접한 동력을 확보할 수 있습니다.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	이 업그레이드를 적용하면 진정한 경주용 차량에 더욱 근접한 동력을 확보할 수 있습니다.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	이 업그레이드를 적용하면 진정한 경주용 차량에 더욱 근접한 동력을 확보할 수 있습니다.
+0	AUTO	CUST_INSTALLED	설치 완료
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	레이스 데이 불러오는 중…
+0	AUTO	CUST_SLOT_CAMS_DESC	차량용 기본 캠축이라면 짧은 지속 시간과 낮은 리프트가 좋습니다. 하지만 지속 시간과 리프트가 상승하면 RPM 범위에서 최대 TQ RPM도 증가합니다. 가장 우수한 캠이라면 일반적인 주행 RPM 범위에서 최대 동력을 발휘해야 합니다.
+0	AUTO	CUST_QUICK_HANDLING_DI3	이 업그레이드를 적용하면 서스펜션 부품들이 독특한 방식으로 조율되어 코너링이 훨씬 부드러워집니다.
+0	AUTO	CUST_QUICK_BRAKE_D3	이 업그레이드를 적용하면 최대 제동 시간을 확보할 수 있으며 감속 시 타이어의 정지 마찰 능력이 유지됩니다.
+0	AUTO	CUST_QUICK_BRAKE_G3	그립 3단계 브레이크 패키지
+0	AUTO	CUST_QUICK_BRAKE_S3	이 업그레이드를 적용하면 최고 속도에서 최대 제동 시간을 확보할 수 있으며 감속 시 타이어의 정지 마찰 능력이 유지됩니다.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	니트로 용기가 클수록 보관할 수 있는 질소의 양도 늘어납니다. 차량에는 여러 개의 용기를 적재할 수도 있습니다. 사용한 용기는 반드시 다시 보충해야 합니다.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	저녁
+0	AUTO	CUST_TINT_LIGHT	밝음
+0	AUTO	CUST_REPAIR_DAMAGE	데미지
+0	AUTO	CUST_TINT_PEARL	진주빛
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	최장 드리프트 거리
+0	AUTO	CUST_SLOT_TIPS_DESC	이 액세서리를 차량에 부착하면 공격적인 분위기를 연출할 수 있습니다.
+0	AUTO	CUST_SLOT_STEERING_DESC	고성능 랙 및 피니언을 장착하면 기본 파워 스티어링 장치에 비해 스티어링 휠의 저항력이 감소하고 조종 각도가 소폭 늘어납니다.
+0	AUTO	CAR_SELECT_CORVETTEZ06	진정한 슈퍼카 킬러로서 티타늄 연결봉과 건식 윤활 방식의 7.0 l 모터가 탑재되어 있습니다.
+0	AUTO	HD_COMPATIBLE	최적의 게임을 위해 HD와 호환됩니다.
+0	AUTO	PS_START_BUTTON	시작
+0	AUTO	RACEDAY_DELETE_EVENT	이벤트 삭제
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	킹 제압 횟수
+0	AUTO	CUST_WIND_TUNNEL	풍동
+0	AUTO	CUST_STAGE_NUMBER	{0:d} 단계
+0	AUTO	FE_STATS_NUMBER_OF_WINS	승리 횟수
+0	AUTO	CUST_FILTER_FRONT_BUMPER	전방 범퍼
+0	AUTO	MAIN_CAREER	커리어
+0	AUTO	CUST_REGION_REAR_WHEEL	후방 휠
+0	AUTO	CUST_QUICK_VISUAL_D3	이 업그레이드에는 다양한 항공기 부품이 사용되어 고속 주행 시 차체 하중(다운포스)이 증가합니다.
+0	AUTO	CUST_QUICK_VISUAL_G3	이 업그레이드에는 다양한 항공기 부품이 사용되어 고속 주행 시 차체 하중(다운포스)이 증가합니다.
+0	AUTO	CUST_QUICK_VISUAL_S3	이 업그레이드에는 다양한 항공기 부품이 사용되어 최고 속도로 주행 시 차체 하중(다운포스)이 증가합니다.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	빈번하게 제동을 걸면 브레이크 시스템에 과도한 열이 누적되어 시간이 지날수록 제동 거리가 길어질 우려가 있습니다.  대형 브레이크 시스템을 사용하면 온도를 낮추고 일관적인 제동 성능을 유지하는 데 도움이 됩니다.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	이 업그레이드를 적용하면 경주용 차량의 엔진 내부가 강화되어 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	순위 게임 승리 횟수
+0	AUTO	CUST_SLOT_BOV_DESC	터보가 최대한의 부스트를 유지할 수 있도록 엔진 속도를 저하시키지 않으면서 블로우 오프 밸브가 초과 압력을 배출합니다.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	당신의 프로토콜 버전에 맞는 서버가 없습니다. 패치 적용을 시도합니다.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	최고 이벤트 유형
+0	AUTO	HUB_BREAK_RECORD	기록 갱신
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	이 막대는 앞바퀴를 지면에 밀착시키고 엔진이 생산하는 토크를 견디는 효과가 있습니다.
+0	AUTO	RACE_DAY_DIFFICULTY_1	하
+0	AUTO	RACE_DAY_DIFFICULTY_2	중
+0	AUTO	RACE_DAY_DIFFICULTY_3	상
+0	AUTO	RACE_DAY_DIFFICULTY_4	엘리트
+0	AUTO	CUST_SLOT_CLUTCH	클러치
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	계속하려면 2 버튼을 누르십시오.
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	최고 0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	전방 타이어 및 후방 타이어를 맞춤식으로 제작하시겠습니까?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	레이스 데이 제작
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	개인 기록
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	차량에 장착한 엔진의 출력이 증가하면 동력이 효과적으로 활용되고 구동 휠에 제대로 전달되도록 업그레이드를 실시해야 합니다. 클러치, 구동축 및 LSD(차동제한장치)는 저마다의 역할을 합니다.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	솔로
+0	AUTO	CUST_TUNE_DRAG_ENGINE	출발을 마치고 나서 드래그 레이싱의 관건은 동력에 달려 있습니다. 동력이 높을수록 가속도가 증가하고 트랩 속도도 상승합니다.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	현재로서는 공유가 불가능합니다. EA 서버의 이용자가 폭주하거나 이용할 수 없는 상태일 것입니다. 나중에 다시 시도하십시오.
+0	AUTO	RD_PLAY	플레이
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	점화 시스템
+0	AUTO	FE_STATS_CAREER_WINS	커리어 승리 횟수
+0	AUTO	RACE_DAY_LOCATION	위치
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	이 업그레이드를 적용하면 보다 신속한 변속이 가능하고 보다 효과적으로 엔진의 동력을 바퀴의 회전력으로 전달할 수 있습니다.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	이 업그레이드를 적용하면 훨씬 더 신속하고 정확한 변속이 가능할 뿐 아니라 엔진의 동력을 바퀴의 회전력으로 전환하는 부품들의 부담을 줄일 수 있습니다.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	정말로 이 공유 청사진을 삭제하시겠습니까?
+0	AUTO	SHOW_FRIENDS	친구 보이기
+0	AUTO	FE_STATS_HUBS_DOMINATED	레이스 데이 정복
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	최고 반응 시간
+0	AUTO	CODE_ENTRY_INVALID	입력하신 코드가 유효하지 않습니다. 입력하신 코드가 정확한지 확인하고 다시 시도하십시오.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	최대 8개의 이벤트 선택
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	차량 수리
+0	AUTO	CUST_AUTOSCULPT	오토스컬프트
+0	AUTO	CUST_REPAIR_MARKER	수리 마커
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	무지개빛
+0	AUTO	CUST_SLOT_CAM_GEARS	캠 기어
+0	AUTO	CUST_SLOT_ROOF_SCOOP	루프 스쿠프
+0	AUTO	CUST_COMPONENTS_TITLE	구성 요소 사용자 정의
+0	AUTO	CUST_BRAKES_GROUP	브레이크
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	정말로 떠나시겠습니까?
+0	AUTO	CUST_SLOT_TRACTION_BARS	트랙션 바
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	이 업그레이드를 적용하면 고성능 브레이크 차량의 패드 및 회전자가 사용되므로 차량의 제동 능력이 향상됩니다.  브레이크는 드리프트를 제어 및 조절하는 데 중요한 영향을 미칩니다.
+0	AUTO	MAIN_RACE_DAY	레이스 데이
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	스피드 챌린지 승률
+0	AUTO	SELL_CAR_CONFIRMATION	이 차량의 가격은 ${0:d}입니다.^정말 판매하시겠습니까?
+0	AUTO	RD_DELETE_RD	레이스 데이를 삭제하시겠습니까?
+0	AUTO	CAR_SELECT_G35	350z와 동일한 기반으로 제작됐습니다.
+0	AUTO	CAR_SELECT_GXP	260Hp를 발휘하는 2.0L 16v 터보 모터, LSD 및 18s를 특징으로 합니다.
+0	AUTO	CAR_SELECT_NSX	Honda의 레이싱 기술을 과시하기 위해 개발된 이 중급 엔진 차량은 시대를 초월했다는 평가를 받은 바 있습니다.
+0	AUTO	CAR_SELECT_R35	R35 GTR의 시판 버전입니다.
+0	AUTO	CAR_SELECT_S13	가장 전통적인 드리프트 차량입니다.
+0	AUTO	CAR_SELECT_S15	북미에는 공급된 적이 없는 자동차입니다. 그러나 튜너 사회에서는 전통적인 차량으로 일컬어지고 있습니다.
+0	AUTO	CAR_SELECT_RS4	400 HP V8를 특징으로 하는 b7 rs4은 세단형, 웨건형 및 컨버터블로 판매되고 있습니다.
+0	AUTO	CAR_SELECT_RSX	전설적인 Integra의 후속 모델로서 Honda K 시리즈 모터가 사용됐습니다.
+0	AUTO	CAR_SELECT_RX8	RX-8은 거의 완벽한 핸들링과 50-50 하중 분산을 특징으로 하는 전방 엔진 및 2+2의 후륜 구동 회전 동력식 차량입니다.
+0	AUTO	CAR_SELECT_STI	수평 4기통, 터보 및 4륜 구동 방식의 STI는 튜너 차량의 표준을 제시한 자동차입니다. 모든 것이 가능하고 모든 것을 훌륭하게 소화할 수 있는 자동차입니다.
+0	AUTO	CAR_SELECT_Z4M	E46 m3와 동일하게 Inline 6가 장착됐으며 최대 한계 속도 250 km/h에 제로백은 4.9초에 달하는 것으로 발표됐습니다.
+0	AUTO	CUST_QUICK_VISUAL_DI3	드리프트 3단계 외양
+0	AUTO	CUST_AUTOSCULPT_ZONE1	구역 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	구역 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	구역 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	구역 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	구역 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	구역 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	구역 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	구역 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	구역 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	최고 레이스 점수
+0	AUTO	FE_STATS_AVERAGE_SPEED	평균 속도
+0	AUTO	CUST_PAINT_GROUP_METALLIC	메탈릭
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	시작 버튼을 누르십시오.
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	드리프트 승률
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	이용 가능한 백업 차량 없음
+0	AUTO	CUST_FILTER_FRONT	전방 휠
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	차량 구입
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	정식 시판에 앞서 2006년에 선보인 5세대 Camaro의 사전 제작 버전입니다.
+0	AUTO	CUST_QUICK_SUSPENSION_1	이 업그레이드를 적용하면 차량의 코너링 속도와 안정감이 강화됩니다.
+0	AUTO	CUST_QUICK_SUSPENSION_2	이 업그레이드를 적용하면 차량 제어 능력이 대폭 향상되어 차량의 코너링 속도와 안정감이 강화됩니다.
+0	AUTO	CUST_QUICK_NITROUS_D3	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 50 - 250 마력이 일시적으로 강화됩니다. 따라서 우승과 최하위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	CUST_QUICK_NITROUS_G3	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 50 - 250 마력이 일시적으로 강화됩니다. 따라서 우승과 2위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	CUST_QUICK_NITROUS_S3	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 50 - 250 마력이 일시적으로 강화됩니다. 따라서 우승과 2위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	CUST_PERFORMANCE	성능
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	흔들림 방지 막대를 강화하면 코너에서 안정성이 강화되어 언더스티어를 예방할 수 있는 효과가 있습니다.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	정말로 이 청사진을 삭제하시겠습니까?
+0	AUTO	MODE_BLUEPRINTS_ONLY	청사진
+0	AUTO	CUST_QUICK_UPGRADE	빠른 업그레이드
+0	AUTO	CAR_SELECT_CORVETTEC6	Corvette의 최신 버전이자 35년의 역사를 자랑하는 Corvette로서는 최초로 헤드라이트가 노출되어 있습니다.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	오프라인
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	보상
+0	AUTO	MAIN_QUIT_GAME	종료
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	니트로
+0	AUTO	CAR_TYPE_DRIFT	드리프트
+0	AUTO	FE_HUBMAP_ETREE_FILTER	필터
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	롤 케이지는 안전 및 레이스용 차량에 걸맞은 외관 외에도 샤시의 내구성이 향상된다는 장점이 있습니다.
+0	AUTO	CUST_SLOT_BC_DESC	엔진에 부스트가 많이 공급될수록 좋습니다.  엔진이 무리 없이 처리할 수 있는 부스트가 높을수록 터보의 활용도가 향상됩니다.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	변속기가 과열되면 다양한 문제가 발생합니다
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	강제 흡기
+0	AUTO	CAR_TYPE_SPEED	스피드 챌린지
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	실린더 헤드
+0	AUTO	CUST_SELL_CAR_WARNING	이 차량을 판매할 경우 같은 유형의 차량을 새로 구입하기 전에는 {0:s} 레이스 이벤트에 참가할 수 없습니다.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	이 위치에는 해당 유형의 레이스가 없습니다.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	시간
+0	AUTO	RD_DELETED	레이스 데이가 삭제됐습니다.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	차량에 장착한 엔진의 출력이 증가하면 동력이 효과적으로 활용되고 구동 휠에 제대로 전달되도록 업그레이드를 실시해야 합니다. 클러치, 구동축 및 LSD(차동제한장치)는 저마다의 역할을 합니다.
+0	AUTO	CUST_SLOT_AIR_INTAKE	공기 흡입
+0	AUTO	CUST_PART_PURCHASED	구입함
+0	AUTO	CUST_BP_OPTION_UNDO	취소
+0	AUTO	CUST_FILTER_BODY	차체
+0	AUTO	CUST_FILTER_HOOD	후드
+0	AUTO	CUST_FILTER_REAR	후방 휠
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	이 업그레이드를 적용하면 엔진 컴퓨터가 새로 프로그래밍됩니다. 따라서 가장 절실할 때에 보다 많은 연료와 공기를 연소시킴으로써 엔진의 출력을 극대화할 수 있습니다.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	노끈식 스테인리스 스틸으로 보강된 브레이크 라인을 사용하면 유압 및 제동 반응 능력이 향상됩니다.
+0	AUTO	LS_SAVING	저장하는 중….
+0	AUTO	CUST_CUSTOM_UPGRADE	맞춤형 업그레이드
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	이 레이스 데이에 참가할 수 있는 자격이 없습니다. 다음 유형의 차량이 부족합니다.
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	출발하는 동안 하중을 적절하게 전달하는 데 적합한 서스펜션 부품을 설치하면 보다 우수한 속도 및 정지 마찰력을 갖춘 차량이 완성됩니다.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	레이스 모드 선택
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	일반 바디 키트에는 애프터마켓의 배기 팁을 설치할 수 없습니다!
+0	AUTO	CUST_PURCHASE_CAR	차량 구입
+0	AUTO	CODE_ENTRY_VERIFICATION	서버에서 코드 검사 중…
+0	AUTO	MC_OLD_SAVE_REWARD	이전에 출시된 니드포스피드™ 타이틀을 이용해 주셔서 감사합니다. 커리어 모드에서 사용할 수 있는 {0:d}개의 수리 마커와 {1:d}개의 종합 마커를 보상으로 제공했습니다.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	높은 등급의 상대보다 앞서 완주한 횟수
+0	AUTO	RACE_DAY_LOCATION_1_MC	아우토반
+0	AUTO	RACE_DAY_LOCATION_2_MC	오토폴리스
+0	AUTO	RACE_DAY_LOCATION_3_MC	시카고 비행장
+0	AUTO	RACE_DAY_LOCATION_4_MC	에비스
+0	AUTO	RACE_DAY_LOCATION_5_MC	인피니온
+0	AUTO	RACE_DAY_LOCATION_6_MC	몬델로 파크
+0	AUTO	RACE_DAY_LOCATION_7_MC	네바다 고속도로
+0	AUTO	RACE_DAY_LOCATION_8_MC	포틀랜드 인터내셔널 레이스웨이
+0	AUTO	RACE_DAY_LOCATION_9_MC	텍사스 월드 스피드웨이
+0	AUTO	CUST_QUICK_POWER_D3	드래그 3단계 동력
+0	AUTO	CUST_QUICK_POWER_G3	이 패키지를 이용하면 평범한 차량이 훨씬 강력한 경주용 차량으로 변신합니다.
+0	AUTO	CUST_QUICK_POWER_S3	스피드 3단계 동력
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	청사진 개수
+0	AUTO	FE_STATS_BEST_RUN	최고 주행
+0	AUTO	WINDTUNNEL_DOWNFORCE	다운포스
+0	AUTO	CUST_SLOT_COOLING_DESC	너무 뜨겁지도, 차갑지도 않고 적당해야 합니다.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	최고 드리프트 점수
+0	AUTO	CUST_CAT_DRIFT_FORCED	이 업그레이드를 적용하면 엔진에 주입되는 공기의 양이 증가하여 보다 많은 양의 연료를 연소하므로 엔진의 출력이 향상됩니다.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	수리 마커 사용
+0	AUTO	FE_STATS_FILTER_GENERAL	일반 통계
+0	AUTO	CB_BLUEPRINTS_HEADER	청사진 유형
+0	AUTO	ENTER_SECRET_CODE	비밀 코드를 입력하십시오.
+0	AUTO	CUST_SLOT_BODYKIT_DESC	이것을 사용하면 차량의 외관이 크게 바뀌며 몇 가지 공기역학적 기능을 추가할 수도 있습니다.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	완파된 차량 대수
+0	AUTO	CUST_SLOT_WHEELS	바퀴
+0	AUTO	CUST_SLOT_SUPERCHARGER	수퍼배터리
+0	AUTO	CAR_SELECT_SHELBYGT500	구름방지 막대가 장착된 최초의 미국 자동차이자 가장 유명한 Shelby 자동차 중 하나입니다.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	최장 단일 윌리
+0	AUTO	FE_STATS_GRIP_WINS	그립 레이스 승리 횟수
+0	AUTO	CL_MS_POINTS	MS 포인트
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	최장 드리프트 시간
+0	AUTO	CUST_FILTER_REAR_BUMPER	후방 범퍼
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	최고 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	차량을 구입하고 이 청사진을 구입한 차량에 적용하려면 {0:d}이(가) 소요됩니다. 계속하시겠습니까?
+0	AUTO	GARAGE_REPAIR_DENIED	이 차량을 수리하는 데 필요한 현금이 부족하고 수리 마커도 보유하고 있지 않습니다.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	계속하려면 클릭하십시오.
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	PUNKBUSTER 레이스 횟수
+0	AUTO	GARAGE_NO_CAR_REPAIR	차량을 수리하는 데 필요한 현금이나 수리 마커가 없습니다.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	이용 가능한 차량이 없습니다.
+0	AUTO	RDMAP_CREATE_PREVIEW	사용자 레이스 데이 제작
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	빈번하게 제동을 걸면 브레이크 시스템에 과도한 열이 누적되어 시간이 지날수록 제동 거리가 길어질 우려가 있습니다.  대형 브레이크 시스템을 사용하면 온도를 낮추고 일관적인 제동 성능을 유지하는 데 도움이 됩니다.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	최다 연쇄 드리프트
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	프로포셔닝 밸브
+0	AUTO	FE_STATS_CLUB_TAG	클럽 태그
+0	AUTO	CUST_SLOT_EXHAUST	배기 팁
+0	AUTO	CAR_SELECT_INTEGRATYPER	당대 최고의 핸들링을 제공하는 전륜 구동 차량으로 자주 손꼽힙니다.
+0	AUTO	CUST_CAT_DRAG_BRAKE	여기서의 주안점은 제동 능력보다는 주행 능력에 있습니다. 최경량의 브레이크 장치를 설치해서 차량의 가속 시간을 최대한 단축하는 데 그 목적이 있습니다.
+0	AUTO	WINDTUNNEL_DRAG	드래그
+0	AUTO	CUST_APPLY_PAINT	페인트 적용
+0	AUTO	WINDTUNNEL_PEAK_HP	최대 HP
+0	AUTO	CUST_BLUEPRINT_DELETE	청사진 삭제
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	커리어 통계
+0	AUTO	CUST_VISUAL_TITLE	비주얼
+0	AUTO	CUST_SLOT_DRIVESHAFT	구동축
+0	AUTO	HACK_PURCHASE_BLUEPRINT	청사진 구입
+0	AUTO	CAREER_COMPLETION_HEADER	커리어 완료
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	엔진의 동력이 높을수록 타이어의 회전과 드리프트 상승을 유지하기가 용이합니다. 파워 슬라이딩을 향상시키려면 출력을 늘리십시오.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	최고 속도 1/4 마일
+0	AUTO	CL_NOT_ENOUGH_CASH	이 차량을 구입할 현금이 부족합니다.
+0	AUTO	CUST_SLOT_SC_DESC	이 강제 흡기 방식은 모터에 의해 자체적으로 구동되며 저속 기어에서 더 많은 동력을 공급합니다.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	클럽
+0	AUTO	CUST_SLOT_TIRES	타이어
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	게임을 찾지 못했습니다.
+0	AUTO	RACEDAY_EXIT_CONFIRM	그러면 이 레이스 데이에 대한 모든 수정이 취소됩니다. 수정을 취소하시겠습니까?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	충격 흡수 스프링
+0	AUTO	CUST_REGION_SKIRT	스커트
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	니트로 용기
+0	AUTO	CUST_QUICK_FORCED_DI3	이 업그레이드를 적용하면 엔진에 주입되는 공기의 양이 증가하여 차량의 동력이 향상됨과 동시에 더욱 다양한 장점을 갖춘 경주용 차량으로 거듭나게 됩니다
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	윌리 표시줄
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	이차에 대해서는 말할 수 없습니다.
+0	AUTO	CL_MAXIMUM_CARS_REACHED	최대 차량 보유 대수인 {0:d}대에 도달했습니다.^^차량을 구입하려면 먼저 맞춤형 차량 한 대를 처분하십시오.
+0	AUTO	CUST_CUSTOMIZE_MAIN	사용자 정의하기
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	이 업그레이드를 적용하면 엔진 컴퓨터가 새로 프로그래밍됩니다. 따라서 많은 연료와 공기를 연소시킴으로써 코너에서 상대 차량을 따돌리는 데 필요한 추가 동력을 확보할 수 있습니다.
+0	AUTO	CUST_BLUEPRINT_HEADER	청사진 사용자 정의
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	드래그 승률
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	머플러
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	선택
+0	AUTO	CUST_PAINT_GROUP_CHROME	크롬
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	공유 청사진 개수
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	강제 흡기
+0	AUTO	FE_STATS_DRIFT_RACES	드리프트 레이스 횟수
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	차량에 장착한 엔진의 출력이 증가하면 동력이 효과적으로 활용되고 구동 휠에 제대로 전달되도록 업그레이드를 실시해야 합니다. 클러치, 구동축 및 LSD(차동제한장치)는 저마다의 역할을 합니다.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	실적 통계
+0	AUTO	CUST_SLOT_TURBOCHARGER	터보차져
+0	AUTO	CUST_SLOT_SHIFTER	변속기
+0	AUTO	CUST_DYNO_TEST	DYNO 테스트
+0	AUTO	RACE_DAY_LOCATION_10_DESC	일본인 레이서들이 도쿄 조선소의 선박 제조 레이스 데이를 장악했습니다. 그들은 상상할 수 있는 모든 시가지 전명을 이용하여 긴장감 넘치는 레이스 경로를 건설했습니다.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	챌린지 차량 선택
+0	AUTO	CUST_CAT_SPEED_NITROUS	이 업그레이드는 일시적으로 승패에 중대한 영향을 미치는 마력을 상승시키는 효과가 있습니다.
+0	AUTO	CAR_SELECT_MUSTANGGTN	5세대 Mustang '반미래주의' 자동차입니다.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	승률
+0	AUTO	RD_CUSTOM_SELECT	레이스 데이를 플레이하시겠습니까?
+0	AUTO	KING_FLOW_CASH_REWARD	현금 보상
+0	AUTO	CUST_CAT_SPEED_BRAKE	이 업그레이드를 적용하면 고성능 브레이크 차량의 패드 및 회전자가 사용되므로 차량의 제동 능력이 향상됩니다. 적합하게 튜닝된 차량이라면 브레이크가 중요 요소입니다.
+0	AUTO	CUST_SPEED_TUT_AWD	4륜 구동으로 주행하면 정지 마찰력이 증가하는데, 이는 차량 출발과 코너를 벗어난 직후의 가속에 특히 효과적입니다. 이 점을 효과적으로 활용하십시오.
+0	AUTO	CUST_SPEED_TUT_FWD	전륜 구동 차량의 물리적 법칙을 극복하는 것은 어렵지만 적절한 튜닝 부품을 선택한다면 최고의 경주용 차량을 제작할 수 있습니다. 가장 먼저 고려해야 할 사항은 차량 전면의 모든 부품을 강화함으로써 FF 차량 고유의 언더스티어를 최소화하는 것입니다. 그러고 나서 LSD(차동제한장치)를 설치해서 핸들이 쏠리는 현상을 최소화해야 합니다.
+0	AUTO	CUST_SPEED_TUT_RWD	후륜 구동 차량의 경우 균형 유지 및 가속 페달을 이용한 조종이 효과적입니다. 하지만 차량 튜닝 시 오버스티어가 과도하게 발생하지 않도록 주의하십시오.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	냉각 시스템
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	homoglamation 용도로 개발됐으며 실제로 호위용 차량으로는 사용된 바 없습니다. 하지만 Escort RS는 가장 전통적인 차량이자 상징으로 자리잡았습니다.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	최고 0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	서부에서 가장 빠른 도로로 알려진 윌로우 스프링스는 캘리포니아 사막의 산등성이에 자리잡고 있습니다. 윌로우 스프링스는 끊임 없는 고저 변화와 높은 평균 속도를 특징으로 합니다.
+0	AUTO	RACE_DAY_DIFFICULTY	난이도
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	장바구니에 있는 마커를 모두 구입하는 데 필요한 현금이 부족합니다.
+0	AUTO	CAR_SELECT_CHALLENGER	Dodge가 포니 자동차 시장에 처음 진출하면서 선보인 1세대 Challenger입니다. 터빈 자동차를 목표로 했던 기존의 자동차 설계를 탈피했습니다.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	이용 가능한 레이스 데이 슬롯을 선택하면 맞춤형 레이스 데이를 새로 생성할 수 있습니다. 선택한 아이콘은 [내 레이스 데이]의 [레이스 데이 지도]에 있는 레이스 데이를 의미합니다.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	4륜 구동으로 주행하면 정지 마찰력이 증가하는데, 이는 차량 출발과 코너를 벗어난 직후의 가속에 특히 효과적입니다. 이 점을 효과적으로 활용하십시오.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	전륜 구동 차량의 물리적 법칙을 극복하는 것은 어렵지만 적절한 튜닝 부품을 선택한다면 최고의 경주용 차량을 제작할 수 있습니다. 가장 먼저 고려해야 할 사항은 차량 전면의 모든 부품을 강화함으로써 FF 차량 고유의 언더스티어를 줄이는 것입니다. 그러고 나서 LSD(차동제한장치)를 설치해서 핸들이 쏠리는 현상을 최소화해야 합니다.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	후륜 구동 차량의 경우 균형 유지 및 가속 페달을 이용한 조종이 효과적입니다. 하지만 차량 튜닝 시 오버스티어가 과도하게 발생하지 않도록 주의하십시오.
+0	AUTO	CUST_SELL_CAR	차량 판매
+0	AUTO	RACE_DAY_LOCATION_12_DESC	독일 라이프치히의 포르셰 테스트 트랙에는 레이스 세계에서 가장 유명한 커브길이 재현되어 있습니다.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	사이드 스커트
+0	AUTO	CUST_SLOT_FUEL_DESC	높은 마력을 발휘하려는 효과적인 연료 공급이 이뤄져야 합니다. 대형 연료 분사 장치와 업그레이드된 연료 라인을 겸비한 대형 연료 펌프를 사용하면 마력이 대폭 향상됩니다.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	우수한 드리프트 차량이라면 출발 시점에서 예측이 가능하고 모든 코너에서 오버스티어를 유지하기가 용이하며 안정성도 뛰어나야 합니다.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	친구
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	아침
+0	AUTO	CUST_FILTER_SPOILER	스포일러
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	대진표 작성 오류가 발생했습니다.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	도쿄의 고속도로를 통과하며 입체 교차로, 직선으로 및 터널 구간으로 구성된 고속 주해로입니다.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	순위 게임 플레이 횟수
+0	AUTO	CUST_TUNE	튜닝
+0	AUTO	CUST_VISUALS_TITLE	비주얼
+0	AUTO	FE_STATS_CLUB_NAME	클럽 이름
+0	AUTO	CUST_INSTALL	설치
+0	AUTO	RACEDAY_SAVE_CONFIRM	정말 레이스 데이를 저장하시겠습니까?
+0	AUTO	FE_MATCHMAKING_JOINING	게임 세션에 합류하는 중….
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	블로우 오프 밸브
+0	AUTO	CUST_SLOT_ROLL_CAGE	롤 케이지
+0	AUTO	CAR_LOT_NO_DRIFTING	드리프트 불가
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	이 업그레이드를 적용하면 기존 엔진 내부가 보다 강력하고 내구성이 우수한 부품으로 교체되므로 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	종합 마커 사용
+0	AUTO	CUST_PACKAGE_VISUAL	비주얼 패키지
+0	AUTO	CUST_EMPTY_BLUEPRINT	새 청사진 제작
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	보상을 받으려면 비밀코드 또는 보너스 코드를 여기에 입력하십시오.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	이 장거리 경주용 업그레이드를 적용하면 먼지 속에서도 안락함을 느낄 수 있습니다.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	레이스 데이의 난이도를 선택하십시오. 선택한 난이도에 따라 해당 레이스 데이의 AI 난이도와 차량의 최대 열이 결정됩니다.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	커리어 차량
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	12인 레이스 완료 횟수
+0	AUTO	CUST_REGION_FRONT_TIRE	전방 타이어
+0	AUTO	FE_STATS_DRAG_WINS	드래그 레이스 승리 횟수
+0	AUTO	RACE_DAY_SAVE_NAME	My Race Day
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	이 부품을 구매할 현금이 부족합니다!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	최고 윌리 각도
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	터보는 에어 펌프 역할을 합니다.
+0	AUTO	CUST_SLOT_BLOCK_DESC	실린더의 직경을 늘리면 엔진의 배기량, 다시 말해서 연소되는 연료량이 증가하여 보다 높은 동력을 생산하게 됩니다.
+0	AUTO	CUST_CAT_GRIP_BRAKE	이 업그레이드를 적용하면 고성능 브레이크 차량의 패드 및 회전자가 사용되므로 차량의 제동 능력이 향상됩니다. 적합하게 튜닝된 차량이라면 브레이크가 핵심 요소입니다.
+0	AUTO	CUST_SLOT_SPOILER	스포일러
+0	AUTO	RACE_DAY_RACE_EVENTS	레이스 이벤트
+0	AUTO	CUST_SLOT_STEERING_KIT	핸들 키트
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	그립 승률
+0	AUTO	CUST_BLUEPRINT_RENAME	청사진 이름 변경
+0	AUTO	RACE_DAY_SLOT_FILLED	가득 참
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	최고 드리프트 점수
+0	AUTO	CUST_VINYLS	비닐
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	성능 제어 암의 재질이 우수할수록 전체적인 서스펜션 기하학이 향상될 뿐 아니라 캠버 선택의 폭도 더욱 다양해집니다.
+0	AUTO	FE_STATS_HUBS_WON	레이스 데이 승리
+0	AUTO	CUST_CAT_GRIP_NITROUS	이 업그레이드는 일시적으로 승패에 중대한 영향을 미치는 마력을 상승시키는 효과가 있습니다.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	레이스에 부적격
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	레이스 데이용 수리 마커 개수를 선택하십시오. 싱글 플레이 레이스 데이를 생성하면 동일한 개수의 수리 마커와 종합 마커가 제공됩니다.
+0	AUTO	CAR_SELECT_CAMAROSS	Mustang을 잡아먹는 작고 거친 동물로 묘사된 바 있는 1세대 Camaro입니다.
+0	AUTO	FE_STATS_BEAT_MODERATOR	모더레이터를 상대로 승리
+0	AUTO	CUST_SLOT_HANDBRAKE	핸드브레이크
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	이 업그레이드를 적용하면 보다 신속하고 정확한 변속이 가능하면서도 표준 경주용 차량에 맞게 엔진의 동력을 바퀴의 회전력으로 전환하는 부품들의 부담을 줄일 수 있습니다.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	이 업그레이드를 적용하면 보다 신속하고 정확한 변속이 가능하면서도 표준 경주용 차량에 맞게 엔진의 동력을 바퀴의 회전력으로 전환하는 부품들의 부담을 줄일 수 있습니다.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	이 업그레이드를 적용하면 보다 신속하고 정확한 변속이 가능하면서도 표준 경주용 차량에 맞게 엔진의 동력을 바퀴의 회전력으로 전환하는 부품들의 부담을 줄일 수 있습니다.
+0	AUTO	COMMON_CLASS_HEADER	티어
+0	AUTO	CAR_SELECT_FORDGT	1960년대 후반 Ford의 레이싱계 정복을 기념하는 뜻으로 개발됐습니다. Ford GT는 60년대 클래식 자동차의 현대식 버전입니다.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	실적 통계
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	로터
+0	AUTO	CUST_QUICK_INTERNALS_D3	이 업그레이드를 적용하면 단시간 동안 엔진이 훨씬 더 높은 동력을 견딜 수 있습니다.
+0	AUTO	CUST_QUICK_INTERNALS_G3	이 업그레이드를 적용하면 경주용 차량의 엔진 내부가 강화되어 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	CUST_QUICK_INTERNALS_S3	스피드 3단계 엔진 내부
+0	AUTO	CUST_SLOT_PISTONS	피스톤
+0	AUTO	CUST_CAT_DRIFT_NITROUS	이 업그레이드는 일시적으로 승패에 중대한 영향을 미치는 마력을 상승시키는 효과가 있습니다.
+0	AUTO	FE_STATS_BEST_LAP_TIME	최고 랩타임
+0	AUTO	FE_STATS_SKILLS_STATS	스킬 통계
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	커리어 진행도
+0	AUTO	CUST_DRIFT_TUT_RWD	효과적인 드리프트 차량을 구성하려면 부드러운 출발과 코너링에서 차량의 후미가 미끄러지는 현상을 막는 방안을 강구해야 합니다.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	이 업그레이드를 적용하면 진정한 경주용 차량에 더욱 근접한 동력을 확보할 수 있습니다.
+0	AUTO	CUST_SELL_CAR_DENIED	마지막 남은 차량은 판매할 수 없습니다.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	내구성이 뛰어난 이 서스펜션 부품은 토크의 압박으로 인해 차량이 훼손되는 것을 예방하고 타이어의 정지 마찰력을 극대화하는 효과가 있습니다.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	정오
+0	AUTO	CUST_SLOT_PULLEY_DESC	다른 크기의 드라이브 풀리를 설치하면 수퍼차저의 회전 속도가 빨라져서 부스트와 동력이 증가합니다.
+0	AUTO	CUST_SLOT_IGNITION_DESC	높은 마력을 발휘하려면 강력하고 일관적인 스파크가 필요합니다. 백금이나 이리듐과 같은 전도성이 뛰어난 재질로 만든 점화선 및 스파크 플러그를 사용하면 엔진의 전체적인 성능이 향상됩니다.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	끄기
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	브레이크 라인 키트
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	최고 멀티플라이어
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	니트로 시스템
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	대진표 작성 통계가 존재하지 않습니다.
+0	AUTO	RACE_DAY_TRACK_CONFIG	트랙 구성
+0	AUTO	CS_HEADER_DRAG_EVENT	드래그 이벤트
+0	AUTO	CUST_QUICK_BRAKE_1	이 업그레이드를 적용하면 일반 브레이크보다 차량의 제동 거리가 줄어듭니다.
+0	AUTO	CUST_QUICK_BRAKE_2	2단계 브레이크
+0	AUTO	CUST_REPAIR_TITLE	차량 수리
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	차량에 장착한 엔진의 출력이 증가하면 동력이 효과적으로 활용되고 구동 휠에 제대로 전달되도록 업그레이드를 실시해야 합니다. 클러치, 구동축 및 LSD(차동제한장치)는 저마다의 역할을 합니다.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	청사진 요약
+0	AUTO	CUST_CAT_DRAG_FORCED	여기서의 주안점은 우수한 동력입니다. 이 터보 시스템은 HP 및 WOT 주행 능력을 극대화하도록 설계되어 있습니다. 이 부품들은 트랩 속도에 중요한 영향을 미칩니다.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	지금 이 레이스 데이틀 플레이하시겠습니까?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	정말 이 사진을 저장하시겠습니까?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	이 업그레이드를 적용하면 구동축, 차동 장치 및 차축 등 차량의 동력을 바퀴에 전달하는 부품이 강화됩니다.
+0	AUTO	CUST_BP_EXIT_CONFIRM	그러면 이 청사진에 대한 모든 수정이 취소됩니다. 수정을 취소하시겠습니까?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	청사진 이름 변경…
+0	AUTO	CUST_FILTER_MIRRORS	미러
+0	AUTO	ENTER_PRESELL_CODE	보너스 코드를 입력하십시오.
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	다운로드 실패
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	섀도우 승리 횟수
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	이 업그레이드를 적용하면 성능을 극대화하도록 엔진 컴퓨터가 새로 프로그래밍됩니다.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	최고 반응 시간
+0	AUTO	CAR_SELECT_MK5GTI	기존 해치백 차량의 최신 버전으로서 2.0FSi 터보 모터가 200Hp 이상을 발휘하며 그 이상의 마력을 발휘하도록 손쉽게 튜닝할 수 있습니다.
+0	AUTO	CAR_SELECT_MK5R32	해치백과 협각 v6, 전륜 구동 시스템을 추가하면 가장 완벽한 차량이 될 것입니다.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	출발하는 동안 하중을 적절하게 전달하는 데 적합한 서스펜션 부품을 설치하면 보다 우수한 속도 및 정지 마찰력을 갖춘 차량이 완성됩니다.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	제어 암
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	엄청난 동력이 관건인 상황에서는 차량이 드래그 스트라이프를 지속적으로 고속 질주하는 데 적합한 정밀 서스펜션이 필요합니다.
+0	AUTO	CUST_SLOT_BODY	바디 키트
+0	AUTO	CUST_SLOT_HOOD	후드
+0	AUTO	CUST_SLOT_PADS	패드
+0	AUTO	FE_STATS_DRIFT_WINS	드리프트 레이스 승리 횟수
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	이 업그레이드를 적용하면 엔진 컴퓨터가 새로 프로그래밍됩니다. 따라서 많은 연료와 공기를 연소시킴으로써 차량이 보다 신속하게 출발하는 데 필요한 동력을 확보할 수 있습니다.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	사용자 정의하기
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	커리어 총계
+0	AUTO	RD_CREATE_RD	레이스 데이를 제작하시겠습니까?
+0	AUTO	FE_STATS_DRAG_RACES	드래그 레이스 횟수
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	접속 종료율
+0	AUTO	CUST_REGION_FRONT_WHEEL	전방 휠
+0	AUTO	CAR_SELECT_ECLIPSE	2G Eclipse Crankwalk
+0	AUTO	CAR_LOT_TITLE	차량 구입
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	사용 중인 레이스 데이 슬롯을 선택하면 해당 레이스 데이에 대한 정보가 나타납니다. 또한 해당 레이스 데이를 삭제할 수도 있습니다.
+0	AUTO	CAREER_MAP_TITLE	커리어 지도
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	추적자로서의 최고 드리프트 점수
+0	AUTO	CUST_SLOT_CRANKSHAFT	크랭크 축
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	차량 보상
+0	AUTO	CAR_SELECT_R34GTR	여타 자동차 제조업체에 튜너 자동차의 표준을 제시한 차량입니다.
+0	AUTO	CS_HEADER_DRIFT_EVENT	드리프트 이벤트
+0	AUTO	RACE_DAY_MULTIPLAYER	멀티 플레이
+0	AUTO	CUST_SLOT_CRANK_DESC	기본 크랭크 축은 높은 마력의 부담을 견디지 못합니다. 500 마력을 초과하는 차량에는 단조 크랭크 축이 필요합니다.
+0	AUTO	CAR_SELECT_COBALTSS	슈퍼차저 방식의 2.0l 모터가 탑재된 Cobalt는 Cavalier의 후속 주자로서 Honda Civic과 같은 자동차와의 경쟁을 목표로 탄생했습니다.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} FT
+0	AUTO	CAR_SELECT_350Z	후륜 구동, 2+2 스포츠 쿠페를 특징으로 하는 5세대 Z 계열 자동차입니다.
+0	AUTO	CAR_SELECT_997T	3.6l 터보 모터, 1초 만에 40-60 mph의 속도에 도달합니다.
+0	AUTO	CAR_SELECT_AE86	86, 소형 후륜 구동 자동차의 결정판입니다.
+0	AUTO	CAR_SELECT_CTSV	Cadillac의 V 시리즈 브랜드로 최초 출시된 자동차로서 유럽 스포츠 세단과의 경쟁을 목표로 개발됐습니다.
+0	AUTO	CAR_SELECT_EVO9	2.0 16v 터보 전륜 구동 방식의 해치백 차량으로서 탄생 이후 튜너 산업에서 성능과 핸들링의 새로운 표준을 제시한 바 있습니다.
+0	AUTO	CAR_SELECT_EVOX	STIG보다 더욱 빠른 속도를 자랑합니다.
+0	AUTO	CAR_SELECT_GTON	Corvette이 제작한 Holden V의 북미 버전입니다.
+0	AUTO	CAR_SELECT_GTOO	일각에서는 이 차량은 최초의 머슬카로 인정하고 있습니다.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Ford의 SVT(차량 특별 개발팀)과 전설적인 Carroll Shelby가 프로젝트에 공동 참여함으로써 개발 과정부터 성공이 확실히 보장된 자동차입니다. 이 제휴 소식이 전해지자 450마력, 450 lb-ft의 토크, Brembo 캘리퍼스 19인치 합금 휠, 이전의 Mustang Cobra 모델과 비슷한 수준의 가격 등 Mustang 및 파워 애호가들의 얼굴에는 화색이 만면했습니다.  프로젝트 설계자에 따르면 2006 Ford Mustang Shelby Cobra GT500은 'Mustang 사상 가장 강력한 자동차'가 될 것이라고 합니다.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	이 쇼다운 잠금 해제 방법
+0	AUTO	CUST_REPAIR_USE_CASH	현금 사용
+0	AUTO	FE_STATS_FILTER_SKILLS	스킬 통계
+0	AUTO	FE_STATS_SPEED_RACES	스피드 레이스 횟수
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	이벤트 지정
+0	AUTO	RD_DELETE_SHARED_RD	공유 레이스 데이를 삭제하시겠습니까?
+0	AUTO	CAREER_OVERVIEW_HEADER	커리어 진행도
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	배기 파이프
+0	AUTO	CUST_TUNE_GRIP_BRAKES	빈번하게 제동을 걸면 브레이크 시스템에 과도한 열이 누적되어 시간이 지날수록 제동 거리가 길어질 우려가 있습니다.  대형 브레이크 시스템을 사용하면 온도를 낮추고 일관적인 제동 성능을 유지하는 데 도움이 됩니다.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	이 업그레이드를 적용하면 기존 엔진 내부가 보다 강력하고 내구성이 우수한 부품으로 교체되므로 더욱 높은 동력과 rpm을 견딜 수 있습니다.
+0	AUTO	CL_DRIVETRAIN_ALL	모든 유형
+0	AUTO	CL_DRIVETRAIN_AWD	4륜 구동
+0	AUTO	CL_DRIVETRAIN_FWD	전륜 구동
+0	AUTO	CL_DRIVETRAIN_RWD	후륜 구동
+0	AUTO	FE_COMMON_MODE	모드
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	흡기 다기관
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	이벤트 기록
+0	AUTO	CODE_ENTRY	코드 입력
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	장바구니에 있는 마커를 모두 구입하시겠습니까?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	배기
+0	AUTO	RACE_DAY_SPLIT_SCREEN	분할 화면
+0	AUTO	CUST_SLOT_INTERCOOLER	인터쿨러
+0	AUTO	CUST_TUNE_GRIP_ENGINE	모든 코너에서 속도를 제어하면서 코너를 벗어난 직후에 적절하게 가속을 하는 것이 관건입니다. 엔진의 동력이 우수할수록 코너에서 가속해서 최고 속도에 도달하기가 용이합니다.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	클럽 회원 수
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	엔진 내부
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	이 업그레이드를 적용하면 구동축, 차동 장치 및 차축 등 차량의 파워를 바퀴에 전달하는 부품이 강화됩니다.
+0	AUTO	CUST_WIND_TUNNEL_OFF	풍동 끄기
+0	AUTO	FE_COMMON_CONFIGURATION	구성
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} HP
+0	AUTO	CS_HEADER_GRIP_EVENT	그립 이벤트
+0	AUTO	CAR_SELECT_CIVIC	6세대 Civic 자동차는 거리, 트랙, 드래그 레이싱 등을 가지지 않고 튜너 사회에서 가장 인기 있는 자동차로 손꼽힙니다.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	레이스 데이 삭제 완료
+0	AUTO	CAR_SELECT_E46M3	M3 3번째 버전인 E 46은 출시 당시에 BMW 자동차 중 리터당 최대 마력을 자랑한 바 있습니다.
+0	AUTO	CAR_SELECT_E92M3	출시 예정인 e92 m3은 탄소 섬유 재질의 루프로 멋을 더하고 v8(기존의 m3s는 실린더 직렬식 6s)로 배기량도 커졌습니다.
+0	AUTO	CAR_SELECT_ELISE	2 시리즈, 즉 2세대 Elise입니다. Elise는 경험 많은 운전자를 염두에 두고 불필요한 기능을 없앤 반제품 차량입니다.
+0	AUTO	CAR_SELECT_FDRX7	드리프트나 그립에서 당대 최고의 튜너 자동차 중 하나로 손꼽히는 진정한 전설입니다.
+0	AUTO	CAR_SELECT_IS350	2세대 IS로서 후륜 구동 방식의 고급 쿠페형인 이 차량은 쿠페처럼 매끄러운 외양에 차체 뒷부분이 유선형으로 된 구조를 특징으로 합니다.
+0	AUTO	CAR_SELECT_LP640	640hp를 발휘하는 6.5l가 장착된 슈퍼카 성능의 결정판입니다.
+0	AUTO	CUST_SLOT_VALVE_DESC	이 장치는 유압 유동체를 브레이크 시스템 전체에 재분배함으로써 전방 또는 후방 브레이크의 제동력을 향상시킵니다.
+0	AUTO	CAR_SELECT_SUPRA	4세대 Supra로서 이전 세대보다 가볍고 민첩하게 설계됐으며 선회력에서 0.98g를 기록한 바 있습니다. 북미를 대상으로 1999년까지 판매됐으며 일본에는 2002년까지 판매됐습니다.
+0	AUTO	CUST_FILTER_ALL_PARTS	모든 부품
+0	AUTO	CUST_QUICK_SUSPENSION_D3	이 업그레이드의 용도는 주행 바퀴의 중량감을 극대화하고 앞바퀴의 들림 현상을 최소화하는 것입니다.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	이 업그레이드를 적용하면 도로와의 압착력을 원래대로 유지하면서 차량의 코너링 속도와 안정감이 강화됩니다.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	이 업그레이드를 적용하면 도로 압착력을 원래대로 유지하면서 최고 속도에서 차량의 코너링 속도와 안정감이 강화됩니다.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	대진표 작성 검색에 실패했습니다.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	레이스 이벤트 지정
+0	AUTO	FE_STATS_CLUB_LEADER	클럽 리더
+0	AUTO	RACE_DAY_LOCATION_1_DESC	독일의 아우토반링은 아우토반 구간은 물론 경사진 커브와 터널이 포함된 고속도로 연결망입니다.
+0	AUTO	FE_MATCHMAKING_CANCELLING	게임 검색 취소 중…
+0	AUTO	CUST_SLOT_DIFF_DESC	마침내, 여기에서 엔진의 동력이 좌우의 동력으로 전환되어 휠에 전달됩니다.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	정말로 이 레이스 데이를 덮어쓰시겠습니까?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	리더보다 앞서 완주한 최다 횟수
+0	AUTO	CAR_SELECT_ZONDAF	다수의 자동차 전문 기자들이 Zonda F를 세계 최고의 수퍼카로 손꼽고 있습니다.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	타이어가 도로면에 밀착한 상태를 지속적으로 유지하기 위해 전면 및 후면 흔들림 방지 막대를 강화하고 투관을 우레탄 재질로 교체하며 쇼크업소버를 레이싱용 댐프너로 교체합니다.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	내 레이스 데이^자신만의 레이스 데이를 제작하고 설계하십시오. 솔로 레이스 데이나 멀티플레이어 레이스 데이를 제작해서 다른 플레이어와 온라인에서 경쟁을 벌일 수 있습니다. 분할 화면 레이스 데이를 생성한 후 친구에게 도전하십시오.^^온라인에서 솔로 또는 멀티 플레이어 레이스 데이를 다른 플레이어와 공유하고 플레이어들을 초대해서 당신이 직접 제작한 레이스 데이를 무대로 경쟁을 벌이십시오.^^.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	오토폴리스는 일본 외곽의 산 정상에 위치해 있습니다.  이 경주로에는 우울한 배경을 가지고 있지만 고속 주 행로에 걸맞게 새롭고 깨끗합니다.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	고성능 스프링이 제공하는 낮은 무게중심과 더욱 견고한 쇼크업소버가 결합하면 차량의 코너링 능력이 크게 향상됩니다.
+0	AUTO	CUST_CAT_DRAG_NITROUS	이 업그레이드는 일시적으로 마력을 상승시키는 효과가 있습니다. 니트로는 드래그 레이서의 필수품입니다.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	윈지 시티 레이서들은 버려진 공항을 장악하여 자신들만의 세계를 창조했습니다. 시카고 공항에는 드넓은 주행으로, 다양한 그립 경로, 드리프트 경로 및 드래그 스타라이프가 있습니다.
+0	AUTO	FE_STATS_TOP_SPEED	최고 속도
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	압력 조절 키트
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	스테이지에서 최대 그립 도달 횟수
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	최고 60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	부스트 컨트롤러
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	일본은 산기슭을 깎아서 드리프트 애호가들의 정신적인 고향이랄 수 있는 네비스를 건설했습니다. 후쿠야마 챌린지는 지방의 간선도로를 출발하여 고속도로로 이어집니다.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	캠축을 구동하는 기어나 스프로켓의 무게를 경감하면 캠 회전에 필요한 에너지가 줄어들어서 더욱 많은 동력을 확보할 수 있습니다.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X ${1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	데미지 없이 승리한 레이스 횟수
+0	AUTO	CUST_QUICK_HANDLING_1	이 업그레이드를 적용하면 차량의 코너링이 더욱 부드러워지고 고속 주행 상태에서도 안정성이 강화됩니다.
+0	AUTO	CUST_QUICK_HANDLING_2	2단계 핸들링
+0	AUTO	CUST_SLOT_PRESSURE_DESC	질소가 일시적인 동력 증가에 대단히 효과적이지만 너무 많은 질소가 주입되면 폭발점을 초과할 정도로 엔진이 과열될 수 있습니다. 압력 조절 키트를 사용하면 엔진이 감당할 수 있는 만큼의 압력만을 공급하게 됩니다.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	정말로 위치를 변경하시겠습니까? 그렇게 하면 기존의 이벤트 선택이 모두 삭제됩니다.
+0	AUTO	CUST_VINYL_LAYER_TITLE	레이어 메뉴
+0	AUTO	CUST_CAT_DRAG_INTERNALS	이 업그레이드를 적용하면 기존 엔진 내부가 단조 부품으로 교체되므로 격렬한 단거리 주행에 필요한 힘과 내구성이 유지됩니다.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	노스캐롤라이나의 인피니온 레이스웨이는 경사 변화가 심하고 굴곡진 커브가 복잡하게 잇따라 이어져 있습니다. 단 한번의 그릇된 판단으로 차량의 속도가 저하되고 장애물에 부딪힐 수 있습니다.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	스피드 챌린지
+0	AUTO	FE_STATS_CLUB_POINTS	클럽 포인트
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	이 업그레이드를 적용하면 엔진 컴퓨터가 새로 프로그래밍됩니다. 따라서 많은 연료와 공기를 연소시킴으로써 코너에서 상대 차량을 따돌리는 데 필요한 추가 동력을 확보할 수 있습니다.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	정말 %s 이벤트를 제거하시겠습니까?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	레이스 데이 저장 완료
+0	AUTO	CUST_QUICK_NITROUS_DI3	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 50 - 250 마력이 일시적으로 강화됩니다. 따라서 우승과 2위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	CUST_QUICK_POWER_1	이 기본 업그레이드 패키지를 적용하면 전체 rpm 범위에서 동력이 강화될 뿐 아니라 차량의 음향 효과를 보다 공격적으로 튜닝할 수 있습니다.
+0	AUTO	CUST_QUICK_POWER_2	이 패키지를 이용하면 1단계에서 보다 부드러운 업그레이드 환경을 구축하여 전체 rpm 범위에서 동력을 강화할 수 있을 뿐 아니라 보다 공격적인 음향 효과를 구현할 수 있습니다
+0	AUTO	RACE_DAY_LOCATION_6_DESC	몬델로 파크는엄청나게 구불구불하고 좁은 도로로 구성되어 있으며 아일랜드의 한 지방을 관통합니다.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	예비 차량
+0	AUTO	FE_STATS_GRIP_RACES	그립 레이스 횟수
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	차고
+0	AUTO	CUST_PACKAGE_POWER	파워 패키지
+0	AUTO	CUST_OWNED	소유
+0	AUTO	CUST_PAINT	페인트
+0	AUTO	CUST_PARTS	차체 부품
+0	AUTO	CUST_PACKAGE_TITLE	패키지
+0	AUTO	CS_OPTION_CAR_SELECT	차량 선택
+0	AUTO	RACE_DAY_SLOT_EMPTY	이용 가능
+0	AUTO	FE_STATS_ACHIEVEMENTS	성과
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	맞춤형 챌린지 레이스 데이를 생성하려면 선택하십시오. 챌린지 레이스 데이를 생성하면 해당 레이스 데이를 플레이 전용 차량을 선택할 수 있습니다.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	록포드 파일(Rockford File) 시리즈를 재현할 수 있는 핸드브레이크
+0	AUTO	RACE_DAY_LOCATION_7_DESC	하이웨이 루트 318은 네바다 사막 깊숙한 곳에 자리하고 있으며 복사열이 그대로 발산되는 타르머캐덤 포장 도로입니다. 200mph 이상의 속도도 가능하지만 단순한 커브라고 절대 방심하지 마십시오.
+0	AUTO	CUST_SLOT_ROTORS_DESC	고성능 브레이크 로터는 기본 부품보다 열 발산 능력이 뛰어납니다. 기본 로터보다 직경이 큰 로터를 사용하면 패드가 접촉하는 표면이 증가하므로 제동력이 향상됩니다.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	리더로서의 최고 드리프트 점수
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	이 업그레이드를 적용하면 서스펜션 부품들이 독특한 방식으로 조율되어 코너링이 훨씬 부드러워집니다.
+0	AUTO	CUST_REGION_FRONT_BUMPER	전방 범퍼
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	예상 순자산
+0	AUTO	CUST_SLOT_TRANSMISSION	트랜스미션
+0	AUTO	RACE_DAY_LOCATION_8_DESC	태평양 북서쪽 녹색 지역의 레이니어 산 근처에 위치한 포틀랜드 인터내셔널 레이스웨이(RIR)는 최고 수준의 드래그 스타라이프가 갖춰진 까다로운 주해로입니다.
+0	AUTO	CUST_BLUEPRINT_SAVE	청사진 저장
+0	AUTO	CUST_QUICK_NITROUS_1	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 마력이 일시적으로 강화됩니다. 따라서 우승과 2위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	CUST_QUICK_NITROUS_2	이 업그레이드를 적용하면 기체 질소 주입을 통해 엔진 출력에 마력이 일시적으로 대폭 강화됩니다. 따라서 우승과 2위의 향방이 뒤바뀔 수 있습니다.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	텍사스는 뭐든지 규모가 큽니다. 꾸불꾸불한 주행로가 경사진 타원형 경주로 안팎에 뱀처럼 이어진 텍사스 월드 스피드웨이도 예외는 아닙니다.
+0	AUTO	CAR_SELECT_CORVETTE	Sting Ray 계열의 결정판인 2세데 Corvette는 역대 최고의 5대 스포츠카로 손꼽힌 바 있습니다.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	구간 최다 점유
+0	AUTO	CL_DRIVETRAIN_HEADER	차축
+0	AUTO	CUST_PACKAGE_HANDLING	핸들링 패키지
+0	AUTO	FE_STATS_SPEED_WINS	스피드 레이스 승리 횟수
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	체크포인트 최다 확보
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	상위 튜너 점수 게시판에는 상위 청사진 튜너가 게시됩니다. 모든 공유 청사진의 승률을 토대로 점수 게시판 순위가 결정됩니다.  점수 게시판 순위에 오르려면 최소 20회의 레이스에 당신의 공유 청사진이 사용되어야 합니다.

@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Spanish_Frontend.bin
+#	File created on: 2025-05-24 11:18:20
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	COSTE DE REPARACIÓN TOTAL
+0	AUTO	MODE_ALL	Todos los coches
+0	AUTO	CUST_VINYL_MOVE_LAYER	Mover capa arriba/abajo
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	BLOQUE DE MOTOR
+0	AUTO	CAR_SELECT_MUSTANGGT	El Mustang de 4ª generación, con un V8 de 4.6l, es el primer coche que viene a la mente cuando uno piensa en un muscle car.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Esta mejora sustituye las piezas internas de motor existentes por otras más robustas y resistentes, lo que permite que el motor produzca más potencia y resista revoluciones más altas.  ^
+0	AUTO	CUST_VISUAL_DECALS	PEGATINAS
+0	AUTO	CUST_CUSTOMIZE	Personalizar proyecto
+0	AUTO	CODE_ENTRY_VALID	¡Enhorabuena! El código ha sido aceptado y tu recompensa se ha desbloqueado.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	PINZAS
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Hay tarjetas en el carrito de la compra que no has comprado. ¿Quieres salir de todos modos?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	BARRAS ANTIVUELCO
+0	AUTO	CUST_QUICK_HANDLING_D3	Esta mejora combina piezas de suspensión más duras para mantener el coche bien colocado en recta. ^
+0	AUTO	CUST_QUICK_HANDLING_G3	Esta mejora combina piezas de suspensión más duras para mantener el coche bien colocado en curvas y en rectas. ^
+0	AUTO	CUST_QUICK_HANDLING_S3	Esta mejora combina piezas de suspensión más duras para mantener el coche bien colocado a grandes velocidades en curvas y en rectas.^
+0	AUTO	CUST_REGION_REAR_TIRE	NEUMÁTICO TRASERO
+0	AUTO	FE_STATS_BEST_SECTOR	MEJOR SECTOR
+0	AUTO	CL_FREE_CAR_MARKER	TARJETA DE CONCESIONARIO
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	DEFINIR PRUEBAS DE CARRERA
+0	AUTO	CUST_QUICK_BRAKE_DI3	Esta mejora garantiza que se consigue el tiempo de frenada máximo pero permite, e incluso favorece, que los neumáticos reduzcan la tracción en la deceleración.^
+0	AUTO	CUST_BP_APPLY_CONFIRM	Cuesta {0:d} adquirir todas las piezas necesarias para aplicar este Proyecto a tu coche. ¿Quieres continuar?
+0	AUTO	CUST_SLOT_BUSHING_KIT	KIT DE COJINETES
+0	AUTO	FE_STATS_GAMES_PLAYED	PARTIDAS JUGADOS
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	COCHES DE BONIFICACIÓN
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	CAPA {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	INFORMACIÓN DEL KIT
+0	AUTO	CUST_SLOT_NITROUS_DESC	El nitroso es un gas muy inflamable que se puede inyectar en el cilindro durante la combustión para aumentar la producción de potencia temporalmente.^
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Esta mejora reprograma el ordenador del motor para maximizar las prestaciones.^
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Esta mejora reprograma el ordenador del motor para maximizar las prestaciones.^
+0	AUTO	CS_HEADER_SPEED_EVENT	PRUEBAS DE DESAFÍO DE SPEED
+0	AUTO	CUST_SLOT_HEADS_DESC	Al colocar las válvulas sobre la cabeza del cilindro, puedes aumentar el flujo de aire al motor y eliminar los gases de escape el motor. De ese modo, aumentarás la potencia.^
+0	AUTO	CUST_VINYL_ADDLAYER	AÑADIR NUEVA CAPA
+0	AUTO	CUST_CAT_SPEED_FORCED	Un turbo con poco retarlo y de rápido desarrollo te dará una curva de potencia eficaz y una gran ventaja sobre la pista o en la calle.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	MULTIPLICADOR MÁS ALTO
+0	AUTO	RACE_MODE_GRIP_MODE	MODO^GRIP
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	El siguiente paso es definir las pruebas de carrera de tu Día de carrera.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	NÚMERO DE CARRERAS
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Esta mejora fortalece los componentes que transfieren la potencia del coche a las ruedas, incluyendo el palier, el diferencial y los ejes.^
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	NÚMERO DE PARTIDAS DE CARRERA
+0	AUTO	RACE_DAY_ADD_EVENT	AÑADIR PRUEBA
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Este Proyecto es incompatible con tu versión de Need for Speed™ ProStreet y no puede aplicarse. Visita NeedforSpeed.com para más información sobre las actualizaciones y nuevos contenidos del juego.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	PINTURA DE RUEDAS
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Activar Proyecto
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	GESTIÓN DE MOTOR
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	GANAR RECOMPENSA
+0	AUTO	CUST_PAINT_BODY	PINTURA
+0	AUTO	CUST_PAINT_RIMS	RUEDAS
+0	AUTO	CUST_PAINT_TINT	LUNAS TINTADAS
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	No se ha producido ningún error.
+0	AUTO	RACEDAY_CONFIRM_DELETE	¿Seguro que quieres borrar este Día de carrera? Se perderán los ajustes personalizados y los récords para este Día de carrera.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	SELECCIÓN DE IDIOMA
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Los cojinetes fabricados con materiales más resistentes, como uretano o aluminio, permiten que el coche gire con más agarre y con menos movimiento de carrocería.^
+0	AUTO	HUB_DIFFICULTY_2	MEDIO
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Si detienes el coche con frecuencia, el calor del sistema de frenos aumenta y puede provocar que la distancia de frenado aumente con el tiempo. Un sistema de frenos de más tamaño favorece que la temperatura no aumente tanto y el frenado sea más estable.^
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	VELOCIDAD PUNTA MÁS ALTA
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Selecciona método de compra
+0	AUTO	CUST_SLOT_INTAKE_DESC	Cuanto más aire refrigerado reciba un motor, mejor rendirá. Además, cuanto más refrigerado esté el aire, más potencia desarrollará el motor. ^
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Al poner énfasis en el sobreviraje, las grandes barras estabilizadoras traseras, los cojinetes de aluminio y la eliminación de las barras estabilizadoras delanteras, será mucho más fácil cruzar el coche.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	¿Quieres salir de la pantalla de selección de coche y volver al mapa de carrera?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Guardando Día de carrera...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	COCHE TUNER MEJOR CLASIFICADO
+0	AUTO	RACE_MODE_DESCRIPTION	Al elegir el modo de carrera establecerás las pruebas en las que puedes competir con este coche.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	¡Tienes que instalar piezas AutoSculpt para acceder al túnel de viento!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Cuanta más capacidad tenga el colector de aire, más aire podrá recibir el motor. Con un colector de gran flujo y suave, el motor podrá exprimir al máximo su potencial a grandes revoluciones.^
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	VELOCIDAD DE CONTROL MÁXIMA
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	SISTEMA DE COMBUSTIBLE
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Con un motor de 2.3l que genera 260 cv, un LSD y una transmisión de 6 velocidades, el Speed 3 es un compacto moderno.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Esta mejora permite un cambio de marchas aún más rápido y preciso y aligera los componentes que transfieren la potencia a las ruedas en un coche de carreras estándar.^
+0	AUTO	CAR_SELECT_INTEGRA	El Kouki, con su motor de serie B de altas revoluciones, es un coche increíblemente popular entre los entusiastas de las carreras, debido a sus múltiples opciones de motor y gran plataforma de manejo.
+0	AUTO	FE_HUBMAP_ETREE_CARS	COCHES
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Esta mejora aumenta la potencia global que genera el motor. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Esta mejora da un paso más y aumenta la potencia como si fuera un auténtico coche de carreras.^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Es vital que controles la velocidad en las curvas y que prestes atención a la aceleración en las salidas de las curvas. Cuanta más potencia, más facilidad para salir propulsado de los giros y alcanzar mayor velocidad.^
+0	AUTO	GARAGE_REPAIR_CONFIRM	¿Seguro que quieres reparar este coche?
+0	AUTO	CAR_SELECT_S3	El S3 de segunda generación no se vende en Norteamérica.
+0	AUTO	CAR_SELECT_S4	El S4 es más dócil que el RS4 y también tiene un motor V8 de 4.2l.
+0	AUTO	CAR_SELECT_TT	La versión de marca 2 del TT ha recibido múltiples premios de coche del año.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	ÓXIDO NITROSO
+0	AUTO	FE_STATS_DOWNLOADING_STATS	ESTADÍSTICAS DE DESCARGA
+0	AUTO	CUST_QUICK_FORCED_D3	Inducción forzada de drag de fase 3
+0	AUTO	CUST_QUICK_FORCED_G3	Esta mejora aumenta la cantidad de aire introducido en el motor, lo que aumenta más la potencia y se aproxima más a un coche de carreras.^
+0	AUTO	CUST_QUICK_FORCED_S3	Esta mejora aumenta la cantidad de aire introducido en el motor, lo que aumenta más la potencia y se aproxima más a un coche de carreras.^
+0	AUTO	CUST_PAINT_GROUP_CANDY	BRILLANTE
+0	AUTO	CUST_PAINT_GROUP_GLOSS	SATINADA
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATE
+0	AUTO	CUST_DRIVETRAIN_GROUP	UNIDAD MOTRIZ
+0	AUTO	CUST_PAINT_GROUP_PEARL	DESTELLEANTE
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Esta mejora reprograma el ordenador del motor para maximizar las prestaciones y permitir una mayor aceleración.^
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Esta mejora reprograma aún más el ordenador del motor para maximizar las prestaciones.^
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Esta mejora reprograma aún más el ordenador del motor para maximizar las prestaciones.^
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Las pinzas con pistones más grandes, o en mayor número, distribuyen más equilibradamente la superficie de las zapatas al rotor, lo que implica un mejor frenado.^
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Presiona START para comenzar
+0	AUTO	RACE_DAY_SLOT_ID	RANURA {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	SILENCIADORES
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Se ha producido un error al intentar unirte a la carrera. Inténtalo de nuevo.
+0	AUTO	COMMON_START	Comenzar
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	REFRIGERACIÓN DE TRANSMISIÓN
+0	AUTO	RACE_MODE_DRIFT_MODE	MODO^DRIFT
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	¿Qué ruedas quieres personalizar?
+0	AUTO	CUST_SLOT_FLYWHEEL	VOLANTE DEL EMBRAGUE
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Los asientos de competición se mantienen en tu sitio.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Si cambias de modo se borrarán todos los Proyectos de este coche, incluyendo las personalizaciones visuales y vinilos. ¿Seguro que quieres continuar?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	TIEMPO EN CARRERAS DEL MODO CARRERA
+0	AUTO	CUST_DRAG_TUT_AWD	La tracción total tiene grandes ventajas en pista, ya que permite que todos los caballos hagan fuerza en la salida.^
+0	AUTO	CUST_DRAG_TUT_FWD	La tracción delantera es más difícil de controlar en las carreras de drag, donde hay que mantener la tracción. Cuanta más potencia, mayor es la necesidad de evitar que los neúmaticos derrapen. Para crear un coche de drag rápido, hay que centrarse en la potencia y en clavarse a la carretera. Cuando hayas superado las mejoras de potencia básicas, deberás concentrarte en controlar esa potencia y esa tracción.
+0	AUTO	CUST_DRAG_TUT_RWD	La clave de la configuración de drag es la tracción. Elimina los saltos de las ruedas, y las pérdidas de agarre de las ruedas para lograr mejores tiempos. Este principio se cumple aún más en coches de gran potencia.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	El servidor de Need for Speed™ ha cancelado la consulta.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Los neumáticos te adhieren al suelo.
+0	AUTO	CAR_SELECT_GTRPROTO	El GTR Proto es la versión de preproducción del R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	COCHES EXCEPCIONALES
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	RECOMPENSA POR DOMINAR
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} TARJETAS DE MECÁNICO
+0	AUTO	CAR_SELECT_VIPERCOUPE	La 3ª versión del Viper. El motor V10 en los deportivos coupé de Dodge y sus 500 cv producen un sonido característico.
+0	AUTO	MAIN_MENU_TITLE	MENÚ PRINCIPAL
+0	AUTO	CUST_TINT_DARK	OSCURO
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Si tienes una configuración de suspensión adecuada, una que permita una buena transferencia de peso al arrancar, obtendrás un coche más rápido y con más tracción.^
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	No puedes destrozar coches
+0	AUTO	CUST_APPLYING_BLUEPRINT	APLICANDO PROYECTO
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	ELIGE UNA RANURA DE DÍA DE CARRERA
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Un coche de motor medio, con un rendimiento cercano al del 911.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	PORCENTAJE DE CARRERA COMPLETADO
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFERENCIAL
+0	AUTO	CUST_WIND_TUNNEL_ON	Con túnel de viento
+0	AUTO	RACE_DAY_LOCATION_10_MC	Astilleros de Tokio
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokio Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	No hay tarjetas de mecánico disponibles en los Días de carrera multijugador. Puedes causar daños al coche, pero se eliminan al final. También puedes destrozar el coche.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	El Proyecto no se corresponde con el modo del coche que al que lo estás aplicando. Se eliminarán los Proyectos anteriores. ¿Seguro que quieres hacerlo?
+0	AUTO	CUST_QUICK_POWER_DI3	Este kit se centra en lograr más potencia para romper la tracción en las ruedas motrices. ^
+0	AUTO	RACE_MODE_DRAG_MODE	MODO^DRAG
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Esta mejora básica mejora el aspecto global del coche. ^
+0	AUTO	CUST_QUICK_VISUAL_2	Con la incorporación del alerón y los divisores frontales, el coche experimentará una considerable reducción de la elevación a gran velocidad. Como resultado, tendrá más estabilidad en velocidades elevadas y más tracción en las curvas.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Seleccionar modo de juego.
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Ya hay un Proyecto en la ranura que has seleccionado. ¿Quieres sobrescribirlo?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	GESTIÓN DE TARJETAS
+0	AUTO	CAR_SELECT_FOCUSST	El Focus MK2 no se vende en Norteamérica y tiene un motor turbo de 2.5 l y 225 cv.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Esta mejora fortalece los componentes que transfieren la potencia del coche a las ruedas, incluyendo el palier, el diferencial y los ejes.^
+0	AUTO	FE_MAIN_MENU	Menú principal
+0	AUTO	CUST_REGION_REAR_BUMPER	PARACHOQUES TRASERO
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	POLEAS MOTRICES
+0	AUTO	CAR_SELECT_BARRACUDA	El Hemi Cuda es una leyenda.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	COCHE CON CLASIFICACIÓN MÁS ALTA
+0	AUTO	CUST_APPLY_PAINT_TITLE	APLICAR COLOR
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	COCHES EN EL GARAJE
+0	AUTO	CUST_REGION_ALL_WHEELS	TODAS LAS RUEDAS
+0	AUTO	CUST_QUICK_FORCED_2	Esta mejora aumenta la cantidad de aire introducido en el motor, lo que aumenta la potencia general. ^
+0	AUTO	FE_STATS_FASTEST_LAP	VUELTA RÁPIDA
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Para que los neúmaticos se agarren bien a la pista, se endurecen las barras estabilizadoras delantera y trasera. Los cojinetes se sustituyen por piezas de uretano y los amortiguadores por depresores de competición.
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	PORCENTAJE DE NF
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	El Charger B-body, uno de los coches televisivos más célebres de todos los tiempos.
+0	AUTO	CUST_QUICK_INTERNALS_1	Esta mejora fortalece el motor y permite añadir más mejores posteriormente.^
+0	AUTO	CUST_QUICK_INTERNALS_2	Esta mejora añade piezas internas de motor más robustas para poder aprovechar mejor la potencia y revoluciones más altas.^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	¿Seguro que quieres restablecer este Proyecto a su estado predeterminado?
+0	AUTO	CUST_SLOT_RACING_SEATS	ASIENTOS DE COMPETICIÓN
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZONA 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	MEJOR PUNTUACIÓN DE SECTOR
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	COCHE MÁS VALIOSO
+0	AUTO	CAR_SELECT_CIVICSI	Civic de octava generación.
+0	AUTO	CAR_SELECT_CHEVELLESS	El Chevelle fue el primer muscle car de Chevrolet. Chevy no permitía motores superiores a 400 cc. Eso cambió en 1970, y se presentó el Chevelle 402.
+0	AUTO	CUST_CAT_GRIP_FORCED	Un turbo con poco retarlo y de rápido desarrollo te dará una curva de potencia eficaz y una gran ventaja sobre la pista o en la calle.^
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Bienvenido al mapa de Día de carrera
+0	AUTO	CUST_BLUEPRINT_APPLY	Aplicar Proyecto
+0	AUTO	CUST_SLOT_CAMSHAFTS	ÁRBOLES DE LEVAS
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Mostrar todas las carreras
+0	AUTO	CUST_SLOT_HEADERS	CABEZAS
+0	AUTO	FE_STATS_FASTEST_TIME	MEJOR TIEMPO
+0	AUTO	CUST_SUSPENSION_GROUP	SUSPENSIÓN
+0	AUTO	CUST_BLUEPRINT_RESET	ELIMINAR PROYECTO
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Esta mejora da un paso más y aumenta la potencia como si fuera un auténtico coche preparado para carreras drag.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Esta mejora da un paso más y aumenta la potencia como si fuera un auténtico coche de carreras.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Esta mejora da un paso más y aumenta la potencia como si fuera un auténtico coche de carreras.^
+0	AUTO	CUST_INSTALLED	INSTALADO
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Cargando Día de carrera...
+0	AUTO	CUST_SLOT_CAMS_DESC	Una buena leva es la que dura poco y apenas se eleva. A medida que la duración y la elevación aumentan, el par máximo también aumenta dentro del espectro de revoluciones. Una buena leva es la que consigue más potencia dentro del espectro de revoluciones en el que estás habitualmente.^
+0	AUTO	CUST_QUICK_HANDLING_DI3	Esta mejora ajusta excepcionalmente la suspensión para permitir que tome mejor las curvas.^
+0	AUTO	CUST_QUICK_BRAKE_D3	Esta mejora garantiza que se consigue el tiempo de frenada máximo y que los neumáticos no reducen la tracción en la deceleración.^
+0	AUTO	CUST_QUICK_BRAKE_G3	Kit de frenos de grip de fase 3
+0	AUTO	CUST_QUICK_BRAKE_S3	Esta mejora garantiza que se consigue el tiempo de frenada máximo a velocidad máxima y que los neumáticos no reducen la tracción en la deceleración.^
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Cuando más grande sea la botella de nitroso, más podrá almacenar. Además, puedes llevar varias botellas en un coche. Después de su uso, es necesario rellenar las botellas. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Tarde
+0	AUTO	CUST_TINT_LIGHT	CLARO
+0	AUTO	CUST_REPAIR_DAMAGE	DAÑO
+0	AUTO	CUST_TINT_PEARL	IRIDISCENTE
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	DISTANCIA DE DRIFT MÁS LARGA
+0	AUTO	CUST_SLOT_TIPS_DESC	Con estos consejos, tu coche tendrá un aspecto más imponente.^
+0	AUTO	CUST_SLOT_STEERING_DESC	Un bastidor y piñones de alto rendimiento pueden aumentar el ángulo de dirección, además de reducir la resistencia del volante mucho más que las unidades de serie.   ^
+0	AUTO	CAR_SELECT_CORVETTEZ06	Un auténtico supercoche. Tiene un motor de 7.0l con bielas de titanio y un sistema de aceite de cárter seco.
+0	AUTO	HD_COMPATIBLE	Compatible con alta definición (HD)
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Borrar prueba
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	KINGS DERROTADOS
+0	AUTO	CUST_WIND_TUNNEL	TÚNEL DE VIENTO
+0	AUTO	CUST_STAGE_NUMBER	FASE {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	NÚMERO DE VICTORIAS
+0	AUTO	CUST_FILTER_FRONT_BUMPER	PARACHOQUES DELANTERO
+0	AUTO	MAIN_CAREER	CARRERA
+0	AUTO	CUST_REGION_REAR_WHEEL	RUEDAS TRASERAS
+0	AUTO	CUST_QUICK_VISUAL_D3	Esta mejora utiliza las distintas piezas aerodinámicas para sumar carga aerodinámica a velocidad elevada.^
+0	AUTO	CUST_QUICK_VISUAL_G3	Esta mejora utiliza las distintas piezas aerodinámicas para sumar carga aerodinámica a velocidad elevada.^
+0	AUTO	CUST_QUICK_VISUAL_S3	Esta mejora utiliza las distintas piezas aerodinámicas para sumar carga aerodinámica a velocidad punta.^
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Si detienes el coche con frecuencia, el calor del sistema de frenos aumenta y puede provocar que la distancia de frenado aumente con el tiempo. Un sistema de frenos de más tamaño favorece que la temperatura no aumente tanto y el frenado sea más estable.^
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Esta mejora añade piezas internas de motor de coche de carreras para poder aprovechar mejor la potencia y revoluciones más altas.^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	VICTORIAS EN CLASIFICATORIAS
+0	AUTO	CUST_SLOT_BOV_DESC	Para que el turbo consiga la máxima potencia, una válvula de explosión descarga el exceso de presión sin frenar el motor. ^
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Hay una actualización disponible necesaria para jugar online. Ve a  NeedforSpeed.com y obtén información sobre la actualización.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	MEJOR TIPO DE EVENTO
+0	AUTO	HUB_BREAK_RECORD	BATIR RÉCORD
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Estas barras mantendrán las ruedas delanteras sujetas al suelo, y pueden resistir el par que desarrolle el motor.^
+0	AUTO	RACE_DAY_DIFFICULTY_1	Fácil
+0	AUTO	RACE_DAY_DIFFICULTY_2	Media
+0	AUTO	RACE_DAY_DIFFICULTY_3	Difícil
+0	AUTO	RACE_DAY_DIFFICULTY_4	Élite
+0	AUTO	CUST_SLOT_CLUTCH	EMBRAGUE
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Pulsa el botón 2 para continuar
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	0-60 MPH MÁS RÁPIDO
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	¿Quieres personalizar los neumáticos traseros o delanteros?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	CREAR DÍA DE CARRERA
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	RÉCORDS PERSONALES
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Si aumentas la potencia que desarrolla el motor, debes hacer más mejoras para asegurarte de que esa potencia se distribuye con eficacia y se envía a las ruedas. Para ello, utiliza embragues, ejes de transmisión y diferenciales.^
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	INDIVIDUAL
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Tras el arranque inicial, la clave en las carreras de drag es la potencia. Cuanta más potencia, más velocidad en la pista y más velocidad de radar.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Este Día de carrera es incompatible con tu versión de Need for Speed™ ProStreet y no puede aplicarse. Visita NeedforSpeed.com para más información sobre las actualizaciones y nuevos contenidos del juego.
+0	AUTO	RD_PLAY	JUGAR
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	SISTEMA DE IGNICIÓN
+0	AUTO	FE_STATS_CAREER_WINS	VICTORIAS EN EL MODO CARRERA
+0	AUTO	RACE_DAY_LOCATION	LUGAR
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Esta mejora permite un cambio de marchas más rápido y transferirá la potencia del motor a las ruedas de forma más efectiva.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Esta mejora permite un cambio de marchas más rápido y preciso y aligera los componentes que transfieren la potencia a las ruedas.^
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	¿Seguro que quieres borrar este Proyecto compartido?
+0	AUTO	SHOW_FRIENDS	Mostrar amigos
+0	AUTO	FE_STATS_HUBS_DOMINATED	DÍAS DE CARRERA DOMINADOS
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	TIEMPO DE REACCIÓN MÁS RÁPIDO
+0	AUTO	CODE_ENTRY_INVALID	El código que has introducido no es válido. Asegúrate de que introduces el código correcto e inténtalo de nuevo.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	ELIGE HASTA 8 PRUEBAS
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Reparar coche
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	TARJETA DE MECÁNICO
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	IRIDISCENTE
+0	AUTO	CUST_SLOT_CAM_GEARS	LEVAS
+0	AUTO	CUST_SLOT_ROOF_SCOOP	TOMA DE AIRE
+0	AUTO	CUST_COMPONENTS_TITLE	PERSONALIZAR COMPONENTES
+0	AUTO	CUST_BRAKES_GROUP	FRENOS
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	¿Seguro que quieres salir?
+0	AUTO	CUST_SLOT_TRACTION_BARS	BARRAS DE TRACCIÓN
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Esta mejora aumenta la potencia de frenado del coche mediante la utilización de zapatas y rotores. Los frenos son fundamentales para controlar y modular el derrape.
+0	AUTO	MAIN_RACE_DAY	DÍA DE CARRERA
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	% VICTORIAS EN DESAFÍOS DE SPEED
+0	AUTO	SELL_CAR_CONFIRMATION	El valor de este coche es {0:d}.^Si decides venderlo, perderás todos los Proyectos de este coche. ¿Seguro que lo quieres vender?
+0	AUTO	RD_DELETE_RD	¿Eliminar Día de carrera?
+0	AUTO	CAR_SELECT_G35	El G35 compartió su plataforma con el 350Z.
+0	AUTO	CAR_SELECT_GXP	El GXP tiene un motor 2.0 de 16v que desarrolla 260 cv, un LSD y 18 en stock.
+0	AUTO	CAR_SELECT_NSX	Diseñado para exhibir la tecnología de competición de Honda, este coche de motor medio se adelantó enormemente a su tiempo.
+0	AUTO	CAR_SELECT_R35	Es la versión de producción del R35 GTR.
+0	AUTO	CAR_SELECT_S13	El S13 es uno de los coches de drift más emblemáticos.
+0	AUTO	CAR_SELECT_S15	El S15 es un coche que en principio nunca llegó a Norteamérica. Sin embargo, se ha convertido en un icono en la cultura del tuning.
+0	AUTO	CAR_SELECT_RS4	El B7 RS4, con un motor V8 de 400 cv, está disponible en sedán, familiar y convertible.
+0	AUTO	CAR_SELECT_RSX	El sustituto del legendario Integra, utiliza la nueva serie de motores Honda K.
+0	AUTO	CAR_SELECT_RX8	Un coche con motor frontal y tracción trasera rotatoria 2+2. El RX8 tiene una distribución de peso 50/50 casi perfecta que permite un manejo tremendamente equilibrado.
+0	AUTO	CAR_SELECT_STI	Cuatro cilindros en línea, turbo y tracción a las cuatro ruedas. El STi es uno de los coches referencia del tuning. Un coche que hace de todo, y lo hace bien.
+0	AUTO	CAR_SELECT_Z4M	El E46 M3 lleva el mismo motor de 6 cilindros en línea. Pasa de 0 a 90 en 4,9 segundos y su velocidad máxima es de 250 km/h.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Piezas visuales de drift de fase 3
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZONA 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZONA 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZONA 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZONA 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZONA 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZONA 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZONA 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZONA 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZONA 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	PUNTUACIÓN DE CARRERA MÁS ALTA
+0	AUTO	FE_STATS_AVERAGE_SPEED	VELOCIDAD MEDIA
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALIZADA
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Pulsa el botón START
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	PORCENTAJE DE VICTORIAS EN DRIFT
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	No hay coches de apoyo disponibles
+0	AUTO	CUST_FILTER_FRONT	RUEDAS DELANTERAS
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	CONCESIONARIO
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Es la versión en preproducción de la 5ª generación de Camaro presentada en 2006.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Mejorando la suspensión, tu coche tomará las curvas más rápido y más equilibrado.
+0	AUTO	CUST_QUICK_SUSPENSION_2	Esta mejora permite que el coche tome las curvas aún más rápido y más nivelado, con mucho más control.^
+0	AUTO	CUST_QUICK_NITROUS_D3	Esta mejora añade entre 50 y 250 caballos de potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el último puesto.  ^
+0	AUTO	CUST_QUICK_NITROUS_G3	Esta mejora añade entre 50 y 250 caballos de potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el 2º puesto.  ^
+0	AUTO	CUST_QUICK_NITROUS_S3	Esta mejora añade entre 50 y 250 caballos de potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el 2º puesto.  ^
+0	AUTO	CUST_PERFORMANCE	PRESTACIONES
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Si tensas más las barras estabilizadores, conseguirás más rigidez en las curvas y reducirás el riesgo de subviraje.^
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	¿Seguro que quieres borrar este Proyecto?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Proyectos
+0	AUTO	CUST_QUICK_UPGRADE	MEJORA RÁPIDA
+0	AUTO	CAR_SELECT_CORVETTEC6	La versión más moderna del Corvette, y la primera versión en 35 años con faros delanteros visibles.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	SIN CONEXIÓN
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	RECOMPENSA
+0	AUTO	MAIN_QUIT_GAME	SALIR
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	ÓXIDO NITROSO
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTRO
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Además de las ventajas de seguridad de un buen chasis, se puede aumentar su rigidez y mejorar el aspecto global del coche.^
+0	AUTO	CUST_SLOT_BC_DESC	Cuanta más propulsión tenga un motor, mejor. Un motor debe poder soportar una gran propulsión sin fallar, por lo que este dispositivo es un buen complemento para exprimir al máximo un turbo.^
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Las transmisiones calientes son problemáticas.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	INDUCCIÓN FORZADA
+0	AUTO	CAR_TYPE_SPEED	DESAFÍO DE SPEED
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	CABEZAS DE CILINDRO
+0	AUTO	CUST_SELL_CAR_WARNING	Si vendes este coche, no podrás entrar en ninguna prueba de carrera {0:s} hasta que compres otro coche de ese tipo.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	No hay pruebas de este tipo en este lugar.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	HORA DEL DÍA
+0	AUTO	RD_DELETED	Día de carrera eliminado
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Si aumentas la potencia que desarrolla el motor, debes hacer más mejoras para asegurarte de que esa potencia se distribuye con eficacia y se envía a las ruedas. Para ello, utiliza embragues, ejes de transmisión y diferenciales.^
+0	AUTO	CUST_SLOT_AIR_INTAKE	COLECTOR DE AIRE
+0	AUTO	CUST_PART_PURCHASED	COMPRADO
+0	AUTO	CUST_BP_OPTION_UNDO	DESCARTAR
+0	AUTO	CUST_FILTER_BODY	CARROCERÍA
+0	AUTO	CUST_FILTER_HOOD	CAPÓ
+0	AUTO	CUST_FILTER_REAR	RUEDAS TRASERAS
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Al reprogramar el ordenador del motor, esta mejora permite que se queme más carburante y aire, lo que produce más potencia en el momento en que más se necesite.^
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Los latiguillos de freno reforzados con acero inoxidable trenzado aumentan la presión hidráulica y la respuesta de frenado.^
+0	AUTO	LS_SAVING	GUARDANDO...
+0	AUTO	CUST_CUSTOM_UPGRADE	MEJORA PERSONALIZADA
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	No eres apto para participar en este Día de carrera. No tienes los siguientes tipos de coches:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Si tienes una configuración de suspensión adecuada, una que no tenga excesivo sobreviraje ni subviraje, obtendrás un coche más rápido y más fácil de conducir.^
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	ELEGIR MODO DE CARRERA
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	¡No puedes instalar un tubo de escape modificado en un kit de carrocería de serie!
+0	AUTO	CUST_PURCHASE_CAR	Comprar coche
+0	AUTO	CODE_ENTRY_VERIFICATION	Verificando código en el servidor...
+0	AUTO	MC_OLD_SAVE_REWARD	Gracias por jugar a los anteriores Need for Speed™. Te hemos concedido {0:d} tarjetas de mecánico y {1:d} tarjeta(s) de siniestro en el modo Carrera.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	FINALES SOBRE UN RIVAL SUPERIOR
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Aeródromo de Chicago
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Autopista de Nevada
+0	AUTO	RACE_DAY_LOCATION_8_MC	Carrera Internacional de Portland
+0	AUTO	RACE_DAY_LOCATION_9_MC	Circuito Mundial de Texas
+0	AUTO	CUST_QUICK_POWER_D3	Potencia de drag de fase 3
+0	AUTO	CUST_QUICK_POWER_G3	Este kit transforma un coche urbano en un coche de carreras con aún más potencia.^
+0	AUTO	CUST_QUICK_POWER_S3	Potencia de speed de fase 3
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	NÚMERO DE PROYECTOS
+0	AUTO	FE_STATS_BEST_RUN	MEJOR RONDA
+0	AUTO	WINDTUNNEL_DOWNFORCE	CARGA AERODINÁMICA
+0	AUTO	CUST_SLOT_COOLING_DESC	Ni muy caliente, ni muy frío. Perfecto.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	MEJOR PUNTUACIÓN DE DRIFT
+0	AUTO	CUST_CAT_DRIFT_FORCED	Aumentando la cantidad de aire introducido en el motor, la combustión del carburante mejora y el motor genera más potencia.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	USAR TARJETA DE MECÁNICO
+0	AUTO	FE_STATS_FILTER_GENERAL	ESTADÍSTICAS GENERALES
+0	AUTO	CB_BLUEPRINTS_HEADER	TIPO DE PROYECTO
+0	AUTO	ENTER_SECRET_CODE	INTRODUCE UN CÓDIGO SECRETO
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Modificará considerablemente el aspecto del vehículo y puede que añada una mayor funcionalidad aerodinámica.^
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	COCHES DESTROZADOS
+0	AUTO	CUST_SLOT_WHEELS	LLANTAS
+0	AUTO	CUST_SLOT_SUPERCHARGER	SOBRECOMPRESOR
+0	AUTO	CAR_SELECT_SHELBYGT500	El GT500 es el primer coche americano con barra antivuelco, y uno de los Shelby más famosos.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	MÁXIMO TIEMPO DE WHEELIE
+0	AUTO	FE_STATS_GRIP_WINS	VICTORIAS DE GRIP
+0	AUTO	CL_MS_POINTS	Puntos Microsoft®
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	TIEMPO DE DRIFT MÁS LARGO
+0	AUTO	CUST_FILTER_REAR_BUMPER	PARACHOQUES TRASERO
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	MEJOR 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Cuesta {0:d} adquirir un coche y aplicarle este Proyecto. ¿Quieres continuar?
+0	AUTO	GARAGE_REPAIR_DENIED	No tienes suficiente dinero ni tarjetas para reparar este coche.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	Haz CLIC para continuar
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	CARRERAS PUNKBUSTER
+0	AUTO	GARAGE_NO_CAR_REPAIR	No tienes suficiente dinero o tarjetas de mecánico disponibles para reparar el coche.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	NO HAY COCHES DISPONIBLES
+0	AUTO	RDMAP_CREATE_PREVIEW	CREAR UN DÍA DE CARRERA
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Si detienes el coche con frecuencia, el calor del sistema de frenos aumenta y puede provocar que la distancia de frenado aumente con el tiempo. Un sistema de frenos de más tamaño favorece que la temperatura no aumente tanto y el frenado sea más estable.^
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	MÁS DRIFTS ENLAZADOS
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	VÁLVULA DOSIFICADORA
+0	AUTO	FE_STATS_CLUB_TAG	SÍMBOLO DEL CLUB
+0	AUTO	CUST_SLOT_EXHAUST	TUBOS DE ESCAPE
+0	AUTO	CAR_SELECT_INTEGRATYPER	El Integra Type R a menudo es considerado el coche de tracción delantera de mejor manejo de todos los tiempos.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Aquí se pone énfasis en avanzar, no en frenar. El objetivo es lograr la instalación de freno más ligera que se pueda conseguir para que el coche acelere lo más rápido posible.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Aplicar color
+0	AUTO	WINDTUNNEL_PEAK_HP	POTENCIA MÁXIMA
+0	AUTO	CUST_BLUEPRINT_DELETE	Borrar Proyecto
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	ESTADÍSTICAS DE CARRERA
+0	AUTO	CUST_VISUAL_TITLE	VISUAL
+0	AUTO	CUST_SLOT_DRIVESHAFT	PALIER
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Comprar Proyecto
+0	AUTO	CAREER_COMPLETION_HEADER	CARRERA COMPLETADA
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Cuanta más potencia tenga el motor, más fácil será hacer que las ruedas giren y que se mantenga el derrape. Aumenta la potencia para conseguir mejores derrapes.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	1/4 DE MILLA MÁS RÁPIDO
+0	AUTO	CL_NOT_ENOUGH_CASH	No tienes suficiente dinero para este coche.
+0	AUTO	CUST_SLOT_SC_DESC	Este método de inducción forzada lo realiza el propio motor, y genera más potencia.^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	CLUB
+0	AUTO	CUST_SLOT_TIRES	NEUMÁTICOS
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	No se han encontrado Días de carrera.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Se descartarán todos los cambios que hayas hecho en este Día de carrera. ¿Descartar cambios?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	MUELLES Y AMORTIGUADORES
+0	AUTO	CUST_REGION_SKIRT	FALDÓN
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	BOTELLA DE NITROSO
+0	AUTO	CUST_QUICK_FORCED_DI3	Esta mejora aumenta la cantidad de aire introducido en el motor, lo que aumenta más la potencia y se aproxima más a un coche de carreras.^
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	BARRAS ANTIVUELCO
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	No podemos hablar de este coche
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Has alcanzado el máximo de {0:d} coches.^Vende un coche del garaje para liberar espacio y poder hacer la compra.
+0	AUTO	CUST_CUSTOMIZE_MAIN	PERSONALIZACIÓN
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Reprogramar el ordenador del motor permite que se queme más carburante y aire, lo que produce más potencia para adelantar a un coche rival al salir de una curva.
+0	AUTO	CUST_BLUEPRINT_HEADER	PERSONALIZAR PROYECTO
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	PORCENTAJE DE VICTORIAS EN DRAG
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	SISTEMA DE ESCAPE
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	SELECCIONAR
+0	AUTO	CUST_PAINT_GROUP_CHROME	CROMADA
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	NÚMERO DE PROYECTOS COMPARTIDOS
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	INDUCCIÓN FORZADA
+0	AUTO	FE_STATS_DRIFT_RACES	CARRERAS DE DRIFT
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Si aumentas la potencia que desarrolla el motor, debes hacer más mejoras para asegurarte de que esa potencia se distribuye con eficacia y se envía a las ruedas. Para ello, utiliza embragues, ejes de transmisión y diferenciales.^
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	ESTADÍSTICAS DE RENDIMIENTO
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBOCARGADOR
+0	AUTO	CUST_SLOT_SHIFTER	CAMBIO
+0	AUTO	CUST_DYNO_TEST	TEST DINÁMICO
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Los pilotos japoneses han tomado el embarcadero industrial de los astilleros de Tokio. Han hecho intensas rutas de carreras utilizando todo tipo de piezas de la calle.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	SELECCIONAR COCHES DE DESAFÍO
+0	AUTO	CUST_CAT_SPEED_NITROUS	Esta mejora produce un aumento de potencia temporal que puede marcar la diferencia entre la victoria y la derrota. ^
+0	AUTO	CAR_SELECT_MUSTANGGTN	El Mustang de 5ª generación es conocido por su "retrofuturismo".
+0	AUTO	FE_STATS_WIN_PERCENTAGE	PORCENTAJE DE VICTORIAS
+0	AUTO	RD_CUSTOM_SELECT	¿Jugar Día de carrera?
+0	AUTO	KING_FLOW_CASH_REWARD	RECOMPENSA EN DINERO
+0	AUTO	CUST_CAT_SPEED_BRAKE	Esta mejora aumenta la potencia de frenado del coche mediante la utilización de zapatas y rotores. Los frenos son un componente fundamental para tener un coche bien reglado.^
+0	AUTO	CUST_SPEED_TUT_AWD	Al conducir con tracción total, aumenta el agarre, especialmente en las salidas y en la aceleración de salida de curvas. Benefíciate de ello.^
+0	AUTO	CUST_SPEED_TUT_FWD	Aunque con un coche de tracción delantera desafías las leyes de la física, puedes fabricar una gran arma de tracción si haces los reglajes adecuados. Lo primero que debes hacer es reducir el subviraje lógico en un coche con tracción delantera, endureciendo todos los componentes frontales. Después tendrás que colocar un diferencial de limitación de derrape para eliminar el par de giro.
+0	AUTO	CUST_SPEED_TUT_RWD	El equilibrio y la aceleración son las ventajas de las configuraciones con tracción trasera. Evita el excesivo sobreviraje en la configuración.^
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	SISTEMA DE REFRIGERACIÓN
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	El Cosworth se creó con fines de homologación y realmente nunca fue un Escort, pero al final se convirtió en uno de los coches más emblemáticos y carismáticos de todos los tiempos.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	0-100 MPH MÁS RÁPIDO
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs, conocida como la carretera más rápida del este, está ubicada en una ladera del desierto de California. En Willow hay constantes cambios de rasante y la velocidad media es muy elevada.
+0	AUTO	RACE_DAY_DIFFICULTY	DIFICULTAD
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	No tienes suficiente dinero para comprar todas las tarjetas de tu carrito de la compra.
+0	AUTO	CAR_SELECT_CHALLENGER	El Challenger de primera generación fue la incursión de Dodge en el mercado de muscle cars. Se basó en el diseño de un coche más antiguo que tenía la intención de ser un coche con propulsión por turbina.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Elige una ranura para crear un Día de carrera personal. El icono representará ese Día en el mapa, debajo de Mi Día de carrera.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Al conducir con tracción total, aumenta el agarre, especialmente en las salidas y en la aceleración de salida de curvas. Benefíciate de ello.^
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Aunque con un coche de tracción delantera desafías las leyes de la física, puedes fabricar una gran arma de tracción si haces los reglajes adecuados. Lo primero que debes hacer es reducir el subviraje lógico en un coche con tracción delantera, endureciendo todos los componentes frontales. Después tendrás que colocar un diferencial de limitación de derrape para eliminar el par de giro.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	El equilibrio y la aceleración son las ventajas de las configuraciones con tracción trasera. Evita el excesivo sobreviraje en la configuración.^
+0	AUTO	CUST_SELL_CAR	Vender coche
+0	AUTO	RACE_DAY_LOCATION_12_DESC	La pista de pruebas de Porsche en Leipzig, Alemania, reproduce algunas de las más famosas curvas de los circuitos profesionales.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	FALDONES LATERALES
+0	AUTO	CUST_SLOT_FUEL_DESC	Una distribución eficaz del carburante es esencial para conseguir altas potencias. Una bomba de combustible de gran capacidad junto con grandes inyectores y buenas mangueras producirá un considerable aumento de la potencia. ^
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	La clave para conseguir un buen coche de drift, es que sea manejable en derrapes, que sea manejable en los sobrevirajes de las curvas, y que a la vez sea increíblemente estable.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	AMIGOS
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Mañana
+0	AUTO	CUST_FILTER_SPOILER	ALERÓN
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Se ha producido un error en el emparejamiento.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Se trata de un circuito de alta velocidad que discurre durante varias millas de autopista el Tokio, e incluye bucles, rectas y una sección de túnel.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	PARTIDAS CLASIFICATORIAS JUGADAS
+0	AUTO	CUST_TUNE	REGLAR
+0	AUTO	CUST_VISUALS_TITLE	PIEZAS VISUALES
+0	AUTO	FE_STATS_CLUB_NAME	NOMBRE DEL CLUB
+0	AUTO	CUST_INSTALL	Instalar
+0	AUTO	RACEDAY_SAVE_CONFIRM	¿Seguro que quieres guardar tu Día de carrera?
+0	AUTO	FE_MATCHMAKING_JOINING	Accediendo a la partida...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	VÁLVULA DE PURGA
+0	AUTO	CUST_SLOT_ROLL_CAGE	CHASIS
+0	AUTO	CAR_LOT_NO_DRIFTING	SIN DRIFT
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Esta mejora sustituye las piezas internas de motor existentes por otras más robustas y resistentes, lo que permite que el motor produzca más potencia y resista revoluciones más altas.^
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	USAR TARJETA DE SINIESTRO
+0	AUTO	CUST_PACKAGE_VISUAL	Kits visuales
+0	AUTO	CUST_EMPTY_BLUEPRINT	Crear nuevo proyecto
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Introduce tu código secreto o código de versión promocional aquí para recibir tu recompensa.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Con esta mejora al estilo rally, dará la impresión de que lo tuyo es pilotar en tierra. ^
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Elige el nivel de dificultad del Día de carrera. El nivel de dificultad que elijas definirá la dificultad de la IA y el nivel máximo de coches de ese Día de carrera.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	COCHES DE CARRERA
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	CARRERAS DE 12 COMPLETADAS
+0	AUTO	CUST_REGION_FRONT_TIRE	NEUMÁTICO DELANTERO
+0	AUTO	FE_STATS_DRAG_WINS	VICTORIAS DE DRAG
+0	AUTO	RACE_DAY_SAVE_NAME	Mi Día de carrera
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	¡No tienes suficiente dinero para comprar esta pieza!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	MAYOR ÁNGULO DE WHEELIE
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Los turbos son bombas de aire.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Al aumentar la resistencia de los cilindros, aumenta el desplazamiento del motor, y por lo tanto la cantidad de combustible que se quema, lo que en consecuencia produce más potencia.^
+0	AUTO	CUST_CAT_GRIP_BRAKE	Esta mejora aumenta la potencia de frenado del coche mediante la utilización de zapatas y rotores. Los frenos son un componente fundamental para tener un coche bien reglado.^
+0	AUTO	CUST_SLOT_SPOILER	ALERÓN
+0	AUTO	RACE_DAY_RACE_EVENTS	PRUEBAS DE CARRERA
+0	AUTO	CUST_SLOT_STEERING_KIT	KIT DE DIRECCIÓN
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	PORCENTAJE DE VICTORIAS EN GRIP
+0	AUTO	CUST_BLUEPRINT_RENAME	Cambiando nombre a Proyecto...
+0	AUTO	RACE_DAY_SLOT_FILLED	LLENA
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	PUNTUACIÓN DE DRIFT MÁS ALTA
+0	AUTO	CUST_VINYLS	VINILOS
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Los brazos de control de rendimiento, fabricados con materiales de primera calidad, ofrecen más opciones de peralte además de una mejor geometría de suspensión global.^
+0	AUTO	FE_STATS_HUBS_WON	DÍAS DE CARRERA GANADOS
+0	AUTO	CUST_CAT_GRIP_NITROUS	Esta mejora produce un aumento de potencia temporal que puede marcar la diferencia entre la victoria y la derrota. ^
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NO APTO PARA LA CARRERA
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Elige la cantidad de tarjetas de reparación para tu Día de carrera. Cuando crees un Día de carrera individual, obtendrás la misma cantidad de tarjetas de mecánico que de tarjetas de siniestro.
+0	AUTO	CAR_SELECT_CAMAROSS	La primera generación de Camaro fue descrito como un pequeño y voraz animal que devora Mustangs.
+0	AUTO	FE_STATS_BEAT_MODERATOR	MODERADOR DERROTADO
+0	AUTO	CUST_SLOT_HANDBRAKE	FRENO DE MANO
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Esta mejora permite un cambio de marchas aún más rápido y preciso y aligera los componentes que transfieren la potencia a las ruedas en un coche de carreras estándar.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Esta mejora permite un cambio de marchas aún más rápido y preciso y aligera los componentes que transfieren la potencia a las ruedas en un coche de carreras estándar.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Esta mejora permite un cambio de marchas aún más rápido y preciso y aligera los componentes que transfieren la potencia a las ruedas en un coche de carreras estándar.^
+0	AUTO	COMMON_CLASS_HEADER	NIVEL
+0	AUTO	CAR_SELECT_FORDGT	El Ford GT se creó como homenaje al dominio de Ford en las competiciones de carreras en los años 60, y es la versión moderna del clásico GT 40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	ESTADÍSTICAS DE RENDIMIENTO
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ROTORES
+0	AUTO	CUST_QUICK_INTERNALS_D3	Esta mejora permite que el motor soporte mucha más potencia durante un corto periodo de tiempo.^
+0	AUTO	CUST_QUICK_INTERNALS_G3	Esta mejora añade piezas internas de motor de coche de carreras para poder aprovechar mejor la potencia y revoluciones más altas.^
+0	AUTO	CUST_QUICK_INTERNALS_S3	Piezas internas de speed de fase 3
+0	AUTO	CUST_SLOT_PISTONS	PISTONES
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Esta mejora produce un aumento de potencia temporal que puede marcar la diferencia entre la victoria y la derrota. ^
+0	AUTO	FE_STATS_BEST_LAP_TIME	VUELTA RÁPIDA
+0	AUTO	FE_STATS_SKILLS_STATS	ESTADÍSTICAS DE HABILIDAD
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	RESUMEN DE CARRERA
+0	AUTO	CUST_DRIFT_TUT_RWD	Para lograr un buen coche de drift, tienes que ser capaz de iniciar y mantener grandes drift con el coche.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Esta mejora da un paso más y aumenta la potencia como si fuera un auténtico coche de carreras.^
+0	AUTO	CUST_SELL_CAR_DENIED	No puedes vender tu último coche.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Estas suspensiones resistentes ayudan a que el coche no se doble con la presión de un par muy alto, y aumenta la tracción máxima de los neumáticos. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Mediodía
+0	AUTO	CUST_SLOT_PULLEY_DESC	Si colocas un kit de poleas de diferente tamaño, el sobrecompresor girará más rápido, lo que producirá más impulso y potencia. ^
+0	AUTO	CUST_SLOT_IGNITION_DESC	En los desarrollos de potencia altos se necesita una chispa potente y regular. Con cables de ignición y bujías fabricadas con materiales de gran conductividad, como platino e iridio, mejorarás el rendimiento global del motor.    ^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	NO
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	KIT DE LATIGUILLO DE FRENO
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	MEJOR MULTIPLICADOR
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	SISTEMA DE NITROSO
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	El servidor de clasificación no está disponible. Inténtalo de nuevo más tarde.
+0	AUTO	RACE_DAY_TRACK_CONFIG	CONFIGURACIÓN DE PISTA
+0	AUTO	CS_HEADER_DRAG_EVENT	PRUEBAS DE DRAG
+0	AUTO	CUST_QUICK_BRAKE_1	Esta mejora permitirá que tu coche se detenga en una distancia más corta que con frenos de serie.^
+0	AUTO	CUST_QUICK_BRAKE_2	Frenos de fase 2
+0	AUTO	CUST_REPAIR_TITLE	REPARAR EL COCHE
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Si aumentas la potencia que desarrolla el motor, debes hacer más mejoras para asegurarte de que esa potencia se distribuye con eficacia y se envía a las ruedas. Para ello, utiliza embragues, ejes de transmisión y diferenciales.^
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Resumen del Proyecto
+0	AUTO	CUST_CAT_DRAG_FORCED	Aquí se pone énfasis en la potencia. Estos componentes turbo están diseñados para alcanzar la mayor potencia y aceleración. Estas piezas influyen enormemente en la velocidad de radar.^
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	¿Quieres jugar este Día de carrera ahora?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	¿Quieres guardar los cambios realizados en el Proyecto?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Esta mejora fortalece los componentes que transfieren la potencia del coche a las ruedas, incluyendo el palier, el diferencial y los ejes.^
+0	AUTO	CUST_BP_EXIT_CONFIRM	Se descartarán todos los cambios que hayas hecho en este Proyecto. ¿Descartar cambios?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Cambiando nombre a Proyecto...
+0	AUTO	CUST_FILTER_MIRRORS	ESPEJOS
+0	AUTO	ENTER_PRESELL_CODE	INTRODUCE UN CÓDIGO PROMOCIONAL
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	ERROR AL DESCARGAR
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	SHOWDOWNS GANADOS
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Esta mejora reprograma aún más el ordenador del motor para maximizar las prestaciones.^
+0	AUTO	FE_STATS_BEST_REACTION_TIME	MEJOR TIEMPO DE REACCIÓN
+0	AUTO	CAR_SELECT_MK5GTI	El Mk5 GTI es la versión más moderna del compacto original. Su motor turbo 2.0 inicia con 200 cv, pero se puede modificar a mucho más.
+0	AUTO	CAR_SELECT_MK5R32	Toma un compacto, añádele un V6 de ángulo estrecho y un sistema de tracción total, y este es el resultado.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Si tienes una configuración de suspensión adecuada, una que no tenga excesivo sobreviraje ni subviraje, obtendrás un coche más rápido y más fácil de conducir.^
+0	AUTO	CUST_SLOT_CONTROL_ARMS	BRAZOS DE CONTROL
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Al tener que manejar tanta potencia, se necesita una suspensión rígida para mantener el coche recto en la pista de drag. ^
+0	AUTO	CUST_SLOT_BODY	KIT DE CARROCERÍA
+0	AUTO	CUST_SLOT_HOOD	CAPÓ
+0	AUTO	CUST_SLOT_PADS	ZAPATAS
+0	AUTO	FE_STATS_DRIFT_WINS	VICTORIAS DE DRIFT
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Al reprogramar el ordenador del motor, esta mejora permite que se queme más carburante y aire, lo que produce más potencia para que el coche se cruce y entre derrapando en la línea de meta.^
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	PERSONALIZACIÓN
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	COCHES DESTROZADOS EN CARRERA
+0	AUTO	RD_CREATE_RD	Crear Día de carrera
+0	AUTO	FE_STATS_DRAG_RACES	CARRERAS DE DRAG
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	PORCENTAJE DE DESCONEXIÓN
+0	AUTO	CUST_REGION_FRONT_WHEEL	RUEDAS DELANTERAS
+0	AUTO	CAR_SELECT_ECLIPSE	El Eclipse 2G es propenso al drift total.
+0	AUTO	CAR_LOT_TITLE	CONCESIONARIO
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Al seleccionar una ranura de Día de carrera ocupada, obtendrás información sobre ese Día de carrera y podrás eliminar ese Día de carrera.
+0	AUTO	CAREER_MAP_TITLE	MAPA DE CARRERA
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	PTS MAX EN PERSECUCIÓN DE DRIFT
+0	AUTO	CUST_SLOT_CRANKSHAFT	CIGÜEÑAL
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	COCHE DE RECOMPENSA
+0	AUTO	CAR_SELECT_R34GTR	El coche define el panorama del tuning. Es la referencia de todos los demás.
+0	AUTO	CS_HEADER_DRIFT_EVENT	PRUEBAS DE DRIFT
+0	AUTO	RACE_DAY_MULTIPLAYER	MULTIJUGADOR
+0	AUTO	CUST_SLOT_CRANK_DESC	Los cigüeñales de serie no aprovechan bien los altos caballajes. Se necesita un cigüeñal forjado para los niveles de caballos de potencia que superen los 500.^
+0	AUTO	CAR_SELECT_COBALTSS	El Cobalt, con un motor sobrecomprimido de 2.0 l, fue el sustituto del Cavalier, y su misión era competir contra coches como el Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} Pies
+0	AUTO	CAR_SELECT_350Z	Es el 5º coche de la línea Z. Coche de tracción trasera deportivo, coupé 2+2.
+0	AUTO	CAR_SELECT_997T	Este coche, con un motor turbo de 3.6l, pasa de 60 a 90 km/h en 1 segundo.
+0	AUTO	CAR_SELECT_AE86	El Corolla, el último coche compacto de tracción trasera.
+0	AUTO	CAR_SELECT_CTSV	El CTSV fue el primer coche puesto a la venta bajo el sello de la serie V de Cadillac, diseñado para competir contra los sedanes deportivos europeos.
+0	AUTO	CAR_SELECT_EVO9	El EVO IX es un compacto con tracción a las cuatro ruedas y un motor 2.0 de 16v. Desde su creación, ha sido la referencia para la industria del tuning por sus prestaciones y su manejo.
+0	AUTO	CAR_SELECT_EVOX	El EVO 10 es más rápido que un rayo.
+0	AUTO	CAR_SELECT_GTON	El Pontiac GTO era la versión americana de la plataforma Holden V con el LS2 del Corvette.
+0	AUTO	CAR_SELECT_GTOO	Algunos lo consideran el primer muscle car.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Con las mentes de la unidad SVT (Equipo Especial de Vehículos) y el legendario Carroll Shelby trabajando juntos en este proyecto, el éxito estaba prácticamente garantizado. El resultado de esta colaboración pondrá la sonrisa boba en todos los aficionados a los Mustangs y a la potencia. 450 caballos, par de 450 lb-ps (¡en serio, tíos!), pinzas Brembo, llantas de aleación de 19 pulgadas y un precio acorde con el modelo anterior Mustang Cobra. Según los diseñadores del proyecto, el Ford Mustang Shelby Cobra GT500 de 206 "será el producto de Mustang más potente jamás fabricado".
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	PARA DESBLOQUEAR ESTE SHOWDOWN
+0	AUTO	CUST_REPAIR_USE_CASH	Utilizar dinero
+0	AUTO	FE_STATS_FILTER_SKILLS	ESTADÍSTICAS DE HABILIDAD
+0	AUTO	FE_STATS_SPEED_RACES	CARRERAS DE SPEED
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Definir pruebas
+0	AUTO	RD_DELETE_SHARED_RD	¿Eliminar Día de carrera compartido?
+0	AUTO	CAREER_OVERVIEW_HEADER	RESUMEN DE CARRERA
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	TUBOS DE ESCAPE
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Si detienes el coche con frecuencia, el calor del sistema de frenos aumenta y puede provocar que la distancia de frenado aumente con el tiempo. Un sistema de frenos de más tamaño favorece que la temperatura no aumente tanto y el frenado sea más estable.^
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Esta mejora sustituye las piezas internas de motor existentes por otras más robustas y resistentes, lo que permite que el motor produzca más potencia y resista revoluciones más altas.  ^
+0	AUTO	CL_DRIVETRAIN_ALL	Todos los tipos
+0	AUTO	CL_DRIVETRAIN_AWD	Tracción total
+0	AUTO	CL_DRIVETRAIN_FWD	Tracción delantera
+0	AUTO	CL_DRIVETRAIN_RWD	Tracción trasera
+0	AUTO	FE_COMMON_MODE	MODO
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	COLECTOR
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	RÉCORDS DE PRUEBAS
+0	AUTO	CODE_ENTRY	INTRODUCIR CÓDIGO
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	¿Quieres comprar todas las tarjetas que hay en el carrito de la compra?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	ESCAPE
+0	AUTO	RACE_DAY_SPLIT_SCREEN	PANTALLA DIVIDIDA
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Es vital que controles la velocidad en las curvas y que prestes atención a la aceleración en las salidas de las curvas. Cuanta más potencia, más facilidad para salir propulsado de los giros y alcanzar mayor velocidad.^
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	NÚMERO DE MIEMBROS DEL CLUB
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	PIEZAS INTERNAS DE MOTOR
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Esta mejora fortalece los componentes que transfieren la potencia del coche a las ruedas, incluyendo el palier, el diferencial y los ejes.^
+0	AUTO	CUST_WIND_TUNNEL_OFF	Sin túnel de viento
+0	AUTO	FE_COMMON_CONFIGURATION	CONFIGURACIÓN
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} CV
+0	AUTO	CS_HEADER_GRIP_EVENT	PRUEBAS DE GRIP
+0	AUTO	CAR_SELECT_CIVIC	Civic de 6ª generación, uno de los más populares entre los tuneros. Vale tanto para circuitos urbanos, drag, o cualquier cosa entre ese camino.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Día de carrera eliminado
+0	AUTO	CAR_SELECT_E46M3	La 3ª versión del M3, el E46, debutó con la potencia más alta de BMW por litro que cualquier otro motor BMW anterior.
+0	AUTO	CAR_SELECT_E92M3	El E92 M3 lleva un techo de fibra de carbono y un motor V8 (el M3 anterior era de 6 cilindros en línea).
+0	AUTO	CAR_SELECT_ELISE	El Elise de segunda generación es un coche que lleva lo justo para suministrar la experiencia de pilotaje suprema.
+0	AUTO	CAR_SELECT_FDRX7	El FD RX-7 es uno de los mejores coches de tuning de todos los tiempos, tanto para drift como para grip. Una auténtica leyenda.
+0	AUTO	CAR_SELECT_IS350	El IS de 2ª generación es un coupé de tracción trasera de lujo, con un contorno depurado estilo coupé, y  perfil aerodinámico.
+0	AUTO	CAR_SELECT_LP640	Su motor de 6.5 l genera 640 cv y lo coloca en lo más alto de los supercoches de altas prestaciones.
+0	AUTO	CUST_SLOT_VALVE_DESC	Al redistribuir el fluido hidráulico por todo el sistema de freno, este dispositivo produce una mayor fuerza de frenado tanto en la parte delantera como en la trasera. ^
+0	AUTO	CAR_SELECT_SUPRA	El Supra de 4ª generación. Fabricado para ser más ligero y ágil que la generación anterior, capaz de desarrollar 0,98 g en la plataforma deslizante. El 99 fue el último año de venta en Norteamérica, y la producción en Japón llegó hasta 2002.
+0	AUTO	CUST_FILTER_ALL_PARTS	TODAS LAS PIEZAS
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Esta mejora se centra en aumentar el peso en las ruedas motrices y reducir el tiempo de elevación de las ruedas delanteras.^
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Esta mejora permite que el coche tome las curvas aún más rápido y más nivelado, sin perder el agarre al asfalto.^
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Esta mejora permite que el coche tome las curvas aún más rápido y más nivelado a velocidad punta, sin perder el agarre al asfalto.^
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	No se han encontrado partidas ni jugadores adecuados. Inténtalo de nuevo.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Definir pruebas de carrera
+0	AUTO	FE_STATS_CLUB_LEADER	LÍDER DEL CLUB
+0	AUTO	RACE_DAY_LOCATION_1_DESC	El Autobahnring de Alemania es una red de carreteras de alta velocidad entrelazadas que incluyen secciones de la Autobahn, además de curvas peraltadas y túneles.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Cancelando búsqueda...
+0	AUTO	CUST_SLOT_DIFF_DESC	Aquí, la potencia del motor se transfiere finalmente de un lado a otro y luego a las ruedas. ^
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	¿Seguro que quieres sobrescribir este Día de carrera?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	METAS POR DELANTE DEL LÍDER
+0	AUTO	CAR_SELECT_ZONDAF	Muchos periodistas del mundo del motor afirman que el Zonda F es uno de los mejores supercoches del mundo.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Para que los neúmaticos se agarren bien a la pista, se endurecen las barras estabilizadoras delantera y trasera. Los cojinetes se sustituyen por piezas de uretano y los amortiguadores por depresores de competición.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Mi Día de carrera^Crea y diseña tu propio Día de carrera. Crea un Día de carrera individual, o un Día de carrera multijugador, y compite contra otros jugadores online. Crea un Día de carrera en pantalla dividida y desafía a un amigo.^^Comparte tu Día de carrera individual o multijugador con otros jugadores online e invítalos a que se unan a tu propia competición personal de Día de carrera.^^.
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis está en lo alto de una montaña en una remotísima región de Japón. Aunque al principio el circuito es algo sombrío, la ruta de alta velocidad es moderna y limpia
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Los amortiguadores endurecidos, combinados con el centro de gravedad más bajo que proporcionan los muelles, mejoran enormemente la capacidad de giro del coche.^
+0	AUTO	CUST_CAT_DRAG_NITROUS	Esta mejora produce un aumento de potencia temporal. El óxido nitroso es obligatorio para los pilotos de drag.^
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Los pilotos de Chicago se han adueñado de un aeropuerto abandonado. El Aeródromo de Chicago tiene una pista muy ancha, varias rutas de grip y drift y una pista de drag.
+0	AUTO	FE_STATS_TOP_SPEED	VELOCIDAD PUNTA
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	KIT DE CONTROL DE PRESIÓN
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	GRIPS MÁXIMOS EN LA PRESENTACIÓN
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	60-0 MPH MÁS RÁPIDO
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	CONTROLADOR DE PROPULSIÓN
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbono
+0	AUTO	RACE_DAY_LOCATION_4_DESC	La falda de una montaña se esculpió para albergar Ebisu, el hogar espiritual del drifting. El desafío Fukuyama discurre por el campo y luego se convierte en autopista.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Al aligerar los engranajes o piñones que regulan el árbol de levas, se reduce la energía necesaria para girar esos árboles y se puede lograr más potencia.^
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	TOTAL DE VICTORIAS  SIN DAÑOS
+0	AUTO	CUST_QUICK_HANDLING_1	Esta mejora permite que el coche tome mejor las curvas y tenga más estabilidad a velocidad elevada.^
+0	AUTO	CUST_QUICK_HANDLING_2	Manejo de fase 2
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Aunque el nitroso es muy útil para aumentar la potencia temporalmente, demasiado nitroso puede llegar a romper el motor. Con un kit de control de presión te puedes asegurar de que el motor recibe la cantidad de presión que puede soportar.^
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	¿Seguro que quieres cambiar el lugar? Eso borrará todas tus selecciones de evento.
+0	AUTO	CUST_VINYL_LAYER_TITLE	MENÚ DE CAPAS
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Esta mejora sustituye las piezas internas del motor por piezas alteradas, lo que les da mucha más fuerza y durabilidad para las intensas pruebas de cuarto de milla.^
+0	AUTO	RACE_DAY_LOCATION_5_DESC	La carrera Infineon, al norte de California, consta de una compleja serie de giros elevados y curvas. Un movimiento en falso te ralentizará, si no acabas estampado contra uno de los muros.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	DESAFÍO^DE SPEED
+0	AUTO	FE_STATS_CLUB_POINTS	PUNTOS DEL CLUB
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Al reprogramar el ordenador del motor permite que se queme más carburante y aire, lo que produce más potencia para adelantar a un coche rival al salir de una curva.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	¿Seguro que quieres eliminar la prueba %s?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Día de carrera guardado
+0	AUTO	CUST_QUICK_NITROUS_DI3	Esta mejorar añade entre 50 y 250 caballos de potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el 2º puesto.  ^
+0	AUTO	CUST_QUICK_POWER_1	El kit de mejoras básico añade más potencia durante todo el espectro de revoluciones, además de aportarle al que inicialmente era un coche de serie, una afinación más agresiva.
+0	AUTO	CUST_QUICK_POWER_2	Este kit se basa en las suaves mejoras de la 1ª fase para proporcionar más potencia en toda la franja de potencia y también un sonido más agresivo.^
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park es un circuito increíblemente sinuoso y compacto situado en medio de la campiña irlandesa.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	COCHE DE APOYO
+0	AUTO	FE_STATS_GRIP_RACES	CARRERAS DE GRIP
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAJE
+0	AUTO	CUST_PACKAGE_POWER	Kits de potencia
+0	AUTO	CUST_OWNED	ADQUIRIDO
+0	AUTO	CUST_PAINT	PINTURA
+0	AUTO	CUST_PARTS	PIEZAS DE CARROCERÍA
+0	AUTO	CUST_PACKAGE_TITLE	KIT
+0	AUTO	CS_OPTION_CAR_SELECT	Seleccionar coche
+0	AUTO	RACE_DAY_SLOT_EMPTY	DISPONIBLE
+0	AUTO	FE_STATS_ACHIEVEMENTS	OBJETIVOS LOGRADOS
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Crea un Día de carrera desafío, y podrás elegir coches específicos que sólo se pueden utilizar al jugar ese Día de carrera.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Freno de mano para revivir los episodios de Rockford.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	La Carretera 318 es una porción de asfalto ardiente en pleno desierto de Nevada. Se alcanzan velocidades de 300 km/h, pero cuidado con las engañosas curvas fáciles.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Los rotores de freno de alto rendimiento difunden el calor mejor que los de serie. Los rotores con un diámetro superior a los de serie permiten que las zapatas se sujeten en un área más amplia, y por lo tanto producen más fuerza de frenado.^
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	PTS. MAX. DE DRIFT COMO LÍDER
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Esta mejora ajusta excepcionalmente la suspensión para permitir que tome mejor las curvas.^
+0	AUTO	CUST_REGION_FRONT_BUMPER	PARACHOQUES DELANTERO
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	VALOR NETO ESTIMADO
+0	AUTO	CUST_SLOT_TRANSMISSION	TRANSMISIÓN
+0	AUTO	RACE_DAY_LOCATION_8_DESC	La Carrera Internacional de Portland está situada cerca del Monte Rainier, en la frondosa vegetación del noroeste del Pacífico. Es una ruta muy exigente, con una pista de drag de primerísima calidad.
+0	AUTO	CUST_BLUEPRINT_SAVE	GUARDAR PROYECTO
+0	AUTO	CUST_QUICK_NITROUS_1	Esta mejorar añade potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el 2º puesto.  ^
+0	AUTO	CUST_QUICK_NITROUS_2	Esta mejora añade aún más potencia durante breves momentos al motor por medio de una inyección seca de nitroso. Puede suponer la diferencia entre el 1er y el 2º puesto.  ^
+0	AUTO	RACE_DAY_LOCATION_9_DESC	En Texas, todo es más grande, y el Circuito Mundial de Texas no es una excepción. En él, un sinuoso circuito serpentea hacia dentro y hacia fuera de un óvalo inclinado.
+0	AUTO	CAR_SELECT_CORVETTE	El último de los coches rayo. El Corvette de 2ª generación fue nombrado uno de los 5 mejores coches deportivos de todos los tiempos.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	SECTORES CONSEGUIDOS
+0	AUTO	CL_DRIVETRAIN_HEADER	UNIDAD MOTRIZ
+0	AUTO	CUST_PACKAGE_HANDLING	Kits de manejo
+0	AUTO	FE_STATS_SPEED_WINS	VICTORIAS DE SPEED
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	MÁS CONTROLES GANADOS
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	La clasificación de mejores tuneros representa a los mejores creadores de Proyectos del juego. Tu clasificación depende del porcentaje de victorias de todos tus Proyectos compartidos. Tus Proyectos compartidos tienen que usarse en al menos 20 carreras para poder aparecer en la clasificación.

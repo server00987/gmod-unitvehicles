@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Chinese_Trad_Global_DLC.bin
+#	File created on: 2025-05-24 11:10:22
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Super Club
+0	1A821602	0x1A821602	Speed Loop
+0	1A821603	0x1A821603	Route 1前半
+0	1A821604	0x1A821604	Route 2後半
+0	1A821605	0x1A821605	Route 3完整
+0	1A82161D	0x1A82161D	Tokyo Bay Bridge
+0	1BB8601F	0x1BB8601F	你的極速快感版本與你想加入的遊戲版本不同。請確認你的^遊戲有更新到最新的版本。想更了解請到^NeedforSpeed.com。
+0	35E21908	0x35E21908	免費的延伸包現在可在^Xbox LIVE賣場下載!
+0	3EC4AB81	0x3EC4AB81	盡情的玩!
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKYO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKYO EXPRESSWAY II
+0	42781C20	0x42781C20	現在可在Xbox LIVE賣場下載!
+0	525DCCC5	0x525DCCC5	延伸包
+0	5959EB4C	0x5959EB4C	你要分享的玩家尚未取得最新的遊戲更新。他們必須先更^新他們極速快感才有辦法取得這競速日分享。
+0	59C9AC1C	0x59C9AC1C	擴充包
+0	61098C88	0x61098C88	你要分享的玩家尚未取得最新的遊戲更新。他們必須先更^新他們極速快感才有辦法取得這藍圖分享。
+0	6692EC80	0x6692EC80	你要想載入的檔案無法被讀取，因為內容已不再提供。
+0	671480B8	0x671480B8	免費 – Porsche Leipzig的正規測試賽道
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	免費 - 2007 SEAT Leon Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokyo Expressway
+0	71FD1C1D	0x71FD1C1D	Tokyo Expressway II
+0	7A83FDB7	0x7A83FDB7	遊戲就是要這樣玩
+0	800472C1	0x800472C1	不需要，謝謝
+0	82E2BDAE	0x82E2BDAE	你下載的擴充包與你原本遊戲語言不同。^你想要下載正確的版本嗎?
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	免費
+0	88D1ECEE	0x88D1ECEE	免費的擴充包。
+0	88E17FE9	0x88E17FE9	Grab this FREE download on Xbox LIVE Marketplace for new tracks, new cars, and extended Career Mode and Race Day events!
+0	91F522D5	0x91F522D5	在生涯模式及競速日畫面看新的延伸賽事還有免費的車在生涯^模式的車庫裡。
+0	930C8172	0x930C8172	謝謝你下載
+0	A76603FD	0xA76603FD	免費的擴充包。
+0	BCFBDE9A	0xBCFBDE9A	《極速快感：職業街頭》擴充包目前無法下載。
+0	C174E20F	0xC174E20F	《極速快感：職業街頭》必須先重新啟動才有辦法看到新的內^容。在遊戲重新開始前，會有一小段無運作時間，點選OK重^新啟動。
+0	E4AF851F	0xE4AF851F	免費 - 日本的Tokyo Expressway
+0	E5E32468	0xE5E32468	請到NeedforSpeed.com取得更多更新資訊及社群活動
+0	E62B2319	0xE62B2319	免費 - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	額外14輛新車，包含Bugatti Veyron 16.4與Porsche 911 GT3!^請到NeedforSpeed.com取得更多資訊!
+0	F39D0787	0xF39D0787	馬上取得這免費下載!
+0	F5663CFA	0xF5663CFA	取得這個免費的下載，新的賽道、車輛還有延長的生涯模式與競速日賽事
+0	FEEF54A9	0xFEEF54A9	請到NeedforSpeed.com取得更多更新資訊及社群活動!

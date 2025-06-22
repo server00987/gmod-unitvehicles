@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\German_Frontend.bin
+#	File created on: 2025-05-24 11:14:08
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	REPARATURKOSTEN INSGESAMT
+0	AUTO	MODE_ALL	Alle Wagen
+0	AUTO	CUST_VINYL_MOVE_LAYER	Schicht nach oben/unten
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	MOTORBLOCK
+0	AUTO	CAR_SELECT_MUSTANGGT	Mit seinem 4,6-Liter-V8 ist der Mustang der 4. Generation der Inbegriff eines 'Pony-Cars'.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Bei diesem Upgrade werden bestimmte Motorbauteile durch robustere Bauteile ersetzt. Dadurch kann der Motor höhere Drehzahlen verkraften und mehr Leistung erzeugen.
+0	AUTO	CUST_VISUAL_DECALS	DECALS
+0	AUTO	CUST_CUSTOMIZE	Blaupause anpassen
+0	AUTO	CODE_ENTRY_VALID	Glückwunsch! Der Code wurde akzeptiert und deine Belohnung wurde freigeschaltet!
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	BREMSSÄTTEL
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Du hast Gutscheine in deinem Einkaufswagen, die noch nicht gekauft wurden. Trotzdem beenden?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	STABILISATOREN
+0	AUTO	CUST_QUICK_HANDLING_D3	Bei diesem Upgrade wird das Fahrwerk durch härtere Komponenten ergänzt, so dass der Wagen auf der Geraden auf dem Asphalt klebt. ^
+0	AUTO	CUST_QUICK_HANDLING_G3	Bei diesem Upgrade wird das Fahrwerk durch härtere Komponenten ergänzt, so dass der Wagen auf der Geraden und in Kurven auf dem Asphalt klebt. ^
+0	AUTO	CUST_QUICK_HANDLING_S3	Bei diesem Upgrade wird das Fahrwerk durch härtere Komponenten ergänzt, so dass der Wagen bei hohem Tempo in Kurven und auf der Geraden auf dem Asphalt klebt.^
+0	AUTO	CUST_REGION_REAR_TIRE	HINTERREIFEN
+0	AUTO	FE_STATS_BEST_SECTOR	BESTER SEKTOR
+0	AUTO	CL_FREE_CAR_MARKER	WAGEN-GUTSCHEIN
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	RENN-EVENTS FESTLEGEN
+0	AUTO	CUST_QUICK_BRAKE_DI3	Mit diesem Upgrade wird der Bremsweg auf ein Minimum verkürzt, die Räder blockieren jedoch beim Bremsen.^^
+0	AUTO	CUST_BP_APPLY_CONFIRM	Es kostet dich {0:d}, alle Teile zu kaufen, die du benötigst, um diese Blaupause auf deinen Wagen anzuwenden. Möchtest du fortfahren?
+0	AUTO	CUST_SLOT_BUSHING_KIT	LAGER-KIT
+0	AUTO	FE_STATS_GAMES_PLAYED	GESPIELTE PARTIEN
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUSWAGEN
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	SCHICHT {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	PAKET-INFORMATIONEN
+0	AUTO	CUST_SLOT_NITROUS_DESC	Nitro ist ein leicht entflammbares Gas, das in die Zylinder eingespritzt werden kann, um die Motorleistung vorübergehend zu erhöhen.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Mit diesem Upgrade wird das Motorsteuergerät neu programmiert, um die Leistung zu erhöhen.^
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Mit diesem Upgrade wird das Motorsteuergerät neu programmiert, um die Leistung zu erhöhen.^
+0	AUTO	CS_HEADER_SPEED_EVENT	SPEED-CHALLENGE-EVENTS
+0	AUTO	CUST_SLOT_HEADS_DESC	Durch Polieren der Ventile und Kanäle des Zylinderkopfs wird die Luftzufuhr in den Motor und die Abgasableitung aus dem Motor verbessert. Dies steigert die Motorleistung.
+0	AUTO	CUST_VINYL_ADDLAYER	NEUE SCHICHT HINZUFÜGEN
+0	AUTO	CUST_CAT_SPEED_FORCED	Ein kleiner, schnell ansprechender Turbolader verbessert die Leistungscharakteristik und verschafft dir auf Rennstrecken und Straßen einen enormen Vorteil.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	HÖCHSTER MULTIPLIKATOR
+0	AUTO	RACE_MODE_GRIP_MODE	GRIP-^MODUS
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Im nächsten Schritt legst du die Renn-Events für deinen Renntag fest.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	ANZAHL RENNEN
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Dieses Upgrade stärkt die Antriebswelle, das Differential, die Achsen und alle anderen Komponenten, die die Kraft des Motors auf die Räder übertragen.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	KARRIERE-SPIELE
+0	AUTO	RACE_DAY_ADD_EVENT	EVENT HINZUFÜGEN
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Diese Blaupause ist mit deiner Version von Need for Speed™ ProStreet nicht kompatibel und kann daher nicht verwendet werden. Unter NeedforSpeed.com findest du Informationen zu Updates und neuen Spielinhalten.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	FELGENFARBE
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Blaupause aktivieren
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	MOTORSTEUERUNG
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	SIEG-BELOHNUNG
+0	AUTO	CUST_PAINT_BODY	LACK
+0	AUTO	CUST_PAINT_RIMS	FELGEN
+0	AUTO	CUST_PAINT_TINT	SCHEIBENFOLIEN
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Kein Fehler aufgetreten.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Möchtest du diesen Renntag löschen? Deine eigenen Einstellungen und Rekorde für diesen Renntag gehen verloren.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	SPRACHAUSWAHL
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Lager aus steiferen Materialien, wie Urethan oder Aluminium, sorgen für geringere Wankbewegungen der Karosserie und direkteres Kurvenfahrverhalten.
+0	AUTO	HUB_DIFFICULTY_2	MITTEL
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Wenn man einen Wagen immer wieder stark abbremst, wird im Bremssystem übermäßige Hitze erzeugt, die mit der Zeit den Bremsweg verlängern kann. Ein größer dimensioniertes Bremssystem hilft dabei, die Temperaturen niedriger zu halten und eine konstante Bremsleistung zu gewährleisten.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	HÖCHSTE MAXIMALGESCHWINDIGKEIT
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Kaufmethode auswählen
+0	AUTO	CUST_SLOT_INTAKE_DESC	Je mehr Luft in den Motor eingeleitet wird, desto höher ist die Motorleistung. Darüber hinaus sollte die Luft möglichst kühl sein, um die Motorleistung zu erhöhen.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Bei diesem Upgrade liegt der Schwerpunkt auf dem Übersteuern des Wagens. Der große Heckstabilisator, Aluminiumlager und der fehlende Frontstabilisator erleichtern das seitliche Driften deutlich.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Möchtest du den Wagenauswahl-Bildschirm verlassen und in die Karrierekarte zurückkehren?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Renntag wird gespeichert ...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	HÖCHSTBEWERTETER WAGEN-TUNER
+0	AUTO	RACE_MODE_DESCRIPTION	Die Auswahl des Rennmodus bestimmt, an welchen Events du mit diesem Wagen teilnehmen kannst.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Verbaue AutoSculpt-Teile, damit du in den Windkanal darfst!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Je größer das Ansaugsystem dimensioniert ist, desto mehr Luft wird in den Motor eingeleitet. Durch den Einbau eines optimierten Ansaugsystems lässt sich die maximale Motorleistung daher deutlich erhöhen.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	BESTES KONTROLLPUNKT-GESAMTTEMPO
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	BENZINSYSTEM
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Mit seinem 2,3-Liter-Turbomotor mit über 260 PS, einem Sperrdifferenzial und einem 6-Gang-Getriebe ist der Speed 3 ein moderner Kompaktwagen.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Mit diesem Upgrade kannst du noch schneller und präziser schalten, und die Kraftübertragung auf die Räder wird weiterhin auf das Niveau eines Rennwagens verbessert.^
+0	AUTO	CAR_SELECT_INTEGRA	Der Kouki mit seinem Serie-B-Hochdrehzahlmotor ist äußerst beliebt bei Motorsportfans, da er gut getunt werden kann und über ein tolles Handling verfügt.
+0	AUTO	FE_HUBMAP_ETREE_CARS	WAGEN
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Mit diesem Upgrade erhöhst du die Motorleistung. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Mit diesem Upgrade erhöhst du die Motorleistung auf das Niveau eines Rennwagens.^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	In Kurven sind die richtige Geschwindigkeit, und insbesondere die optimale Geschwindigkeit beim Herausbeschleunigen, entscheidend. Höhere Motorleistung erlaubt ein schnelleres Herausbeschleunigen aus Kurven und natürlich höhere Geschwindigkeiten.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Möchtest du diesen Wagen reparieren?
+0	AUTO	CAR_SELECT_S3	Der S3 der 2. Generation wird nicht in Nordamerika verkauft.
+0	AUTO	CAR_SELECT_S4	Der S4 ist die zahmere Version des RS4, besitzt aber ebenfalls einen 4,2-Liter-V8.
+0	AUTO	CAR_SELECT_TT	Die 2. Version des TT wurde mit zahlreichen Preisen als Auto des Jahres ausgezeichnet.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	LACHGAS
+0	AUTO	FE_STATS_DOWNLOADING_STATS	LÄDT STATISTIKEN HERUNTER …
+0	AUTO	CUST_QUICK_FORCED_D3	Aufladung Drag-Stufe 3
+0	AUTO	CUST_QUICK_FORCED_G3	Mit diesem Upgrade wird mehr Luft in den Motor gepumpt, so dass die Motorleistung mit der eines Rennwagens vergleichbar ist.^
+0	AUTO	CUST_QUICK_FORCED_S3	Mit diesem Upgrade wird mehr Luft in den Motor gepumpt, so dass die Motorleistung mit der eines Rennwagens vergleichbar ist.^
+0	AUTO	CUST_PAINT_GROUP_CANDY	CANDY
+0	AUTO	CUST_PAINT_GROUP_GLOSS	HOCHGLANZ
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATT
+0	AUTO	CUST_DRIVETRAIN_GROUP	ANTRIEB
+0	AUTO	CUST_PAINT_GROUP_PEARL	PERLEFFEKT
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Mit diesem Upgrade wird das Motorsteuergerät neu programmiert, um maximale Leistung bei rasanter Beschleunigung zu garantieren.^
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Mit diesem Upgrade wird das Motorsteuergerät weiter umprogrammiert, so dass eine erneute Leistungssteigerung erzielt wird.^
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Mit diesem Upgrade wird das Motorsteuergerät weiter umprogrammiert, so dass eine erneute Leistungssteigerung erzielt wird.^
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Bremssättel mit größeren oder mehreren Kolben verteilen den Anpressdruck der Bremsbeläge besser auf die Bremsscheiben. Dies führt zu einer deutlich besseren Bremsleistung.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	START drücken, um zu beginnen
+0	AUTO	RACE_DAY_SLOT_ID	SLOT {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	SCHALLDÄMPFER
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Beim Versuch, dem Spiel beizutreten, ist ein Fehler aufgetreten. Bitte noch einmal versuchen.
+0	AUTO	COMMON_START	Start
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	GETRIEBEKÜHLER
+0	AUTO	RACE_MODE_DRIFT_MODE	DRIFT-^MODUS
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Welche Räder möchtest du anpassen?
+0	AUTO	CUST_SLOT_FLYWHEEL	SCHWUNGRAD
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Mit Rennsitzen bleibst du da, wo du hingehörst.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Wenn du den Modus wechselst, werden alle Blaupausen dieses Wagens einschließlich Optik-Tuning und individuellen Vinyls gelöscht. Fortfahren?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	ZEIT IN KARRIERE-RENNEN
+0	AUTO	CUST_DRAG_TUT_AWD	Allradantrieb ist am Start ein großer Vorteil, da die überlegene Traktion dabei hilft, jede einzelne Pferdestärke auch umzusetzen.
+0	AUTO	CUST_DRAG_TUT_FWD	Mit Frontantrieb hat man beim Drag-Racing in erster Linie das Problem der Traktion. Je mehr Leistung, desto mehr muss man darauf achten, dass die Reifen nicht durchdrehen. Wenn man einen schnellen Dragster mit Frontantrieb aufbauen will, sollte man viel Leistung zur Verfügung haben, sie aber auch auf den Boden bringen können. Wenn du die Standard-Leistungsupgrades bereits installiert hast, solltest du dich darauf konzentrieren, Leistung und Traktion in den Griff zu bekommen.
+0	AUTO	CUST_DRAG_TUT_RWD	Das Wichtigste bei einem Drag-Setup ist die Traktion. Vermeide ein Springen der angetriebenen Räder und halte den Radschlupf im Rahmen, um schnelle Zeiten fahren zu können. Bei Wagen mit hoher Motorleistung ist das sogar noch wichtiger.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Der Need for Speed-Server hat die Anfrage abgebrochen.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Reifen sorgen für den richtigen Bodenkontakt.
+0	AUTO	CAR_SELECT_GTRPROTO	Der GTR Proto ist die Vorserienversion des R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	ANZAHL SELTENE WAGEN
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	DOMINANZ-BELOHNUNG
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} REPARATURGUTSCHEINE
+0	AUTO	CAR_SELECT_VIPERCOUPE	Die 3. Version der Dodge Viper. Der V10-Motor dieses Sportcoupés besitzt einen unverkennbaren Sound und leistet 500 PS.
+0	AUTO	MAIN_MENU_TITLE	HAUPTMENÜ
+0	AUTO	CUST_TINT_DARK	DUNKEL
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Mit dem richtigen Fahrwerkssetup, das beim Start eine optimale Schwerpunktverlagerung ermöglicht, sorgt man als Fahrer für einen schnelleren Wagen, der auch noch mehr Traktion hat.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Kein Totalschaden möglich
+0	AUTO	CUST_APPLYING_BLUEPRINT	BLAUPAUSE WIRD ANGEWENDET
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	WÄHLE EINEN RENNTAG-SLOT
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Ein Mittelmotorwagen mit einer Performance, die nahe an der des 911 liegt.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	KARRIEREFORTSCHRITT %
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFFERENZIAL
+0	AUTO	CUST_WIND_TUNNEL_ON	Windkanal ein
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Reparaturgutscheine sind für Multiplayer-Renntage deaktiviert. Schäden am Wagen sind möglich, werden aber nach dem Rennen zurückgesetzt. Totalschäden sind nicht möglich.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Die Blaupause passt nicht zum Modus des Wagens, auf den du sie anwenden möchtest. Alle vorherigen Blaupausen werden gelöscht. Möchtest du fortfahren?
+0	AUTO	CUST_QUICK_POWER_DI3	Dieses Paket liefert so viel zusätzliche Power, dass die Antriebsräder durchdrehen. ^
+0	AUTO	RACE_MODE_DRAG_MODE	DRAG-^MODUS
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Mit diesem Basis-Upgrade verbesserst du die gesamte Wagenoptik. ^
+0	AUTO	CUST_QUICK_VISUAL_2	Der Flügel und die Frontsplitter sorgen bei hoher Geschwindigkeit für bedeutend weniger Auftrieb. Daraus ergeben sich eine höhere Stabilität bei Höchstgeschwindigkeit und mehr Kurvenhaftung.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Spielmodus auswählen
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Im ausgewählten Slot befindet sich bereits eine Blaupause. Möchtest du sie überschreiben?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	GUTSCHEIN-VERWALTUNG
+0	AUTO	CAR_SELECT_FOCUSST	Der in Nordamerika nicht erhältliche Focus MK2 hat einen 2,5-Liter-Turbomotor mit 225 PS.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Dieses Upgrade stärkt die Antriebswelle, das Differential, die Achsen und alle anderen Komponenten, die die Kraft des Motors auf die Räder übertragen.
+0	AUTO	FE_MAIN_MENU	Hauptmenü
+0	AUTO	CUST_REGION_REAR_BUMPER	HECKSTOSSSTANGE
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	RIEMENSCHEIBE
+0	AUTO	CAR_SELECT_BARRACUDA	Das ist der Hemi 'Cuda, eine Legende.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	HÖCHSTBEWERTETER WAGEN
+0	AUTO	CUST_APPLY_PAINT_TITLE	LACK AUFTRAGEN
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	ANZAHL WAGEN IN GARAGE
+0	AUTO	CUST_REGION_ALL_WHEELS	ALLE FELGEN
+0	AUTO	CUST_QUICK_FORCED_2	Mit diesem Upgrade wird mehr Luft in den Motor gepumpt, so dass die Motorleistung gesteigert wird.^
+0	AUTO	FE_STATS_FASTEST_LAP	SCHNELLSTE RUNDE
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAG
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Um die Bodenhaftung der Reifen zu optimieren, werden die Front- und Heckstabilisatoren verstärkt, die Lager durch Urethankomponenten ersetzt sowie Rennstoßdämpfer verwendet.
+0	AUTO	CAR_TYPE_GRIP	GRIP
+0	AUTO	FE_STATS_DNF_PERCENTAGE	NICHT-IM-ZIEL-QUOTE
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	Der B-Body Charger war einer der berühmtesten TV-Wagen aller Zeiten.
+0	AUTO	CUST_QUICK_INTERNALS_1	Mit diesem Upgrade verstärkst du den Motor, so dass später umfassendere Upgrades eingesetzt werden können.^
+0	AUTO	CUST_QUICK_INTERNALS_2	Bei diesem Upgrade werden noch stärkere Motorteile eingesetzt, so dass die Motorleistung und -drehzahl erhöht werden.^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Blaupause auf ihren Ursprungszustand zurücksetzen?
+0	AUTO	CUST_SLOT_RACING_SEATS	RENNSITZE
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZONE 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	BESTE SEKTORPUNKTE
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	WERTVOLLSTER WAGEN
+0	AUTO	CAR_SELECT_CIVICSI	Der Civic der achten Generation.
+0	AUTO	CAR_SELECT_CHEVELLESS	Die Chevelle war Chevrolets erstes Muscle Car. Bis 1970 verbaute Chevy keine Motoren mit mehr als 400 Kubikzoll Hubraum, was sich aber 1970 mit der Vorstellung der Chevelle 402 änderte.
+0	AUTO	CUST_CAT_GRIP_FORCED	Ein kleiner, schnell ansprechender Turbolader verbessert die Leistungscharakteristik und verschafft dir auf Rennstrecken und Straßen einen enormen Vorteil.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Willkommen auf der Renntag-Karte
+0	AUTO	CUST_BLUEPRINT_APPLY	Blaupause anwenden
+0	AUTO	CUST_SLOT_CAMSHAFTS	NOCKENWELLEN
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Alle Rennen anzeigen
+0	AUTO	CUST_SLOT_HEADERS	AUSPUFFKRÜMMER
+0	AUTO	FE_STATS_FASTEST_TIME	BESTZEIT
+0	AUTO	CUST_SUSPENSION_GROUP	FAHRWERK
+0	AUTO	CUST_BLUEPRINT_RESET	BLAUPAUSE ZURÜCKSETZEN
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Mit diesem Upgrade erhöhst du die Motorleistung auf das Niveau eines Drag-Wagens.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Mit diesem Upgrade erhöhst du die Motorleistung auf das Niveau eines Rennwagens.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Mit diesem Upgrade erhöhst du die Motorleistung auf das Niveau eines Rennwagens.^
+0	AUTO	CUST_INSTALLED	INSTALLIERT
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Renntag wird geladen ...
+0	AUTO	CUST_SLOT_CAMS_DESC	Flache Nockenwellen mit kurzen Steuerzeiten sind perfekt für den Alltagsfahrer. Nockenwellen für mehr Ventilhub und mit längeren Steuerzeiten hingegen verlagern das maximale Drehmoment in den oberen Drehzahlbereich. Die beste Nockenwelle ist die, die im Drehzahlbereich, in dem du die meiste Zeit fährst, die optimale Leistung bringt.
+0	AUTO	CUST_QUICK_HANDLING_DI3	Bei diesem Upgrade wird das Fahrwerk so eingestellt, dass du leicht durch Kurven sliden kannst.^
+0	AUTO	CUST_QUICK_BRAKE_D3	Mit diesem Upgrade wird der Bremsweg auf ein Minimum verkürzt, und die Räder blockieren beim Bremsen nicht.^^
+0	AUTO	CUST_QUICK_BRAKE_G3	Bremspaket Grip-Stufe 3
+0	AUTO	CUST_QUICK_BRAKE_S3	Mit diesem Upgrade wird der Bremsweg beim Abbremsen aus der Höchstgeschwindigkeit auf ein Minimum verkürzt, und die Räder blockieren beim Bremsen nicht.^
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Je größer die Nitroflasche ist, desto mehr Nitro kannst du mitführen. Es können auch mehrere Flaschen eingebaut werden. Jede Flasche muss nach der Verwendung neu befüllt werden.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Abend
+0	AUTO	CUST_TINT_LIGHT	HELL
+0	AUTO	CUST_REPAIR_DAMAGE	SCHADEN
+0	AUTO	CUST_TINT_PEARL	PERLGLANZ
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	LÄNGSTE DRIFTDISTANZ
+0	AUTO	CUST_SLOT_TIPS_DESC	Diese Auspuffendtöpfe verleihen deinem Wagen ein aggressiveres Aussehen.
+0	AUTO	CUST_SLOT_STEERING_DESC	Ein Hochleistungs-Zahnstangenlenkgetriebe erhöht den Lenkwinkel und hat einen geringeren Lenkwiderstand als Standardsysteme.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Ein echter Supersportwagen-Killer. Diese Corvette besitzt einen 7,0-Liter-Motor mit Titanpleueln und Trockensumpfschmierung.
+0	AUTO	HD_COMPATIBLE	HD Compatible for optimal gaming
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Event löschen
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	ANZAHL BESIEGTE KINGS
+0	AUTO	CUST_WIND_TUNNEL	WINDKANAL
+0	AUTO	CUST_STAGE_NUMBER	STUFE {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	ANZAHL SIEGE
+0	AUTO	CUST_FILTER_FRONT_BUMPER	FRONTSTOSSSTANGE
+0	AUTO	MAIN_CAREER	KARRIERE
+0	AUTO	CUST_REGION_REAR_WHEEL	HINTERRÄDER
+0	AUTO	CUST_QUICK_VISUAL_D3	Bei diesem Upgrade produzieren verschiedene Aerodynamikteile mehr Abtrieb bei hohem Tempo.^
+0	AUTO	CUST_QUICK_VISUAL_G3	Bei diesem Upgrade produzieren verschiedene Aerodynamikteile mehr Abtrieb bei hohem Tempo.^
+0	AUTO	CUST_QUICK_VISUAL_S3	Bei diesem Upgrade produzieren verschiedene Aerodynamikteile mehr Abtrieb bei Höchstgeschwindigkeit.^
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Wenn man einen Wagen immer wieder stark abbremst, wird im Bremssystem übermäßige Hitze erzeugt, die mit der Zeit den Bremsweg verlängern kann. Ein größer dimensioniertes Bremssystem hilft dabei, die Temperaturen niedriger zu halten und eine konstante Bremsleistung zu gewährleisten.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Bei diesem Upgrade kommen die Motorteile eines Rennwagens zum Einsatz, so dass die Motorleistung und -drehzahl weiter erhöht werden.^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	ANZAHL RANGLISTEN-SIEGE
+0	AUTO	CUST_SLOT_BOV_DESC	Damit ein Turbolader maximalen Ladedruck aufbauen und halten kann, sorgt ein Blowoff-Ventil dafür, dass kurzfristig überschüssiger Druck abgelassen wird.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Für das Online-Spiel ist ein Update verfügbar und erforderlich. Auf NeedforSpeed.de erhältst du weitere Informationen dazu.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	BESTER EVENT-TYP
+0	AUTO	HUB_BREAK_RECORD	REKORD BRECHEN
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Diese Stabilisatoren verhindern, dass die Vorderräder deines Wagens aufgrund des enormen Drehmoments abheben.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Leicht
+0	AUTO	RACE_DAY_DIFFICULTY_2	Mittel
+0	AUTO	RACE_DAY_DIFFICULTY_3	Schwer
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elite
+0	AUTO	CUST_SLOT_CLUTCH	KUPPLUNG
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	2-Taste drücken, um fortzufahren
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	SCHNELLSTE 0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Möchtest du die vorderen oder die hinteren Reifen anpassen?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	RENNTAG ERSTELLEN
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	PERSÖNLICHE REKORDE
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Wenn du die Leistung deines Motors erhöhst, musst du auch Upgrades vornehmen, die dafür sorgen, dass die Leistung effizient genutzt und an die Antriebsräder weitergegeben werden kann. Dabei spielen Kupplung, Antriebswelle und Sperrdifferenzial eine Rolle.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	SOLO
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Nach dem Start spielt bei Drag-Rennen die Motorleistung die größte Rolle. Mehr Leistung sorgt für eine höhere Strecken- und Zielgeschwindigkeit.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Dieser Renntag ist mit deiner Version von Need for Speed™ ProStreet nicht kompatibel und kann daher nicht verwendet werden. Unter NeedforSpeed.com findest du Informationen zu Updates und neuen Spielinhalten.
+0	AUTO	RD_PLAY	SPIELEN
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	ZÜNDUNGSSYSTEM
+0	AUTO	FE_STATS_CAREER_WINS	KARRIERE-SIEGE
+0	AUTO	RACE_DAY_LOCATION	ORT
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Mit diesem Upgrade kannst du schneller schalten, und die Motorkraft wird effizienter auf die Straße übertragen.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Mit diesem Upgrade kannst du noch schneller und präziser schalten, und die Kraftübertragung auf die Räder wird weiter verbessert.^
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Möchtest du diese freigegebene Blaupause löschen?
+0	AUTO	SHOW_FRIENDS	Freunde anzeigen
+0	AUTO	FE_STATS_HUBS_DOMINATED	DOMINIERTE RENNTAGE
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	SCHNELLSTE REAKTIONSZEIT
+0	AUTO	CODE_ENTRY_INVALID	Der eingegebene Code ist ungültig. Bitte versichere dich, dass der eingegebene Code korrekt ist, und probiere es noch einmal.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	WÄHLE BIS ZU 8 EVENTS
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Wagen reparieren
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	REPARATURGUTSCHEIN
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	SCHILLERND
+0	AUTO	CUST_SLOT_CAM_GEARS	NOCKENWELLENRÄDER
+0	AUTO	CUST_SLOT_ROOF_SCOOP	DACHHUTZE
+0	AUTO	CUST_COMPONENTS_TITLE	KOMPONENTEN ANPASSEN
+0	AUTO	CUST_BRAKES_GROUP	BREMSEN
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Möchtest du wirklich beenden?
+0	AUTO	CUST_SLOT_TRACTION_BARS	ZUGSTREBEN
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Dieses Upgrade verbessert die Verzögerung deines Wagens durch den Einsatz von Hochleistungsbremsbelägen und -bremsscheiben. Bremsen sind für die Kontrolle und die Regulierung des Drifts entscheidend.
+0	AUTO	MAIN_RACE_DAY	RENNTAG
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	SPEED-CHALLENGE-SIEGQUOTE
+0	AUTO	SELL_CAR_CONFIRMATION	Der Wert dieses Wagens beträgt {0:d}^Wenn du ihn verkaufst, verlierst du alle Blaupausen dafür. Möchtest du ihn verkaufen?
+0	AUTO	RD_DELETE_RD	Renntag entfernen?
+0	AUTO	CAR_SELECT_G35	Der G35 hat dieselbe technische Plattform wie der 350Z.
+0	AUTO	CAR_SELECT_GXP	Der GXP besitzt einen 2,0-16V-Turbomotor mit 260 PS, ein Sperrdifferenzial und 18-Zoll-Räder.
+0	AUTO	CAR_SELECT_NSX	Dieser Wagen sollte Hondas Rennsporttechnologie demonstrieren. Der Mittelmotorwagen war seiner Zeit weit voraus.
+0	AUTO	CAR_SELECT_R35	Dies ist die Serienversion des R35 GTR.
+0	AUTO	CAR_SELECT_S13	Der S13 ist einer der bekanntesten Drift-Wagen.
+0	AUTO	CAR_SELECT_S15	Der S15 war ursprünglich nie in Nordamerika zu kaufen. Dennoch hat er sich zu einem Kultauto in der Tuningszene entwickelt.
+0	AUTO	CAR_SELECT_RS4	Der B7 RS4 besitzt einen V8 mit 400 PS und ist als Limousine, Kombi oder Cabrio erhältlich.
+0	AUTO	CAR_SELECT_RSX	Der Nachfolger des legendären Honda Integra besitzt den neuen Motor der K-Serie.
+0	AUTO	CAR_SELECT_RX8	Ein 2+2-Sitzer mit vorn eingebautem Wankelmotor und Heckantrieb. Der RX-8 hat eine fast perfekte Gewichtsverteilung von 50:50 und dadurch ein unglaublich ausgewogenes Handling.
+0	AUTO	CAR_SELECT_STI	Ein Boxermotor mit Turbolader und Allradantrieb. Der Sti ist einer der Wagen, die den Maßstab für andere Tuningwagen setzen. Ein echtes Allroundmodell, das alles gut kann.
+0	AUTO	CAR_SELECT_Z4M	Besitzt denselben Reihensechszylinder wie der E46 M3. Die Beschleunigung von 0 auf 100 erfolgt in 4,9 Sekunden, die Höchstgeschwindigkeit ist auf 250 km/h begrenzt.
+0	AUTO	CUST_QUICK_VISUAL_DI3	Optik Drift-Stufe 3
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZONE 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZONE 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZONE 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZONE 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZONE 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZONE 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZONE 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZONE 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZONE 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	HÖCHSTES RENN-ERGEBNIS
+0	AUTO	FE_STATS_AVERAGE_SPEED	DURCHSCHNITTSTEMPO
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALLIC
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	START-Taste drücken
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	DRIFT-SIEGQUOTE
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Keine Ersatzwagen verfügbar
+0	AUTO	CUST_FILTER_FRONT	VORDERRÄDER
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	AUTOHÄNDLER
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Das Vorserienmodell der 5. Version des Camaro wurde 2006 vorgestellt.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Mit diesem Upgrade kommst du schneller und glatter durch Kurven.^
+0	AUTO	CUST_QUICK_SUSPENSION_2	Mit diesem Upgrade kommst du schneller und glatter durch Kurven, und das bei noch besserem Handling.^
+0	AUTO	CUST_QUICK_NITROUS_D3	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung um 50 bis 250 PS erhöht. Das bringt dich möglicherweise vom letzten Platz an die Spitze.  ^
+0	AUTO	CUST_QUICK_NITROUS_G3	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung um 50 bis 250 PS erhöht. Das bringt dich möglicherweise von Platz zwei an die Spitze.  ^
+0	AUTO	CUST_QUICK_NITROUS_S3	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung um 50 bis 250 PS erhöht. Das bringt dich möglicherweise von Platz zwei an die Spitze.  ^
+0	AUTO	CUST_PERFORMANCE	LEISTUNG
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Härtere Stabilisatoren verbessern das Kurvenverhalten des Wagens und verringern die Gefahr des Untersteuerns.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Möchtest du diese Blaupause löschen?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Blaupausen
+0	AUTO	CUST_QUICK_UPGRADE	SCHNELL-UPGRADE
+0	AUTO	CAR_SELECT_CORVETTEC6	Dies ist die neueste Version der Corvette - und die erste Version in fast 35 Jahren ohne Klappscheinwerfer.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	BELOHNUNG
+0	AUTO	MAIN_QUIT_GAME	BEENDEN
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	LACHGAS
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTER
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Ein Überrollkäfig führt zu erhöhter Sicherheit, kann aber auch die Stabilität des Chassis erhöhen und deinem Wagen den typischen Renn-Look verleihen.
+0	AUTO	CUST_SLOT_BC_DESC	Je mehr Ladedruck ein Motor bekommt, desto besser. Verträgt der Motor einen höheren Ladedruck, ohne kaputt zu gehen, dann ist dieses Gerät hervorragend geeignet, um einen Turbolader optimal zu nutzen.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Überhitzte Getriebe machen viele Probleme.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	AUFLADUNG
+0	AUTO	CAR_TYPE_SPEED	SPEED-CHALLENGE
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	ZYLINDERKÖPFE
+0	AUTO	CUST_SELL_CAR_WARNING	Wenn du diesen Wagen verkaufst, kannst du nicht an {0:s}-Renn-Events teilnehmen, bis du einen anderen Wagen dieses Typs kaufst.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	An diesem Ort gibt es keine Events dieses Typs.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	TAGESZEIT
+0	AUTO	RD_DELETED	Renntag entfernt
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Wenn du die Leistung deines Motors erhöhst, musst du auch Upgrades vornehmen, die dafür sorgen, dass die Leistung effizient genutzt und an die Antriebsräder weitergegeben werden kann. Dabei spielen Kupplung, Antriebswelle und Sperrdifferenzial eine Rolle.
+0	AUTO	CUST_SLOT_AIR_INTAKE	AUFLADUNG
+0	AUTO	CUST_PART_PURCHASED	GEKAUFT
+0	AUTO	CUST_BP_OPTION_UNDO	VERWERFEN
+0	AUTO	CUST_FILTER_BODY	KAROSSERIE
+0	AUTO	CUST_FILTER_HOOD	MOTORHAUBE
+0	AUTO	CUST_FILTER_REAR	HINTERRÄDER
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Durch Umprogrammierung des Motorsteuergeräts wird die Verbrennung des Luft-Kraftstoffgemischs optimiert, um eine maximale Motorleistung zu erzielen.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Stahlflex-Bremsleitungen erhöhen den Hydraulikdruck und verbessern die Dosierbarkeit der Bremsen.
+0	AUTO	LS_SAVING	SPEICHERT ...
+0	AUTO	CUST_CUSTOM_UPGRADE	SPEZIAL-UPGRADE
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Du darfst an diesem Renntag nicht teilnehmen. Folgende Wagentypen fehlen dir:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Mit dem richtigen Fahrwerkssetup, das am besten neutral abgestimmt ist, also kein zu starkes Über- oder Untersteuern bewirkt, erhält man einen schnelleren Wagen, der auch noch leichter zu fahren ist.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	RENNMODUS WÄHLEN
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Du kannst keinen Nachrüst-Endtopf mit einem Serien-Karosserie-Kit kombinieren!
+0	AUTO	CUST_PURCHASE_CAR	Wagen kaufen
+0	AUTO	CODE_ENTRY_VERIFICATION	Codeüberprüfung auf Server ...
+0	AUTO	MC_OLD_SAVE_REWARD	Danke, dass du ältere Need for Speed™-Titel gespielt hast. Wir haben dir im Karriere-Modus {0:d} Reparaturgutschein(e) und {1:d} Totalschaden-Gutschein(e) verliehen.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	ZIELANKÜNFTE VOR HÖHERKL. GEGNER
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	Leistung Drag-Stufe 3
+0	AUTO	CUST_QUICK_POWER_G3	Mit diesem Paket verwandelst du deinen Straßenwagen in einen Rennwagen der Extraklasse.^
+0	AUTO	CUST_QUICK_POWER_S3	Leistung Speed-Stufe 3
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	ANZAHL BLAUPAUSEN
+0	AUTO	FE_STATS_BEST_RUN	BESTER LAUF
+0	AUTO	WINDTUNNEL_DOWNFORCE	ABTRIEB
+0	AUTO	CUST_SLOT_COOLING_DESC	Nicht zu heiß, nicht zu kalt. Genau richtig.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	BESTES DRIFT-ERGEBNIS
+0	AUTO	CUST_CAT_DRIFT_FORCED	Durch eine erhöhte Luftzufuhr in die Zylinder kann mehr Kraftstoff verbrannt und damit die Motorleistung erhöht werden.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Reparaturgutschein
+0	AUTO	FE_STATS_FILTER_GENERAL	ALLGEMEINE STATISTIK
+0	AUTO	CB_BLUEPRINTS_HEADER	BLAUPAUSENTYP
+0	AUTO	ENTER_SECRET_CODE	GEHEIMCODE EINGEBEN
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Dieses Upgrade verändert die Optik deines Wagens deutlich und verbessert möglicherweise seine Aerodynamik.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	ANZAHL WAGEN MIT TOTALSCHADEN
+0	AUTO	CUST_SLOT_WHEELS	FELGEN
+0	AUTO	CUST_SLOT_SUPERCHARGER	KOMPRESSOR
+0	AUTO	CAR_SELECT_SHELBYGT500	Der GT500 is der erste amerikanische Wagen mit Überrollbügel und eins der berühmtesten Modelle von Shelby.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	LÄNGSTER EINZELNER WHEELIE
+0	AUTO	FE_STATS_GRIP_WINS	GRIP-SIEGE
+0	AUTO	CL_MS_POINTS	Microsoft® Points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	LÄNGSTE DRIFTDAUER
+0	AUTO	CUST_FILTER_REAR_BUMPER	HECKSTOSSSTANGE
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	BESTE 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Es kostet dich {0:d}, einen Wagen zu kaufen und diese Blaupause darauf anzuwenden. Möchtest du fortfahren?
+0	AUTO	GARAGE_REPAIR_DENIED	Du hast nicht genügend Geld und keine Reparaturgutscheine, um diesen Wagen zu reparieren.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	KLICKEN zum Fortfahren
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	ANZAHL PUNKBUSTER-RENNEN
+0	AUTO	GARAGE_NO_CAR_REPAIR	Du hast nicht genügend Geld oder Reparaturgutscheine, um deinen Wagen zu reparieren.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	KEINE WAGEN VERFÜGBAR
+0	AUTO	RDMAP_CREATE_PREVIEW	EIGENEN RENNTAG ERSTELLEN
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Wenn man einen Wagen immer wieder stark abbremst, wird im Bremssystem übermäßige Hitze erzeugt, die mit der Zeit den Bremsweg verlängern kann. Ein größer dimensioniertes Bremssystem hilft dabei, die Temperaturen niedriger zu halten und eine konstante Bremsleistung zu gewährleisten.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	MEISTE DRIFTS IN FOLGE
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	BREMSDRUCKVERTEILER
+0	AUTO	FE_STATS_CLUB_TAG	CLUB-KÜRZEL
+0	AUTO	CUST_SLOT_EXHAUST	AUSPUFFENDTOPF
+0	AUTO	CAR_SELECT_INTEGRATYPER	Der Integra Type R gilt oft als der frontangetriebene Wagen mit dem besten Handling überhaupt.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Der Schwerpunkt liegt hier nicht auf dem Bremsen sondern auf dem Fahren. Das Ziel ist ein möglichst leichtes Bremsen-Setup, damit dein Wagen optimal beschleunigen kann.
+0	AUTO	WINDTUNNEL_DRAG	DRAG
+0	AUTO	CUST_APPLY_PAINT	Einfärben
+0	AUTO	WINDTUNNEL_PEAK_HP	MAXIMALLEISTUNG
+0	AUTO	CUST_BLUEPRINT_DELETE	Blaupause löschen
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	KARRIERESTATISTIK
+0	AUTO	CUST_VISUAL_TITLE	OPTIK
+0	AUTO	CUST_SLOT_DRIVESHAFT	ANTRIEBSSTRANG
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Blaupause kaufen
+0	AUTO	CAREER_COMPLETION_HEADER	KARRIEREFORTSCHRITT
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Höhere Motorleistung erleichtert das konstante Durchdrehen der Reifen und somit das Driften. Sorge für mehr Leistung, um bessere Powerslides zu fahren.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	SCHNELLSTE VIERTELMEILE
+0	AUTO	CL_NOT_ENOUGH_CASH	Du hast nicht genug Geld für diesen Wagen.
+0	AUTO	CUST_SLOT_SC_DESC	Bei dieser Art der Aufladung treibt der Motor den Lader selbst an, wodurch die Leistung auch in niedrigen Drehzahlbereichen erhöht wird.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	CLUB
+0	AUTO	CUST_SLOT_TIRES	REIFEN
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Keine Renntage gefunden.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Alle Änderungen, die du an deinem Renntag vorgenommen hast, werden verworfen. Möchtest du fortfahren?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	FEDERN UND STOSSDÄMPFER
+0	AUTO	CUST_REGION_SKIRT	SCHÜRZE
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	NITROFLASCHE
+0	AUTO	CUST_QUICK_FORCED_DI3	Mit diesem Upgrade wird mehr Luft in den Motor gepumpt, so dass die Motorleistung mit der eines Rennwagens vergleichbar ist.^
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	WHEELIE-BARS
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	über diesen Wagen können wir nicht sprechen
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Du hast das Maximum von {0:d} Wagen erreicht.  ^Bitte verkaufe einen Wagen aus der Garage, um Platz für den Kauf zu machen.
+0	AUTO	CUST_CUSTOMIZE_MAIN	TUNING
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Durch Umprogrammierung des Motorsteuergeräts wird die Verbrennung des Luft-Kraftstoffgemischs optimiert, so dass du genug Motorleistung hast, um einen Gegner beim Herausbeschleunigen aus einer Kurve zu überholen.
+0	AUTO	CUST_BLUEPRINT_HEADER	BLAUPAUSE ANPASSEN
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	DRAG-SIEGQUOTE
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	ABGASANLAGE
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	AUSWÄHLEN
+0	AUTO	CUST_PAINT_GROUP_CHROME	CHROM
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	ANZAHL FREIGEGEBENE BLAUPAUSEN
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	AUFLADUNG
+0	AUTO	FE_STATS_DRIFT_RACES	DRIFT-RENNEN
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Wenn du die Leistung deines Motors erhöhst, musst du auch Upgrades vornehmen, die dafür sorgen, dass die Leistung effizient genutzt und an die Antriebsräder weitergegeben werden kann. Dabei spielen Kupplung, Antriebswelle und Sperrdifferenzial eine Rolle.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	LEISTUNGS-STATISTIK
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBOLADER
+0	AUTO	CUST_SLOT_SHIFTER	SCHALTHEBEL
+0	AUTO	CUST_DYNO_TEST	PRÜFSTAND
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Die japanischen Fahrer haben das Industriegebiet des Tokioter Hafens für sich entdeckt und dort anspruchsvolle Rennstrecken durch die urbane Landschaft gebaut.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	CHALLENGE-WAGEN AUSWÄHLEN
+0	AUTO	CUST_CAT_SPEED_NITROUS	Dieses Upgrade erhöht vorübergehend die Motorleistung. Dies kann über Sieg und Niederlage entscheiden.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Der Mustang der 5. Generation ist für seinen 'retrofuturistischen Look' bekannt.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	SIEGQUOTE
+0	AUTO	RD_CUSTOM_SELECT	Renntag spielen?
+0	AUTO	KING_FLOW_CASH_REWARD	GELDPRÄMIE
+0	AUTO	CUST_CAT_SPEED_BRAKE	Dieses Upgrade verbessert die Verzögerung deines Wagens durch den Einsatz von Hochleistungsbremsbelägen und -bremsscheiben. Bremsen sind ein wichtiges Element für jedes gut getunte Fahrzeug.
+0	AUTO	CUST_SPEED_TUT_AWD	Durch Allradantrieb wird die Traktion erhöht, vor allem beim Start und beim Herausbeschleunigen aus Kurven. Das solltest du dir zu Nutze machen.
+0	AUTO	CUST_SPEED_TUT_FWD	Obwohl du in einem Wagen mit Frontantrieb gegen die Gesetze der Physik kämpfst, kannst du ihn mit dem richtigen Tuning dennoch in einen gefürchteten Gegner verwandeln. Dabei sollte auf deiner Liste ganz oben stehen, das typische Untersteuern von Fronttrieblern zu reduzieren, indem du die Front versteifst. Danach brauchst du ein Sperrdifferenzial, um das Drehmoment des Motors auch auf den Boden zu bekommen.
+0	AUTO	CUST_SPEED_TUT_RWD	Ausgewogene Gewichtsverteilung und die Möglichkeit, 'mit dem Gaspedal zu lenken', sind die klaren Vorteile des Heckantriebs. Achte darauf, bei deinem Setup zu starkes Übersteuern zu vermeiden.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	KÜHLSYSTEM
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Der Cosworth wurde aus Homologationszwecken gebaut und war eigentlich gar kein richtiger Escort. Dennoch ist der Escort RS mit seiner unverwechselbaren Silhouette einer der bekanntesten Sportwagen aller Zeiten.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	SCHNELLSTE 0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs, die schnellste Straße des Westens, liegt in einem hügeligen Gebiet in der Wüste Kaliforniens. Es geht ständig auf und ab, das Durchschnittstempo ist hoch.
+0	AUTO	RACE_DAY_DIFFICULTY	SCHWIERIGKEIT
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Du hast nicht genügend Geld, um alle Gutscheine zu kaufen, die sich momentan in deinem Einkaufswagen befinden.
+0	AUTO	CAR_SELECT_CHALLENGER	Der Challenger der ersten Generation war für Dodge der Einstieg in den Markt der 'Pony-Cars'. Er basierte auf einem älteren Design für einen geplanten Wagen mit Turbinenantrieb.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Wähle einen freien Renntag-Slot, um einen neuen eigenen Renntag zu erstellen. Das Symbol, das du wählst, stellt diesen Renntag in der Renntagkarte unter Mein Renntag dar.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Durch Allradantrieb wird die Traktion erhöht, vor allem beim Start und beim Herausbeschleunigen aus Kurven. Das solltest du dir zu Nutze machen.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Obwohl du in einem Wagen mit Frontantrieb gegen die Gesetze der Physik kämpfst, kannst du ihn mit dem richtigen Tuning dennoch in einen gefürchteten Gegner verwandeln. Dabei sollte auf deiner Liste ganz oben stehen, das typische Untersteuern von Fronttrieblern zu reduzieren, indem du die Front versteifst. Danach brauchst du ein Sperrdifferenzial, um das Drehmoment des Motors auch auf den Boden zu bekommen.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Ausgewogene Gewichtsverteilung und die Möglichkeit, 'mit dem Gaspedal zu lenken', sind die klaren Vorteile des Heckantriebs. Achte darauf, bei deinem Setup zu starkes Übersteuern zu vermeiden.
+0	AUTO	CUST_SELL_CAR	Wagen verkaufen
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Für die komplexe Porsche-Teststrecke in Leipzig wurden einige der bekanntesten Kurven des Motorsports nachgebaut.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	SEITENSCHÜRZEN
+0	AUTO	CUST_SLOT_FUEL_DESC	Eine effiziente Kraftstoffversorgung ist für hohe PS-Zahlen entscheidend. Eine größere Benzinpumpe, größere Einspritzdüsen und optimierte Benzinleitungen erhöhen die Motorleistung deutlich.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Ein gut abgestimmter Drift-Wagen lässt sich kontrolliert zum Ausbrechen bringen, er kann in der Kurve leicht übersteuert gefahren werden, bleibt währenddessen aber äußerst stabil.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	FREUNDE
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Morgen
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Bei der Spielersuche ist ein Fehler aufgetreten.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Eine Hochgeschwindigkeitspassage über die Schnellstraßen von Tokio. Es gibt Schleifen, Geraden und einen Tunnelabschnitt.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	GESPIELTE RANGLISTEN-SPIELE
+0	AUTO	CUST_TUNE	TUNING
+0	AUTO	CUST_VISUALS_TITLE	OPTIK
+0	AUTO	FE_STATS_CLUB_NAME	CLUB-NAME
+0	AUTO	CUST_INSTALL	Installieren
+0	AUTO	RACEDAY_SAVE_CONFIRM	Möchtest du deinen Renntag speichern?
+0	AUTO	FE_MATCHMAKING_JOINING	Tritt Spielsitzung bei ...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	BLOWOFF-VENTIL
+0	AUTO	CUST_SLOT_ROLL_CAGE	ÜBERROLLKÄFIG
+0	AUTO	CAR_LOT_NO_DRIFTING	KEIN DRIFTEN
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Bei diesem Upgrade werden bestimmte Motorbauteile durch robustere Bauteile ersetzt. Dadurch kann der Motor höhere Drehzahlen verkraften und mehr Leistung erzeugen.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	TOTALSCHADEN-GUTSCHEIN
+0	AUTO	CUST_PACKAGE_VISUAL	Optik-Pakete
+0	AUTO	CUST_EMPTY_BLUEPRINT	Neue Blaupause erstellen
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Gib hier deinen Geheimcode oder Promo-Code ein und du erhältst deine Belohnung.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Mit diesem aus dem Rallyesport bekannten Upgrade bist du bestens ausgestattet, um eine Runde durch Matsch und Schlamm zu drehen.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Wähle den Schwierigkeitsgrad für deinen Renntag. Er bestimmt die KI-Schwierigkeit und die maximale Wagenstufe für diesen Renntag.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	KARRIEREWAGEN
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	BEENDETE 12-SPIELER-RENNEN
+0	AUTO	CUST_REGION_FRONT_TIRE	VORDERREIFEN
+0	AUTO	FE_STATS_DRAG_WINS	DRAG-SIEGE
+0	AUTO	RACE_DAY_SAVE_NAME	Mein Renntag
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Du hast nicht genügend Geld für diesen Kauf!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	GRÖSSTER WHEELIE-WINKEL
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Turbos sind nichts anderes als Luftpumpen.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Eine größere Zylinderbohrung erhöht den Hubraum und damit die Motorleistung.
+0	AUTO	CUST_CAT_GRIP_BRAKE	Dieses Upgrade verbessert die Verzögerung deines Wagens durch den Einsatz von Hochleistungsbremsbelägen und -bremsscheiben. Bremsen sind ein wichtiges Element für jedes gut getunte Fahrzeug.
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	RENN-EVENTS
+0	AUTO	CUST_SLOT_STEERING_KIT	LENKUNGS-KIT
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	GRIP-SIEGQUOTE
+0	AUTO	CUST_BLUEPRINT_RENAME	Blaupause wird umbenannt ...
+0	AUTO	RACE_DAY_SLOT_FILLED	BESETZT
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	HÖCHSTES DRIFT-ERGEBNIS
+0	AUTO	CUST_VINYLS	VINYLS
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Aus hochwertigen Materialien gefertigte Achsschenkel bieten zusätzliche Radsturz-Einstellmöglichkeiten und eine insgesamt bessere Fahrwerksgeometrie.
+0	AUTO	FE_STATS_HUBS_WON	GEWONNENE RENNTAGE
+0	AUTO	CUST_CAT_GRIP_NITROUS	Dieses Upgrade erhöht vorübergehend die Motorleistung. Dies kann über Sieg und Niederlage entscheiden.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	NICHT ZUM RENNEN ZUGELASSEN
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Wähle die Anzahl Reparaturgutscheine für deinen Renntag. Erstellst du einen Solo-Renntag, bekommst du gleich viele Reparatur- und Totalschaden-Gutscheine.
+0	AUTO	CAR_SELECT_CAMAROSS	Der Camaro der ersten Generation wurde bekannt als kleines, wildes Tier, das Mustangs zum Mittagessen verspeist.
+0	AUTO	FE_STATS_BEAT_MODERATOR	MODERATOR GESCHLAGEN
+0	AUTO	CUST_SLOT_HANDBRAKE	HANDBREMSE
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Mit diesem Upgrade kannst du noch schneller und präziser schalten, und die Kraftübertragung auf die Räder wird weiterhin auf das Niveau eines Rennwagens verbessert.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Mit diesem Upgrade kannst du noch schneller und präziser schalten, und die Kraftübertragung auf die Räder wird weiterhin auf das Niveau eines Rennwagens verbessert.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Mit diesem Upgrade kannst du noch schneller und präziser schalten, und die Kraftübertragung auf die Räder wird weiterhin auf das Niveau eines Rennwagens verbessert.^
+0	AUTO	COMMON_CLASS_HEADER	STUFE
+0	AUTO	CAR_SELECT_FORDGT	Der Ford GT wurde als Hommage an Fords Motorsportdominanz in den späten 60ern entworfen. Er ist die moderne Version dieses klassischen GT40.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	LEISTUNGS-STATISTIK
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	BREMSSCHEIBEN
+0	AUTO	CUST_QUICK_INTERNALS_D3	Mit diesem Upgrade kann der Motor kurze Zeit eine höhere Leistung erbringen.^
+0	AUTO	CUST_QUICK_INTERNALS_G3	Bei diesem Upgrade kommen die Motorteile eines Rennwagens zum Einsatz, so dass die Motorleistung und -drehzahl weiter erhöht werden.^
+0	AUTO	CUST_QUICK_INTERNALS_S3	Motorteile Speed-Stufe 3
+0	AUTO	CUST_SLOT_PISTONS	KOLBEN
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Dieses Upgrade erhöht vorübergehend die Motorleistung. Dies kann über Sieg und Niederlage entscheiden.
+0	AUTO	FE_STATS_BEST_LAP_TIME	RUNDENBESTZEIT
+0	AUTO	FE_STATS_SKILLS_STATS	FÄHIGKEITEN-STATISTIK
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	KARRIEREÜBERSICHT
+0	AUTO	CUST_DRIFT_TUT_RWD	Ein effizientes Drift-Setup zeichnet sich dadurch aus, dass man das Heck des Wagens einfach zum Ausbrechen bringen und dabei gut kontrollieren kann.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Mit diesem Upgrade erhöhst du die Motorleistung auf das Niveau eines Rennwagens.^
+0	AUTO	CUST_SELL_CAR_DENIED	Dein letzter Wagen ist unverkäuflich.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Diese groß dimensionierten Streben verhindern das Verwinden der Karosserie bei hohen Antriebsdrehmomenten und sorgen so für eine optimale Traktion.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Mittag
+0	AUTO	CUST_SLOT_PULLEY_DESC	Durch den Einbau einer geänderten Antriebsriemenscheibe dreht sich der Turbolader schneller und liefert mehr Ladedruck und mehr Leistung.
+0	AUTO	CUST_SLOT_IGNITION_DESC	Ein starker und permanenter Zündfunke ist für hohe PS-Zahlen unerlässlich. Der Einsatz von Zündkabeln und Zündkerzen aus hochleitenden Materialien, wie Platin oder Iridium, kann die Motorleistung deutlich verbessern.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	AUS
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	BREMSLEITUNGS-KIT
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	BESTER MULTIPLIKATOR
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	NITROSYSTEM
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Der Ranglistenserver ist momentan nicht erreichbar. Bitte später noch einmal versuchen.
+0	AUTO	RACE_DAY_TRACK_CONFIG	STRECKENKONFIGURATION
+0	AUTO	CS_HEADER_DRAG_EVENT	DRAG-EVENTS
+0	AUTO	CUST_QUICK_BRAKE_1	Mit diesem Upgrade hat dein Wagen einen kürzeren Bremsweg als mit den serienmäßigen Bremsen.
+0	AUTO	CUST_QUICK_BRAKE_2	Bremsen Stufe 2
+0	AUTO	CUST_REPAIR_TITLE	REPARATUR
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Wenn du die Leistung deines Motors erhöhst, musst du auch Upgrades vornehmen, die dafür sorgen, dass die Leistung effizient genutzt und an die Antriebsräder weitergegeben werden kann. Dabei spielen Kupplung, Antriebswelle und Sperrdifferenzial eine Rolle.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Blaupausen-Übersicht
+0	AUTO	CUST_CAT_DRAG_FORCED	Bei diesem Upgrade liegt der Schwerpunkt auf einer möglichst hohen Leistung. Die Turbokomponenten sind auf hohe PS-Zahlen und Fahren unter Volllast ausgelegt und verbessern deutlich deine gemessenen Geschwindigkeiten.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Möchtest du diesen Renntag jetzt spielen?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Möchtest du die Änderungen an dieser Blaupause speichern?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Dieses Upgrade stärkt die Antriebswelle, das Differential, die Achsen und alle anderen Komponenten, die die Kraft des Motors auf die Räder übertragen.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Dadurch werden alle an der Blaupause vorgenommenen Änderungen verworfen. Änderungen verwerfen?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Blaupause wird umbenannt ...
+0	AUTO	CUST_FILTER_MIRRORS	SPIEGEL
+0	AUTO	ENTER_PRESELL_CODE	PROMO-CODE EINGEBEN
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	HERUNTERLADEN GESCHEITERT
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	ANZAHL GEWONNENE SHOWDOWNS
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Mit diesem Upgrade wird das Motorsteuergerät weiter umprogrammiert, so dass eine erneute Leistungssteigerung erzielt wird.^
+0	AUTO	FE_STATS_BEST_REACTION_TIME	BESTE REAKTIONSZEIT
+0	AUTO	CAR_SELECT_MK5GTI	Der Mk5 GTI ist die neueste Version des Urvaters aller Kompaktwagen. Der 2.0 TFSI-Motor hat 200 PS und kann problemlos leistungsgesteigert werden.
+0	AUTO	CAR_SELECT_MK5R32	Man nehme einen Kompaktwagen, einen V6 mit schmalem Zylinderwinkel und Allradantrieb - heraus kommt dieses Modell.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Mit dem richtigen Fahrwerkssetup, das am besten neutral abgestimmt ist, also kein zu starkes Über- oder Untersteuern bewirkt, erhält man einen schnelleren Wagen, der auch noch leichter zu fahren ist.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	ACHSSCHENKEL
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	Bei enorm hoher Motorleistung ist ein straffes Fahrwerk erforderlich, das deinen Wagen stabil in der Spur hält.
+0	AUTO	CUST_SLOT_BODY	KAROSSERIE-KIT
+0	AUTO	CUST_SLOT_HOOD	MOTORHAUBE
+0	AUTO	CUST_SLOT_PADS	BREMSBELÄGE
+0	AUTO	FE_STATS_DRIFT_WINS	DRIFT-SIEGE
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Durch Umprogrammierung des Motorsteuergeräts wird die Verbrennung des Luft-Kraftstoffgemischs optimiert, so dass du genug Motorleistung hast, damit deine Hinterräder die Haftung verlieren und du quer ins Ziel fahren kannst.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	TUNING
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	KARRIERE-TOTALSCHÄDEN
+0	AUTO	RD_CREATE_RD	Renntag erstellen
+0	AUTO	FE_STATS_DRAG_RACES	DRAG-RENNEN
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	SPIELABBRUCHQUOTE
+0	AUTO	CUST_REGION_FRONT_WHEEL	VORDERRÄDER
+0	AUTO	CAR_SELECT_ECLIPSE	Der 2G Eclipse hat oft Probleme mit der Kurbelwellenlagerung.
+0	AUTO	CAR_LOT_TITLE	AUTOHÄNDLER
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Wenn du einen benutzten Renntag-Slot auswählst, erhältst du Informationen über diesen Renntag und kannst diesen Renntag löschen.
+0	AUTO	CAREER_MAP_TITLE	KARRIEREKARTE
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	BESTES DRIFT-ERGEBNIS VERFOLGUNG
+0	AUTO	CUST_SLOT_CRANKSHAFT	KURBELWELLE
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	WAGEN-BELOHNUNG
+0	AUTO	CAR_SELECT_R34GTR	Der Wagen, der die Tuningszene definiert. Der Maßstab für alle anderen Modelle.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFT-EVENTS
+0	AUTO	RACE_DAY_MULTIPLAYER	MULTIPLAYER
+0	AUTO	CUST_SLOT_CRANK_DESC	Serienmäßige Kurbelwellen sind nicht für hohe PS-Zahlen ausgelegt. Für Fahrzeuge mit mehr als 500 PS sind daher geschmiedete Kurbelwellen erforderlich.
+0	AUTO	CAR_SELECT_COBALTSS	Mit seinem aufgeladenen 2,0-Liter-Motor ersetzte der Cobalt den Cavalier und sollte gegen Modelle wie den Honda Civic antreten.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} FUSS
+0	AUTO	CAR_SELECT_350Z	Dies ist der fünfte Wagen aus der Z-Serie, ein 2+2-Sportcoupé mit Heckantrieb.
+0	AUTO	CAR_SELECT_997T	Mit seinem 3,6-Liter-Turbomotor beschleunigt dieser Wagen von 60 auf 100 km/h in nur einer Sekunde.
+0	AUTO	CAR_SELECT_AE86	Der Hachi-Roku ist einer der letzten Kompaktwagen mit Heckantrieb.
+0	AUTO	CAR_SELECT_CTSV	Der CTSV war das erste Modell, das Cadillac in der V-Sportwagenserie herausbrachte, und sollte gegen europäische Sportlimousinen bestehen.
+0	AUTO	CAR_SELECT_EVO9	Der EVO IX ist ein Kompaktwagen mit 2,0-16V-Turbomotor und Allradantrieb. Seit seinem Erscheinen ist er der Tuning-Maßstab im Hinblick auf Performance und Handling.
+0	AUTO	CAR_SELECT_EVOX	Der EVO X ist schneller als der 'Stig'.
+0	AUTO	CAR_SELECT_GTON	Der Pontiac GTO war die nordamerikanische Version der Holden-V-Plattform mit dem LS2-Motor aus der Corvette.
+0	AUTO	CAR_SELECT_GTOO	Für viele das erste Muscle Car überhaupt.
+0	AUTO	CAR_SELECT_SHELBYGT500N	An diesem Projekt arbeiteten Fords SVT-Abteilung (Special Vehicle Team) und der legendäre Carroll Shelby zusammen - der Erfolg war also sozusagen vorprogrammiert. Herausgekommen ist ein Wagen, der Mustang-Fans ein breites Grinsen ins Gesicht zaubert: 450 PS, 650 Nm Drehmoment (oh yeah, Baby!), Brembo-Bremsanlage, 19-Zoll-Leichtmetallräder und ein Preis, der sich am Mustang Cobra-Vorgängermodell orientiert. Der 2006er Ford Mustang Shelby Cobra GT500 wird der leistungsstärkste in Serie gebaute Mustang aller Zeiten sein, wenn es nach seinen Designern geht.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	VORAUSSETZUNGEN FÜR SHOWDOWN
+0	AUTO	CUST_REPAIR_USE_CASH	Bargeld benutzen
+0	AUTO	FE_STATS_FILTER_SKILLS	FÄHIGKEITEN-STATISTIK
+0	AUTO	FE_STATS_SPEED_RACES	SPEED-RENNEN
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Events definieren
+0	AUTO	RD_DELETE_SHARED_RD	Freigegebenen Renntag entfernen?
+0	AUTO	CAREER_OVERVIEW_HEADER	KARRIEREÜBERSICHT
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	AUSPUFFROHRE
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Wenn man einen Wagen immer wieder stark abbremst, wird im Bremssystem übermäßige Hitze erzeugt, die mit der Zeit den Bremsweg verlängern kann. Ein größer dimensioniertes Bremssystem hilft dabei, die Temperaturen niedriger zu halten und eine konstante Bremsleistung zu gewährleisten.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Bei diesem Upgrade werden bestimmte Motorbauteile durch robustere Bauteile ersetzt. Dadurch kann der Motor höhere Drehzahlen verkraften und mehr Leistung erzeugen.
+0	AUTO	CL_DRIVETRAIN_ALL	Alle Typen
+0	AUTO	CL_DRIVETRAIN_AWD	Allradantrieb
+0	AUTO	CL_DRIVETRAIN_FWD	Frontantrieb
+0	AUTO	CL_DRIVETRAIN_RWD	Heckantrieb
+0	AUTO	FE_COMMON_MODE	MODUS
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	ANSAUGBRÜCKE
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	EVENT-REKORDE
+0	AUTO	CODE_ENTRY	CODEEINGABE
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Alle Gutscheine kaufen, die sich momentan in deinem Einkaufswagen befinden?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	ABGASANLAGE
+0	AUTO	RACE_DAY_SPLIT_SCREEN	SPLITSCREEN
+0	AUTO	CUST_SLOT_INTERCOOLER	LADELUFTKÜHLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	In Kurven sind die richtige Geschwindigkeit, und insbesondere die optimale Geschwindigkeit beim Herausbeschleunigen, entscheidend. Höhere Motorleistung erlaubt ein schnelleres Herausbeschleunigen aus Kurven und natürlich höhere Geschwindigkeiten.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	ANZAHL CLUBMITGLIEDER
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	MOTORTEILE
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Dieses Upgrade stärkt die Antriebswelle, das Differential, die Achsen und alle anderen Komponenten, die die Kraft des Motors auf die Räder übertragen.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Windkanal aus
+0	AUTO	FE_COMMON_CONFIGURATION	KONFIGURATION
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} PS
+0	AUTO	CS_HEADER_GRIP_EVENT	GRIP-EVENTS
+0	AUTO	CAR_SELECT_CIVIC	Der Civic der 6. Generation ist eins der beliebtesten Autos in der Tuningszene, egal ob für Street-, Rennstrecken-, Drag-Rennen oder alles mögliche dazwischen.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Renntag gelöscht
+0	AUTO	CAR_SELECT_E46M3	Die 3. Version des M3. Der E46 hatte die bis dato höchste spezifische Leistung aller BMW-Motoren überhaupt.
+0	AUTO	CAR_SELECT_E92M3	Der E92 M3 besitzt ein Carbondach und einen V8, im Gegensatz zu den vorherigen m3-Modellen mit Reihensechszylinder.
+0	AUTO	CAR_SELECT_ELISE	Die Elise der 2. Generation ist ein gewichtsoptimierter Sportwagen ohne jeglichen Schnickschnack, der auf maximale Fahrleistungen getrimmt ist.
+0	AUTO	CAR_SELECT_FDRX7	Der FD RX-7 ist einer der besten Tuningwagen aller Zeiten, egal ob für Drift- oder Grip-Rennen. Eine echte Legende.
+0	AUTO	CAR_SELECT_IS350	Der IS der 2. Generation ist ein Luxuscoupé mit Heckantrieb. Der neue IS hat elegantere, coupéartige Linien mit auslaufendem Heck.
+0	AUTO	CAR_SELECT_LP640	Mit seinem 640 PS starken 6,5-Liter-Motor befindet sich der LP640 im oberen Leistungsbereich der Supersportwagen.
+0	AUTO	CUST_SLOT_VALVE_DESC	Durch Regelung des Hydraulikdrucks innerhalb des Bremssystems kann dieses System die Bremsleistung entweder an der Vorder- oder Hinterachse erhöhen.
+0	AUTO	CAR_SELECT_SUPRA	Der Supra der 4. Generation ist leichter und agiler als sein Vorgänger und erreicht Querbeschleunigungen von 0,98 G. 1999 wurden in Nordamerika die letzten Supras verkauft, die Produktion in Japan wurde allerdings bis 2002 fortgesetzt.
+0	AUTO	CUST_FILTER_ALL_PARTS	ALLE TEILE
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Durch dieses Upgrade wird das Gewicht auf die Antriebsräder verlagert, so dass die Vorderräder möglichst wenig vom Boden abheben.^
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Mit diesem Upgrade kommst du noch schneller und glatter durch Kurven, ohne die Haftung zu verlieren.^
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Mit diesem Upgrade kommst du selbst bei Höchstgeschwindigkeit schnell und glatt durch Kurven, ohne die Haftung zu verlieren.^
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Es konnten keine passenden Spiele oder Spieler gefunden werden. Bitte noch einmal versuchen.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Renn-Events festlegen
+0	AUTO	FE_STATS_CLUB_LEADER	CLUB-CHEF
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Der in Deutschland liegende Autobahnring ist ein dichtes Netz von Hochgeschwindigkeitsstraßen und umfasst Autobahnabschnitte sowie überhöhte Kurven und Tunnels.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Suche wird abgebrochen ...
+0	AUTO	CUST_SLOT_DIFF_DESC	Dieses Upgrade überträgt die Motorleistung gleichmäßig auf die angetriebenen Räder.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Möchtest du diesen Renntag überschreiben?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	MEISTE ZIELANKÜNFTE V. FÜHRENDEM
+0	AUTO	CAR_SELECT_ZONDAF	Viele Autojournalisten sind der Meinung, dass der Zonda F einer der besten Supersportwagen der Welt ist.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Um die Bodenhaftung der Reifen zu optimieren, werden die Front- und Heckstabilisatoren verstärkt, die Lager durch Urethankomponenten ersetzt sowie Rennstoßdämpfer verwendet.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Mein Renntag^Erstelle und entwirf deinen eigenen Renntag. Erstelle einen Solo- oder einen Multiplayer-Renntag und tritt online gegen andere Spieler an. Erstelle einen Splitscreen-Renntag und fordere einen Freund heraus.^^Gib deinen Solo- oder Multiplayer-Renntag online anderen Spielern frei und lade sie ein, deinem eigenen persönlichen Renntag beizutreten.^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis befindet sich auf einem Berg in einem entlegenen Gebiet Japans. Die ursprünglich düstere Strecke ist heute ein neuer und sauberer Hochgeschwindigkeitskurs.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Härtere Stoßdämpfer in Verbindung mit einem niedrigeren Fahrzeugschwerpunkt durch härtere Tieferlegungsfedern verbessern das Kurvenverhalten deines Wagens deutlich.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Dieses Upgrade erhöht vorübergehend die Motorleistung. Nitro ist ein Muss für jedes Drag-Rennen.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Fahrer aus der "Windy City" haben einen Flugplatz zur Rennstrecke umgebaut. Chicago Airfield hat eine breite Bahn, mehrere Grip- und Drift-Strecken und einen Drag-Strip.
+0	AUTO	FE_STATS_TOP_SPEED	HÖCHSTGESCHWINDIGKEIT
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	DRUCKREGLER
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	ANZAHL MAXIMALER GRIP ERREICHT
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	SCHNELLSTE 60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	LADEDRUCKREGELUNG
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS ProStreet
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Ebisu, das geistige Zentrum des Driftens, liegt in einer japanischen Bergregion. Die Fukuyama-Challenge startet auf dem Land und wechselt dann auf eine Schnellstraße.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Je leichter die Nockenwellenstirnräder sind, desto weniger Energie ist zum Antrieb der Nockenwellen erforderlich. Dies wirkt sich positiv auf die Leistung des Motors aus.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	OHNE SCHÄDEN GEWONNENE RENNEN
+0	AUTO	CUST_QUICK_HANDLING_1	Mit diesem Upgrade erreicht der Wagen eine höhere Kurvenstabilität und eine stabilere Straßenlage bei hohem Tempo.^
+0	AUTO	CUST_QUICK_HANDLING_2	Handling Stufe 2
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Während sich Nitro hervorragend für die kurzfristige Erhöhung der Motorleistung eignet, kann eine zu starke Nitrozufuhr den Motor zerstören. Eine elektronische Drucksteuerung sorgt dafür, dass der Motor nicht überlastet wird.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Möchtest du den Ort wechseln? Dadurch wird deine gesamte vorhandene Event-Auswahl gelöscht.
+0	AUTO	CUST_VINYL_LAYER_TITLE	SCHICHT-MENÜ
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Bei diesem Upgrade werden bestimmte Motorbauteile durch robustere geschmiedete Komponenten ersetzt, die für die Belastungen auf der Viertelmeile ausgelegt sind.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Der nordkalifornische Infineon Raceway zeichnet sich durch komplexe Höhenänderungen und Kurven aus. Ein falsches Manöver, und man wird langsam oder landet in einer Mauer.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	SPEED-^CHALLENGE
+0	AUTO	FE_STATS_CLUB_POINTS	CLUB-PUNKTE
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Durch Umprogrammierung des Motorsteuergeräts wird die Verbrennung des Luft-Kraftstoffgemischs optimiert, so dass du genug Motorleistung hast, um einen Gegner beim Herausbeschleunigen aus einer Kurve zu überholen.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Möchtest du das Event %s entfernen?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Renntag gespeichert
+0	AUTO	CUST_QUICK_NITROUS_DI3	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung um 50 bis 250 PS erhöht. Das bringt dich möglicherweise von Platz zwei an die Spitze.  ^
+0	AUTO	CUST_QUICK_POWER_1	Mit diesem Basis-Upgrade-Paket erhöhst du die Leistung des Motors im gesamten Drehzahlband und verpasst deinem Serienwagen einen aggressiveren Sound.
+0	AUTO	CUST_QUICK_POWER_2	Dieses Paket baut auf den kleineren Upgrades aus Stufe 1 auf und bietet im gesamten Drehzahlband eine höhere Motorleistung sowie einen aggressiveren Sound.^
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park ist eine unglaublich verwinkelte und kompakte Strecke inmitten der irischen Landschaft.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	ERSATZWAGEN
+0	AUTO	FE_STATS_GRIP_RACES	GRIP-RENNEN
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAGE
+0	AUTO	CUST_PACKAGE_POWER	Leistungs-Pakete
+0	AUTO	CUST_OWNED	GEKAUFT
+0	AUTO	CUST_PAINT	LACK
+0	AUTO	CUST_PARTS	KAROSSERIETEILE
+0	AUTO	CUST_PACKAGE_TITLE	PAKET
+0	AUTO	CS_OPTION_CAR_SELECT	Wagen auswählen
+0	AUTO	RACE_DAY_SLOT_EMPTY	FREI
+0	AUTO	FE_STATS_ACHIEVEMENTS	ERREICHTE ZIELE
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Wenn du einen eigenen Challenge-Renntag erstellst, kannst du die Wagen bestimmen, die in diesem Renntag benutzt werden können.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Mit der Handbremse kannst du alte Rockford-Folgen nachspielen.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Die Highway Route 318 mit ihrem sonnenverbrannten Asphalt liegt tief in der Wüste Nevadas. Man kann über 320 fahren, aber die vermeintlich einfachen Kurven täuschen.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Hochleistungsbremsscheiben leiten die beim Bremsen entstehende Wärme besser ab als Serienscheiben. Größere Bremsscheiben bieten den Bremsbelägen mehr Oberfläche und erhöhen dadurch die Bremskraft.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	BESTES DRIFT-ERGEBNIS FÜHRUNG
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Bei diesem Upgrade wird das Fahrwerk so eingestellt, dass du leicht durch Kurven sliden kannst.^
+0	AUTO	CUST_REGION_FRONT_BUMPER	FRONTSTOSSSTANGE
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	GESCHÄTZTES KAPITAL
+0	AUTO	CUST_SLOT_TRANSMISSION	GETRIEBE
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Der Portland International Raceway, kurz PIR, liegt in der Nähe des Mount Rainier und ist ein anspruchsvoller Straßenkurs mit einem hervorragenden Drag-Strip.
+0	AUTO	CUST_BLUEPRINT_SAVE	BLAUPAUSE AKTUALISIEREN
+0	AUTO	CUST_QUICK_NITROUS_1	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung erhöht. Das bringt dich möglicherweise von Platz zwei an die Spitze.  ^
+0	AUTO	CUST_QUICK_NITROUS_2	Bei diesem Upgrade wird die Antriebsleistung des Motors kurzfristig durch eine Lachgas-Trockeneinspritzung noch weiter erhöht. Das bringt dich möglicherweise von Platz zwei an die Spitze.  ^
+0	AUTO	RACE_DAY_LOCATION_9_DESC	In Texas ist alles etwas größer, so auch der Texas World Speedway, bei dem sich ein verwinkelter Straßenkurs an ein Rennoval mit überhöhten Kurven anschließt.
+0	AUTO	CAR_SELECT_CORVETTE	Das letzte Stingray-Modell. Die Corvette der 2. Generation wurde zu einem der 5 besten Sportwagen aller Zeiten gewählt.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	MEISTE GEWONNENE SEKTOREN
+0	AUTO	CL_DRIVETRAIN_HEADER	ANTRIEB
+0	AUTO	CUST_PACKAGE_HANDLING	Handling-Pakete
+0	AUTO	FE_STATS_SPEED_WINS	SPEED-SIEGE
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	MEISTE GEWONNENE KONTROLLPUNKTE
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Die Top-Tuner-Rangliste führt die besten Blaupausen-Tuner des Spiels auf. Deine Bewertung erfolgt nach der Siegquote aller Blaupausen, die du freigegeben hast. Deine freigegebenen Blaupausen müssen in mindestens 20 Rennen benutzt worden sein, bevor du in der Rangliste erscheinst.

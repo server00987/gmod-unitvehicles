@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Swedish_Frontend.bin
+#	File created on: 2025-05-24 11:18:46
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	TOTAL REPARATIONSKOSTNAD
+0	AUTO	MODE_ALL	Alla bilar
+0	AUTO	CUST_VINYL_MOVE_LAYER	Flytta lager upp/ner
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	MOTORBLOCK
+0	AUTO	CAR_SELECT_MUSTANGGT	Den fjärde generationens Mustang har en 4.6-liters V8 och den definierar mer eller mindre pony car-standarden.
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Den här uppgraderingen ersätter motorns interna delar med starkare och mer hållbara delar vilket möjliggör att motorn klarar högre effekt och kan nå högre varvtal.^
+0	AUTO	CUST_VISUAL_DECALS	DEKALER
+0	AUTO	CUST_CUSTOMIZE	Specialanpassa
+0	AUTO	CODE_ENTRY_VALID	Grattis! Din kod fungerade och din belöning är upplåst.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	BROMSOK
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	Du har obetalda marker i din kundvagn. Vill du avsluta ändå?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	KRÄNGNINGSHÄMMARE
+0	AUTO	CUST_QUICK_HANDLING_D3	Den här uppgraderingen kombinerar styvare fjädringsdelar så att bilen får maximalt väggrepp när den kör rakt fram. ^
+0	AUTO	CUST_QUICK_HANDLING_G3	Den här uppgraderingen kombinerar styvare fjädringsdelar så att bilen får maximalt väggrepp i kurvor och när den kör rakt fram. ^
+0	AUTO	CUST_QUICK_HANDLING_S3	Den här uppgraderingen kombinerar styvare fjädringsdelar så att bilen får maximalt väggrepp i hög fart i kurvor och när den kör rakt fram. ^
+0	AUTO	CUST_REGION_REAR_TIRE	BAKDÄCK
+0	AUTO	FE_STATS_BEST_SECTOR	BÄSTA SEKTOR
+0	AUTO	CL_FREE_CAR_MARKER	GRATIS BILMARKER
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	VÄLJ RACINGTÄVLINGAR
+0	AUTO	CUST_QUICK_BRAKE_DI3	Den här uppgraderingen ger optimal bromssträcka samtidigt som bilen blir mer benägen att tappa väggreppet under inbromsning.^
+0	AUTO	CUST_BP_APPLY_CONFIRM	Det kostar {0:d} att köpa alla delar som krävs för att kunna använda den här Blueprinten på bilen. Vill du fortsätta?
+0	AUTO	CUST_SLOT_BUSHING_KIT	BUSSNINGAR
+0	AUTO	FE_STATS_GAMES_PLAYED	SPELADE SPEL
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	BONUSBILAR
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	LAGER {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	PAKETINFORMATION
+0	AUTO	CUST_SLOT_NITROUS_DESC	Lustgas är en mycket explosiv gas som kan sprutas in i cylindrarna vid förbränningen för att öka effekten rejält.^
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Den här uppgraderingen programmerar om motorstyrningen för att optimera prestanda.^
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Den här uppgraderingen programmerar om motorstyrningen för att optimera prestanda.^
+0	AUTO	CS_HEADER_SPEED_EVENT	FARTUTMANINGAR
+0	AUTO	CUST_SLOT_HEADS_DESC	Genom att porta ventilerna i cylindertoppen kan du öka luftflödet in i motorn och få ut avgaserna ur motorn. Detta resulterar i högre motoreffekt.^
+0	AUTO	CUST_VINYL_ADDLAYER	LÄGG TILL NYTT LAGER
+0	AUTO	CUST_CAT_SPEED_FORCED	En turbo med kort fördröjning och snabb uppladdning ger dig en användbar effektkurva och ett klart effektövertag oavsett om du kör på bana eller gata.^
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	HÖGSTA MULTIPLIKATOR
+0	AUTO	RACE_MODE_GRIP_MODE	BANRACE
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Nästa steg är att välja racetävlingarna för din racingdag.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	ANTAL RACE
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Den här uppgraderingen förstärker komponenter som överför bilens motorkraft till hjulen, inklusive drivaxel, differential och axlar.^
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	ANTAL KARRIÄRSSPEL
+0	AUTO	RACE_DAY_ADD_EVENT	LÄGG TILL RACE
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Du kan inte använda den här Blueprinten eftersom den är inkompatibel med din version av Need for Speed™ ProStreet.  Läs mer om uppdateringar och nya spelfunktioner på webbplatsen NeedforSpeed.com.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	HJULDELAR
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Välj som aktiv Blueprint
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	MOTORSTYRNING
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	VINSTBELÖNING
+0	AUTO	CUST_PAINT_BODY	LACK
+0	AUTO	CUST_PAINT_RIMS	HJUL
+0	AUTO	CUST_PAINT_TINT	FÖNSTERTONING
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Det har inte uppstått något fel.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Är du säker på att du vill radera den här racingdagen? Dina specifika inställningar och rekord för racingdagen kommer att försvinna.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	SPRÅKVAL
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Bussningar i styvare material som polyuretan eller aluminium ger dig möjighet att ta snävare kurvor med mindre karosskrängningar.^
+0	AUTO	HUB_DIFFICULTY_2	MEDEL
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Om en bil bromsas gång på gång byggs stark värme upp i bromssystemet vilket hotar att förlänga bromssträckorna. Ett större bromssystem hjälper dig att hålla ner värmen och gör bromsverkan mer konsekvent.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	HÖGSTA TOPPFART
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Välj köpmetod
+0	AUTO	CUST_SLOT_INTAKE_DESC	Ju mer kyld luft som motorn tar in desto bättre prestanda får den. Dessutom blir effekten ännu högre ju lägre temperaturen på luften är. ^
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Den här uppgraderingen är inriktad på rejäl överstyrning. En kraftig bakre krängningshämmare, aluminiumbussningar och en borttagen främre krängningshämmare förenklar när du vill få bilen att bredsladda.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Vill du lämna bilvalsmenyn och återgå till karriärkartan?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Sparar racingdag…
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	HÖGSTA TUNINGBILRANKING
+0	AUTO	RACE_MODE_DESCRIPTION	Om du väljer racetyp avgör det vilka tävlingar som bilen kan tävla i.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Du måste ha AutoSculpt-delar för att kunna använda vindtunneln!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Om insuget har högre kapacitet ökar motorns möjliga inflöde av luft. Med ett polerat och jämnt insug kommer motorn att få större möjlighet att nå maximal effekt.^
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	TOTAL TOPPFART FÖR KONTROLLER
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	BRÄNSLESYSTEM
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Med en turbomotor på 2,3 liter som matar ut 260 hästkrafter, diffspärr och 6-växlad låda är Speed 3 en modern tredörrsbil.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Den här uppgraderingen ger ännu snabbare och exaktare växlingar samtidigt som komponenterna som överför effekten till drivhjulen är lättare och av racingkvalitet.^
+0	AUTO	CAR_SELECT_INTEGRA	Koukin, med sin lättvarvade B-seriemotor är en mycket populär bil bland racingentusiaster. Anledningen är motorutbudet och bilarnas väghållning.
+0	AUTO	FE_HUBMAP_ETREE_CARS	BILAR
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Den här uppgraderingen ökar motorns uteffekt. ^
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Den här uppgraderingen går ett steg längre och ökar motoreffekten till racingnivå.^
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Att kontrollera din hastighet genom kurvor, liksom att hålla koll på accelerationen ut ur kurvor, är nyckeln. Större motoreffekt ökar förmågan att komma ut som en katapult ur kurvor och att nå högre hastigheter.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Är du säker på att du vill reparera bilen?
+0	AUTO	CAR_SELECT_S3	Andra generationens S3 säljs inte i Nordamerika.
+0	AUTO	CAR_SELECT_S4	S4 är inte lika hetsig som RS4 men den är också utrustad med en 4,2-liters V8.
+0	AUTO	CAR_SELECT_TT	Mark2-versionen av TT har vunnit ett antal Årets Bil-priser.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	LUSTGAS
+0	AUTO	FE_STATS_DOWNLOADING_STATS	HÄMTAR STATISTIK
+0	AUTO	CUST_QUICK_FORCED_D3	överladdning steg 3 dragracing
+0	AUTO	CUST_QUICK_FORCED_G3	Den här uppgraderingen ökar mängden luft som pressas in i motorn, vilket ökar effekten ännu mer och förvandlar bilen till en racingbil.^
+0	AUTO	CUST_QUICK_FORCED_S3	Den här uppgraderingen ökar mängden luft som pressas in i motorn vilket ökar effekten ännu mer och förvandlar bilen till en racingbil.
+0	AUTO	CUST_PAINT_GROUP_CANDY	CANDY
+0	AUTO	CUST_PAINT_GROUP_GLOSS	GLANS
+0	AUTO	CUST_PAINT_GROUP_MATTE	MATT
+0	AUTO	CUST_DRIVETRAIN_GROUP	DRIVLINA
+0	AUTO	CUST_PAINT_GROUP_PEARL	PEARL
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Den här uppgraderingen programmerar om motorstyrningen för att optimera accelerationsprestanda.^
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Den här uppgraderingen programmerar om motorstyrningen ännu mer för att ytterligare optimera prestanda.^
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Den här uppgraderingen programmerar om motorstyrningen ännu mer för att ytterligare optimera prestanda.^
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Bromsok med större eller flera kolvar kan distribuera bromskraften i klossen bättre över skivan vilket ger bättre bromsverkan.^
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Tryck på START-knappen för att börja
+0	AUTO	RACE_DAY_SLOT_ID	PLATS {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	LJUDDÄMPARE
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Anslutningen till spelet misslyckades. Försök igen.
+0	AUTO	COMMON_START	Kör
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	VÄXELLÅDEKYLARE
+0	AUTO	RACE_MODE_DRIFT_MODE	DRIFT
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Vilka hjul vill du specialanpassa?
+0	AUTO	CUST_SLOT_FLYWHEEL	SVÄNGHJUL
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Racingstolar håller dig på plats.
+0	AUTO	MODE_CHANGE_CONFIRMATION	Om du byter speltyp kommer bilens Blueprints att försvinna, inklusive utseende- och vinyländringar. Vill du fortsätta?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	TID SPENDERAD I KARRIÄRRACE
+0	AUTO	CUST_DRAG_TUT_AWD	Fyrhjulsdrift är en enorm fördel som ger optimalt väggrepp och hjälper alla hästkrafter i bilen att dra åt samma håll.^
+0	AUTO	CUST_DRAG_TUT_FWD	Det största problemet med framhjulsdrift i dragracing är att behålla väggreppet. Ju mer effekt du har desto svårare är det att få däcken att greppa. Att bygga en snabb framhjulsdriven dragster handlar om höga effektuttag och och att få ner kraften i vägbanan. Förutom effektuppgraderingar handlar det om att försöka kontrollera all kraft med bibehållet grepp.
+0	AUTO	CUST_DRAG_TUT_RWD	Nyckeln till en bra dragsterinställning är väggrepp. Du måste eliminera bilens sladdtendenser och lära dig att hantera hjulspinn för att få snabbare tider. Det gäller i ännu högre grad vid stora effektuttag.
+0	AUTO	CUST_ENGINE_GROUP	MOTOR
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Need for Speed™-servern har avbrutit din förfrågan.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Däck håller bilen på banan.
+0	AUTO	CAR_SELECT_GTRPROTO	GTR Proto är förserieprototypen av R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	ANTAL SÄLLSYNTA BILAR
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	DOMINANSSBELÖNING
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	{0:d} REPARATIONSMARKER
+0	AUTO	CAR_SELECT_VIPERCOUPE	Tredje versionen av Dodge Viper har en V10-motor med 500 hk och en härlig motorsång.
+0	AUTO	MAIN_MENU_TITLE	HUVUDMENY
+0	AUTO	CUST_TINT_DARK	MÖRK
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Med bra fjädringsinställning, som tillåter korrekt viktfördelning under starten, får du ett fordon som både är snabbare och har ett bättre väggrepp.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Kan inte krascha bilar
+0	AUTO	CUST_APPLYING_BLUEPRINT	APPLICERAR BLUEPRINT
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	VÄLJ EN RACINGDAGPLATS
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Det här är en mittmotorbil som nästan matchar 911:ans prestanda.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	KARRIÄRPROCENT
+0	AUTO	CUST_SLOT_DIFFERENTIAL	DIFFERENTIAL
+0	AUTO	CUST_WIND_TUNNEL_ON	Vindtunnel på
+0	AUTO	RACE_DAY_LOCATION_10_MC	Tokyo Dockyard
+0	AUTO	RACE_DAY_LOCATION_11_MC	Willow Springs
+0	AUTO	RACE_DAY_LOCATION_12_MC	Leipzig
+0	AUTO	RACE_DAY_LOCATION_13_MC	Tokyo Expressway
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	Reparationsmarker är inte tillgängliga i Multiplayerspel. Din bil kan få skador men de återställs efter en tävling. Du kan dessutom inte totalkvadda bilen i en tävling.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Blueprinten matchar inte biltypen du försöker använda den på. Alla tidigare blueprints kommer att tas bort. Vill du fortsätta ändå?
+0	AUTO	CUST_QUICK_POWER_DI3	Den här uppgraderingen är inriktad på att ge så mycket kraft att drivhjulen tappar fästet. ^
+0	AUTO	RACE_MODE_DRAG_MODE	DRAG-^RACING
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Den här basuppgraderingen förbättrar bilens totalutseende. ^
+0	AUTO	CUST_QUICK_VISUAL_2	Med hjälp av vingen och frontsplittern kommer din bil att få bättre väggrepp i höga farter. Resultatet blir bättre högfartsstabilitet och mer grepp i kurvorna.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Välj speltyp
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	Platsen du valde innehåller redan en Blueprint. Vill du skriva över den?
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	MARKERHANTERING
+0	AUTO	CAR_SELECT_FOCUSST	MK2 Focus som säljs utanför USA har en turbomotor på 2,5 liter och 225 hästkrafter.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Den här uppgraderingen förstärker komponenter som överför bilens motorkraft till hjulen, inklusive drivaxel, differential och axlar.^
+0	AUTO	FE_MAIN_MENU	Huvudmeny
+0	AUTO	CUST_REGION_REAR_BUMPER	BAKRE KOFÅNGARE
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	REMSKIVA
+0	AUTO	CAR_SELECT_BARRACUDA	Hemi 'Cudan är en äkta legend.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	HÖGSTA BILRANKING
+0	AUTO	CUST_APPLY_PAINT_TITLE	LACKA OM
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	ANTAL BILAR I GARAGET
+0	AUTO	CUST_REGION_ALL_WHEELS	ALLA HJUL
+0	AUTO	CUST_QUICK_FORCED_2	Den här uppgraderingen ökar mängden luft som pressas in i motorn, vilket ökar effekten i hela varvtalsområdet.^
+0	AUTO	FE_STATS_FASTEST_LAP	SNABBASTE VARV
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	DRAGRACING
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	För att däcken ska få maximalt grepp förstärks din främre och bakre krängningshämmare, bussningsmaterialet byts mot polyuretan och stötdämparna byts till racingversioner.
+0	AUTO	CAR_TYPE_GRIP	BANA
+0	AUTO	FE_STATS_DNF_PERCENTAGE	BRYTPROCENT
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	Chargern med B-kaross är en av de mest kända TV-bilarna genom tiderna.
+0	AUTO	CUST_QUICK_INTERNALS_1	Den här uppgraderingen förstärker motorn och möjliggör ytterligare motoruppgraderingar efterhand.^
+0	AUTO	CUST_QUICK_INTERNALS_2	Den här uppgraderingen förstärker motorns inre komponenter så att den klarar mer effekt och högre varvtal.^
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Vill du återställa Blueprinten till standardversionen?
+0	AUTO	CUST_SLOT_RACING_SEATS	RACINGSTOLAR
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ZON 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	BÄSTA SEKTORPOÄNG
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	MEST VÄRDEFULLA BIL
+0	AUTO	CAR_SELECT_CIVICSI	Åttonde generationens Civic.
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevellen var Chevys första muskelbil. Före 1970 var motorerna inte större än 400 cui men det förändrades 1970 när 402 Chevelle introducerades.
+0	AUTO	CUST_CAT_GRIP_FORCED	En turbo med kort fördröjning och snabb uppladdning ger dig en användbar effektkurva och ett klart effektövertag oavsett om du kör på bana eller gata.^
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Välkommen till racingdagkartan
+0	AUTO	CUST_BLUEPRINT_APPLY	Applicera Blueprint
+0	AUTO	CUST_SLOT_CAMSHAFTS	KAMAXLAR
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Visa alla race
+0	AUTO	CUST_SLOT_HEADERS	GRENRÖR
+0	AUTO	FE_STATS_FASTEST_TIME	SNABBASTE TID
+0	AUTO	CUST_SUSPENSION_GROUP	FJÄDRING
+0	AUTO	CUST_BLUEPRINT_RESET	ÅTERSTÄLL
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Den här uppgraderingen går ett steg längre och ökar motoreffekten till dragracingnivå.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Den här uppgraderingen går ett steg längre och ökar motoreffekten till racingnivå.^
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Den här uppgraderingen går ett steg längre och ökar motoreffekten till racingnivå.^
+0	AUTO	CUST_INSTALLED	INSTALLERAD
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Laddar racingdag…
+0	AUTO	CUST_SLOT_CAMS_DESC	Kort duration och låga ventillyft ger en behaglig vardagskam. När durationen och lyften blir högre flyttas maxvarvet för vridmomentet högre upp i varvtalsområdet. Den bästa kamaxeln är den som ger maximal effekt i det varvtalsområde där motorn oftast arbetar.^
+0	AUTO	CUST_QUICK_HANDLING_DI3	Den här uppgraderingen gör att fjädringen anpassas till mer sladdbenägenhet i kurvor.^
+0	AUTO	CUST_QUICK_BRAKE_D3	Den här uppgraderingen ger optimal bromssträcka och säkerställer att du inte tappar väggreppet under inbromsning.^
+0	AUTO	CUST_QUICK_BRAKE_G3	bromspaket steg 3 bana
+0	AUTO	CUST_QUICK_BRAKE_S3	Den här uppgraderingen ger optimal bromssträcka från toppfart och säkerställer att du inte tappar väggreppet under inbromsning.^
+0	AUTO	CUST_SLOT_BOTTLE_DESC	En större lustgasbehållare ökar mängden lustgas som du kan använda. Du kan dessutom ha flera behållare i samma bil. Varje behållare måste fyllas på nytt när den använts. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Kväll
+0	AUTO	CUST_TINT_LIGHT	LJUS
+0	AUTO	CUST_REPAIR_DAMAGE	SKADOR
+0	AUTO	CUST_TINT_PEARL	PEARL
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	LÄNGSTA DRIFTSTRÄCKA
+0	AUTO	CUST_SLOT_TIPS_DESC	Dessa tips ger ditt fordon ett aggressivare utseende.
+0	AUTO	CUST_SLOT_STEERING_DESC	En kuggstångsstyrning av prestandatyp kan ge bättre styrvinkel och mindre styrmotstånd än standarddelar.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Corvetten är en superbil med sjulitersmotor, titanaxlar och torrsumpssmörjning.
+0	AUTO	HD_COMPATIBLE	HD-kompatibel för optimalt spelande
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Ta bort tävling
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	ANTAL BESEGRADE KUNGAR
+0	AUTO	CUST_WIND_TUNNEL	VINDTUNNEL
+0	AUTO	CUST_STAGE_NUMBER	STEG {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	ANTAL VINSTER
+0	AUTO	CUST_FILTER_FRONT_BUMPER	FRÄMRE KOFÅNGARE
+0	AUTO	MAIN_CAREER	KARRIÄR
+0	AUTO	CUST_REGION_REAR_WHEEL	BAKHJUL
+0	AUTO	CUST_QUICK_VISUAL_D3	Den här uppgraderingen innhåller olika aerodynamiska delar som ger ökat väggrepp i hög fart.^
+0	AUTO	CUST_QUICK_VISUAL_G3	Den här uppgraderingen innhåller olika aerodynamiska delar som ger ökat väggrepp i hög fart.^
+0	AUTO	CUST_QUICK_VISUAL_S3	Den här uppgraderingen innhåller olika aerodynamiska delar som ger ökat väggrepp i maximal fart.^
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Om en bil bromsas gång på gång byggs stark värme upp i bromssystemet vilket hotar att förlänga bromssträckorna. Ett större bromssystem hjälper dig att hålla ner värmen och gör bromsverkan mer konsekvent.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Den här uppgraderingen ger motorn interna racingkomponenter vilket gör att den klarar ännu mer effekt och högre varvtal.^
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	ANTAL RANKADE VINSTER
+0	AUTO	CUST_SLOT_BOV_DESC	För att en turbo ska kunna uppnå och bibehålla maximalt tryck används en dumpventil som släpper ut extratrycket utan att motorn tappar i effekt. ^
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	En uppdatering är tillgänglig. Den krävs för onlinespel. Besök NeedforSpeed.com för information.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	BÄSTA TÄVLINGSTYP
+0	AUTO	HUB_BREAK_RECORD	SLÅ REKORD
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	De här wheeliehjulen ser till att framhjulen ligger an mot marken och gör att bilen hanterar motorns vridmoment bättre.^
+0	AUTO	RACE_DAY_DIFFICULTY_1	Lätt
+0	AUTO	RACE_DAY_DIFFICULTY_2	Medel
+0	AUTO	RACE_DAY_DIFFICULTY_3	Svår
+0	AUTO	RACE_DAY_DIFFICULTY_4	Elit
+0	AUTO	CUST_SLOT_CLUTCH	KOPPLING
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Tryck på knapp 2 för att fortsätta
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	SNABBASTE 0-60 MPH
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Vill du specialanpassa framdäcken eller bakdäcken?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	SKAPA EN RACINGDAG
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	PERSONLIGA REKORD
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Då du ökar motorns uteffekt måste du uppgradera för att garantera att effekten utnyttjas effektivt och skickas till drivhjulen. Kopplingar, drivaxel och bromsad diffspärr spelar alla en viktig roll.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	SOLO
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Efter den inledande starten är hög effekt nyckeln till dragracing. Fler hästkrafter ökar hastigheten efter banan och höjer slutfarten.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Du kan inte använda den här racingdagen eftersom den är inkompatibel med din version av Need for Speed™ ProStreet.  Läs mer om uppdateringar och nya spelfunktioner på webbplatsen NeedforSpeed.com.
+0	AUTO	RD_PLAY	SPELA
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	TÄNDSYSTEM
+0	AUTO	FE_STATS_CAREER_WINS	ANTAL KARRIÄRVINSTER
+0	AUTO	RACE_DAY_LOCATION	PLATS
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Den här uppgraderingen ger snabbare växlingar och ser till att du effektivare får ner motorstyrkan till hjulen.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Den här uppgraderingen ger snabbare och exaktare växlingar samtidigt som komponenterna som överför effekten till drivhjulen är lättare.^
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Är du säker på att du vill ta bort den delade Blueprinten?
+0	AUTO	SHOW_FRIENDS	Visa kompisar
+0	AUTO	FE_STATS_HUBS_DOMINATED	DOMINERADE RACINGDAGAR
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	SNABBASTE REAKTIONSTID
+0	AUTO	CODE_ENTRY_INVALID	Koden du angett är ogiltig. Kontrollera att du matat in koden korrekt och försök igen.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	VÄLJ UPP TILL 8 RACE
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Reparera bil
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	REPARATIONSMARKER
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	REFLEKTION
+0	AUTO	CUST_SLOT_CAM_GEARS	KAMDREV
+0	AUTO	CUST_SLOT_ROOF_SCOOP	TAKHUV
+0	AUTO	CUST_COMPONENTS_TITLE	SPECIALANPASSA KOMPONENTER
+0	AUTO	CUST_BRAKES_GROUP	BROMSAR
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Är du säker på att du vill avsluta?
+0	AUTO	CUST_SLOT_TRACTION_BARS	REAKTIONSSTAG
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Den här uppgraderingen ger dig bättre bromskraft med hjälp av prestandaklossar och förbättrade bromsskivor. Det är viktigt att ha bra bromsar för att kunna dosera och styra en drift.
+0	AUTO	MAIN_RACE_DAY	RACINGDAG
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	VINSTPROCENT FÖR FARTUMANINGAR
+0	AUTO	SELL_CAR_CONFIRMATION	Bilens värde är {0:d}^Om du säljer den blir du av med alla Blueprints som hör till bilen. Är du säker på att du vill sälja den?
+0	AUTO	RD_DELETE_RD	Ta bort racingdag?
+0	AUTO	CAR_SELECT_G35	G35 delade plattform med 350z.
+0	AUTO	CAR_SELECT_GXP	GXP:an har en turbomotor på 2,0 liter, 16 ventiler och med 260 hk, diffspärr och 18-tummare som standard.
+0	AUTO	CAR_SELECT_NSX	Den här mittmotorbilen byggdes för att briljera med Hondas racingteknik och den var långt före sin tid.
+0	AUTO	CAR_SELECT_R35	Det här är den serietillverkade varianten av R35 GTR.
+0	AUTO	CAR_SELECT_S13	S13-modellen är en ikon i driftvärlden.
+0	AUTO	CAR_SELECT_S15	S15 importerades aldrig till USA via de vanliga kanalerna men den har ändå blivit en klassiker på tuningscenen.
+0	AUTO	CAR_SELECT_RS4	B7 RS4 kännetecknas av en 400 hästkrafter stark V8 och den går att få antingen som sedan, herrgårdsvagn eller cabriolet.
+0	AUTO	CAR_SELECT_RSX	Ersättaren till klassiska Integra använder de nya Honda K-motorerna.
+0	AUTO	CAR_SELECT_RX8	RX-8 är en bakhjulsdriven 2+2 bil med wankelmotor som har nästan perfekt viktdistribution 50:50 och härlig väghållning.
+0	AUTO	CAR_SELECT_STI	Boxerfyra, turbo och fyrhjulsdrift gör Sti:n till en av de populäraste bilarna på tuningscenen. Den klarar av allt och den gör det på ett övertygande sätt.
+0	AUTO	CAR_SELECT_Z4M	Den här bilen har samma raka 6:a som E46 M3. 0-100 km/h avhandlas på 4,9 sekunder och den har en strypt topphastighet på 250 km/h.
+0	AUTO	CUST_QUICK_VISUAL_DI3	utseende steg 3 drift
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ZON 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ZON 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ZON 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ZON 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ZON 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ZON 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ZON 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ZON 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ZON 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	HÖGSTA RACEPOÄNG
+0	AUTO	FE_STATS_AVERAGE_SPEED	MEDELHASTIGHET
+0	AUTO	CUST_PAINT_GROUP_METALLIC	METALLIC
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Tryck på START-knappen
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	DRIFTVINSTER I PROCENT
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Inga backupbilar tillgängliga
+0	AUTO	CUST_FILTER_FRONT	FRAMHJUL
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	BILAFFÄR
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Prototypen av den snart släppta femte generationens Camaro. Den introducerades 2006.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Den här uppgraderingen gör att din bil tar kurvorna snabbare och med bättre väghållning.^
+0	AUTO	CUST_QUICK_SUSPENSION_2	Den här uppgraderingen gör att din bil tar kurvorna snabbare och med bättre väghållning och kontroll.^
+0	AUTO	CUST_QUICK_NITROUS_D3	Den här uppgraderingen ger, för ett kort ögonblick, 50 till 250 hästkrafter mer i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats.  ^
+0	AUTO	CUST_QUICK_NITROUS_G3	Den här uppgraderingen ger, för ett kort ögonblick, 50 till 250 hästkrafter mer i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats. ^
+0	AUTO	CUST_QUICK_NITROUS_S3	Den här uppgraderingen ger, för ett kort ögonblick, 50 till 250 hästkrafter mer i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats. ^
+0	AUTO	CUST_PERFORMANCE	PRESTANDA
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Genom att styva upp krängningshämmarna blir bilen hårdare i kurvtagningen vilket förhindrar understyrning.^
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Är du säker på att du vill ta bort den här Blueprinten?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Blueprints
+0	AUTO	CUST_QUICK_UPGRADE	SNABBUPPGRADERING
+0	AUTO	CAR_SELECT_CORVETTEC6	Det här är den senaste Corvette-modellen och den första på över 35 år med vanliga framljus.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	OFFLINE
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	BELÖNING
+0	AUTO	MAIN_QUIT_GAME	AVSLUTA
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	LUSTGAS
+0	AUTO	CAR_TYPE_DRIFT	DRIFT
+0	AUTO	FE_HUBMAP_ETREE_FILTER	FILTER
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Förutom själva säkerhetsaspekten, kan en skyddsbur även stärka karossens styvhet och ge den ett karakteristiskt racingutseende.
+0	AUTO	CUST_SLOT_BC_DESC	Ju mer överladdning som motorn kan hantera, desto bättre. Om motorn klarar hög överladdning utan att gå sönder är den här prylen ett lämpligt tillskott för att få ut maximalt ur turbon.^
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Varma växellådor betyder trubbel.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	ÖVERLADDNING
+0	AUTO	CAR_TYPE_SPEED	FARTUTMANING
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	TOPPLOCK
+0	AUTO	CUST_SELL_CAR_WARNING	Om du säljer den här bilen kan du inte vara med i race av typen {0:s} tills du köpt en ny bil av rätt typ.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Det finns inga tävlingar av den typen här.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	TID PÅ DAGEN
+0	AUTO	RD_DELETED	Tog bort racingdag.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Då du ökar motorns uteffekt måste du uppgradera andra komponenter för att garantera att effekten utnyttjas optimalt och skickas till drivhjulen. Koppling, drivaxlar och diffspärrar är viktiga komponenter i kraftöverföringen.
+0	AUTO	CUST_SLOT_AIR_INTAKE	LUFTINTAG
+0	AUTO	CUST_PART_PURCHASED	INKÖPT
+0	AUTO	CUST_BP_OPTION_UNDO	RADERA
+0	AUTO	CUST_FILTER_BODY	KAROSS
+0	AUTO	CUST_FILTER_HOOD	HUV
+0	AUTO	CUST_FILTER_REAR	BAKHJUL
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Den här uppgraderingen programmerar om din motorstyrning så att mer bränsle och luft kan förbrännas, vilket ger högre effekt när du behöver det som bäst.^
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Metallomspunna bromsledningar är en förstärkning som kan ge ökat hydrauliskt tryck och bättre bromsrespons.^
+0	AUTO	LS_SAVING	SPARAR...
+0	AUTO	CUST_CUSTOM_UPGRADE	SPECIALUPPGRADERING
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Du har inte behörighet att delta i den här racingdagen. Du saknar följande biltyper:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Med en korrekt fjädringsinställning som varken under- eller överstyr för mycket, får föraren en bil som är både snabbare och enklare att köra.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	VÄLJ RACETYP
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Du kan inte installera ett tredjepartsslutrör på ett standardkarosskit!
+0	AUTO	CUST_PURCHASE_CAR	Köp bil
+0	AUTO	CODE_ENTRY_VERIFICATION	Verifierar kod på server...
+0	AUTO	MC_OLD_SAVE_REWARD	Tack för att du spelat tidigare Need for Speed™-spel. Som belöning får du {0:d} reparationsmarker och {1:d} kraschreparationsmarker i karriärläget.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	BESEGRADE MOTST. FR. HÖGRE KLASS
+0	AUTO	RACE_DAY_LOCATION_1_MC	Autobahnring
+0	AUTO	RACE_DAY_LOCATION_2_MC	Autopolis
+0	AUTO	RACE_DAY_LOCATION_3_MC	Chicago Airfield
+0	AUTO	RACE_DAY_LOCATION_4_MC	Ebisu
+0	AUTO	RACE_DAY_LOCATION_5_MC	Infineon
+0	AUTO	RACE_DAY_LOCATION_6_MC	Mondello Park
+0	AUTO	RACE_DAY_LOCATION_7_MC	Nevada Highway
+0	AUTO	RACE_DAY_LOCATION_8_MC	Portland International Raceway
+0	AUTO	RACE_DAY_LOCATION_9_MC	Texas World Speedway
+0	AUTO	CUST_QUICK_POWER_D3	prestanda steg 3 dragracing
+0	AUTO	CUST_QUICK_POWER_G3	Den här uppgraderingen förvandlar din streetbil till en racerbil genom att öka på effekten.
+0	AUTO	CUST_QUICK_POWER_S3	prestanda steg 3 fartrace
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	ANTAL BLUEPRINTS
+0	AUTO	FE_STATS_BEST_RUN	BÄSTA LOPP
+0	AUTO	WINDTUNNEL_DOWNFORCE	DOWNFORCE
+0	AUTO	CUST_SLOT_COOLING_DESC	Inte för varmt, inte för kallt. Lagom.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	BÄSTA DRIFTPOÄNG
+0	AUTO	CUST_CAT_DRIFT_FORCED	Den här uppgraderingen ökar mängden luft som pressas in i motorn vilket ger bättre bränsleförbränning som ökar motoreffekten.^
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Använd reparationsmarker
+0	AUTO	FE_STATS_FILTER_GENERAL	ALLMÄN STATISTIK
+0	AUTO	CB_BLUEPRINTS_HEADER	BLUEPRINT-TYP
+0	AUTO	ENTER_SECRET_CODE	ANGE HEMLIG KOD
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Den här uppgraderingen ändrar utseendet på bilen totalt och kan dessutom ge vissa aerodynamiska fördelar.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	ANTAL TOTALKRASCHADE BILAR
+0	AUTO	CUST_SLOT_WHEELS	HJUL
+0	AUTO	CUST_SLOT_SUPERCHARGER	KOMPRESSOR
+0	AUTO	CAR_SELECT_SHELBYGT500	GT500 var den första amerikanska bilen med skyddsbur och den är av de mest kända Shelby-bilarna.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	LÄNGSTA ENSKILDA WHEELIE
+0	AUTO	FE_STATS_GRIP_WINS	ANTAL BANRACEVINSTER
+0	AUTO	CL_MS_POINTS	Microsoft® points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	LÄNGSTA DRIFTTID
+0	AUTO	CUST_FILTER_REAR_BUMPER	BAKRE KOFÅNGARE
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	BÄSTA TID 0-60 MPH
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Det kostar {0:d} att köpa en bil och använda Blueprinten på den. Vill du fortsätta?
+0	AUTO	GARAGE_REPAIR_DENIED	Du har inte tillräckligt med pengar och inga marker för att kunna reparera bilen.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	KLICKA för att fortsätta
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	ANTAL PUNKBUSTER-RACE
+0	AUTO	GARAGE_NO_CAR_REPAIR	Du har inte tillräckligt med pengar eller reparationsmarker för att laga bilen.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	INGA BILAR TILLGÄNGLIGA
+0	AUTO	RDMAP_CREATE_PREVIEW	SKAPA EGEN RACINGDAG
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Om en bil bromsas gång på gång byggs stark värme upp i bromssystemet vilket hotar att förlänga bromssträckorna. Ett större bromssystem hjälper dig att hålla ner värmen och gör bromsverkan mer konsekvent.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	FLEST DRIFTSLADDAR I FÖLJD
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	BROMSKRAFTFÖRDELARE
+0	AUTO	FE_STATS_CLUB_TAG	KLUBBTAGG
+0	AUTO	CUST_SLOT_EXHAUST	SLUTRÖR
+0	AUTO	CAR_SELECT_INTEGRATYPER	Integra Type R betraktas ofta som den bästa framhjulsdrivna bilen genom tiderna.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Här är det viktigast med hög fart, inte bromskraft. Målet är att använda lätta bromskomponenter för att bilen ska accelerera så fort som möjligt.
+0	AUTO	WINDTUNNEL_DRAG	LUFTMOTSTÅND
+0	AUTO	CUST_APPLY_PAINT	Lacka om
+0	AUTO	WINDTUNNEL_PEAK_HP	TOPPVÄRDE HK
+0	AUTO	CUST_BLUEPRINT_DELETE	Ta bort
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	KARRIÄRSTATISTIK
+0	AUTO	CUST_VISUAL_TITLE	UTSEENDE
+0	AUTO	CUST_SLOT_DRIVESHAFT	DRIVAXEL
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Köp Blueprint
+0	AUTO	CAREER_COMPLETION_HEADER	KARRIÄRSSUMMERING
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Högre motorstyrka gör det lättare att hålla däcken spinnande och driften igång. Om du ökar uteffekten blir det enklare att göra bredsladdar.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	SNABBASTE 400 M
+0	AUTO	CL_NOT_ENOUGH_CASH	Du har inte tillräckligt med pengar för att köpa bilen.
+0	AUTO	CUST_SLOT_SC_DESC	Den här överladdningsmetoden drivs av motorn och ger bra bottendrag.^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	KLUBB
+0	AUTO	CUST_SLOT_TIRES	DÄCK
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Hittade inga racingdagar.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Den här åtgärden raderar alla ändringar du gjort för racingdagen. Vill du radera ändringarna?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	STÖTDÄMPARE OCH FJÄDRAR
+0	AUTO	CUST_REGION_SKIRT	KJOL
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	LUSTGASBEHÅLLARE
+0	AUTO	CUST_QUICK_FORCED_DI3	Den här uppgraderingen ökar mängden luft som pressas in i motorn, vilket ökar effekten ännu mer och förvandlar bilen till en racingbil.^
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	WHEELIEHJUL
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	Vi kan inte delge er någon information om den här bilen.
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Du har nått maxantalet {0:d} bilar.  ^Sälj en bil i garaget för att bereda plats för nya inköp.
+0	AUTO	CUST_CUSTOMIZE_MAIN	SPECIALANPASSNING
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Den här uppgraderingen programmerar om din motorstyrning så att mer bränsle och luft kan förbrännas, vilket ger dig den kraft du behöver för att göra avgörande omkörningar på väg ut ur kurvor.^
+0	AUTO	CUST_BLUEPRINT_HEADER	ANPASSA BLUEPRINT
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	DRAGRACINGVINSTER I PROCENT
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	AVGASSYSTEM
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	VÄLJ
+0	AUTO	CUST_PAINT_GROUP_CHROME	KROM
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	ANTAL DELADE BLUEPRINTS
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	ÖVERLADDNING
+0	AUTO	FE_STATS_DRIFT_RACES	ANTAL DRIFTRACE
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Då du ökar motorns uteffekt måste du uppgradera andra komponenter för att garantera att effekten utnyttjas optimalt och skickas till drivhjulen. Koppling, drivaxlar och diffspärrar är viktiga komponenter i kraftöverföringen.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	PRESTANDASTATISTIK
+0	AUTO	CUST_SLOT_TURBOCHARGER	TURBO
+0	AUTO	CUST_SLOT_SHIFTER	VÄXELSPAK
+0	AUTO	CUST_DYNO_TEST	BROMSBÄNK
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Japanska förare har tagit över frakthamnen i Tokyo Dockyards. De har byggt krävande racebanor och utnyttjar mängder med komponenter i det urbana landskapet.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	VÄLJ UTMANINGSBILAR
+0	AUTO	CUST_CAT_SPEED_NITROUS	Den här uppgraderingen ger en temporär effektökning som kan innebära skillnaden mellan vinst och förlust.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Femte generationens Mustang är känd för sin retrofuturism.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	VINSTPROCENT
+0	AUTO	RD_CUSTOM_SELECT	Spela racingdag?
+0	AUTO	KING_FLOW_CASH_REWARD	BELÖNING
+0	AUTO	CUST_CAT_SPEED_BRAKE	Den här uppgraderingen ger dig bättre bromskraft med hjälp av prestandaklossar och förbättrade bromsskivor. Bra bromsar är en avgörande komponent i trimmade fordon.
+0	AUTO	CUST_SPEED_TUT_AWD	Med fyrhjulsdrift förbättras väggreppet, speciellt vid start och acceleration ut ur kurvor. Se till att utnyttja detta faktum.
+0	AUTO	CUST_SPEED_TUT_FWD	Även om du kämpar mot fysikens lagar i en framhjulsdriven bil, kan du bygga ett formidabelt banvapen om du gör rätt justeringsval. Första punkten på agendan bör vara att minska den naturliga understyrning som finns hos framhjulsdrivna bilar genom att styva upp framvagnsdelarna. Sedan behöver du en diffspärr för att eliminera slirtendenser vid gaspådrag.
+0	AUTO	CUST_SPEED_TUT_RWD	Bra balans och styrbarhet vid gaspådrag är några av fördelarna med en bakhjulsdriven bil. Men se till att inte skapa alltför mycket överstyrning.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	KYLSYSTEM
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Cosworhten skapades av homologeringsskäl och den var egentligen aldrig en Escort. Men Escort RS blev en av de mest stilbildande och kopierade bilarna genom tiderna.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	SNABBASTE 0-100 MPH
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Willow Springs, den snabbaste vägen i västra USA, går längs en bergssida i kaliforniska öknen. Willow har dramatiska höjdskillnader och höga genomsnittshastigheter.
+0	AUTO	RACE_DAY_DIFFICULTY	SVÅRIGHETSGRAD
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Du har inte tillräckligt med pengar för att köpa markerna i din kundvagn.
+0	AUTO	CAR_SELECT_CHALLENGER	Första generationens Challenger var Dodges instegsmodell på pony car-marknaden. Den var baserad på en äldre modell som egentligen var avsedd för gasturbindrift.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Du kan skapa en egen racingdag genom att välja en ledig racingdagplats. Den ikon du väljer kommer att representera racingdagen på kartan under Min racingdag.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Med fyrhjulsdrift förbättras väggreppet, speciellt vid start och acceleration ut ur kurvor. Se till att utnyttja detta faktum.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Även om du kämpar mot fysikens lagar i en framhjulsdriven bil, kan du bygga ett formidabelt banvapen om du gör rätt justeringsval. Första punkten på agendan bör vara att minska den naturliga understyrning som finns hos framhjulsdrivna bilar genom att styva upp framvagnsdelarna. Sedan behöver du en diffspärr för att eliminera slirtendenser vid gaspådrag.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Bra balans och styrbarhet vid gaspådrag är några av fördelarna med en bakhjulsdriven bil. Men se till att inte skapa alltför mycket överstyrning.
+0	AUTO	CUST_SELL_CAR	Sälj bil
+0	AUTO	RACE_DAY_LOCATION_12_DESC	Den härliga Porsche-testbanan i Leipzig, Tyskland, innehåller kopior av de mest berömda kurvpartierna i racingvärlden.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	SIDOKJOLAR
+0	AUTO	CUST_SLOT_FUEL_DESC	Effektiv bränsledistribution är ett krav för höga effektuttag. En större bränslepump i kombination med större spridare och uppgraderade bränsleledningar ger en betydande effektökning. ^
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Nyckeln till en framgångsrik driftbil är en bil som släpper förutsägbart, håller överstyrningen genom kurvor och som samtidigt är otroligt stabil.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	VÄNNER
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Morgon
+0	AUTO	CUST_FILTER_SPOILER	SPOILER
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Ett matchningsfel uppstod.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Det här är en riktig fartsträcka på Tokyos motorvägar som innehåller loopar, mäktiga rakor och ett tunnelparti.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	ANTAL RANKADE SPEL
+0	AUTO	CUST_TUNE	TUNING
+0	AUTO	CUST_VISUALS_TITLE	UTSEENDEDELAR
+0	AUTO	FE_STATS_CLUB_NAME	KLUBBNAMN
+0	AUTO	CUST_INSTALL	Installera
+0	AUTO	RACEDAY_SAVE_CONFIRM	Är du säker på att du vill spara racingdagen?
+0	AUTO	FE_MATCHMAKING_JOINING	Ansluter till spelsession...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	DUMPVENTIL
+0	AUTO	CUST_SLOT_ROLL_CAGE	SKYDDSBUR
+0	AUTO	CAR_LOT_NO_DRIFTING	INGEN DRIFT
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Den här uppgraderingen ersätter motorns interna delar med starkare och mer hållbara delar vilket möjliggör att motorn klarar högre effekt och kan nå högre varvtal.^
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	ANVÄND KRASCHREPARATIONSMARKER
+0	AUTO	CUST_PACKAGE_VISUAL	Utseendepaket
+0	AUTO	CUST_EMPTY_BLUEPRINT	Skapa ny Blueprint
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Ange din promokod eller hemliga kod här för att få din belöning.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Med denna rallyinspirerade uppgradering ser du ut att höra hemma i leran.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Välj svårighetsgrad för din racingdag. Den svårighetsgrad du väljer definierar AI-inställningen och den maximala bilnivån för racingdagen.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	BILAR I KARRIÄRLÄGET
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	ANTAL RACE FÖR 12 SPELARE
+0	AUTO	CUST_REGION_FRONT_TIRE	FRAMDÄCK
+0	AUTO	FE_STATS_DRAG_WINS	ANTAL DRAGRACINGVINSTER
+0	AUTO	RACE_DAY_SAVE_NAME	Min racingdag
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Du har inte tillräckligt med pengar för inköpet!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	HÖGSTA WHEELIEVINKEL
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Turboaggregat är luftpumpar.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Genom att borra upp cylindrarna får du större cylindervolym och ökar mängden bränsle som kan förbrännas vilket ger mer effekt.^
+0	AUTO	CUST_CAT_GRIP_BRAKE	Den här uppgraderingen ger dig bättre bromskraft med hjälp av prestandaklossar och förbättrade bromsskivor. Bra bromsar är en viktig komponent i trimmade fordon.^
+0	AUTO	CUST_SLOT_SPOILER	SPOILER
+0	AUTO	RACE_DAY_RACE_EVENTS	RACINGTÄVLINGAR
+0	AUTO	CUST_SLOT_STEERING_KIT	STYRSYSTEMSKIT
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	BANVINSTPROCENT
+0	AUTO	CUST_BLUEPRINT_RENAME	Byter namn på Blueprint…
+0	AUTO	RACE_DAY_SLOT_FILLED	UPPTAGEN
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	HÖGSTA DRIFTPOÄNG
+0	AUTO	CUST_VINYLS	VINYLER
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Högpresterande tvärlänkar är konstruerade av bättre material och erbjuder fler camberinställningar och bättre fjädringsgeometri.
+0	AUTO	FE_STATS_HUBS_WON	VUNNA RACINGDAGAR
+0	AUTO	CUST_CAT_GRIP_NITROUS	Den här uppgraderingen ger en temporär effektökning som kan innebära skillnaden mellan vinst och förlust.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	EJ BEHÖRIG TILL RACE
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Välj antalet reparationsmarker för din racingdag. När du skapar en solodag får du lika många reparationsmarker som kraschreparationsmarker.
+0	AUTO	CAR_SELECT_CAMAROSS	Första generationens Camaro beskrevs som ett litet giftigt odjur som åt Mustanger.
+0	AUTO	FE_STATS_BEAT_MODERATOR	BESEGRA MODERATOR
+0	AUTO	CUST_SLOT_HANDBRAKE	HANDBROMS
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Den här uppgraderingen ger ännu snabbare och exaktare växlingar samtidigt som komponenterna som överför effekten till drivhjulen är lättare och av racingkvalitet.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Den här uppgraderingen ger ännu snabbare och exaktare växlingar samtidigt som komponenterna som överför effekten till drivhjulen är lättare och av racingkvalitet.^
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Den här uppgraderingen ger ännu snabbare och exaktare växlingar samtidigt som komponenterna som överför effekten till drivhjulen är lättare och av racingkvalitet.^
+0	AUTO	COMMON_CLASS_HEADER	TYP
+0	AUTO	CAR_SELECT_FORDGT	Ford GT skapades som en hyllning till Fords racingdominans i slutet av 60-talet och den är en modern uppdatering av den klassiska versionen.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	PRESTANDASTATISTIK
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	BROMSSKIVOR
+0	AUTO	CUST_QUICK_INTERNALS_D3	Den här uppgraderingen gör att motorn klarar betydligt högre effekt under kortare perioder.^
+0	AUTO	CUST_QUICK_INTERNALS_G3	Den här uppgraderingen ger motorn interna racingkomponenter vilket gör att den klarar ännu mer effekt och högre varvtal.^
+0	AUTO	CUST_QUICK_INTERNALS_S3	Steg 3 interna delar fartrace
+0	AUTO	CUST_SLOT_PISTONS	KOLVAR
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Den här uppgraderingen ger en temporär effektökning som kan innebära skillnaden mellan vinst och förlust.^
+0	AUTO	FE_STATS_BEST_LAP_TIME	BÄSTA VARVTID
+0	AUTO	FE_STATS_SKILLS_STATS	SKICKLIGHETSTATISTIK
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	KARRIÄRÖVERSIKT
+0	AUTO	CUST_DRIFT_TUT_RWD	Att kunna skapa och bibehålla breda bakhjulssladdar på ett smidigt sätt är nyckeln till att specialanpassa en effektiv driftbil.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Den här uppgraderingen går ett steg längre och ökar motoreffekten till racingnivå.^
+0	AUTO	CUST_SELL_CAR_DENIED	Du kan inte sälja din sista bil.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	De här rejäla fjädringskomponenterna förhindrar att bilen flexar vid höga vridmoment vilket förbättrar däckens väggrepp. ^
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	Lunchtid
+0	AUTO	CUST_SLOT_PULLEY_DESC	Genom att montera en remskiva i en annan storlek kommer kompressorn att snurra snabbare vilket ger högre överladdning och mer effekt.^
+0	AUTO	CUST_SLOT_IGNITION_DESC	Det behövs en kraftfull tändgnista när man vill ha ut höga motoreffekter. Med hjälp av tändkablar och tändstift i maximalt ledande material som platina och iridium kan du förbättra motorns prestanda.    ^
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	AV
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	BROMSLEDNINGAR
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	BÄSTA MULTIPLIKATOR
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	LUSTGASSYSTEM
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Statistikservern är nere. Försök igen senare.
+0	AUTO	RACE_DAY_TRACK_CONFIG	BANKONFIGURATION
+0	AUTO	CS_HEADER_DRAG_EVENT	DRAGRACINGTÄVLINGAR
+0	AUTO	CUST_QUICK_BRAKE_1	Den här uppgraderingen ger kortare bromssträcka än standardbromsarna.^
+0	AUTO	CUST_QUICK_BRAKE_2	bromsar steg 2
+0	AUTO	CUST_REPAIR_TITLE	REPARERA DIN BIL
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Då du ökar motorns uteffekt måste du uppgradera andra komponenter för att garantera att effekten utnyttjas optimalt och skickas till drivhjulen. Koppling, drivaxlar och diffspärrar är viktiga komponenter i kraftöverföringen.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Sammanfattning
+0	AUTO	CUST_CAT_DRAG_FORCED	Den här uppgraderingen handlar om råkraft, turbokomponenterna är utformade för toppeffekt och fullgaskörning. De här delarna har en dramatisk inverkan på din hastighet i fartkontrollerna.^
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Vill du köra racingdagen nu?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Vill du spara ändringarna du gjort på Blueprinten?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Den här uppgraderingen förstärker komponenter som överför bilens motorkraft till hjulen, inklusive drivaxel, differential och axlar.^
+0	AUTO	CUST_BP_EXIT_CONFIRM	Denna åtgärd raderar alla ändringar du gjort på Blueprinten. Vill du radera ändringarna?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Byter namn på Blueprint...
+0	AUTO	CUST_FILTER_MIRRORS	BACKSPEGLAR
+0	AUTO	ENTER_PRESELL_CODE	ANGE PROMOKOD
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	FEL VID HÄMTNING
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	ANTAL VUNNA SHOWDOWN-TÄVLINGAR
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Den här uppgraderingen programmerar om motorstyrningen ännu mer för att ytterligare optimera prestanda.^
+0	AUTO	FE_STATS_BEST_REACTION_TIME	BÄSTA REAKTIONSTID
+0	AUTO	CAR_SELECT_MK5GTI	Mk5 GTI är den senaste versionen av GTI-bilarnas original. FSi-turbomotorn på 2 liter ger 200 hk från fabrik och den kan lätt trimmas.
+0	AUTO	CAR_SELECT_MK5R32	Ta en tredörrsbil, lägg till en kompakt V6-motor och fyrhjulsdrift så blir detta resultatet.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Med en korrekt fjädringsinställning som varken under- eller överstyr för mycket, får föraren en bil som är både snabbare och enklare att köra.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	TVÄRLÄNKAR
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	När effekten är maximerad behöver du en förstärkt fjädring som kan hålla bilen i en rak racinglinje längs hela dragracingbanan.
+0	AUTO	CUST_SLOT_BODY	KAROSSKIT
+0	AUTO	CUST_SLOT_HOOD	HUV
+0	AUTO	CUST_SLOT_PADS	BROMSBELÄGG
+0	AUTO	FE_STATS_DRIFT_WINS	ANTAL DRIFTVINSTER
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Den här uppgraderingen programmerar om din motorstyrning så att mer bränsle och luft kan förbrännas, vilket ger dig den kraft som behövs för att få hjulen att spinna när du sladdar in över mållinjen.^
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	SPECIALANPASSNING
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	TOTALT ANTAL KRASCHER I KARRIÄRLÄGET
+0	AUTO	RD_CREATE_RD	Skapa racingdag
+0	AUTO	FE_STATS_DRAG_RACES	ANTAL DRAGRACE
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	NEDKOPPLINGSPROCENT
+0	AUTO	CUST_REGION_FRONT_WHEEL	FRAMHJUL
+0	AUTO	CAR_SELECT_ECLIPSE	Andra generationens Eclipse är ökänd för vevaxelsallad.
+0	AUTO	CAR_LOT_TITLE	BILAFFÄR
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Genom att välja en racingdagplats som används kan du läsa mer information om racingdagen och välja att ta bort den.
+0	AUTO	CAREER_MAP_TITLE	KARRIÄRKARTA
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	BÄSTA DRIFTPOÄNG SOM FÖRFÖLJARE
+0	AUTO	CUST_SLOT_CRANKSHAFT	VEVAXEL
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	BILBELÖNING
+0	AUTO	CAR_SELECT_R34GTR	Bilen som dominerar tuningvärlden och sätter ribban för alla andra.
+0	AUTO	CS_HEADER_DRIFT_EVENT	DRIFTTÄVLINGAR
+0	AUTO	RACE_DAY_MULTIPLAYER	MULTIPLAYER
+0	AUTO	CUST_SLOT_CRANK_DESC	Standardvevaxlar kan inte hantera belastningen från riktigt höga effekter. En smidd vevaxel  krävs när motoreffekten överstiger 500 hästkrafter.^
+0	AUTO	CAR_SELECT_COBALTSS	Cobalten med turboladdad motor på 2,0 liter ersatte Cavaliern och den var avsedd att ta upp kampen med bilar som Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} FT
+0	AUTO	CAR_SELECT_350Z	Det här är den femte bilen i Z-serien. En bakhjulsdriven 2+2 sportkupé.
+0	AUTO	CAR_SELECT_997T	Med en 3,6-liters turbomotor klarar den här bilen 65-100 km/h på en sekund.
+0	AUTO	CAR_SELECT_AE86	Hachi-Roku är en av de sista bakhjulsdrivna kompaktbilarna.
+0	AUTO	CAR_SELECT_CTSV	CTSV var den första bilen i Cadillacs prestandafokuserade V-serie, som ska ta upp kampen med europeiska sportsedaner.
+0	AUTO	CAR_SELECT_EVO9	EVO IX är en 2-liters turbobil med sexton ventiler och fyrhjulsdrift. Den har sedan starten varit en drömbil för trimintresserade med intresse för väghållning och prestanda.
+0	AUTO	CAR_SELECT_EVOX	EVO X är snabbare än "the Stig".
+0	AUTO	CAR_SELECT_GTON	Pontiac GTO var den nordamerikanska versionen av Holden V-plattformen med LS2-spisen från Corvette.
+0	AUTO	CAR_SELECT_GTOO	Många anser att det här var den första muskelbilen.
+0	AUTO	CAR_SELECT_SHELBYGT500N	De skarpaste utvecklarna på Fords SVT-enhet och den legendariske Carroll Shelby kunde inte misslyckas. Resultatet kommer att få en och annan Mustang- och muskelbilsfantast att dra på smilbanden: 450 hästar, 450 ft-lb i vridmoment, Brembo-bromsar, 19-tums lättmetallfälgar och en prislapp i paritet med tidigare Mustang Cobra-modeller. Enligt produktutvecklarna är 2006 års Ford Mustang Shelby Cobra GT500 den effektstarkaste serietillverkade Mustangen någonsin.
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	FÖR ATT LÅSA UPP DENNA SHOWDOWN
+0	AUTO	CUST_REPAIR_USE_CASH	Använd pengar
+0	AUTO	FE_STATS_FILTER_SKILLS	SKICKLIGHETSTATISTIK
+0	AUTO	FE_STATS_SPEED_RACES	ANTAL FARTRACE
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Definiera tävling
+0	AUTO	RD_DELETE_SHARED_RD	Ta bort delad racingdag?
+0	AUTO	CAREER_OVERVIEW_HEADER	KARRIÄRÖVERSIKT
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	AVGASRÖR
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Om en bil bromsas gång på gång byggs stark värme upp i bromssystemet vilket hotar att förlänga bromssträckorna. Ett större bromssystem hjälper dig att hålla ner värmen och gör bromsverkan mer konsekvent.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Den här uppgraderingen ersätter motorns interna delar med starkare och mer hållbara delar vilket möjliggör att motorn klarar högre effekt och kan nå högre varvtal.^
+0	AUTO	CL_DRIVETRAIN_ALL	Alla typer
+0	AUTO	CL_DRIVETRAIN_AWD	Fyrhjulsdrift
+0	AUTO	CL_DRIVETRAIN_FWD	Framhjulsdrift
+0	AUTO	CL_DRIVETRAIN_RWD	Bakhjulsdrift
+0	AUTO	FE_COMMON_MODE	TYP
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	INSUG
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	TÄVLINGSREKORD
+0	AUTO	CODE_ENTRY	KODINMATNING
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Vill du köpa alla marker som du har i din kundvagn?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	AVGASSYSTEM
+0	AUTO	RACE_DAY_SPLIT_SCREEN	DELAD SKÄRM
+0	AUTO	CUST_SLOT_INTERCOOLER	INTERCOOLER
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Att kontrollera din hastighet genom kurvor, liksom att hålla koll på accelerationen ut ur kurvor, är nyckeln. Större motoreffekt ökar förmågan att komma ut som en katapult ur kurvor och att nå högre hastigheter.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	ANTAL KLUBBMEDLEMMAR
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	MOTORKOMPONENTER
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Den här uppgraderingen förstärker komponenter som överför bilens motorkraft till hjulen, inklusive drivaxel, differential och axlar.^
+0	AUTO	CUST_WIND_TUNNEL_OFF	Vindtunnel av
+0	AUTO	FE_COMMON_CONFIGURATION	KONFIGURATION
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} HK
+0	AUTO	CS_HEADER_GRIP_EVENT	BANTÄVLINGAR
+0	AUTO	CAR_SELECT_CIVIC	Sjätte generationens Civic är en av de populäraste i tuningvärlden. Oavsett om det handlar om street-, banrace eller dragracing och allting däremellan.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Racingdag raderad
+0	AUTO	CAR_SELECT_E46M3	Den tredje versionen av BMWs M3, E46:an, hade högst effektuttag per liter någonsin i en BMW när den presenterades.
+0	AUTO	CAR_SELECT_E92M3	E92-versionen av M3 har kolfibertak och drivs av en V8 (tidigare M3or hade raka 6:or).
+0	AUTO	CAR_SELECT_ELISE	Andra generationens Elise är en spartansk bil med körglädje i fokus.
+0	AUTO	CAR_SELECT_FDRX7	FD RX-7 är en av de bästa trimbilarna genom alla tider, vare sig det gäller drift eller banrace. En klassiker.
+0	AUTO	CAR_SELECT_IS350	Andra generationens IS är en bakhjulsdriven lyxkupé med en slankare och mer fastbackliknande kupéprofil.
+0	AUTO	CAR_SELECT_LP640	LP640 har en 6,5-liters motor på 640 hästkrafter som gör den till en supersportbil i toppklass.
+0	AUTO	CUST_SLOT_VALVE_DESC	Genom att återcirkulera hydraulvätska i bromssystemet kan du få bättre bromsverkan fram eller bak. ^
+0	AUTO	CAR_SELECT_SUPRA	Fjärde generationens Supra var lättare och snabbare än tidigare versioner och den klarar 0,98G i väghållningstester. 1999 var sista modellåret i USA, i  Japan fortsatte produktionen ända till 2002
+0	AUTO	CUST_FILTER_ALL_PARTS	ALLA DELAR
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Den här uppgraderingen flyttar maximalt med vikt över drivhjulen för att minska tiden som framhjulen är i luften vid acceleration.^
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Den här uppgraderingen gör att bilen tar kurvorna snabbare och med mindre sidorörelser utan att förlora väggreppet.^
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Den här uppgraderingen gör att bilen tar kurvorna snabbare och med mindre sidorörelser utan att förlora väggreppet i hög fart.^
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Kunde inte hitta lämpliga spelare eller matcher. Försök igen.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Välj racingtävlingar
+0	AUTO	FE_STATS_CLUB_LEADER	KLUBBLEDARE
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Autobahnringen i Tyskland består av ett sammanflätat nät av snabba vägavsnitt med Autobahnsträckor, doserade kurvor och långa tunnlar.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Avbryter sökning …
+0	AUTO	CUST_SLOT_DIFF_DESC	Här överförs motoreffekten till sidaxlarna och slutligen till respektive hjul. ^
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Är du säker på att du vill skriva över den här racingdagen?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	FLEST MÅLGÅNGAR FÖRE LEDARE
+0	AUTO	CAR_SELECT_ZONDAF	Många motorjournalister rankar Zonda F som en av de bästa supersportbilarna i världen.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	För att däcken ska få maximalt grepp förstärks din främre och bakre krängningshämmare, bussningsmaterialet byts mot polyuretan och stötdämparna byts till racingmodell.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Min racingdag^Skapa och utforma din egen racingdag. Skapa en racingdag för en eller flera spelare och tävla mot andra spelare online. Skapa en racingdag för spel på delad skärm och utmana en kompis.^^Dela din racingdag med andra spelare online och bjud in dem till din egen tävling.^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Autopolis är beläget på en bergstopp i en oländig del av Japan. Banan har en oklar historia men högfartspartierna är nya och välutformade.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Hårdare stötdämpare i kombination med en lägre tyngdpunkt, erhållen med hjälp av prestandafjädrarna, förbättrar bilens kurvtagningsförmåga.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Den här uppgraderingen ger dig en temporär effekthöjning. Lustgas är ett måste i dragracinglopp.^
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Windy Citys förare har tagit över ett övergivet flygfält och gjort det till sitt. Chicago Airfield innehåller banpartier, driftbanor och en rejäl dragracingsträcka.
+0	AUTO	FE_STATS_TOP_SPEED	TOPPFART
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	TRYCKREGULATORKIT
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	ANTAL MAXGREPPTILLFÄLLEN
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	SNABBASTE 60-0 MPH
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	TURBOREGULATOR
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Ett helt japanskt berg gick åt för att skapa Ebisu, driftens andliga hemvist. Fukuyama Challenge startar på landsbygden och slingrar sig ut på en motorväg.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Genom att lätta kuggar eller drev som driver kamaxlarna kan du minska kraften som behövs för att få axlarna att snurra vilket ökar motorstyrkan.^
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	TOTALT ANTAL VINSTER UTAN SKADOR
+0	AUTO	CUST_QUICK_HANDLING_1	Den här uppgraderingen gör att bilen får bättre kurvegenskaper och blir mer stabil i höga farter.^
+0	AUTO	CUST_QUICK_HANDLING_2	väghållning steg 2
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Lustgas är perfekt för temporära effektökningar men för mycket lustgas kan överbelasta motorn så att den går sönder. En tryckvaktssats kan garantera att motorn inte matas med högre tryck än den kan klara av.^
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Är du säker på att du vill ändra plats? Alla befintliga tävlingsinställningar kommer att raderas.
+0	AUTO	CUST_VINYL_LAYER_TITLE	LAGERMENY
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Den här uppgraderingen ersätter de interna delarna i din motor med smidda komponenter som ger bättre styrka och hållbarhet i intensiva fyrahundrameterslopp.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Infineon Raceway i norra Kalifornien består av komplexa bergskurvor och snäva svängar. En enda miss gör att du kan tappa farten eller krascha in i en hård vägg.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	FART-^UTMANING
+0	AUTO	FE_STATS_CLUB_POINTS	KLUBBPOÄNG
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Den här uppgraderingen programmerar om din motorstyrning så att mer bränsle och luft kan förbrännas vilket ger dig den kraft du behöver för att göra avgörande omkörningar på väg ut ur kurvor.^
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Är du säker på att du vill ta bort tävlingen %s ?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Racingdag sparad
+0	AUTO	CUST_QUICK_NITROUS_DI3	Den här uppgraderingen ger, för ett kort ögonblick, 50 till 250 hästkrafter mer i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats.  ^
+0	AUTO	CUST_QUICK_POWER_1	Den här basuppgraderingen erbjuder mer kraft genom hela varvtalsregistret och ger din tidigare standardbil en mer aggressiv framtoning.
+0	AUTO	CUST_QUICK_POWER_2	Den här uppgraderingen bygger på de mildare uppgraderingarna från steg 1 och ger ännu mer kraft i hela registret och ett kraftfullare ljud.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	Mondello Park är en otroligt snirklig och kompakt bana som anlagts mitt ute på den irländska landsbygden.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	BACKUPBIL
+0	AUTO	FE_STATS_GRIP_RACES	ANTAL BANRACE
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	GARAGE
+0	AUTO	CUST_PACKAGE_POWER	Kraftpaket
+0	AUTO	CUST_OWNED	I GARAGET
+0	AUTO	CUST_PAINT	LACK
+0	AUTO	CUST_PARTS	KAROSSDELAR
+0	AUTO	CUST_PACKAGE_TITLE	PAKET
+0	AUTO	CS_OPTION_CAR_SELECT	Välj bil
+0	AUTO	RACE_DAY_SLOT_EMPTY	TILLGÄNGLIG
+0	AUTO	FE_STATS_ACHIEVEMENTS	UPPNÅDDA MÅL
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Genom att skapa en utmaningsdag kan du välja ut specifika bilar som kan användas under racingdagen.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Använd handbromsen om du vill leka biljakt.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Highway Route 318 är en solstekt asfaltsorm mitt ute i Nevada-öknen. Här kan du komma upp i riktigt höga hastigheter men kurvorna kan vara bedrägliga.
+0	AUTO	CUST_SLOT_ROTORS_DESC	Prestandabromsskivor är bättre på att avleda värme än standardskivor. Skivor med större diameter ger också klossarna en större yta att greppa vilket ger bättre bromsverkan.^
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	BÄSTA DRIFTPOÄNG SOM LEDARE
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Den här uppgraderingen kalibrerar fjädringen så att du enkelt kan sladda genom kurvorna.^
+0	AUTO	CUST_REGION_FRONT_BUMPER	FRÄMRE KOFÅNGARE
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	UPPSKATTAD FÖRMÖGENHET
+0	AUTO	CUST_SLOT_TRANSMISSION	VÄXELLÅDA
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Portland International Raceway (PIR) ligger nära Mt. Rainier i nordvästra USA. Det är en krävande bana med en toppklassad dragracingsträcka.
+0	AUTO	CUST_BLUEPRINT_SAVE	SPARA BLUEPRINT
+0	AUTO	CUST_QUICK_NITROUS_1	Den här uppgraderingen ger, för ett kort ögonblick, extra effekt i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats.  ^
+0	AUTO	CUST_QUICK_NITROUS_2	Den här uppgraderingen ger, för ett kort ögonblick, ännu mer effekt i motorn med hjälp av lustgas. Effekthöjningen kan innebära skillnaden mellan andra och första plats.  ^
+0	AUTO	RACE_DAY_LOCATION_9_DESC	Allt är stort i Texas och Texas World Speedway är inget undantag. Den kurvtäta gatubanan är ihopfogad med en enorm ovalbana med dramatisk lutning.
+0	AUTO	CAR_SELECT_CORVETTE	Den sista Stingrayen var andra generationens Corvette och beskrevs som en av de fem bästa sportbilarna genom tiderna.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	FLEST ÖVERTAGNA SEKTORER
+0	AUTO	CL_DRIVETRAIN_HEADER	DRIVLINA
+0	AUTO	CUST_PACKAGE_HANDLING	Väghållningspaket
+0	AUTO	FE_STATS_SPEED_WINS	ANTAL FARTRACEVINSTER
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	FLEST VUNNA KONTROLLER
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Ledartavlan för toppbyggare visar spelets bästa Blueprint-skapare. Din ranking avgörs av vinstprocenten för alla dina delade Blueprints. Din delade Blueprint måste användas i minst 20 race innan den kan bli registrerad på ledartavlan.

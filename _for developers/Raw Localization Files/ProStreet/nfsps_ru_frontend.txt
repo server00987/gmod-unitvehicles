@@ -1,0 +1,727 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\Russian_Frontend.bin
+#	File created on: 2025-05-24 11:17:43
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	AUTO	FE_STATS_TOTAL_REPAIR_COST	ОБЩАЯ СТОИМОСТЬ РЕМОНТА
+0	AUTO	MODE_ALL	Все машины
+0	AUTO	CUST_VINYL_MOVE_LAYER	Сместить слой вверх/вниз
+0	AUTO	LANG_RUSSIAN_NO_TRANSLATION	Русский
+0	AUTO	CUST_SLOT_ENGINE_BLOCK	БЛОК ЦИЛИНДРОВ
+0	AUTO	CAR_SELECT_MUSTANGGT	Mustang 4 поколения. Оснащенный 4,6-литровым 8-цилиндровым V-образным двигателем, этот автомобиль является классическим "пони".
+0	AUTO	CUST_CAT_SPEED_INTERNALS	Это усовершенствование заключается в замене механических частей двигателя на более прочные и надежные, что позволяет повысить предельные обороты.
+0	AUTO	CUST_VISUAL_DECALS	НАКЛЕЙКИ
+0	AUTO	CUST_CUSTOMIZE	Выбор
+0	AUTO	CODE_ENTRY_VALID	Поздравляем! Ваш код принят. Вы получили награду.
+0	AUTO	CUST_SLOT_BRAKE_CALIPERS	ТОМОЗНЫЕ СУППОРТЫ
+0	AUTO	FE_MARKERMAN_EXIT_CONFIRM	В корзине покупок есть неоплаченные жетоны. Продолжить?
+0	AUTO	CUST_SLOT_ANTI_ROLL_BARS	СТАБ. ПОПЕРЕЧНОЙ УСТОЙЧИВОСТИ
+0	AUTO	CUST_QUICK_HANDLING_D3	Благодаря этому усовершенствованию подвеска становится более жесткой, что повышает устойчивость машины на прямой.
+0	AUTO	CUST_QUICK_HANDLING_G3	Благодаря этому усовершенствованию подвеска становится более жесткой, что повышает устойчивость машины на прямой и в поворотах.
+0	AUTO	CUST_QUICK_HANDLING_S3	Благодаря этому усовершенствованию подвеска становится более жесткой, что повышает устойчивость машины на большой скорости как на прямых участках, так и в поворотах.
+0	AUTO	CUST_REGION_REAR_TIRE	ЗАДНИЕ ШИНЫ
+0	AUTO	FE_STATS_BEST_SECTOR	ЛУЧШИЙ УЧАСТОК
+0	AUTO	CL_FREE_CAR_MARKER	ЖЕТОН АВТОМОБИЛЯ
+0	AUTO	RACEDAY_DEFINE_RACE_EVENTS_TITLE	ВЫБОР ЗАЕЗДОВ
+0	AUTO	CUST_QUICK_BRAKE_DI3	Благодаря этому усовершенствованию уменьшается время торможения, но повышается вероятность потери сцепления с трассой при снижении скорости.
+0	AUTO	CUST_BP_APPLY_CONFIRM	Для применения этой конфигурации необходимо приобрести запчасти на сумму {0:d}. Продолжить?
+0	AUTO	CUST_SLOT_BUSHING_KIT	САЙЛЕНТБЛОКИ
+0	AUTO	FE_STATS_GAMES_PLAYED	ВСЕГО ИГР
+0	AUTO	FE_CAR_SELECT_FILTER__BONUS_CARS	АВТОМОБИЛИ: ДОПОЛНИТЕЛЬНО
+0	AUTO	LANG_HUNGARIAN_NO_TRANSLATION	MAGYAR
+0	AUTO	CUST_VINYL_LAYER_HEADER	СЛОЙ {0:d}
+0	AUTO	CUST_PACKAGE_INFORMATION	ОПИСАНИЕ КОМПЛЕКТА
+0	AUTO	CUST_SLOT_NITROUS_DESC	Впрыск закиси азота в цилиндры двигателя позволяет кратковременно повысить его мощность.
+0	AUTO	CUST_QUICK_MANAGEMENT_1	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность.
+0	AUTO	CUST_QUICK_MANAGEMENT_2	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность.
+0	AUTO	CS_HEADER_SPEED_EVENT	СКОРОСТНЫЕ
+0	AUTO	CUST_SLOT_HEADS_DESC	Увеличив диаметр клапанов головки блока цилиндров, вы увеличите приток воздуха в двигатель и скорость отвода выхлопных газов. Это приведет к повышению мощности.
+0	AUTO	CUST_VINYL_ADDLAYER	ДОБАВИТЬ СЛОЙ
+0	AUTO	CUST_CAT_SPEED_FORCED	Эффективная система турбонаддува дает вам несравненное преимущество как на трассе, так и на городских улицах.
+0	AUTO	FE_STATS_HIGHEST_MULTIPLIER	МАКС. МНОЖИТЕЛЬ
+0	AUTO	RACE_MODE_GRIP_MODE	ГРИП
+0	AUTO	RACEDAY_DESC_DEFINE_RACE_EVENTS	Теперь выберите заезды для создаваемого уик-энда.
+0	AUTO	FE_STATS_NUMBER_OF_RACES	ОБЩЕЕ КОЛ-ВО ЗАЕЗДОВ
+0	AUTO	CUST_CAT_DRIFT_DRIVETRAIN	Это усовершенствование заключается в замене карданного вала, дифференциала, мостов и других элементов трансмиссии на более прочные.
+0	AUTO	FE_STATS_NUMBER_CAREER_GAMES	КАРЬЕРА: ИГРЫ
+0	AUTO	RACE_DAY_ADD_EVENT	ДОБАВИТЬ ЗАЕЗД
+0	AUTO	BLUEPRINT_NO_DLC_CONTENT	Эта конфигурация несовместима с вашей версией игры. Обратитесь на веб-сайт NeedforSpeed.com за информацией об обновлениях и дополнительных материалах.
+0	AUTO	LANG_POLISH_NO_TRANSLATION	POLSKI
+0	AUTO	CUST_PAINT_WHEELS	ПОКРАСКА ДИСКОВ
+0	AUTO	CUST_BLUEPRINT_SET_ACTIVE	Выбрать в качестве текущей
+0	AUTO	LANG_GERMAN_NO_TRANSLATION	DEUTSCH
+0	AUTO	CUST_ENGINE_MANAGEMENT_TITLE	ЭЛЕКТРОНИКА
+0	AUTO	HUBMAP_HEADING_WIN_REWARD	ПРИЗ ЗА ПОБЕДУ
+0	AUTO	CUST_PAINT_BODY	КРАСКА
+0	AUTO	CUST_PAINT_RIMS	ДИСКИ
+0	AUTO	CUST_PAINT_TINT	ТОНИРОВКА
+0	AUTO	FE_MATCHMAKING_ERROR_NONE	Ошибок не обнаружено.
+0	AUTO	RACEDAY_CONFIRM_DELETE	Удалить этот уик-энд? Ваши параметры и рекорды для этого уик-энда будут утрачены.
+0	AUTO	MENU_TITLE_LANGUAGE_SELECT	ВЫБОР ЯЗЫКА
+0	AUTO	CUST_SLOT_BUSHINGS_DESC	Сайлент-блоки из алюминия, полиуретана и других жестких материалов позволяют уменьшить радиус поворота без риска опрокинуть автомобиль.
+0	AUTO	HUB_DIFFICULTY_2	СРЕДНЯЯ СЛОЖНОСТЬ
+0	AUTO	CUST_TUNE_SPEED_BRAKES	Нагрев тормозной системы при каждом использовании приводит к ее постепенному износу и увеличению тормозного пути. Чем больше размеры деталей этой системы, тем лучше теплоотвод и тем выше надежность тормозов.
+0	AUTO	FE_STATS_HIGHEST_TOP_SPEED	ЛУЧШАЯ СКОРОСТЬ
+0	AUTO	CL_SELECT_PURCHASE_METHOD	Выберите способ покупки.
+0	AUTO	CUST_SLOT_INTAKE_DESC	Чем больше холодного воздуха получает двигатель, тем эффективнее он функционирует. Температура воздуха также имеет значение.
+0	AUTO	LANG_SPANISH_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CUST_CAT_DRIFT_SUSPENSION	Здесь акцент сделан на избыточной поворачиваемости. Усиленный задний стабилизатор поперечной устойчивости, алюминиевые сайлент-блоки и демонтаж переднего стабилизатора облегчают ввод автомобиля в занос.
+0	AUTO	DIALOG_MSG_CONFIRM_LEAVE_CARSELECT	Покинуть этот экран и вернуться на карту?
+0	AUTO	RACEDAY_SAVING_RACEDAY_PROG	Сохранение уик-энда...
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR_TUNER	САМЫЙ ЦЕННЫЙ ТЮНИНГ
+0	AUTO	RACE_MODE_DESCRIPTION	От типа гонок зависит, в каких заездах сможет участвовать этот автомобиль.
+0	AUTO	CUST_NO_WIND_TUNNEL_PARTS	Для доступа к аэродинам. трубе установите детали AutoSculpt!
+0	AUTO	CUST_SLOT_INTAKEMANIFOLD_DESC	Чем больше сечение воздухозаборника, тем больше воздуха получает двигатель. Постоянный мощный поток воздуха способствует эффективной работе мотора.
+0	AUTO	FE_STATS_TOP_TOTAL_CHECKPOINT_SPEED	МАКС. СУММАРНАЯ СКОРОСТЬ НА КП
+0	AUTO	CUST_SLOT_FUEL_SYSTEM	ТОПЛИВНАЯ СИСТЕМА
+0	AUTO	PS2_P2START_MESSAGE	
+0	AUTO	CAR_SELECT_MAZDASPEED3	Speed 3 - современный хэтчбек с 2,30-литровым мотором мощностью более 260 л.с., ламбо-дверями и 6-ступенчатой КПП.
+0	AUTO	CUST_QUICK_DRIVETRAIN_DI3	Благодаря этому усовершенствованию скорость и точность переключения передач еще более возрастают, а облегченные компоненты приводят трансмиссию в соответствие с гоночными стандартами.
+0	AUTO	CAR_SELECT_INTEGRA	"Коуки" с высокооборотным двигателем серии B очень популярны среди гонщиков-любителей благодаря богатому выбору опций и отличному шасси.
+0	AUTO	FE_HUBMAP_ETREE_CARS	АВТОМОБИЛИ
+0	AUTO	CUST_QUICK_ENGINEGROUP_1	Благодаря этому усовершенствованию повышается общая мощность двигателя.
+0	AUTO	CUST_QUICK_ENGINEGROUP_2	Благодаря этому усовершенствованию мощность двигателя еще немного приближается к гоночным стандартам.
+0	AUTO	CUST_TUNE_SPEED_ENGINE	Ключ к успеху - прохождение поворотов с минимальной потерей скорости. Повышение мощности двигателя позволяет развивать большую скорость и быстрее разгоняться на выходе из поворота.
+0	AUTO	GARAGE_REPAIR_CONFIRM	Отремонтировать автомобиль?
+0	AUTO	CAR_SELECT_S3	S3 второго поколения. В Северной Америке не продается.
+0	AUTO	CAR_SELECT_S4	S4 превосходит RS4 по управляемости и оснащена 4,2-литровым 8-цилиндровым V-образным двигателем.
+0	AUTO	CAR_SELECT_TT	Эти обновленная версия TT получила немало высших наград.
+0	AUTO	CUST_ENGINE_NITROUS_GROUP	ЗАКИСЬ АЗОТА
+0	AUTO	FE_STATS_DOWNLOADING_STATS	СТАТИСТИКА ЗАГРУЗКИ
+0	AUTO	CUST_QUICK_FORCED_D3	нагнетатель, дрэг, уровень 3
+0	AUTO	CUST_QUICK_FORCED_G3	Благодаря этому усовершенствованию увеличивается объем воздуха, поступающего в двигатель, и тем самым мощность последнего еще немного возрастает.
+0	AUTO	CUST_QUICK_FORCED_S3	Благодаря этому усовершенствованию увеличивается объем воздуха, поступающего в двигатель, и тем самым мощность последнего еще немного возрастает.
+0	AUTO	CUST_PAINT_GROUP_CANDY	КАРАМЕЛЬ
+0	AUTO	CUST_PAINT_GROUP_GLOSS	ГЛЯНЕЦ
+0	AUTO	CUST_PAINT_GROUP_MATTE	МАТОВАЯ
+0	AUTO	CUST_DRIVETRAIN_GROUP	ТРАНСМИССИЯ
+0	AUTO	CUST_PAINT_GROUP_PEARL	ПЕРЛАМУТР
+0	AUTO	CUST_QUICK_MANAGEMENT_D3	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность при резком ускорении.
+0	AUTO	CUST_QUICK_MANAGEMENT_G3	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность.
+0	AUTO	CUST_QUICK_MANAGEMENT_S3	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность.
+0	AUTO	CUST_SLOT_CALIPERS_DESC	Суппорты с большим количеством поршней более равномерно распределяют тормозное усилие по диску, повышая эффективность торможения.
+0	AUTO	MENU_SPLASH_START_PROMPT_XENON	Нажмите кнопку START
+0	AUTO	RACE_DAY_SLOT_ID	ЯЧЕЙКА  {0:d}
+0	AUTO	CUST_SLOT_MUFFLERS	ГЛУШИТЕЛИ
+0	AUTO	FE_MATCHMAKING_ERROR_GAME_JOIN_TIMEOUT	Не удалось присоединиться к игре. Повторите попытку.
+0	AUTO	COMMON_START	Старт
+0	AUTO	CUST_SLOT_TRANSMISSION_COOLING	ОХЛАЖДЕНИЕ ТРАНСМИССИИ
+0	AUTO	RACE_MODE_DRIFT_MODE	ДРИФТ
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_WHEEL	Какие колеса вы хотите изменить?
+0	AUTO	CUST_SLOT_FLYWHEEL	МАХОВИК
+0	AUTO	CUST_SLOT_DESC_SEATS_DESC	Гоночные сиденья - удобно и надежно.
+0	AUTO	MODE_CHANGE_CONFIRMATION	При смене типа будут удалены все конфигурации для этого автомобиля, в том числе относящиеся ко внешнему виду. Продолжить?
+0	AUTO	FE_STATS_TIME_SPENT_IN_CAREER	ВРЕМЯ В РЕЖИМЕ КАРЬЕРЫ
+0	AUTO	CUST_DRAG_TUT_AWD	Полный привод дает существенное преимущество на старте. Благодаря превосходному сцеплению с трассой всех четырех колес ни одна лошадиная сила не пропадает впустую.
+0	AUTO	CUST_DRAG_TUT_FWD	Передний привод - не лучший выбор для дрэга. Чем выше мощность двигателя, тем больше вероятность пробуксовки, поэтому при создании дрэгстера с передним приводом очень важно обеспечить превосходное сцепление ведущих колес с трассой.
+0	AUTO	CUST_DRAG_TUT_RWD	Главное в дрэге - сцепление с трассой. Вы должны полностью устранить вертикальные колебания колес и свести пробуксовку к минимуму. Особенно это важно на машинах с мощными двигателями.
+0	AUTO	CUST_ENGINE_GROUP	ДВИГАТЕЛЬ
+0	AUTO	FE_MATCHMAKING_ERROR_CANCEL_UNKNOWN	Запрос отклонен сервером.
+0	AUTO	CUST_SLOT_DESC_TIRES_DESC	Шины не дают вам соскользнуть с трассы.
+0	AUTO	CAR_SELECT_GTRPROTO	GTR Proto - это предсерийный образец R35 GTR.
+0	AUTO	FE_STATS_NUMBER_OF_RARE_CARS	КОЛ-ВО РЕДКИХ АВТОМОБИЛЕЙ
+0	AUTO	HUBMAP_HEADING_DOMINATE_REWARD	ПРИЗ ЗА ЛИДЕРСТВО
+0	AUTO	RACE_DAY_HOW_MANY_REPAIR_MARKERS	ЖЕТОНЫ РЕМОНТА: {0:d}
+0	AUTO	CAR_SELECT_VIPERCOUPE	Третья версия Viper. Спортивное купе Dodge, 10-цилиндровый V-образный двигатель мощностью 500 л.с. и непередаваемый звук.
+0	AUTO	MAIN_MENU_TITLE	ГЛАВНОЕ МЕНЮ
+0	AUTO	CUST_TINT_DARK	ТЕМНАЯ
+0	AUTO	CUST_TUNE_DRAG_SUSPENION	Регулировка подвески, направленная на правильное распределение веса, позволяет улучить и разгонные характеристики, и сцепление с трассой.
+0	AUTO	RACE_DAY_REPAIR_MARKERS_MULTI_PLAYER	Неразрушаемые автомобили
+0	AUTO	CUST_APPLYING_BLUEPRINT	ПРИМЕНЕНИЕ КОНФИГУРАЦИИ
+0	AUTO	RACEDAY_CHOOSE_SLOTS_HEADER	ВЫБЕРИТЕ ЯЧЕЙКУ
+0	AUTO	LANG_MEXICAN_NO_TRANSLATION	ESPAÑOL
+0	AUTO	CAR_SELECT_CAYMANS	Машина среднемоторной компоновки, по характеристикам сравнимая с 911.
+0	AUTO	FE_STATS_CAREER_COMPLETION_PERCENTAGE	ПРОЦЕНТ ЗАВЕРШЕНИЯ КАРЬЕРЫ
+0	AUTO	CUST_SLOT_DIFFERENTIAL	ДИФФЕРЕНЦИАЛ
+0	AUTO	CUST_WIND_TUNNEL_ON	Аэр. труба вкл.
+0	AUTO	RACE_DAY_LOCATION_10_MC	Токийский порт
+0	AUTO	RACE_DAY_LOCATION_11_MC	Уиллоу-спрингс
+0	AUTO	RACE_DAY_LOCATION_12_MC	Лейпциг
+0	AUTO	RACE_DAY_LOCATION_13_MC	Токио Экспрессуэй
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS_MULTIPLAYER	В коллективных уик-эндах недоступны жетоны ремонта. Автомобиль в таких гонках невозможно разбить, а повреждения восстанавливаются после каждого заезда.
+0	AUTO	WINDTUNNEL_X_LATERAL_GRIP_FLOAT	{0:f.2} G
+0	AUTO	CUST_BP_APPLY_CHANGE_MODE_CONFIRM	Эта конфигурация не соответствует виду гонок, для которого предназначен этот автомобиль. Все предыдущие конфигурации были удалены. Продолжить?
+0	AUTO	CUST_QUICK_POWER_DI3	Этот комплект повышает мощность двигателя настолько, чтобы преодолеть сцепление ведущих колес с трассой.
+0	AUTO	RACE_MODE_DRAG_MODE	ДРЭГ
+0	AUTO	WII_CONTROLLER_SAFETY	
+0	AUTO	CUST_QUICK_VISUAL_1	Этот базовый комплект улучшает внешний вид автомобиля.
+0	AUTO	CUST_QUICK_VISUAL_2	Благодаря этому усовершенствованию уменьшается подъемная сила, действующая на автомобиль на больших скоростях. Это приводит к повышению устойчивости на больших скоростях и в поворотах.
+0	AUTO	FE_HUBMAP_SELECT_PLAYMODE	Выберите режим игры
+0	AUTO	CUST_BP_APPLY_OVERWRITE_CONFIRM	В этой ячейке уже сохранена конфигурация. Перезаписать ее.
+0	AUTO	FE_HUBMAP_ETREE_MARKER_MANAGEMENT	ЖЕТОНЫ
+0	AUTO	CAR_SELECT_FOCUSST	Focus второй модели, продаваемый за пределами Северной Америки, оснащен 2,5-литровым мотором с турбонаддувом, развивающим мощность 225 л.с.
+0	AUTO	CUST_CAT_SPEED_DRIVETRAIN	Это усовершенствование заключается в замене карданного вала, дифференциала, мостов и других элементов трансмиссии на более прочные.
+0	AUTO	FE_MAIN_MENU	Главное меню
+0	AUTO	CUST_REGION_REAR_BUMPER	ЗАДНИЙ БАМПЕР
+0	AUTO	CUST_SLOT_DRIVE_PULLEY	ПРИВОД НАГНЕТАТЕЛЯ
+0	AUTO	CAR_SELECT_BARRACUDA	Hemi 'Cuda. Это легенда.
+0	AUTO	FE_STATS_HIGHEST_RATED_CAR	САМЫЙ ЦЕННЫЙ АВТОМОБИЛЬ
+0	AUTO	CUST_APPLY_PAINT_TITLE	ПОКРАСКА
+0	AUTO	FE_STATS_NUMBER_OF_CARS_IN_GARAGE	КОЛ-ВО АВТОМОБИЛЕЙ В ГАРАЖЕ
+0	AUTO	CUST_REGION_ALL_WHEELS	ВСЕ КОЛЕСА
+0	AUTO	CUST_QUICK_FORCED_2	Благодаря этому усовершенствованию увеличивается объем воздуха, поступающего в двигатель, и тем самым повышается мощность последнего.
+0	AUTO	FE_STATS_FASTEST_LAP	ЛУЧШИЙ КРУГ
+0	AUTO	FE_MARKERMAN_CASH_COUNT	{0:d}
+0	AUTO	CAR_TYPE_DRAG	ДРЭГ
+0	AUTO	CUST_CAT_SPEED_SUSPENSION	Это усовершенствование, направленное на обеспечение максимального сцепления с трассой, включает в себя жесткие стабилизаторы поперечной устойчивости, полиуретановые сайлент-блоки и амортизаторы гоночного класса.
+0	AUTO	CAR_TYPE_GRIP	ГРИП
+0	AUTO	FE_STATS_DNF_PERCENTAGE	ПРОЦЕНТ НФ
+0	AUTO	NFS_ALL_CHARACTERS	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®™áàâäąåæªčçćďéè^ěëêęíìïîłńňñóòøöôőœřšśťůúùüûűýžżź^º°¿¡ÁÀÂÅÄĄÆČĆÇĎÉÈĚËÊĘÍÌÎÏŁŇÑŃ^ŐÓÒØÖÔŒŘŚŠŤŮÚÙÜÚŰÛÝŻŹŽßАБ^ВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩ^ЪЫЬЭЮЯабвгдеёжзийклмнопрстуф^хцчшщъыьэюя
+0	AUTO	CAR_SELECT_CHARGER	Charger с кузовом B - самый популярный автомобиль на телевидении.
+0	AUTO	CUST_QUICK_INTERNALS_1	Благодаря этому усовершенствованию двигатель становится прочнее и может выдержать дальнейшую модернизацию.
+0	AUTO	CUST_QUICK_INTERNALS_2	Благодаря этому усовершенствованию двигатель становится прочнее и может работать на более высоких оборотах.
+0	AUTO	CUST_RESET_BLUEPRINT_CONFIRM	Восстановить стандартные параметры конфигурации?
+0	AUTO	CUST_SLOT_RACING_SEATS	ГОНОЧНЫЕ СИДЕНЬЯ
+0	AUTO	CUST_AUTOSCULPT_ZONE10	ЗОНА 10
+0	AUTO	FE_STATS_BEST_SECTOR_POINTS	МАКС. ОЧКОВ ЗА УЧАСТОК
+0	AUTO	FE_STATS_MOST_VALUABLE_CAR	САМЫЙ ДОРОГОЙ АВТОМОБИЛЬ
+0	AUTO	CAR_SELECT_CIVICSI	Civic восьмого поколения.
+0	AUTO	CAR_SELECT_CHEVELLESS	Chevelle - первый из классических спорткаров "Шевроле". Впервые эта компания установила двигатель объемом более 6,5 литров в 1970 году на модель 402.
+0	AUTO	CUST_CAT_GRIP_FORCED	Эффективная система турбонаддува дает вам несравненное преимущество как на трассе, так и на городских улицах.
+0	AUTO	FEATURE_TIP_TITLE_RACEDAY_MAP	Добро пожаловать на карту уик-эндов
+0	AUTO	CUST_BLUEPRINT_APPLY	Выбрать конфигурацию
+0	AUTO	CUST_SLOT_CAMSHAFTS	РАСПРЕДВАЛЫ
+0	AUTO	FE_HUBMAP_TOGGLE_SHOW_ALL_RACES	Все гонки
+0	AUTO	CUST_SLOT_HEADERS	ВЫПУСКНОЙ КОЛЛЕКТОР
+0	AUTO	FE_STATS_FASTEST_TIME	ЛУЧШИЙ РЕЗУЛЬТАТ
+0	AUTO	CUST_SUSPENSION_GROUP	ПОДВЕСКА
+0	AUTO	CUST_BLUEPRINT_RESET	СБРОС КОНФИГУРАЦИИ
+0	AUTO	CUST_QUICK_ENGINEGROUP_D3	Благодаря этому усовершенствованию мощность двигателя еще немного приближается к стандартам дрэга.
+0	AUTO	CUST_QUICK_ENGINEGROUP_G3	Благодаря этому усовершенствованию мощность двигателя еще немного приближается к гоночным стандартам.
+0	AUTO	CUST_QUICK_ENGINEGROUP_S3	Благодаря этому усовершенствованию мощность двигателя еще немного приближается к гоночным стандартам.
+0	AUTO	CUST_INSTALLED	УСТАНОВЛЕНО
+0	AUTO	RACEDAY_LOADING_RACEDAY_PROG	Загрузка уик-энда...
+0	AUTO	CUST_SLOT_CAMS_DESC	Для повседневной городской езды лучше всего подходит минимальная продолжительность перекрытия клапанов. По мере увеличения этого параметра пиковая мощность смещается в сторону более высоких оборотов. Настройте этот параметр так, чтобы обеспечить максимальную мощность в наиболее часто используемом диапазоне оборотов.
+0	AUTO	CUST_QUICK_HANDLING_DI3	Благодаря этому усовершенствованию машина лучше ведет себя в поворотах.
+0	AUTO	CUST_QUICK_BRAKE_D3	Благодаря этому усовершенствованию уменьшается время торможения и риск потери сцепления с трассой при снижении скорости.
+0	AUTO	CUST_QUICK_BRAKE_G3	тормоза, грип, уровень 3
+0	AUTO	CUST_QUICK_BRAKE_S3	Благодаря этому усовершенствованию уменьшается время торможения с максимальной скорости и риск потери сцепления с трассой при снижении скорости.
+0	AUTO	CUST_SLOT_BOTTLE_DESC	Чем больше емкость баллона, тем больше ваш запас закиси азота. Вы также можете установить несколько баллонов, которые необходимо заправлять по мере расхода N2O.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_EVENING	Вечер
+0	AUTO	CUST_TINT_LIGHT	СВЕТЛАЯ
+0	AUTO	CUST_REPAIR_DAMAGE	ПОВРЕЖДЕНИЯ
+0	AUTO	CUST_TINT_PEARL	ПЕРЛАМУТРОВАЯ
+0	AUTO	FE_STATS_LONGEST_DRIFT_DISTANCE	МАКСИМАЛЬНАЯ ДИСТАНЦИЯ ЗАНОСА
+0	AUTO	CUST_SLOT_TIPS_DESC	Эти детали придают машине более агрессивный вид.
+0	AUTO	CUST_SLOT_STEERING_DESC	Замена рулевого вала и шестерни позволяет немного увеличить ход руля и снизить усилие на нем.
+0	AUTO	CAR_SELECT_CORVETTEZ06	Настоящий убийца суперкаров. Семилитровый двигатель с титановыми шатунами и маслосистемой с сухим поддоном.
+0	AUTO	HD_COMPATIBLE	Поддерживается стандарт HD
+0	AUTO	PS_START_BUTTON	START
+0	AUTO	RACEDAY_DELETE_EVENT	Удалить заезд
+0	AUTO	FE_STATS_NUMBER_OF_KINGS_BEATEN	КОЛ-ВО ПОБЕД НАД КОРОЛЯМИ
+0	AUTO	CUST_WIND_TUNNEL	АЭРОДИН. ТРУБА
+0	AUTO	CUST_STAGE_NUMBER	ЭТАП {0:d}
+0	AUTO	FE_STATS_NUMBER_OF_WINS	КОЛ-ВО ПОБЕД
+0	AUTO	CUST_FILTER_FRONT_BUMPER	ПЕРЕДНИЙ БАМПЕР
+0	AUTO	MAIN_CAREER	КАРЬЕРА
+0	AUTO	CUST_REGION_REAR_WHEEL	ЗАДНИЕ КОЛЕСА
+0	AUTO	CUST_QUICK_VISUAL_D3	Благодаря этому усовершенствованию увеличивается прижимающая сила, действующая на автомобиль на больших скоростях.
+0	AUTO	CUST_QUICK_VISUAL_G3	Благодаря этому усовершенствованию увеличивается прижимающая сила, действующая на автомобиль на больших скоростях.
+0	AUTO	CUST_QUICK_VISUAL_S3	Благодаря этому усовершенствованию увеличивается прижимающая сила, действующая на автомобиль на больших скоростях.
+0	AUTO	CUST_TUNE_DRAG_BRAKES	Нагрев тормозной системы при каждом использовании приводит к ее постепенному износу и увеличению тормозного пути. Чем больше размеры деталей этой системы, тем лучше теплоотвод и тем выше надежность тормозов.
+0	AUTO	CUST_QUICK_INTERNALS_DI3	Благодаря этому усовершенствованию двигатель приводится в соответствие с гоночными стандартами и может работать на более высоких оборотах.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_WINS	ПОБЕД В РЕЙТИНГОВЫХ ИГРАХ
+0	AUTO	CUST_SLOT_BOV_DESC	Чтобы обеспечить максимально возможную эффективность турбонаддува, выпускной клапан стравливает излишнее давление без снижения оборотов двигателя.
+0	AUTO	FE_MATCHMAKING_ERROR_NO_RB	Доступно обновление, необходимое для игры через Интернет. За подробностями обращайтесь на веб-сайт NeedforSpeed.com.
+0	AUTO	FE_STATS_BEST_EVENT_TYPE	ЛЮБИМЫЙ ТИП ГОНОК
+0	AUTO	HUB_BREAK_RECORD	ПОБЕЙТЕ РЕКОРД
+0	AUTO	CUST_SLOT_WHEELIEBARS_DESC	Эти ролики препятствуют отрыву передних колес автомобиля при резкой даче газа.
+0	AUTO	RACE_DAY_DIFFICULTY_1	Низкая
+0	AUTO	RACE_DAY_DIFFICULTY_2	Средняя
+0	AUTO	RACE_DAY_DIFFICULTY_3	Высокая
+0	AUTO	RACE_DAY_DIFFICULTY_4	Максимальная
+0	AUTO	CUST_SLOT_CLUTCH	СЦЕПЛЕНИЕ
+0	AUTO	MENU_SPLASH_START_PROMPT_REV	Для продолжения нажмите кнопку 2
+0	AUTO	FE_STATS_FASTEST_0_TO_60_MPH	РЕКОРД 0-60 МИЛЬ/Ч
+0	AUTO	CUST_DIALOG_CHOOSE_FRONT_REAR_TIRE	Вы хотите заменить передние или задние шины?
+0	AUTO	RACEDAY_CREATE_RACEDAY_TITLE	СОЗДАНИЕ УИК-ЭНДА
+0	AUTO	FE_HUBMAP_ETREE_PERSONAL_RECORDS	ЛИЧНЫЕ РЕКОРДЫ
+0	AUTO	CUST_TUNE_DRAG_DRIVETRAIN	Повысить мощность двигателя недостаточно - надо обеспечить оптимальную передачу этой мощности на колеса. Сцепление, карданный вал, дифференциалы - все элементы трансмиссии имеют значение.
+0	AUTO	FE_HUBMAP_PLAYMODE_SOLO	ОДИН ИГРОК
+0	AUTO	CUST_TUNE_DRAG_ENGINE	Мощность - ключ к победе в дрэге. Чем она больше, тем быстрее вы разгоняетесь и тем большую скорость набираете на четверти мили.
+0	AUTO	RACEDAY_NO_DLC_CONTENT	Эта конфигурация несовместима с вашей версией игры. Обратитесь на веб-сайт NeedforSpeed.com за информацией об обновлениях и дополнительных материалах.
+0	AUTO	RD_PLAY	НАЧАТЬ
+0	AUTO	CUST_SLOT_IGNITION_SYSTEM	СИСТЕМА ЗАЖИГАНИЯ
+0	AUTO	FE_STATS_CAREER_WINS	КАРЬЕРА: ПОБЕДЫ
+0	AUTO	RACE_DAY_LOCATION	ТРАССА
+0	AUTO	CUST_QUICK_DRIVETRAIN_1	Благодаря этому усовершенствованию сокращается время переключения передач и повышается эффективность передачи мощности двигателя на колеса.
+0	AUTO	CUST_QUICK_DRIVETRAIN_2	Благодаря этому усовершенствованию скорость и точность переключения передач еще более возрастают, а облегченные компоненты повышают эффективность трансмиссии.
+0	AUTO	CUST_DELETE_SHARED_BLUEPRINT_CONFIRM	Удалить эту опубликованную конфигурацию?
+0	AUTO	SHOW_FRIENDS	Знакомые
+0	AUTO	FE_STATS_HUBS_DOMINATED	ЛИДЕРСТВО НА УИК-ЭНДАХ
+0	AUTO	FE_STATS_FASTEST_REACTION_TIME	ЛУЧШЕЕ ВРЕМЯ ОТКЛИКА
+0	AUTO	CODE_ENTRY_INVALID	Вы ввели неверный код. Проверьте правильность ввода и повторите попытку.
+0	AUTO	RACEDAY_CHOOSE_EVENTS_HEADER	ВЫБЕРИТЕ ДО 8 ЗАЕЗДОВ
+0	AUTO	FE_HUBMAP_ETREE_DEBUG_CARTEST	DEBUG CAR TEST
+0	AUTO	CUST_REPAIR_CAR	Ремонт автомобиля
+0	AUTO	CUST_AUTOSCULPT	AutoSculpt
+0	AUTO	CUST_REPAIR_MARKER	ЖЕТОН РЕМОНТА
+0	AUTO	CUST_PAINT_GROUP_IRIDESCENT	ХАМЕЛЕОН
+0	AUTO	CUST_SLOT_CAM_GEARS	ШЕСТЕРНИ РАСПРЕДВАЛОВ
+0	AUTO	CUST_SLOT_ROOF_SCOOP	ВОЗДУХОЗАБОРНИК
+0	AUTO	CUST_COMPONENTS_TITLE	НАСТРОЙКА КОМПОНЕНТОВ
+0	AUTO	CUST_BRAKES_GROUP	ТОРМОЗА
+0	AUTO	MAIN_QUIT_GAME_CONFIRM_DIALOG	Выйти из игры?
+0	AUTO	CUST_SLOT_TRACTION_BARS	ТЯГИ
+0	AUTO	RACE_DAY_REPAIR_MARKERS_1	1
+0	AUTO	RACE_DAY_REPAIR_MARKERS_2	2
+0	AUTO	RACE_DAY_REPAIR_MARKERS_3	3
+0	AUTO	RACE_DAY_REPAIR_MARKERS_4	4
+0	AUTO	RACE_DAY_REPAIR_MARKERS_5	5
+0	AUTO	RACE_DAY_REPAIR_MARKERS_6	6
+0	AUTO	CUST_CAT_DRIFT_BRAKE	Это усовершенствование включает в себя более мощные тормозные колодки и диски. В дрифте очень важна эффективность тормозной системы.
+0	AUTO	MAIN_RACE_DAY	УИК-ЭНД
+0	AUTO	FE_STATS_SPEED_CHALLENGE_WIN_PERCENTAGE	ПРОЦЕНТ ПОБЕД (СКОРОСТНЫЕ)
+0	AUTO	SELL_CAR_CONFIRMATION	Стоимость автомобиля составляет {0:d}.^В случае его продажи все конфигурации для него будут утрачены. Продать автомобиль?
+0	AUTO	RD_DELETE_RD	Удалить уик-энд?
+0	AUTO	CAR_SELECT_G35	G35 использует то же шасси, что и 350Z.
+0	AUTO	CAR_SELECT_GXP	GXP - это 2-литровый 16-цилиндровый V-образный двигатель мощностью 260 л.с., ламбо-двери и 18-дюймовые диски в стандартной комплектации.
+0	AUTO	CAR_SELECT_NSX	Автомобиль со среднемоторной компоновкой, созданный для демонстрации технологий Honda и многократно опередивший свое время.
+0	AUTO	CAR_SELECT_R35	Серийная версия R35 GTR.
+0	AUTO	CAR_SELECT_S13	S13 - одна из культовых дрифтерских моделей.
+0	AUTO	CAR_SELECT_S15	S15 никогда не поставлялась в Северную Америку, но она очень популярна среди тюнеров.
+0	AUTO	CAR_SELECT_RS4	B7 RS4 с 8-цилиндровым V-образным двигателем мощностью 400 л.с. поставляется в вариантах "седан", "универсал" и "кабриолет".
+0	AUTO	CAR_SELECT_RSX	Замена легендарной Integra, оснащенная новым двигателем Honda серии К.
+0	AUTO	CAR_SELECT_RX8	Переднемоторный заднеприводной четырехместный автомобиль с роторным двигателем. Благодаря почти идеальной развесовке обладает отличной управляемостью.
+0	AUTO	CAR_SELECT_STI	Четыре горизонтальных цилиндра, турбонаддув и полный привод. Sti очень популярна среди тюнеров, она действительно может все.
+0	AUTO	CAR_SELECT_Z4M	Оснащенная тем же рядным 6-цилиндровым двигателем, что и E46 M3, эта машина разгоняется до 100 км/ч за 4,9 сек., а ее максимальная скорость ограничена 250 км/ч.
+0	AUTO	CUST_QUICK_VISUAL_DI3	внешний вид, дрифт, уровень 3
+0	AUTO	CUST_AUTOSCULPT_ZONE1	ЗОНА 1
+0	AUTO	CUST_AUTOSCULPT_ZONE2	ЗОНА 2
+0	AUTO	CUST_AUTOSCULPT_ZONE3	ЗОНА 3
+0	AUTO	CUST_AUTOSCULPT_ZONE4	ЗОНА 4
+0	AUTO	CUST_AUTOSCULPT_ZONE5	ЗОНА 5
+0	AUTO	CUST_AUTOSCULPT_ZONE6	ЗОНА 6
+0	AUTO	CUST_AUTOSCULPT_ZONE7	ЗОНА 7
+0	AUTO	CUST_AUTOSCULPT_ZONE8	ЗОНА 8
+0	AUTO	CUST_AUTOSCULPT_ZONE9	ЗОНА 9
+0	AUTO	FE_STATS_HIGHEST_RACE_SCORE	ЛУЧШИЙ РЕЗУЛЬТАТ ЗАЕЗДА
+0	AUTO	FE_STATS_AVERAGE_SPEED	СРЕДНЯЯ СКОРОСТЬ
+0	AUTO	CUST_PAINT_GROUP_METALLIC	МЕТАЛЛИК
+0	AUTO	LANG_FINNISH_NO_TRANSLATION	SUOMI
+0	AUTO	MENU_SPLASH_START_PROMPT	Нажмите кнопку START
+0	AUTO	FE_STATS_DRIFT_WIN_PERCENTAGE	ПРОЦЕНТ ПОБЕД (ДРИФТ)
+0	AUTO	CS_OPTION_NO_BACKUP_CARS	Нет запасных автомобилей
+0	AUTO	CUST_FILTER_FRONT	ПЕРЕДНИЕ ДИСКИ
+0	AUTO	FE_HUBMAP_ETREE_CARLOT	АВТОСАЛОН
+0	AUTO	CAR_SELECT_CAMAROCONCEPT	Прототип Camaro 5 поколения, представленный в 2006 году.
+0	AUTO	CUST_QUICK_SUSPENSION_1	Благодаря этому усовершенствованию автомобиль лучше проходит повороты.
+0	AUTO	CUST_QUICK_SUSPENSION_2	Благодаря этому усовершенствованию автомобиль лучше проходит повороты и становится более управляемым.
+0	AUTO	CUST_QUICK_NITROUS_D3	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя на 50-250 л.с. путем сухого впрыска закиси азота. Это позволит вам вырваться вперед даже с последнего места.
+0	AUTO	CUST_QUICK_NITROUS_G3	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя на 50-250 л.с. путем сухого впрыска закиси азота.
+0	AUTO	CUST_QUICK_NITROUS_S3	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя на 50-250 л.с. путем сухого впрыска закиси азота.
+0	AUTO	CUST_PERFORMANCE	ТЮНИНГ
+0	AUTO	CUST_SLOT_ROLLBARS_DESC	Увеличение жесткости стабилизаторов поперечной устойчивости улучшает управляемость автомобиля в поворотах.
+0	AUTO	CUST_DELETE_BLUEPRINT_CONFIRM	Удалить эту конфигурацию?
+0	AUTO	MODE_BLUEPRINTS_ONLY	Конфигурации
+0	AUTO	CUST_QUICK_UPGRADE	БЫСТРЫЙ ТЮНИНГ
+0	AUTO	CAR_SELECT_CORVETTEC6	Последняя версия Corvette. Впервые после 35-летнего перерыва выпускается с открытыми фарами.
+0	AUTO	FE_HUBMAP_ETREE_OFFLINE	НЕ В СЕТИ
+0	AUTO	HUBMAP_HEADING_TRACK_REWARD	ПРИЗ
+0	AUTO	MAIN_QUIT_GAME	ВЫХОД
+0	AUTO	LANG_ITALIAN_NO_TRANSLATION	ITALIANO
+0	AUTO	CUST_NITROUS_OXIDE_TITLE	ЗАКИСЬ АЗОТА
+0	AUTO	CAR_TYPE_DRIFT	ДРИФТ
+0	AUTO	FE_HUBMAP_ETREE_FILTER	ФИЛЬТРЫ
+0	AUTO	CUST_SLOT_ROLLCAGE_DESC	Каркас безопасности не только защищает гонщика, но и повышает жесткость кузова, а также придает автомобилю стильный спортивный вид.
+0	AUTO	CUST_SLOT_BC_DESC	Чем больше давление турбонаддува, тем лучше. Если двигатель вашего автомобиля выдерживает повышенное давление, это усовершенствование будет вам полезно.
+0	AUTO	CUST_SLOT_TRANSCOOLING_DESC	Перегрев трансмиссии - источник проблем.
+0	AUTO	CUST_ENGINE_FORCED_INDUCTION_GROUP	НАДДУВ
+0	AUTO	CAR_TYPE_SPEED	СКОРОСТЬ
+0	AUTO	CUST_SLOT_CYLINDER_HEADS	ГОЛОВКА БЛОКА ЦИЛИНДРОВ
+0	AUTO	CUST_SELL_CAR_WARNING	Продав этот автомобиль, вы не сможете участвовать в заездах вида "{0:s}", пока не приобретете новую машину того же типа.
+0	AUTO	RACE_DAY_NO_EVENTS_FOR_TYPE	Этот вид заездов здесь недоступен.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY	ВРЕМЯ СУТОК
+0	AUTO	RD_DELETED	Уик-энд удален.
+0	AUTO	CUST_TUNE_GRIP_DRIVETRAIN	Повысить мощность двигателя недостаточно - надо обеспечить оптимальную передачу этой мощности на колеса. Сцепление, карданный вал, дифференциалы - все элементы трансмиссии имеют значение.
+0	AUTO	CUST_SLOT_AIR_INTAKE	СИСТЕМА ВПУСКА
+0	AUTO	CUST_PART_PURCHASED	КУПЛЕНО
+0	AUTO	CUST_BP_OPTION_UNDO	ВЫЙТИ
+0	AUTO	CUST_FILTER_BODY	КУЗОВ
+0	AUTO	CUST_FILTER_HOOD	КАПОТ
+0	AUTO	CUST_FILTER_REAR	ЗАДНИЕ ДИСКИ
+0	AUTO	CUST_CAT_DRAG_MANAGEMENT	Это усовершенствование заключается в перепрограммировании блока управления двигателем на обеспечение максимальной мощности.
+0	AUTO	CUST_SLOT_BRAKELINES_DESC	Тормозные шланги в оплетке из нержавеющей стали выдерживают большее давление и повышают эффективность торможения.
+0	AUTO	LS_SAVING	СОХРАНЕНИЕ...
+0	AUTO	CUST_CUSTOM_UPGRADE	УНИКАЛЬНЫЕ ЗАПЧАСТИ
+0	AUTO	HUB_INFO_NOT_ELIGIBLE_TO_RACE	Вы не допущены к участию в этом уик-энде. Требуется автомобиль следующего типа:
+0	AUTO	CUST_TUNE_GRIP_SUSPENSION	Устранив избыточную и недостаточную поворачиваемость путем регулировки подвески, вы получите скоростной и легкий в управлении автомобиль.
+0	AUTO	LANG_DANISH_NO_TRANSLATION	DANSK
+0	AUTO	CHOOSE_RACE_MODE_HEADER	ВЫБОР ТИПА ГОНОК
+0	AUTO	CUST_NO_EXHAUST_ON_STOCK_BODY	Тюнинговая насадка на выхлопную трубу несовместима с серийным кузовом!
+0	AUTO	CUST_PURCHASE_CAR	Приобрести машину
+0	AUTO	CODE_ENTRY_VERIFICATION	Проверка кода на сервере...
+0	AUTO	MC_OLD_SAVE_REWARD	Спасибо за участие в предыдущих играх серии Need for Speed! Мы дарим вам жетоны ремонта ({0:d}) и полного ремонта ({1:d}) для режима карьеры.
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_FINISHED_AHEAD_OF_HIGHER_CLASS_OPPONENT	КОЛ-ВО ОБГОНОВ СОПЕРНИКА БОЛЕЕ ВЫСОКОГО КЛАССА
+0	AUTO	RACE_DAY_LOCATION_1_MC	Автобанринг
+0	AUTO	RACE_DAY_LOCATION_2_MC	Аутополис
+0	AUTO	RACE_DAY_LOCATION_3_MC	Чикагский аэродром
+0	AUTO	RACE_DAY_LOCATION_4_MC	Эбису
+0	AUTO	RACE_DAY_LOCATION_5_MC	Инфинеон
+0	AUTO	RACE_DAY_LOCATION_6_MC	Монделло-парк
+0	AUTO	RACE_DAY_LOCATION_7_MC	Невада Хайвей
+0	AUTO	RACE_DAY_LOCATION_8_MC	Портленд Интернейшнл Рейсуэй
+0	AUTO	RACE_DAY_LOCATION_9_MC	Тексас Уорлд Спидуэй
+0	AUTO	CUST_QUICK_POWER_D3	мощность, дрэг, уровень 3
+0	AUTO	CUST_QUICK_POWER_G3	Этот комплект приближает мощность двигателя к гоночным стандартам.
+0	AUTO	CUST_QUICK_POWER_S3	мощность, скоростные, уровень 3
+0	AUTO	FE_STATS_NUMBER_OF_BLUEPRINTS	КОЛ-ВО КОНФИГУРАЦИЙ
+0	AUTO	FE_STATS_BEST_RUN	ЛУЧШИЙ ЗАЕЗД
+0	AUTO	WINDTUNNEL_DOWNFORCE	ПРИЖИМАЮЩАЯ СИЛА
+0	AUTO	CUST_SLOT_COOLING_DESC	Не слишком холодно, не слишком жарко. В самый раз.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE	ЛУЧШИЙ СЧЕТ В ДРИФТЕ
+0	AUTO	CUST_CAT_DRIFT_FORCED	Благодаря этому усовершенствованию в двигатель поступает больше воздуха, что способствует повышению мощности.
+0	AUTO	CUST_REPAIR_USE_REPAIR_MARKER	Потратить жетон
+0	AUTO	FE_STATS_FILTER_GENERAL	ОБЩИЕ ДАННЫЕ
+0	AUTO	CB_BLUEPRINTS_HEADER	ТИП КОНФИГУРАЦИИ
+0	AUTO	ENTER_SECRET_CODE	ВВЕДИТЕ СЕКРЕТНЫЙ КОД
+0	AUTO	CUST_SLOT_BODYKIT_DESC	Это усовершенствование существенно меняет внешний вид автомобиля и немного улучшает его аэродинамику.
+0	AUTO	FE_STATS_NUMBER_OF_CARS_TOTALLED	КОЛ-ВО РАЗБИТЫХ АВТОМОБИЛЕЙ
+0	AUTO	CUST_SLOT_WHEELS	ДИСКИ
+0	AUTO	CUST_SLOT_SUPERCHARGER	НАГНЕТАТЕЛЬ
+0	AUTO	CAR_SELECT_SHELBYGT500	GT500 - первый американский автомобиль, оснащенный стабилизатором поперечной устойчивости. Самая известная из моделей Shelby.
+0	AUTO	FE_STATS_LONGEST_SINGLE_WHEELIE	МАКСИМАЛЬНАЯ ДИСТАНЦИЯ "ВИЛЛИ"
+0	AUTO	FE_STATS_GRIP_WINS	ГРИП: ПОБЕДЫ
+0	AUTO	CL_MS_POINTS	Microsoft® points
+0	AUTO	FE_STATS_LONGEST_DRIFT_TIME	МАКСИМАЛЬНАЯ ДЛИТЕЛЬНОСТЬ ЗАНОСА
+0	AUTO	CUST_FILTER_REAR_BUMPER	ЗАДНИЙ БАМПЕР
+0	AUTO	FE_STATS_BEST_0_TO_60_MPH	РЕКОРД 0-60 МИЛЬ/Ч
+0	AUTO	CUST_BP_PURCHASE_CAR_CONFIRM	Покупка автомобиля и применение к нему этой конфигурации обойдется вам в {0:d}. Продолжить?
+0	AUTO	GARAGE_REPAIR_DENIED	У вас нет средств и жетонов для ремонта этого автомобиля.
+0	AUTO	MENU_SPLASH_START_PROMPT_PC	Щелкните для продолжения
+0	AUTO	LANG_CZECH_NO_TRANSLATION	ČEŠTINA
+0	AUTO	FE_STATS_NUMBER_OF_PUNKBUSTER_RACES	КОЛ-ВО ЗАЕЗДОВ  PUNKBUSTER
+0	AUTO	GARAGE_NO_CAR_REPAIR	У вас нет денег и жетонов для ремонта этого автомобиля.
+0	AUTO	CUST_GARAGE_NO_CARS_FOUND	НЕТ ДОСТУПНЫХ МАШИН
+0	AUTO	RDMAP_CREATE_PREVIEW	СОЗДАНИЕ УИК-ЭНДА
+0	AUTO	CUST_TUNE_DRIFT_BRAKES	Нагрев тормозной системы при каждом использовании приводит к ее постепенному износу и увеличению тормозного пути. Чем больше размеры деталей этой системы, тем лучше теплоотвод и тем выше надежность тормозов.
+0	AUTO	FE_STATS_MOST_CHAINED_DRIFTS	МАКСИМАЛЬНАЯ СЕРИЯ ЗАНОСОВ
+0	AUTO	CUST_SLOT_PROPORTIONING_VALVE	ОГРАНИЧИТЕЛЬ ДАВЛЕНИЯ
+0	AUTO	FE_STATS_CLUB_TAG	КОД КЛУБА
+0	AUTO	CUST_SLOT_EXHAUST	НАСАДКА ГЛУШИТЕЛЯ
+0	AUTO	CAR_SELECT_INTEGRATYPER	Говорят, что у Integra Type R самая лучшая управляемость среди всех переднеприводных машин.
+0	AUTO	CUST_CAT_DRAG_BRAKE	Здесь акцент сделан не на резком торможении, а на динамике. Ваша цель - уменьшить тормозные усилия до того предела, при котором вы еще можете сохранять контроль над автомобилем.
+0	AUTO	WINDTUNNEL_DRAG	ЛОБОВОЕ СОПРОТИВЛЕНИЕ
+0	AUTO	CUST_APPLY_PAINT	Покраска
+0	AUTO	WINDTUNNEL_PEAK_HP	ПИКОВАЯ МОЩНОСТЬ
+0	AUTO	CUST_BLUEPRINT_DELETE	Удалить конфигурацию
+0	AUTO	FE_HUBMAP_ETREE_CAREER_STATISTICS	СТАТИСТИКА КАРЬЕРЫ
+0	AUTO	CUST_VISUAL_TITLE	ОТДЕЛКА
+0	AUTO	CUST_SLOT_DRIVESHAFT	КАРДАННЫЙ ВАЛ
+0	AUTO	HACK_PURCHASE_BLUEPRINT	Купить конфигурацию
+0	AUTO	CAREER_COMPLETION_HEADER	ЗАВЕРШЕНИЕ КАРЬЕРЫ
+0	AUTO	CUST_TUNE_DRIFT_ENGINE	Чем выше мощность двигателя, тем легче добиться пробуксовки и зрелищных заносов.
+0	AUTO	FE_STATS_FASTEST_1_4_MILE	РЕКОРД НА 1/4 МИЛИ
+0	AUTO	CL_NOT_ENOUGH_CASH	Недостаточно средств для покупки этой машины.
+0	AUTO	CUST_SLOT_SC_DESC	Эта система наддува приводится в действие самим двигателем и обеспечивает большую мощность на низких оборотах.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_CLUBS	КЛУБ
+0	AUTO	CUST_SLOT_TIRES	ШИНЫ
+0	AUTO	FE_MATCHMAKING_ERROR_NO_EXISTING_GAME_FOUND	Гоночные уик-энды не найдены.
+0	AUTO	RACEDAY_EXIT_CONFIRM	Все изменения, внесенные вами в этот уик-энд, будут отменены. Продолжить?
+0	AUTO	CUST_SLOT_SHOCKS_AND_SPRINGS	ПОДВЕСКА
+0	AUTO	CUST_REGION_SKIRT	НАКЛАДКА НА ПОРОГИ
+0	AUTO	CUST_SLOT_NITROUS_BOTTLE	БАЛЛОН ДЛЯ ЗАКИСИ АЗОТА
+0	AUTO	CUST_QUICK_FORCED_DI3	Благодаря этому усовершенствованию увеличивается объем воздуха, поступающего в двигатель, и тем самым мощность последнего еще немного возрастает.
+0	AUTO	LANG_SWEDISH_NO_TRANSLATION	SVENSKA
+0	AUTO	CUST_SLOT_WHEELIE_BARS	РОЛИКИ НА ЗАДНЕМ БАМПЕРЕ
+0	AUTO	LANG_ENGLISH_NO_TRANSLATION	ENGLISH
+0	AUTO	CAR_SELECT_997GT2	не будем говорить об этой машине.
+0	AUTO	CL_MAXIMUM_CARS_REACHED	Достигнуто максимальное количество автомобилей ({0:d}). Освободите место в гараже, продав ненужную машину.
+0	AUTO	CUST_CUSTOMIZE_MAIN	ТЮНИНГ И РЕГУЛИРОВКА
+0	AUTO	CUST_CAT_GRIP_MANAGEMENT	Это усовершенствование заключается в перепрограммировании блока управления двигателем на обеспечение максимальной мощности, которая необходима для обгона соперника в повороте.
+0	AUTO	CUST_BLUEPRINT_HEADER	ИЗМЕНЕНИЕ КОНФИГУРАЦИИ
+0	AUTO	FE_STATS_DRAG_WIN_PERCENTAGE	ПРОЦЕНТ ПОБЕД (ДРЭГ)
+0	AUTO	CUST_EXHAUST_SYSTEM_TITLE	ВЫХЛОПНАЯ СИСТЕМА
+0	AUTO	FE_HUBMAP_ETREE_SELECT_HUB	ВЫБРАТЬ
+0	AUTO	CUST_PAINT_GROUP_CHROME	ХРОМ
+0	AUTO	FE_STATS_NUMBER_OF_SHARED_BLUEPRINTS	КОЛ-ВО КОНФИГУРАЦИЙ В СЕТИ
+0	AUTO	CUST_FORCED_INDUCTION_TITLE	НАДДУВ
+0	AUTO	FE_STATS_DRIFT_RACES	ДРИФТ: ЗАЕЗДЫ
+0	AUTO	CUST_TUNE_DRIFT_DRIVETRAIN	Повысить мощность двигателя недостаточно - надо обеспечить оптимальную передачу этой мощности на колеса. Сцепление, карданный вал, дифференциалы - все элементы трансмиссии имеют значение.
+0	AUTO	FE_STATS_FILTER_PERFORMANCE	ЭФФЕКТИВНОСТЬ
+0	AUTO	CUST_SLOT_TURBOCHARGER	ТУРБОНАДДУВ
+0	AUTO	CUST_SLOT_SHIFTER	РЫЧАГ ПЕРЕКЛЮЧЕНИЯ ПЕРЕДАЧ
+0	AUTO	CUST_DYNO_TEST	ПРОВЕРКА НА СТЕНДЕ
+0	AUTO	RACE_DAY_LOCATION_10_DESC	Токийский порт очень популярен среди местных гонщиков. По его обширной территории можно проложить множество интересных трасс.
+0	AUTO	RACEDAY_SCREEN_SELECT_CHALLENGE_CARS	ВЫБОР АВТОМОБИЛЕЙ
+0	AUTO	CUST_CAT_SPEED_NITROUS	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя путем впрыска закиси азота.
+0	AUTO	CAR_SELECT_MUSTANGGTN	Mustang 5 поколения. Своего рода ретрофутуризм.
+0	AUTO	FE_STATS_WIN_PERCENTAGE	ПРОЦЕНТ ПОБЕД
+0	AUTO	RD_CUSTOM_SELECT	Начать уик-энд?
+0	AUTO	KING_FLOW_CASH_REWARD	ДЕНЕЖНЫЙ ПРИЗ
+0	AUTO	CUST_CAT_SPEED_BRAKE	Это усовершенствование включает в себя более мощные тормозные колодки и диски. Эффективная тормозная система - необходимая составляющая тюнинга.
+0	AUTO	CUST_SPEED_TUT_AWD	Полный привод обеспечивает максимальное сцепление колес с трассой, особенно при даче газа на старте или выходе из поворота. Пользуйтесь этим преимуществом.
+0	AUTO	CUST_SPEED_TUT_FWD	Машины с передним приводом достаточно сложны в управлении, однако при правильной настройке они весьма эффективны на трассе. Первым делом вы должны устранить недостаточную поворачиваемость, повысив жесткость всех элементов передней подвески. Затем вам следует установить дифференциал повышенного трения, позволяющий избежать силового подруливания.
+0	AUTO	CUST_SPEED_TUT_RWD	Сбалансированность и управляемость - главные преимущества заднего привода. Настраивая такую машину, уделите внимание устранению избыточной поворачиваемости.
+0	AUTO	CUST_SLOT_COOLING_SYSTEM	СИСТЕМА ОХЛАЖДЕНИЯ
+0	AUTO	CAR_SELECT_ESCORTCOSWORTH	Эта модель Cosworth никогда не использовалась в полицейском эскорте, но вошла в число самых культовых автомобилей всех времен.
+0	AUTO	FE_STATS_FASTEST_0_TO_100_MPH	РЕКОРД 0-100 МИЛЬ/Ч
+0	AUTO	RACE_DAY_LOCATION_11_DESC	Скоростная трасса "Уиллоу-спрингс" проходит по склону холма в калифорнийской пустыне. Ее главные особенности - сложный рельеф и высокая средняя скорость.
+0	AUTO	RACE_DAY_DIFFICULTY	СЛОЖНОСТЬ
+0	AUTO	FE_MARKERMAN_NOT_ENOUGH_CASH	Недостаточно средств для покупки всех выбранных жетонов.
+0	AUTO	CAR_SELECT_CHALLENGER	Challenger первого поколения, он же первый "пони" от Dodge. Его дизайн основан на старом проекте автомобиля с турбинным двигателем.
+0	AUTO	RACEDAY_DESC_AVAILABLE_SLOT	Выбрав свободную ячейку, вы сможете создать новый уик-энд. Вам будет предложено выбрать пиктограмму для его обозначения на карте.
+0	AUTO	CUST_GRIP_TUT_GRIP_AWD	Полный привод обеспечивает максимальное сцепление колес с трассой, особенно при даче газа на старте или выходе из поворота. Пользуйтесь этим преимуществом.
+0	AUTO	CUST_GRIP_TUT_GRIP_FWD	Машины с передним приводом достаточно сложны в управлении, однако при правильной настройке они весьма эффективны на трассе. Первым делом вы должны устранить недостаточную поворачиваемость, повысив жесткость всех элементов передней подвески. Затем вам следует установить дифференциал повышенного трения, позволяющий избежать силового подруливания.
+0	AUTO	CUST_GRIP_TUT_GRIP_RWD	Сбалансированность и управляемость - главные преимущества заднего привода. Настраивая такую машину, уделите внимание устранению избыточной поворачиваемости.
+0	AUTO	CUST_SELL_CAR	Продать
+0	AUTO	RACE_DAY_LOCATION_12_DESC	На испытательном полигоне фирмы "Порше" в немецком Лейпциге воссозданы самые знаменитые повороты известных гоночных трасс.
+0	AUTO	CUST_FILTER_SIDE_SKIRTS	НАКЛАДКИ НА ПОРОГИ
+0	AUTO	CUST_SLOT_FUEL_DESC	Эффективная топливная система - залог мощности. Установка более производительного бензонасоса, форсунок инжектора и топливных магистралей позволяет существенно повысить мощность двигателя.
+0	AUTO	CUST_TUNE_DRIFT_SUSPENSION	Предсказуемое поведение автомобиля в заносе очень важно для дрифта. Ваша цель - обеспечить избыточную поворачиваемость при сохранении управляемости.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_FRIENDS	ДРУЗЬЯ
+0	AUTO	LANG_NORWEGIAN_NO_TRANSLATION	Norsk
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_MORNING	Утро
+0	AUTO	CUST_FILTER_SPOILER	СПОЙЛЕР
+0	AUTO	FE_MATCHMAKING_ERROR_UNKNOWN	Ошибка поиска соперников.
+0	AUTO	RACE_DAY_LOCATION_13_DESC	Эта трасса включает в себя несколько миль скоростного токийского шоссе с прямыми участками, развязками и тоннелями.
+0	AUTO	FE_STATS_NUMBER_OF_RANKED_GAMES_PLAYED	РЕЙТИНГОВЫХ ИГР
+0	AUTO	CUST_TUNE	ТЮНИНГ
+0	AUTO	CUST_VISUALS_TITLE	СТАЙЛИНГ
+0	AUTO	FE_STATS_CLUB_NAME	НАЗВАНИЕ КЛУБА
+0	AUTO	CUST_INSTALL	Установить
+0	AUTO	RACEDAY_SAVE_CONFIRM	Сохранить уик-энд?
+0	AUTO	FE_MATCHMAKING_JOINING	Присоединение к игре...
+0	AUTO	CUST_SLOT_BLOW_OFF_VALVE	ПЕРЕПУСКНОЙ КЛАПАН
+0	AUTO	CUST_SLOT_ROLL_CAGE	КАРКАС БЕЗОПАСНОСТИ
+0	AUTO	CAR_LOT_NO_DRIFTING	НЕ ДЛЯ ДРИФТА
+0	AUTO	CUST_CAT_DRIFT_INTERNALS	Это усовершенствование заключается в замене механических частей двигателя на более прочные и надежные, что позволяет повысить предельные обороты.
+0	AUTO	CUST_REPAIR_USE_TOTALLED_MARKER	ПОТРАТИТЬ ЖЕТОН ПОЛНОГО РЕМОНТА
+0	AUTO	CUST_PACKAGE_VISUAL	Внешний вид
+0	AUTO	CUST_EMPTY_BLUEPRINT	Новая конфигурация
+0	AUTO	MOBILE_CODE_ENTRY_PROMT	Если у вас есть секретный или рекламный код, введите его здесь, чтобы получить награду.
+0	AUTO	CUST_SLOT_ROOFSCOOP_DESC	Воздухозаборники раллийного типа позволяют уверенно ездить даже в самой непролазной грязи.
+0	AUTO	RACEDAY_DESC_DIFFICULTY	Укажите уровень сложности создаваемого уик-энда. От этого уровня зависит мастерство компьютерных соперников и максимальное количество участников.
+0	AUTO	FE_CAR_SELECT_FILTER_CAREER_CARS	АВТОМОБИЛИ: КАРЬЕРА
+0	AUTO	FE_STATS_NUMBER_OF_12_PLAYER_RACES_COMPLETED	КОЛ-ВО ГОНОК С 12 УЧАСТНИКАМИ
+0	AUTO	CUST_REGION_FRONT_TIRE	ПЕРЕДНИЕ ШИНЫ
+0	AUTO	FE_STATS_DRAG_WINS	ДРЭГ: ПОБЕДЫ
+0	AUTO	RACE_DAY_SAVE_NAME	Мой уик-энд
+0	AUTO	CUST_PART_NOT_ENOUGH_CASH	Недостаточно средств для этой покупки!
+0	AUTO	FE_STATS_HIGHEST_WHEELIE_ANGLE	МАКСИМАЛЬНЫЙ УГОЛ "ВИЛЛИ"
+0	AUTO	CUST_SLOT_DESC_TURBO_DESC	Турбонаддув - это воздушный насос.
+0	AUTO	CUST_SLOT_BLOCK_DESC	Благодаря расточке цилиндров увеличивается рабочий объем двигателя, а значит, и его максимальная мощность.
+0	AUTO	CUST_CAT_GRIP_BRAKE	Это усовершенствование включает в себя более мощные тормозные колодки и диски. Эффективная тормозная система - необходимая составляющая тюнинга.
+0	AUTO	CUST_SLOT_SPOILER	СПОЙЛЕР
+0	AUTO	RACE_DAY_RACE_EVENTS	ЗАЕЗДЫ
+0	AUTO	CUST_SLOT_STEERING_KIT	РУЛЕВОЕ УПРАВЛЕНИЕ
+0	AUTO	FE_STATS_GRIP_WIN_PERCENTAGE	ПРОЦЕНТ ПОБЕД В ГРИПЕ
+0	AUTO	CUST_BLUEPRINT_RENAME	Переименовать конфигурацию
+0	AUTO	RACE_DAY_SLOT_FILLED	ЗАНЯТО
+0	AUTO	FE_STATS_HIGHEST_DRIFT_SCORE	ЛУЧШИЙ СЧЕТ В ДРИФТЕ
+0	AUTO	CUST_VINYLS	АППЛИКАЦИИ
+0	AUTO	CUST_SLOT_CONTROLARMS_DESC	Благодаря установке более качественных рулевых тяг увеличивается диапазон регулировки угла развала и геометрии подвески в целом.
+0	AUTO	FE_STATS_HUBS_WON	ПОБЕДЫ В УИК-ЭНДАХ
+0	AUTO	CUST_CAT_GRIP_NITROUS	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя путем впрыска закиси азота.
+0	AUTO	HUB_HEADING_NOT_ELIGIBLE_TO_RACE	ВЫ НЕ ДОПУЩЕНЫ К ЗАЕЗДУ
+0	AUTO	RACEDAY_DESC_REPAIR_MARKERS	Укажите количество жетонов ремонта для создаваемого уик-энда. В индивидуальном уик-энде вы получаете равное количество жетонов ремонта и жетонов полного ремонта.
+0	AUTO	CAR_SELECT_CAMAROSS	Camaro первого поколения. Маленький юркий зверек, который кушает "Мустангов".
+0	AUTO	FE_STATS_BEAT_MODERATOR	ПОБЕДА НАД ПОМОЩНИКОМ
+0	AUTO	CUST_SLOT_HANDBRAKE	РУЧНОЙ ТОРМОЗ
+0	AUTO	CUST_QUICK_DRIVETRAIN_D3	Благодаря этому усовершенствованию скорость и точность переключения передач еще более возрастают, а облегченные компоненты приводят трансмиссию в соответствие с гоночными стандартами.
+0	AUTO	CUST_QUICK_DRIVETRAIN_G3	Благодаря этому усовершенствованию скорость и точность переключения передач еще более возрастают, а облегченные компоненты приводят трансмиссию в соответствие с гоночными стандартами.
+0	AUTO	CUST_QUICK_DRIVETRAIN_S3	Благодаря этому усовершенствованию скорость и точность переключения передач еще более возрастают, а облегченные компоненты приводят трансмиссию в соответствие с гоночными стандартами.
+0	AUTO	COMMON_CLASS_HEADER	КЛАСС
+0	AUTO	CAR_SELECT_FORDGT	Ford GT - это современная версия классического GT40, созданная в память о гоночных победах Ford 60-х годов.
+0	AUTO	FE_STATS_PERFORMANCE_STATS	ЭФФЕКТИВНОСТЬ
+0	AUTO	CUST_SLOT_BRAKE_ROTORS	ТОРМОЗНЫЕ ДИСКИ
+0	AUTO	CUST_QUICK_INTERNALS_D3	Благодаря этому усовершенствованию двигатель может выдерживать большие кратковременные нагрузки.
+0	AUTO	CUST_QUICK_INTERNALS_G3	Благодаря этому усовершенствованию двигатель приводится в соответствие с гоночными стандартами и может работать на более высоких оборотах.
+0	AUTO	CUST_QUICK_INTERNALS_S3	Двигатель, скоростные, уровень 3.
+0	AUTO	CUST_SLOT_PISTONS	ПОРШНИ
+0	AUTO	CUST_CAT_DRIFT_NITROUS	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя путем впрыска закиси азота.
+0	AUTO	FE_STATS_BEST_LAP_TIME	ЛУЧШЕЕ ВРЕМЯ КРУГА
+0	AUTO	FE_STATS_SKILLS_STATS	НАВЫКИ
+0	AUTO	FE_HUBMAP_ETREE_CAREER_SUMMARY	ОБЩИЕ СВЕДЕНИЯ
+0	AUTO	CUST_DRIFT_TUT_RWD	Для успешного дрифта наиболее важна способность автомобиля плавно выполнять широкие заносы.
+0	AUTO	CUST_QUICK_ENGINEGROUP_DI3	Благодаря этому усовершенствованию мощность двигателя еще немного приближается к гоночным стандартам.
+0	AUTO	CUST_SELL_CAR_DENIED	Это ваша последняя машина.
+0	AUTO	CUST_SLOT_TRACTIONBARS_DESC	Установка более прочных и жестких элементов подвески препятствует деформации автомобиля и обеспечивает максимальное сцепление с трассой.
+0	AUTO	RACEDAY_SCREEN_TIMEOFDAY_NOON	День
+0	AUTO	CUST_SLOT_PULLEY_DESC	Изменение диаметра приводного шкива заставляет турбину нагнетателя вращаться быстрее, что также способствует повышению мощности двигателя.
+0	AUTO	CUST_SLOT_IGNITION_DESC	Мощному двигателю требуется мощное и стабильное зажигание. Установив проводку и свечи из платины, иридия и других высокопроводящих материалов, вы повысите общую эффективность двигателя.
+0	AUTO	FE_HUBMAP_ETREE_FILTER_OFF	ОТКЛ.
+0	AUTO	CUST_SLOT_BRAKE_LINE_KIT	ТОРМОЗНЫЕ ШЛАНГИ
+0	AUTO	FE_STATS_BEST_DRIFT_MULTIPLIER	МАКС. МНОЖИТЕЛЬ
+0	AUTO	CUST_SLOT_NITROUS_SYSTEM	СИСТЕМА ВПРЫСКА ЗАКИСИ АЗОТА
+0	AUTO	FE_MATCHMAKING_ERROR_STATS_NOT_AVAILABLE	Сервер статистики недоступен. Повторите попытку позже.
+0	AUTO	RACE_DAY_TRACK_CONFIG	КОНФИГУРАЦИЯ ТРАССЫ
+0	AUTO	CS_HEADER_DRAG_EVENT	ДРЭГ
+0	AUTO	CUST_QUICK_BRAKE_1	Благодаря этому усовершенствованию существенно сокращается тормозной путь автомобиля.
+0	AUTO	CUST_QUICK_BRAKE_2	тормоза, уровень 2
+0	AUTO	CUST_REPAIR_TITLE	РЕМОНТ АВТОМОБИЛЯ
+0	AUTO	CUST_TUNE_SPEED_DRIVETRAIN	Повысить мощность двигателя недостаточно - надо обеспечить оптимальную передачу этой мощности на колеса. Сцепление, карданный вал, дифференциалы - все элементы трансмиссии имеют значение.
+0	AUTO	CUST_BLUEPRINT_SUMMARY	Описание конфигурации
+0	AUTO	CUST_CAT_DRAG_FORCED	Здесь акцент сделан на обеспечении максимальной мощности. Эти компоненты существенно повышают максимальную скорость на четверти мили.
+0	AUTO	RACEDAY_SAVE_CONFIRM_RACE	Принять участие в этом уик-энде?
+0	AUTO	CUST_SAVE_BLUEPRINT_CONFIRM	Сохранить изменения, внесенные в эту конфигурацию?
+0	AUTO	CUST_CAT_DRAG_DRIVETRAIN	Это усовершенствование заключается в замене карданного вала, дифференциала, мостов и других элементов трансмиссии на более прочные.
+0	AUTO	CUST_BP_EXIT_CONFIRM	Все изменения конфигурации автомобиля будут отменены. Продолжить?
+0	AUTO	BLUEPRINT_SHARING_RENAMING	Переименование конфигурации...
+0	AUTO	CUST_FILTER_MIRRORS	ЗЕРКАЛА
+0	AUTO	ENTER_PRESELL_CODE	ВВЕДИТЕ РЕКЛАМНЫЙ КОД
+0	AUTO	FE_STATS_DOWNLOAD_FAILED	ОШИБКИ ЗАГРУЗКИ
+0	AUTO	FE_STATS_NUMBER_OF_SHOWDOWNS_WON	КОЛ-ВО ПОБЕД В ФИНАЛАХ
+0	AUTO	CUST_QUICK_MANAGEMENT_DI3	Благодаря этому усовершенствованию блок управления двигателя перепрограммируется на максимальную эффективность.
+0	AUTO	FE_STATS_BEST_REACTION_TIME	ЛУЧШЕЕ ВРЕМЯ ОТКЛИКА
+0	AUTO	CAR_SELECT_MK5GTI	Mk5 GTI - это новая версия знаменитого хэтчбека. Даже в стандартной комплектации ее 2-литровый двигатель с послойным впрыском топлива развивает мощность более 200 л.с.
+0	AUTO	CAR_SELECT_MK5R32	Хэтчбек с 6-цилиндровым V-образным двигателем и полным приводом.
+0	AUTO	CUST_TUNE_SPEED_SUSPENSION	Устранив избыточную и недостаточную поворачиваемость путем регулировки подвески, вы получите скоростной и легкий в управлении автомобиль.
+0	AUTO	CUST_SLOT_CONTROL_ARMS	РЫЧАГИ ПОДВЕСКИ
+0	AUTO	CUST_CAT_DRAG_SUSPENSION	При той мощности, которую развивает двигатель в дрэге, жесткая подвеска необходима для сохранения контроля над автомобилем.
+0	AUTO	CUST_SLOT_BODY	КУЗОВ
+0	AUTO	CUST_SLOT_HOOD	КАПОТ
+0	AUTO	CUST_SLOT_PADS	ТОРМОЗНЫЕ КОЛОДКИ
+0	AUTO	FE_STATS_DRIFT_WINS	ДРИФТ: ПОБЕДЫ
+0	AUTO	CUST_CAT_DRIFT_MANAGEMENT	Это усовершенствование заключается в перепрограммировании блока управления двигателем на обеспечение максимальной мощности, которая необходима для входа в занос.
+0	AUTO	WII_CONTROLS_WARNING	
+0	AUTO	MENU_CUSTOMIZATION	ТЮНИНГ И СТАЙЛИНГ
+0	AUTO	FE_STATS_CAREER_TOTALLED_COUNT	АВТОМОБИЛЕЙ РАЗБИТО
+0	AUTO	RD_CREATE_RD	Создать уик-энд?
+0	AUTO	FE_STATS_DRAG_RACES	ДРЭГ: ЗАЕЗДЫ
+0	AUTO	FE_STATS_DISCONNECT_PERCENTAGE	ПРОЦЕНТ РАЗРЫВОВ
+0	AUTO	CUST_REGION_FRONT_WHEEL	ПЕРЕДНИЕ КОЛЕСА
+0	AUTO	CAR_SELECT_ECLIPSE	Eclipse второго поколения. Этим все сказано.
+0	AUTO	CAR_LOT_TITLE	АВТОСАЛОН
+0	AUTO	RACEDAY_DESC_FILLED_SLOT	Выбрав заполненную ячейку, вы получите сведения о сохраненном в ней уик-энде и сможете удалить его.
+0	AUTO	CAREER_MAP_TITLE	КАРТА
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_FOLLOWER	ЛУЧШИЙ СЧЕТ В ДРИФТЕ: ВЕДОМЫЙ
+0	AUTO	CUST_SLOT_CRANKSHAFT	КОЛЕНВАЛ
+0	AUTO	HUBMAP_HEADING_CAR_REWARD	ПРИЗ: АВТОМОБИЛЬ
+0	AUTO	CAR_SELECT_R34GTR	Идеальный тюнерский автомобиль. Все остальные равняются на него.
+0	AUTO	CS_HEADER_DRIFT_EVENT	ДРИФТ
+0	AUTO	RACE_DAY_MULTIPLAYER	КОЛЛЕКТИВНАЯ ИГРА
+0	AUTO	CUST_SLOT_CRANK_DESC	Серийный коленвал может не выдержать высокой мощности двигателя. Если мощность превышает 500 л.с., необходимо установить кованый коленвал.
+0	AUTO	CAR_SELECT_COBALTSS	Cobalt оснащенный 2-литровым мотором с нагнетателем был выпущен как замена Cavalier. Достойный соперник для Honda Civic.
+0	AUTO	WINDTUNNEL_X_60_TO_0_TIME_FLOAT	{0:f.0} ФУТ.
+0	AUTO	CAR_SELECT_350Z	Пятый автомобиль серии Z. Задний привод, спортивное купе 2+2.
+0	AUTO	CAR_SELECT_997T	С 3,6-литровым двигателем и турбонаддувом эта машина разгоняется с 65 до 100 км/ч за 1 секунду.
+0	AUTO	CAR_SELECT_AE86	Так называемая "хати-року". Одна из последних малолитражек с задним приводом.
+0	AUTO	CAR_SELECT_CTSV	Первая модель серии Cadillac серии V, предназначенная для соревнований с европейскими спортивными седанами.
+0	AUTO	CAR_SELECT_EVO9	EVO IX - это полноприводный хэтчбек с 2-литровым 16-цилиндровым V-образным двигателем. Благодаря высокой мощности и отличной управляемости очень популярен среди тюнеров.
+0	AUTO	CAR_SELECT_EVOX	EVO X по праву считается очень быстрым автомобилем.
+0	AUTO	CAR_SELECT_GTON	Pontiac GTO - это североамериканская версия Holden V с двигателем LS2 от Corvette.
+0	AUTO	CAR_SELECT_GTOO	Эту модель считают одним из первых классических спорткаров.
+0	AUTO	CAR_SELECT_SHELBYGT500N	Этот совместный проект подразделения Ford SVT и легендарного Кэррола Шелби был изначально обречен на успех. Его результат привел в восторг всех поклонников "Мустангов" и просто мощных машин: 450 "лошадок", крутящий момент в 450 футов на фунт (о да!), суппорты Brembo, 19-дюймовые облегченные диски и цена, сравнимая с Mustang Cobra. По мнению конструкторов этого проекта, Ford Mustang Shelby Cobra GT500 2006 года станет "самым мощным серийным "Мустангом" всех времен."
+0	AUTO	LANG_DUTCH_NO_TRANSLATION	NEDERLANDS
+0	AUTO	WII_P2START_MESSAGE	
+0	AUTO	CAREER_UNLOCK_SHOWDOWN	ДЛЯ ДОСТУПА К ЭТИМ СОРЕВНОВАНИЯМ
+0	AUTO	CUST_REPAIR_USE_CASH	Заплатить
+0	AUTO	FE_STATS_FILTER_SKILLS	НАВЫКИ
+0	AUTO	FE_STATS_SPEED_RACES	СКОРОСТНЫЕ ГОНКИ: ЗАЕЗДЫ
+0	AUTO	RACEDAY_BUTTON_DEFINE_EVENTS	Укажите заезды
+0	AUTO	RD_DELETE_SHARED_RD	Удалить опубликованный уик-энд?
+0	AUTO	CAREER_OVERVIEW_HEADER	СТАТИСТИКА КАРЬЕРЫ
+0	AUTO	CUST_SLOT_EXHAUST_PIPES	ВЫХЛОПНАЯ СИСТЕМА
+0	AUTO	CUST_TUNE_GRIP_BRAKES	Нагрев тормозной системы при каждом использовании приводит к ее постепенному износу и увеличению тормозного пути. Чем больше размеры деталей этой системы, тем лучше теплоотвод и тем выше надежность тормозов.
+0	AUTO	CUST_CAT_GRIP_INTERNALS	Это усовершенствование заключается в замене механических частей двигателя на более прочные и надежные, что позволяет повысить предельные обороты.
+0	AUTO	CL_DRIVETRAIN_ALL	Все типы
+0	AUTO	CL_DRIVETRAIN_AWD	Полный
+0	AUTO	CL_DRIVETRAIN_FWD	Передний
+0	AUTO	CL_DRIVETRAIN_RWD	Задний
+0	AUTO	FE_COMMON_MODE	ТИП ГОНКИ
+0	AUTO	CUST_SLOT_INTAKE_MANIFOLD	ВПУСКНОЙ КОЛЛЕКТОР
+0	AUTO	FE_HUBMAP_ETREE_EVENT_RECORDS	РЕКОРДЫ
+0	AUTO	CODE_ENTRY	ВВОД КОДА
+0	AUTO	FE_MARKERMAN_CHECKOUT_CONFIRM	Купить все выбранные жетоны?
+0	AUTO	CUST_ENGINE_EXHAUST_GROUP	ВЫХЛОПНАЯ СИСТЕМА
+0	AUTO	RACE_DAY_SPLIT_SCREEN	РАЗДЕЛЕНИЕ ЭКРАНА
+0	AUTO	CUST_SLOT_INTERCOOLER	ИНТЕРКУЛЕР
+0	AUTO	CUST_TUNE_GRIP_ENGINE	Ключ к успеху - прохождение поворотов с минимальной потерей скорости. Повышение мощности двигателя позволяет развивать большую скорость и быстрее разгоняться на выходе из поворота.
+0	AUTO	ALL_SPECIAL_CHARACTERS	á à â ä ą å æ ª č ç ć ď é è ě ë ê ę í ì ï î ł ń ň ñ ó ò ø ö ô ő œ ř š ś ť ů ú ù ü û ű ý ž ż ź º °¿ ¡ ^Á À Â Å Ä Ą Æ Č Ć Ç Ď É È Ě Ë Ê Ę Í Ì Î Ï Ł Ň Ñ Ń Ő Ó Ò Ø Ö Ô Œ Ř Ś Š Ť Ů Ú Ù Ü Ú Ű Û Ý Ż Ź Ž ß А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+0	AUTO	FE_STATS_NUMBER_OF_CLUB_MEMBERS	ЧИСЛЕННОСТЬ КЛУБА
+0	AUTO	CUST_ENGINE_INTERNALS_TITLE	МЕХАНИКА
+0	AUTO	CUST_CAT_GRIP_DRIVETRAIN	Это усовершенствование заключается в замене карданного вала, дифференциала, мостов и других элементов трансмиссии на более прочные.
+0	AUTO	CUST_WIND_TUNNEL_OFF	Аэр. труба откл.
+0	AUTO	FE_COMMON_CONFIGURATION	НАСТРОЙКА
+0	AUTO	WINDTUNNEL_X_HP_FLOAT	{0:f.0} Л.С.
+0	AUTO	CS_HEADER_GRIP_EVENT	ГРИП
+0	AUTO	CAR_SELECT_CIVIC	Civic шестого поколения - одна из самых популярных моделей в тюнерской среде. Годится для повседневной езды, кольцевых гонок, дрэга и всего остального.
+0	AUTO	RACEDAY_RACEDAY_DELETED_CONFIRMED	Уик-энд удален
+0	AUTO	CAR_SELECT_E46M3	Третья версия M3 с двигателем E46 - самым эффективным по соотношению "мощность/объем" среди всех моторов BMW.
+0	AUTO	CAR_SELECT_E92M3	Прототип E92 M3 с углепластиковой крышей и 8-цилиндровым V-образным двигателем (предыдущие M3 оснащались рядным 6-цилиндровым).
+0	AUTO	CAR_SELECT_ELISE	Elise второго поколения. Культовый автомобиль, созданный исключительно для гонок.
+0	AUTO	CAR_SELECT_FDRX7	FD RX-7 - один из самых известных тюнерских автомобилей. Хорош и в дрэге, и в грипе. Настоящая легенда.
+0	AUTO	CAR_SELECT_IS350	IS второго поколения. Роскошное заднеприводное купе со стремительными обводами.
+0	AUTO	CAR_SELECT_LP640	Благодаря 6,5-литровому мотору мощностью 640 л.с. LP640 считается одним из самых мощных суперкаров в мире.
+0	AUTO	CUST_SLOT_VALVE_DESC	Регулируя давление в различных частях тормозной системы, вы можете изменять распределение тормозного усилия между передними и задними колесами.
+0	AUTO	CAR_SELECT_SUPRA	Supra 4 поколения, облегченная по сравнению с предыдущей моделью и обладающая отличными характеристиками поведения в заносе. Ее поставки в Северную Америку были прекращены в 1999 году, но выпуск в Японии продолжался до 2002 года.
+0	AUTO	CUST_FILTER_ALL_PARTS	ВСЕ ЧАСТИ
+0	AUTO	CUST_QUICK_SUSPENSION_D3	Благодаря этому усовершенствованию возрастает нагрузка на ведущие колеса и предотвращается отрыв передних колес от трассы.
+0	AUTO	CUST_QUICK_SUSPENSION_G3	Благодаря этому усовершенствованию автомобиль еще лучше проходит повороты, не теряя сцепления с трассой.
+0	AUTO	CUST_QUICK_SUSPENSION_S3	Благодаря этому усовершенствованию автомобиль может проходить повороты на максимальной скорости, не теряя сцепления с трассой.
+0	AUTO	FE_MATCHMAKING_ERROR_SEARCH_FAILED	Не удалось найти подходящих соперников. Повторите попытку.
+0	AUTO	RACE_DAY_HELP_DEFINE_EVENTS	Выбор заездов
+0	AUTO	FE_STATS_CLUB_LEADER	ГЛАВА КЛУБА
+0	AUTO	RACE_DAY_LOCATION_1_DESC	Немецкий "Автобанринг" представляет собой сеть пересекающихся скоростных магистралей. На нем есть и открытые прямые участки, и тоннели, и крутые повороты.
+0	AUTO	FE_MATCHMAKING_CANCELLING	Прекращение поиска...
+0	AUTO	CUST_SLOT_DIFF_DESC	Именно в этом узле мощность двигателя распределяется между колесами.
+0	AUTO	RACEDAY_SAVE_CONFIRM_OVERWRITE	Перезаписать этот уик-энж?
+0	AUTO	FE_STATS_MOST_TIMES_FINISHED_AHEAD_OF_LEADER	МАКСИМУМ ПОБЕД НАД ЛИДЕРОМ
+0	AUTO	CAR_SELECT_ZONDAF	большинство журналистов считает Zonda F лучшим суперкаром в мире.
+0	AUTO	CUST_CAT_GRIP_SUSPENSION	Это усовершенствование, направленное на обеспечение максимального сцепления с трассой, включает в себя жесткие стабилизаторы поперечной устойчивости, полиуретановые сайлент-блоки и амортизаторы гоночного класса.
+0	AUTO	FEATURE_TIP_RACEDAY_MAP	Мой уик-энд^Создавайте собственные гоночные уик-энды для индивидуальной и коллективной игры, а также для игры в режиме разделения экрана.^^'Создав гоночный уик-энд, вы можете опубликовать его в Интернете, а затем провести собственные соревнования на его основе.^^
+0	AUTO	RACE_DAY_LOCATION_2_DESC	Трасса "Аутополис" находится на вершине горы в одной из отдаленных областей Японии. Несмотря на сомнительное происхождение, она содержится в отличном состоянии.
+0	AUTO	CUST_SLOT_SHOCKS_DESC	Повышение жесткости амортизаторов и более низкое расположение центра тяжести существенно улучшают управляемость автомобиля в поворотах.
+0	AUTO	CUST_CAT_DRAG_NITROUS	Благодаря этому усовершенствованию вы можете кратковременно повысить мощность двигателя. Система впрыска закиси азота необходима всем дрэг-рейсерам.
+0	AUTO	RACE_DAY_LOCATION_3_DESC	Этот заброшенный аэродром давно облюбовали чикагские гонщики. На нем есть широкая взлетная полоса, несколько трасс для грипа и дрифта, а также прямой участок для дрэга.
+0	AUTO	FE_STATS_TOP_SPEED	МАКСИМАЛЬНАЯ СКОРОСТЬ
+0	AUTO	CUST_SLOT_PRESSURE_CONTROL_KIT	СИСТЕМА КОНТРОЛЯ ДАВЛЕНИЯ
+0	AUTO	FE_STATS_NUMBER_OF_TIMES_ACHIEVED_MAXIMUM_GRIP_IN_STAGING	КОЛ-ВО МАКС. СЦЕПЛЕНИЙ С ТРАССОЙ
+0	AUTO	FE_STATS_FASTEST_60_TO_0_MPH	РЕКОРД 60-0 МИЛЬ/Ч
+0	AUTO	CUST_SLOT_BOOST_CONTROLLER	КОНТРОЛЛЕР НАДДУВА
+0	AUTO	CARBON_GAME_NAME_SHORT	NFS Carbon
+0	AUTO	RACE_DAY_LOCATION_4_DESC	Японская трасса "Эбису", своего рода Мекка дрифта, проложена по склону горы. От нее отходит участок "Фукуяма-челлендж", переходящий в скоростное шоссе.
+0	AUTO	CUST_SLOT_CAMGEARS_DESC	Облегченные детали привода распредвалов уменьшают потери энергии в этом узле  и повышают КПД двигателя.
+0	AUTO	FE_MARKERMAN_CART_COUNT	{0:d} X {1:d}
+0	AUTO	FE_STATS_TOTAL_RACES_WON_WITHOUT_DAMAGE	ВСЕГО ПОБЕД БЕЗ ПОВРЕЖДЕНИЙ
+0	AUTO	CUST_QUICK_HANDLING_1	Благодаря этому усовершенствованию машина становится более стабильной на большой скорости и в поворотах.
+0	AUTO	CUST_QUICK_HANDLING_2	управляемость, уровень 2
+0	AUTO	CUST_SLOT_PRESSURE_DESC	Закись азота - эффективное средство, но ее чрезмерное использование может привести к повреждению двигателя. Эта система позволяет поддерживать безопасное давление впрыска.
+0	AUTO	RACE_DAY_DIALOG_CONFIRM_TRACK_CHANGE	Вы действительно хотите изменить место проведения? Список заездов будет очищен.
+0	AUTO	CUST_VINYL_LAYER_TITLE	СЛОИ
+0	AUTO	CUST_CAT_DRAG_INTERNALS	Это усовершенствование заключается в замене механических частей двигателя на более прочные и надежные.
+0	AUTO	RACE_DAY_LOCATION_5_DESC	Трасса "Инфинеон" в Северной Каролине отличается сложным рельефом и обилием крутых поворотов. Малейшая ошибка может привести к аварии или потере скорости.
+0	AUTO	RACE_MODE_SPEED_CHALLENGE_MODE	СКОРОСТНЫЕ^ГОНКИ
+0	AUTO	FE_STATS_CLUB_POINTS	СЧЕТ КЛУБА
+0	AUTO	CUST_CAT_SPEED_MANAGEMENT	Это усовершенствование заключается в перепрограммировании блока управления двигателем на обеспечение максимальной мощности, которая необходима для обгона соперника в повороте.
+0	AUTO	RACEDAY_CONFIRM_REMOVE_EVENT	Удалить заезд %s ?
+0	AUTO	RACEDAY_RACEDAY_SAVED_CONFIRMED	Уик-энд сохранен
+0	AUTO	CUST_QUICK_NITROUS_DI3	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя на 50-250 л.с. путем сухого впрыска закиси азота.
+0	AUTO	CUST_QUICK_POWER_1	Этот базовый комплект не только повышает мощность двигателя на любых оборотах, но  и делает его звук более агрессивным.
+0	AUTO	CUST_QUICK_POWER_2	Этот комплект содержит основные усовершенствования 1 этапа. Он не только повышает мощность двигателя на любых оборотах, но  и делает его звук более агрессивным.
+0	AUTO	RACE_DAY_LOCATION_6_DESC	"Монделло-парк" - компактная и очень извилистая трасса в ирландской глубинке.
+0	AUTO	LANG_FRENCH_NO_TRANSLATION	FRANCAIS
+0	AUTO	CS_HEADER_BACKUP_CAR	ЗАПАСНОЙ АВТОМОБИЛЬ
+0	AUTO	FE_STATS_GRIP_RACES	ГРИП: ЗАЕЗДЫ
+0	AUTO	FE_HUBMAP_ETREE_CAR_CUSTOMIZATION	ГАРАЖ
+0	AUTO	CUST_PACKAGE_POWER	Мощность
+0	AUTO	CUST_OWNED	В НАЛИЧИИ
+0	AUTO	CUST_PAINT	КРАСКА
+0	AUTO	CUST_PARTS	ДЕТАЛИ КУЗОВА
+0	AUTO	CUST_PACKAGE_TITLE	НАБОР
+0	AUTO	CS_OPTION_CAR_SELECT	Выбор автомобиля
+0	AUTO	RACE_DAY_SLOT_EMPTY	СВОБОДНО
+0	AUTO	FE_STATS_ACHIEVEMENTS	ДОСТИЖЕНИЯ
+0	AUTO	RACEDAY_DESC_CHALLENGE_HUB	Выберите этот пункт, чтобы создать отборочный уик-энд, на который допускаются только определенные автомобили.
+0	AUTO	CUST_SLOT_DESC_HANDBRAKE_DESC	Ручной тормоз: вспомним полицейский разворот.
+0	AUTO	RACE_DAY_LOCATION_7_DESC	Хайвей-318 - это полоса раскаленного солнцем асфальта в пустыне Невада. Здесь не предел даже 320 км/ч, но будьте осторожны на поворотах: их простота обманчива!
+0	AUTO	CUST_SLOT_ROTORS_DESC	Установка тормозных дисков увеличенного диаметра повышает эффективность торможения за счет большей площади контакта и лучшего теплоотвода.
+0	AUTO	FE_STATS_BEST_DRIFT_SCORE_AS_LEADER	ЛУЧШИЙ СЧЕТ В ДРИФТЕ: ВЕДУЩИЙ
+0	AUTO	CUST_QUICK_SUSPENSION_DI3	Благодаря этому усовершенствованию автомобиль эффективнее проходит повороты с заносом.
+0	AUTO	CUST_REGION_FRONT_BUMPER	ПЕРЕДНИЙ БАМПЕР
+0	AUTO	FE_STATS_ESTIMATED_NET_WORTH	ОБЩАЯ ЭФФЕКТИВНОСТЬ
+0	AUTO	CUST_SLOT_TRANSMISSION	ТРАНСМИССИЯ
+0	AUTO	RACE_DAY_LOCATION_8_DESC	Автодром "Портленд Интернейшнл Рейсуэй" расположен неподалеку от горы Райнье. Это достаточно сложный комплекс трасс с отличным участком для дрэга.
+0	AUTO	CUST_BLUEPRINT_SAVE	ОБНОВИТЬ КОНФИГУРАЦИЮ
+0	AUTO	CUST_QUICK_NITROUS_1	Благодаря этому усовершенствованию вы можете кратковременно повышать мощность двигателя путем сухого впрыска закиси азота.
+0	AUTO	CUST_QUICK_NITROUS_2	Благодаря этому усовершенствованию вы можете еще более повышать мощность двигателя путем сухого впрыска закиси азота.
+0	AUTO	RACE_DAY_LOCATION_9_DESC	В Техасе, как известно, все большое, вот и автодром "Тексас Уорлд Спидуэй" поражает размерами. Он включает в себя извилистую трассу, пересекающую скоростной "овал".
+0	AUTO	CAR_SELECT_CORVETTE	Corvette второго поколения не случайно был назван одним из 5 лучших спорткаров всех времен и народов.
+0	AUTO	FE_STATS_MOST_SECTORS_CLAIMED	МАКСИМУМ ПОБЕД НА УЧАСТКАХ
+0	AUTO	CL_DRIVETRAIN_HEADER	ПРИВОД
+0	AUTO	CUST_PACKAGE_HANDLING	Управляемость
+0	AUTO	FE_STATS_SPEED_WINS	СКОРОСТНЫЕ ГОНКИ: ПОБЕДЫ
+0	AUTO	FE_STATS_MOST_CHECKPOINTS_WON	МАКСИМУМ ПОБЕД НА КП
+0	AUTO	FEATURE_TIP_TUNER_LEADERBOARD	Узнать о том, кто добился наибольших успехов в искусстве тюнинга, можно с помощью рейтинга тюнеров. Ваша позиция в нем зависит от процента побед, которые были одержаны с помощью созданных вами конфигураций. В рейтинге упоминаются только игроки, конфигурации которых использовались в 20 или более заездах.

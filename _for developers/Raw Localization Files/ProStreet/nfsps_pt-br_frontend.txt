@@ -1,0 +1,727 @@
+#	Labrune - D:\[Modding]\NFS\StringEditor\TextStrings\ProStreet\New folder\Mexican_Frontend.bin
+#	File created on: 2025-06-15 22:07:17
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - Frontend
+0	001C0235	0x001C0235	CUSTO TOTAL DO REPARO
+0	003DF25C	0x003DF25C	Todos os Carros
+0	0067AE61	0x0067AE61	Alterar a camada
+0	03692BEF	0x03692BEF	CAA:89
+0	03C5B05E	0x03C5B05E	BLOCO DO MOTOR
+0	04EE230D	0x04EE230D	Com um V8 de 4,6L esse Mustang da 4° Gen. é o que o mundo pensa sobre Carro Pônei.
+0	0505C814	0x0505C814	Essa melhoria troca os componentes internos do seu motor atual por componentes melhores, permitindo o seu motor gerar mais força e aguentar uma RPM maior.  ^
+0	0652B7FC	0x0652B7FC	DECALQUES
+0	0795BF00	0x0795BF00	Alterar o Projeto
+0	080922BA	0x080922BA	Congratulations!  Your code has been accepted and your reward has been unlocked.
+0	08654D15	0x08654D15	TRAVAS
+0	08E23BAD	0x08E23BAD	Você näo confirmou suas compras, deseja mesmo sair?
+0	091D6509	0x091D6509	BARRAS ANTI-ROLAGEM
+0	0A17AE74	0x0A17AE74	This upgrade combines stiffer suspension parts to keep the car fully planted in a straight line. ^
+0	0A17AED7	0x0A17AED7	This upgrade combines stiffer suspension parts to keep the car fully planted in turns and on the straights. ^
+0	0A17B063	0x0A17B063	This upgrade combines stiffer suspension parts to keep the car fully planted at high speeds in turns and on the straights.^
+0	0A6F9EBD	0x0A6F9EBD	PNEU TRASEIRO
+0	0B59FA34	0x0B59FA34	MELHOR SETOR
+0	0BC33EA5	0x0BC33EA5	CARRO GRATUITO
+0	0BD65FF1	0x0BD65FF1	DEFINA OS EVENTOS
+0	0CA6E01D	0x0CA6E01D	This upgrade makes sure that maximum stopping time is attained but allows and even encourages the tires to brake traction under deceleration.^
+0	0CF07D21	0x0CF07D21	It costs {0:d} to purchase all the parts required in order to apply this Blueprint to your car. Do you wish to proceed?
+0	0D369CD5	0x0D369CD5	BUSHING KIT
+0	0D4370A2	0x0D4370A2	JOGOS JOGADOS
+0	0D5030B0	0x0D5030B0	CARROS EXTRAS
+0	0D8032A7	0x0D8032A7	MAGYAR
+0	0F49B873	0x0F49B873	CAMADA {0:d}
+0	105ABFEE	0x105ABFEE	INFO. DO PACOTE
+0	105DBAB0	0x105DBAB0	Nitrous, a highly combustible gas, can be injected into the cylinder during combustion to vastly increase temporary power output.^
+0	10A47F46	0x10A47F46	This upgrade reprograms the engine computer to maximize performance.^
+0	10A47F47	0x10A47F47	This upgrade reprograms the engine computer to maximize performance.^
+0	10BCE2EE	0x10BCE2EE	EVENTO ALTA VELOCIDADE
+0	11182061	0x11182061	By porting the valves on your cylinder head, you can increase the flow of air into the engine and exhaust gases out of the engine. This will result in higher horsepower.^
+0	11A35074	0x11A35074	ADC. NOVA CAMADA
+0	11B57997	0x11B57997	A low-lag, quick-spooling turbo will give you a useable power curve and an unparalleled advantage on the track or on the street.^
+0	11BE9D49	0x11BE9D49	HIGHEST MULTIPLIER
+0	11EE51F3	0x11EE51F3	MODO^CIRCUITO
+0	12F5E32E	0x12F5E32E	Próximo passo é definir os evetos para o seu Track Day.
+0	158666C1	0x158666C1	NÚMERO DE CORRIDAS
+0	166FAB04	0x166FAB04	Essa atualizaçäo melhora os componentes que mandar toda a potência para as suas rodas, incluindo transmissäo, deferencial e eixos.^
+0	167DAB3D	0x167DAB3D	NÚMERO DE JOGOS DA CARREIRA
+0	16F64E40	0x16F64E40	ADICIONAR EVENTO
+0	17FFD9BC	0x17FFD9BC	This Blueprint is incompatible with your version of Need for Speed" ProStreet and can not be applied.  Visit NeedforSpeed.com for information on updates and new game content.
+0	18326759	0x18326759	POLSKI
+0	183FBFE0	0x183FBFE0	COR DA RODA
+0	187C27B8	0x187C27B8	Colocar Como Projeto Ativo
+0	1899B644	0x1899B644	DEUTSCH
+0	18C4FDB0	0x18C4FDB0	GERENCIAMENTO DO MOTOR
+0	1962B5BC	0x1962B5BC	GANHANDO A RECOMPENSA
+0	1999EB46	0x1999EB46	PINTURA
+0	19A298F3	0x19A298F3	AROS
+0	19A3B1D7	0x19A3B1D7	INSULFILME
+0	1A014D25	0x1A014D25	No error has occurred.
+0	1A6A6197	0x1A6A6197	Quer mesmo deletar o seu Track Day?
+0	1AB5CD57	0x1AB5CD57	SELEÇÄO DE LINGUAGEM
+0	1ABA35DF	0x1ABA35DF	Bushings made from stiffer materials such as urethane or aluminum will allow your car to turn tighter with less body roll.^
+0	1ABBA0A1	0x1ABBA0A1	MÉDIO
+0	1AC26860	0x1AC26860	Parar um carro repetidamente aumenta o calor excessivo no sistema de freios e ameaça aumentar as distâncias de parada ao longo do tempo. Um sistema de travagem maior ajuda a manter a temperatura baixa e a travagem consistente.^
+0	1B75FC85	0x1B75FC85	MAIOR MÁXIMA
+0	1B77D8C7	0x1B77D8C7	Select purchase method
+0	1BBEA9F8	0x1BBEA9F8	Quanto mais ar frio um motor recebe, melhor seu desempenho. Além disso, quanto mais frio o ar estiver, mais potência o motor produzirá.^
+0	1BE250C0	0x1BE250C0	ESPAÑOL
+0	1CCC7F63	0x1CCC7F63	With an emphasis on oversteer, the big, rear anti-sway bar, aluminum bushings and removal of the front sway bar will make it a lot easier to turn your car sideways.
+0	1CE83DE3	0x1CE83DE3	Deseja sair da tela de Seleçäo de Carro e retornar ao Mapa de Carreira?
+0	1D4371AE	0x1D4371AE	Salvando o Track Day...
+0	1D504294	0x1D504294	TUNER MAIS ELOGIADO
+0	1DC0F8A1	0x1DC0F8A1	A escolha do Modo de corrida determinará em quais eventos este carro poderá competir.
+0	1E875149	0x1E875149	Você deve colocar partes ''editaveis'' como Body Kits e Aerofólios pra ter acesso ao tunel de vento.
+0	1EC17D62	0x1EC17D62	The higher capactiy the air intake, the more air your engine will receive at a time. With a high-flow, smooth intake, the engine will be able to attain much more of it's peak power potential.^
+0	1EDD16E4	0x1EDD16E4	MELHOR RADAR TOTAL
+0	1F4CE54E	0x1F4CE54E	SISTEMA DE COMBÚSTIVEL
+0	1F89B247	0x1F89B247	
+0	1FC4E4C4	0x1FC4E4C4	With a turbo 2.3L motor pushing 260+hp, a LSD, and a 6-speed tranny, the Speed 3 is a modern hot hatch.
+0	2028BD90	0x2028BD90	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels for a race car standard.^
+0	20E3767D	0x20E3767D	The Kouki, with its high revving B series motor is an incredibly popular car with racing enthusiasts due to its many motor options and great handling platform.
+0	21043882	0x21043882	CARROS
+0	2152940C	0x2152940C	This upgrade increases the overall power output of the engine. ^
+0	2152940D	0x2152940D	This upgrade goes a step further and takes power toward that of a true race car.^
+0	217CC31E	0x217CC31E	Managing your speed throughout corners, as well as paying proper attention to corner exit acceleration, is key. More engine power increases the ability to rocket out from turns and reach higher speeds.^
+0	223B5855	0x223B5855	Are you sure you wish to repair this car?
+0	2248FC19	0x2248FC19	The 2nd gen S3 is not sold in North America.
+0	2248FC1A	0x2248FC1A	Tamer than the RS4, the S4 also sports a 4.2L V8.
+0	2248FC5B	0x2248FC5B	The mark 2 version of the TT has received numerous car of the year awards.
+0	237C6C32	0x237C6C32	NITRO
+0	23ADE81B	0x23ADE81B	DOWNLOADING STATS
+0	23B98D42	0x23B98D42	Drag stage 3 forced induction
+0	23B98DA5	0x23B98DA5	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	23B98F31	0x23B98F31	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	23D2F913	0x23D2F913	DOCE
+0	2421696C	0x2421696C	LUSTRADA
+0	2488099F	0x2488099F	FOSCA
+0	24B5F6A1	0x24B5F6A1	TRANSMISSÄO
+0	24C03398	0x24C03398	PEROLADO
+0	25346AAC	0x25346AAC	This upgrade further reprograms the engine computer to maximize performance for hard acceleration.^
+0	25346B0F	0x25346B0F	This upgrade further reprograms the engine computer to maximize performance.^
+0	25346C9B	0x25346C9B	This upgrade further reprograms the engine computer to maximize performance.^
+0	256EC78F	0x256EC78F	Calipers with larger or multiple pistons can more evenly distribute the surface area of a brake pad to the rotor, resulting in more braking power.^
+0	25C22853	0x25C22853	Pressione ENTER para começar
+0	273AB144	0x273AB144	ESPAÇO {0:d}
+0	27646BE2	0x27646BE2	MUFFLERS
+0	28AC6CE4	0x28AC6CE4	An error occurred while trying to join the race.  Please try again.
+0	28C06335	0x28C06335	Começar*
+0	290C5152	0x290C5152	TRANSMISSION COOLING
+0	296E8DBA	0x296E8DBA	MODO^DRIFT
+0	297F1852	0x297F1852	Quais aros você deseja alterar?
+0	2A4EE83E	0x2A4EE83E	FLYWHEEL
+0	2A87439A	0x2A87439A	Assentos de corridas te mantem confortável.
+0	2BA22C71	0x2BA22C71	Mudar o Modo do carro resultará na perda de ajustes e customizaçäo visual. Deseja mesmo continuar?
+0	2BD76D76	0x2BD76D76	TEMPO GASTO NA CARREIRA
+0	2C9458F2	0x2C9458F2	All-wheel-drive is a huge advantage off the line, enabling monstrous traction to help every single horsepower dig from a stop.^
+0	2C946E37	0x2C946E37	A front-wheel-drive's biggest hurdle when it comes to drag racing is maintaining traction. The more power you have means more emphasis on keeping the tires from spinning. Building a fast FWD drag car is about creating power, and getting it to the ground. Once you go beyond the basic power upgrades, your emphasis has to be on controlling that power and traction.
+0	2C94A143	0x2C94A143	The key to a drag setup is traction. Eliminate wheelhop from the car and manage your wheelspin for fast times. This is even more true in cars with large power outputs.^
+0	2CA5E9FF	0x2CA5E9FF	MOTOR
+0	2D37DBAA	0x2D37DBAA	The Need for Speed server has canceled the query.
+0	2E392C61	0x2E392C61	Tires stick you to the ground.
+0	2ECEC354	0x2ECEC354	The GTR Proto is the pre-production version of the R35 GTR.
+0	2F967165	0x2F967165	NUMBER OF RARE CARS
+0	3034747F	0x3034747F	RECOMPENSAS DOMINADAS
+0	308B9FCE	0x308B9FCE	{0:d} CARTÖES DE REPARO
+0	30B28855	0x30B28855	The 3rd version of the Viper; the V10 engine in Dodge's sports coupe and its distinctive sound push out 500 hp.
+0	30CDA579	0x30CDA579	MENU PRINCIPAL
+0	30FC8B5D	0x30FC8B5D	ESCURO
+0	319F5199	0x319F5199	By setting a proper suspension setup, one which allows proper weight transfer during a launch, a driver will end up with a car that is both faster and has more traction.^
+0	323516E3	0x323516E3	Cannot Total Cars
+0	34AC9C95	0x34AC9C95	COLOCANDO UM PROJETO
+0	34C6E894	0x34C6E894	ESCOLHA UM SLOT DE Track Day
+0	34F32B4F	0x34F32B4F	ESPAÑOL
+0	3511BD5F	0x3511BD5F	This is a mid-engine car, with performance that is close to the 911's
+0	351A093F	0x351A093F	PORCENTAGEM DA CARREIRA
+0	351ECD6B	0x351ECD6B	DIFFERENTIAL
+0	357EA500	0x357EA500	Tunel de Vento ligado
+0	3582F27E	0x3582F27E	Tokyo Dockyard
+0	35837EDF	0x35837EDF	Willow Springs
+0	35840B40	0x35840B40	Leipzig
+0	358497A1	0x358497A1	Tokyo Expressway
+0	35E04AE3	0x35E04AE3	Repair Markers are disabled for Multiplayer Track Days. You can damage your car but damage is reset at the end of each race. You also cannot total your car in a race.
+0	365745A8	0x365745A8	{0:f.2} G
+0	36B5714A	0x36B5714A	The Blueprint does not match the mode of the car you are applying it to. All previous Blueprints will be deleted. Are you sure you wish to do this?
+0	371D12E5	0x371D12E5	This package focuses on making enough power to break the traction of the drive wheels. ^
+0	37A8AB3F	0x37A8AB3F	MODO^ARRANCADA
+0	38B6FE76	0x38B6FE76	
+0	38FD5ADD	0x38FD5ADD	This basic upgrade improves the overall appearance of the car. ^
+0	38FD5ADE	0x38FD5ADE	With the addition of the wing and front splitters your car will now experience significantly less lift at speed. The end result will be more stability at speed, and more traction through the corners.
+0	39763E7F	0x39763E7F	Selecione o modo de jogo
+0	3A2EE267	0x3A2EE267	There is already a Blueprint in the slot you selected. Do you want to overwrite it?
+0	3A3F28F7	0x3A3F28F7	GERENCIAMENTO DE CARTÖES
+0	3B1F419A	0x3B1F419A	The MK2 Focus, which is sold outside of North America, has a turbo 2.5L motor and 225hp.
+0	3B68419C	0x3B68419C	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	3B6A7442	0x3B6A7442	Menu Principal
+0	3BAC06D4	0x3BAC06D4	PARA-CHOQUE TRASEIRO
+0	3C201AB2	0x3C201AB2	DRIVE PULLEY
+0	3CC64B58	0x3CC64B58	The Hemi 'Cuda is a legend.
+0	3D1F0A07	0x3D1F0A07	HIGHEST RATED CAR
+0	3D7304BF	0x3D7304BF	ADCIONAR PINTURA
+0	3DEC9318	0x3DEC9318	NÚMERO DE CARROS NA GARAGEM
+0	3F1B5300	0x3F1B5300	TODOS OS AROS
+0	3F24A71D	0x3F24A71D	This upgrade increases the amount of air forced into the engine, increasing the power across the board.^
+0	4057056D	0x4057056D	VOLTA MAIS RAPIDA
+0	40F7F28D	0x40F7F28D	${0:d}
+0	41C4B033	0x41C4B033	ARRANCADA
+0	41C515FB	0x41C515FB	In order to keep your tires firmly planted on the pavement, both your front and rear sway bars are stiffened, bushings replaced with urethane pieces, and shocks replaced with racing dampeners. ^
+0	41C65667	0x41C65667	ADERÊNCIA
+0	4241EF8C	0x4241EF8C	PORCENTAGEM NT
+0	428E807D	0x428E807D	abcdefghijklmnopqrstuvwxyz^ABCDEFGHIJKLMNOPQRSTUVWXYZ^1234567890!@#$%^&*()_-=+;:/?\^><,.""'{}[]§©®"áàâäåæªçéè^ëêíìïîBDHñóòøöôQSYa[eoúùüûqý~|z^º°¿¡ÁÀÂÅÄÆÇÉÈËÊÍÌÎÏAGÑC^PÓÒØÖÔRXZ`dnÚÙÜÚpÛÝ{y}ß^ä !"#$%&'()^*+,-./012ä45Q6789:;<=>?@ABCD^EFGHIJKLMNO
+0	43B663EF	0x43B663EF	The B-body Charger was one of the most famous TV cars of all time.
+0	43C8C4B9	0x43C8C4B9	This upgrade strengthens the engine and allows for more extensive upgrades later.^
+0	43C8C4BA	0x43C8C4BA	This upgrade adds even stronger engine internals to allow it to take the strain of more power and higher RPMs.^
+0	4409DC81	0x4409DC81	Deseja mesmo fazer com que esse Projeto volte ao zero?
+0	4565FF91	0x4565FF91	ASSENTOS DE CORRIDA
+0	4577628D	0x4577628D	ZONA 10
+0	45B42410	0x45B42410	MELHOR PONTUAÇÄO DE SETOR
+0	4715483A	0x4715483A	CARRO MAIS VALIOSO
+0	4782907D	0x4782907D	Eighth gen Civic.
+0	478518A1	0x478518A1	The Chevelle was Chevy's first muscle car. Chevy wouldn't allow a motor larger than 400ci, which changed in 1970 when the 402 Chevelle was introduced.
+0	48AC5A98	0x48AC5A98	A low-lag, quick-spooling turbo will give you a useable power curve and an unparalleled advantage on the track or on the street.^
+0	49B73F8D	0x49B73F8D	Bem Vindo ao mapa de Track Day!
+0	4A1FCDD7	0x4A1FCDD7	Adicionar Projeto
+0	4AD0CFD8	0x4AD0CFD8	CAMSHAFTS
+0	4B14F10C	0x4B14F10C	Mostrar Todas as Corridas
+0	4B1C4C7A	0x4B1C4C7A	HEADERS
+0	4B3C37FF	0x4B3C37FF	MELHOR TEMPO
+0	4B3E5640	0x4B3E5640	SUSPENSÄO
+0	4B4D7214	0x4B4D7214	REINICIAR PROJETO
+0	4BA51832	0x4BA51832	This upgrade goes a step further and takes power toward that of a true purpose built drag car.^
+0	4BA51895	0x4BA51895	This upgrade goes a step further and takes power toward that of a true race car.^
+0	4BA51A21	0x4BA51A21	This upgrade goes a step further and takes power toward that of a true race car.^
+0	4BB5B97D	0x4BB5B97D	INSTALADO
+0	4C6D7044	0x4C6D7044	Carregando o Track Day...
+0	4C72A420	0x4C72A420	Short duration and low lift make for a nice daily driver cam. As the lift and duration is raised, the peak TQ RPM is moved higher in the RPM range. The best cam is the one that makes the most power in the RPM range that you typically drive at.^
+0	4D0D7FFD	0x4D0D7FFD	This upgrade uniquely tunes the suspension to allow it to slide easily though turns.^
+0	4DF58A94	0x4DF58A94	This upgrade makes sure that maximum stopping time is attained and that the tires don't brake traction under deceleration.^
+0	4DF58AF7	0x4DF58AF7	grip stage 3 brake package
+0	4DF58C83	0x4DF58C83	This upgrade makes sure that maximum stopping time is attained from top speed and that the tires don't brake traction under deceleration.^
+0	501D4FC6	0x501D4FC6	The larger the nitrous bottle, the more nitrous you can store. Also, you can have multiple bottles in a car. Each bottle must be refilled after use. ^
+0	50330523	0x50330523	Entardecer
+0	5122EF33	0x5122EF33	CLARO
+0	514B447E	0x514B447E	DANO
+0	5169076F	0x5169076F	PEROLA
+0	517B7475	0x517B7475	DRIFT MAIS LONGO
+0	51B3827C	0x51B3827C	These tips will give an aggressive look to your ride.^
+0	51D56F7D	0x51D56F7D	A performance rack and pinion can add a little more steering angle while offering reduced steering wheel resistance over stock power steering units.   ^
+0	51FE043F	0x51FE043F	A true, super car killer, this Corvette has a 7.0L motor with titanium rods and a dry sump oil system.
+0	5269E82A	0x5269E82A	Compatível com HD para a melhor experiência
+0	52AEA96A	0x52AEA96A	START
+0	5358A1CB	0x5358A1CB	Deletar Evento
+0	54BB117D	0x54BB117D	NÚMERO DE REIS DERROTADOS
+0	550000E4	0x550000E4	TUNEL DE VENTO
+0	555558D9	0x555558D9	NÍVEL {0:d}
+0	55FF3214	0x55FF3214	NÚMERO DE VITORIAS
+0	56BA4A95	0x56BA4A95	PARA-CHOQUE FRONTAL
+0	5815A2B5	0x5815A2B5	MODO CARREIRA
+0	5898FC7E	0x5898FC7E	AROS TRASEIROS
+0	58A8B923	0x58A8B923	This upgrade makes use of different aero parts for added downforce at speed.^
+0	58A8B986	0x58A8B986	This upgrade makes use of different aero parts for added downforce at speed.^
+0	58A8BB12	0x58A8BB12	This upgrade makes use of different aero parts for added downforce at top speed.^
+0	58EEB12D	0x58EEB12D	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	590D3168	0x590D3168	This upgrade adds race car engine internals to allow it to take the strain of still more power and higher RPMs.^
+0	599E11C8	0x599E11C8	NÚMERO DE VITORIAS RANQUEADAS
+0	59C56563	0x59C56563	To allow a turbo to attain and maintain maximum boost, a blow-off valve dumps excess pressure without slowing the engine down. ^
+0	5A2B3C05	0x5A2B3C05	An update is available and required for online gameplay.  Visit NeedforSpeed.com for update information.
+0	5A8E6167	0x5A8E6167	MELHOR TIPO DE EVENTO
+0	5AF929E0	0x5AF929E0	RECORDE QUEBRADO
+0	5B4D0947	0x5B4D0947	These bars will keep your front wheels planted on the ground and can withstand the torque your engine puts out.^
+0	5B5B1319	0x5B5B1319	Fácil
+0	5B5B131A	0x5B5B131A	Médio
+0	5B5B131B	0x5B5B131B	Difícil
+0	5B5B131C	0x5B5B131C	Elite
+0	5BFFFF01	0x5BFFFF01	EMBREAGEM
+0	5DD496D8	0x5DD496D8	Press the 2 Button to continue
+0	5E50E68B	0x5E50E68B	0-60 MPH MAIS RAPIDO
+0	5E579011	0x5E579011	Deseja customizar os pneus da frente ou de trás?
+0	5E6BC804	0x5E6BC804	CRIAR UM Track Day
+0	5E97A9AE	0x5E97A9AE	RECORDES PESSOAIS
+0	5F32130D	0x5F32130D	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnesses and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	5FA7FDFC	0x5FA7FDFC	SOZINHO
+0	5FA90BEB	0x5FA90BEB	After the initial launch, power is the key to drag racing. More power will increase the speed down the track and raise the trap speed.^
+0	60040940	0x60040940	This Track Day is incompatible with your version of Need for Speed" ProStreet and can not be applied.  Visit NeedforSpeed.com for information on updates and new game content.
+0	6168ADEA	0x6168ADEA	JOGAR
+0	617121C3	0x617121C3	IGNITION SYSTEM
+0	62567249	0x62567249	NÚMERO DE VITORIAS NA CARREIRA
+0	6256FE4F	0x6256FE4F	LOCALIZAÇÄO
+0	62C326E1	0x62C326E1	This upgrade will allow for quicker shifting and will more efficiently transfer the engine's power to wheels.^
+0	62C326E2	0x62C326E2	This upgrade will allow for even faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels.^
+0	6359AF87	0x6359AF87	Are you sure you want to delete this shared Blueprint?
+0	649A2F6A	0x649A2F6A	Show Friends
+0	65239CBD	0x65239CBD	Track Days DOMINADOS
+0	6523CE93	0x6523CE93	MELHOR TEMPO DE REAÇÄO
+0	652B7151	0x652B7151	The code you have entered is not valid. Please make sure the code you have entered is correct and try again.
+0	653CBD74	0x653CBD74	ESCOLHA ATÉ 8 EVENTOS
+0	6620DFD5	0x6620DFD5	DEBUG CAR TEST
+0	663443F5	0x663443F5	Reparar Carro
+0	663D2A11	0x663D2A11	Editavel
+0	664C9A61	0x664C9A61	CARTÄO DE REPARO
+0	667F0EEE	0x667F0EEE	IRRIDESCENTE
+0	66BEBAE0	0x66BEBAE0	ENGRENAGENS DO CAME
+0	6710B2B7	0x6710B2B7	ENTRADA DE AR
+0	672CB244	0x672CB244	CUSTOMIZAR COMPONENTES
+0	6756F8C1	0x6756F8C1	FREIOS
+0	67CB327B	0x67CB327B	Você deseja mesmo sair?
+0	680BD849	0x680BD849	TRACTION BARS
+0	686DCADD	0x686DCADD	1
+0	686DCADE	0x686DCADE	2
+0	686DCADF	0x686DCADF	3
+0	686DCAE0	0x686DCAE0	4
+0	686DCAE1	0x686DCAE1	5
+0	686DCAE2	0x686DCAE2	6
+0	68A8FF31	0x68A8FF31	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are essential in controlling and modulating a drift.^
+0	68F54ABB	0x68F54ABB	Track Day
+0	68FFB694	0x68FFB694	PORCENTAGEM DE VITORIAS EM ALTA VELO.
+0	6B1CF6EC	0x6B1CF6EC	Esse carro atualmente vale: {0:d}^Se você vender esse carro, todos os Projetos seräo perdidos.^Deseja mesmo continuar?^
+0	6B42C11C	0x6B42C11C	Apagar o Track Day?
+0	6B684C62	0x6B684C62	The G35 shared its platform with the 350z.
+0	6B685142	0x6B685142	The GXP has a 2.0L 16v turbo motor putting out 260hp, a LSD and 18s stock.
+0	6B686E6C	0x6B686E6C	Designed to show off Honda's racing technology, this mid-engine car was incredibly ahead of its time.
+0	6B687B2D	0x6B687B2D	This is the production version of the R35 GTR.
+0	6B687F2A	0x6B687F2A	The S13 is one of the most iconic drift cars.
+0	6B687F2C	0x6B687F2C	The S15 never originally made it to North America. However, it  has become an iconic car for tuner culture.
+0	6B687F4C	0x6B687F4C	The B7 RS4 features a 400hp V8, and is available as a sedan, wagon, or convertible.
+0	6B687F70	0x6B687F70	The replacement to the legendary Integra uses the new Honda K series motor.
+0	6B687FF5	0x6B687FF5	A front engine, rear-wheel-drive, rotary-powered 2+2 car, the RX-8 has almost a perfect 50:50 weight distribution and incredibly balanced handling.
+0	6B6883C3	0x6B6883C3	A flat four, turbo, and 4-wheel-drive, the Sti is one of the cars that defines tuner cars. It can do it all, and do it well.
+0	6B689D6E	0x6B689D6E	Sporting the same Inline 6 as the E46 m3, 0-60 time is reported to be 4.9 seconds, with a limited top speed of 250 km/h.
+0	6DBFE08C	0x6DBFE08C	Drift stage 3 visuals
+0	6EB60ABD	0x6EB60ABD	ZONA 1
+0	6EB60ABE	0x6EB60ABE	ZONA 2
+0	6EB60ABF	0x6EB60ABF	ZONA 3
+0	6EB60AC0	0x6EB60AC0	ZONA 4
+0	6EB60AC1	0x6EB60AC1	ZONA 5
+0	6EB60AC2	0x6EB60AC2	ZONA 6
+0	6EB60AC3	0x6EB60AC3	ZONA 7
+0	6EB60AC4	0x6EB60AC4	ZONA 8
+0	6EB60AC5	0x6EB60AC5	ZONA 9
+0	6EC386B8	0x6EC386B8	MAIOR PONTUAÇÄO
+0	6EF7F402	0x6EF7F402	VEL. MÉDIA
+0	6F64DE4F	0x6F64DE4F	METÁLICO
+0	6FC507F9	0x6FC507F9	SUOMI
+0	703A92CC	0x703A92CC	Pressione o botäo START
+0	708C81FA	0x708C81FA	PORCENTAGEM DE VITORIAS EM DRIFT
+0	71B289C6	0x71B289C6	Sem carros reservas disponiveis
+0	72A9EE4B	0x72A9EE4B	AROS FRONTAIS
+0	72F44DBE	0x72F44DBE	CONCESSIONARIA
+0	73833472	0x73833472	The pre-production version of the 5th gen Camaro was introduced in '06.
+0	73A68F00	0x73A68F00	This upgrade will allow the car to corner faster and flatter.^
+0	73A68F01	0x73A68F01	This upgrade will allow the car to corner even faster and flatter, with even more control.^
+0	74036923	0x74036923	This upgrade will, for a short moment, add 50-250  horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and last place.  ^
+0	74036986	0x74036986	This upgrade will, for a short moment, add 50-250 horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	74036B12	0x74036B12	This upgrade will, for a short moment, add 50-250 horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	74DC32CF	0x74DC32CF	PERFORMANCE
+0	7599A33D	0x7599A33D	Tightening up the sway bars adds extra rigidity in the corners, helping to prevent understeer.^
+0	76369151	0x76369151	Deseja mesmo deletar este Projeto?
+0	76995CCC	0x76995CCC	Projetos
+0	76A5C881	0x76A5C881	ATUALIZAÇÄO RÁPIDA
+0	76D923F8	0x76D923F8	This is the newest version of the Corvette, and the first version in almost 35 years to have exposed headlights.
+0	7809699C	0x7809699C	OFFLINE
+0	78684D63	0x78684D63	RECOMPENSA
+0	7923447F	0x7923447F	SAIR
+0	7993832C	0x7993832C	ITALIANO
+0	79B1918A	0x79B1918A	ÓXIDO NITROSO
+0	7A5AD8CE	0x7A5AD8CE	DRIFT
+0	7A81621F	0x7A81621F	FILTRO
+0	7AAD3F25	0x7AAD3F25	Além dos benefícios de segurança de uma gaiola de proteçÄo, ela também pode aumentar a rigidez do chassi, ao mesmo tempo que dá ao seu carro aquela aparência de corrida.^
+0	7AB36DE1	0x7AB36DE1	The more boost an engine receives, the better. If an engine can handle higher boost without failing, than this device is a welcome addition to help get the most out of a turbo.^
+0	7AB70C4F	0x7AB70C4F	Hot trannys are a lot of trouble.
+0	7ADDD87D	0x7ADDD87D	INDUÇÄO FORÇADA
+0	7B691E66	0x7B691E66	ALTA VELO.
+0	7B9513FC	0x7B9513FC	CYLINDER HEADS
+0	7B9AA717	0x7B9AA717	Se você vender este carro, näo poderá entrar em nenhum evento do tipo: {0:s}.
+0	7BA15EEE	0x7BA15EEE	Sem eventos desse tipo para este Track Day.
+0	7BBD8658	0x7BBD8658	TEMPO DO DIA
+0	7C746CAB	0x7C746CAB	Track Day deletedo.
+0	7C8EF0C1	0x7C8EF0C1	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	7D04F4F5	0x7D04F4F5	AIR INTAKE
+0	7DDC0C32	0x7DDC0C32	COMPRADO
+0	7F190E9C	0x7F190E9C	DESFAZER
+0	7F964B70	0x7F964B70	CARROCERIA
+0	7F99970C	0x7F99970C	CAPÔ
+0	7F9EE68C	0x7F9EE68C	AROS TRASEIROS
+0	8012D88E	0x8012D88E	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you maximum power output when you need it most.^
+0	801338DC	0x801338DC	Brake lines reinforced with braided stainless steel increase hydraulic pressure and braking response.^
+0	81805A25	0x81805A25	SALVANDO...
+0	81A5D9DF	0x81A5D9DF	ATUALIZAÇÄO CUSTOMIZADA
+0	823496D1	0x823496D1	You are ineligible to participate at this Track Day. You are lacking the following type of cars:
+0	82EBC520	0x82EBC520	By setting a proper suspension setup, one which doesn't have excessive understeer or oversteer, a driver will end up with a car that is both faster and easier to drive.^
+0	8326EC81	0x8326EC81	DANSK
+0	83FA4A66	0x83FA4A66	ESCOLHA O MODO DE CORRIDA
+0	84689C47	0x84689C47	Você näo pode instalar um escapamento personalizado em um kit de fábrica.
+0	849E5ACD	0x849E5ACD	Comprar Carro
+0	84A5F1CD	0x84A5F1CD	Verifying code on server...
+0	84B62CBF	0x84B62CBF	Obrigado por ter jogado alguns NFS anteriores, aqui {0:d} Cartöes de Reparo e {1:d} Cartöes de Reparo Total.
+0	8552F521	0x8552F521	VEZES QUE TERMINOU NA FRENTE DE OPONENTES DE CLASSE MAIOR
+0	8580DC6E	0x8580DC6E	Autobahnring
+0	858168CF	0x858168CF	Autopolis
+0	8581F530	0x8581F530	Chicago Airfield
+0	85828191	0x85828191	Ebisu
+0	85830DF2	0x85830DF2	Infineon
+0	85839A53	0x85839A53	Mondello Park
+0	858426B4	0x858426B4	Nevada Highway
+0	8584B315	0x8584B315	Portland International Raceway
+0	85853F76	0x85853F76	Texas World Speedway
+0	858C845C	0x858C845C	Drag stage 3 power
+0	858C84BF	0x858C84BF	This package makes the transformation from streetcar to race car with even more power.^
+0	858C864B	0x858C864B	Speed stage 3 power
+0	85F0463B	0x85F0463B	NÚMERO DE PROJETOS
+0	86528C99	0x86528C99	MELHOR CORRIDA
+0	865CAF8D	0x865CAF8D	DOWNFORCE
+0	8694ED47	0x8694ED47	Not too hot, not too cool. Just right
+0	86988658	0x86988658	MELHOR PONTUAÇÄO DE DRIFT
+0	86F06EFF	0x86F06EFF	This upgrade increases the amount of air forced into the engine, allowing for more fuel to burn and thus more power out of your engine.^
+0	8710442F	0x8710442F	Usar Cartäo de Reparo
+0	87B5EABA	0x87B5EABA	STATUS GERAIS
+0	8904F173	0x8904F173	TIPO DE PROJETO
+0	8926193C	0x8926193C	DIGITE O CÓDIGO SECRETO
+0	89729AB2	0x89729AB2	This will dramatically change the look of your vehicle and could possibly add some aerodynamic functionality.^
+0	8A2B0414	0x8A2B0414	NÚMERO DE CARROS DESTRUIDOS
+0	8A55C4E6	0x8A55C4E6	AROS
+0	8A685A29	0x8A685A29	SUPERCHARGER
+0	8A72C52A	0x8A72C52A	The GT500 is the first North American car with a roll bar, and one of the most famous Shelby cars.
+0	8AF7C5F6	0x8AF7C5F6	EMPINADA MAIS LONGA
+0	8B51AD49	0x8B51AD49	NÚMERO DE CIRCUITOS GANHOS
+0	8BC24009	0x8BC24009	Microsoft® points
+0	8BD26159	0x8BD26159	TEMPO DE DRIFT MAIS LONGO
+0	8C1F4FB6	0x8C1F4FB6	PARA-CHOQUE TRASEIRO
+0	8C40259F	0x8C40259F	MELHOR 0-60 EM MPH
+0	8DA83F8B	0x8DA83F8B	It costs {0:d} to purchase a car and apply this Blueprint to it. Do you wish to proceed?
+0	8E4CB6D0	0x8E4CB6D0	Você näo tem dinheiro ou cartöes suficientes para reparar esse carro.
+0	8E7ACDFE	0x8E7ACDFE	Pressione ENTER para continuar.
+0	8EA3ED77	0x8EA3ED77	E`TINA
+0	8EECB1F3	0x8EECB1F3	NUMBER OF PUNKBUSTER RACES
+0	8F9B9FB9	0x8F9B9FB9	Você näo tem dinheiro ou cartöes suficientes para reparar esse carro.
+0	8FCE1D43	0x8FCE1D43	SEM CARROS DISPONIVEIS
+0	8FF8A8A7	0x8FF8A8A7	CRIAR UM Track Day PERSONALIZADO
+0	8FFD5DC8	0x8FFD5DC8	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	90025010	0x90025010	MOST CHAINED DRIFTS
+0	90BC3055	0x90BC3055	PROPORTIONING VALVE
+0	90D0A8D8	0x90D0A8D8	CLUB TAG
+0	90FCE4C0	0x90FCE4C0	ESCAPAMENTOS
+0	91344231	0x91344231	The Integra Type R is often regarded as the best handling front-wheel-drive car of all time.
+0	915EDE76	0x915EDE76	The emphasis here isn't on stopping, it's on going. The goal should be getting the lightest brake setup that you can in order to allow your car to accelerate as fast as possible.
+0	917A73C4	0x917A73C4	DRAG
+0	91C3911E	0x91C3911E	Aplicar Pintura
+0	9420A55E	0x9420A55E	PEAK HP
+0	944FA564	0x944FA564	Deletar Projeto
+0	949D0675	0x949D0675	ESTATISTICAS DA CARREIRA
+0	94B9E9D2	0x94B9E9D2	VISUAL
+0	9567458E	0x9567458E	DRIVESHAFT
+0	9652BAE4	0x9652BAE4	Purchase Blueprint
+0	968D4452	0x968D4452	PORCENTAGEM DA CARREIRA
+0	96B7B886	0x96B7B886	More engine power makes it easier to keep tires spinning and a drift going. Increase output to aid in powerslides.^
+0	96B83C7A	0x96B83C7A	400M MAIS RAPIDO
+0	971B8A21	0x971B8A21	Você näo tem dinheiro suficiente para comprar esse carro.
+0	975176B2	0x975176B2	This method of forced induction is driven by the motor itself and provides more power down low.^
+0	9751DA17	0x9751DA17	CLUB
+0	97607865	0x97607865	PNEUS
+0	994144F0	0x994144F0	Nenhum Track Day encontrado.
+0	997FA8BE	0x997FA8BE	Você está prestes a perder todas as alteraçöes, deseja continuar?
+0	99ABAE80	0x99ABAE80	SHOCKS AND SPRINGS
+0	9AA275CD	0x9AA275CD	SAIA
+0	9AC2A93B	0x9AC2A93B	NITROUS BOTTLE
+0	9AEB388B	0x9AEB388B	This upgrade increases the amount of air forced into the engine, increasing the power yet again while transforming into more of a race car.^
+0	9B51E541	0x9B51E541	SVENSKA
+0	9B755588	0x9B755588	WHEELIE BARS
+0	9B9290B4	0x9B9290B4	ENGLISH
+0	9C113529	0x9C113529	we cant talk about this car
+0	9C982CBE	0x9C982CBE	Você atingiu a quantidade de {0:d} carros.  ^É necessario vender 1 carro pra liberar espaço na garagem.
+0	9CE78E44	0x9CE78E44	CUSTOMIZAÇÄO
+0	9D6FB642	0x9D6FB642	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the extra power you need to overtake a rival car coming out of a corner.^
+0	9D9E399A	0x9D9E399A	CUSTOMIZAR PROJETO
+0	9DAC027F	0x9DAC027F	PORCENTAGEM DE VITORIAS NAS ARRANCADAS
+0	9DEA4D04	0x9DEA4D04	EXHAUST SYSTEM
+0	9E309A37	0x9E309A37	SELECIONAR
+0	9EB32602	0x9EB32602	CROMADO
+0	9F5C08B1	0x9F5C08B1	NUMBER OF SHARED BLUEPRINTS
+0	9FD876FD	0x9FD876FD	INDUÇÄO FORÇADA
+0	A04DDC7D	0xA04DDC7D	NÚMERO DE DRIFT JOGADOS
+0	A0AB9528	0xA0AB9528	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	A126BE2E	0xA126BE2E	STATUS DE PERFORMANCE
+0	A1360826	0xA1360826	TURBOCHARGER
+0	A16E7D93	0xA16E7D93	SHIFTER
+0	A1B1D576	0xA1B1D576	TESTE DE DYNO
+0	A204AE0D	0xA204AE0D	Os japoneses tomaram o controle dos estaleiros industriais de Tóquio. E entäo construíram algumas rotas de corrida insanas usando cada pedaço que conseguiram da paisagem urbana.
+0	A20D3D80	0xA20D3D80	SELECIONE OS CARROS PARA O DESAFIO
+0	A2643678	0xA2643678	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	A2B284FB	0xA2B284FB	The 5th gen Mustang is known for its "retro-futurism."
+0	A2C5F202	0xA2C5F202	PORCENTAGEM DE VITORIAS
+0	A2E6BFCE	0xA2E6BFCE	Jogar o Track Day?
+0	A30535C1	0xA30535C1	RECOMPENSA EM DINHEIRO
+0	A32B16C9	0xA32B16C9	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are an important element in a well-tuned vehicle.^
+0	A3802F25	0xA3802F25	By driving all four wheels, traction is increased, especially during starts and at corner exit acceleration. Be sure to take advantage of this fact.^
+0	A380446A	0xA380446A	Although you're fighting the laws of physics in a front-wheel-drive car, you can build a formidable track weapon if you make the right tuning choices. The first item on your agenda should be to reduce the amount of understeer inherent in an FF car by stiffening everything up front. Then you'll need a limited slip differential to help eliminate the torque steer. ^
+0	A3807776	0xA3807776	Balance and throttle steer are the clear advantages to a rear-wheel-drive setup. Be sure to avoid excessive oversteer in your setup.^
+0	A3ECF80D	0xA3ECF80D	COOLING SYSTEM
+0	A430939C	0xA430939C	The Cosworth was created for homoglamation purposes, and was never really an Escort. But the Escort RS turned into one of the most iconic cars and silhouettes of all time.
+0	A441DBD6	0xA441DBD6	FASTEST 0-100 MPH
+0	A459D6AE	0xA459D6AE	Willow Springs, conhecida como a estrada mais rápida do Oeste, fica numa encosta no deserto da Califórnia. Willow tem mudanças constantes de elevaçäo entäo tome cuidado para näo acelerar de mais.
+0	A4674869	0xA4674869	DIFICULDADE
+0	A48915BA	0xA48915BA	You do not have enough cash to buy all markers currently in your shopping cart.
+0	A48DF5E8	0xA48DF5E8	The first gen Challenger was Dodge's entry into the pony car market. It was based off of an older car design that was intended to be a turbine powered car.
+0	A5AA2BF7	0xA5AA2BF7	Selecting an available Track Day slot allows you to create a new Custom Track Day. The icon you choose will represent that Track Day on the Track Day Map under My Track Day.
+0	A5C553D7	0xA5C553D7	By driving all four wheels, traction is increased, especially during starts and at corner exit acceleration. Be sure to take advantage of this fact.^
+0	A5C5691C	0xA5C5691C	Although you're fighting the laws of physics in a front-wheel-drive car, you can build a formidable track weapon if you make the right tuning choices. The first item on your agenda should be to reduce the amount of understeer inherent in an FF car by stiffening everything up front. Then you'll need a limited slip differential to help eliminate the torque steer. ^
+0	A5C59C28	0xA5C59C28	Balance and throttle steer are the clear advantages to a rear-wheel-drive drive setup. Be sure to avoid excessive oversteer in your setup.^
+0	A5C88F62	0xA5C88F62	Vender Carro
+0	A6AEFF4F	0xA6AEFF4F	A pista de testes de elite da Porsche em Leipzig, Alemanha, apresenta reproduçöes de algumas das curvas mais famosas das corridas.
+0	A6B463A6	0xA6B463A6	SAIAS LATERAIS
+0	A6E69648	0xA6E69648	Efficient fuel delivery is key in achieving high horsepower. A larger fuel pump combined with larger injectors and upgraded fuel lines will produce significant horsepower gains. ^
+0	A7086987	0xA7086987	The key to a successful drift car is a car that's predictable at breaking loose, easy to maintain oversteered through the corner, and at the same time incredibly stable.
+0	A746D8C9	0xA746D8C9	FRIENDS
+0	A8726AB4	0xA8726AB4	Norsk
+0	A89C0D51	0xA89C0D51	Manhä
+0	A8E69AE0	0xA8E69AE0	AEROFÓLIO
+0	A900F925	0xA900F925	Matchmaking error occurred.
+0	A90427F0	0xA90427F0	This is a high-speed run through some of the miles of freeway in Tokyo, and includes loops, straightaways and a tunnel section.
+0	A9B8CC12	0xA9B8CC12	NÚMERO DE JOGOS RANQUEADOS JOGADOS
+0	AA5C53D9	0xAA5C53D9	AJUSTAR
+0	AAA63285	0xAAA63285	VISUAIS
+0	AAE27A9D	0xAAE27A9D	CLUB NAME
+0	AC258B54	0xAC258B54	Instalar
+0	ACB93AD3	0xACB93AD3	Deseja mesmo salvar o seu Track Day?
+0	AD08561A	0xAD08561A	Joining game session...
+0	ADFC3129	0xADFC3129	BLOW OFF VALVE
+0	AE07EF66	0xAE07EF66	GAIOLA
+0	AE6762F5	0xAE6762F5	NÄO FAZ DRIFT
+0	AE91A47C	0xAE91A47C	This upgrade replaces your existing engine internals with stronger, more durable parts, allowing for your engine to make more power and sustain higher RPMs.^
+0	AE9D7B85	0xAE9D7B85	USAR CARTÄO DE REPARO TOTAL
+0	AEC0045C	0xAEC0045C	Visual Packages
+0	AEE31E40	0xAEE31E40	Criar um novo Projeto
+0	AF0F5DD3	0xAF0F5DD3	Enter your Secret Code or Promo Code here in order to receive your reward.
+0	AF646596	0xAF646596	With this rally-inspired upgrade, you'll look right at home playing in the dirt. ^
+0	B02FD4E8	0xB02FD4E8	Escolha o nível de dificuldade para definir o quanto a IA será habilidosa e quais seräo os carros permitidos para o seu Track Day.
+0	B04DAEDC	0xB04DAEDC	CARROS DA CARREIRA
+0	B07E214B	0xB07E214B	NUMBER OF 12 PLAYER RACES COMPLETED
+0	B10B499C	0xB10B499C	PNEU FRONTAL
+0	B10C0695	0xB10C0695	NÚMERO DE ARRANCADAS GANHAS
+0	B1B4EFC5	0xB1B4EFC5	Meu Track Day
+0	B23EDF47	0xB23EDF47	Näo há dinheiro suficiente para fazer essa compra.
+0	B249AA0B	0xB249AA0B	MAIOR ÂNGULO DE EMPINADA
+0	B3CB1FA6	0xB3CB1FA6	Turbos are air pumps.
+0	B435F327	0xB435F327	Increasing cylinder bore raises engine displacement and thus the amount of fuel that can be burned to produce more power.^
+0	B4595BAA	0xB4595BAA	This upgrade will increase your car's stopping power by using high performance brake pads and rotors. Brakes are a crucial element in a well-tuned vehicle.^
+0	B485D8BC	0xB485D8BC	AEROFÓLIO
+0	B4904005	0xB4904005	EVENTOS
+0	B4E78E46	0xB4E78E46	STEERING KIT
+0	B4E89A33	0xB4E89A33	PORCENTAGEM DE VITORIAS EM CIRCUITOS
+0	B4F8E509	0xB4F8E509	Renaming Blueprint...
+0	B57FAD27	0xB57FAD27	CHEIO
+0	B65AC636	0xB65AC636	MAIOR PONTUAÇÄO EM DRIFT
+0	B6923882	0xB6923882	VINIS
+0	B7179310	0xB7179310	Constructed from higher quality materials, performance control arms offer more camber options as well as better overall suspension geometry.^
+0	B7C79F3C	0xB7C79F3C	Track Days GANHOS
+0	B8373799	0xB8373799	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	B8532875	0xB8532875	NOT ELIGIBLE TO RACE
+0	B949F32C	0xB949F32C	Choose the number of Repair Markers for your Track Day. When creating a Solo Track Day you will get an equal number of Repair Markers and Total Repair Markers.
+0	BA7BB2AC	0xBA7BB2AC	The first gen Camaro was described as a small, vicious animal that eats Mustangs.
+0	BAA299DF	0xBAA299DF	BEAT MODERATOR
+0	BAD8891E	0xBAD8891E	FREO DE MÄO
+0	BB2805A7	0xBB2805A7	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels to a race car standard.^
+0	BB28060A	0xBB28060A	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels to a race car standard.^
+0	BB280796	0xBB280796	This upgrade will allow for still faster and more precise shifting as well as continuing to lighten the components that transfer power to the wheels of a race car standard.^
+0	BBA89465	0xBBA89465	NIVEL
+0	BC012059	0xBC012059	The Ford GT was created as an homage to Ford's racing dominance in the late 60s and is the modern version of the classic GT40.
+0	BC3FA9B7	0xBC3FA9B7	PERFORMANCE STATS
+0	BCCE2B8B	0xBCCE2B8B	ROTORS
+0	BCE15E7F	0xBCE15E7F	This upgrade allows the engine to sustain much higher power for a short amount of time.^
+0	BCE15EE2	0xBCE15EE2	This upgrade adds race car engine internals to allow it to take the strain of still more power and higher RPMs.^
+0	BCE1606E	0xBCE1606E	Speed stage 3 internals.
+0	BD917E2E	0xBD917E2E	PISTONS
+0	BEFDD8E0	0xBEFDD8E0	This upgrade will give you a temporary boost in horsepower that could mean the difference between winning and losing.^
+0	BF28518F	0xBF28518F	BEST LAP TIME
+0	BF862117	0xBF862117	SKILLS STATS
+0	BFD49098	0xBFD49098	RESUMO DA CARREIRA
+0	C01A19DE	0xC01A19DE	Be able to smoothly initiate and hold large, tail out slides is the key to setting up an efficient drift car.^
+0	C048217B	0xC048217B	This upgrade goes a step further and takes power toward that of a true race car.^
+0	C06D238A	0xC06D238A	You cannot sell your last car.
+0	C0F90488	0xC0F90488	These heavy duty suspension bits help keep your car from flexing under the strain of high torque, giving your tires maximum traction. ^
+0	C14A7551	0xC14A7551	Noon
+0	C14BF457	0xC14BF457	By fitting a different size drive pulley, the supercharger will spin faster, thus proving more boost and more power.^
+0	C277317D	0xC277317D	A powerful, consistent spark is needed in high horsepower applications. Using ignition wires and sparkplugs made with highly conductive materials such as platinum and iridium can improve the overall performance of your engine.    ^
+0	C2C8CAF9	0xC2C8CAF9	DESLIGADO
+0	C2F1F051	0xC2F1F051	BRAKE LINE KIT
+0	C2F8FAE3	0xC2F8FAE3	BEST MULTIPLIER
+0	C31EC3B6	0xC31EC3B6	NITROUS SYSTEM
+0	C323D734	0xC323D734	Stats ranking server is currently down. Please try again later.
+0	C3413F00	0xC3413F00	CONFIGURAÇÄO DA PISTA
+0	C373559B	0xC373559B	EVENTOS DE ARRANCADA
+0	C44D422E	0xC44D422E	This upgrade will allow your car to stop in a shorter distance than with stock brakes.^
+0	C44D422F	0xC44D422F	stage 2 brakes
+0	C58D2B61	0xC58D2B61	REPARAR SEU CARRO
+0	C5A42BC0	0xC5A42BC0	As you increase engine power output, upgrades must be made to ensure that the power is being efficiently harnessed and sent to the drive wheels. Clutches, driveshafts, and limited-slip differentials all play a role.^
+0	C65697FF	0xC65697FF	Sumário do Projeto
+0	C66236E4	0xC66236E4	Here, the emphasis is on big power; these turbo components are designed for peak HP and WOT driving. These parts will have a dramatic impact on your trap speeds.^
+0	C6A3230D	0xC6A3230D	Deseja jogar este Track Day?
+0	C760E56D	0xC760E56D	Deseja salvar as mudanças do seu projeto?
+0	C79CDD69	0xC79CDD69	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	C80AB415	0xC80AB415	Isso vai descartar todas as mudanças do projeto, continuar?
+0	C99081EF	0xC99081EF	Renaming Blueprint...
+0	CAF05950	0xCAF05950	ESPELHOS
+0	CB264EAD	0xCB264EAD	COLOQUE O CÓDIGO
+0	CB494073	0xCB494073	DOWNLOADING FAILED
+0	CB9181B2	0xCB9181B2	NÚMERO DE SHOWDOWNS GANHO
+0	CBC1C335	0xCBC1C335	This upgrade further reprograms the engine computer to maximize performance.^
+0	CBDF22A7	0xCBDF22A7	MELHOR TEMPO DE REAÇÄO
+0	CBFD0224	0xCBFD0224	The Mk5 GTI is the newest version of the original hot hatch. Its 2.0L FSi turbo motor starts out with over 200hp, and is easily modded beyond that.
+0	CBFD2C97	0xCBFD2C97	Take a hot hatch, add a narrow angle V6, then an all-wheel-drive system, and this is what you get.
+0	CC01001F	0xCC01001F	By setting a proper suspension setup, one which doesn't have excessive understeer or oversteer, a driver will end up with a car that is both faster and easier to drive.^
+0	CD60F971	0xCD60F971	CONTROL ARMS
+0	CDF9B1C8	0xCDF9B1C8	With so much power at stake, a rigid suspension is necessary to keep your car flying straight down the drag strip. ^
+0	CE3EF6CC	0xCE3EF6CC	BODY KIT
+0	CE424268	0xCE424268	CAPÔS
+0	CE466886	0xCE466886	PADS
+0	CE90E050	0xCE90E050	NÚMERO DE DRIFTS GANHOS
+0	CEE5A629	0xCEE5A629	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the power you need to break your tires loose and slide past the finish line.^
+0	CF856790	0xCF856790	
+0	CFC1136C	0xCFC1136C	CUSTOMIZAÇÄO
+0	D07408C9	0xD07408C9	TOTAL DE CARROS DESTRUIDOS NA CARREIRA
+0	D1F1D3BD	0xD1F1D3BD	Criar Track Day
+0	D22DCB62	0xD22DCB62	NÚMERO DE ARRANCADAS JOGADAS
+0	D2420B5E	0xD2420B5E	DISCONNECT PERCENTAGE
+0	D2AA033D	0xD2AA033D	AROS FRONTAIS
+0	D2C35878	0xD2C35878	The 2G Eclipse is prone to crankwalk.
+0	D319A504	0xD319A504	CONCESSIONARIA
+0	D47E5E06	0xD47E5E06	Selecting a filled Track Day slot provides you with information about that Track Day and will allow you to delete that Track Day.
+0	D4A39C4F	0xD4A39C4F	MAPA
+0	D4BE8C54	0xD4BE8C54	BEST DRIFT SCORE AS FOLLOWER
+0	D57B1B23	0xD57B1B23	CRANKSHAFT
+0	D5B32AA4	0xD5B32AA4	CARRO RECOMPENSA
+0	D5F3F4D9	0xD5F3F4D9	The car that defines the tuner scene and sets the bar for all others.
+0	D63ACB56	0xD63ACB56	EVENTOS DE DRIFT
+0	D6400B2E	0xD6400B2E	MULTIJOGADOR
+0	D652224B	0xD652224B	Stock crankshafts cannot take the strain of high horsepower. A forged crank is necessary for horsepower levels in excess of 500.^
+0	D67F114E	0xD67F114E	With a superchaged 2.0L motor, the Cobalt was the replacement for the Cavalier and was intended to compete against cars like the Honda Civic.
+0	D6A4BA37	0xD6A4BA37	{0:f.0} FT
+0	D866E945	0xD866E945	This is the 5th car in the Z line; a rear-wheel-drive, 2+2 sports coupe.
+0	D86A4570	0xD86A4570	With a 3.6L turbo motor, this car goes from 40-60 mph in one second.
+0	D86EDB87	0xD86EDB87	The Hachi-Roku is one of the last of the compact rear-wheel-drive cars.
+0	D87037B3	0xD87037B3	The CTSV was the first car launched under Cadillac's V-Series performance brand, and designed to compete against European sport sedans.
+0	D8715856	0xD8715856	The EVO IX has a 2.0L, 16v turbo all-wheel-drive hot hatch. It's been the defining car for performance and handling within the tuner industry since its creation.
+0	D8715875	0xD8715875	The EVO X is faster than the Stig.
+0	D87268AB	0xD87268AB	The Pontiac GTO was the North American version of the Holden V platform with the LS2 from the Corvette.
+0	D87268AC	0xD87268AC	Some consider this the first muscle car.
+0	D8CB6AB8	0xD8CB6AB8	With the minds from Ford's SVT (Special Vehicle Team) unit and the legendary Carroll Shelby working together on this project, it was almost certainly a guaranteed success. The result of this collaboration will surely put goofy grins on the faces of Mustang and power lovers everywhere: 450 horsepower, 450 ft-lb of torque (oh yeah, baby!), Brembo calipers, 19-inch alloy wheels, and a price that should be in line with that of the previous Mustang Cobra model. And according to project designers, the 2006 Ford Mustang Shelby Cobra GT500 "will be the most powerful production Mustang ever built."
+0	D9D31C82	0xD9D31C82	NEDERLANDS
+0	DA3876DB	0xDA3876DB	
+0	DA83B9F4	0xDA83B9F4	PARA DESBLOQUEAR ESTE SHOWDOWN
+0	DA99270A	0xDA99270A	Usar Dinheiro
+0	DAB32E6E	0xDAB32E6E	SKILLS STATS
+0	DACFF415	0xDACFF415	NÚMERO DE ALTA VEL. JOGADAS
+0	DADCF651	0xDADCF651	Definir Eventos
+0	DB0EA232	0xDB0EA232	Delete shared Track Day?
+0	DB29BEAF	0xDB29BEAF	RESUMO DA CARREIRA
+0	DB309600	0xDB309600	EXHAUST PIPES
+0	DB38D4E1	0xDB38D4E1	Stopping a car time after time builds up excessive heat in the braking system and threatens to increase stopping distances over time. A larger braking system helps keep temps down and braking consistent.^
+0	DB9D9575	0xDB9D9575	This upgrade replaces your existing engine internals with stronger, more durable parts, allowing for your engine to make more power and sustain higher RPMs.  ^
+0	DC92EF3D	0xDC92EF3D	TODOS
+0	DC92F0A0	0xDC92F0A0	INTEGRAL
+0	DC9305E5	0xDC9305E5	DIANTEIRA
+0	DC9338F1	0xDC9338F1	TRASEIRA
+0	DD0493F6	0xDD0493F6	MODO
+0	DDC4F363	0xDDC4F363	INTAKE MANIFOLD
+0	DEB33B6C	0xDEB33B6C	EVENT RECORDS
+0	DF63F5CB	0xDF63F5CB	USAR CÓDIGO
+0	E0DA7A89	0xE0DA7A89	Purchase all markers that are currently in your shopping cart?
+0	E1BCA620	0xE1BCA620	EXHAUST
+0	E1BF6641	0xE1BF6641	SPLIT SCREEN
+0	E1D7F1A4	0xE1D7F1A4	INTERCOOLER
+0	E1F32F9F	0xE1F32F9F	Managing your speed throughout corners, as well as paying proper attention to corner exit acceleration, is key. More engine power increases the ability to rocket out from turns and reach higher speeds.^
+0	E2A01FD7	0xE2A01FD7	á à â ä  å æ ª  ç   é è  ë ê  í ì ï î B D H ñ ó ò ø ö ô Q S Y a [ e o ú ù ü û q ý ~ | z º °¿ ¡ ^Á À Â Å Ä  Æ   Ç  É È  Ë Ê  Í Ì Î Ï A G Ñ C P Ó Ò Ø Ö Ô R X Z ` d n Ú Ù Ü Ú p Û Ý { y } ß    ä                ! " # $ % & ' ( ) * + , - . / 0 1 2 ä 4 5 Q 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O
+0	E4204A43	0xE4204A43	NUMBER OF CLUB MEMBERS
+0	E453D183	0xE453D183	ENGINE INTERNALS
+0	E4F9BB1D	0xE4F9BB1D	This upgrade strengthens the components that transfer your car's power to the wheels, including the driveshaft, differential and axles.^
+0	E553443E	0xE553443E	Wind Tunnel Off
+0	E5D7AC49	0xE5D7AC49	CONFIGURAÇÄO
+0	E6510BEA	0xE6510BEA	{0:f.0} HP
+0	E66DD2CF	0xE66DD2CF	EVENTOS DE CIRCUITO
+0	E6713141	0xE6713141	The 6th gen Civic is one of the most popular cars in tuner culture, whether for street, track, drag racing, or anything in between.
+0	E6750FBC	0xE6750FBC	Track Day Deleted
+0	E68956A2	0xE68956A2	The 3rd version of the M3, the E46 debutted with BMW's highest horsepower per liter of any BMW motor at that time.
+0	E68C0383	0xE68C0383	The E92 M3 sports a carbon fibre roof and is  powered by a V8 (past M3s had inline 6s).
+0	E696D165	0xE696D165	The 2nd gen Elise is a stripped-down, bare bones car with only the driving experience in mind.
+0	E6A4ADBE	0xE6A4ADBE	The FD RX-7 is one of the greatest tuner cars of all time, whether for drift or grip. A true legend.
+0	E6E2A887	0xE6E2A887	The 2nd gen IS is a rear-wheel-drive luxury coupe, with  sleeker coupe-like contours, and a fastback profile.
+0	E7175989	0xE7175989	With its 6.5L motor pushing 640hp, the LP640 is at the top end of super car performance.
+0	E77E7E9A	0xE77E7E9A	By redistributing hydraulic fluid throughout the brake system, this device can allow for greater braking force in either the front or the rear. ^
+0	E799357E	0xE799357E	The 4th gen Supra is built to be lighter and more nimble than the previous gen car. It is capable of a .98g on the skid pad. The 99 was the last year for North America, with Japan having production through 2002.
+0	E7DA9084	0xE7DA9084	ALL PARTS
+0	E87871A6	0xE87871A6	This upgrade focuses on maximizing weight over the drive wheels and minimizing front wheel air-time.^
+0	E8787209	0xE8787209	This upgrade will allow the car to corner even faster and flatter without losing its grip on the tarmac.^
+0	E8787395	0xE8787395	This upgrade will allow the car to corner even faster and flatter at top speed without losing its grip on the tarmac.^
+0	E87941EF	0xE87941EF	No suitable matches or players could be found.  Please try again.
+0	E8B2E71D	0xE8B2E71D	Definir os Eventos de Corrida
+0	E9031709	0xE9031709	CLUB LEADER
+0	E924D3FD	0xE924D3FD	A "Autobahnring" da Alemanha é uma grande rede interligada de estradas de alta velocidade que inclui seçöes da famosa Autobahn, aonde velocidade é tudo.
+0	E93A693C	0xE93A693C	Canceling search...
+0	E9D302B5	0xE9D302B5	Here, the engine's power finally is transferred into side-to-side power and is sent to the wheels. ^
+0	E9F14CD9	0xE9F14CD9	Are you sure you want to overwrite this Track Day?
+0	EA383F96	0xEA383F96	MOST TIMES FINISHED AHEAD OF LEADER
+0	EAA61A95	0xEAA61A95	Many motoring journalists say that the Zonda F is one of the best supercars in the world.
+0	EB568F7C	0xEB568F7C	In order to keep your tires firmly planted on the pavement, both your front and rear sway bars are stiffened, bushings replaced with urethane pieces, and shocks replaced with racing dampeners. ^
+0	EB700BAC	0xEB700BAC	My Track Day^Create and design your own Track Day. Create a Solo Track Day or Multiplayer Track Day and compete with other players online. Create a Split Screen Track Day and challenge a friend.^^Share your Solo or Multiplayer Track Day with other players online and invite them to join your own personal Track Day competition.^^.
+0	EB79FC9E	0xEB79FC9E	Autopolis está situada no topo de uma montanha em uma parte remota do Japäo. Embora o circuito tenha origens obscuras, o percurso de alta velocidade é novo e limpo.
+0	EBDC0547	0xEBDC0547	Stiffer shocks combined with the lower center of gravity that performance springs provide can greatly enhance a car's cornering ability.^
+0	ECA89D65	0xECA89D65	This upgrade will give you a temporary boost in horsepower. Nitrous oxide is a must-have for drag racers.^
+0	EDCF253F	0xEDCF253F	Os pilotos de Windy City tomaram o controle de um aeroporto abandonado, o Chicago Airfield. Com uma pista larga cheia de curvas para ótimos Circuitos e Drifts, e também uma longa pista para Arrancadas.
+0	EDD5E77A	0xEDD5E77A	MÁXIMA
+0	EE3A2E3E	0xEE3A2E3E	PRESSURE CONTROL KIT
+0	EEE5B95D	0xEEE5B95D	NÚMEROS DE VEZES QUE CONSEGUIU A ADERENCIA MAX. NO AQUECIMENTO
+0	EF2E3A2B	0xEF2E3A2B	60-0 MPH MAIS RAPIDO
+0	EF42E428	0xEF42E428	CONTROLE DE POTÊNCIA
+0	EF5DB83C	0xEF5DB83C	NFS Carbon
+0	F0244DE0	0xF0244DE0	Uma montanha foi escavada para abrigar Ebisu, o lar espirutual do Drift. O desafio Fukuyama vai de uma estrada do interior até a uma Auto-Estrada.
+0	F0562BFF	0xF0562BFF	By lightening the gears or sprockets that drive your camshafts, you reduce the amount of energy needed to turn those cams and allow for more power to  be made.^
+0	F070F6B8	0xF070F6B8	{0:d} X ${1:d}
+0	F0766BCC	0xF0766BCC	TOTAL DE CORRIDAS GANHAS SEM DANOS
+0	F0CA6A0E	0xF0CA6A0E	This upgrade allows the car to corner better and be more stable at speeds.^
+0	F0CA6A0F	0xF0CA6A0F	stage 2 handling
+0	F1369555	0xF1369555	Though nitrous is great for a temporary increase in power, too much nitrous can stress the engine past the breaking point. A pressure control kit assures that the engine only receives as much pressure as it can handle.^
+0	F17B2C6C	0xF17B2C6C	Deseja mesmo alterar o local? isso vai remover todos os eventos já selecionados.
+0	F1CE616C	0xF1CE616C	MENU CAMADAS
+0	F1FF9E41	0xF1FF9E41	This upgrade replaces your existing engine internals with forged pieces, giving them lasting strength and durability for those intense quarter mile runs.^
+0	F2797681	0xF2797681	Infineon Raceway ao norte da Califórnia, com curvas complexas e acidentadas. Uma manobra em falso e tudo estará perdido.
+0	F2BDD954	0xF2BDD954	ALTA^VELOCIDADE
+0	F3113E19	0xF3113E19	CLUB POINTS
+0	F3DE3CC1	0xF3DE3CC1	By reprogramming your engine computer, this upgrade will make it possible for more fuel and air to be burned, giving you the extra power you need to overtake a rival car coming out of a corner.^
+0	F3EDBE13	0xF3EDBE13	Are you sure you want to remove the event %s ?
+0	F44D2ED8	0xF44D2ED8	Track Day Salvo
+0	F470908C	0xF470908C	This upgrade will, for a short moment, add 50 - 250  horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	F48822F6	0xF48822F6	This basic upgrade package will add power through the entire RPM range, as well as giving your once stock car, a more aggressive tone.
+0	F48822F7	0xF48822F7	This package builds on the milder upgrades from Stage 1 to provide increased power throughout the powerband and a more aggressive sound as well.^
+0	F4CE9F22	0xF4CE9F22	Mondello Park é um percurso incrivelmente cheio de curvas e compacto no meio de uma zona rural irlandesa.
+0	F4FDE840	0xF4FDE840	FRANCAIS
+0	F4FFAB87	0xF4FFAB87	CARRO RESERVA
+0	F5284896	0xF5284896	NÚMERO DE CIRCUITOS JOGADOS
+0	F53A1C67	0xF53A1C67	GARAGEM
+0	F55E8855	0xF55E8855	Pack de Desempenho
+0	F58D6D7A	0xF58D6D7A	ADQUIRIDO
+0	F5936199	0xF5936199	PINTURA
+0	F59388A7	0xF59388A7	PARTES DO BODYKIT
+0	F5A3942A	0xF5A3942A	PACK
+0	F5ABB161	0xF5ABB161	Selecionar Carro
+0	F5EC47A6	0xF5EC47A6	DISPONÍVEL
+0	F60B3073	0xF60B3073	METAS ATINGIDO
+0	F618A216	0xF618A216	Com essa opçäo você pode definir se todos iräo usar os mesmos carros ou näo.
+0	F630C7BA	0xF630C7BA	Handbrake so you can relive Rockford File episodes.
+0	F723C7C3	0xF723C7C3	A Highway Route 318 é um trecho ensolarado nas entranhas do deserto de Nevada. Velocidades superiores a 380 km/h säo possíveis, mas cuidado com as curvas que aparentam ser simples :)
+0	F72520C5	0xF72520C5	Performance brake rotors radiate heat better than stock. Larger-than-stock diameter rotors give more surface area for pads to clamp down on and thus more braking force.^
+0	F75CEB17	0xF75CEB17	BEST DRIFT SCORE AS LEADER
+0	F786A96F	0xF786A96F	This upgrade uniquely tunes the suspension to allow it to slide easily though turns.^
+0	F7DDE573	0xF7DDE573	PARA-CHOQUE FRONTAL
+0	F7F32FF0	0xF7F32FF0	ESTIMATED NET WORTH
+0	F8AABC28	0xF8AABC28	TRANSMISSÄO
+0	F978F064	0xF978F064	Próxima do Monte Rainier, do lado de uma vegetaçäo linda ao noroeste do Pacífico, o Portland International Raceway, ou PIR, é um percurso rodoviário incrivel com uma pista de Arrancada da melhor qualidade.
+0	FA86B580	0xFA86B580	ATUALIZAR PROJETO
+0	FBC20ADD	0xFBC20ADD	This upgrade will, for a short moment, add horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	FBC20ADE	0xFBC20ADE	This upgrade will, for a short moment, add even more horsepower to the engine's output via a dry shot of nitrous. This can mean the difference between 1st and 2nd place.  ^
+0	FBCE1905	0xFBCE1905	Tudo é maior no Texas, e o Texas World SpeedWay näo é excessäo, onde uma pista se contorce por dentro e fora de um oval angulado.
+0	FD49C75F	0xFD49C75F	The last of the Sting Rays, the 2nd gen Corvette was named as one of the top 5 sports cars of all time.
+0	FDDDDBAA	0xFDDDDBAA	TOTAL DE SETORES DOMINADOS
+0	FE52954D	0xFE52954D	TRANSMISSÄO
+0	FE8F9B0D	0xFE8F9B0D	Pack de Dirigibilidade
+0	FEE264E8	0xFEE264E8	NÚMERO DE ALTA VEL. GANHAS
+0	FF565C07	0xFF565C07	TOTAL DE RADARES GANHOS
+0	FF566EB8	0xFF566EB8	The Top Tuner leaderboard represents the top Blueprint tuners in the game. You are ranked based on the win percentage of all your shared Blueprints. Your shared Blueprints must be used in at least 20 races before you will appear on the leaderboard.

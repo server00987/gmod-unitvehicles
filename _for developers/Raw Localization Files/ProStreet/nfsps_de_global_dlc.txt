@@ -1,0 +1,51 @@
+#	Labrune - D:\Games\NFS Pro Street\LANGUAGES\German_Global_DLC.bin
+#	File created on: 2025-05-24 11:14:21
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - DLC
+0	1A821601	0x1A821601	Super Club
+0	1A821602	0x1A821602	Speed Loop
+0	1A821603	0x1A821603	Route 1 Erste Hälfte
+0	1A821604	0x1A821604	Route 2 Zweite Hälfte
+0	1A821605	0x1A821605	Route 3 Komplett
+0	1A82161D	0x1A82161D	Tokyo Bay Bridge
+0	1BB8601F	0x1BB8601F	Deine Need for Speed™ ProStreet-Version ist nicht kompatibel mit der Version des Spiels, dem du beitreten möchtest. Alle Spieler sollten sicher stellen, dass die aktuellsten Updates installiert sind. Besuche NeedforSpeed.de für mehr Informationen.
+0	35E21908	0x35E21908	Die KOSTENLOSE Energizer Lithium-Erweiterung ist jetzt als Download auf dem Xbox LIVE-Marktplatz verfügbar!
+0	3EC4AB81	0x3EC4AB81	Viel Spaß!
+0	420DCA3B	0x420DCA3B	LEIPZIG
+0	420DCA53	0x420DCA53	LEIPZIG II
+0	420DCA54	0x420DCA54	TOKYO EXPRESSWAY
+0	420DCA55	0x420DCA55	TOKYO EXPRESSWAY II
+0	42781C20	0x42781C20	auf dem Xbox LIVE-Marktplatz verfügbar!
+0	525DCCC5	0x525DCCC5	Energizer Lithium-Erweiterung
+0	5959EB4C	0x5959EB4C	Der Spieler, mit dem du teilen möchtest, hat noch nicht das neueste Update und muss Need for Speed aktualisieren, um diesen Renntag zu erhalten.
+0	59C9AC1C	0x59C9AC1C	Coca-Cola Zero Booster Packs.
+0	61098C88	0x61098C88	Der Spieler, mit dem du teilen möchtest, hat noch nicht das neueste Update und muss Need for Speed aktualisieren, um diese Blaupause zu erhalten.
+0	6692EC80	0x6692EC80	Die Datei, die du laden möchtest, konnte nicht geladen werden, da das Erweiterungspack nicht verfügbar ist.
+0	671480B8	0x671480B8	GRATIS - Zertifizierte Porsche-Teststrecke, Leipzig
+0	6DACD85F	0x6DACD85F	The FREE Extender Pack is now available for download on Xbox LIVE Marketplace!
+0	6ECC5E67	0x6ECC5E67	GRATIS - 2007 SEAT Leon Cupra
+0	71FD1C03	0x71FD1C03	Leipzig
+0	71FD1C1B	0x71FD1C1B	Leipzig II
+0	71FD1C1C	0x71FD1C1C	Tokyo Expressway
+0	71FD1C1D	0x71FD1C1D	Tokyo Expressway II
+0	7A83FDB7	0x7A83FDB7	Zocken, wie es sein sollte!
+0	800472C1	0x800472C1	Nein danke!
+0	82E2BDAE	0x82E2BDAE	Die Sprache des heruntergeladenen Booster Packs ist nicht mit dieser Disc kompatibel. Soll die richtige Version heruntergeladen werden?
+0	83D6CADC	0x83D6CADC	Extender Pack
+0	85C882DE	0x85C882DE	KOSTENLOSEN
+0	88D1ECEE	0x88D1ECEE	KOSTENLOSEN Coca-Cola Zero Booster Packs.
+0	88E17FE9	0x88E17FE9	Hol dir diesen GRATIS-Download auf dem Xbox LIVE-Marktplatz - mit neuen Strecken, neuen Wagen, neuen Events für die Renntage und einem erweiterten Karriere-Modus!
+0	91F522D5	0x91F522D5	Schau dir die erweiterten Karriere- und Renntag-Bildschirme und die KOSTENLOSEN Wagen beim Autohändler an.
+0	930C8172	0x930C8172	Danke für das Herunterladen des
+0	A76603FD	0xA76603FD	mit dem KOSTENLOSEN Coca-Cola Zero Booster Pack.
+0	BCFBDE9A	0xBCFBDE9A	Das Need for Speed™ ProStreet Booster Pack konnte nicht heruntergeladen werden.
+0	C174E20F	0xC174E20F	Need for Speed™ ProStreet muss neu gestartet werden, damit die neuen Inhalte verfügbar sind. Wähle OK, um jetzt neu zu starten.
+0	E4AF851F	0xE4AF851F	GRATIS - Tokyo Expressway, Japan
+0	E5E32468	0xE5E32468	Besuche NeedforSpeed.de für Updates und Community-Events
+0	E62B2319	0xE62B2319	GRATIS - 1969 Plymouth® Road Runner
+0	EE5865C5	0xEE5865C5	Zusätzlich 14 neue Wagen, unter anderem Bugatti Veyron 16.4 und Porsche 911 GT3! Gehe jetzt auf NeedforSpeed.de oder bis Ende Januar 2008 auf Coke.de für weitere Details!
+0	F39D0787	0xF39D0787	Jetzt GRATIS herunterladen!
+0	F5663CFA	0xF5663CFA	Besorge dir KOSTENLOS neue Strecken, neue Wagen, neue Events für die Renntage und einen erweiterten Karriere-Modus!
+0	FEEF54A9	0xFEEF54A9	Weitere Updates und Community Events findest du auf NeedforSpeed.de und mehr Hot Stuff zu Need for Speed gibt's bis Ende Januar 2008 auf Coke.de!

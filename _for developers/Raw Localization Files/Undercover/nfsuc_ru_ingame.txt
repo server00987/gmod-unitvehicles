@@ -1,0 +1,102 @@
+#	Labrune - D:\Games\NFS Undercover\LANGUAGES\Russian_InGame.bin
+#	File created on: 2025-05-23 18:40:24
+#
+#Chunk	Hash (HEX)	Label	Value
+# ---------------------------------------------------------------------------------------------------------
+# Chunk 0 - InGame
+0	AUTO	HUD_STYLE_POINT_GRINDING	ШЛИФОВКА: {0:d}
+0	AUTO	HUD_STYLE_POINT_COP_TAKEOUT	ВЫВЕДЕНИЕ ИЗ СТРОЯ ПОЛИЦ.: {0:d}
+0	AUTO	HUD_STYLE_POINT_PURSUIT_BREAKER	ХРУПКАЯ КОНСТРУКЦИЯ: {0:d}
+0	AUTO	HUD_SHOWROOM1	Магазин уличных запчастей в Палм Харбор
+0	AUTO	HUD_SHOWROOM2	Магазин запчастей класса 3 в Палм Харбор
+0	AUTO	HUD_SHOWROOM3	Магазин гоночных запчастей в Сансет Хиллс
+0	AUTO	HUD_SHOWROOM4	Магазин запчастей класса 2 в Сансет Хиллс
+0	AUTO	HUD_SHOWROOM5	Магазин профессиональных запчастей в Порт Крисент
+0	AUTO	HUD_SHOWROOM6	Магазин запчастей класса 1 в Port Crescent
+0	AUTO	HUD_CIVIC_COP_IMMOBILIZED	Полицейская машина выведена из строя\nУщерб гос-ву: {0:d} $
+0	AUTO	T_Credits	
+0	AUTO	SPOILER_2CF	Gentera Style 113 CF
+0	AUTO	SPOILER_5CF	Gentera Style 112 CF
+0	AUTO	SPOILER_8CF	Gentera Style 114 CF
+0	AUTO	SPOILER_9CF	Gentera Style 109 CF
+0	AUTO	HUD_STYLE_POINT_180_REVERSE	РАЗВОРОТ НА 180: {0:d}
+0	AUTO	HUD_STYLE_POINT_360_REVERSE	360 ЗАДНИМ ХОДОМ: {0:d}
+0	AUTO	HUD_STYLE_POINT_540_REVERSE	РАЗВОРОТ ЗАДНИМ ХОДОМ НА 540: {0:d}
+0	AUTO	HUD_COPS	КОПЫ
+0	AUTO	HUD_STYLE_POINT_720_REVERSE	РАЗВОРОТ ЗАДНИМ ХОДОМ НА 720: {0:d}
+0	AUTO	HUD_BUSTED	АРЕСТ!
+0	AUTO	HUD_FEDERAL_COP_IMMOBILIZED	ФЕДЕР. ПОЛИЦИЯ ВЫВЕД. ИЗ СТРОЯ\nУЩЕРБ ГОС-ВУ: {0:d} $
+0	AUTO	HUD_STYLE_POINT_DRAFT	ВОЗДУШНЫЙ МЕШОК: {0:d}
+0	AUTO	HUD_STYLE_POINT_DRIFT	ДРИФТИНГ: {0:d}
+0	AUTO	COMMON_X_METERS_SHORT_INT	{0:d} м
+0	AUTO	COMMON_PERCENT	{0:d}%
+0	AUTO	HUD_STYLE_POINT_POWERSLIDE	ЗАНОС: {0:d}
+0	AUTO	HUD_STYLE_POINT_BONUS_START	КРАСИВЫЙ СТАРТ: {0:d}
+0	AUTO	SPOILER_11CF	Gentera Style 115 CF
+0	AUTO	SPOILER_12CF	Gentera Style 118 CF
+0	AUTO	SPOILER_13CF	Gentera Evo CF
+0	AUTO	HUD_STYLE_POINT_NEAR_MISS_MULT	ПРОЕЗД ВПРИТИРКУ x{0:d}: {1:d}
+0	AUTO	HUD_COOLDOWN	ОЖИДАНИЕ
+0	AUTO	HUD_GO	СТАРТ!
+0	AUTO	HUD_STYLE_POINT_TOP_SPEED	МАКС. СКОРОСТЬ: {0:d}
+0	AUTO	HUD_POSITION	{0:d}/{1:d}
+0	AUTO	COMMON_NEG	-{0:d}
+0	AUTO	COMMON_POS	+{0:d}
+0	AUTO	DIALOG_MSG_CONFIRM_EXIT_TO_FREEROAM	Выйти из игры?\nВсе изменения будут утрачены.
+0	AUTO	HUD_TARGET_ACHIEVED	Цель достигнута! Отрывайся от погони!
+0	AUTO	HUD_STYLE_POINT_360_REVERSE_BURNOUT	ФОРСАЖ ЗАДНИМ ХОДОМ НА 360: {0:d}
+0	AUTO	HUD_STYLE_POINT_180	РАЗВОРОТ НА 180: {0:d}
+0	AUTO	HUD_STYLE_POINT_360	РАЗВОРОТ НА 360: {0:d}
+0	AUTO	HUD_STYLE_POINT_540	РАЗВОРОТ НА 540: {0:d}
+0	AUTO	HUD_STYLE_POINT_720	РАЗВОРОТ НА 720: {0:d}
+0	AUTO	HOOD_1CF	Araxis Sport CF
+0	AUTO	HOOD_2CF	Araxis Sweeper CF
+0	AUTO	HOOD_3CF	Araxis Blitz CF
+0	AUTO	HOOD_4CF	Araxis Impact CF
+0	AUTO	HOOD_5CF	Formula CF
+0	AUTO	HOOD_6CF	Beast CF
+0	AUTO	HOOD_7CF	Blister CF
+0	AUTO	HOOD_8CF	Shaker CF
+0	AUTO	HUD_STYLE_POINT_CLOSE_CALL	ПРОЕЗД ВПРИТИРКУ: {0:d}
+0	AUTO	COMMON_RETURN_TO_EVENT	Вернуться к эпизоду
+0	AUTO	HUD_STYLE_POINT_180_BURNOUT	ФОРСАЖ НА 180: {0:d}
+0	AUTO	HUD_STYLE_POINT_360_BURNOUT	ФОРСАЖ НА 360: {0:d}
+0	AUTO	HUD_LAP	КРУГ
+0	AUTO	COMMON_PURSUIT_ONLY	Только погоня
+0	AUTO	HUD_EVADE	УХОДИ ОТ ПОГОНИ
+0	AUTO	HUD_TIMER	ВРЕМЯ
+0	AUTO	HUD_STYLE_POINT_CLEAN_SECTION	ЧИСТЫЙ УЧАСТОК: {0:d}
+0	AUTO	HUD_STYLE_POINT_COUNTING	ОЧКИ: {0:d}
+0	AUTO	HUD_STYLE_POINT_NOS_DRIFT	ДРИФТ НА ЗАКИСИ АЗОТА: {0:d}
+0	AUTO	HUD_STYLE_POINT_CLEAN_SECTION_MULT	БЕЗУПРЕЧНЫЙ УЧАСТОК х {0:d}: {1:d}
+0	AUTO	HUD_CTS_CURRENT_OVER_TOTAL	{0:d} $/{1:d} $
+0	AUTO	HUD_TACH_ABBREV_NEUTRAL	Н
+0	AUTO	HUD_ROBBERS	ВОРЫ
+0	AUTO	HUD_STYLE_POINT_BURNOUT	ФОРСАЖ: {0:d}
+0	AUTO	HUD_STYLE_POINT_RUBOUT	УСТРАНЕНИЕ ПРОТИВНИКА: {0:d}
+0	AUTO	HUD_LEVEL_UP	ВОССТАНОВЛЕНИЕ ПРИБОРОВ: {0:d}
+0	AUTO	HUD_STYLE_POINT_PASSING	ОБГОН: {0:d}
+0	AUTO	HUD_STYLE_POINT_WINNER	Победитель гонки: {0:d}
+0	AUTO	HUD_STATE_COP_IMMOBILIZED	МАШИНА ПОЛИЦИИ ШТАТА ВЫВЕД. ИЗ СТРОЯ\nУЩЕРБ ГОС-ВУ:{0:d} $
+0	AUTO	HUD_STYLE_POINT_RANKING_1	1 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_2	2 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_3	3 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_4	4 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_5	5 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_6	6 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_RANKING_7	7 МЕСТО: {0:d}
+0	AUTO	HUD_STYLE_POINT_NEAR_MISS	ПРОЕЗД ВПРИТИРКУ: {0:d}
+0	AUTO	HUD_SUV_COP_IMMOBILIZED	ДЖИП ВЫВЕДЕН ИЗ СТРОЯ\nУЩЕРБ ГОС-ВУ: {0:d} $
+0	AUTO	HUD_SUPER_STATE_COP_IMMOBILIZED	СПЕЦМАШИНА ФЕД. ПОЛИЦ. ВЫВЕД. ИЗ СТРОЯ\nУЩЕРБ ГОС-ВУ: {0:d} $
+0	AUTO	HUD_MULTIPLIER	x
+0	AUTO	HUD_TACH_ABBREV_REVERSE	З
+0	AUTO	HUD_STYLE_POINT_AIR_JUMP	ПРЫЖОК: {0:d}
+0	AUTO	IN_GAME_TEMP	Temp
+0	AUTO	HUD_COP_TAKEOUT	КОПЫ ОСТАНОВЛЕНЫ
+0	AUTO	HUD_STYLE_POINT_PENALTY_COUNT	ШТРАФ: {0:d}
+0	AUTO	COMMON_X_METERS_SHORT_STRING	{0:s} м
+0	AUTO	HUD_STYLE_POINT_180_REVERSE_BURNOUT	ФОРСАЖ ЗАДНИМ ХОДОМ НА 180: {0:d}
+0	AUTO	HUD_STYLE_POINT_TRADE_PAINT	СТОЛКНОВЕНИЕ: {0:d}
+0	AUTO	COMMON_X_FEET_SHORT_STRING	{0:s} фут.
+0	AUTO	HUD_STYLE_POINT_FIRST_POS	Первая позиция: {0:d}
+0	AUTO	HUD_STYLE_POINT_REVERSE_BURNOUT	ФОРСАЖ ЗАДНИМ ХОДОМ: {0:d}
