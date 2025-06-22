@@ -386,18 +386,16 @@ function UVRenderCommander(ent)
         
         surface.SetDrawColor( 0, 161, 255, fadeAlpha )
         surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-        surface.DrawRect( rectxpos + (w * (0.0075 * rectlen)), rectypos - 2, w * 0.002, h*0.054) -- Right
+        surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
         surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-        surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Up
+        surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
         
         surface.SetMaterial(UVMaterials["ARROW_CARBON"])
         surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
         
         surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
         surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
-        
-        -- draw.DrawText("\n" .. "#uv.unit.commander" .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-        
+
         draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
@@ -405,7 +403,7 @@ end
 
 function UVRenderEnemySquare(ent)
     local localPlayer = LocalPlayer()
-    local box_color = (!UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 100, 100)
+    local box_color = (!UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 132, 0 )
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
@@ -421,8 +419,6 @@ function UVRenderEnemySquare(ent)
             box_color = Color( 255, blink2, blink2)
         elseif entbustedtimeleft < 1 then
             box_color = Color( 255, blink3, blink3)
-        else
-            box_color = Color( 255, 255, 255 )
         end
     end
     
@@ -482,28 +478,29 @@ function UVRenderEnemySquare(ent)
         end
         
         cam.Start2D()
-        local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
-        local bustdist = math.Round(distInMeters) .. " m"
-        
-        local rectlen = string.len(enemycallsign)
-        local rectxpos = textX - (w * (0.00375 * rectlen))
-        local rectypos = textY + (w * 0.0125)
-        
-        surface.SetDrawColor( 255, 255, 255, fadeAlpha )
-        surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-        surface.DrawRect( rectxpos + (w * (0.0075 * rectlen)), rectypos - 2, w * 0.002, h*0.054) -- Right
-        surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-        surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Up
-        
-        surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-        surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
-        
-        surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-        surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
-        
-        draw.DrawText("\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-        
-        draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
+			local pos = ent:GetPos() + Vector(0, 0, 80)
+			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+			local bustdist = math.Round(distInMeters) .. " m"
+			
+			local rectlen = string.len(enemycallsign)
+			local rectxpos = textX - (w * (0.00375 * rectlen))
+			local rectypos = textY + (w * 0.0125)
+			
+			surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
+			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
+			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
+			
+			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			
+			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
+			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+			
+			draw.DrawText("\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			
+			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
@@ -1724,17 +1721,19 @@ local function carbon_pursuit_main( ... )
     UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
     
     local hl10 = 0
+	local hlcm = 0
     if UVHeatLevel > 9 then hl10 = w * 0.01 end
+	if (UVHUDDisplayCooldown and UVHUDCopMode) then hlcm = h * 0.0475 end
+	
+    DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.28 - hlcm, .045, Colors.Carbon_Accent) -- Icon
     
-    DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.28, .045, Colors.Carbon_Accent) -- Icon
-    
-    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83 + 2, h * 0.26 + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
-    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.26, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
-    
+    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83 + 2, h * 0.26 - hlcm + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
+    draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.26 - hlcm, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
+
     surface.SetDrawColor(Color(0,0,0))
-    surface.DrawRect(w * 0.835 - 4, h * 0.275 - 3, w * 0.145 + 8.5, h * 0.015 + 6)
+    surface.DrawRect(w * 0.835 - 4, h * 0.275 - hlcm - 3, w * 0.145 + 8.5, h * 0.015 + 6)
     surface.SetDrawColor(Colors.Carbon_AccentDarker)
-    surface.DrawRect(w * 0.835, h * 0.275, w * 0.145, h * 0.015)
+    surface.DrawRect(w * 0.835, h * 0.275 - hlcm, w * 0.145, h * 0.015)
     surface.SetDrawColor(Color(255, 255, 255))
     local HeatProgress = 0
     if MaxHeatLevel:GetInt() ~= UVHeatLevel then
@@ -1769,18 +1768,10 @@ local function carbon_pursuit_main( ... )
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-    
-    -- if HeatProgress >= 0.6 and HeatProgress < 0.75 then
-    -- surface.SetDrawColor(Color(255, blink, blink))
-    -- elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
-    -- surface.SetDrawColor(Color(255, blink2, blink2))
-    -- elseif HeatProgress >= 0.9 and HeatProgress < 1 then
-    -- surface.SetDrawColor(Color(255, blink3, blink3))
-    -- elseif HeatProgress >= 1 then
+
     surface.SetDrawColor(Colors.Carbon_Accent)
-    -- end
     
-    surface.DrawRect(w * 0.835, h * 0.275, B, h * 0.015)
+    surface.DrawRect(w * 0.835, h * 0.275 - hlcm, B, h * 0.015)
     
     -- General Icons
     surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL_INVERTED"])
@@ -2025,8 +2016,8 @@ local function carbon_pursuit_main( ... )
                 draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
                 draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
             else
-                draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.975 + 2,h * 0.23 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
-                draw.DrawText("#uv.chase.cooldown", "UVCarbonLeaderboardFont",w * 0.975,h * 0.23,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
+                draw.DrawText("#uv.chase.cooldown","UVCarbonLeaderboardFont",w * 0.98 + 2,h * 0.2 + 2,Color(0,0,0),TEXT_ALIGN_RIGHT)
+                draw.DrawText("#uv.chase.cooldown", "UVCarbonLeaderboardFont",w * 0.98,h * 0.2,Colors.Carbon_Accent,TEXT_ALIGN_RIGHT)
             end
         else
             CooldownProgress = 0
@@ -4855,29 +4846,9 @@ local function undercover_pursuit_main( ... )
             
             -- Upper Box
             if not UVHUDCopMode then
-                -- if UVHUDDisplayHidingPrompt then
-                -- surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-                -- surface.SetDrawColor(0, 175, 0, 200)
-                -- surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                
-                -- local blink = 255 * math.Clamp(math.abs(math.sin(RealTime() * 2)), .7, 1)
-                -- color = Color(blink, 255, blink)
-                
-                -- surface.SetDrawColor(130, 199, 74, 124)
-                -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.05)
-                -- draw.DrawText(
-                -- "#uv.chase.hiding",
-                -- "UVFont5UI-BottomBar",
-                -- w * 0.5,
-                -- bottomy,
-                -- color,
-                -- TEXT_ALIGN_CENTER)
-                -- end
-                
                 DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
                 DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
-                
-                -- surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
+
                 surface.SetDrawColor(200, 200, 200, 125)
                 surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
                 
@@ -4885,34 +4856,14 @@ local function undercover_pursuit_main( ... )
                 surface.SetDrawColor(50, 173, 255, 255)
                 
                 surface.DrawRect(w * 0.333, bottomy, T, h * 0.03)
-                
-                -- surface.SetDrawColor(0, 0, 0, 200)
-                -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
-                -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                -- draw.DrawText("#uv.chase.cooldown","UVFont5UI-BottomBar",w * 0.5,bottomy3,Color(255, 255, 255),TEXT_ALIGN_CENTER)
             else
-                local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-                local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
+                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
+                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, 125)) -- Icon
+
+                surface.SetDrawColor(50, 214, 255, 50)
+                surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.04)
                 
-                -- surface.SetDrawColor( shade_theme_color:Unpack() )
-                -- surface.DrawRect( w*0.333, bottomy2, w*0.34, h*0.01)
-                
-                shade_theme_color.a = shade_theme_color.a - 35
-                theme_color.a = theme_color.a - 35
-                
-                local blink = 255 * math.Clamp(math.abs(math.sin(RealTime())), .7, 1)
-                color = Color(blink, blink, 255)
-                
-                surface.SetDrawColor(shade_theme_color:Unpack())
-                surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                
-                surface.SetDrawColor(theme_color:Unpack())
-                
-                surface.SetMaterial(UVMaterials["BACKGROUND"])
-                surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-                
-                local text = lang("uv.chase.cooldown")
-                draw.DrawText(text, "UVFont5UI-BottomBar", w / 2, bottomy3, color, TEXT_ALIGN_CENTER)
+                draw.DrawText("#uv.chase.cooldown", "UVUndercoverWhiteFont", w * 0.5, bottomy - (h * 0.005), Color(255, 255, 255), TEXT_ALIGN_CENTER)
             end
         else
             CooldownProgress = 0
