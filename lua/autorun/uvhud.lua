@@ -279,6 +279,13 @@ function Carbon_FormatRaceTime(curTime)
     end
 end
 
+function UV_FormatRaceEndTime(seconds)
+	if not seconds then return nil end
+	local minutes = math.floor(seconds / 60)
+	local secs = seconds % 60
+	return string.format("%d:%05.2f", minutes, secs)
+end
+
 UV_UI = {}
 
 for _, v in pairs( {'racing', 'pursuit'} ) do
@@ -2116,14 +2123,14 @@ UV_UI.racing.mostwanted.events = {
             
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
-            
+
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
             local entry = {
                 y = yPos,
                 leftText = tostring(i),
                 middleText = name,
-                rightText = totalTime,
+                rightText = UV_FormatRaceEndTime(totalTime),
                 revealTime = revealTime
             }
             
@@ -3616,7 +3623,7 @@ UV_UI.racing.undercover.events = {
             -- Combine pos and name for left column text
             local text = i .. "    " .. name
             
-            table.insert(racersDisplayData, { text = text, value = totalTime, color = LBCol })
+            table.insert(racersDisplayData, { text = text, value = UV_FormatRaceEndTime(totalTime), color = LBCol })
         end
         
         -- Now assign this to the data your paint function uses:
@@ -6087,7 +6094,7 @@ UV_UI.racing.underground.events = {
                 y = yPos,
                 posText = tostring(i),
                 nameText = name,
-                timeText = totalTime
+                timeText = UV_FormatRaceEndTime(totalTime)
             }
             
             table.insert(displaySequence, entry)
@@ -6561,7 +6568,7 @@ UV_UI.racing.underground2.events = {
                 y = yPos,
                 posText = tostring(i),
                 nameText = name,
-                timeText = totalTime,
+                timeText = UV_FormatRaceEndTime(totalTime),
 				color = LC,
 				localPlayer = LP
             }
