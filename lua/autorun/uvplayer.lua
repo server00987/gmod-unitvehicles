@@ -118,18 +118,12 @@ if SERVER then
         for _, v in pairs( ply_array ) do
             
             net.Start('UVUnitTakedown')
-            
-            --[[
-                1. Unit Type
-                2. Name
-                3. Bounty
-                4. Combo
-            ]]
-            net.WriteString( select( 1, ... ) )
-            net.WriteString( select( 2, ... ) )
 
-            net.WriteUInt( select( 3, ... ), 32 )
-            net.WriteUInt( select( 4, ... ), 7 )
+            net.WriteString( select( 1, ... ) ) -- Unit Type
+            net.WriteString( select( 2, ... ) ) -- Name
+            net.WriteUInt( select( 3, ... ), 32 ) -- Bounty
+            net.WriteUInt( select( 4, ... ), 7 ) -- Combo
+            net.WriteBool( select( 5, ... ) ) -- Player
             
             net.Send( v )
             
@@ -957,37 +951,9 @@ else
         local name = net.ReadString()
         local bounty = net.ReadUInt( 32 )
         local bountyCombo = net.ReadUInt( 7 )
+        local isPlayer = net.ReadBool()
 
-        hook.Run( 'UIEventHook', 'pursuit', 'onUnitTakedown', unitType, name, string.Comma( bounty ), bountyCombo )
-
-        -- local lang = language.GetPhrase
-        
-        -- -- local format = net.ReadString()
-        -- -- local icon = net.ReadString()
-        -- -- local args = net.ReadTable()
-        -- local array = net.ReadTable()
-        
-        -- local args = array[3]
-        -- local icon = array[2]
-        -- local format = array[1]
-        
-        -- for k, v in pairs (args) do
-        --     args[k]=lang (v)
-        -- end
-        
-        -- UVCenterNotification = string.format( lang(format), unpack ( args ) )
-        -- UVCenterNotificationIcon = array[2]
-        
-        -- if timer.Exists("UVNotificationTimer") then
-        --     timer.Remove("UVNotificationTimer")
-        -- end
-        
-        -- timer.Create("UVNotificationTimer", 5, 1, function()
-        --     UVCenterNotificationIcon = nil
-        --     UVCenterNotification = nil
-        -- end)
-        
-        --LocalPlayer():PrintMessage( HUD_PRINTCENTER, string.format( lang(format), unpack ( args ) ) )
+        hook.Run( 'UIEventHook', 'pursuit', 'onUnitTakedown', unitType, name, string.Comma( bounty ), bountyCombo, isPlayer)
     end)
     
     net.Receive("UVWeaponJammerEnable", function()

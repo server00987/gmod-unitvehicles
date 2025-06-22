@@ -252,12 +252,8 @@ if SERVER then
 				bountyplus = (UVUBountySpecial:GetInt())*(uvcombobounty)
 			end
 			local bounty = string.Comma(bountyplus)
-			if IsValid(self.e) and isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then
-				if self.v.rhino then
-					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.rhino", v, bountyplus, uvcombobounty)
-				else
-					UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.special", v, bountyplus, uvcombobounty)
-				end
+			if IsValid(self.e) and isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) then
+				UVNotifyCenter({UVGetDriver(self.e)}, "uv.hud.combo", "UNITS_DISABLED", self.v.rhino and "uv.unit.rhino" or "uv.unit.special", v, bountyplus, uvcombobounty, UVGetDriver(self.e):IsPlayer())
 			end
 			uvwrecks = uvwrecks + 1
 			if self.v.IsGlideVehicle then
