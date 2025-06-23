@@ -58,7 +58,8 @@ UVMaterials = {
     ["BACKGROUND_BIGGER"] = Material("unitvehicles/hud/NFSMW_BACKGROUND_BIGGER.png"),
     
     -- Carbon
-    ["NOTI_BG_CARBON"] = Material("unitvehicles/icons_carbon/FULL_CIRCLE.png"),
+    ["TAKEDOWN_CIRCLE_CARBON"] = Material("unitvehicles/icons_carbon/FULL_CIRCLE.png"),
+    ["TAKEDOWN_RING_CARBON"] = Material("unitvehicles/icons_carbon/FULL_CIRCLE_RING.png"),
 	
     ["UNITS_DISABLED_CARBON"] = Material("unitvehicles/icons_carbon/COPS_DESTROYED.png"),
     ["UNITS_CARBON"] = Material("unitvehicles/icons_carbon/COPS_INVOLVED.png"),
@@ -266,8 +267,7 @@ if CLIENT then
 		shadow = true,
 	})
 end
-	
-	
+
 function Carbon_FormatRaceTime(curTime)
     local minutes = math.floor(curTime / 60)
     local seconds = math.floor(curTime % 60)
@@ -294,6 +294,40 @@ for _, v in pairs( {'racing', 'pursuit'} ) do
 end
 
 -- Universal
+function DrawIcon(material, x, y, height_ratio, color, args)
+    local tex = material:GetTexture("$basetexture")
+
+    if tex then
+        local texW, texH = tex:Width(), tex:Height()
+        local aspect = texW / texH
+
+        local desiredHeight = ScrH() * height_ratio
+        local desiredWidth = desiredHeight * aspect
+
+        -- Center coords for DrawTexturedRectRotated
+        local centerX = x
+        local centerY = y
+
+        if color then
+            surface.SetDrawColor(color:Unpack())
+        else
+            surface.SetDrawColor(255, 255, 255)
+        end
+
+        surface.SetMaterial(material, args)
+
+        -- Check if 'args' table contains 'rotation' key
+        if args and args.rotation then
+            surface.DrawTexturedRectRotated(centerX, centerY, desiredWidth, desiredHeight, args.rotation)
+        else
+            -- Adjust x,y for non-rotated draw (top-left corner)
+            local drawX = x - desiredWidth / 2
+            local drawY = y - desiredHeight / 2
+            surface.DrawTexturedRect(drawX, drawY, desiredWidth, desiredHeight)
+        end
+    end
+end
+
 function UVRenderCommander(ent)
     local localPlayer = LocalPlayer()
     local box_color = Color(0, 161, 255)
@@ -1073,10 +1107,12 @@ UV_UI.pursuit.carbon.events = {
 		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
 		isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 		
+		local SID = 0.35
+
 		local carbon_noti_animState = {
 			active = false,
 			startTime = 0,
-			slideInDuration = 0.2,
+			slideInDuration = SID,
 			holdDuration = 3,
 			slideDownDuration = 0.25,
 			upper = {
@@ -1090,6 +1126,55 @@ UV_UI.pursuit.carbon.events = {
 				centerX = ScrW() / 2,
 				y = ScrH() * 0.385,
 				slideDownEndY = ScrH() * 0.635,
+			},
+			ring = {
+				scaleStart = 0.5,
+				scaleEnd = 0.09,
+				alphaStart = 15,
+				alphaEnd = 150,
+				scale = 0.2,
+				alpha = 15,
+				
+				shrinkStart = 0,
+				shrinkDuration = SID,
+				disappearTime = 0.03,
+				reappearDelay = SID + 0.03,
+				expandStartTime = nil,
+				expanded = false,
+				visible = true
+			},
+			ringClone = {
+				createdTime = nil,
+				blinkInterval = 0.125,
+				blinkCount = 0,
+				maxBlinks = 2,
+				scale = 0.085,
+				scaleDuration = 0.6,
+				targetScale = 0.07,
+				alpha = 175,
+				visible = true,
+				fadeAfterBlinkStart = nil,
+			},
+			icon = {
+			  scale = 0.06,
+			  baseScale = 0.06,
+			  overshootScale = 0.07,
+			  alpha = 255,
+			  ExpandDuration = 0.125,
+			},
+			circle = {
+				scaleStart = 0.4,
+				scaleEnd = 0.0575,
+				alphaStart = 15,
+				alphaEnd = 100,
+
+				scale = 0.2,
+				alpha = 15,
+				rotation = 0,
+
+				spinStartTime = nil,
+				spinDuration = 5,
+				drawY = ScrH() / 3.35
 			},
 		}
 
@@ -1148,11 +1233,201 @@ UV_UI.pursuit.carbon.events = {
                 hook.Remove("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN")
             end
 
-			-- NOTI_BG_CARBON
-			surface.SetDrawColor(175, 175, 175)  -- Full white with full alpha
-			surface.SetMaterial(UVMaterials["NOTI_BG_CARBON"])
-			surface.DrawTexturedRectRotated(ScrW() / 2, ScrH() / 3.35, 64, 64, (-CurTime() * 90) % 360)
-            DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, ScrH() / 3.35, 0.06, Color(255, 255, 255))
+			-- Other Elements
+			-- Outer Ring
+			local ring = carbon_noti_animState.ring
+			local elapsed = CurTime() - carbon_noti_animState.startTime
+
+			local mergeEndTime = carbon_noti_animState.slideInDuration
+			local blinkDuration = 0.1 -- total blink time (two blinks)
+			local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
+
+			if elapsed < mergeEndTime then
+				-- Shrinking phase: scale down & alpha up
+				local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
+				ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
+				ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
+			elseif elapsed < mergeEndTime + blinkDuration then
+				-- Blink phase: fade ring out and back in twice
+
+				local blinkElapsed = elapsed - mergeEndTime
+				-- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
+				local phase = (blinkElapsed / blinkInterval) % 2
+				-- Map phase to alpha (1->0->1) using triangle wave
+				local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
+				ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
+
+				-- Keep scale steady during blinking
+				ring.scale = ring.scaleEnd
+			else
+				-- Expansion + fade out phase
+				local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
+				local expandDuration = 0.3
+				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+
+				ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
+				ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
+			end
+
+			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
+
+			-- Outer Ring Duplicate
+			local clone = carbon_noti_animState.ringClone
+
+			-- Spawn clone ring after main ring shrinks
+			if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
+				clone.createdTime = CurTime()
+				clone.blinkCount = 0
+			end
+
+			if clone.createdTime then
+				local cloneElapsed = CurTime() - clone.createdTime
+				local blinkCycle = clone.blinkInterval * 2
+
+				-- Blinking logic
+				if clone.blinkCount < clone.maxBlinks then
+					local blinkCycle = clone.blinkInterval * 2
+					local cloneElapsed = CurTime() - clone.createdTime
+					local cycleTime = cloneElapsed % blinkCycle
+
+					if cycleTime < clone.blinkInterval then
+						-- Pop in (fully opaque)
+						clone.alpha = 255
+					else
+						-- Fade out during second half of the cycle
+						local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
+						clone.alpha = Lerp(fadeT, 255, 0)
+					end
+
+					-- Count completed full blink cycles
+					local completedCycles = math.floor(cloneElapsed / blinkCycle)
+					if completedCycles > clone.blinkCount then
+						clone.blinkCount = completedCycles
+					end
+
+				else
+					-- After blinking ends, fade from 255 to ring.alphaEnd
+					if not clone.fadeAfterBlinkStart then
+						clone.fadeAfterBlinkStart = CurTime()
+					end
+
+					local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
+					clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
+				end
+
+				-- Gradual scale-down over total blink duration
+				local totalDuration = clone.scaleDuration
+				local scaleT = math.min(cloneElapsed / totalDuration, 1)
+				clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
+
+				-- Apply final slide down and fade for clone ring (matching text timing)
+				local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
+				if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+					local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
+					local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
+
+					-- Move the clone downward (same offset as text)
+					local slideOffset = Lerp(t, 0, ScrH() * 0.2)
+					clone.drawY = (ScrH() / 3.35) + slideOffset
+
+					-- Fade out over time
+					clone.alpha = Lerp(t, clone.alpha, 0)
+				else
+					clone.drawY = ScrH() / 3.35 -- stay at normal position
+				end
+
+				if clone.visible then
+					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
+				end
+			end
+
+			-- Inner Circle
+			local circle = carbon_noti_animState.circle
+			local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
+
+			-- Step 1: Animate scale + alpha like ring
+			if elapsed < carbon_noti_animState.slideInDuration then
+				circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
+				circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
+			end
+
+			-- Step 2: Start spinning after 4.1 is done blinking
+			local clone = carbon_noti_animState.ringClone
+			local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
+
+			if CurTime() > blinkDoneTime and not circle.spinStartTime then
+				circle.spinStartTime = CurTime()
+			end
+
+			if circle.spinStartTime then
+				local spinElapsed = CurTime() - circle.spinStartTime
+				local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
+				circle.rotation = Lerp(spinT, 0, -360)
+			end
+
+			-- Step 3: Follow slide down like Element 4.1
+			if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+				local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+				local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
+				circle.drawY = (ScrH() / 3.35) + slideOffset
+				circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
+			end
+
+			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
+
+			-- Takedown Icon
+			local icon = carbon_noti_animState.icon
+			local elapsed = CurTime() - carbon_noti_animState.startTime
+
+			local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+			local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
+
+			local slideOffset = 0
+			if elapsed > slideDownStart and elapsed < slideDownEnd then
+				local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+				slideOffset = Lerp(t, 0, ScrH() * 0.2)
+			elseif elapsed >= slideDownEnd then
+				slideOffset = ScrH() * 0.2
+			end
+
+			local currentY = (ScrH() / 3.35) + slideOffset
+			local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+			local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+
+			-- 1) Initial: fully visible
+			if elapsed < carbon_noti_animState.slideInDuration then
+				icon.scale = icon.baseScale
+				icon.alpha = 255
+
+			-- 2) Shrink to 0 instantly when Element 4 finishes shrinking
+			elseif elapsed < shrinkEnd then
+				icon.scale = 0  -- instant shrink
+				icon.alpha = 255
+
+			-- 3) Expand with overshoot during Element 4 expand
+			elseif elapsed < expandEnd then
+				local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+				local expandElapsed = elapsed - expandStart
+				local expandDuration = carbon_noti_animState.icon.ExpandDuration
+				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+
+				if t < 0.8 then
+					icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
+				else
+					icon.scale = icon.baseScale
+				end
+
+				icon.alpha = 255
+
+			-- 4) Slide down with element 4.1, fade out alpha
+			elseif elapsed < slideDownEnd then
+				local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+				icon.alpha = Lerp(fadeT, 255, 0)
+			else
+				icon.alpha = 0
+			end
+
+			DrawIcon(UVMaterials["UNITS_DISABLED"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
         end)
     end,
     onUnitDeploy = function(...)

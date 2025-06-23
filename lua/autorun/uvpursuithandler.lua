@@ -2114,7 +2114,15 @@ if SERVER then
 					net.Send(uvplayerunittableplayers)
 				else --escaped
 					for k, v in pairs(player.GetAll()) do
-						print(v:GetName().." ("..string.Comma(uvbounty).." Bounty, "..uvwrecks.." Wreck(s), "..uvtags.." Tags(s)) has escaped from the Unit Vehicles with a time of "..timeformatted.."!")
+						print(v:GetName().." Evaded!\n" .. 
+						"Total Bounty - " .. string.Comma(uvbounty).."\n" .. 
+						"Pursuit Duration - " .. timeformatted .. "\n" ..
+						"Police Vehicles Involved - " .. uvdeploys .. "\n" ..
+						"Damaged Police Vehicles - " .. uvtags .. "\n" ..
+						"Immobilized Police Vehicles - " .. uvwrecks .. "\n" ..
+						"Roadblocks Dodged - " .. uvroadblocksdodged .. "\n" ..
+						"Spike Strips Dodged - " .. uvspikestripsdodged
+						)
 					end
 					local escapedtable = {}
 					escapedtable["Deploys"] = uvdeploys
@@ -2805,31 +2813,7 @@ else --HUD/Options
 	local UVHUDMilestoneSpikestrips = Material("unitvehicles/icons/MILESTONE_SPIKESTRIPS.png")
 	local UVHUDPursuitBreaker = Material("unitvehicles/icons/WORLD_PURSUITBREAKER.png")
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
-	
-	function DrawIcon(material, x, y, height_ratio, color, args)
-		local tex = material :GetTexture("$basetexture")
-		
-		if tex then
-			local texW, texH = tex:Width(), tex:Height()
-			local aspect = texW / texH
-			
-			local desiredHeight = ScrH() * height_ratio
-			local desiredWidth = desiredHeight * aspect
-			
-			local x = x - desiredWidth / 2
-			local y = y - desiredHeight / 2
-			
-			if color then
-				surface.SetDrawColor(color:Unpack())
-			else
-				surface.SetDrawColor(255,255,255)
-			end
-			
-			surface.SetMaterial(material, args)
-			surface.DrawTexturedRect(x, y, desiredWidth, desiredHeight)
-		end
-	end
-	
+
 	concommand.Add("uv_keybinds", function( ply, cmd, slot )
 		if IsSettingKeybind then
 			notification.AddLegacy( "You are already setting a keybind!", NOTIFY_ERROR, 5 )
