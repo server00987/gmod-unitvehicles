@@ -31,6 +31,7 @@ local Colors = {
 UVMaterials = {
     ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
     
+    ["GLOW_ICON"] = Material("unitvehicles/icons/CIRCLE_GLOW_LIGHT.png"),
     ["UNITS_DAMAGED"] = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png"),
     ["UNITS_DISABLED"] = Material("unitvehicles/icons/COPS_TAKENOUT_ICON.png"),
     ["UNITS"] = Material("unitvehicles/icons/COPS_ICON.png"),
@@ -531,7 +532,7 @@ local function mw_noti_draw(text, font, x, y, color)
     
     for i, line in ipairs(lines) do
         local w,h = surface.GetTextSize(line)
-        draw.SimpleText(line, font, x - w/2, currentY, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         currentY = currentY + h
     end
 end
@@ -1069,39 +1070,84 @@ UV_UI.racing.carbon.events = {
 
 UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
-        
+		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
+		isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
+		
+		local carbon_noti_animState = {
+			active = false,
+			startTime = 0,
+			slideInDuration = 0.2,
+			holdDuration = 3,
+			slideDownDuration = 0.25,
+			upper = {
+				startX = ScrW() * 0.25,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.35,
+				slideDownEndY = ScrH() * 0.6,
+			},
+			lower = {
+				startX = ScrW() * 0.75,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.385,
+				slideDownEndY = ScrH() * 0.635,
+			},
+		}
+
+        UV_UI.pursuit.carbon.events.carbon_noti_animState = carbon_noti_animState
+        carbon_noti_animState.active = true
+        carbon_noti_animState.startTime = CurTime()
+
         ----------------------------------------------------------------------------
         
-        if timer.Exists( 'CARBON_NOTIFICATION_TAKEDOWN_TIMER' ) then timer.Remove( "CARBON_NOTIFICATION_TAKEDOWN_TIMER" ) end 
-        
-        timer.Create( "CARBON_NOTIFICATION_TAKEDOWN_TIMER", 5, 1, function()
-            hook.Remove( "HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN" )
-        end)
-        
-        local hooks = hook.GetTable()
-        if hooks.HUDPaint and hooks.HUDPaint.CARBON_NOTIFICATION_TAKEDOWN then return end
-        
+        -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
+        if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.CARBON_NOTIFICATION_TAKEDOWN then
+            hook.Remove("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN")
+        end
+
+        -- Add the HUDPaint hook freshly for this animation
         hook.Add("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN", function()
-            carbon_noti_draw(
-				UV_UI.pursuit.carbon.states.TakedownText,
-				"UVCarbonFont",
-				"UVCarbonFont-Smaller",
-				ScrW() / 2 + 2,
-				ScrH() / 2.7 + 2,
-				Color(0, 0, 0),
-				Color(0, 0, 0)
-			)
-			carbon_noti_draw(
-				UV_UI.pursuit.carbon.states.TakedownText,
-				"UVCarbonFont",
-				"UVCarbonFont-Smaller",
-				ScrW() / 2,
-				ScrH() / 2.7,
-				Color(255, 255, 255),
-				Color(175, 175, 175)
-			)
-			
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+
+            local function calcPosAlpha(elapsed, elem)
+                local x, y, alpha = elem.centerX, elem.y, 255
+                if elapsed < carbon_noti_animState.slideInDuration then
+                    local t = elapsed / carbon_noti_animState.slideInDuration
+                    x = Lerp(t, elem.startX, elem.centerX)
+                    alpha = Lerp(t, 0, 255)
+                elseif elapsed < carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                    x = elem.centerX
+                    alpha = 255
+                elseif elapsed < carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
+                    local t = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+                    y = Lerp(t, elem.y, elem.slideDownEndY)
+                    alpha = Lerp(t, 255, 0)
+                else
+                    alpha = 0
+                end
+                return x, y, alpha
+            end
+
+            local lines = string.Explode("\n", UV_UI.pursuit.carbon.states.TakedownText or "")
+            if #lines < 2 then return end
+			local upperLine = lines[1] or ""
+			local lowerLine = lines[2] or ""
+
+			-- Upper
+            local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+
+			-- Lower
+            local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
+            carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
+            carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx, ly, Color(175, 175, 175, lalpha), nil)
+
+            -- Disable animation and remove hook when done
+            if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
+                carbon_noti_animState.active = false
+                hook.Remove("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN")
+            end
+
 			-- NOTI_BG_CARBON
 			surface.SetDrawColor(175, 175, 175)  -- Full white with full alpha
 			surface.SetMaterial(UVMaterials["NOTI_BG_CARBON"])
@@ -2435,25 +2481,111 @@ end
 }
 
 UV_UI.pursuit.mostwanted.events = {
+	notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-        UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
-        
+        UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ),
+		isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
+
+		UV_UI.pursuit.mostwanted.events.notifState = {
+			active = true,
+			startTime = CurTime(),
+			fadeStartTime = nil,
+
+			phase1Duration = 2.5,
+			fadeDuration = 0.3,
+			startY = ScrH() * 0.325,
+			midY = ScrH() * 0.4,
+			finalY = ScrH() * 0.9,
+
+			randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+			randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+			randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+			centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
+
+			burstDuration = 0.025,
+			burstDuration2 = 0.025,
+			toCenterDuration = 0.1,
+			holdDuration = 2.3,
+		}
+
+
+		local notifState = UV_UI.pursuit.mostwanted.events.notifState
+
         ----------------------------------------------------------------------------
-        
+
         if timer.Exists( 'MW_NOTIFICATION_TAKEDOWN_TIMER' ) then timer.Remove( "MW_NOTIFICATION_TAKEDOWN_TIMER" ) end 
         
-        timer.Create( "MW_NOTIFICATION_TAKEDOWN_TIMER", 5, 1, function()
+        timer.Create( "MW_NOTIFICATION_TAKEDOWN_TIMER", 3, 1, function()
             hook.Remove( "HUDPaint", "MW_NOTIFICATION_TAKEDOWN" )
+			notifState.active = false
         end)
         
-        local hooks = hook.GetTable()
-        if hooks.HUDPaint and hooks.HUDPaint.MW_NOTIFICATION_TAKEDOWN then return end
-        
-        hook.Add("HUDPaint", "MW_NOTIFICATION_TAKEDOWN", function()
-            mw_noti_draw( UV_UI.pursuit.mostwanted.states.TakedownText, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)) )
-            DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, ScrH() / 3.2, 0.06, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-        end)
-    end,
+		hook.Add("HUDPaint", "MW_NOTIFICATION_TAKEDOWN", function()
+			local now = CurTime()
+			local elapsed = now - notifState.startTime
+			local pos = Vector()
+			local alpha = 255
+
+			if elapsed < notifState.burstDuration then
+				-- Phase 1: teleport at randomStart
+				pos = notifState.randomStart
+
+			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
+				-- Phase 2: teleport at randomBurst1
+				pos = notifState.randomBurst1
+
+			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
+				-- Phase 3: teleport at randomBurst2
+				pos = notifState.randomBurst2
+
+			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
+				-- Phase 4: gradual downward motion from midY to finalY (no fade)
+				local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
+				local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
+				pos = Vector(
+					notifState.centerPos.x,
+					Lerp(t, notifState.startY, notifState.midY),
+					0
+				)
+				alpha = 255
+
+			else
+				-- Phase 5: smooth fall + fade (as before)
+				if not notifState.fadeStartTime then
+					notifState.fadeStartTime = now
+				end
+
+				local fadeElapsed = now - notifState.fadeStartTime
+				local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+
+				pos = Vector(
+					notifState.centerPos.x,
+					Lerp(t, notifState.midY, notifState.finalY),
+					0
+				)
+				alpha = Lerp(t, 255, 0)
+			end
+
+			mw_noti_draw(UV_UI.pursuit.mostwanted.states.TakedownText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
+			
+			local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
+			local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
+			local iconDiffY = ScrH() * 0.045
+			local iconStartY = notifState.startY - iconDiffY
+			local iconY
+			if not notifState.fadeStartTime then
+				local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
+				iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
+			else
+				local fadeElapsed = now - notifState.fadeStartTime
+				local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+				iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+			end
+
+			DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
+			DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+		end)
+	end,
     onUnitWreck = function(...)
         
         hook.Remove("Think", "MW_WRECKS_COLOR_PULSE")
