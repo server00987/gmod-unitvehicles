@@ -1213,7 +1213,7 @@ UV_UI.pursuit.carbon.events = {
             end
 
             local lines = string.Explode("\n", UV_UI.pursuit.carbon.states.TakedownText or "")
-            if #lines < 2 then return end
+            if #lines < 1 then return end
 			local upperLine = lines[1] or ""
 			local lowerLine = lines[2] or ""
 
