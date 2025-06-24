@@ -604,6 +604,35 @@ local function carbon_noti_draw(text, font, font2, x, y, color, color2)
     end
 end
 
+local function DrawScaledCenteredTextLines(text, font, x, y, color, scale)
+    surface.SetFont(font)
+    local lines = string.Explode("\n", text)
+    local totalHeight = 0
+    local lineHeights, lineWidths = {}, {}
+
+    for _, line in ipairs(lines) do
+        local w, h = surface.GetTextSize(line)
+        table.insert(lineWidths, w)
+        table.insert(lineHeights, h)
+        totalHeight = totalHeight + h
+    end
+
+    local currentY = y - totalHeight * scale / 2
+
+    for i, line in ipairs(lines) do
+        local w, h = lineWidths[i], lineHeights[i]
+        local mat = Matrix()
+        mat:Scale(Vector(scale, scale, 1))
+        mat:SetTranslation(Vector(x - w / 2 * scale, currentY, 0))
+
+        cam.PushModelMatrix(mat)
+            draw.SimpleText(line, font, 0, 0, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        cam.PopModelMatrix()
+
+        currentY = currentY + h * scale
+    end
+end
+
 UV_UI.general = {}
 
 local function uv_general( ... )
@@ -4257,20 +4286,90 @@ UV_UI.pursuit.undercover.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
         UV_UI.pursuit.undercover.states.TakedownText = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 
+        local anim = {
+            startTime = CurTime(),
+            duration = 3,
+            endTime = CurTime() + 3,
+
+			phase1Time = 0.1,
+			phase2Time = 0.2,       -- ends at 0.2
+			pulseDuration = 2.5,    -- from 0.2 to 1.4
+			fadeDuration = 0.5,     -- from 1.4 to 1.9
+			pulses = 3,
+
+			scaleIn = 1.3,
+			scaleMid = 1.0,
+			scaleBreathIn = 0.95,
+			scaleBreathOut = 1.05,
+			scaleExit = 0.1
+        }
+
+        UV_UI.pursuit.undercover.states.TakedownAnim = anim
+
         ----------------------------------------------------------------------------
-        
-        if timer.Exists( 'UNDERCOVER_NOTIFICATION_TAKEDOWN_TIMER' ) then timer.Remove( "UNDERCOVER_NOTIFICATION_TAKEDOWN_TIMER" ) end 
-        
-        timer.Create( "UNDERCOVER_NOTIFICATION_TAKEDOWN_TIMER", 5, 1, function()
-            hook.Remove( "HUDPaint", "UNDERCOVER_NOTIFICATION_TAKEDOWN" )
-        end)
-        
-        local hooks = hook.GetTable()
-        if hooks.HUDPaint and hooks.HUDPaint.UNDERCOVER_NOTIFICATION_TAKEDOWN then return end
-        
+
         hook.Add("HUDPaint", "UNDERCOVER_NOTIFICATION_TAKEDOWN", function()
-            mw_noti_draw( UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", ScrW() / 2 + 1, ScrH() / 2.7 + 1, Color(0, 0, 0) )
-            mw_noti_draw( UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", ScrW() / 2, ScrH() / 2.7, Color(50, 255, 50, 255 - math.abs( math.sin(CurTime() * 3) * 120)) )
+            local a = UV_UI.pursuit.undercover.states.TakedownAnim
+            if not a then return end
+
+            local now = CurTime()
+            local t = now - a.startTime
+            if now >= a.endTime then
+                UV_UI.pursuit.undercover.states.TakedownAnim = nil
+                hook.Remove("HUDPaint", "UNDERCOVER_NOTIFICATION_TAKEDOWN")
+                return
+            end
+
+            -- Phase logic
+			local scale = scale or a.scaleMid
+			local alpha = alpha or 255
+			local offsetY = offsetY or 0
+			local baseColor = Color(50, 255, 50)
+			local t = CurTime() - a.startTime
+			local phase3Start = a.phase2Time
+			local phase3End = a.phase2Time + a.pulseDuration
+			local phase4Start = phase3End
+			local phase4End = a.endTime
+
+			-- Phase 1: Initial white burst
+			if t < a.phase1Time then
+				scale = a.scaleIn
+				alpha = 255
+				baseColor = Color(255, 255, 255)
+
+			-- Phase 2: Snap to green and shrink quickly
+			elseif t < a.phase2Time then
+				local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
+				scale = Lerp(p, a.scaleIn, a.scaleMid)
+				alpha = 255
+
+			-- Phase 3: Breathing pulses
+			elseif t < phase3End then
+				local p = (t - phase3Start) / a.pulseDuration
+				local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
+
+				if pulseT < 0.6 then
+					-- Inhale
+					scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
+				else
+					-- Exhale
+					scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+				end
+				alpha = 255
+
+			-- Phase 4: Fade out, shrink, and move up
+			elseif t < phase4End then
+				local p = (t - phase4Start) / a.fadeDuration
+				scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
+				alpha = Lerp(p, 255, 0)
+				offsetY = Lerp(p, 0, -30)
+			end
+
+            local shadowColor = Color(0, 0, 0, alpha)
+            local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
+
+            DrawScaledCenteredTextLines(UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", x + 2, y + 2, shadowColor, scale)
+            DrawScaledCenteredTextLines(UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", x, y, baseColor, scale)
         end)
     end,
     onUnitDeploy = function(...)
