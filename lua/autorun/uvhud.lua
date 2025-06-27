@@ -282,9 +282,15 @@ end
 
 function UV_FormatRaceEndTime(seconds)
 	if not seconds then return nil end
-	local minutes = math.floor(seconds / 60)
-	local secs = seconds % 60
-	return string.format("%d:%05.2f", minutes, secs)
+	if type(seconds) == "string" then
+		return seconds
+	elseif type(seconds) == "number" then
+		local minutes = math.floor(seconds / 60)
+		local secs = seconds % 60
+		return string.format("%d:%05.2f", minutes, secs)
+	else
+		return "NIL"
+	end
 end
 
 UV_UI = {}
@@ -1022,7 +1028,7 @@ UV_UI.racing.carbon.events = {
                 local info = racer.array or racer  -- fallback if 'array' doesn't exist
                 
                 local name = info["Name"] or "Unknown"
-                local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+                local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
                 
                 if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
                 
@@ -2472,7 +2478,7 @@ UV_UI.racing.mostwanted.events = {
             or h2 + math.floor((visibleIndex - 1) / 2) * h * 0.08
             
             local name = info["Name"] or "Unknown"
-            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
 
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
@@ -4048,7 +4054,7 @@ UV_UI.racing.undercover.events = {
             local LBCol = Color(255, 255, 255)
             
             local name = info["Name"] or "Unknown"
-            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
@@ -6592,7 +6598,7 @@ UV_UI.racing.underground.events = {
 			local yPos = h*0.08 + (i - 1) * rowHeight
 
             local name = info["Name"] or "Unknown"
-            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
@@ -7061,7 +7067,7 @@ UV_UI.racing.underground2.events = {
 			local LP, LC = false, Color(255, 255, 255)
 
             local name = info["Name"] or "Unknown"
-            local totalTime = info["TotalTime"] and string.format("%.2f", info["TotalTime"]) or "#uv.race.suffix.dnf"
+            local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
