@@ -1106,8 +1106,9 @@ else
             
             if driver == LocalPlayer() then
                 local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+				local mutesfx = GetConVar("unitvehicle_mutecheckpointsfx"):GetBool()
                 local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/checkpointpass/*", "GAME" )
-				if #soundfiles > 0 then
+				if not mutesfx and #soundfiles > 0 then
 					surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
 				end
             end

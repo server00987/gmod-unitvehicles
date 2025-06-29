@@ -503,7 +503,7 @@ if SERVER then
 	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will have their own tags which you can see as a cop during pursuits.")
 	RacerPursuitTech = CreateConVar("unitvehicle_racerpursuittech", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
 	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
-	
+	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
 	
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -2466,6 +2466,7 @@ else --HUD/Options
 	RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers will have their own tags which you can see as a cop during pursuits.")
 	RacerPursuitTech = CreateClientConVar("unitvehicle_racerpursuittech", 1, true, false, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
 	RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
+	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
 	
 	-- unit convars
 	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -4149,6 +4150,10 @@ else --HUD/Options
 			uistylepursuit:AddChoice( "Undercover", "undercover")
 			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
 			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
+			
+			panel:Help("#uv.settings.audio.title")
+			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_playmusic")
+			panel:ControlHelp("#uv.settings.audio.mutecp.desc")
 			
 			panel:Help("#uv.settings.music")
 			panel:Help("#uv.settings.ptech.keybinds")

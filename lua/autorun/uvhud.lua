@@ -1072,19 +1072,19 @@ UV_UI.racing.carbon.events = {
             
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "CheckJumpKeyForResults")
                 AnimateAndRemovePanel(ResultPanel)
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "CheckJumpKeyForResults")
             AnimateAndRemovePanel(ResultPanel)
         end
         
         local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
+        hook.Add("Think", "CheckJumpKeyForResults", function()
             local ply = LocalPlayer()
             if not IsValid(ply) then return end
             
@@ -2701,7 +2701,7 @@ UV_UI.racing.mostwanted.events = {
             )
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
                     surface.PlaySound( "uvui/mw/closemenu.wav" )
                     closing = true
@@ -2720,7 +2720,7 @@ UV_UI.racing.mostwanted.events = {
     if closing then
         local elapsed = curTime - closeStartTime
         if elapsed >= totalRevealTime then
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "CheckJumpKeyForResults")
             if IsValid(ResultPanel) then
                 ResultPanel:Close()
             end
@@ -3970,7 +3970,7 @@ UV_UI.racing.undercover.events = {
         local function CloseResults()
             if IsValid(ResultPanel) then ResultPanel:Close() end
             if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "CheckJumpKeyForResults")
         end
         
         local closing = false
@@ -4235,7 +4235,7 @@ UV_UI.racing.undercover.events = {
         -- end
         
         local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
+        hook.Add("Think", "CheckJumpKeyForResults", function()
             local ply = LocalPlayer()
             if not IsValid(ply) then return end
             
@@ -6636,7 +6636,7 @@ UV_UI.racing.underground.events = {
 				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
 				
 				if elapsedFade >= fadeDuration then
-					hook.Remove("Think", "CheckJumpKeyForDebrief")
+					hook.Remove("Think", "CheckJumpKeyForResults")
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 					end
@@ -6720,7 +6720,7 @@ UV_UI.racing.underground.events = {
             draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
 
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
                     surface.PlaySound( "uvui/mw/closemenu.wav" )
                     closing = true
@@ -6738,7 +6738,7 @@ UV_UI.racing.underground.events = {
 	-- end
 
 	local wasJumping = false
-	hook.Add("Think", "CheckJumpKeyForDebrief", function()
+	hook.Add("Think", "CheckJumpKeyForResults", function()
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 		
@@ -7112,7 +7112,7 @@ UV_UI.racing.underground2.events = {
 				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
 				
 				if elapsedFade >= fadeDuration then
-					hook.Remove("Think", "CheckJumpKeyForDebrief")
+					hook.Remove("Think", "CheckJumpKeyForResults")
 					if IsValid(ResultPanel) then
 						ResultPanel:Close()
 					end
@@ -7198,7 +7198,7 @@ UV_UI.racing.underground2.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
 
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
                     surface.PlaySound( "uvui/mw/closemenu.wav" )
                     closing = true
@@ -7216,7 +7216,7 @@ UV_UI.racing.underground2.events = {
 	-- end
 
 	local wasJumping = false
-	hook.Add("Think", "CheckJumpKeyForDebrief", function()
+	hook.Add("Think", "CheckJumpKeyForResults", function()
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 		
