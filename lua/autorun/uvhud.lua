@@ -1030,7 +1030,7 @@ UV_UI.racing.carbon.events = {
             
             draw.DrawText( "#uv.results.race.pos.caps", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
             draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.4, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-            draw.DrawText( "#uv.results.race.time.caps, "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+            draw.DrawText( "#uv.results.race.time.caps", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
             
             -- Draw visible racer entries
             local startIndex = scrollOffset + 1
