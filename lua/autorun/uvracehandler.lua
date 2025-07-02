@@ -1296,7 +1296,12 @@ else
 			return
 		end
 		
-        hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+		local lap_final = false
+		if (total_laps > 1 and new_lap == total_laps) then 
+			lap_final = true
+		end
+		
+        hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
     end)
     
     net.Receive( "uvrace_start", function()

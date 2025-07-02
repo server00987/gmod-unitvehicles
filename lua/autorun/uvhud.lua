@@ -986,6 +986,7 @@ UV_UI.racing.carbon.events = {
         end)
         
         ResultPanel.Paint = function(self, w, h)
+			local alttext = math.floor(CurTime() / 5) % 2 == 1
             local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
             local lang = language.GetPhrase
             
@@ -1029,8 +1030,7 @@ UV_UI.racing.carbon.events = {
             
             draw.DrawText( "#uv.results.race.pos.caps", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
             draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.4, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-            
-            draw.DrawText( "#uv.results.race.time.caps", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+            draw.DrawText( "#uv.results.race.time.caps, "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
             
             -- Draw visible racer entries
             local startIndex = scrollOffset + 1
@@ -1061,7 +1061,7 @@ UV_UI.racing.carbon.events = {
                 
                 draw.SimpleText(tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
                 draw.SimpleText(name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-                draw.SimpleText(totalTime, "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+                draw.SimpleText(UV_FormatRaceEndTime(totalTime), "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
             end
             
             -- Time remaining and closing
@@ -1496,6 +1496,7 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 
 UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		if UVHUDDisplayRacing then return end
 		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
 		isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 		
@@ -3153,7 +3154,7 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 	-- if is_local_player then
 		-- name = "YOU"
 	-- end
-	
+
 	if is_global_best then
 		UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
 	else
@@ -3269,6 +3270,7 @@ end
 UV_UI.pursuit.mostwanted.events = {
 	notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		if UVHUDDisplayRacing then return end
         UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ),
 		isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
 
@@ -4399,6 +4401,10 @@ UV_UI.pursuit.undercover.states = {
     TakedownText = nil,
 }
 
+UV_UI.racing.undercover.states = {
+    LapCompleteText = nil,
+}
+
 UV_UI.racing.undercover.events = {
     ShowResults = function(sortedRacers) -- Undercover
         if UVHUDDisplayRacing then return end
@@ -4757,11 +4763,115 @@ UV_UI.racing.undercover.events = {
                 UV_UI.racing.undercover.events.ShowResults(sortedRacers)
             end
         end)
+    end,
+
+onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+	-- if is_local_player then
+		-- name = "YOU"
+	-- end
+	
+	if is_global_best then
+		UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+	else
+		if is_local_player then
+			UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+		else
+			return
+		end
+	end
+
+        local anim = {
+            startTime = CurTime(),
+            duration = 3,
+            endTime = CurTime() + 3,
+
+			phase1Time = 0.1,
+			phase2Time = 0.2,       -- ends at 0.2
+			pulseDuration = 2.5,    -- from 0.2 to 1.4
+			fadeDuration = 0.5,     -- from 1.4 to 1.9
+			pulses = 3,
+
+			scaleIn = 1.3,
+			scaleMid = 1.0,
+			scaleBreathIn = 0.95,
+			scaleBreathOut = 1.05,
+			scaleExit = 0.1
+        }
+
+        UV_UI.racing.undercover.states.LapCompleteAnim = anim
+
+        ----------------------------------------------------------------------------
+
+        hook.Add("HUDPaint", "UNDERCOVER_NOTIFICATION_LAPTIME", function()
+            local a = UV_UI.racing.undercover.states.LapCompleteAnim
+            if not a then return end
+
+            local now = CurTime()
+            local t = now - a.startTime
+            if now >= a.endTime then
+                UV_UI.racing.undercover.states.LapCompleteAnim = nil
+                hook.Remove("HUDPaint", "UNDERCOVER_NOTIFICATION_LAPTIME")
+                return
+            end
+
+            -- Phase logic
+			local scale = scale or a.scaleMid
+			local alpha = alpha or 255
+			local offsetY = offsetY or 0
+			local baseColor = Color(0,194,255)
+			local t = CurTime() - a.startTime
+			local phase3Start = a.phase2Time
+			local phase3End = a.phase2Time + a.pulseDuration
+			local phase4Start = phase3End
+			local phase4End = a.endTime
+
+			-- Phase 1: Initial white burst
+			if t < a.phase1Time then
+				scale = a.scaleIn
+				alpha = 255
+				baseColor = Color(255, 255, 255)
+
+			-- Phase 2: Snap to green and shrink quickly
+			elseif t < a.phase2Time then
+				local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
+				scale = Lerp(p, a.scaleIn, a.scaleMid)
+				alpha = 255
+
+			-- Phase 3: Breathing pulses
+			elseif t < phase3End then
+				local p = (t - phase3Start) / a.pulseDuration
+				local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
+
+				if pulseT < 0.6 then
+					-- Inhale
+					scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
+				else
+					-- Exhale
+					scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+				end
+				alpha = 255
+
+			-- Phase 4: Fade out, shrink, and move up
+			elseif t < phase4End then
+				local p = (t - phase4Start) / a.fadeDuration
+				scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
+				alpha = Lerp(p, 255, 0)
+				offsetY = Lerp(p, 0, -30)
+			end
+
+            local shadowColor = Color(0, 0, 0, alpha)
+            local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
+
+            DrawScaledCenteredTextLines(UV_UI.racing.undercover.states.LapCompleteText, "UVUndercoverWhiteFont", x + 2, y + 2, shadowColor, scale)
+            DrawScaledCenteredTextLines(UV_UI.racing.undercover.states.LapCompleteText, "UVUndercoverWhiteFont", x, y, baseColor, scale)
+        end)
     end
 }
 
 UV_UI.pursuit.undercover.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		if UVHUDDisplayRacing then return end
         UV_UI.pursuit.undercover.states.TakedownText = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 
         local anim = {
