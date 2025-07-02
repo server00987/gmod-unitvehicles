@@ -5,6 +5,11 @@ local UVRacePlayMusic = false
 local UVRacePlayTransition = false
 
 local showhud = GetConVar("cl_drawhud")
+	
+if CLIENT then -- For Global Best Lap
+	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
+	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
+end
 
 if SERVER then
     UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
@@ -929,9 +934,9 @@ else
 		local lang = language.GetPhrase
 		
         if timedifference != 0 then
-            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap.new"), driver), Color(0, 255, 255), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
+            -- chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap.new"), driver), Color(0, 255, 255), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
         else
-            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap"), driver), Color(0, 255, 255), UVDisplayTimeRace(time))
+            -- chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.newbestlap"), driver), Color(0, 255, 255), UVDisplayTimeRace(time))
         end
     end)
     
@@ -1147,7 +1152,7 @@ else
                 }
                 
                 local place_array = PlaceStrings[place] or PlaceStrings[4]
-                chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], lang("uv.race.pos.num." .. place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))
+                -- chat.AddText(Color(255,255,255), UVHUDRaceInfo['Participants'][participant].Name, lang("uv.race.finishtext.1"), place_array[1], lang("uv.race.pos.num." .. place), Color(255,255,255), lang("uv.race.finishtext.2"), Color(0,255,0), UVDisplayTimeRace(time))
 
                 local driver = participant:GetDriver()
                 local is_local_player = IsValid(driver) and driver == LocalPlayer()
@@ -1211,8 +1216,22 @@ else
             UVHUDRaceInfo['Info'].Started = true
             UVHUDRaceInfo['Info'].Time = time
         end
+
+		-- Reset best lap times and other lap data on race start
+		if CLIENT then
+			UVHUDGlobalBestLapTime = nil
+			UVHUDGlobalBestLapHolder = nil
+		end
+		
+		if UVHUDRaceInfo and UVHUDRaceInfo['Participants'] then
+			for participant, data in pairs(UVHUDRaceInfo['Participants']) do
+				data.BestLapTime = nil
+				data.LastLapTime = nil
+				data.LastLapCurTime = nil
+			end
+		end
     end)
-    
+
     net.Receive( "uvrace_lapcomplete", function()
         local participant = net.ReadEntity()
         local time = net.ReadFloat()
@@ -1232,12 +1251,6 @@ else
             if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
                 UVHUDRaceInfo['Participants'][participant].Lap = UVHUDRaceInfo['Participants'][participant].Lap +1
 
-                -- if not UVHUDRaceInfo['Participants'][participant].LastLapTime then
-                --     UVHUDRaceInfo['Participants'][participant].LastLapTime = time
-                --     UVHUDRaceInfo['Participants'][participant].BestLapTime = time
-                -- elseif time < UVHUDRaceInfo['Participants'][participant].BestLapTime then
-                --     UVHUDRaceInfo['Participants'][participant].BestLapTime = time
-                -- end
                 if not UVHUDRaceInfo['Participants'][participant].BestLapTime or UVHUDRaceInfo['Participants'][participant].LastLapTime > time then
                     UVHUDRaceInfo['Participants'][participant].BestLapTime = time
                 end
@@ -1252,25 +1265,38 @@ else
         end
         
         local address = ((IsValid(participant) and participant:GetDriver() == LocalPlayer() and lang("uv.race.you")) or (UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] and UVHUDRaceInfo['Participants'][participant].Name))
-        
-        if UVHUDLastLapTime == nil then
-            chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.laptime"), address), Color(0, 255, 0), UVDisplayTimeRace(time))
-            UVHUDLastLapTime = time
-            UVHUDBestLapTime = time
-        else
-            if time < UVHUDBestLapTime then
-                local timedifference = UVHUDBestLapTime - time
-                chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.bestlap"), address), Color(0, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (-"..math.Round(timedifference, 3)..")")
-                UVHUDLastLapTime = time
-                UVHUDBestLapTime = time
-            else
-                local timedifference = time - UVHUDBestLapTime
-                chat.AddText(Color(255, 255, 255), string.format(lang("uv.race.laptime"), address), Color(255, 255, 0), UVDisplayTimeRace(time), Color(255, 255, 255), " (+"..math.Round(timedifference, 3)..")")
-                UVHUDLastLapTime = time
-            end
-        end
 
-        hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur )
+		local is_global_best = false
+
+		-- Per-player best lap update (no chat)
+		if UVHUDLastLapTime == nil then
+			UVHUDLastLapTime = time
+			UVHUDBestLapTime = time
+		else
+			if time < UVHUDBestLapTime then
+				UVHUDLastLapTime = time
+				UVHUDBestLapTime = time
+			else
+				UVHUDLastLapTime = time
+			end
+		end
+
+		-- Global best lap update and flag set
+		if UVHUDGlobalBestLapTime == nil or time < UVHUDGlobalBestLapTime then
+			UVHUDGlobalBestLapTime = time
+			UVHUDGlobalBestLapHolder = participant
+			is_global_best = true
+		end
+
+		local is_local_player = IsValid(participant) and participant:GetDriver() == LocalPlayer()
+		
+		local total_laps = UVHUDRaceInfo['Info'] and UVHUDRaceInfo['Info'].Laps or 0
+
+		if (total_laps <= 1 or new_lap > total_laps) and not is_global_best then
+			return
+		end
+		
+        hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
     end)
     
     net.Receive( "uvrace_start", function()

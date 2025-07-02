@@ -103,6 +103,14 @@ UVMaterials = {
     ["RESULTS_UG2_SHINE"] = Material("unitvehicles/hud_underground2/results_bg_shine.png"),
     ["RESULTS_UG2_LP"] = Material("unitvehicles/hud_underground2/results_bg_lp.png"),
     ["RESULTS_UG2_BUTTON"] = Material("unitvehicles/hud_underground2/UI_PC_GENERIC_BUTTON.png"),
+		
+	-- ProStreet
+    ["RESULTS_PS_CURVES"] = Material("unitvehicles/icons_prostreet/curves.png"),
+    ["RESULTS_PS_HUB"] = Material("unitvehicles/icons_prostreet/hub_44.png"),
+    ["RESULTS_PS_WING"] = Material("unitvehicles/icons_prostreet/flixfx_wing.png"),
+    ["RESULTS_PS_WING_INV"] = Material("unitvehicles/icons_prostreet/flixfx_wing_inv.png"),
+    ["RESULTS_PS_SP8"] = Material("unitvehicles/icons_prostreet/flixfx_sp8.png"),
+	
 }
 
 UV_UI_Events = {
@@ -814,6 +822,10 @@ UV_UI.pursuit.carbon.states = {
     TakedownText = nil,
 }
 
+UV_UI.racing.carbon.states = {
+    LapCompleteText = nil,
+}
+
 UV_UI.racing.carbon.events = {
     ShowResults = function(sortedRacers) -- Carbon
         if UVHUDDisplayRacing then return end
@@ -823,14 +835,21 @@ UV_UI.racing.carbon.events = {
         local h = ScrH()
         
         --------------------------------------
-        
+
+        OK = vgui.Create("DButton", vgui.GetWorldPanel())
+        OK:SetText("")
+        OK:SetPos(w*0.2565, h*0.9)
+        OK:SetSize(w*0.15, h*0.035)
+        OK.Paint = function() end
+
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         -- ResultPanel:SetPos(0, 0)
         ResultPanel:SetMouseInputEnabled(true)
         ResultPanel:SetKeyboardInputEnabled(false)
         ResultPanel:SetZPos(32767)
-        
+
         local targetY = 0
         local overshootY = h * 0.1  -- drops 10% below target before bouncing back
         local startY = -h           -- start fully above the screen
@@ -875,6 +894,7 @@ UV_UI.racing.carbon.events = {
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)
             gui.EnableScreenClicker(false)
+			OK:SetEnabled(false)
             
             hook.Add("Think", "ResultPanelExitAnim", function()
                 if not IsValid(panel) then
@@ -895,12 +915,7 @@ UV_UI.racing.carbon.events = {
         end
         
         gui.EnableScreenClicker(true)
-        
-        local OK = vgui.Create("DButton", ResultPanel)
-        OK:SetText("X")
-        OK:SetSize(w*0.015, h*0.03)
-        OK:SetPos(w*0.725, h*0.205)
-        
+
         local timetotal = 30
         local timestart = CurTime()
         local exitStarted = false -- prevent repeated trigger
@@ -1104,7 +1119,7 @@ UV_UI.racing.carbon.events = {
             end
         end)
     end,
-    
+
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
@@ -1136,6 +1151,345 @@ UV_UI.racing.carbon.events = {
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 UV_UI.racing.carbon.events.ShowResults(sortedRacers)
             end
+        end)
+    end,
+
+onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+	-- if is_local_player then
+		-- name = "YOU"
+	-- end
+	
+	if is_global_best then
+		UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+	else
+		if is_local_player then
+			UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+		else
+			return
+		end
+	end
+		local SID = 0.35
+
+		local carbon_noti_animState = {
+			active = false,
+			startTime = 0,
+			slideInDuration = SID,
+			holdDuration = 3,
+			slideDownDuration = 0.25,
+			upper = {
+				startX = ScrW() * 0.25,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.35,
+				slideDownEndY = ScrH() * 0.6,
+			},
+			lower = {
+				startX = ScrW() * 0.75,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.385,
+				slideDownEndY = ScrH() * 0.635,
+			},
+			ring = {
+				scaleStart = 0.5,
+				scaleEnd = 0.09,
+				alphaStart = 15,
+				alphaEnd = 150,
+				scale = 0.2,
+				alpha = 15,
+				
+				shrinkStart = 0,
+				shrinkDuration = SID,
+				disappearTime = 0.03,
+				reappearDelay = SID + 0.03,
+				expandStartTime = nil,
+				expanded = false,
+				visible = true
+			},
+			ringClone = {
+				createdTime = nil,
+				blinkInterval = 0.125,
+				blinkCount = 0,
+				maxBlinks = 2,
+				scale = 0.085,
+				scaleDuration = 0.6,
+				targetScale = 0.07,
+				alpha = 175,
+				visible = true,
+				fadeAfterBlinkStart = nil,
+			},
+			icon = {
+			  scale = 0.06,
+			  baseScale = 0.06,
+			  overshootScale = 0.07,
+			  alpha = 255,
+			  ExpandDuration = 0.125,
+			},
+			circle = {
+				scaleStart = 0.4,
+				scaleEnd = 0.0575,
+				alphaStart = 15,
+				alphaEnd = 100,
+
+				scale = 0.2,
+				alpha = 15,
+				rotation = 0,
+
+				spinStartTime = nil,
+				spinDuration = 5,
+				drawY = ScrH() / 3.35
+			},
+		}
+
+        UV_UI.racing.carbon.events.carbon_noti_animState = carbon_noti_animState
+        carbon_noti_animState.active = true
+        carbon_noti_animState.startTime = CurTime()
+
+        ----------------------------------------------------------------------------
+        
+        -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
+        if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.CARBON_NOTIFICATION_LAP then
+            hook.Remove("HUDPaint", "CARBON_NOTIFICATION_LAP")
+        end
+
+        -- Add the HUDPaint hook freshly for this animation
+        hook.Add("HUDPaint", "CARBON_NOTIFICATION_LAP", function()
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+
+            local function calcPosAlpha(elapsed, elem)
+                local x, y, alpha = elem.centerX, elem.y, 255
+                if elapsed < carbon_noti_animState.slideInDuration then
+                    local t = elapsed / carbon_noti_animState.slideInDuration
+                    x = Lerp(t, elem.startX, elem.centerX)
+                    alpha = Lerp(t, 0, 255)
+                elseif elapsed < carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                    x = elem.centerX
+                    alpha = 255
+                elseif elapsed < carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
+                    local t = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+                    y = Lerp(t, elem.y, elem.slideDownEndY)
+                    alpha = Lerp(t, 255, 0)
+                else
+                    alpha = 0
+                end
+                return x, y, alpha
+            end
+
+            local lines = string.Explode("\n", UV_UI.racing.carbon.states.LapCompleteText or "")
+            if #lines < 1 then return end
+			local upperLine = lines[1] or ""
+			local lowerLine = lines[2] or ""
+
+			-- Upper
+            local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+
+			-- Lower
+            local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
+            carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
+            carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx, ly, Color(175, 175, 175, lalpha), nil)
+
+            -- Disable animation and remove hook when done
+            if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
+                carbon_noti_animState.active = false
+                hook.Remove("HUDPaint", "CARBON_NOTIFICATION_LAP")
+            end
+
+			-- Other Elements
+			-- Outer Ring
+			local ring = carbon_noti_animState.ring
+			local elapsed = CurTime() - carbon_noti_animState.startTime
+
+			local mergeEndTime = carbon_noti_animState.slideInDuration
+			local blinkDuration = 0.1 -- total blink time (two blinks)
+			local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
+
+			if elapsed < mergeEndTime then
+				-- Shrinking phase: scale down & alpha up
+				local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
+				ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
+				ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
+			elseif elapsed < mergeEndTime + blinkDuration then
+				-- Blink phase: fade ring out and back in twice
+
+				local blinkElapsed = elapsed - mergeEndTime
+				-- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
+				local phase = (blinkElapsed / blinkInterval) % 2
+				-- Map phase to alpha (1->0->1) using triangle wave
+				local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
+				ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
+
+				-- Keep scale steady during blinking
+				ring.scale = ring.scaleEnd
+			else
+				-- Expansion + fade out phase
+				local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
+				local expandDuration = 0.3
+				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+
+				ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
+				ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
+			end
+
+			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
+
+			-- Outer Ring Duplicate
+			local clone = carbon_noti_animState.ringClone
+
+			-- Spawn clone ring after main ring shrinks
+			if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
+				clone.createdTime = CurTime()
+				clone.blinkCount = 0
+			end
+
+			if clone.createdTime then
+				local cloneElapsed = CurTime() - clone.createdTime
+				local blinkCycle = clone.blinkInterval * 2
+
+				-- Blinking logic
+				if clone.blinkCount < clone.maxBlinks then
+					local blinkCycle = clone.blinkInterval * 2
+					local cloneElapsed = CurTime() - clone.createdTime
+					local cycleTime = cloneElapsed % blinkCycle
+
+					if cycleTime < clone.blinkInterval then
+						-- Pop in (fully opaque)
+						clone.alpha = 255
+					else
+						-- Fade out during second half of the cycle
+						local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
+						clone.alpha = Lerp(fadeT, 255, 0)
+					end
+
+					-- Count completed full blink cycles
+					local completedCycles = math.floor(cloneElapsed / blinkCycle)
+					if completedCycles > clone.blinkCount then
+						clone.blinkCount = completedCycles
+					end
+
+				else
+					-- After blinking ends, fade from 255 to ring.alphaEnd
+					if not clone.fadeAfterBlinkStart then
+						clone.fadeAfterBlinkStart = CurTime()
+					end
+
+					local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
+					clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
+				end
+
+				-- Gradual scale-down over total blink duration
+				local totalDuration = clone.scaleDuration
+				local scaleT = math.min(cloneElapsed / totalDuration, 1)
+				clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
+
+				-- Apply final slide down and fade for clone ring (matching text timing)
+				local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
+				if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+					local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
+					local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
+
+					-- Move the clone downward (same offset as text)
+					local slideOffset = Lerp(t, 0, ScrH() * 0.2)
+					clone.drawY = (ScrH() / 3.35) + slideOffset
+
+					-- Fade out over time
+					clone.alpha = Lerp(t, clone.alpha, 0)
+				else
+					clone.drawY = ScrH() / 3.35 -- stay at normal position
+				end
+
+				if clone.visible then
+					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
+				end
+			end
+
+			-- Inner Circle
+			local circle = carbon_noti_animState.circle
+			local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
+
+			-- Step 1: Animate scale + alpha like ring
+			if elapsed < carbon_noti_animState.slideInDuration then
+				circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
+				circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
+			end
+
+			-- Step 2: Start spinning after 4.1 is done blinking
+			local clone = carbon_noti_animState.ringClone
+			local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
+
+			if CurTime() > blinkDoneTime and not circle.spinStartTime then
+				circle.spinStartTime = CurTime()
+			end
+
+			if circle.spinStartTime then
+				local spinElapsed = CurTime() - circle.spinStartTime
+				local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
+				circle.rotation = Lerp(spinT, 0, -360)
+			end
+
+			-- Step 3: Follow slide down like Element 4.1
+			if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+				local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+				local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
+				circle.drawY = (ScrH() / 3.35) + slideOffset
+				circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
+			end
+
+			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
+
+			-- Takedown Icon
+			local icon = carbon_noti_animState.icon
+			local elapsed = CurTime() - carbon_noti_animState.startTime
+
+			local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+			local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
+
+			local slideOffset = 0
+			if elapsed > slideDownStart and elapsed < slideDownEnd then
+				local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+				slideOffset = Lerp(t, 0, ScrH() * 0.2)
+			elseif elapsed >= slideDownEnd then
+				slideOffset = ScrH() * 0.2
+			end
+
+			local currentY = (ScrH() / 3.35) + slideOffset
+			local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+			local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+
+			-- 1) Initial: fully visible
+			if elapsed < carbon_noti_animState.slideInDuration then
+				icon.scale = icon.baseScale
+				icon.alpha = 255
+
+			-- 2) Shrink to 0 instantly when Element 4 finishes shrinking
+			elseif elapsed < shrinkEnd then
+				icon.scale = 0  -- instant shrink
+				icon.alpha = 255
+
+			-- 3) Expand with overshoot during Element 4 expand
+			elseif elapsed < expandEnd then
+				local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+				local expandElapsed = elapsed - expandStart
+				local expandDuration = carbon_noti_animState.icon.ExpandDuration
+				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+
+				if t < 0.8 then
+					icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
+				else
+					icon.scale = icon.baseScale
+				end
+
+				icon.alpha = 255
+
+			-- 4) Slide down with element 4.1, fade out alpha
+			elseif elapsed < slideDownEnd then
+				local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+				icon.alpha = Lerp(fadeT, 255, 0)
+			else
+				icon.alpha = 0
+			end
+
+			DrawIcon(UVMaterials["CLOCK_BG"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
         end)
     end
 }
@@ -1566,7 +1920,14 @@ UV_UI.pursuit.carbon.events = {
         local wrecks = UVWrecks
         local suspects = UVHUDWantedSuspectsNumber
         
+        OK = vgui.Create("DButton", vgui.GetWorldPanel())
+        OK:SetText("")
+        OK:SetPos(w*0.2565, h*0.675)
+        OK:SetSize(w*0.15, h*0.035)
+        OK.Paint = function() end
+
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
+		ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         -- ResultPanel:SetPos(0, 0)
         ResultPanel:SetMouseInputEnabled(true)
@@ -1617,6 +1978,7 @@ UV_UI.pursuit.carbon.events = {
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)
             gui.EnableScreenClicker(false)
+			OK:SetEnabled(false)
             
             hook.Add("Think", "ResultPanelExitAnim", function()
                 if not IsValid(panel) then
@@ -1637,12 +1999,7 @@ UV_UI.pursuit.carbon.events = {
         end
         
         gui.EnableScreenClicker(true)
-        
-        local OK = vgui.Create("DButton", ResultPanel)
-        OK:SetText("X")
-        OK:SetSize(w*0.015, h*0.03)
-        OK:SetPos(w*0.725, h*0.205)
-        
+
         local timetotal = 30
         local timestart = CurTime()
         local exitStarted = false -- prevent repeated trigger
@@ -1800,7 +2157,6 @@ UV_UI.pursuit.carbon.events = {
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
                 AnimateAndRemovePanel(ResultPanel)
             end
-            
         end
         
         function OK:DoClick() 
@@ -2410,6 +2766,10 @@ UV_UI.pursuit.mostwanted.states = {
     TakedownText = nil,
 }
 
+UV_UI.racing.mostwanted.states = {
+    LapCompleteText = nil,
+}
+
 UV_UI.racing.mostwanted.events = {
     ShowResults = function(sortedRacers) -- Most Wanted
         local debriefcolor = Color(255, 183, 61)
@@ -2432,9 +2792,10 @@ UV_UI.racing.mostwanted.events = {
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
         
-        OK:SetText("X")
-        OK:SetSize(w*0.015, h*0.03)
-        OK:SetPos(w*0.775, h*0.1425)
+        OK:SetText("")
+        OK:SetPos(w*0.205, h*0.77)
+        OK:SetSize(w*0.205, h*0.0425)
+		OK.Paint = function() end
         
         local timestart = CurTime()
         
@@ -2499,9 +2860,6 @@ UV_UI.racing.mostwanted.events = {
         local flashDuration = 0.2 -- total time for flash animation
         local flashStartTime = nil
         local allRevealed = false
-        OK:SetAlpha(0)
-        OK:SetVisible(false)
-        OK:SetEnabled(false)
         
         local closing = false
         local closeStartTime = 0
@@ -2672,13 +3030,10 @@ UV_UI.racing.mostwanted.events = {
             
             -- Show/Hide OK button with fade
             if flashStartTime then
-                OK:SetAlpha(textAlpha)
-                if textAlpha > 0 and not OK:IsVisible() then
-                    OK:SetVisible(true)
+                if textAlpha > 0 then
                     OK:SetEnabled(true)
                 end
             else
-                OK:SetVisible(false)
                 OK:SetEnabled(false)
             end
             
@@ -2790,6 +3145,124 @@ onRaceEnd = function( sortedRacers, stringArray )
             UV_UI.racing.mostwanted.events.ShowResults(sortedRacers)
         end
     end)
+end,
+
+notifState = {},
+onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+	-- if is_local_player then
+		-- name = "YOU"
+	-- end
+	
+	if is_global_best then
+		UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+	else
+		if is_local_player then
+			UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime"), Carbon_FormatRaceTime( lap_time ) )
+		else
+			return
+		end
+	end
+
+	UV_UI.racing.mostwanted.events.notifState = {
+		active = true,
+		startTime = CurTime(),
+		fadeStartTime = nil,
+
+		phase1Duration = 2.5,
+		fadeDuration = 0.3,
+		startY = ScrH() * 0.325,
+		midY = ScrH() * 0.4,
+		finalY = ScrH() * 0.9,
+
+		randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+		randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+		randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+		centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
+
+		burstDuration = 0.025,
+		burstDuration2 = 0.025,
+		toCenterDuration = 0.1,
+		holdDuration = 2.3,
+	}
+
+
+	local notifState = UV_UI.racing.mostwanted.events.notifState
+
+	----------------------------------------------------------------------------
+
+	if timer.Exists( 'MW_NOTIFICATION_LAP_TIMER' ) then timer.Remove( "MW_NOTIFICATION_LAP_TIMER" ) end 
+	
+	timer.Create( "MW_NOTIFICATION_LAP_TIMER", 3, 1, function()
+		hook.Remove( "HUDPaint", "MW_NOTIFICATION_LAP" )
+		notifState.active = false
+	end)
+	
+	hook.Add("HUDPaint", "MW_NOTIFICATION_LAP", function()
+		local now = CurTime()
+		local elapsed = now - notifState.startTime
+		local pos = Vector()
+		local alpha = 255
+
+		if elapsed < notifState.burstDuration then
+			-- Phase 1: teleport at randomStart
+			pos = notifState.randomStart
+
+		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
+			-- Phase 2: teleport at randomBurst1
+			pos = notifState.randomBurst1
+
+		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
+			-- Phase 3: teleport at randomBurst2
+			pos = notifState.randomBurst2
+
+		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
+			-- Phase 4: gradual downward motion from midY to finalY (no fade)
+			local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
+			local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
+			pos = Vector(
+				notifState.centerPos.x,
+				Lerp(t, notifState.startY, notifState.midY),
+				0
+			)
+			alpha = 255
+
+		else
+			-- Phase 5: smooth fall + fade (as before)
+			if not notifState.fadeStartTime then
+				notifState.fadeStartTime = now
+			end
+
+			local fadeElapsed = now - notifState.fadeStartTime
+			local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+
+			pos = Vector(
+				notifState.centerPos.x,
+				Lerp(t, notifState.midY, notifState.finalY),
+				0
+			)
+			alpha = Lerp(t, 255, 0)
+		end
+		
+		mw_noti_draw(UV_UI.racing.mostwanted.states.LapCompleteText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
+		
+		local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
+		local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
+		local iconDiffY = ScrH() * 0.045
+		local iconStartY = notifState.startY - iconDiffY
+		local iconY
+		if not notifState.fadeStartTime then
+			local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
+			iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
+		else
+			local fadeElapsed = now - notifState.fadeStartTime
+			local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+			iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+		end
+
+		DrawIcon( UVMaterials['CLOCK'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
+		DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+	end)
 end
 }
 
@@ -3007,9 +3480,10 @@ UV_UI.pursuit.mostwanted.events = {
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
         
-        OK:SetText("X")
-        OK:SetSize(w*0.015, h*0.03)
-        OK:SetPos(w*0.775, h*0.1425)
+        OK:SetText("")
+        OK:SetPos(w*0.205, h*0.77)
+        OK:SetSize(w*0.205, h*0.0425)
+		OK.Paint = function() end
         
         local timestart = CurTime()
         
@@ -3050,9 +3524,6 @@ UV_UI.pursuit.mostwanted.events = {
         local flashDuration = 0.2 -- total time for flash animation
         local flashStartTime = nil
         local allRevealed = false
-        OK:SetAlpha(0)
-        OK:SetVisible(false)
-        OK:SetEnabled(false)
         
         local closing = false
         local closeStartTime = 0
@@ -3202,13 +3673,10 @@ UV_UI.pursuit.mostwanted.events = {
             
             -- Show/Hide OK button with fade
             if flashStartTime then
-                OK:SetAlpha(textAlpha)
-                if textAlpha > 0 and not OK:IsVisible() then
-                    OK:SetVisible(true)
+                if textAlpha > 0 then
                     OK:SetEnabled(true)
                 end
             else
-                OK:SetVisible(false)
                 OK:SetEnabled(false)
             end
             
@@ -3944,12 +4412,12 @@ UV_UI.racing.undercover.events = {
         
         local BackgroundPanel = vgui.Create("DPanel")
         local ResultPanel = vgui.Create("DFrame")
-        -- local OK = vgui.Create("DButton")
+        local OK = vgui.Create("DButton")
         
         BackgroundPanel:SetSize(w, h)
         BackgroundPanel:SetZPos(0)
         
-        -- ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         ResultPanel:SetBackgroundBlur(true)
         ResultPanel:ShowCloseButton(false)
@@ -3960,10 +4428,11 @@ UV_UI.racing.undercover.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         ResultPanel:SetVisible(false)
         
-        -- OK:SetText("X")
-        -- OK:SetSize(w*0.015, h*0.03)
-        -- OK:SetPos(w*0.635, h*0.225)
-        -- OK:SetPaintedManually(true)
+        OK:SetText("")
+        OK:SetPos(w*0.5, h*0.745)
+        OK:SetSize(w*0.16, h*0.06)
+		OK:SetEnabled(true)
+        OK.Paint = function() end
         
         local fadeStart = CurTime()
         local backgroundAlpha = 0
@@ -4202,8 +4671,7 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
                 Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             end
-            
-            
+
             -- Time remaining and closing					
             surface.SetDrawColor( 0, 0, 0, tabAlpha )
             surface.DrawRect( w*0.33, h*0.745, w*0.33, h*0.06)
@@ -4233,9 +4701,10 @@ UV_UI.racing.undercover.events = {
             cam.End2D()
         end
         
-        -- function OK:DoClick() 
-        -- startCloseAnimation()
-        -- end
+        function OK:DoClick() 
+			startCloseAnimation()
+			OK:SetEnabled(false)
+        end
         
         local wasJumping = false
         hook.Add("Think", "CheckJumpKeyForResults", function()
@@ -4492,12 +4961,12 @@ UV_UI.pursuit.undercover.events = {
         
         local BackgroundPanel = vgui.Create("DPanel")
         local ResultPanel = vgui.Create("DFrame")
-        -- local OK = vgui.Create("DButton")
+        local OK = vgui.Create("DButton")
         
         BackgroundPanel:SetSize(w, h)
         BackgroundPanel:SetZPos(0)
         
-        -- ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         ResultPanel:SetBackgroundBlur(true)
         ResultPanel:ShowCloseButton(false)
@@ -4508,11 +4977,12 @@ UV_UI.pursuit.undercover.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         ResultPanel:SetVisible(false)
         
-        -- OK:SetText("X")
-        -- OK:SetSize(w*0.015, h*0.03)
-        -- OK:SetPos(w*0.635, h*0.225)
-        -- OK:SetPaintedManually(true)
-        
+        OK:SetText("")
+        OK:SetPos(w*0.5, h*0.6425)
+        OK:SetSize(w*0.16, h*0.06)
+		OK:SetEnabled(true)
+        OK.Paint = function() end
+
         local fadeStart = CurTime()
         local backgroundAlpha = 0
         local backgroundFadeDuration = 0.5  -- seconds
@@ -4674,7 +5144,6 @@ UV_UI.pursuit.undercover.events = {
                 draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset, Color(255, 255, 255, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             end
             
-            
             -- Time remaining and closing					
             surface.SetDrawColor( 0, 0, 0, tabAlpha )
             surface.DrawRect( w*0.33, h*0.6425, w*0.33, h*0.06)
@@ -4694,9 +5163,10 @@ UV_UI.pursuit.undercover.events = {
             cam.End2D()
         end
         
-        -- function OK:DoClick() 
-        -- startCloseAnimation()
-        -- end
+        function OK:DoClick() 
+			startCloseAnimation()
+			OK:SetEnabled(false)
+        end
         
         local wasJumping = false
         hook.Add("Think", "CheckJumpKeyForDebrief", function()
@@ -6345,7 +6815,7 @@ local function prostreet_racing_main( ... )
     local checkpoint_count = #my_array["Checkpoints"]
     
     ------------------------------------
-    
+
     -- Timer
     surface.SetDrawColor(0, 0, 0, 200)
     surface.DrawRect(w * 0.425, h * 0.075, w * 0.15, h * 0.05)
@@ -6510,24 +6980,16 @@ end
 UV_UI.racing.prostreet.main = prostreet_racing_main
 
 UV_UI.racing.prostreet.events = {
-    ShowResults = function(sortedRacers) -- ProStreet (Undercover temp)
-        if UVHUDDisplayRacing then return end
-        
+    ShowResults = function(sortedRacers) -- ProStreet
         local w = ScrW()
         local h = ScrH()
         
         --------------------------------------
         
-        local debrieflinedata
-        
-        local BackgroundPanel = vgui.Create("DPanel")
         local ResultPanel = vgui.Create("DFrame")
-        -- local OK = vgui.Create("DButton")
+        local OK = vgui.Create("DButton")
         
-        BackgroundPanel:SetSize(w, h)
-        BackgroundPanel:SetZPos(0)
-        
-        -- ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         ResultPanel:SetBackgroundBlur(true)
         ResultPanel:ShowCloseButton(false)
@@ -6536,86 +6998,23 @@ UV_UI.racing.prostreet.events = {
         ResultPanel:SetDraggable(false)
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        ResultPanel:SetVisible(false)
+		
+        OK:SetText("")
+        OK:SetPos(w*0.2, h*0.9)
+        OK:SetSize(w*0.15, h*0.035)
+		OK:SetEnabled(true)
+        OK.Paint = function() end
+		
+        local timestart = CurTime()
+        local displaySequence = {}
         
-        -- OK:SetText("X")
-        -- OK:SetSize(w*0.015, h*0.03)
-        -- OK:SetPos(w*0.635, h*0.225)
-        -- OK:SetPaintedManually(true)
-        
-        local fadeStart = CurTime()
-        local backgroundAlpha = 0
-        local backgroundFadeDuration = 0.5  -- seconds
-        local fadeComplete = false
-        
-        local function CloseResults()
-            if IsValid(ResultPanel) then ResultPanel:Close() end
-            if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "CheckJumpKeyForResults")
-        end
-        
-        local closing = false
-        local closeStart = 0
-        local closeDuration = 0.5
-        
-        local zoomStart = CurTime() + backgroundFadeDuration
-        local zoomDuration = 0.5
-        local rowDelay = 0.15
-        local numTotalRows = 16
-        
-        local autoCloseDelay = 30
-        local animationStartTime = CurTime()
-        local autoCloseStartTime = animationStartTime + ((numTotalRows - 1) * rowDelay) + zoomDuration
-        
-        -- Then your timer start time:
-        local timestart = autoCloseStartTime
-        
-        local function startCloseAnimation()
-            if closing then return end
-            closing = true
-            closeStart = CurTime()
-        end
-        
-        BackgroundPanel.Paint = function(self, w, h)
-            local elapsed = CurTime() - fadeStart
-            local alpha
-            
-            if not fadeComplete then
-                alpha = math.min(175, (elapsed / backgroundFadeDuration) * 175)
-                if alpha >= 175 then
-                    fadeComplete = true
-                    if IsValid(ResultPanel) then
-                        ResultPanel:SetVisible(true)
-                    end
-                end
-            elseif closing then
-                local fadeOutElapsed = CurTime() - closeStart
-                alpha = math.max(0, 175 * (1 - (fadeOutElapsed / closeDuration)))
-            else
-                alpha = 175
-            end
-            
-            backgroundAlpha = alpha
-            surface.SetDrawColor(5, 25, 150, backgroundAlpha)
-            surface.DrawRect(0, 0, w, h)
-        end
-        
-        local entriesToShow = 16
-        local scrollOffset = 0
-        
-        ResultPanel.OnMouseWheeled = function(self, delta)
-            local maxOffset = math.max(0, #sortedRacers - entriesToShow)
-            scrollOffset = math.Clamp(scrollOffset - delta, 0, maxOffset)
-        end
-        
+        -- Data and labels
         local racersArray = {}
         
-        -- Convert sortedRacers (whatever form) to a flat array if needed
-        for _, racer in pairs(sortedRacers) do
-            table.insert(racersArray, racer)
+        for _, dict in pairs(sortedRacers) do
+            table.insert(racersArray, dict)
         end
         
-        -- Sort by TotalTime (DNF = math.huge)
         table.sort(racersArray, function(a, b)
             local timeA = a.array and a.array.TotalTime
             local timeB = b.array and b.array.TotalTime
@@ -6626,212 +7025,228 @@ UV_UI.racing.prostreet.events = {
             
             return tA < tB
         end)
+
+        local entriesToShow = 8
+        local scrollOffset = 0
         
-        local racersDisplayData = {}
-        
-        for i = 1, #racersArray do
-            local racer = racersArray[i]
-            local info = racer.array or racer  -- fallback if 'array' doesn't exist
-            local LBCol = Color(255, 255, 255)
+        local i = 0
+        for place, dict in ipairs(racersArray) do
+            local info = dict.array or {}
+            i = i + 1
             
+            -- Staggered vertical layout
+            local visibleIndex = i -- 1 to entriesToShow
+            local rowHeight = h * 0.09
+			local yPos = h*0.08 + (i - 1) * rowHeight
+			local LP, LC = false, Color(100, 100, 100)
+
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
-            if info["LocalPlayer"] then
-                LBCol = Color(255, 200, 50)
+			if info["LocalPlayer"] then
+				LP = true
+				LC = Color(0, 0, 0)
+			end
+			
+            local entry = {
+                y = yPos,
+                posText = tostring(i),
+                nameText = name,
+                timeText = UV_FormatRaceEndTime(totalTime),
+				color = LC,
+				localPlayer = LP
+            }
+            
+            table.insert(displaySequence, entry)
+        end
+
+        local closing = false
+        local closeStartTime = 0
+
+        function ResultPanel:OnMouseWheeled(delta)
+            if delta > 0 then
+                scrollOffset = math.max(scrollOffset - 1, 0)
+            elseif delta < 0 then
+                local maxOffset = math.max(0, #displaySequence - entriesToShow)
+                scrollOffset = math.min(scrollOffset + 1, maxOffset)
             end
             
-            -- Combine pos and name for left column text
-            local text = i .. "    " .. name
-            
-            table.insert(racersDisplayData, { text = text, value = UV_FormatRaceEndTime(totalTime), color = LBCol })
+            return true -- prevent further processing
         end
-        
-        -- Now assign this to the data your paint function uses:
-        debrieflinedata = {}
-        
-        -- Fill with racer data for existing racers
-        for i = 1, math.min(#racersDisplayData, numTotalRows) do
-            debrieflinedata[i] = racersDisplayData[i]
-        end
-        
-        -- Fill remaining rows with empty placeholders
-        for i = #racersDisplayData + 1, numTotalRows do
-            debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
-        end
-        
-        local statusString = "#uv.results.lost" -- default fallback
-        
-        local localIndex = nil
-        local localTime = nil
-        local secondPlaceTime = nil
-        
-        for i, info in ipairs(racersArray) do
-            local racer = racersArray[i]
-            local info = racer.array or racer  -- fallback if 'array' doesn't exist
-            
-            if info["LocalPlayer"] then
-				localIndex = i
-				localTime = tonumber(info["TotalTime"]) or math.huge
-            elseif i == 2 then
-                secondPlaceTime = tonumber(info["TotalTime"]) or math.huge
-            end
-        end
-        
-        if localIndex == 1 then
-            local timeDiff = (secondPlaceTime or 0) - (localTime or 0)
-            if timeDiff >= 10 then
-                statusString = "#uv.results.dominated"
-            else
-                statusString = "#uv.results.won"
-            end
-        end
+		
+		local playedfadeSound = false
         
         ResultPanel.Paint = function(self, w, h)
-            local now = CurTime()
-            
-            local zoomElapsed = closing and (now - closeStart) or (now - zoomStart)
-            local zoomFrac = math.Clamp(zoomElapsed / zoomDuration, 0, 1)
-            
-            local function easeOutCubic(t) return 1 - (1 - t)^3 end
-            local function easeInCubic(t) return t^3 end
-            
-            local easedFrac = closing and easeInCubic(zoomFrac) or easeOutCubic(zoomFrac)
-            local zoomScale = Lerp(easedFrac, closing and 1.0 or 2.0, closing and 2.0 or 1.0)
-            local panelAlpha = closing and (1 - easedFrac) or 1
-            
-            if closing and zoomFrac >= 1 then
-                CloseResults()
-                return
-            end
-            
-            local mat = Matrix()
-            mat:Translate(Vector(w*0.5, h*0.5, 0))
-            mat:Scale(Vector(zoomScale, zoomScale, 1))
-            mat:Translate(Vector(-(w*0.5), -(h*0.5), 0))
-            
-            local tabAlpha = math.floor(panelAlpha * 235)
-            local textAlpha = math.floor(panelAlpha * 255)
-            
-            cam.Start2D()
-            cam.PushModelMatrix(mat)
-            local timeremaining = math.ceil(autoCloseDelay - (CurTime() - timestart))
-            local lang = language.GetPhrase
-            
-            -- Upper Results Tab
-            surface.SetDrawColor( 0, 0, 0, tabAlpha )
-            surface.DrawRect( w*0.33, h*0.15, w*0.33, h*0.06)
-            
-            draw.DrawText(statusString, "UVUndercoverWhiteFont", w*0.332, h*0.155, Color( 255, 200, 50, textAlpha ), TEXT_ALIGN_LEFT )
-            
-            -- Text
-            local rowYOffsetBase = h * 0.21
-            local rowYOffsetBaseAlt = h * (0.21 + 0.0325)
-            
-            local labelStartX, valueStartX = w * 0.25, w * 0.75 -- Offscreen starting points
-            local labelTargetX, valueTargetX = w * 0.332, w * 0.6575
-            
-            for i = 1, numTotalRows do
-                local rowStartTime = zoomStart + zoomDuration + (i - 1) * rowDelay
-                local rowEndTime = rowStartTime + rowDelay
-                local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
-                local ease = 1 - math.pow(1 - rowProgress, 2)
-                
-                local isDark = i % 2 == 0
-                local baseAlpha = isDark and 150 or 75
-                local rowColor = isDark and Color(50, 50, 50) or Color(150, 150, 150)
-                
-                local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
-                local rowHeight = h * 0.035
-                local rowWidth = w * 0.33
-                local rowX = w * 0.33
-                local halfWidth = rowWidth / 2
-                local alpha = ease * baseAlpha * panelAlpha
-                
-                -- Animate left half
-                local leftX = Lerp(ease, labelStartX, rowX)
-                surface.SetDrawColor(rowColor.r, rowColor.g, rowColor.b, alpha)
-                surface.DrawRect(leftX, yOffset, halfWidth + (h * 0.001), rowHeight)
-                
-                -- Animate right half
-                local rightX = Lerp(ease, valueStartX, rowX + halfWidth)
-                surface.DrawRect(rightX, yOffset, halfWidth, rowHeight)
-            end
-            
-            for i = 1, entriesToShow do
-                local dataIndex = i + scrollOffset
-                local line = debrieflinedata[dataIndex]
-                if not line then continue end -- Skip if no data for this row
-                
-                local rowStartTime = zoomStart + zoomDuration + (dataIndex - 1) * rowDelay
-                local rowProgress = math.Clamp((CurTime() - rowStartTime) / rowDelay, 0, 1)
-                local alpha = rowProgress * 255
-                local ease = 1 - math.pow(1 - rowProgress, 2) -- smooth end
-                
-                local yOffset = ((i % 2 == 1) and rowYOffsetBase or rowYOffsetBaseAlt) + math.floor((i - 1) / 2) * h * 0.0675
-                
-                local labelX = Lerp(ease, labelStartX, labelTargetX)
-                local valueX = Lerp(ease, valueStartX, valueTargetX)
-                
-                draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
-                Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-                draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
-                Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            end
-            
-            
-            -- Time remaining and closing					
-            surface.SetDrawColor( 0, 0, 0, tabAlpha )
-            surface.DrawRect( w*0.33, h*0.745, w*0.33, h*0.06)
-            
-            if timeremaining > autoCloseDelay then
-                timeremaining = autoCloseDelay
-            end
-            
-            local blink = 255 * math.abs(math.sin(RealTime() * 8))
-            
-            if scrollOffset > 0 then
-                draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.1775, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-            end
-            
-            if scrollOffset < #sortedRacers - entriesToShow then
-                draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-            end
-            
-            draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
-            
-            if timeremaining < 1 then
-                startCloseAnimation()
-            end
-            
-            cam.PopModelMatrix()
-            cam.End2D()
-        end
-        
-        -- function OK:DoClick() 
-        -- startCloseAnimation()
-        -- end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        startCloseAnimation()
-                    end
+            local curTime = CurTime()
+			local fadeDuration = 0.125
+			local fadeAlpha = 1
+			local scaleX = 1
+
+			if closing then
+				OK:SetEnabled(false)
+				local elapsedFade = curTime - closeStartTime
+				local progress = math.Clamp(elapsedFade / fadeDuration, 0, 1)
+
+				fadeAlpha = 1 - progress  -- fade out from 1 to 0
+				scaleX = 1 + progress * 1  -- scale horizontally from 1 to 2 times
+				
+				if not playedfadeSound and elapsedFade >= 0.05 then
+					 playedfadeSound = true
+					 surface.PlaySound( "uvui/ps/closemenu2.wav" )
+				end
+				
+				if elapsedFade >= fadeDuration then
+					hook.Remove("Think", "CheckJumpKeyForResults")
+					if IsValid(ResultPanel) then
+						ResultPanel:Close()
+					end
+					return -- early exit, avoid drawing anymore
+				end
+			end
+			-- Setup transformation matrix
+			local matrix = Matrix()
+			matrix:Translate(Vector(w * 0.5, 0, 0))         -- move origin to horizontal center
+			matrix:Scale(Vector(scaleX, 1, 1))              -- scale horizontally
+			matrix:Translate(Vector(-w * 0.5, 0, 0))        -- move origin back
+
+			cam.PushModelMatrix(matrix)
+			
+            -- Draw rows and alternating backgrounds fully visible when revealed
+            local startIndex = scrollOffset + 1
+            local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
+    			
+			-- Black BG Textured Elements
+			surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_PS_CURVES"])
+			surface.DrawTexturedRect(w * 0.31, h * 0.125, w * 0.125, h * 0.11)
+			
+			surface.SetMaterial(UVMaterials["RESULTS_PS_HUB"])
+			surface.DrawTexturedRectRotated(w * 0.31, h * 0.185, w * 0.1, h * 0.09, -12.5)
+			
+			surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
+			surface.DrawTexturedRectRotated(w * 0.255, h * 0.2, w * 0.07, h * 0.125, -32.5)
+			
+			surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
+			surface.DrawTexturedRectRotated(w * 0.2035, h * 0.27, w * 0.07, h * 0.125, -130)
+			
+			surface.SetMaterial(UVMaterials["RESULTS_PS_WING_INV"])
+			surface.DrawTexturedRect(w * 0.18, h * 0.26, w * 0.055, h * 0.25, 0)
+
+			local baseHeight = 0.31
+			local extraHeight = 0
+			
+			if #displaySequence > 4 then
+				local extraEntries = math.min(#displaySequence, 8) - 4
+				extraHeight = extraEntries * (h * 0.06)
+			end
+
+			-- Black BG Element
+			surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
+			surface.DrawRect(w * 0.2, h * 0.2, w * (1 - 2 * 0.2), (h * baseHeight) + extraHeight)
+
+			-- White BG Element
+			surface.SetDrawColor(200, 200, 200, 255 * fadeAlpha)
+			surface.DrawRect(w * 0.21, h * 0.25, w * (1 - 2 * 0.21), (h * (baseHeight - 0.06)) + extraHeight)
+
+			draw.SimpleText("#uv.results.race.raceresults", "UVFont2", w * 0.205, h * 0.2025, Color(255, 255, 255, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+
+            for i = startIndex, endIndex do
+				local entry = displaySequence[i]
+				local localIndex = i - startIndex + 1
+				local yPos = h * 0.255 + (localIndex - 1) * (h * 0.06)
+				
+				if entry.localPlayer then
+					surface.SetDrawColor(255, 255, 0, 255 * fadeAlpha)
+				else
+					surface.SetDrawColor(175, 175, 175, 255 * fadeAlpha)
+				end
+				surface.DrawRect(w * 0.2175, yPos, w * (1 - 2 * 0.2175), h * 0.055)
+				
+                if entry.posText then
+                    draw.SimpleText(entry.posText, "UVFont2", w * 0.22, yPos, Color(entry.color.r, entry.color.g, entry.color.b, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
-            else
-                wasJumping = false
+                if entry.nameText then
+                    draw.SimpleText(entry.nameText, "UVFont2", w * 0.25, yPos, Color(entry.color.r, entry.color.g, entry.color.b, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.timeText then
+                    draw.SimpleText(entry.timeText, "UVFont2", w * 0.775, yPos, Color(entry.color.r, entry.color.g, entry.color.b, 255 * fadeAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+                end
             end
-        end)
-    end,
+			
+            local blink = 255 * math.abs(math.sin(RealTime() * 8))
+
+			if scrollOffset > 0 then
+				draw.SimpleText("▲", "UVFont3", w * 0.5, h * 0.2, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+			end
+			
+			if scrollOffset < #displaySequence - entriesToShow then
+				draw.SimpleText("▼", "UVFont3", w * 0.5, h * 0.725, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+			end
+
+            -- Time since panel was created
+            local elapsed = CurTime() - timestart
+            
+            -- Only start auto-close countdown after reveal + flash
+            local autoCloseDuration = 30  -- 30 seconds countdown
+            
+            local autoCloseTimer = 0
+            local autoCloseRemaining = autoCloseDuration
+            
+			autoCloseTimer = elapsed
+			autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+			
+            local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. language.GetPhrase("uv.results.continue")
+            local conttextl = string.len(conttext)
+            
+            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
+            local autotextl = string.len(autotext)
+            
+            surface.SetDrawColor( 150, 150, 150, 175 * fadeAlpha )
+            surface.DrawRect( w*0.1965, h*0.9, (w*0.00575 * conttextl), h*0.035)
+            draw.DrawText( conttext, "UVCarbonLeaderboardFont", w*0.2085, h*0.9025, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT )
+            
+            surface.DrawRect( w*0.2 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
+            draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2125 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT )
+
+			cam.PopModelMatrix()
+			
+            if autoCloseRemaining <= 0 then
+                hook.Remove("Think", "CheckJumpKeyForResults")
+                if not closing then
+                    surface.PlaySound( "uvui/ps/closemenu.wav" )
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            end
+		end
+
+	function OK:DoClick()
+		if not closing then
+			surface.PlaySound( "uvui/ps/closemenu.wav" )
+			closing = true
+			closeStartTime = CurTime()
+		end
+	end
+
+	local wasJumping = false
+	hook.Add("Think", "CheckJumpKeyForResults", function()
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+		
+		if ply:KeyDown(IN_JUMP) then
+			if not wasJumping and not closing then
+				surface.PlaySound( "uvui/ps/closemenu.wav" )
+				wasJumping = true
+				closing = true
+				closeStartTime = CurTime()
+			end
+		else
+			wasJumping = false
+		end
+	end)
+end,
     
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
@@ -6907,9 +7322,9 @@ UV_UI.racing.underground.events = {
         --------------------------------------
         
         local ResultPanel = vgui.Create("DFrame")
-        -- local OK = vgui.Create("DButton")
+        local OK = vgui.Create("DButton")
         
-        -- ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         ResultPanel:SetBackgroundBlur(true)
         ResultPanel:ShowCloseButton(false)
@@ -6919,12 +7334,11 @@ UV_UI.racing.underground.events = {
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
         
-        -- OK:SetText("X")
-        -- OK:SetSize(w*0.015, h*0.03)
-        -- OK:SetPos(w*0.775, h*0.1425)
-        -- OK:SetAlpha(0)
-        -- OK:SetVisible(false)
-        -- OK:SetEnabled(false)
+        OK:SetText("")
+        OK:SetPos(w*0.5, h*0.9)
+        OK:SetSize(w*0.2, h*0.025)
+        OK:SetEnabled(true)
+		OK.Paint = function() end
         
         local timestart = CurTime()
         local displaySequence = {}
@@ -6995,6 +7409,7 @@ UV_UI.racing.underground.events = {
 			local fadeAlpha = 1
 
 			if closing then
+				OK:SetEnabled(false)
 				local elapsedFade = curTime - closeStartTime
 				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
 				
@@ -7085,20 +7500,20 @@ UV_UI.racing.underground.events = {
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
-                    surface.PlaySound( "uvui/mw/closemenu.wav" )
+                    surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
                 end
             end
 		end
 
-	-- function OK:DoClick()
-		-- if not closing then
-			-- surface.PlaySound( "uvui/mw/closemenu.wav" )
-			-- closing = true
-			-- closeStartTime = CurTime()
-		-- end
-	-- end
+	function OK:DoClick()
+		if not closing then
+			surface.PlaySound( "uvui/ug/closemenu.wav" )
+			closing = true
+			closeStartTime = CurTime()
+		end
+	end
 
 	local wasJumping = false
 	hook.Add("Think", "CheckJumpKeyForResults", function()
@@ -7107,7 +7522,7 @@ UV_UI.racing.underground.events = {
 		
 		if ply:KeyDown(IN_JUMP) then
 			if not wasJumping and not closing then
-				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				surface.PlaySound( "uvui/ug/closemenu.wav" )
 				wasJumping = true
 				closing = true
 				closeStartTime = CurTime()
@@ -7382,9 +7797,9 @@ UV_UI.racing.underground2.events = {
         --------------------------------------
         
         local ResultPanel = vgui.Create("DFrame")
-        -- local OK = vgui.Create("DButton")
+        local OK = vgui.Create("DButton")
         
-        -- ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         ResultPanel:SetBackgroundBlur(true)
         ResultPanel:ShowCloseButton(false)
@@ -7393,7 +7808,13 @@ UV_UI.racing.underground2.events = {
         ResultPanel:SetDraggable(false)
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-
+        
+        OK:SetText("")
+        OK:SetPos(w*0.775, h*0.84)
+        OK:SetSize(w*0.15, h*0.0425)
+		OK:SetEnabled(true)
+        OK.Paint = function() end
+        
         local timestart = CurTime()
         local displaySequence = {}
         
@@ -7471,6 +7892,7 @@ UV_UI.racing.underground2.events = {
 			local fadeAlpha = 1
 
 			if closing then
+				OK:SetEnabled(false)
 				local elapsedFade = curTime - closeStartTime
 				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
 				
@@ -7563,20 +7985,20 @@ UV_UI.racing.underground2.events = {
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
-                    surface.PlaySound( "uvui/mw/closemenu.wav" )
+                    surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
                 end
             end
 		end
 
-	-- function OK:DoClick()
-		-- if not closing then
-			-- surface.PlaySound( "uvui/mw/closemenu.wav" )
-			-- closing = true
-			-- closeStartTime = CurTime()
-		-- end
-	-- end
+	function OK:DoClick()
+		if not closing then
+			surface.PlaySound( "uvui/ug/closemenu.wav" )
+			closing = true
+			closeStartTime = CurTime()
+		end
+	end
 
 	local wasJumping = false
 	hook.Add("Think", "CheckJumpKeyForResults", function()
@@ -7585,7 +8007,7 @@ UV_UI.racing.underground2.events = {
 		
 		if ply:KeyDown(IN_JUMP) then
 			if not wasJumping and not closing then
-				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				surface.PlaySound( "uvui/ug/closemenu.wav" )
 				wasJumping = true
 				closing = true
 				closeStartTime = CurTime()
