@@ -5057,7 +5057,7 @@ UV_UI.pursuit.undercover.events = {
         local suspects = UVHUDWantedSuspectsNumber
         
         local lineData = {
-            { text = "#uv.results.chase.bounty", value = "$" .. bounty },
+            { text = "#uv.results.chase.costtostate", value = "$" .. bounty },
             { text = "#uv.results.chase.time", value = time },
             { text = "#uv.results.chase.units.deployed", value = deploys },
             { text = "#uv.results.chase.units.damaged", value = tags },
