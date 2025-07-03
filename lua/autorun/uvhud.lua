@@ -1156,10 +1156,7 @@ UV_UI.racing.carbon.events = {
 
 onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
 	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-	-- if is_local_player then
-		-- name = "YOU"
-	-- end
-	
+
 	if is_global_best then
 		UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
 	else
@@ -3249,7 +3246,7 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 		
 		local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
 		local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
-		local iconDiffY = ScrH() * 0.045
+		local iconDiffY = ScrH() * 0.055
 		local iconStartY = notifState.startY - iconDiffY
 		local iconY
 		if not notifState.fadeStartTime then
@@ -7089,6 +7086,10 @@ end
 
 UV_UI.racing.prostreet.main = prostreet_racing_main
 
+UV_UI.racing.prostreet.states = {
+    LapCompleteText = nil,
+}
+
 UV_UI.racing.prostreet.events = {
     ShowResults = function(sortedRacers) -- ProStreet
         local w = ScrW()
@@ -7390,6 +7391,101 @@ end,
                 -- _main()
                 UV_UI.racing.prostreet.events.ShowResults(sortedRacers)
             end
+        end)
+    end,
+
+onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
+	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+	local llt = ""
+
+	if lap_final then llt = language.GetPhrase("uv.race.finallap") .. " " end
+	
+	if is_global_best then
+		UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+	else
+		if is_local_player then
+			UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+		else
+			return
+		end
+	end
+		local SID = 0.35
+
+		local prostreet_noti_animState = {
+			active = false,
+			startTime = 0,
+			slideInDuration = SID,
+			holdDuration = 3,
+			slideDownDuration = 0.25,
+			upper = {
+				startX = ScrW() * 0.25,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.35,
+				slideDownEndY = ScrH() * 0.6,
+			},
+			lower = {
+				startX = ScrW() * 0.75,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.385,
+				slideDownEndY = ScrH() * 0.635,
+			},
+		}
+
+        UV_UI.racing.prostreet.events.prostreet_noti_animState = prostreet_noti_animState
+        prostreet_noti_animState.active = true
+        prostreet_noti_animState.startTime = CurTime()
+
+        ----------------------------------------------------------------------------
+        
+        -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
+        if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.PROSTREET_NOTIFICATION_LAP then
+            hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
+        end
+
+        -- Add the HUDPaint hook freshly for this animation
+        hook.Add("HUDPaint", "PROSTREET_NOTIFICATION_LAP", function()
+            local elapsed = CurTime() - prostreet_noti_animState.startTime
+
+            local function calcPosAlpha(elapsed, elem)
+                local x, y, alpha = elem.centerX, elem.y, 255
+                if elapsed < prostreet_noti_animState.slideInDuration then
+                    local t = elapsed / prostreet_noti_animState.slideInDuration
+                    x = Lerp(t, elem.startX, elem.centerX)
+                    alpha = Lerp(t, 0, 255)
+                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration then
+                    x = elem.centerX
+                    alpha = 255
+                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
+                    local t = (elapsed - prostreet_noti_animState.slideInDuration - prostreet_noti_animState.holdDuration) / prostreet_noti_animState.slideDownDuration
+                    -- y = Lerp(t, elem.y, elem.slideDownEndY)
+                    alpha = Lerp(t, 255, 0)
+                else
+                    alpha = 0
+                end
+                return x, y, alpha
+            end
+
+            local lines = string.Explode("\n", UV_UI.racing.prostreet.states.LapCompleteText or "")
+            if #lines < 1 then return end
+			local upperLine = lines[1] or ""
+			local lowerLine = lines[2] or ""
+
+			-- Upper
+            local ux, uy, ualpha = calcPosAlpha(elapsed, prostreet_noti_animState.upper)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
+            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+
+			-- Lower
+            local lx, ly, lalpha = calcPosAlpha(elapsed, prostreet_noti_animState.lower)
+            carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
+            carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx, ly, Color(255, 255, 255, lalpha), nil)
+
+            -- Disable animation and remove hook when done
+            if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
+                prostreet_noti_animState.active = false
+                hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
+            end
+
         end)
     end
 }
