@@ -575,7 +575,7 @@ function UVRenderEnemySquare(ent)
 				draw.DrawText(enemypos, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			end
 			
-			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
+			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY - (h * 0.01), Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
