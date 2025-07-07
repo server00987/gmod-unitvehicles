@@ -1518,32 +1518,34 @@ else
         end
 		
 		-- Draw squares for all other race participants
-		local localPlayer = LocalPlayer()
-		local myVehicle = localPlayer:GetVehicle()
-		if not IsValid(myVehicle) then return end
+		if RacerTags:GetBool() then
+			local localPlayer = LocalPlayer()
+			local myVehicle = localPlayer:GetVehicle()
+			if not IsValid(myVehicle) then return end
 
-		local renderQueue = {}
+			local renderQueue = {}
 
-		for vehicle, info in pairs(UVHUDRaceInfo.Participants or {}) do
-			if not IsValid(vehicle) or vehicle == myVehicle then continue end
-			if info.Status == "Disqualified" or info.Status == "Busted" then continue end
+			for vehicle, info in pairs(UVHUDRaceInfo.Participants or {}) do
+				if not IsValid(vehicle) or vehicle == myVehicle then continue end
+				if info.Status == "Disqualified" or info.Status == "Busted" then continue end
 
-			local dist = localPlayer:GetPos():DistToSqr(vehicle:GetPos())
-			table.insert(renderQueue, { vehicle = vehicle, dist = dist })
-		end
+				local dist = localPlayer:GetPos():DistToSqr(vehicle:GetPos())
+				table.insert(renderQueue, { vehicle = vehicle, dist = dist })
+			end
 
-		-- Sort so farther ones draw first, closer ones last (on top)
-		table.sort(renderQueue, function(a, b)
-			return a.dist < b.dist
-		end)
+			-- Sort so farther ones draw first, closer ones last (on top)
+			table.sort(renderQueue, function(a, b)
+				return a.dist < b.dist
+			end)
 
-		local maxSquares = 4
-		local count = math.min(#renderQueue, maxSquares)
+			local maxSquares = 4
+			local count = math.min(#renderQueue, maxSquares)
 
-		for i = count, 1, -1 do
-			local data = renderQueue[i]
-			if data and IsValid(data.vehicle) then
-				UVRenderEnemySquare(data.vehicle)
+			for i = count, 1, -1 do
+				local data = renderQueue[i]
+				if data and IsValid(data.vehicle) then
+					UVRenderEnemySquare(data.vehicle)
+				end
 			end
 		end
 

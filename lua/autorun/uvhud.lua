@@ -540,11 +540,42 @@ function UVRenderEnemySquare(ent)
                 fadeAlpha = 0
             end
         end
-        
 		
+		-- Edge fade (screen position based)
+		local edgeFadeAlpha = 255
+
+		local edgeStartX = w * 0.2
+		local edgeEndX = w * 0.8
+		local edgeStartY = h * 0.2
+		local edgeEndY = h * 0.8
+
+		-- Horizontal fade
+		if textX < w * 0.05 or textX > w * 0.95 then
+			edgeFadeAlpha = 0
+		elseif textX < edgeStartX then
+			edgeFadeAlpha = 255 * ((textX - w * 0.05) / (edgeStartX - w * 0.05))
+		elseif textX > edgeEndX then
+			edgeFadeAlpha = 255 * ((w * 0.95 - textX) / (w * 0.95 - edgeEndX))
+		end
+
+		-- Vertical fade
+		if textY < h * 0.05 or textY > h * 0.95 then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 0)
+		elseif textY < edgeStartY then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 255 * ((textY - h * 0.05) / (edgeStartY - h * 0.05)))
+		elseif textY > edgeEndY then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 255 * ((h * 0.95 - textY) / (h * 0.95 - edgeEndY)))
+		end
+
+		-- Combine with distance fade
+		fadeAlpha = math.min(fadeAlpha, edgeFadeAlpha)
+
 		local xheight = 0
-		if !UVHUDCopMode then xheight = h * 0 end
-			
+		-- if !UVHUDCopMode then xheight = h * 0 end
+
+		-- if #enemycallsign > 20 then -- If too long
+			-- enemycallsign = string.sub(enemycallsign, 1, 20 - 3) .. "..."
+		-- end
 
         cam.Start2D()
 			local pos = ent:GetPos() + Vector(0, 0, 80)
@@ -3878,7 +3909,7 @@ local function mw_racing_main( ... )
         local mode = entry[3]
         local diff = entry[4]
         -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
-        local racercount = i * w * 0.014
+        local racercount = i * w * 0.01407
         -- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
         
         local Strings = {
@@ -5509,8 +5540,11 @@ local function undercover_racing_main( ... )
         end
         
         local text = alt and (status_text) or (racer_name)
-        -- text = string.upper(text)
-        
+
+		if #text > 25 then
+			text = string.sub(text, 1, 25 - 3) .. "..."
+		end
+
         -- This should only draw on LocalPlayer() but couldn't figure it out
         if is_local_player then
             surface.SetDrawColor(Colors.Undercover_Accent2Transparent:Unpack())
@@ -7087,6 +7121,10 @@ local function prostreet_racing_main( ... )
         
         local text = alt and (status_text) or (racer_name)
         
+		if #text > 20 then
+			text = string.sub(text, 1, 20 - 3) .. "..."
+		end
+
         if !boxyes then
             surface.SetDrawColor(0, 0, 0, 200)
             draw.NoTexture()

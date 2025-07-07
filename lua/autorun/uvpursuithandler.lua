@@ -500,7 +500,7 @@ if SERVER then
 	//PursuitThemePlayRandomHeat = CreateConVar("unitvehicle_pursuitthemeplayrandomheat", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
 	RepairCooldown = CreateConVar("unitvehicle_repaircooldown", 60, {FCVAR_ARCHIVE}, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateConVar("unitvehicle_repairrange", 100, {FCVAR_ARCHIVE}, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
-	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will have their own tags which you can see as a cop during pursuits.")
+	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
 	RacerPursuitTech = CreateConVar("unitvehicle_racerpursuittech", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
 	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
@@ -2463,7 +2463,7 @@ else --HUD/Options
 	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
 	RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateClientConVar("unitvehicle_repairrange", 100, true, false, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
-	RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers will have their own tags which you can see as a cop during pursuits.")
+	RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
 	RacerPursuitTech = CreateClientConVar("unitvehicle_racerpursuittech", 1, true, false, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
 	RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
@@ -4019,8 +4019,6 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.pursuit.respawntime.desc")
 			panel:NumSlider("#uv.settings.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
 			panel:ControlHelp("#uv.settings.pursuit.spikeduration.desc")
-			panel:CheckBox("#uv.settings.pursuit.racertags", "unitvehicle_racertags")
-			panel:ControlHelp("#uv.settings.pursuit.racertags.desc")
 			
 			panel:Help("#uv.settings.ptech")
 			panel:ControlHelp("#uv.settings.ptech.desc")
@@ -4090,6 +4088,10 @@ else --HUD/Options
 			uistylepursuit:AddChoice( "Undercover", "undercover")
 			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
 			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
+			
+			panel:CheckBox("#uv.settings.ui.racertags", "unitvehicle_racertags")
+			panel:ControlHelp("#uv.settings.ui.racertags.desc.racing")
+			panel:ControlHelp("#uv.settings.ui.racertags.desc.pursuit")
 			
 			panel:Help("#uv.settings.audio.title")
 			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_playmusic")
