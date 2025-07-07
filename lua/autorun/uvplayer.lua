@@ -948,6 +948,7 @@ else
     
     net.Receive("UVUnitTakedown", function()
 		if UVHUDCopMode then return end
+		if UVHUDDisplayRacing then return end
 		
 		local unitType = net.ReadString()
         local name = net.ReadString()
