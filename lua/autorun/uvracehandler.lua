@@ -1548,7 +1548,42 @@ else
 				end
 			end
 		end
+		
+		-- Handle minimap blips *after* rendering; only for Participants
+		for vehicle, info in pairs(UVHUDRaceInfo.Participants or {}) do
+			if not IsValid(vehicle) or vehicle == myVehicle then continue end
 
+			if not GMinimap then continue end
+			if not vehicle.displayedonhud then
+				vehicle.displayedonhud = true
+				local blip, id = GMinimap:AddBlip({
+					id = "UVBlip" .. vehicle:EntIndex(),
+					parent = vehicle,
+					icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
+					scale = 1.4,
+					color = Color(255, 191, 0),
+				})
+				if vehicle:GetClass() == "prop_vehicle_jeep" then
+					blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+				end
+			end
+
+			if vehicle.displayedonhud then
+				local curblip = GMinimap:FindBlipByID("UVBlip" .. vehicle:EntIndex())
+				if not curblip then continue end
+
+				if UVHUDDisplayCooldown or 
+				   (UVHUDCopMode and 
+					(tonumber(UVUnitsChasing) <= 0 or not vehicle.inunitview) and 
+					not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
+				then
+					curblip.alpha = 0
+				else
+					curblip.alpha = 255
+				end
+			end
+		end
+		
         -- check for wrong way
         if _UVCurrentCheckpoint and IsValid(_UVCurrentCheckpoint) then
             local vehicle_center = my_vehicle:WorldSpaceCenter()

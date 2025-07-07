@@ -406,7 +406,36 @@ function UVRenderCommander(ent)
         elseif distInMeters > fadeDist then
             fadeAlpha = 0
         end
-        
+        		
+		-- Edge fade (screen position based)
+		local edgeFadeAlpha = 255
+
+		local edgeStartX = w * 0.2
+		local edgeEndX = w * 0.8
+		local edgeStartY = h * 0.2
+		local edgeEndY = h * 0.8
+
+		-- Horizontal fade
+		if textX < w * 0.05 or textX > w * 0.95 then
+			edgeFadeAlpha = 0
+		elseif textX < edgeStartX then
+			edgeFadeAlpha = 255 * ((textX - w * 0.05) / (edgeStartX - w * 0.05))
+		elseif textX > edgeEndX then
+			edgeFadeAlpha = 255 * ((w * 0.95 - textX) / (w * 0.95 - edgeEndX))
+		end
+
+		-- Vertical fade
+		if textY < h * 0.05 or textY > h * 0.95 then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 0)
+		elseif textY < edgeStartY then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 255 * ((textY - h * 0.05) / (edgeStartY - h * 0.05)))
+		elseif textY > edgeEndY then
+			edgeFadeAlpha = math.min(edgeFadeAlpha, 255 * ((h * 0.95 - textY) / (h * 0.95 - edgeEndY)))
+		end
+
+		-- Combine with distance fade
+		fadeAlpha = math.min(fadeAlpha, edgeFadeAlpha)
+
         cam.Start2D()
         local bustdist = math.Round(distInMeters) .. " m"
         

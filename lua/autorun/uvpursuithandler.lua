@@ -3601,36 +3601,38 @@ else --HUD/Options
 
 
 				-- Handle minimap blips *after* rendering
-				for _, ent in pairs(UVHUDWantedSuspects) do
-					if not IsValid(ent) then continue end
+				if UVHUDCopMode then -- Only as a Cop
+					for _, ent in pairs(UVHUDWantedSuspects) do
+						if not IsValid(ent) then continue end
 
-					if not GMinimap then continue end
-					if not ent.displayedonhud then
-						ent.displayedonhud = true
-						local blip, id = GMinimap:AddBlip({
-							id = "UVBlip" .. ent:EntIndex(),
-							parent = ent,
-							icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
-							scale = 1.4,
-							color = Color(255, 191, 0),
-						})
-						if ent:GetClass() == "prop_vehicle_jeep" then
-							blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+						if not GMinimap then continue end
+						if not ent.displayedonhud then
+							ent.displayedonhud = true
+							local blip, id = GMinimap:AddBlip({
+								id = "UVBlip" .. ent:EntIndex(),
+								parent = ent,
+								icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
+								scale = 1.4,
+								color = Color(255, 191, 0),
+							})
+							if ent:GetClass() == "prop_vehicle_jeep" then
+								blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+							end
 						end
-					end
 
-					if ent.displayedonhud then
-						local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
-						if not curblip then continue end
+						if ent.displayedonhud then
+							local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
+							if not curblip then continue end
 
-						if UVHUDDisplayCooldown or 
-						   (UVHUDCopMode and 
-							(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
-							not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
-						then
-							curblip.alpha = 0
-						else
-							curblip.alpha = 255
+							if UVHUDDisplayCooldown or 
+							   (UVHUDCopMode and 
+								(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+								not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
+							then
+								curblip.alpha = 0
+							else
+								curblip.alpha = 255
+							end
 						end
 					end
 				end
