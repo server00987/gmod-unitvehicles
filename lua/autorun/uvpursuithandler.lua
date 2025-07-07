@@ -3465,8 +3465,8 @@ else --HUD/Options
 	
 	outofpursuit = 0
 	
-	hook.Add( "HUDPaint", "UVHUD", function() --HUD
-		
+	hook.Add( "HUDPaint", "UVHUDPursuit", function() --HUD
+
 		local vehicle = LocalPlayer():GetVehicle()
 		
 		local w = ScrW()
@@ -3474,56 +3474,7 @@ else --HUD/Options
 		local hudyes = showhud:GetBool()
 		local hudtype = UVHUDTypePursuit:GetString()
 		local lang = language.GetPhrase
-		
-		-- local UnitsChasing = tonumber(UVUnitsChasing)
-		-- local UVBustTimer = BustedTimer:GetFloat()
-		
-		-- TEST VARS, REMOVE AFTER FINISHING
-		-- hudyes = true 
-		-- UVHUDDisplayPursuit = true
-		-- UVHUDCopMode = false
-		-- UVHUDDisplayCooldown = true
-		-- UVHUDDisplayNotification = false
-		-- UVHUDDisplayBusting = false
-		-- UVHUDDisplayEvading = false
-		-- UVHUDDisplayHidingPrompt = true
-		-- UVWrecks = 1
-		-- UVTags = 1
-		-- UVTimer = CurTime()
-		-- UVBounty = 0
-		-- UVHeatLevel = 5
-		-- UVBountyNo = 589328
-		-- UVCooldownTimer = .5
-		-- ResourceText = 30
-		-- UVUnitsChasing = 2
-		-- UnitsChasing = 1v
-		
-		--[[
-		['InPursuit'] = false,
-		['PursuitStart'] = 0,
-		['Heat'] = 1,
-		['UnitsChasing'] = 0,
-		['ResourcePoints'] = 0,
-		['Deploys'] = 0,
-		['PursuitLength'] = 0,
-		['Wrecks'] = 0,
-		['Tags'] = 0,
-		['Bounty'] = 0,
-		['CommanderActive'] = false,
-		['CommanderEntity'] = nil
-		]]
-		
-		-- if PursuitTable.IsEvading then
-		-- 	if not lastEvasionProgress or lastEvasionProgress == 0 then
-		-- 		lastEvasionProgress = CurTime()
-		-- 	end
-		
-		-- 	UVEvadingProgress = math.Clamp((CurTime() - lastEvasionProgress) / 5, 0, 1)
-		-- else
-		-- 	UVEvadingProgress = 0
-		-- 	lastEvasionProgress = 0
-		-- end
-		
+
 		if UVHUDDisplayPursuit then
 			if not UVCooldownProgress then UVCooldownProgress = 0 end
 			
@@ -3601,47 +3552,7 @@ else --HUD/Options
 		if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			LocalPlayer():ConCommand('uv_skipsong')
 		end
-		
-		-- if UVHUDDisplayBusting and !UVHUDDisplayCooldown and hudyes then
-		-- if !BustingProgress or BustingProgress == 0 then
-		-- BustingProgress = CurTime()
-		-- end
-		-- surface.SetDrawColor( 0, 0, 0, 200)
-		-- surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
-		-- surface.SetDrawColor(Color(255,0,0))
-		-- surface.DrawRect(w/3,h/1.1,12,40)
-		-- surface.DrawRect(w*2/3,h/1.1,12,40)
-		-- surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-		-- surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
-		-- surface.SetDrawColor(Color(255,0,0))
-		-- local T = math.Clamp((UVBustingProgress/UVBustTimer)*(w/3-20),0,w/3-20)
-		-- surface.DrawRect(w/3+16,h/1.1+16,T,8)
-		-- else
-		-- BustingProgress = 0
-		-- end
-		
-		-- if UVHUDDisplayCooldown and hudyes then
-		-- if !CooldownProgress or CooldownProgress == 0 then
-		-- CooldownProgress = CurTime()
-		-- end
-		-- UVSoundCooldown()
-		-- if !UVHUDCopMode then
-		-- surface.SetDrawColor( 0, 0, 0, 200)
-		-- surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
-		-- surface.SetDrawColor(Color(0,0,255))
-		-- surface.DrawRect(w/3,h/1.1,12,40)
-		-- surface.DrawRect(w*2/3,h/1.1,12,40)
-		-- surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-		-- surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
-		-- surface.SetDrawColor(Color(0,0,255))
-		-- local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
-		-- surface.DrawRect(w/3+16,h/1.1+16,T,8)
-		-- end
-		-- EvadingProgress = 0
-		-- else
-		-- CooldownProgress = 0
-		-- end
-		
+
 		local localPlayer = LocalPlayer()
 		local entities = ents.GetAll()
 		local box_color = Color(0, 255, 0)
@@ -3659,35 +3570,63 @@ else --HUD/Options
 			end
 		end
 		
-		if UVHUDWantedSuspects and !uvclientjammed and RacerTags:GetBool() then
-			if next(UVHUDWantedSuspects) != nil then
+		if UVHUDWantedSuspects and not uvclientjammed and UVHUDCopMode and RacerTags:GetBool() then
+			if next(UVHUDWantedSuspects) ~= nil then
+				local renderQueue = {}
+
+				for _, ent in pairs(UVHUDWantedSuspects) do
+					if IsValid(ent) then
+						local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
+						table.insert(renderQueue, { vehicle = ent, distance = dist })
+					end
+				end
+
+				-- Sort ascending (closest first)
+				table.SortByMember(renderQueue, "distance", true)
+
+				local maxSquares = 4
+				local numToRender = math.min(#renderQueue, maxSquares)
+
+				-- Render farthest first so closest overlays on top
+				for i = numToRender, 1, -1 do
+					local data = renderQueue[i]
+					if data and IsValid(data.vehicle) then
+						UVRenderEnemySquare(data.vehicle)
+					end
+				end
+				
+				for i, data in ipairs(renderQueue) do
+				  print(i, data.vehicle, data.distance)
+				end
+
+
+				-- Handle minimap blips *after* rendering
 				for _, ent in pairs(UVHUDWantedSuspects) do
 					if not IsValid(ent) then continue end
-					UVRenderEnemySquare(ent)
-					
+
 					if not GMinimap then continue end
 					if not ent.displayedonhud then
 						ent.displayedonhud = true
-						local blip, id = GMinimap:AddBlip( {
-							id = "UVBlip"..ent:EntIndex(),
+						local blip, id = GMinimap:AddBlip({
+							id = "UVBlip" .. ent:EntIndex(),
 							parent = ent,
 							icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
 							scale = 1.4,
-							color = Color( 255, 191, 0),
-						} )
+							color = Color(255, 191, 0),
+						})
 						if ent:GetClass() == "prop_vehicle_jeep" then
 							blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
 						end
 					end
+
 					if ent.displayedonhud then
-						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
+						local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
 						if not curblip then continue end
-						
+
 						if UVHUDDisplayCooldown or 
-						(UVHUDCopMode and 
-						(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
-						not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and 
-						UVOneCommanderActive)) 
+						   (UVHUDCopMode and 
+							(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+							not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
 						then
 							curblip.alpha = 0
 						else
@@ -3697,6 +3636,7 @@ else --HUD/Options
 				end
 			end
 		end
+
 		
 		if UVHUDRoadblocks then
 			if next(UVHUDRoadblocks) != nil then

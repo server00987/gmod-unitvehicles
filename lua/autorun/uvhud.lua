@@ -377,47 +377,26 @@ function UVRenderCommander(ent)
                 return
             end
         end
-        
-        local pos = ent:GetPos()
-        
-        local mins, maxs = ent:GetCollisionBounds()
-        local points = {
-            Vector(maxs.x, maxs.y, maxs.z),
-            Vector(maxs.x, maxs.y, mins.z),
-            Vector(maxs.x, mins.y, mins.z),
-            Vector(maxs.x, mins.y, maxs.z),
-            Vector(mins.x, mins.y, mins.z),
-            Vector(mins.x, mins.y, maxs.z),
-            Vector(mins.x, maxs.y, mins.z),
-            Vector(mins.x, maxs.y, maxs.z)
-        }
-        
-        local MaxX, MinX, MaxY, MinY
-        local isVisible = false
-        
-        for i = 1, #points do
-            local v = points[i]
-            local p = pos + v
-            local screenPos = p:ToScreen()
-            isVisible = screenPos.visible
-            
-            if MaxX ~= nil then
-                MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
-                MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
-            else
-                MaxX, MaxY = screenPos.x, screenPos.y
-                MinX, MinY = screenPos.x, screenPos.y
-            end
-        end
-        
-        local dist = localPlayer:GetPos():Distance(ent:GetPos())
-        local distInMeters = dist * 0.01905
-        
-        local textX = (MinX + MaxX) / 2
-        local textY = MinY - 125
+		
+		if localPlayer == driver then return end
+		
+		-- Anchor point at vehicle origin (or lightly above)
+		local anchorPos = ent:GetPos() + Vector(0, 0, 70) -- Light lift to target roof
+
+		-- Convert to 2D screen space
+		local screenPos = anchorPos:ToScreen()
+		if not screenPos.visible then return end
+
+		-- Fixed screen offset (so it doesn’t drift with distance)
+		local textX = screenPos.x
+		local textY = screenPos.y - 120 -- This is in pixels and stays consistent
+		
         local w = ScrW()
         local h = ScrH()
         
+        local dist = localPlayer:GetPos():Distance(ent:GetPos())
+        local distInMeters = dist * 0.01905
+
         -- Distance in meters
         local fadeAlpha = 255
         local fadeDist = 200
@@ -481,43 +460,69 @@ function UVRenderEnemySquare(ent)
         end
     end
     
-    if IsValid(ent) then
-        if !UVHUDDisplayPursuit then return end
-        if UVHUDDisplayCooldown or 
-        (UVHUDCopMode and 
-        (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
-        not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) 
-        and UVOneCommanderActive)) 
-        then return end
-        
-        local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
-        local enemydriver = ent:GetDriver()
-        if enemydriver:IsPlayer() then
-            enemycallsign = enemydriver:GetName()
-            if localPlayer == enemydriver then
-                return
-            end
-        end
-        
-        local pos = ent:GetPos()
-        
-        local MaxX, MinX, MaxY, MinY
-        local isVisible = false
-        
-        local p = pos
-        local screenPos = p:ToScreen()
-        isVisible = screenPos.visible
-        
-        if MaxX ~= nil then
-            MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
-            MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
-        else
-            MaxX, MaxY = screenPos.x, screenPos.y
-            MinX, MinY = screenPos.x, screenPos.y
-        end
-        
-        local textX = (MinX + MaxX) / 2
-        local textY = MinY - 150
+	if IsValid(ent) then
+		if not (UVHUDDisplayPursuit or UVHUDDisplayRacing) then return end
+
+		if (UVHUDCopMode and UVHUDDisplayCooldown) or
+		   (UVHUDCopMode and (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+		   not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive))
+		then return end
+
+		if UVHUDRaceInfo and UVHUDRaceInfo.Participants and UVHUDRaceInfo.Participants[ent] then
+			local pdata = UVHUDRaceInfo.Participants[ent]
+			if pdata.Finished or pdata.Disqualified or pdata.Busted then
+				return
+			end
+		end
+		
+		local function GetRacerPositionForEntity(ent)
+			if not UVHUDRaceInfo or not UVHUDRaceInfo.Participants then return nil end
+			local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo.Participants)
+			for i, entry in ipairs(string_array) do
+				local participant_ent = nil
+				if sorted_table and sorted_table[i] then
+					participant_ent = sorted_table[i].vehicle
+				end
+
+				if participant_ent == ent then
+					return i
+				end
+			end
+			return nil
+		end
+
+		local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
+		local enemydriver = ent:GetDriver()
+		local enemypos = "?"
+
+		-- Prefer player name if valid
+		if IsValid(enemydriver) and enemydriver:IsPlayer() then
+			if localPlayer == enemydriver then return end
+			enemycallsign = enemydriver:GetName()
+		end
+
+		-- Fallback: use name from leaderboard data
+		if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
+			local racerInfo = UVHUDRaceInfo.Participants[ent]
+			if racerInfo then
+				enemypos = "#uv.race.pos.num." .. GetRacerPositionForEntity(ent)
+				if racerInfo.Name then
+					enemycallsign = racerInfo.Name
+				end
+			end
+		end
+
+		-- Anchor point at vehicle origin (or lightly above)
+		local anchorPos = ent:GetPos() + Vector(0, 0, 70) -- Light lift to target roof
+
+		-- Convert to 2D screen space
+		local screenPos = anchorPos:ToScreen()
+		if not screenPos.visible then return end
+
+		-- Fixed screen offset (so it doesn’t drift with distance)
+		local textX = screenPos.x
+		local textY = screenPos.y - 120 -- This is in pixels and stays consistent
+
         local w = ScrW()
         local h = ScrH()
         
@@ -536,6 +541,11 @@ function UVRenderEnemySquare(ent)
             end
         end
         
+		
+		local xheight = 0
+		if !UVHUDCopMode then xheight = h * 0 end
+			
+
         cam.Start2D()
 			local pos = ent:GetPos() + Vector(0, 0, 80)
 			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
@@ -543,21 +553,27 @@ function UVRenderEnemySquare(ent)
 			
 			local rectlen = string.len(enemycallsign)
 			local rectxpos = textX - (w * (0.00375 * rectlen))
-			local rectypos = textY + (w * 0.0125)
+			local rectypos = textY + (w * 0.01)
 			
 			surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
-			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054 + xheight) -- Left
+			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054 + xheight) -- Right
 			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
+			surface.DrawRect( rectxpos, rectypos + h*0.05 + xheight, (w * (0.0075 * rectlen)), h*0.002) -- Down
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475) + xheight, w * 0.0075 + 5, h * 0.0175 + 5, -90)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05 + xheight)
 			
-			draw.DrawText("\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			if UVHUDCopMode then
+				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			else
+				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(enemypos, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			end
 			
 			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
@@ -1493,7 +1509,6 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 
 UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
 		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
 		isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 		
@@ -2330,6 +2345,7 @@ local function carbon_pursuit_main( ... )
     
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
+	if UVHUDDisplayRacing then return end
     
     local vehicle = LocalPlayer():GetVehicle()
     
@@ -3267,7 +3283,6 @@ end
 UV_UI.pursuit.mostwanted.events = {
 	notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
         UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ),
 		isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
 
@@ -4868,7 +4883,6 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 
 UV_UI.pursuit.undercover.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
         UV_UI.pursuit.undercover.states.TakedownText = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
 
         local anim = {

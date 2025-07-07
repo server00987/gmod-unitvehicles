@@ -947,12 +947,13 @@ if SERVER then
 else
     
     net.Receive("UVUnitTakedown", function()
-        local unitType = net.ReadString()
+		if UVHUDCopMode then return end
+		
+		local unitType = net.ReadString()
         local name = net.ReadString()
         local bounty = net.ReadUInt( 32 )
         local bountyCombo = net.ReadUInt( 7 )
         local isPlayer = net.ReadBool()
-
         hook.Run( 'UIEventHook', 'pursuit', 'onUnitTakedown', unitType, name, string.Comma( bounty ), bountyCombo, isPlayer)
     end)
     
