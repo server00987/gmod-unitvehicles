@@ -1,3 +1,5 @@
+local _last_backup_pulse_second = 0
+
 local Colors = {
     ["MW_LocalPlayer"] = Color(223, 184, 127), --Color(255, 187, 0),
     ["MW_Accent"] = Color(223, 184, 127),
@@ -60,7 +62,7 @@ UVMaterials = {
     -- Carbon
     ["TAKEDOWN_CIRCLE_CARBON"] = Material("unitvehicles/icons_carbon/FULL_CIRCLE.png"),
     ["TAKEDOWN_RING_CARBON"] = Material("unitvehicles/icons_carbon/FULL_CIRCLE_RING.png"),
-	
+    
     ["UNITS_DISABLED_CARBON"] = Material("unitvehicles/icons_carbon/COPS_DESTROYED.png"),
     ["UNITS_CARBON"] = Material("unitvehicles/icons_carbon/COPS_INVOLVED.png"),
     ["HEAT_CARBON"] = Material("unitvehicles/icons_carbon/FLASHER_ICON_HEAT.png"),
@@ -92,25 +94,25 @@ UVMaterials = {
     ["BUSTED_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/BUSTED_ICON_GLOW.png", "smooth mips"),
     ["EVADE_ICON_UC"] = Material("unitvehicles/icons_undercover/EVADE_CAR_ICON.png", "smooth mips"),
     ["EVADE_ICON_UC_GLOW"] = Material("unitvehicles/icons_undercover/EVADE_ICON_GLOW.png", "smooth mips"),
-	
-	-- Underground 2
+    
+    -- Underground 2
     ["RACE_BG_UPPER_UG2"] = Material("unitvehicles/hud_underground2/3RDPERSON_BOXCORNER.png"),
     ["RACE_BG_LAP_UG2"] = Material("unitvehicles/hud_underground2/3RDPERSON_BOXLAPS.png"),
     ["RACE_BG_TIME_UG2"] = Material("unitvehicles/hud_underground2/3RDPERSON_BOXTIME.png"),
     ["RACE_BG_TIME_UG2_ALT"] = Material("unitvehicles/hud_underground2/3RDPERSON_BOXTIME2.png"),
-	
+    
     ["RESULTS_UG2_BG"] = Material("unitvehicles/hud_underground2/results_bg_bg.png"),
     ["RESULTS_UG2_SHINE"] = Material("unitvehicles/hud_underground2/results_bg_shine.png"),
     ["RESULTS_UG2_LP"] = Material("unitvehicles/hud_underground2/results_bg_lp.png"),
     ["RESULTS_UG2_BUTTON"] = Material("unitvehicles/hud_underground2/UI_PC_GENERIC_BUTTON.png"),
-		
-	-- ProStreet
+    
+    -- ProStreet
     ["RESULTS_PS_CURVES"] = Material("unitvehicles/icons_prostreet/curves.png"),
     ["RESULTS_PS_HUB"] = Material("unitvehicles/icons_prostreet/hub_44.png"),
     ["RESULTS_PS_WING"] = Material("unitvehicles/icons_prostreet/flixfx_wing.png"),
     ["RESULTS_PS_WING_INV"] = Material("unitvehicles/icons_prostreet/flixfx_wing_inv.png"),
     ["RESULTS_PS_SP8"] = Material("unitvehicles/icons_prostreet/flixfx_sp8.png"),
-	
+    
 }
 
 UV_UI_Events = {
@@ -123,157 +125,157 @@ UV_UI_Events = {
 }
 
 if CLIENT then
-	surface.CreateFont("UVFont", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0462962963)),
-		weight = 500,
-		italic = true,
-	})
-	
-	surface.CreateFont("UVFont-Shadow", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0462962963)),
-		weight = 500,
-		italic = true,
-		shadow = true
-	})
-	
-	surface.CreateFont("UVFont-Smaller", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0425)),
-		weight = 500,
-		italic = true,
-	})
-	
-	surface.CreateFont("UVFont-Bolder", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0425)),
-		weight = 1000,
-		italic = false,
-		shadow = true
-	})
-	
-	surface.CreateFont("UVFont2", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0462962963)),
-		weight = 500,
-	})
-	
-	surface.CreateFont("UVFont3", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.0462962963)),
-		weight = 500,
-		shadow = true,
-	})
-	
-	surface.CreateFont("UVFont3Big", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.085)),
-		weight = 500,
-		-- italic = true,
-	})
-		
-	surface.CreateFont("UVFont3Bigger", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.12)),
-		weight = 500,
-		-- italic = true,
-	})
-	
-	surface.CreateFont("UVFont4", {
-		font = "Arial",
-		size = (math.Round(ScrH()*0.02314814815)),
-		weight = 1100,
-		shadow = true,
-	})
-	
-	surface.CreateFont("UVCarbonFont", {
-		font = "HelveticaNeue LT 57 Cn",
-		size = (math.Round(ScrH()*0.043)),
-		shadow = true,
-		weight = 1000,
-	})
-		
-	surface.CreateFont("UVCarbonFont-Smaller", {
-		font = "HelveticaNeue LT 57 Cn",
-		size = (math.Round(ScrH()*0.035)),
-		shadow = true,
-		weight = 1000,
-	})
-	
-	surface.CreateFont("UVUndercoverAccentFont", {
-		font = "HelveticaNeue LT 57 Cn",
-		size = (math.Round(ScrH()*0.033)),
-		shadow = true,
-		weight = 1000,
-	})
-	
-	surface.CreateFont("UVUndercoverLeaderboardFont", {
-		font = "HelveticaNeue LT 57 Cn",
-		size = (math.Round(ScrH()*0.03)),
-		shadow = true,
-		weight = 1000,
-	})
-	
-	surface.CreateFont("UVUndercoverWhiteFont", {
-		font = "Aquarius Six",
-		size = (math.Round(ScrH()*0.047)),
-		shadow = true,
-		weight = 1,
-	})
-	
-	surface.CreateFont("UVCarbonLeaderboardFont", {
-		font = "HelveticaNeue LT 57 Cn",
-		size = (math.Round(ScrH()*0.02314814815)),
-		shadow = true,
-		weight = 1000,
-	})
-	
-	surface.CreateFont("UVFont5", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.043)),
-		weight = 500,
-	})
-	
-	surface.CreateFont("UVFont5UI", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.035)),
-		weight = 500,
-	})
-	
-	surface.CreateFont("UVFont5UI-BottomBar", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.041)),
-		weight = 500,
-	})
-	
-	surface.CreateFont("UVFont5WeightShadow", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.043)),
-		weight = 500,
-		shadow = true
-	})
-	
-	surface.CreateFont("UVFont5Shadow", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.03)),
-		weight = 350,
-		shadow = true
-	})
-	
-	surface.CreateFont("UVMostWantedLeaderboardFont", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.02314814815)),
-		weight = 1000,
-		shadow = true
-	})
-	
-	surface.CreateFont("UVFont5ShadowBig", {
-		font = "EurostileBold",
-		size = (math.Round(ScrH()*0.1)),
-		weight = 500,
-		shadow = true,
-	})
+    surface.CreateFont("UVFont", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0462962963)),
+        weight = 500,
+        italic = true,
+    })
+    
+    surface.CreateFont("UVFont-Shadow", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0462962963)),
+        weight = 500,
+        italic = true,
+        shadow = true
+    })
+    
+    surface.CreateFont("UVFont-Smaller", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0425)),
+        weight = 500,
+        italic = true,
+    })
+    
+    surface.CreateFont("UVFont-Bolder", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0425)),
+        weight = 1000,
+        italic = false,
+        shadow = true
+    })
+    
+    surface.CreateFont("UVFont2", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0462962963)),
+        weight = 500,
+    })
+    
+    surface.CreateFont("UVFont3", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0462962963)),
+        weight = 500,
+        shadow = true,
+    })
+    
+    surface.CreateFont("UVFont3Big", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.085)),
+        weight = 500,
+        -- italic = true,
+    })
+    
+    surface.CreateFont("UVFont3Bigger", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.12)),
+        weight = 500,
+        -- italic = true,
+    })
+    
+    surface.CreateFont("UVFont4", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.02314814815)),
+        weight = 1100,
+        shadow = true,
+    })
+    
+    surface.CreateFont("UVCarbonFont", {
+        font = "HelveticaNeue LT 57 Cn",
+        size = (math.Round(ScrH()*0.043)),
+        shadow = true,
+        weight = 1000,
+    })
+    
+    surface.CreateFont("UVCarbonFont-Smaller", {
+        font = "HelveticaNeue LT 57 Cn",
+        size = (math.Round(ScrH()*0.035)),
+        shadow = true,
+        weight = 1000,
+    })
+    
+    surface.CreateFont("UVUndercoverAccentFont", {
+        font = "HelveticaNeue LT 57 Cn",
+        size = (math.Round(ScrH()*0.033)),
+        shadow = true,
+        weight = 1000,
+    })
+    
+    surface.CreateFont("UVUndercoverLeaderboardFont", {
+        font = "HelveticaNeue LT 57 Cn",
+        size = (math.Round(ScrH()*0.03)),
+        shadow = true,
+        weight = 1000,
+    })
+    
+    surface.CreateFont("UVUndercoverWhiteFont", {
+        font = "Aquarius Six",
+        size = (math.Round(ScrH()*0.047)),
+        shadow = true,
+        weight = 1,
+    })
+    
+    surface.CreateFont("UVCarbonLeaderboardFont", {
+        font = "HelveticaNeue LT 57 Cn",
+        size = (math.Round(ScrH()*0.02314814815)),
+        shadow = true,
+        weight = 1000,
+    })
+    
+    surface.CreateFont("UVFont5", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.043)),
+        weight = 500,
+    })
+    
+    surface.CreateFont("UVFont5UI", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.035)),
+        weight = 500,
+    })
+    
+    surface.CreateFont("UVFont5UI-BottomBar", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.041)),
+        weight = 500,
+    })
+    
+    surface.CreateFont("UVFont5WeightShadow", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.043)),
+        weight = 500,
+        shadow = true
+    })
+    
+    surface.CreateFont("UVFont5Shadow", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.03)),
+        weight = 350,
+        shadow = true
+    })
+    
+    surface.CreateFont("UVMostWantedLeaderboardFont", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.02314814815)),
+        weight = 1000,
+        shadow = true
+    })
+    
+    surface.CreateFont("UVFont5ShadowBig", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.1)),
+        weight = 500,
+        shadow = true,
+    })
 end
 
 function Carbon_FormatRaceTime(curTime)
@@ -289,16 +291,16 @@ function Carbon_FormatRaceTime(curTime)
 end
 
 function UV_FormatRaceEndTime(seconds)
-	if not seconds then return nil end
-	if type(seconds) == "string" then
-		return seconds
-	elseif type(seconds) == "number" then
-		local minutes = math.floor(seconds / 60)
-		local secs = seconds % 60
-		return string.format("%d:%05.2f", minutes, secs)
-	else
-		return "NIL"
-	end
+    if not seconds then return nil end
+    if type(seconds) == "string" then
+        return seconds
+    elseif type(seconds) == "number" then
+        local minutes = math.floor(seconds / 60)
+        local secs = seconds % 60
+        return string.format("%d:%05.2f", minutes, secs)
+    else
+        return "NIL"
+    end
 end
 
 UV_UI = {}
@@ -310,26 +312,26 @@ end
 -- Universal
 function DrawIcon(material, x, y, height_ratio, color, args)
     local tex = material:GetTexture("$basetexture")
-
+    
     if tex then
         local texW, texH = tex:Width(), tex:Height()
         local aspect = texW / texH
-
+        
         local desiredHeight = ScrH() * height_ratio
         local desiredWidth = desiredHeight * aspect
-
+        
         -- Center coords for DrawTexturedRectRotated
         local centerX = x
         local centerY = y
-
+        
         if color then
             surface.SetDrawColor(color:Unpack())
         else
             surface.SetDrawColor(255, 255, 255)
         end
-
+        
         surface.SetMaterial(material, args)
-
+        
         -- Check if 'args' table contains 'rotation' key
         if args and args.rotation then
             surface.DrawTexturedRectRotated(centerX, centerY, desiredWidth, desiredHeight, args.rotation)
@@ -348,32 +350,32 @@ function UVRenderCommander(ent)
     local lang = language.GetPhrase
     
     if IsValid(ent) then
-        if !UVHUDDisplayPursuit then return end
+        if not UVHUDDisplayPursuit then return end
         
         local callsign = lang("uv.unit.commander")
         local driver = UVGetDriver(ent)
-		local notitext = "uv.unit.commander.noti"
+        local notitext = "uv.unit.commander.noti"
         
         -- if driver and driver:IsPlayer() then
         if driver then
             callsign = driver:IsPlayer() and driver:GetName() or lang("uv.unit.commander")
-			if not ent.lplayernotified then
-				ent.lplayernotified = true
-				if localPlayer == driver then
-					notitext = "uv.unit.commander.noti.you"
+            if not ent.lplayernotified then
+                ent.lplayernotified = true
+                if localPlayer == driver then
+                    notitext = "uv.unit.commander.noti.you"
                 end
-					if Glide then
-						Glide.Notify( {
-							text = "<color=61,183,255>" .. language.GetPhrase(notitext),
-							icon = "unitvehicles/icons/MINIMAP_ICON_EVENT_RIVAL.png",
-							lifetime = 5,
-							immediate = true
-						} )
-					else
-						chat.AddText(
-						Color(0, 81, 161), "[Unit Vehicles] ",
-						Color(61, 183, 255), language.GetPhrase(notitext) )
-					end
+                if Glide then
+                    Glide.Notify( {
+                        text = "<color=61,183,255>" .. language.GetPhrase(notitext),
+                        icon = "unitvehicles/icons/MINIMAP_ICON_EVENT_RIVAL.png",
+                        lifetime = 5,
+                        immediate = true
+                    } )
+                else
+                    chat.AddText(
+                    Color(0, 81, 161), "[Unit Vehicles] ",
+                    Color(61, 183, 255), language.GetPhrase(notitext) )
+                end
                 return
             end
         end
@@ -454,22 +456,24 @@ function UVRenderCommander(ent)
         
         surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
         surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
-
+        
         draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
 
 function UVRenderEnemySquare(ent)
+    if not IsValid(ent) then return end
+    
     local localPlayer = LocalPlayer()
-    local box_color = (!UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 132, 0 )
+    local box_color = (not UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 132, 0 )
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
     
     local lang = language.GetPhrase
     
-    local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-(ent.uvbustingprogress or 0)),3)
+    local entbustedtimeleft = math.Round((BustedTimer:GetFloat()-(ent.UVBustingProgress or 0)),3)
     
     if ent.beingbusted then
         if (entbustedtimeleft > 2 and entbustedtimeleft < 3) then
@@ -481,87 +485,85 @@ function UVRenderEnemySquare(ent)
         end
     end
     
-    if IsValid(ent) then
-        if !UVHUDDisplayPursuit then return end
-        if UVHUDDisplayCooldown or 
-        (UVHUDCopMode and 
-        (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
-        not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) 
-        and UVOneCommanderActive)) 
-        then return end
-        
-        local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
-        local enemydriver = ent:GetDriver()
-        if enemydriver:IsPlayer() then
-            enemycallsign = enemydriver:GetName()
-            if localPlayer == enemydriver then
-                return
-            end
+    if not UVHUDDisplayPursuit then return end
+    if UVHUDDisplayCooldown or 
+    (UVHUDCopMode and 
+    (tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+    not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) 
+    and UVOneCommanderActive)) 
+    then return end
+    
+    local enemyCallsign = ent.racer or "Racer "..ent:EntIndex()
+    local enemyDriver = ent:GetDriver()
+    if enemyDriver:IsPlayer() then
+        enemyCallsign = enemyDriver:GetName()
+        if localPlayer == enemyDriver then
+            return
         end
-        
-        local pos = ent:GetPos()
-        
-        local MaxX, MinX, MaxY, MinY
-        local isVisible = false
-        
-        local p = pos
-        local screenPos = p:ToScreen()
-        isVisible = screenPos.visible
-        
-        if MaxX ~= nil then
-            MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
-            MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
-        else
-            MaxX, MaxY = screenPos.x, screenPos.y
-            MinX, MinY = screenPos.x, screenPos.y
-        end
-        
-        local textX = (MinX + MaxX) / 2
-        local textY = MinY - 150
-        local w = ScrW()
-        local h = ScrH()
-        
-        -- Distance in meters
-        local fadeAlpha = 255
-        local fadeDist = 100
-
-        local dist = localPlayer:GetPos():Distance(ent:GetPos())
-        local distInMeters = dist * 0.01905
-        
-        if not UVHUDCopMode then
-            if distInMeters <= fadeDist then
-                fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
-            elseif distInMeters > fadeDist then
-                fadeAlpha = 0
-            end
-        end
-        
-        cam.Start2D()
-			local pos = ent:GetPos() + Vector(0, 0, 80)
-			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
-			local bustdist = math.Round(distInMeters) .. " m"
-			
-			local rectlen = string.len(enemycallsign)
-			local rectxpos = textX - (w * (0.00375 * rectlen))
-			local rectypos = textY + (w * 0.0125)
-			
-			surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
-			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
-			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
-			
-			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
-			
-			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
-			
-			draw.DrawText("\n" .. enemycallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-			
-			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
-        cam.End2D()
     end
+    
+    local pos = ent:GetPos()
+    
+    local MaxX, MinX, MaxY, MinY
+    local isVisible = false
+    
+    local p = pos
+    local screenPos = p:ToScreen()
+    isVisible = screenPos.visible
+    
+    if MaxX ~= nil then
+        MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
+        MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
+    else
+        MaxX, MaxY = screenPos.x, screenPos.y
+        MinX, MinY = screenPos.x, screenPos.y
+    end
+    
+    local textX = (MinX + MaxX) / 2
+    local textY = MinY - 150
+    local w = ScrW()
+    local h = ScrH()
+    
+    -- Distance in meters
+    local fadeAlpha = 255
+    local fadeDist = 100
+    
+    local dist = localPlayer:GetPos():Distance(ent:GetPos())
+    local distInMeters = dist * 0.01905
+    
+    if not UVHUDCopMode then
+        if distInMeters <= fadeDist then
+            fadeAlpha = 255 * ((fadeDist - distInMeters) / 25)
+        elseif distInMeters > fadeDist then
+            fadeAlpha = 0
+        end
+    end
+    
+    cam.Start2D()
+    local pos = ent:GetPos() + Vector(0, 0, 80)
+    local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+    local bustdist = math.Round(distInMeters) .. " m"
+    
+    local rectlen = string.len(enemyCallsign)
+    local rectxpos = textX - (w * (0.00375 * rectlen))
+    local rectypos = textY + (w * 0.0125)
+    
+    surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
+    surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
+    surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
+    surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
+    surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
+    
+    surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+    surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+    
+    surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
+    surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+    
+    draw.DrawText("\n" .. enemyCallsign .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+    
+    draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY, Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
+    cam.End2D()
 end
 
 local function mw_noti_draw(text, font, x, y, color)
@@ -606,15 +608,15 @@ local function carbon_noti_draw(text, font, font2, x, y, color, color2)
     local currentY = y - tH/2
     
     for i, line in ipairs(lines) do
-	    local drawFont = font
+        local drawFont = font
         local drawColor = color
-
+        
         -- Customize second line
         if i == 2 then
             drawFont = font2
             drawColor = color2
         end
-
+        
         local w,h = surface.GetTextSize(line)
         draw.SimpleText(line, drawFont, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         currentY = currentY + h
@@ -626,26 +628,26 @@ local function DrawScaledCenteredTextLines(text, font, x, y, color, scale)
     local lines = string.Explode("\n", text)
     local totalHeight = 0
     local lineHeights, lineWidths = {}, {}
-
+    
     for _, line in ipairs(lines) do
         local w, h = surface.GetTextSize(line)
         table.insert(lineWidths, w)
         table.insert(lineHeights, h)
         totalHeight = totalHeight + h
     end
-
+    
     local currentY = y - totalHeight * scale / 2
-
+    
     for i, line in ipairs(lines) do
         local w, h = lineWidths[i], lineHeights[i]
         local mat = Matrix()
         mat:Scale(Vector(scale, scale, 1))
         mat:SetTranslation(Vector(x - w / 2 * scale, currentY, 0))
-
+        
         cam.PushModelMatrix(mat)
-            draw.SimpleText(line, font, 0, 0, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText(line, font, 0, 0, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         cam.PopModelMatrix()
-
+        
         currentY = currentY + h * scale
     end
 end
@@ -699,7 +701,7 @@ local function uv_general( ... )
             KP_DEL = "KP .",
         }
         
-        if !uvclientjammed then
+        if not uvclientjammed then
             for i=1, 2, 1 do
                 local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
                 
@@ -712,7 +714,7 @@ local function uv_general( ... )
                 end
                 
                 if UVHUDPursuitTech[i] then
-                    if input.IsKeyDown(var) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+                    if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                         net.Start("UVPTUse")
                         net.WriteInt(i, 16)
                         net.SendToServer()
@@ -818,7 +820,7 @@ UV_UI.pursuit.carbon.states = {
     UnitsColor = Color(255,255,255,150),
     BustedColor = Color(255, 255, 255, 50),
     EvasionColor = Color(255, 255, 255, 50),
-	
+    
     TakedownText = nil,
 }
 
@@ -835,13 +837,13 @@ UV_UI.racing.carbon.events = {
         local h = ScrH()
         
         --------------------------------------
-
+        
         OK = vgui.Create("DButton", vgui.GetWorldPanel())
         OK:SetText("")
         OK:SetPos(w*0.2565, h*0.9)
         OK:SetSize(w*0.15, h*0.035)
         OK.Paint = function() end
-
+        
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
         ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
@@ -849,7 +851,7 @@ UV_UI.racing.carbon.events = {
         ResultPanel:SetMouseInputEnabled(true)
         ResultPanel:SetKeyboardInputEnabled(false)
         ResultPanel:SetZPos(32767)
-
+        
         local targetY = 0
         local overshootY = h * 0.1  -- drops 10% below target before bouncing back
         local startY = -h           -- start fully above the screen
@@ -894,7 +896,7 @@ UV_UI.racing.carbon.events = {
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)
             gui.EnableScreenClicker(false)
-			OK:SetEnabled(false)
+            OK:SetEnabled(false)
             
             hook.Add("Think", "ResultPanelExitAnim", function()
                 if not IsValid(panel) then
@@ -915,7 +917,7 @@ UV_UI.racing.carbon.events = {
         end
         
         gui.EnableScreenClicker(true)
-
+        
         local timetotal = 30
         local timestart = CurTime()
         local exitStarted = false -- prevent repeated trigger
@@ -986,7 +988,7 @@ UV_UI.racing.carbon.events = {
         end)
         
         ResultPanel.Paint = function(self, w, h)
-			local alttext = math.floor(CurTime() / 5) % 2 == 1
+            local alttext = math.floor(CurTime() / 5) % 2 == 1
             local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
             local lang = language.GetPhrase
             
@@ -1119,27 +1121,27 @@ UV_UI.racing.carbon.events = {
             end
         end)
     end,
-
+    
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------
-
-		if Glide then
-			if not istable(sortedRacers) or #sortedRacers == 0 then
-				glidetext = "#uv.race.finished.statserror"
-				glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-			end
-				Glide.Notify({
-					text = glidetext,
-					lifetime = duration,
-					immediate = true,
-					icon = glideicon,
-				}) 
-		end
+        
+        if Glide then
+            if not istable(sortedRacers) or #sortedRacers == 0 then
+                glidetext = "#uv.race.finished.statserror"
+                glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+            end
+            Glide.Notify({
+                text = glidetext,
+                lifetime = duration,
+                immediate = true,
+                icon = glideicon,
+            }) 
+        end
         
         hook.Add( "Think", "RaceResultDisplay", function()
             if CurTime() - triggerTime > duration then
@@ -1147,111 +1149,111 @@ UV_UI.racing.carbon.events = {
                 return
             end
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 UV_UI.racing.carbon.events.ShowResults(sortedRacers)
             end
         end)
     end,
-
-onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
-	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-
-	if is_global_best then
-		UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
-	else
-		if is_local_player then
-			UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
-		else
-			return
-		end
-	end
-		local SID = 0.35
-
-		local carbon_noti_animState = {
-			active = false,
-			startTime = 0,
-			slideInDuration = SID,
-			holdDuration = 3,
-			slideDownDuration = 0.25,
-			upper = {
-				startX = ScrW() * 0.25,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.35,
-				slideDownEndY = ScrH() * 0.6,
-			},
-			lower = {
-				startX = ScrW() * 0.75,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.385,
-				slideDownEndY = ScrH() * 0.635,
-			},
-			ring = {
-				scaleStart = 0.5,
-				scaleEnd = 0.09,
-				alphaStart = 15,
-				alphaEnd = 150,
-				scale = 0.2,
-				alpha = 15,
-				
-				shrinkStart = 0,
-				shrinkDuration = SID,
-				disappearTime = 0.03,
-				reappearDelay = SID + 0.03,
-				expandStartTime = nil,
-				expanded = false,
-				visible = true
-			},
-			ringClone = {
-				createdTime = nil,
-				blinkInterval = 0.125,
-				blinkCount = 0,
-				maxBlinks = 2,
-				scale = 0.085,
-				scaleDuration = 0.6,
-				targetScale = 0.07,
-				alpha = 175,
-				visible = true,
-				fadeAfterBlinkStart = nil,
-			},
-			icon = {
-			  scale = 0.06,
-			  baseScale = 0.06,
-			  overshootScale = 0.07,
-			  alpha = 255,
-			  ExpandDuration = 0.125,
-			},
-			circle = {
-				scaleStart = 0.4,
-				scaleEnd = 0.0575,
-				alphaStart = 15,
-				alphaEnd = 100,
-
-				scale = 0.2,
-				alpha = 15,
-				rotation = 0,
-
-				spinStartTime = nil,
-				spinDuration = 5,
-				drawY = ScrH() / 3.35
-			},
-		}
-
+    
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+        local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        
+        if is_global_best then
+            UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+        else
+            if is_local_player then
+                UV_UI.racing.carbon.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+            else
+                return
+            end
+        end
+        local SID = 0.35
+        
+        local carbon_noti_animState = {
+            active = false,
+            startTime = 0,
+            slideInDuration = SID,
+            holdDuration = 3,
+            slideDownDuration = 0.25,
+            upper = {
+                startX = ScrW() * 0.25,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.35,
+                slideDownEndY = ScrH() * 0.6,
+            },
+            lower = {
+                startX = ScrW() * 0.75,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.385,
+                slideDownEndY = ScrH() * 0.635,
+            },
+            ring = {
+                scaleStart = 0.5,
+                scaleEnd = 0.09,
+                alphaStart = 15,
+                alphaEnd = 150,
+                scale = 0.2,
+                alpha = 15,
+                
+                shrinkStart = 0,
+                shrinkDuration = SID,
+                disappearTime = 0.03,
+                reappearDelay = SID + 0.03,
+                expandStartTime = nil,
+                expanded = false,
+                visible = true
+            },
+            ringClone = {
+                createdTime = nil,
+                blinkInterval = 0.125,
+                blinkCount = 0,
+                maxBlinks = 2,
+                scale = 0.085,
+                scaleDuration = 0.6,
+                targetScale = 0.07,
+                alpha = 175,
+                visible = true,
+                fadeAfterBlinkStart = nil,
+            },
+            icon = {
+                scale = 0.06,
+                baseScale = 0.06,
+                overshootScale = 0.07,
+                alpha = 255,
+                ExpandDuration = 0.125,
+            },
+            circle = {
+                scaleStart = 0.4,
+                scaleEnd = 0.0575,
+                alphaStart = 15,
+                alphaEnd = 100,
+                
+                scale = 0.2,
+                alpha = 15,
+                rotation = 0,
+                
+                spinStartTime = nil,
+                spinDuration = 5,
+                drawY = ScrH() / 3.35
+            },
+        }
+        
         UV_UI.racing.carbon.events.carbon_noti_animState = carbon_noti_animState
         carbon_noti_animState.active = true
         carbon_noti_animState.startTime = CurTime()
-
+        
         ----------------------------------------------------------------------------
         
         -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
         if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.CARBON_NOTIFICATION_LAP then
             hook.Remove("HUDPaint", "CARBON_NOTIFICATION_LAP")
         end
-
+        
         -- Add the HUDPaint hook freshly for this animation
         hook.Add("HUDPaint", "CARBON_NOTIFICATION_LAP", function()
             local elapsed = CurTime() - carbon_noti_animState.startTime
-
+            
             local function calcPosAlpha(elapsed, elem)
                 local x, y, alpha = elem.centerX, elem.y, 255
                 if elapsed < carbon_noti_animState.slideInDuration then
@@ -1270,319 +1272,319 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
                 end
                 return x, y, alpha
             end
-
+            
             local lines = string.Explode("\n", UV_UI.racing.carbon.states.LapCompleteText or "")
             if #lines < 1 then return end
-			local upperLine = lines[1] or ""
-			local lowerLine = lines[2] or ""
-
-			-- Upper
+            local upperLine = lines[1] or ""
+            local lowerLine = lines[2] or ""
+            
+            -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
-
-			-- Lower
+            
+            -- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
             carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
             carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx, ly, Color(175, 175, 175, lalpha), nil)
-
+            
             -- Disable animation and remove hook when done
             if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
                 carbon_noti_animState.active = false
                 hook.Remove("HUDPaint", "CARBON_NOTIFICATION_LAP")
             end
-
-			-- Other Elements
-			-- Outer Ring
-			local ring = carbon_noti_animState.ring
-			local elapsed = CurTime() - carbon_noti_animState.startTime
-
-			local mergeEndTime = carbon_noti_animState.slideInDuration
-			local blinkDuration = 0.1 -- total blink time (two blinks)
-			local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
-
-			if elapsed < mergeEndTime then
-				-- Shrinking phase: scale down & alpha up
-				local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
-				ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
-				ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
-			elseif elapsed < mergeEndTime + blinkDuration then
-				-- Blink phase: fade ring out and back in twice
-
-				local blinkElapsed = elapsed - mergeEndTime
-				-- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
-				local phase = (blinkElapsed / blinkInterval) % 2
-				-- Map phase to alpha (1->0->1) using triangle wave
-				local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
-				ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
-
-				-- Keep scale steady during blinking
-				ring.scale = ring.scaleEnd
-			else
-				-- Expansion + fade out phase
-				local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
-				local expandDuration = 0.3
-				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
-
-				ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
-				ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
-			end
-
-			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
-
-			-- Outer Ring Duplicate
-			local clone = carbon_noti_animState.ringClone
-
-			-- Spawn clone ring after main ring shrinks
-			if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
-				clone.createdTime = CurTime()
-				clone.blinkCount = 0
-			end
-
-			if clone.createdTime then
-				local cloneElapsed = CurTime() - clone.createdTime
-				local blinkCycle = clone.blinkInterval * 2
-
-				-- Blinking logic
-				if clone.blinkCount < clone.maxBlinks then
-					local blinkCycle = clone.blinkInterval * 2
-					local cloneElapsed = CurTime() - clone.createdTime
-					local cycleTime = cloneElapsed % blinkCycle
-
-					if cycleTime < clone.blinkInterval then
-						-- Pop in (fully opaque)
-						clone.alpha = 255
-					else
-						-- Fade out during second half of the cycle
-						local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
-						clone.alpha = Lerp(fadeT, 255, 0)
-					end
-
-					-- Count completed full blink cycles
-					local completedCycles = math.floor(cloneElapsed / blinkCycle)
-					if completedCycles > clone.blinkCount then
-						clone.blinkCount = completedCycles
-					end
-
-				else
-					-- After blinking ends, fade from 255 to ring.alphaEnd
-					if not clone.fadeAfterBlinkStart then
-						clone.fadeAfterBlinkStart = CurTime()
-					end
-
-					local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
-					clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
-				end
-
-				-- Gradual scale-down over total blink duration
-				local totalDuration = clone.scaleDuration
-				local scaleT = math.min(cloneElapsed / totalDuration, 1)
-				clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
-
-				-- Apply final slide down and fade for clone ring (matching text timing)
-				local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
-				if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
-					local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
-					local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
-
-					-- Move the clone downward (same offset as text)
-					local slideOffset = Lerp(t, 0, ScrH() * 0.2)
-					clone.drawY = (ScrH() / 3.35) + slideOffset
-
-					-- Fade out over time
-					clone.alpha = Lerp(t, clone.alpha, 0)
-				else
-					clone.drawY = ScrH() / 3.35 -- stay at normal position
-				end
-
-				if clone.visible then
-					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
-				end
-			end
-
-			-- Inner Circle
-			local circle = carbon_noti_animState.circle
-			local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
-
-			-- Step 1: Animate scale + alpha like ring
-			if elapsed < carbon_noti_animState.slideInDuration then
-				circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
-				circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
-			end
-
-			-- Step 2: Start spinning after 4.1 is done blinking
-			local clone = carbon_noti_animState.ringClone
-			local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
-
-			if CurTime() > blinkDoneTime and not circle.spinStartTime then
-				circle.spinStartTime = CurTime()
-			end
-
-			if circle.spinStartTime then
-				local spinElapsed = CurTime() - circle.spinStartTime
-				local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
-				circle.rotation = Lerp(spinT, 0, -360)
-			end
-
-			-- Step 3: Follow slide down like Element 4.1
-			if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
-				local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
-				local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
-				circle.drawY = (ScrH() / 3.35) + slideOffset
-				circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
-			end
-
-			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
-
-			-- Takedown Icon
-			local icon = carbon_noti_animState.icon
-			local elapsed = CurTime() - carbon_noti_animState.startTime
-
-			local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
-			local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
-
-			local slideOffset = 0
-			if elapsed > slideDownStart and elapsed < slideDownEnd then
-				local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
-				slideOffset = Lerp(t, 0, ScrH() * 0.2)
-			elseif elapsed >= slideDownEnd then
-				slideOffset = ScrH() * 0.2
-			end
-
-			local currentY = (ScrH() / 3.35) + slideOffset
-			local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
-			local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
-
-			-- 1) Initial: fully visible
-			if elapsed < carbon_noti_animState.slideInDuration then
-				icon.scale = icon.baseScale
-				icon.alpha = 255
-
-			-- 2) Shrink to 0 instantly when Element 4 finishes shrinking
-			elseif elapsed < shrinkEnd then
-				icon.scale = 0  -- instant shrink
-				icon.alpha = 255
-
-			-- 3) Expand with overshoot during Element 4 expand
-			elseif elapsed < expandEnd then
-				local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
-				local expandElapsed = elapsed - expandStart
-				local expandDuration = carbon_noti_animState.icon.ExpandDuration
-				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
-
-				if t < 0.8 then
-					icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
-				else
-					icon.scale = icon.baseScale
-				end
-
-				icon.alpha = 255
-
-			-- 4) Slide down with element 4.1, fade out alpha
-			elseif elapsed < slideDownEnd then
-				local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
-				icon.alpha = Lerp(fadeT, 255, 0)
-			else
-				icon.alpha = 0
-			end
-
-			DrawIcon(UVMaterials["CLOCK_BG"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
+            
+            -- Other Elements
+            -- Outer Ring
+            local ring = carbon_noti_animState.ring
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+            
+            local mergeEndTime = carbon_noti_animState.slideInDuration
+            local blinkDuration = 0.1 -- total blink time (two blinks)
+            local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
+            
+            if elapsed < mergeEndTime then
+                -- Shrinking phase: scale down & alpha up
+                local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
+                ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
+                ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
+            elseif elapsed < mergeEndTime + blinkDuration then
+                -- Blink phase: fade ring out and back in twice
+                
+                local blinkElapsed = elapsed - mergeEndTime
+                -- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
+                local phase = (blinkElapsed / blinkInterval) % 2
+                -- Map phase to alpha (1->0->1) using triangle wave
+                local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
+                ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
+                
+                -- Keep scale steady during blinking
+                ring.scale = ring.scaleEnd
+            else
+                -- Expansion + fade out phase
+                local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
+                local expandDuration = 0.3
+                local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+                
+                ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
+                ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
+            end
+            
+            DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
+            
+            -- Outer Ring Duplicate
+            local clone = carbon_noti_animState.ringClone
+            
+            -- Spawn clone ring after main ring shrinks
+            if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
+                clone.createdTime = CurTime()
+                clone.blinkCount = 0
+            end
+            
+            if clone.createdTime then
+                local cloneElapsed = CurTime() - clone.createdTime
+                local blinkCycle = clone.blinkInterval * 2
+                
+                -- Blinking logic
+                if clone.blinkCount < clone.maxBlinks then
+                    local blinkCycle = clone.blinkInterval * 2
+                    local cloneElapsed = CurTime() - clone.createdTime
+                    local cycleTime = cloneElapsed % blinkCycle
+                    
+                    if cycleTime < clone.blinkInterval then
+                        -- Pop in (fully opaque)
+                        clone.alpha = 255
+                    else
+                        -- Fade out during second half of the cycle
+                        local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
+                        clone.alpha = Lerp(fadeT, 255, 0)
+                    end
+                    
+                    -- Count completed full blink cycles
+                    local completedCycles = math.floor(cloneElapsed / blinkCycle)
+                    if completedCycles > clone.blinkCount then
+                        clone.blinkCount = completedCycles
+                    end
+                    
+                else
+                    -- After blinking ends, fade from 255 to ring.alphaEnd
+                    if not clone.fadeAfterBlinkStart then
+                        clone.fadeAfterBlinkStart = CurTime()
+                    end
+                    
+                    local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
+                    clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
+                end
+                
+                -- Gradual scale-down over total blink duration
+                local totalDuration = clone.scaleDuration
+                local scaleT = math.min(cloneElapsed / totalDuration, 1)
+                clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
+                
+                -- Apply final slide down and fade for clone ring (matching text timing)
+                local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
+                if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                    local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
+                    local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
+                    
+                    -- Move the clone downward (same offset as text)
+                    local slideOffset = Lerp(t, 0, ScrH() * 0.2)
+                    clone.drawY = (ScrH() / 3.35) + slideOffset
+                    
+                    -- Fade out over time
+                    clone.alpha = Lerp(t, clone.alpha, 0)
+                else
+                    clone.drawY = ScrH() / 3.35 -- stay at normal position
+                end
+                
+                if clone.visible then
+                    DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
+                end
+            end
+            
+            -- Inner Circle
+            local circle = carbon_noti_animState.circle
+            local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
+            
+            -- Step 1: Animate scale + alpha like ring
+            if elapsed < carbon_noti_animState.slideInDuration then
+                circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
+                circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
+            end
+            
+            -- Step 2: Start spinning after 4.1 is done blinking
+            local clone = carbon_noti_animState.ringClone
+            local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
+            
+            if CurTime() > blinkDoneTime and not circle.spinStartTime then
+                circle.spinStartTime = CurTime()
+            end
+            
+            if circle.spinStartTime then
+                local spinElapsed = CurTime() - circle.spinStartTime
+                local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
+                circle.rotation = Lerp(spinT, 0, -360)
+            end
+            
+            -- Step 3: Follow slide down like Element 4.1
+            if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+                local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
+                circle.drawY = (ScrH() / 3.35) + slideOffset
+                circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
+            end
+            
+            DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
+            
+            -- Takedown Icon
+            local icon = carbon_noti_animState.icon
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+            
+            local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+            local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
+            
+            local slideOffset = 0
+            if elapsed > slideDownStart and elapsed < slideDownEnd then
+                local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+                slideOffset = Lerp(t, 0, ScrH() * 0.2)
+            elseif elapsed >= slideDownEnd then
+                slideOffset = ScrH() * 0.2
+            end
+            
+            local currentY = (ScrH() / 3.35) + slideOffset
+            local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+            local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+            
+            -- 1) Initial: fully visible
+            if elapsed < carbon_noti_animState.slideInDuration then
+                icon.scale = icon.baseScale
+                icon.alpha = 255
+                
+                -- 2) Shrink to 0 instantly when Element 4 finishes shrinking
+            elseif elapsed < shrinkEnd then
+                icon.scale = 0  -- instant shrink
+                icon.alpha = 255
+                
+                -- 3) Expand with overshoot during Element 4 expand
+            elseif elapsed < expandEnd then
+                local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+                local expandElapsed = elapsed - expandStart
+                local expandDuration = carbon_noti_animState.icon.ExpandDuration
+                local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+                
+                if t < 0.8 then
+                    icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
+                else
+                    icon.scale = icon.baseScale
+                end
+                
+                icon.alpha = 255
+                
+                -- 4) Slide down with element 4.1, fade out alpha
+            elseif elapsed < slideDownEnd then
+                local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+                icon.alpha = Lerp(fadeT, 255, 0)
+            else
+                icon.alpha = 0
+            end
+            
+            DrawIcon(UVMaterials["CLOCK_BG"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
         end)
     end
 }
 
 UV_UI.pursuit.carbon.events = {
-	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
-		UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
-		isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
-		
-		local SID = 0.35
-
-		local carbon_noti_animState = {
-			active = false,
-			startTime = 0,
-			slideInDuration = SID,
-			holdDuration = 3,
-			slideDownDuration = 0.25,
-			upper = {
-				startX = ScrW() * 0.25,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.35,
-				slideDownEndY = ScrH() * 0.6,
-			},
-			lower = {
-				startX = ScrW() * 0.75,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.385,
-				slideDownEndY = ScrH() * 0.635,
-			},
-			ring = {
-				scaleStart = 0.5,
-				scaleEnd = 0.09,
-				alphaStart = 15,
-				alphaEnd = 150,
-				scale = 0.2,
-				alpha = 15,
-				
-				shrinkStart = 0,
-				shrinkDuration = SID,
-				disappearTime = 0.03,
-				reappearDelay = SID + 0.03,
-				expandStartTime = nil,
-				expanded = false,
-				visible = true
-			},
-			ringClone = {
-				createdTime = nil,
-				blinkInterval = 0.125,
-				blinkCount = 0,
-				maxBlinks = 2,
-				scale = 0.085,
-				scaleDuration = 0.6,
-				targetScale = 0.07,
-				alpha = 175,
-				visible = true,
-				fadeAfterBlinkStart = nil,
-			},
-			icon = {
-			  scale = 0.06,
-			  baseScale = 0.06,
-			  overshootScale = 0.07,
-			  alpha = 255,
-			  ExpandDuration = 0.125,
-			},
-			circle = {
-				scaleStart = 0.4,
-				scaleEnd = 0.0575,
-				alphaStart = 15,
-				alphaEnd = 100,
-
-				scale = 0.2,
-				alpha = 15,
-				rotation = 0,
-
-				spinStartTime = nil,
-				spinDuration = 5,
-				drawY = ScrH() / 3.35
-			},
-		}
-
+    onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+        if UVHUDDisplayRacing then return end
+        UV_UI.pursuit.carbon.states.TakedownText = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ),
+        isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
+        
+        local SID = 0.35
+        
+        local carbon_noti_animState = {
+            active = false,
+            startTime = 0,
+            slideInDuration = SID,
+            holdDuration = 3,
+            slideDownDuration = 0.25,
+            upper = {
+                startX = ScrW() * 0.25,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.35,
+                slideDownEndY = ScrH() * 0.6,
+            },
+            lower = {
+                startX = ScrW() * 0.75,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.385,
+                slideDownEndY = ScrH() * 0.635,
+            },
+            ring = {
+                scaleStart = 0.5,
+                scaleEnd = 0.09,
+                alphaStart = 15,
+                alphaEnd = 150,
+                scale = 0.2,
+                alpha = 15,
+                
+                shrinkStart = 0,
+                shrinkDuration = SID,
+                disappearTime = 0.03,
+                reappearDelay = SID + 0.03,
+                expandStartTime = nil,
+                expanded = false,
+                visible = true
+            },
+            ringClone = {
+                createdTime = nil,
+                blinkInterval = 0.125,
+                blinkCount = 0,
+                maxBlinks = 2,
+                scale = 0.085,
+                scaleDuration = 0.6,
+                targetScale = 0.07,
+                alpha = 175,
+                visible = true,
+                fadeAfterBlinkStart = nil,
+            },
+            icon = {
+                scale = 0.06,
+                baseScale = 0.06,
+                overshootScale = 0.07,
+                alpha = 255,
+                ExpandDuration = 0.125,
+            },
+            circle = {
+                scaleStart = 0.4,
+                scaleEnd = 0.0575,
+                alphaStart = 15,
+                alphaEnd = 100,
+                
+                scale = 0.2,
+                alpha = 15,
+                rotation = 0,
+                
+                spinStartTime = nil,
+                spinDuration = 5,
+                drawY = ScrH() / 3.35
+            },
+        }
+        
         UV_UI.pursuit.carbon.events.carbon_noti_animState = carbon_noti_animState
         carbon_noti_animState.active = true
         carbon_noti_animState.startTime = CurTime()
-
+        
         ----------------------------------------------------------------------------
         
         -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
         if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.CARBON_NOTIFICATION_TAKEDOWN then
             hook.Remove("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN")
         end
-
+        
         -- Add the HUDPaint hook freshly for this animation
         hook.Add("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN", function()
             local elapsed = CurTime() - carbon_noti_animState.startTime
-
+            
             local function calcPosAlpha(elapsed, elem)
                 local x, y, alpha = elem.centerX, elem.y, 255
                 if elapsed < carbon_noti_animState.slideInDuration then
@@ -1601,223 +1603,223 @@ UV_UI.pursuit.carbon.events = {
                 end
                 return x, y, alpha
             end
-
+            
             local lines = string.Explode("\n", UV_UI.pursuit.carbon.states.TakedownText or "")
             if #lines < 1 then return end
-			local upperLine = lines[1] or ""
-			local lowerLine = lines[2] or ""
-
-			-- Upper
+            local upperLine = lines[1] or ""
+            local lowerLine = lines[2] or ""
+            
+            -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
-
-			-- Lower
+            
+            -- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
             carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
             carbon_noti_draw( lowerLine, "UVCarbonFont-Smaller", nil, lx, ly, Color(175, 175, 175, lalpha), nil)
-
+            
             -- Disable animation and remove hook when done
             if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
                 carbon_noti_animState.active = false
                 hook.Remove("HUDPaint", "CARBON_NOTIFICATION_TAKEDOWN")
             end
-
-			-- Other Elements
-			-- Outer Ring
-			local ring = carbon_noti_animState.ring
-			local elapsed = CurTime() - carbon_noti_animState.startTime
-
-			local mergeEndTime = carbon_noti_animState.slideInDuration
-			local blinkDuration = 0.1 -- total blink time (two blinks)
-			local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
-
-			if elapsed < mergeEndTime then
-				-- Shrinking phase: scale down & alpha up
-				local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
-				ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
-				ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
-			elseif elapsed < mergeEndTime + blinkDuration then
-				-- Blink phase: fade ring out and back in twice
-
-				local blinkElapsed = elapsed - mergeEndTime
-				-- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
-				local phase = (blinkElapsed / blinkInterval) % 2
-				-- Map phase to alpha (1->0->1) using triangle wave
-				local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
-				ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
-
-				-- Keep scale steady during blinking
-				ring.scale = ring.scaleEnd
-			else
-				-- Expansion + fade out phase
-				local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
-				local expandDuration = 0.3
-				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
-
-				ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
-				ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
-			end
-
-			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
-
-			-- Outer Ring Duplicate
-			local clone = carbon_noti_animState.ringClone
-
-			-- Spawn clone ring after main ring shrinks
-			if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
-				clone.createdTime = CurTime()
-				clone.blinkCount = 0
-			end
-
-			if clone.createdTime then
-				local cloneElapsed = CurTime() - clone.createdTime
-				local blinkCycle = clone.blinkInterval * 2
-
-				-- Blinking logic
-				if clone.blinkCount < clone.maxBlinks then
-					local blinkCycle = clone.blinkInterval * 2
-					local cloneElapsed = CurTime() - clone.createdTime
-					local cycleTime = cloneElapsed % blinkCycle
-
-					if cycleTime < clone.blinkInterval then
-						-- Pop in (fully opaque)
-						clone.alpha = 255
-					else
-						-- Fade out during second half of the cycle
-						local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
-						clone.alpha = Lerp(fadeT, 255, 0)
-					end
-
-					-- Count completed full blink cycles
-					local completedCycles = math.floor(cloneElapsed / blinkCycle)
-					if completedCycles > clone.blinkCount then
-						clone.blinkCount = completedCycles
-					end
-
-				else
-					-- After blinking ends, fade from 255 to ring.alphaEnd
-					if not clone.fadeAfterBlinkStart then
-						clone.fadeAfterBlinkStart = CurTime()
-					end
-
-					local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
-					clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
-				end
-
-				-- Gradual scale-down over total blink duration
-				local totalDuration = clone.scaleDuration
-				local scaleT = math.min(cloneElapsed / totalDuration, 1)
-				clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
-
-				-- Apply final slide down and fade for clone ring (matching text timing)
-				local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
-				if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
-					local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
-					local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
-
-					-- Move the clone downward (same offset as text)
-					local slideOffset = Lerp(t, 0, ScrH() * 0.2)
-					clone.drawY = (ScrH() / 3.35) + slideOffset
-
-					-- Fade out over time
-					clone.alpha = Lerp(t, clone.alpha, 0)
-				else
-					clone.drawY = ScrH() / 3.35 -- stay at normal position
-				end
-
-				if clone.visible then
-					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
-				end
-			end
-
-			-- Inner Circle
-			local circle = carbon_noti_animState.circle
-			local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
-
-			-- Step 1: Animate scale + alpha like ring
-			if elapsed < carbon_noti_animState.slideInDuration then
-				circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
-				circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
-			end
-
-			-- Step 2: Start spinning after 4.1 is done blinking
-			local clone = carbon_noti_animState.ringClone
-			local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
-
-			if CurTime() > blinkDoneTime and not circle.spinStartTime then
-				circle.spinStartTime = CurTime()
-			end
-
-			if circle.spinStartTime then
-				local spinElapsed = CurTime() - circle.spinStartTime
-				local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
-				circle.rotation = Lerp(spinT, 0, -360)
-			end
-
-			-- Step 3: Follow slide down like Element 4.1
-			if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
-				local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
-				local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
-				circle.drawY = (ScrH() / 3.35) + slideOffset
-				circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
-			end
-
-			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
-
-			-- Takedown Icon
-			local icon = carbon_noti_animState.icon
-			local elapsed = CurTime() - carbon_noti_animState.startTime
-
-			local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
-			local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
-
-			local slideOffset = 0
-			if elapsed > slideDownStart and elapsed < slideDownEnd then
-				local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
-				slideOffset = Lerp(t, 0, ScrH() * 0.2)
-			elseif elapsed >= slideDownEnd then
-				slideOffset = ScrH() * 0.2
-			end
-
-			local currentY = (ScrH() / 3.35) + slideOffset
-			local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
-			local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
-
-			-- 1) Initial: fully visible
-			if elapsed < carbon_noti_animState.slideInDuration then
-				icon.scale = icon.baseScale
-				icon.alpha = 255
-
-			-- 2) Shrink to 0 instantly when Element 4 finishes shrinking
-			elseif elapsed < shrinkEnd then
-				icon.scale = 0  -- instant shrink
-				icon.alpha = 255
-
-			-- 3) Expand with overshoot during Element 4 expand
-			elseif elapsed < expandEnd then
-				local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
-				local expandElapsed = elapsed - expandStart
-				local expandDuration = carbon_noti_animState.icon.ExpandDuration
-				local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
-
-				if t < 0.8 then
-					icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
-				else
-					icon.scale = icon.baseScale
-				end
-
-				icon.alpha = 255
-
-			-- 4) Slide down with element 4.1, fade out alpha
-			elseif elapsed < slideDownEnd then
-				local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
-				icon.alpha = Lerp(fadeT, 255, 0)
-			else
-				icon.alpha = 0
-			end
-
-			DrawIcon(UVMaterials["UNITS_DISABLED"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
+            
+            -- Other Elements
+            -- Outer Ring
+            local ring = carbon_noti_animState.ring
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+            
+            local mergeEndTime = carbon_noti_animState.slideInDuration
+            local blinkDuration = 0.1 -- total blink time (two blinks)
+            local blinkInterval = blinkDuration / 2 -- one blink cycle (fade out + in)
+            
+            if elapsed < mergeEndTime then
+                -- Shrinking phase: scale down & alpha up
+                local t = math.Clamp(elapsed / mergeEndTime, 0, 1)
+                ring.scale = Lerp(t, ring.scaleStart, ring.scaleEnd)
+                ring.alpha = Lerp(t, ring.alphaStart, ring.alphaEnd)
+            elseif elapsed < mergeEndTime + blinkDuration then
+                -- Blink phase: fade ring out and back in twice
+                
+                local blinkElapsed = elapsed - mergeEndTime
+                -- Calculate blink phase (0 to 1 to 0) twice in blinkDuration
+                local phase = (blinkElapsed / blinkInterval) % 2
+                -- Map phase to alpha (1->0->1) using triangle wave
+                local alphaFactor = phase < 1 and (1 - phase) or (phase - 1)
+                ring.alpha = Lerp(alphaFactor, ring.alphaEnd, 0)
+                
+                -- Keep scale steady during blinking
+                ring.scale = ring.scaleEnd
+            else
+                -- Expansion + fade out phase
+                local expandElapsed = elapsed - (mergeEndTime + blinkDuration)
+                local expandDuration = 0.3
+                local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+                
+                ring.scale = Lerp(t, ring.scaleEnd, ring.scaleStart) -- expand out
+                ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
+            end
+            
+            DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
+            
+            -- Outer Ring Duplicate
+            local clone = carbon_noti_animState.ringClone
+            
+            -- Spawn clone ring after main ring shrinks
+            if not clone.createdTime and elapsed >= carbon_noti_animState.slideInDuration then
+                clone.createdTime = CurTime()
+                clone.blinkCount = 0
+            end
+            
+            if clone.createdTime then
+                local cloneElapsed = CurTime() - clone.createdTime
+                local blinkCycle = clone.blinkInterval * 2
+                
+                -- Blinking logic
+                if clone.blinkCount < clone.maxBlinks then
+                    local blinkCycle = clone.blinkInterval * 2
+                    local cloneElapsed = CurTime() - clone.createdTime
+                    local cycleTime = cloneElapsed % blinkCycle
+                    
+                    if cycleTime < clone.blinkInterval then
+                        -- Pop in (fully opaque)
+                        clone.alpha = 255
+                    else
+                        -- Fade out during second half of the cycle
+                        local fadeT = (cycleTime - clone.blinkInterval) / clone.blinkInterval
+                        clone.alpha = Lerp(fadeT, 255, 0)
+                    end
+                    
+                    -- Count completed full blink cycles
+                    local completedCycles = math.floor(cloneElapsed / blinkCycle)
+                    if completedCycles > clone.blinkCount then
+                        clone.blinkCount = completedCycles
+                    end
+                    
+                else
+                    -- After blinking ends, fade from 255 to ring.alphaEnd
+                    if not clone.fadeAfterBlinkStart then
+                        clone.fadeAfterBlinkStart = CurTime()
+                    end
+                    
+                    local fadeT = math.Clamp((CurTime() - clone.fadeAfterBlinkStart) / 0.3, 0, 1)
+                    clone.alpha = Lerp(fadeT, 255, ring.alphaEnd)
+                end
+                
+                -- Gradual scale-down over total blink duration
+                local totalDuration = clone.scaleDuration
+                local scaleT = math.min(cloneElapsed / totalDuration, 1)
+                clone.scale = Lerp(scaleT, 0.085, clone.targetScale)
+                
+                -- Apply final slide down and fade for clone ring (matching text timing)
+                local totalDuration = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration
+                if CurTime() > carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                    local slideElapsed = CurTime() - (carbon_noti_animState.startTime + carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration)
+                    local t = math.Clamp(slideElapsed / carbon_noti_animState.slideDownDuration, 0, 1)
+                    
+                    -- Move the clone downward (same offset as text)
+                    local slideOffset = Lerp(t, 0, ScrH() * 0.2)
+                    clone.drawY = (ScrH() / 3.35) + slideOffset
+                    
+                    -- Fade out over time
+                    clone.alpha = Lerp(t, clone.alpha, 0)
+                else
+                    clone.drawY = ScrH() / 3.35 -- stay at normal position
+                end
+                
+                if clone.visible then
+                    DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
+                end
+            end
+            
+            -- Inner Circle
+            local circle = carbon_noti_animState.circle
+            local t = math.Clamp(elapsed / carbon_noti_animState.slideInDuration, 0, 1)
+            
+            -- Step 1: Animate scale + alpha like ring
+            if elapsed < carbon_noti_animState.slideInDuration then
+                circle.scale = Lerp(t, circle.scaleStart, circle.scaleEnd)
+                circle.alpha = Lerp(t, circle.alphaStart, circle.alphaEnd)
+            end
+            
+            -- Step 2: Start spinning after 4.1 is done blinking
+            local clone = carbon_noti_animState.ringClone
+            local blinkDoneTime = carbon_noti_animState.startTime + carbon_noti_animState.ring.reappearDelay + (clone.maxBlinks * clone.blinkInterval * 2)
+            
+            if CurTime() > blinkDoneTime and not circle.spinStartTime then
+                circle.spinStartTime = CurTime()
+            end
+            
+            if circle.spinStartTime then
+                local spinElapsed = CurTime() - circle.spinStartTime
+                local spinT = math.Clamp(spinElapsed / circle.spinDuration, 0, 1)
+                circle.rotation = Lerp(spinT, 0, -360)
+            end
+            
+            -- Step 3: Follow slide down like Element 4.1
+            if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
+                local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
+                local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
+                circle.drawY = (ScrH() / 3.35) + slideOffset
+                circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
+            end
+            
+            DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
+            
+            -- Takedown Icon
+            local icon = carbon_noti_animState.icon
+            local elapsed = CurTime() - carbon_noti_animState.startTime
+            
+            local slideDownStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+            local slideDownEnd = slideDownStart + carbon_noti_animState.slideDownDuration
+            
+            local slideOffset = 0
+            if elapsed > slideDownStart and elapsed < slideDownEnd then
+                local t = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+                slideOffset = Lerp(t, 0, ScrH() * 0.2)
+            elseif elapsed >= slideDownEnd then
+                slideOffset = ScrH() * 0.2
+            end
+            
+            local currentY = (ScrH() / 3.35) + slideOffset
+            local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+            local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
+            
+            -- 1) Initial: fully visible
+            if elapsed < carbon_noti_animState.slideInDuration then
+                icon.scale = icon.baseScale
+                icon.alpha = 255
+                
+                -- 2) Shrink to 0 instantly when Element 4 finishes shrinking
+            elseif elapsed < shrinkEnd then
+                icon.scale = 0  -- instant shrink
+                icon.alpha = 255
+                
+                -- 3) Expand with overshoot during Element 4 expand
+            elseif elapsed < expandEnd then
+                local expandStart = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
+                local expandElapsed = elapsed - expandStart
+                local expandDuration = carbon_noti_animState.icon.ExpandDuration
+                local t = math.Clamp(expandElapsed / expandDuration, 0, 1)
+                
+                if t < 0.8 then
+                    icon.scale = Lerp(t / 0.8, 0, icon.overshootScale)
+                else
+                    icon.scale = icon.baseScale
+                end
+                
+                icon.alpha = 255
+                
+                -- 4) Slide down with element 4.1, fade out alpha
+            elseif elapsed < slideDownEnd then
+                local fadeT = (elapsed - slideDownStart) / carbon_noti_animState.slideDownDuration
+                icon.alpha = Lerp(fadeT, 255, 0)
+            else
+                icon.alpha = 0
+            end
+            
+            DrawIcon(UVMaterials["UNITS_DISABLED"], ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
         end)
     end,
     onUnitDeploy = function(...)
@@ -1923,9 +1925,9 @@ UV_UI.pursuit.carbon.events = {
         OK:SetPos(w*0.2565, h*0.675)
         OK:SetSize(w*0.15, h*0.035)
         OK.Paint = function() end
-
+        
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
-		ResultPanel:Add(OK)
+        ResultPanel:Add(OK)
         ResultPanel:SetSize(w, h)
         -- ResultPanel:SetPos(0, 0)
         ResultPanel:SetMouseInputEnabled(true)
@@ -1976,7 +1978,7 @@ UV_UI.pursuit.carbon.events = {
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)
             gui.EnableScreenClicker(false)
-			OK:SetEnabled(false)
+            OK:SetEnabled(false)
             
             hook.Add("Think", "ResultPanelExitAnim", function()
                 if not IsValid(panel) then
@@ -1997,7 +1999,7 @@ UV_UI.pursuit.carbon.events = {
         end
         
         gui.EnableScreenClicker(true)
-
+        
         local timetotal = 30
         local timestart = CurTime()
         local exitStarted = false -- prevent repeated trigger
@@ -2370,19 +2372,20 @@ local function carbon_pursuit_main( ... )
         local closestDistance = math.huge
         
         for _, suspect in pairs(UVHUDWantedSuspects) do
-            if not IsValid(suspect) then continue end
-            local dist = ply:GetPos():DistToSqr(suspect:GetPos())
-            
-            if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
-                closestDistance = dist
-                UVClosestSuspect = suspect
+            if IsValid(suspect) then
+                local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+                
+                if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
+                    closestDistance = dist
+                    UVClosestSuspect = suspect
+                end
             end
         end
         
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -2441,15 +2444,15 @@ local function carbon_pursuit_main( ... )
     UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
     
     local hl10 = 0
-	local hlcm = 0
+    local hlcm = 0
     if UVHeatLevel > 9 then hl10 = w * 0.01 end
-	if (UVHUDDisplayCooldown and UVHUDCopMode) then hlcm = h * 0.0475 end
-	
+    if (UVHUDDisplayCooldown and UVHUDCopMode) then hlcm = h * 0.0475 end
+    
     DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.28 - hlcm, .045, Colors.Carbon_Accent) -- Icon
     
     draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83 + 2, h * 0.26 - hlcm + 2, Color(0,0,0), TEXT_ALIGN_RIGHT)
     draw.DrawText("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.26 - hlcm, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT)
-
+    
     surface.SetDrawColor(Color(0,0,0))
     surface.DrawRect(w * 0.835 - 4, h * 0.275 - hlcm - 3, w * 0.145 + 8.5, h * 0.015 + 6)
     surface.SetDrawColor(Colors.Carbon_AccentDarker)
@@ -2488,7 +2491,7 @@ local function carbon_pursuit_main( ... )
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-
+    
     surface.SetDrawColor(Colors.Carbon_Accent)
     
     surface.DrawRect(w * 0.835, h * 0.275 - hlcm, B, h * 0.015)
@@ -2624,12 +2627,12 @@ local function carbon_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(193, 66, 0, blink2)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(193, 66, 0, blink3)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             else
                 states.BustedColor = Color(193, 66, 0)
@@ -2710,7 +2713,7 @@ local function carbon_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown()
+            UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
@@ -2793,7 +2796,7 @@ UV_UI.racing.mostwanted.events = {
         OK:SetText("")
         OK:SetPos(w*0.205, h*0.77)
         OK:SetSize(w*0.205, h*0.0425)
-		OK.Paint = function() end
+        OK.Paint = function() end
         
         local timestart = CurTime()
         
@@ -2841,7 +2844,7 @@ UV_UI.racing.mostwanted.events = {
             
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
-
+            
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
             local entry = {
@@ -3013,8 +3016,8 @@ UV_UI.racing.mostwanted.events = {
                 draw.DrawText("#uv.results.race.name", "UVFont5UI", w * 0.3, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 draw.DrawText("#uv.results.race.time", "UVFont5UI", w * 0.795, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
                 
-				local blink = 255 * math.abs(math.sin(RealTime() * 8))
-				
+                local blink = 255 * math.abs(math.sin(RealTime() * 8))
+                
                 if scrollOffset > 0 then
                     draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
                 end
@@ -3113,31 +3116,31 @@ end,
 onRaceEnd = function( sortedRacers, stringArray )
     local triggerTime = CurTime()
     local duration = 10
-	local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-	local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
-	
-	-----------------------------------------
-
-	if Glide then
-		if not istable(sortedRacers) or #sortedRacers == 0 then
-			glidetext = "#uv.race.finished.statserror"
-			glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-		end
-			Glide.Notify({
-				text = glidetext,
-				lifetime = duration,
-				immediate = true,
-				icon = glideicon,
-			}) 
-	end
-        
+    local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+    local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+    
+    -----------------------------------------
+    
+    if Glide then
+        if not istable(sortedRacers) or #sortedRacers == 0 then
+            glidetext = "#uv.race.finished.statserror"
+            glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+        end
+        Glide.Notify({
+            text = glidetext,
+            lifetime = duration,
+            immediate = true,
+            icon = glideicon,
+        }) 
+    end
+    
     hook.Add( "Think", "RaceResultDisplay", function()
         if CurTime() - triggerTime > duration then
             hook.Remove( 'Think', 'RaceResultDisplay' )
             return
         end
         
-        if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+        if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
             hook.Remove( 'Think', 'RaceResultDisplay' )
             -- _main()
             UV_UI.racing.mostwanted.events.ShowResults(sortedRacers)
@@ -3147,585 +3150,585 @@ end,
 
 notifState = {},
 onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
-	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-	-- if is_local_player then
-		-- name = "YOU"
-	-- end
+    local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+    -- if is_local_player then
+    -- name = "YOU"
+    -- end
+    
+    if is_global_best then
+        UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+    else
+        if is_local_player then
+            UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime"), Carbon_FormatRaceTime( lap_time ) )
+        else
+            return
+        end
+    end
+    
+    UV_UI.racing.mostwanted.events.notifState = {
+        active = true,
+        startTime = CurTime(),
+        fadeStartTime = nil,
+        
+        phase1Duration = 2.5,
+        fadeDuration = 0.3,
+        startY = ScrH() * 0.325,
+        midY = ScrH() * 0.4,
+        finalY = ScrH() * 0.9,
+        
+        randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+        randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+        randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+        centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
+        
+        burstDuration = 0.025,
+        burstDuration2 = 0.025,
+        toCenterDuration = 0.1,
+        holdDuration = 2.3,
+    }
+    
+    
+    local notifState = UV_UI.racing.mostwanted.events.notifState
+    
+    ----------------------------------------------------------------------------
+    
+    if timer.Exists( 'MW_NOTIFICATION_LAP_TIMER' ) then timer.Remove( "MW_NOTIFICATION_LAP_TIMER" ) end 
+    
+    timer.Create( "MW_NOTIFICATION_LAP_TIMER", 3, 1, function()
+        hook.Remove( "HUDPaint", "MW_NOTIFICATION_LAP" )
+        notifState.active = false
+    end)
+    
+    hook.Add("HUDPaint", "MW_NOTIFICATION_LAP", function()
+        local now = CurTime()
+        local elapsed = now - notifState.startTime
+        local pos = Vector()
+        local alpha = 255
+        
+        if elapsed < notifState.burstDuration then
+            -- Phase 1: teleport at randomStart
+            pos = notifState.randomStart
+            
+        elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
+            -- Phase 2: teleport at randomBurst1
+            pos = notifState.randomBurst1
+            
+        elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
+            -- Phase 3: teleport at randomBurst2
+            pos = notifState.randomBurst2
+            
+        elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
+            -- Phase 4: gradual downward motion from midY to finalY (no fade)
+            local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
+            local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
+            pos = Vector(
+            notifState.centerPos.x,
+            Lerp(t, notifState.startY, notifState.midY),
+            0
+        )
+        alpha = 255
+        
+    else
+        -- Phase 5: smooth fall + fade (as before)
+        if not notifState.fadeStartTime then
+            notifState.fadeStartTime = now
+        end
+        
+        local fadeElapsed = now - notifState.fadeStartTime
+        local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+        
+        pos = Vector(
+        notifState.centerPos.x,
+        Lerp(t, notifState.midY, notifState.finalY),
+        0
+    )
+    alpha = Lerp(t, 255, 0)
+end
 
-	if is_global_best then
-		UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
-	else
-		if is_local_player then
-			UV_UI.racing.mostwanted.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime"), Carbon_FormatRaceTime( lap_time ) )
-		else
-			return
-		end
-	end
+mw_noti_draw(UV_UI.racing.mostwanted.states.LapCompleteText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
 
-	UV_UI.racing.mostwanted.events.notifState = {
-		active = true,
-		startTime = CurTime(),
-		fadeStartTime = nil,
+local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
+local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
+local iconDiffY = ScrH() * 0.055
+local iconStartY = notifState.startY - iconDiffY
+local iconY
+if not notifState.fadeStartTime then
+    local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
+    iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
+else
+    local fadeElapsed = now - notifState.fadeStartTime
+    local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+    iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+end
 
-		phase1Duration = 2.5,
-		fadeDuration = 0.3,
-		startY = ScrH() * 0.325,
-		midY = ScrH() * 0.4,
-		finalY = ScrH() * 0.9,
-
-		randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-		randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-		randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-		centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
-
-		burstDuration = 0.025,
-		burstDuration2 = 0.025,
-		toCenterDuration = 0.1,
-		holdDuration = 2.3,
-	}
-
-
-	local notifState = UV_UI.racing.mostwanted.events.notifState
-
-	----------------------------------------------------------------------------
-
-	if timer.Exists( 'MW_NOTIFICATION_LAP_TIMER' ) then timer.Remove( "MW_NOTIFICATION_LAP_TIMER" ) end 
-	
-	timer.Create( "MW_NOTIFICATION_LAP_TIMER", 3, 1, function()
-		hook.Remove( "HUDPaint", "MW_NOTIFICATION_LAP" )
-		notifState.active = false
-	end)
-	
-	hook.Add("HUDPaint", "MW_NOTIFICATION_LAP", function()
-		local now = CurTime()
-		local elapsed = now - notifState.startTime
-		local pos = Vector()
-		local alpha = 255
-
-		if elapsed < notifState.burstDuration then
-			-- Phase 1: teleport at randomStart
-			pos = notifState.randomStart
-
-		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
-			-- Phase 2: teleport at randomBurst1
-			pos = notifState.randomBurst1
-
-		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
-			-- Phase 3: teleport at randomBurst2
-			pos = notifState.randomBurst2
-
-		elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
-			-- Phase 4: gradual downward motion from midY to finalY (no fade)
-			local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
-			local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
-			pos = Vector(
-				notifState.centerPos.x,
-				Lerp(t, notifState.startY, notifState.midY),
-				0
-			)
-			alpha = 255
-
-		else
-			-- Phase 5: smooth fall + fade (as before)
-			if not notifState.fadeStartTime then
-				notifState.fadeStartTime = now
-			end
-
-			local fadeElapsed = now - notifState.fadeStartTime
-			local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-
-			pos = Vector(
-				notifState.centerPos.x,
-				Lerp(t, notifState.midY, notifState.finalY),
-				0
-			)
-			alpha = Lerp(t, 255, 0)
-		end
-		
-		mw_noti_draw(UV_UI.racing.mostwanted.states.LapCompleteText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
-		
-		local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
-		local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
-		local iconDiffY = ScrH() * 0.055
-		local iconStartY = notifState.startY - iconDiffY
-		local iconY
-		if not notifState.fadeStartTime then
-			local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
-			iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
-		else
-			local fadeElapsed = now - notifState.fadeStartTime
-			local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-			iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
-		end
-
-		DrawIcon( UVMaterials['CLOCK'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
-		DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
-	end)
+DrawIcon( UVMaterials['CLOCK'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
+DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+end)
 end
 }
 
 UV_UI.pursuit.mostwanted.events = {
-	notifState = {},
+    notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
+        if UVHUDDisplayRacing then return end
         UV_UI.pursuit.mostwanted.states.TakedownText = string.format( language.GetPhrase( "uv.hud.mw.takedown" ),
-		isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
-
-		UV_UI.pursuit.mostwanted.events.notifState = {
-			active = true,
-			startTime = CurTime(),
-			fadeStartTime = nil,
-
-			phase1Duration = 2.5,
-			fadeDuration = 0.3,
-			startY = ScrH() * 0.325,
-			midY = ScrH() * 0.4,
-			finalY = ScrH() * 0.9,
-
-			randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
-
-			burstDuration = 0.025,
-			burstDuration2 = 0.025,
-			toCenterDuration = 0.1,
-			holdDuration = 2.3,
-		}
-
-
-		local notifState = UV_UI.pursuit.mostwanted.events.notifState
-
+        isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
+        
+        UV_UI.pursuit.mostwanted.events.notifState = {
+            active = true,
+            startTime = CurTime(),
+            fadeStartTime = nil,
+            
+            phase1Duration = 2.5,
+            fadeDuration = 0.3,
+            startY = ScrH() * 0.325,
+            midY = ScrH() * 0.4,
+            finalY = ScrH() * 0.9,
+            
+            randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+            randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+            randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
+            centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
+            
+            burstDuration = 0.025,
+            burstDuration2 = 0.025,
+            toCenterDuration = 0.1,
+            holdDuration = 2.3,
+        }
+        
+        
+        local notifState = UV_UI.pursuit.mostwanted.events.notifState
+        
         ----------------------------------------------------------------------------
-
+        
         if timer.Exists( 'MW_NOTIFICATION_TAKEDOWN_TIMER' ) then timer.Remove( "MW_NOTIFICATION_TAKEDOWN_TIMER" ) end 
         
         timer.Create( "MW_NOTIFICATION_TAKEDOWN_TIMER", 3, 1, function()
             hook.Remove( "HUDPaint", "MW_NOTIFICATION_TAKEDOWN" )
-			notifState.active = false
+            notifState.active = false
         end)
         
-		hook.Add("HUDPaint", "MW_NOTIFICATION_TAKEDOWN", function()
-			local now = CurTime()
-			local elapsed = now - notifState.startTime
-			local pos = Vector()
-			local alpha = 255
-
-			if elapsed < notifState.burstDuration then
-				-- Phase 1: teleport at randomStart
-				pos = notifState.randomStart
-
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
-				-- Phase 2: teleport at randomBurst1
-				pos = notifState.randomBurst1
-
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
-				-- Phase 3: teleport at randomBurst2
-				pos = notifState.randomBurst2
-
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
-				-- Phase 4: gradual downward motion from midY to finalY (no fade)
-				local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
-				local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
-				pos = Vector(
-					notifState.centerPos.x,
-					Lerp(t, notifState.startY, notifState.midY),
-					0
-				)
-				alpha = 255
-
-			else
-				-- Phase 5: smooth fall + fade (as before)
-				if not notifState.fadeStartTime then
-					notifState.fadeStartTime = now
-				end
-
-				local fadeElapsed = now - notifState.fadeStartTime
-				local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-
-				pos = Vector(
-					notifState.centerPos.x,
-					Lerp(t, notifState.midY, notifState.finalY),
-					0
-				)
-				alpha = Lerp(t, 255, 0)
-			end
-
-			mw_noti_draw(UV_UI.pursuit.mostwanted.states.TakedownText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
-			
-			local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
-			local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
-			local iconDiffY = ScrH() * 0.045
-			local iconStartY = notifState.startY - iconDiffY
-			local iconY
-			if not notifState.fadeStartTime then
-				local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
-				iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
-			else
-				local fadeElapsed = now - notifState.fadeStartTime
-				local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-				iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
-			end
-
-			DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
-			DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
-		end)
-	end,
-    onUnitWreck = function(...)
-        
-        hook.Remove("Think", "MW_WRECKS_COLOR_PULSE")
-        
-        if timer.Exists("MW_WRECKS_COLOR_PULSE_DELAY") then timer.Remove("MW_WRECKS_COLOR_PULSE_DELAY") end
-        UV_UI.pursuit.mostwanted.states.WrecksColor = Color(255,255,0, 150)
-        
-        timer.Create("MW_WRECKS_COLOR_PULSE_DELAY", 1, 1, function()
-            hook.Add("Think", "MW_WRECKS_COLOR_PULSE", function()
-                UV_UI.pursuit.mostwanted.states.WrecksColor.b = UV_UI.pursuit.mostwanted.states.WrecksColor.b + 600 * RealFrameTime()
-                if UV_UI.pursuit.mostwanted.states.WrecksColor.b >= 255 then hook.Remove("Think", "MW_WRECKS_COLOR_PULSE") end
-            end)
-        end)
-        
-    end,
-    onUnitTag = function(...)
-        
-        hook.Remove("Think", "MW_TAGS_COLOR_PULSE")
-        if timer.Exists("MW_TAGS_COLOR_PULSE_DELAY") then timer.Remove("MW_TAGS_COLOR_PULSE_DELAY") end
-        
-        UV_UI.pursuit.mostwanted.states.TagsColor = Color(255,255,0, 150)
-        
-        timer.Create("MW_TAGS_COLOR_PULSE_DELAY", 1, 1, function()
+        hook.Add("HUDPaint", "MW_NOTIFICATION_TAKEDOWN", function()
+            local now = CurTime()
+            local elapsed = now - notifState.startTime
+            local pos = Vector()
+            local alpha = 255
             
-            hook.Add("Think", "MW_TAGS_COLOR_PULSE", function()
-                UV_UI.pursuit.mostwanted.states.TagsColor.b = UV_UI.pursuit.mostwanted.states.TagsColor.b + 600 * RealFrameTime()
-                if UV_UI.pursuit.mostwanted.states.TagsColor.b >= 255 then hook.Remove("Think", "MW_TAGS_COLOR_PULSE") end
-            end)
+            if elapsed < notifState.burstDuration then
+                -- Phase 1: teleport at randomStart
+                pos = notifState.randomStart
+                
+            elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
+                -- Phase 2: teleport at randomBurst1
+                pos = notifState.randomBurst1
+                
+            elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
+                -- Phase 3: teleport at randomBurst2
+                pos = notifState.randomBurst2
+                
+            elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
+                -- Phase 4: gradual downward motion from midY to finalY (no fade)
+                local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
+                local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
+                pos = Vector(
+                notifState.centerPos.x,
+                Lerp(t, notifState.startY, notifState.midY),
+                0
+            )
+            alpha = 255
             
-        end)
-        
-    end,
-    onResourceChange = function(...)
-        
-        local new_data = select( 1, ... )
-        local old_data = select( 2, ... )
-        
-        hook.Remove("Think", "MW_RP_COLOR_PULSE")
-        UV_UI.pursuit.mostwanted.states.UnitsColor = (new_data < (old_data or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
-        --UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
-        
-        local clrs = {}
-        
-        for _, v in pairs( { 'r', 'g', 'b' } ) do
-            if UV_UI.pursuit.mostwanted.states.UnitsColor[v] ~= 255 then table.insert(clrs, v) end
-        end 
-        
-        -- if timer.Exists("UVWrecksColor") then
-        -- 	timer.Remove("UVWrecksColor")
-        -- end
-        local val = 50
-        
-        hook.Add("Think", "MW_RP_COLOR_PULSE", function()
-            val = val + 200 * RealFrameTime()
-            -- UVResourcePointsColor.b = val
-            -- UVResourcePointsColor.g = val
-            for _, v in pairs( clrs ) do
-                UV_UI.pursuit.mostwanted.states.UnitsColor[v] = val
+        else
+            -- Phase 5: smooth fall + fade (as before)
+            if not notifState.fadeStartTime then
+                notifState.fadeStartTime = now
             end
             
-            if val >= 255 then hook.Remove("Think", "MW_RP_COLOR_PULSE") end
+            local fadeElapsed = now - notifState.fadeStartTime
+            local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+            
+            pos = Vector(
+            notifState.centerPos.x,
+            Lerp(t, notifState.midY, notifState.finalY),
+            0
+        )
+        alpha = Lerp(t, 255, 0)
+    end
+    
+    mw_noti_draw(UV_UI.pursuit.mostwanted.states.TakedownText, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
+    
+    local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
+    local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
+    local iconDiffY = ScrH() * 0.045
+    local iconStartY = notifState.startY - iconDiffY
+    local iconY
+    if not notifState.fadeStartTime then
+        local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
+        iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
+    else
+        local fadeElapsed = now - notifState.fadeStartTime
+        local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+        iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+    end
+    
+    DrawIcon( UVMaterials['UNITS_DISABLED'], ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
+    DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+end)
+end,
+onUnitWreck = function(...)
+    
+    hook.Remove("Think", "MW_WRECKS_COLOR_PULSE")
+    
+    if timer.Exists("MW_WRECKS_COLOR_PULSE_DELAY") then timer.Remove("MW_WRECKS_COLOR_PULSE_DELAY") end
+    UV_UI.pursuit.mostwanted.states.WrecksColor = Color(255,255,0, 150)
+    
+    timer.Create("MW_WRECKS_COLOR_PULSE_DELAY", 1, 1, function()
+        hook.Add("Think", "MW_WRECKS_COLOR_PULSE", function()
+            UV_UI.pursuit.mostwanted.states.WrecksColor.b = UV_UI.pursuit.mostwanted.states.WrecksColor.b + 600 * RealFrameTime()
+            if UV_UI.pursuit.mostwanted.states.WrecksColor.b >= 255 then hook.Remove("Think", "MW_WRECKS_COLOR_PULSE") end
+        end)
+    end)
+    
+end,
+onUnitTag = function(...)
+    
+    hook.Remove("Think", "MW_TAGS_COLOR_PULSE")
+    if timer.Exists("MW_TAGS_COLOR_PULSE_DELAY") then timer.Remove("MW_TAGS_COLOR_PULSE_DELAY") end
+    
+    UV_UI.pursuit.mostwanted.states.TagsColor = Color(255,255,0, 150)
+    
+    timer.Create("MW_TAGS_COLOR_PULSE_DELAY", 1, 1, function()
+        
+        hook.Add("Think", "MW_TAGS_COLOR_PULSE", function()
+            UV_UI.pursuit.mostwanted.states.TagsColor.b = UV_UI.pursuit.mostwanted.states.TagsColor.b + 600 * RealFrameTime()
+            if UV_UI.pursuit.mostwanted.states.TagsColor.b >= 255 then hook.Remove("Think", "MW_TAGS_COLOR_PULSE") end
         end)
         
-    end,
-    onChasingUnitsChange = function(...)
-        
-    end,
-    onHeatLevelUpdate = function(...)
-        
-    end,
+    end)
     
-    ShowDebrief = function(params) -- Most Wanted
-        if UVHUDDisplayRacing then return end
-        
-        local debriefdata = params.dataTable or escapedtable
-        local debriefcolor = params.color or Color(255, 183, 61)
-        local debrieftextcolor = params.textcolor or Colors.MW_Racer
-        local debrieficon = params.iconMaterial or UVMaterials['RESULTCOP']
-        local debrieftitletext = params.titleText or "Title Text"
-        
-        local w = ScrW()
-        local h = ScrH()
-        
-        --------------------------------------
-        
-        local time = UVDisplayTime(UVTimerProgress)
-        local unit = debriefdata["Unit"] or "Officer Replace Me"
-        local deploys = debriefdata["Deploys"]
-        local roadblocksdodged = debriefdata["Roadblocks"]
-        local spikestripsdodged = debriefdata["Spikestrips"]
-        local bounty = UVBounty
-        local tags = UVTags
-        local wrecks = UVWrecks
-        local suspects = UVHUDWantedSuspectsNumber
-        
-        local ResultPanel = vgui.Create("DFrame")
-        local OK = vgui.Create("DButton")
-        
-        ResultPanel:Add(OK)
-        ResultPanel:SetSize(w, h)
-        ResultPanel:SetBackgroundBlur(true)
-        ResultPanel:ShowCloseButton(false)
-        ResultPanel:Center()
-        ResultPanel:SetTitle("")
-        ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
-        ResultPanel:SetKeyboardInputEnabled(false)
-        
-        OK:SetText("")
-        OK:SetPos(w*0.205, h*0.77)
-        OK:SetSize(w*0.205, h*0.0425)
-		OK.Paint = function() end
-        
-        local timestart = CurTime()
-        
-        local revealStartTime = CurTime()
-        local displaySequence = {}
-        
-        -- Data and labels
-        local infoLabels = {
-            { label = "#uv.results.chase.bounty", value = bounty },
-            { label = "#uv.results.chase.time", value = time },
-            { label = "#uv.results.chase.units.deployed", value = deploys },
-            { label = "#uv.results.chase.units.damaged", value = tags },
-            { label = "#uv.results.chase.units.destroyed", value = wrecks },
-            { label = "#uv.results.chase.dodged.blocks", value = roadblocksdodged },
-            { label = "#uv.results.chase.dodged.spikes", value = spikestripsdodged }
-        }
-        
-        -- Build the sequence including empty tabs to keep layout intact
-        local h1, h2 = h*0.2475, h*0.2875
-        local xLeft = w * 0.205
-        local xRight = w * 0.795
-        local revealInterval = 0.033
-        
-        for i = 1, 13 do -- Total of 13 tabs
-            local revealTime = revealStartTime + (i - 1) * revealInterval
-            
-            -- Alternate h1 and h2 for staggered layout
-            local yPos = (i % 2 == 1) and h1 + math.floor(i / 2) * h * 0.08 or h2 + math.floor((i - 1) / 2) * h * 0.08
-            local entry = {
-                y = yPos,
-                leftText = infoLabels[i] and infoLabels[i].label or nil,
-                rightText = infoLabels[i] and tostring(infoLabels[i].value) or nil,
-                revealTime = revealTime
-            }
-            table.insert(displaySequence, entry)
+end,
+onResourceChange = function(...)
+    
+    local new_data = select( 1, ... )
+    local old_data = select( 2, ... )
+    
+    hook.Remove("Think", "MW_RP_COLOR_PULSE")
+    UV_UI.pursuit.mostwanted.states.UnitsColor = (new_data < (old_data or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
+    --UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
+    
+    local clrs = {}
+    
+    for _, v in pairs( { 'r', 'g', 'b' } ) do
+        if UV_UI.pursuit.mostwanted.states.UnitsColor[v] ~= 255 then table.insert(clrs, v) end
+    end 
+    
+    -- if timer.Exists("UVWrecksColor") then
+    -- 	timer.Remove("UVWrecksColor")
+    -- end
+    local val = 50
+    
+    hook.Add("Think", "MW_RP_COLOR_PULSE", function()
+        val = val + 200 * RealFrameTime()
+        -- UVResourcePointsColor.b = val
+        -- UVResourcePointsColor.g = val
+        for _, v in pairs( clrs ) do
+            UV_UI.pursuit.mostwanted.states.UnitsColor[v] = val
         end
         
-        local flashDuration = 0.2 -- total time for flash animation
-        local flashStartTime = nil
-        local allRevealed = false
+        if val >= 255 then hook.Remove("Think", "MW_RP_COLOR_PULSE") end
+    end)
+    
+end,
+onChasingUnitsChange = function(...)
+    
+end,
+onHeatLevelUpdate = function(...)
+    
+end,
+
+ShowDebrief = function(params) -- Most Wanted
+    if UVHUDDisplayRacing then return end
+    
+    local debriefdata = params.dataTable or escapedtable
+    local debriefcolor = params.color or Color(255, 183, 61)
+    local debrieftextcolor = params.textcolor or Colors.MW_Racer
+    local debrieficon = params.iconMaterial or UVMaterials['RESULTCOP']
+    local debrieftitletext = params.titleText or "Title Text"
+    
+    local w = ScrW()
+    local h = ScrH()
+    
+    --------------------------------------
+    
+    local time = UVDisplayTime(UVTimerProgress)
+    local unit = debriefdata["Unit"] or "Officer Replace Me"
+    local deploys = debriefdata["Deploys"]
+    local roadblocksdodged = debriefdata["Roadblocks"]
+    local spikestripsdodged = debriefdata["Spikestrips"]
+    local bounty = UVBounty
+    local tags = UVTags
+    local wrecks = UVWrecks
+    local suspects = UVHUDWantedSuspectsNumber
+    
+    local ResultPanel = vgui.Create("DFrame")
+    local OK = vgui.Create("DButton")
+    
+    ResultPanel:Add(OK)
+    ResultPanel:SetSize(w, h)
+    ResultPanel:SetBackgroundBlur(true)
+    ResultPanel:ShowCloseButton(false)
+    ResultPanel:Center()
+    ResultPanel:SetTitle("")
+    ResultPanel:SetDraggable(false)
+    ResultPanel:MakePopup()
+    ResultPanel:SetKeyboardInputEnabled(false)
+    
+    OK:SetText("")
+    OK:SetPos(w*0.205, h*0.77)
+    OK:SetSize(w*0.205, h*0.0425)
+    OK.Paint = function() end
+    
+    local timestart = CurTime()
+    
+    local revealStartTime = CurTime()
+    local displaySequence = {}
+    
+    -- Data and labels
+    local infoLabels = {
+        { label = "#uv.results.chase.bounty", value = bounty },
+        { label = "#uv.results.chase.time", value = time },
+        { label = "#uv.results.chase.units.deployed", value = deploys },
+        { label = "#uv.results.chase.units.damaged", value = tags },
+        { label = "#uv.results.chase.units.destroyed", value = wrecks },
+        { label = "#uv.results.chase.dodged.blocks", value = roadblocksdodged },
+        { label = "#uv.results.chase.dodged.spikes", value = spikestripsdodged }
+    }
+    
+    -- Build the sequence including empty tabs to keep layout intact
+    local h1, h2 = h*0.2475, h*0.2875
+    local xLeft = w * 0.205
+    local xRight = w * 0.795
+    local revealInterval = 0.033
+    
+    for i = 1, 13 do -- Total of 13 tabs
+        local revealTime = revealStartTime + (i - 1) * revealInterval
         
-        local closing = false
-        local closeStartTime = 0
+        -- Alternate h1 and h2 for staggered layout
+        local yPos = (i % 2 == 1) and h1 + math.floor(i / 2) * h * 0.08 or h2 + math.floor((i - 1) / 2) * h * 0.08
+        local entry = {
+            y = yPos,
+            leftText = infoLabels[i] and infoLabels[i].label or nil,
+            rightText = infoLabels[i] and tostring(infoLabels[i].value) or nil,
+            revealTime = revealTime
+        }
+        table.insert(displaySequence, entry)
+    end
+    
+    local flashDuration = 0.2 -- total time for flash animation
+    local flashStartTime = nil
+    local allRevealed = false
+    
+    local closing = false
+    local closeStartTime = 0
+    
+    local totalRevealTime = (revealInterval * 13) + flashDuration
+    
+    ResultPanel.Paint = function(self, w, h)
+        local curTime = CurTime()
         
-        local totalRevealTime = (revealInterval * 13) + flashDuration
+        -- Check if all rows revealed
+        local allEntriesRevealed = true
+        for i, entry in ipairs(displaySequence) do
+            if curTime < entry.revealTime then
+                allEntriesRevealed = false
+                break
+            end
+        end
         
-        ResultPanel.Paint = function(self, w, h)
-            local curTime = CurTime()
-            
-            -- Check if all rows revealed
-            local allEntriesRevealed = true
-            for i, entry in ipairs(displaySequence) do
-                if curTime < entry.revealTime then
-                    allEntriesRevealed = false
-                    break
-                end
-            end
-            
-            if allEntriesRevealed and not flashStartTime then
-                flashStartTime = curTime
-            end
-            
-            local flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
-            
-            local textAlpha = 0
-            local tabAlpha = 50
-            
-            if flashStartTime then
-                if not closing then
-                    textAlpha = Lerp(flashProgress, 0, 255)
-                    if flashProgress < 0.5 then
-                        tabAlpha = Lerp(flashProgress / 0.5, 0, 255)
-                    else
-                        tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 50)
-                    end
-                else
-                    -- Reverse flash alpha during closing
-                    textAlpha = Lerp(flashProgress, 255, 0)
-                    if flashProgress < 0.5 then
-                        tabAlpha = Lerp(flashProgress / 0.5, 50, 255)
-                    else
-                        tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 0)
-                    end
-                end
-            end
-            local blackBgAlpha = 0
-            
+        if allEntriesRevealed and not flashStartTime then
+            flashStartTime = curTime
+        end
+        
+        local flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
+        
+        local textAlpha = 0
+        local tabAlpha = 50
+        
+        if flashStartTime then
             if not closing then
-                -- Opening: ramp up to 235 in 0.05s
-                local fadeInDuration = 0.05
-                local elapsedSinceStart = curTime - timestart
-                blackBgAlpha = Lerp(math.min(elapsedSinceStart / fadeInDuration, 1), 0, 235)
-            else
-                -- Closing: hold 235 until last 0.1s, then fade to 0
-                local fadeOutDuration = 0.1
-                local timeSinceCloseStart = curTime - closeStartTime
-                local timeLeft = totalRevealTime - timeSinceCloseStart
-                
-                if timeLeft <= fadeOutDuration then
-                    -- fade out from 235 to 0 in last 0.1 seconds
-                    blackBgAlpha = Lerp(timeLeft / fadeOutDuration, 0, 235)
+                textAlpha = Lerp(flashProgress, 0, 255)
+                if flashProgress < 0.5 then
+                    tabAlpha = Lerp(flashProgress / 0.5, 0, 255)
                 else
-                    blackBgAlpha = 235
+                    tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 50)
+                end
+            else
+                -- Reverse flash alpha during closing
+                textAlpha = Lerp(flashProgress, 255, 0)
+                if flashProgress < 0.5 then
+                    tabAlpha = Lerp(flashProgress / 0.5, 50, 255)
+                else
+                    tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 0)
                 end
             end
+        end
+        local blackBgAlpha = 0
+        
+        if not closing then
+            -- Opening: ramp up to 235 in 0.05s
+            local fadeInDuration = 0.05
+            local elapsedSinceStart = curTime - timestart
+            blackBgAlpha = Lerp(math.min(elapsedSinceStart / fadeInDuration, 1), 0, 235)
+        else
+            -- Closing: hold 235 until last 0.1s, then fade to 0
+            local fadeOutDuration = 0.1
+            local timeSinceCloseStart = curTime - closeStartTime
+            local timeLeft = totalRevealTime - timeSinceCloseStart
             
-            -- Main black background
-            surface.SetDrawColor(0, 0, 0, blackBgAlpha)
-            surface.DrawRect(0, 0, w, h)
+            if timeLeft <= fadeOutDuration then
+                -- fade out from 235 to 0 in last 0.1 seconds
+                blackBgAlpha = Lerp(timeLeft / fadeOutDuration, 0, 235)
+            else
+                blackBgAlpha = 235
+            end
+        end
+        
+        -- Main black background
+        surface.SetDrawColor(0, 0, 0, blackBgAlpha)
+        surface.DrawRect(0, 0, w, h)
+        
+        -- Draw rows and alternating backgrounds fully visible when revealed
+        local xLeft = w * 0.2125
+        local xRight = w * 0.7875
+        local hStep = h * 0.04
+        local elapsed, revealProgress, flashProgress, entriesToShow
+        local entriesCount = #displaySequence
+        
+        if closing then
+            elapsed = curTime - closeStartTime
+            revealProgress = math.Clamp(1 - (elapsed / totalRevealTime), 0, 1)
+            flashProgress = math.Clamp(revealProgress * (flashDuration / totalRevealTime), 0, 1)
             
-            -- Draw rows and alternating backgrounds fully visible when revealed
-            local xLeft = w * 0.2125
-            local xRight = w * 0.7875
-            local hStep = h * 0.04
-            local elapsed, revealProgress, flashProgress, entriesToShow
-            local entriesCount = #displaySequence
+            -- Calculate how many entries should still be visible (from the start)
+            entriesToShow = math.ceil(entriesCount * revealProgress)
+        else
+            elapsed = curTime - revealStartTime
+            revealProgress = math.Clamp(elapsed / (totalRevealTime - flashDuration), 0, 1)
+            flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
+            
+            entriesToShow = math.floor(entriesCount * revealProgress)
+        end
+        
+        for i = 1, entriesCount do
+            local drawEntry = false
             
             if closing then
-                elapsed = curTime - closeStartTime
-                revealProgress = math.Clamp(1 - (elapsed / totalRevealTime), 0, 1)
-                flashProgress = math.Clamp(revealProgress * (flashDuration / totalRevealTime), 0, 1)
-                
-                -- Calculate how many entries should still be visible (from the start)
-                entriesToShow = math.ceil(entriesCount * revealProgress)
+                -- When closing, show only the first 'entriesToShow' entries (reverse reveal)
+                drawEntry = i <= entriesToShow
             else
-                elapsed = curTime - revealStartTime
-                revealProgress = math.Clamp(elapsed / (totalRevealTime - flashDuration), 0, 1)
-                flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
-                
-                entriesToShow = math.floor(entriesCount * revealProgress)
+                -- When opening, show up to entriesToShow
+                drawEntry = i <= entriesToShow
             end
             
-            for i = 1, entriesCount do
-                local drawEntry = false
+            if drawEntry then
+                local entry = displaySequence[i]
+                local isEven = i % 2 == 0
                 
-                if closing then
-                    -- When closing, show only the first 'entriesToShow' entries (reverse reveal)
-                    drawEntry = i <= entriesToShow
+                if isEven then
+                    surface.SetDrawColor(0, 0, 0, 50) -- black background
                 else
-                    -- When opening, show up to entriesToShow
-                    drawEntry = i <= entriesToShow
+                    surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, 25) -- orange background
                 end
+                surface.DrawRect(w * 0.2, entry.y, w * 0.6, hStep)
                 
-                if drawEntry then
-                    local entry = displaySequence[i]
-                    local isEven = i % 2 == 0
-                    
-                    if isEven then
-                        surface.SetDrawColor(0, 0, 0, 50) -- black background
-                    else
-                        surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, 25) -- orange background
-                    end
-                    surface.DrawRect(w * 0.2, entry.y, w * 0.6, hStep)
-                    
-                    if entry.leftText then
-                        draw.SimpleText(entry.leftText, "UVFont5UI", xLeft, entry.y, Color(debrieftextcolor.r, debrieftextcolor.g, debrieftextcolor.b), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-                    end
-                    if entry.rightText then
-                        draw.SimpleText(entry.rightText, "UVFont5UI", xRight, entry.y, Color(debrieftextcolor.r, debrieftextcolor.g, debrieftextcolor.b), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-                    end
+                if entry.leftText then
+                    draw.SimpleText(entry.leftText, "UVFont5UI", xLeft, entry.y, Color(debrieftextcolor.r, debrieftextcolor.g, debrieftextcolor.b), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.rightText then
+                    draw.SimpleText(entry.rightText, "UVFont5UI", xRight, entry.y, Color(debrieftextcolor.r, debrieftextcolor.g, debrieftextcolor.b), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
             end
+        end
+        
+        if flashStartTime then
+            -- Top tab background flash
+            surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
+            surface.DrawRect(w * 0.2, h * 0.1225, w * 0.6, h * 0.075)
             
-            if flashStartTime then
-                -- Top tab background flash
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.DrawRect(w * 0.2, h * 0.1225, w * 0.6, h * 0.075)
-                
-                -- Upper-middle background flash (same alpha as tabs)
-                surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.DrawTexturedRect(w * 0.2, h * 0.1975, w * 0.6, h * 0.05)
-                
-                -- Bottom tab background flash
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-                surface.DrawTexturedRect(w * 0.2, h * 0.7725, w * 0.6, h * 0.04)
-                
-                -- Icon and texts fade in (stay full alpha after flash)
-                DrawIcon(debrieficon, w * 0.225, h * 0.1575, .05, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha))
-                draw.DrawText("#uv.results.pursuit", "UVFont5", w * 0.25, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                
-                draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
-                
-                draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-            end
+            -- Upper-middle background flash (same alpha as tabs)
+            surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
+            surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
+            surface.DrawTexturedRect(w * 0.2, h * 0.1975, w * 0.6, h * 0.05)
             
-            -- Show/Hide OK button with fade
-            if flashStartTime then
-                if textAlpha > 0 then
-                    OK:SetEnabled(true)
-                end
-            else
-                OK:SetEnabled(false)
-            end
+            -- Bottom tab background flash
+            surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
+            surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
+            surface.DrawTexturedRect(w * 0.2, h * 0.7725, w * 0.6, h * 0.04)
             
-            -- Time since panel was created
-            local elapsed = CurTime() - timestart
+            -- Icon and texts fade in (stay full alpha after flash)
+            DrawIcon(debrieficon, w * 0.225, h * 0.1575, .05, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha))
+            draw.DrawText("#uv.results.pursuit", "UVFont5", w * 0.25, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             
-            -- Only start auto-close countdown after reveal + flash
-            local autoCloseStartDelay = totalRevealTime
-            local autoCloseDuration = 30  -- 30 seconds countdown
+            draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
             
-            local autoCloseTimer = 0
-            local autoCloseRemaining = autoCloseDuration
-            
-            if elapsed > autoCloseStartDelay then
-                autoCloseTimer = elapsed - autoCloseStartDelay
-                autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-                
-                draw.DrawText(
-                string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
-                "UVFont5UI", w * 0.795, h * 0.77,
-                Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-                TEXT_ALIGN_RIGHT
-            )
-            
-            if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
-                surface.PlaySound( "uvui/mw/closemenu.wav" )
-                if not closing then
-                    closing = true
-                    closeStartTime = CurTime()
-                end
+            draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+        end
+        
+        -- Show/Hide OK button with fade
+        if flashStartTime then
+            if textAlpha > 0 then
+                OK:SetEnabled(true)
             end
         else
-            -- Before auto-close timer starts, show the text but no countdown
+            OK:SetEnabled(false)
+        end
+        
+        -- Time since panel was created
+        local elapsed = CurTime() - timestart
+        
+        -- Only start auto-close countdown after reveal + flash
+        local autoCloseStartDelay = totalRevealTime
+        local autoCloseDuration = 30  -- 30 seconds countdown
+        
+        local autoCloseTimer = 0
+        local autoCloseRemaining = autoCloseDuration
+        
+        if elapsed > autoCloseStartDelay then
+            autoCloseTimer = elapsed - autoCloseStartDelay
+            autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+            
             draw.DrawText(
-            string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
+            string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
             "UVFont5UI", w * 0.795, h * 0.77,
             Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
             TEXT_ALIGN_RIGHT
         )
-    end
-    if closing then
-        local elapsed = curTime - closeStartTime
-        if elapsed >= totalRevealTime then
+        
+        if autoCloseRemaining <= 0 then
             hook.Remove("Think", "CheckJumpKeyForDebrief")
-            if IsValid(ResultPanel) then
-                ResultPanel:Close()
+            surface.PlaySound( "uvui/mw/closemenu.wav" )
+            if not closing then
+                closing = true
+                closeStartTime = CurTime()
             end
         end
+    else
+        -- Before auto-close timer starts, show the text but no countdown
+        draw.DrawText(
+        string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
+        "UVFont5UI", w * 0.795, h * 0.77,
+        Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
+        TEXT_ALIGN_RIGHT
+    )
+end
+if closing then
+    local elapsed = curTime - closeStartTime
+    if elapsed >= totalRevealTime then
+        hook.Remove("Think", "CheckJumpKeyForDebrief")
+        if IsValid(ResultPanel) then
+            ResultPanel:Close()
+        end
     end
+end
 end
 
 function OK:DoClick()
@@ -3964,19 +3967,20 @@ local function mw_pursuit_main( ... )
         local closestDistance = math.huge
         
         for _, suspect in pairs(UVHUDWantedSuspects) do
-            if not IsValid(suspect) then continue end
-            local dist = ply:GetPos():DistToSqr(suspect:GetPos())
-            
-            if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
-                closestDistance = dist
-                UVClosestSuspect = suspect
+            if IsValid(suspect) then
+                local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+                
+                if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
+                    closestDistance = dist
+                    UVClosestSuspect = suspect
+                end
             end
         end
         
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -4203,12 +4207,12 @@ local function mw_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(255, 0, 0, blink2)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(255, 0, 0, blink3)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             else
                 states.BustedColor = Color(255, 0, 0)
@@ -4332,7 +4336,7 @@ local function mw_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown()
+            UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
@@ -4394,7 +4398,7 @@ UV_UI.pursuit.undercover.states = {
     UnitsColor = Color(255,255,255,150),
     BustedColor = Color(255, 255, 255, 50),
     EvasionColor = Color(255, 255, 255, 50),
-	
+    
     TakedownText = nil,
 }
 
@@ -4434,7 +4438,7 @@ UV_UI.racing.undercover.events = {
         OK:SetText("")
         OK:SetPos(w*0.5, h*0.745)
         OK:SetSize(w*0.16, h*0.06)
-		OK:SetEnabled(true)
+        OK:SetEnabled(true)
         OK.Paint = function() end
         
         local fadeStart = CurTime()
@@ -4567,8 +4571,8 @@ UV_UI.racing.undercover.events = {
             local info = racer.array or racer  -- fallback if 'array' doesn't exist
             
             if info["LocalPlayer"] then
-				localIndex = i
-				localTime = tonumber(info["TotalTime"]) or math.huge
+                localIndex = i
+                localTime = tonumber(info["TotalTime"]) or math.huge
             elseif i == 2 then
                 secondPlaceTime = tonumber(info["TotalTime"]) or math.huge
             end
@@ -4674,7 +4678,7 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
                 Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             end
-
+            
             -- Time remaining and closing					
             surface.SetDrawColor( 0, 0, 0, tabAlpha )
             surface.DrawRect( w*0.33, h*0.745, w*0.33, h*0.06)
@@ -4705,8 +4709,8 @@ UV_UI.racing.undercover.events = {
         end
         
         function OK:DoClick() 
-			startCloseAnimation()
-			OK:SetEnabled(false)
+            startCloseAnimation()
+            OK:SetEnabled(false)
         end
         
         local wasJumping = false
@@ -4730,23 +4734,23 @@ UV_UI.racing.undercover.events = {
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
-		
-		-----------------------------------------
-
-		if Glide then
-			if not istable(sortedRacers) or #sortedRacers == 0 then
-				glidetext = "#uv.race.finished.statserror"
-				glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-			end
-				Glide.Notify({
-					text = glidetext,
-					lifetime = duration,
-					immediate = true,
-					icon = glideicon,
-				}) 
-		end
+        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+        
+        -----------------------------------------
+        
+        if Glide then
+            if not istable(sortedRacers) or #sortedRacers == 0 then
+                glidetext = "#uv.race.finished.statserror"
+                glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+            end
+            Glide.Notify({
+                text = glidetext,
+                lifetime = duration,
+                immediate = true,
+                icon = glideicon,
+            }) 
+        end
         
         hook.Add( "Think", "RaceResultDisplay", function()
             if CurTime() - triggerTime > duration then
@@ -4754,56 +4758,56 @@ UV_UI.racing.undercover.events = {
                 return
             end
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
                 UV_UI.racing.undercover.events.ShowResults(sortedRacers)
             end
         end)
     end,
-
-onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
-	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-	-- if is_local_player then
-		-- name = "YOU"
-	-- end
-	
-	if is_global_best then
-		UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
-	else
-		if is_local_player then
-			UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
-		else
-			return
-		end
-	end
-
+    
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+        local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        -- if is_local_player then
+        -- name = "YOU"
+        -- end
+        
+        if is_global_best then
+            UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+        else
+            if is_local_player then
+                UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+            else
+                return
+            end
+        end
+        
         local anim = {
             startTime = CurTime(),
             duration = 3,
             endTime = CurTime() + 3,
-
-			phase1Time = 0.1,
-			phase2Time = 0.2,       -- ends at 0.2
-			pulseDuration = 2.5,    -- from 0.2 to 1.4
-			fadeDuration = 0.5,     -- from 1.4 to 1.9
-			pulses = 3,
-
-			scaleIn = 1.3,
-			scaleMid = 1.0,
-			scaleBreathIn = 0.95,
-			scaleBreathOut = 1.05,
-			scaleExit = 0.1
+            
+            phase1Time = 0.1,
+            phase2Time = 0.2,       -- ends at 0.2
+            pulseDuration = 2.5,    -- from 0.2 to 1.4
+            fadeDuration = 0.5,     -- from 1.4 to 1.9
+            pulses = 3,
+            
+            scaleIn = 1.3,
+            scaleMid = 1.0,
+            scaleBreathIn = 0.95,
+            scaleBreathOut = 1.05,
+            scaleExit = 0.1
         }
-
+        
         UV_UI.racing.undercover.states.LapCompleteAnim = anim
-
+        
         ----------------------------------------------------------------------------
-
+        
         hook.Add("HUDPaint", "UNDERCOVER_NOTIFICATION_LAPTIME", function()
             local a = UV_UI.racing.undercover.states.LapCompleteAnim
             if not a then return end
-
+            
             local now = CurTime()
             local t = now - a.startTime
             if now >= a.endTime then
@@ -4811,55 +4815,55 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
                 hook.Remove("HUDPaint", "UNDERCOVER_NOTIFICATION_LAPTIME")
                 return
             end
-
+            
             -- Phase logic
-			local scale = scale or a.scaleMid
-			local alpha = alpha or 255
-			local offsetY = offsetY or 0
-			local baseColor = Color(0,194,255)
-			local t = CurTime() - a.startTime
-			local phase3Start = a.phase2Time
-			local phase3End = a.phase2Time + a.pulseDuration
-			local phase4Start = phase3End
-			local phase4End = a.endTime
-
-			-- Phase 1: Initial white burst
-			if t < a.phase1Time then
-				scale = a.scaleIn
-				alpha = 255
-				baseColor = Color(255, 255, 255)
-
-			-- Phase 2: Snap to green and shrink quickly
-			elseif t < a.phase2Time then
-				local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
-				scale = Lerp(p, a.scaleIn, a.scaleMid)
-				alpha = 255
-
-			-- Phase 3: Breathing pulses
-			elseif t < phase3End then
-				local p = (t - phase3Start) / a.pulseDuration
-				local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
-
-				if pulseT < 0.6 then
-					-- Inhale
-					scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
-				else
-					-- Exhale
-					scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
-				end
-				alpha = 255
-
-			-- Phase 4: Fade out, shrink, and move up
-			elseif t < phase4End then
-				local p = (t - phase4Start) / a.fadeDuration
-				scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
-				alpha = Lerp(p, 255, 0)
-				offsetY = Lerp(p, 0, -30)
-			end
-
+            local scale = scale or a.scaleMid
+            local alpha = alpha or 255
+            local offsetY = offsetY or 0
+            local baseColor = Color(0,194,255)
+            local t = CurTime() - a.startTime
+            local phase3Start = a.phase2Time
+            local phase3End = a.phase2Time + a.pulseDuration
+            local phase4Start = phase3End
+            local phase4End = a.endTime
+            
+            -- Phase 1: Initial white burst
+            if t < a.phase1Time then
+                scale = a.scaleIn
+                alpha = 255
+                baseColor = Color(255, 255, 255)
+                
+                -- Phase 2: Snap to green and shrink quickly
+            elseif t < a.phase2Time then
+                local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
+                scale = Lerp(p, a.scaleIn, a.scaleMid)
+                alpha = 255
+                
+                -- Phase 3: Breathing pulses
+            elseif t < phase3End then
+                local p = (t - phase3Start) / a.pulseDuration
+                local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
+                
+                if pulseT < 0.6 then
+                    -- Inhale
+                    scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
+                else
+                    -- Exhale
+                    scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+                end
+                alpha = 255
+                
+                -- Phase 4: Fade out, shrink, and move up
+            elseif t < phase4End then
+                local p = (t - phase4Start) / a.fadeDuration
+                scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
+                alpha = Lerp(p, 255, 0)
+                offsetY = Lerp(p, 0, -30)
+            end
+            
             local shadowColor = Color(0, 0, 0, alpha)
             local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
-
+            
             DrawScaledCenteredTextLines(UV_UI.racing.undercover.states.LapCompleteText, "UVUndercoverWhiteFont", x + 2, y + 2, shadowColor, scale)
             DrawScaledCenteredTextLines(UV_UI.racing.undercover.states.LapCompleteText, "UVUndercoverWhiteFont", x, y, baseColor, scale)
         end)
@@ -4867,36 +4871,36 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
 }
 
 UV_UI.pursuit.undercover.events = {
-	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		if UVHUDDisplayRacing then return end
+    onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+        if UVHUDDisplayRacing then return end
         UV_UI.pursuit.undercover.states.TakedownText = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
-
+        
         local anim = {
             startTime = CurTime(),
             duration = 3,
             endTime = CurTime() + 3,
-
-			phase1Time = 0.1,
-			phase2Time = 0.2,       -- ends at 0.2
-			pulseDuration = 2.5,    -- from 0.2 to 1.4
-			fadeDuration = 0.5,     -- from 1.4 to 1.9
-			pulses = 3,
-
-			scaleIn = 1.3,
-			scaleMid = 1.0,
-			scaleBreathIn = 0.95,
-			scaleBreathOut = 1.05,
-			scaleExit = 0.1
+            
+            phase1Time = 0.1,
+            phase2Time = 0.2,       -- ends at 0.2
+            pulseDuration = 2.5,    -- from 0.2 to 1.4
+            fadeDuration = 0.5,     -- from 1.4 to 1.9
+            pulses = 3,
+            
+            scaleIn = 1.3,
+            scaleMid = 1.0,
+            scaleBreathIn = 0.95,
+            scaleBreathOut = 1.05,
+            scaleExit = 0.1
         }
-
+        
         UV_UI.pursuit.undercover.states.TakedownAnim = anim
-
+        
         ----------------------------------------------------------------------------
-
+        
         hook.Add("HUDPaint", "UNDERCOVER_NOTIFICATION_TAKEDOWN", function()
             local a = UV_UI.pursuit.undercover.states.TakedownAnim
             if not a then return end
-
+            
             local now = CurTime()
             local t = now - a.startTime
             if now >= a.endTime then
@@ -4904,55 +4908,55 @@ UV_UI.pursuit.undercover.events = {
                 hook.Remove("HUDPaint", "UNDERCOVER_NOTIFICATION_TAKEDOWN")
                 return
             end
-
+            
             -- Phase logic
-			local scale = scale or a.scaleMid
-			local alpha = alpha or 255
-			local offsetY = offsetY or 0
-			local baseColor = Color(50, 255, 50)
-			local t = CurTime() - a.startTime
-			local phase3Start = a.phase2Time
-			local phase3End = a.phase2Time + a.pulseDuration
-			local phase4Start = phase3End
-			local phase4End = a.endTime
-
-			-- Phase 1: Initial white burst
-			if t < a.phase1Time then
-				scale = a.scaleIn
-				alpha = 255
-				baseColor = Color(255, 255, 255)
-
-			-- Phase 2: Snap to green and shrink quickly
-			elseif t < a.phase2Time then
-				local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
-				scale = Lerp(p, a.scaleIn, a.scaleMid)
-				alpha = 255
-
-			-- Phase 3: Breathing pulses
-			elseif t < phase3End then
-				local p = (t - phase3Start) / a.pulseDuration
-				local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
-
-				if pulseT < 0.6 then
-					-- Inhale
-					scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
-				else
-					-- Exhale
-					scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
-				end
-				alpha = 255
-
-			-- Phase 4: Fade out, shrink, and move up
-			elseif t < phase4End then
-				local p = (t - phase4Start) / a.fadeDuration
-				scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
-				alpha = Lerp(p, 255, 0)
-				offsetY = Lerp(p, 0, -30)
-			end
-
+            local scale = scale or a.scaleMid
+            local alpha = alpha or 255
+            local offsetY = offsetY or 0
+            local baseColor = Color(50, 255, 50)
+            local t = CurTime() - a.startTime
+            local phase3Start = a.phase2Time
+            local phase3End = a.phase2Time + a.pulseDuration
+            local phase4Start = phase3End
+            local phase4End = a.endTime
+            
+            -- Phase 1: Initial white burst
+            if t < a.phase1Time then
+                scale = a.scaleIn
+                alpha = 255
+                baseColor = Color(255, 255, 255)
+                
+                -- Phase 2: Snap to green and shrink quickly
+            elseif t < a.phase2Time then
+                local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
+                scale = Lerp(p, a.scaleIn, a.scaleMid)
+                alpha = 255
+                
+                -- Phase 3: Breathing pulses
+            elseif t < phase3End then
+                local p = (t - phase3Start) / a.pulseDuration
+                local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
+                
+                if pulseT < 0.6 then
+                    -- Inhale
+                    scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
+                else
+                    -- Exhale
+                    scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+                end
+                alpha = 255
+                
+                -- Phase 4: Fade out, shrink, and move up
+            elseif t < phase4End then
+                local p = (t - phase4Start) / a.fadeDuration
+                scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
+                alpha = Lerp(p, 255, 0)
+                offsetY = Lerp(p, 0, -30)
+            end
+            
             local shadowColor = Color(0, 0, 0, alpha)
             local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
-
+            
             DrawScaledCenteredTextLines(UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", x + 2, y + 2, shadowColor, scale)
             DrawScaledCenteredTextLines(UV_UI.pursuit.undercover.states.TakedownText, "UVUndercoverWhiteFont", x, y, baseColor, scale)
         end)
@@ -5087,9 +5091,9 @@ UV_UI.pursuit.undercover.events = {
         OK:SetText("")
         OK:SetPos(w*0.5, h*0.6425)
         OK:SetSize(w*0.16, h*0.06)
-		OK:SetEnabled(true)
+        OK:SetEnabled(true)
         OK.Paint = function() end
-
+        
         local fadeStart = CurTime()
         local backgroundAlpha = 0
         local backgroundFadeDuration = 0.5  -- seconds
@@ -5271,8 +5275,8 @@ UV_UI.pursuit.undercover.events = {
         end
         
         function OK:DoClick() 
-			startCloseAnimation()
-			OK:SetEnabled(false)
+            startCloseAnimation()
+            OK:SetEnabled(false)
         end
         
         local wasJumping = false
@@ -5526,7 +5530,7 @@ local function undercover_pursuit_main( ... )
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
     if UVHUDDisplayRacing then return end
-
+    
     
     local vehicle = LocalPlayer():GetVehicle()
     
@@ -5568,19 +5572,20 @@ local function undercover_pursuit_main( ... )
         local closestDistance = math.huge
         
         for _, suspect in pairs(UVHUDWantedSuspects) do
-            if not IsValid(suspect) then continue end
-            local dist = ply:GetPos():DistToSqr(suspect:GetPos())
-            
-            if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
-                closestDistance = dist
-                UVClosestSuspect = suspect
+            if IsValid(suspect) then
+                local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+                
+                if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
+                    closestDistance = dist
+                    UVClosestSuspect = suspect
+                end
             end
         end
         
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, 100, 100, blink)
@@ -5823,12 +5828,12 @@ local function undercover_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(255, 100, 100, blink2)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(255, 100, 100, blink3)
                 if playbusting then
-                    UVSoundBusting()
+                    UVSoundBusting(UVHeatLevel)
                 end
             else
                 states.BustedColor = Color(255, 100, 100)
@@ -5940,14 +5945,14 @@ local function undercover_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown()
+            UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
             if not UVHUDCopMode then
                 DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
                 DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
-
+                
                 surface.SetDrawColor(200, 200, 200, 125)
                 surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
                 
@@ -5958,7 +5963,7 @@ local function undercover_pursuit_main( ... )
             else
                 DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
                 DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, 125)) -- Icon
-
+                
                 surface.SetDrawColor(50, 214, 255, 50)
                 surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.04)
                 
@@ -5987,7 +5992,7 @@ UV_UI.pursuit.original.states = {
     UnitsColor = Color(255,255,255,150),
     BustedColor = Color(255, 255, 255, 50),
     EvasionColor = Color(255, 255, 255, 50),
-	
+    
     TakedownText = nil,
 }
 
@@ -6543,7 +6548,7 @@ local function original_pursuit_main( ... )
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
     if UVHUDDisplayRacing then return end
-
+    
     
     local vehicle = LocalPlayer():GetVehicle()
     
@@ -6576,19 +6581,20 @@ local function original_pursuit_main( ... )
         local closestDistance = math.huge
         
         for _, suspect in pairs(UVHUDWantedSuspects) do
-            if not IsValid(suspect) then continue end
-            local dist = ply:GetPos():DistToSqr(suspect:GetPos())
-            
-            if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
-                closestDistance = dist
-                UVClosestSuspect = suspect
+            if IsValid(suspect) then
+                local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+                
+                if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
+                    closestDistance = dist
+                    UVClosestSuspect = suspect
+                end 
             end
         end
         
         if UVClosestSuspect then
             if UVClosestSuspect.beingbusted then
                 UVHUDDisplayBusting = true
-                UVBustingProgress = UVClosestSuspect.uvbustingprogress or 0
+                UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 states.BustedColor = Color(255, blink, blink)
@@ -6668,7 +6674,7 @@ local function original_pursuit_main( ... )
         surface.DrawRect(w/1.099,h/120,w/20+60,39)
         surface.SetDrawColor(Color(255,255,255))
         local HeatProgress = 0
-        if MaxHeatLevel:GetInt() != UVHeatLevel then
+        if MaxHeatLevel:GetInt() ~= UVHeatLevel then
             if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
                 local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
                 
@@ -6696,7 +6702,7 @@ local function original_pursuit_main( ... )
         surface.DrawRect(w/1.099,h/120,B,39)
         local ResourceText = "⛉\n"..UVResourcePoints
         if UVOneCommanderActive then
-            if !UVHUDCommanderLastHealth or !UVHUDCommanderLastMaxHealth then
+            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
                 UVHUDCommanderLastHealth = 0
                 UVHUDCommanderLastMaxHealth = 0
             end
@@ -6771,16 +6777,16 @@ local function original_pursuit_main( ... )
         -- DrawIcon(UVMaterials['UNITS'], w / 2, h * 0.885 - iconhigh, .06, UVUnitsColor)
         draw.DrawText( ResourceText, "UVFont5WeightShadow", w/2, h * 0.85 - iconhigh, UVUnitsColor, TEXT_ALIGN_CENTER )
         
-        if !UVHUDDisplayNotification then
-            if (UnitsChasing > 0 or NeverEvade:GetBool()) and !UVHUDDisplayCooldown then
+        if not UVHUDDisplayNotification then
+            if (UnitsChasing > 0 or NeverEvade:GetBool()) and not UVHUDDisplayCooldown then
                 EvadingProgress = 0
                 local busttime = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
                 
                 if BustingProgress == 0 then
-                    if !UVHUDDisplayBackupTimer then
+                    if not UVHUDDisplayBackupTimer then
                         local uloc, utype = "uv.chase.unit", UnitsChasing
-                        if !UVHUDCopMode then
-                            if UnitsChasing != 1 then 
+                        if not UVHUDCopMode then
+                            if UnitsChasing ~= 1 then 
                                 uloc = "uv.chase.units"
                             end
                         else
@@ -6809,8 +6815,8 @@ local function original_pursuit_main( ... )
                     draw.DrawText( busttext, "UVFont-Smaller",w/2,h/1.05, bustcol, TEXT_ALIGN_CENTER )
                 end
                 UVSoundHeat(UVHeatLevel)
-            elseif !UVHUDDisplayCooldown then
-                if !EvadingProgress or EvadingProgress == 0 then
+            elseif not UVHUDDisplayCooldown then
+                if not EvadingProgress or EvadingProgress == 0 then
                     EvadingProgress = CurTime()
                     UVEvadingProgress = EvadingProgress
                 end
@@ -6854,8 +6860,8 @@ local function original_pursuit_main( ... )
         return 
     end
     
-    if UVHUDDisplayBusting and !UVHUDDisplayCooldown and hudyes then
-        if !BustingProgress or BustingProgress == 0 then
+    if UVHUDDisplayBusting and not UVHUDDisplayCooldown and hudyes then
+        if not BustingProgress or BustingProgress == 0 then
             BustingProgress = CurTime()
         end
         surface.SetDrawColor( 0, 0, 0, 200)
@@ -6878,11 +6884,13 @@ local function original_pursuit_main( ... )
     end
     
     if UVHUDDisplayCooldown and hudyes then
-        if !CooldownProgress or CooldownProgress == 0 then
+        if not CooldownProgress or CooldownProgress == 0 then
             CooldownProgress = CurTime()
         end
-        UVSoundCooldown()
-        if !UVHUDCopMode then
+        
+        UVSoundCooldown(UVHeatLevel)
+        
+        if not UVHUDCopMode then
             surface.SetDrawColor( 0, 0, 0, 200)
             surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
             surface.SetDrawColor(Color(0,0,255))
@@ -6894,6 +6902,7 @@ local function original_pursuit_main( ... )
             local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
             surface.DrawRect(w/3+16,h/1.1+16,T,8)
         end
+        
         EvadingProgress = 0
     else
         CooldownProgress = 0
@@ -6922,7 +6931,7 @@ local function prostreet_racing_main( ... )
     local checkpoint_count = #my_array["Checkpoints"]
     
     ------------------------------------
-
+    
     -- Timer
     surface.SetDrawColor(0, 0, 0, 200)
     surface.DrawRect(w * 0.425, h * 0.075, w * 0.15, h * 0.05)
@@ -7073,7 +7082,7 @@ local function prostreet_racing_main( ... )
         
         local text = alt and (status_text) or (racer_name)
         
-        if !boxyes then
+        if not boxyes then
             surface.SetDrawColor(0, 0, 0, 200)
             draw.NoTexture()
             surface.DrawRect(w * 0.025, h * 0.1, w * 0.15, h * 0.04 + racercountbox)
@@ -7109,13 +7118,13 @@ UV_UI.racing.prostreet.events = {
         ResultPanel:SetDraggable(false)
         ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-		
+        
         OK:SetText("")
         OK:SetPos(w*0.2, h*0.9)
         OK:SetSize(w*0.15, h*0.035)
-		OK:SetEnabled(true)
+        OK:SetEnabled(true)
         OK.Paint = function() end
-		
+        
         local timestart = CurTime()
         local displaySequence = {}
         
@@ -7136,7 +7145,7 @@ UV_UI.racing.prostreet.events = {
             
             return tA < tB
         end)
-
+        
         local entriesToShow = 8
         local scrollOffset = 0
         
@@ -7148,34 +7157,34 @@ UV_UI.racing.prostreet.events = {
             -- Staggered vertical layout
             local visibleIndex = i -- 1 to entriesToShow
             local rowHeight = h * 0.09
-			local yPos = h*0.08 + (i - 1) * rowHeight
-			local LP, LC = false, Color(100, 100, 100)
-
+            local yPos = h*0.08 + (i - 1) * rowHeight
+            local LP, LC = false, Color(100, 100, 100)
+            
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
-			if info["LocalPlayer"] then
-				LP = true
-				LC = Color(0, 0, 0)
-			end
-			
+            if info["LocalPlayer"] then
+                LP = true
+                LC = Color(0, 0, 0)
+            end
+            
             local entry = {
                 y = yPos,
                 posText = tostring(i),
                 nameText = name,
                 timeText = UV_FormatRaceEndTime(totalTime),
-				color = LC,
-				localPlayer = LP
+                color = LC,
+                localPlayer = LP
             }
             
             table.insert(displaySequence, entry)
         end
-
+        
         local closing = false
         local closeStartTime = 0
-
+        
         function ResultPanel:OnMouseWheeled(delta)
             if delta > 0 then
                 scrollOffset = math.max(scrollOffset - 1, 0)
@@ -7186,95 +7195,95 @@ UV_UI.racing.prostreet.events = {
             
             return true -- prevent further processing
         end
-		
-		local playedfadeSound = false
+        
+        local playedfadeSound = false
         
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
-			local fadeDuration = 0.125
-			local fadeAlpha = 1
-			local scaleX = 1
-
-			if closing then
-				OK:SetEnabled(false)
-				local elapsedFade = curTime - closeStartTime
-				local progress = math.Clamp(elapsedFade / fadeDuration, 0, 1)
-
-				fadeAlpha = 1 - progress  -- fade out from 1 to 0
-				scaleX = 1 + progress * 1  -- scale horizontally from 1 to 2 times
-				
-				if not playedfadeSound and elapsedFade >= 0.05 then
-					 playedfadeSound = true
-					 surface.PlaySound( "uvui/ps/closemenu2.wav" )
-				end
-				
-				if elapsedFade >= fadeDuration then
-					hook.Remove("Think", "CheckJumpKeyForResults")
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-					end
-					return -- early exit, avoid drawing anymore
-				end
-			end
-			-- Setup transformation matrix
-			local matrix = Matrix()
-			matrix:Translate(Vector(w * 0.5, 0, 0))         -- move origin to horizontal center
-			matrix:Scale(Vector(scaleX, 1, 1))              -- scale horizontally
-			matrix:Translate(Vector(-w * 0.5, 0, 0))        -- move origin back
-
-			cam.PushModelMatrix(matrix)
-			
+            local fadeDuration = 0.125
+            local fadeAlpha = 1
+            local scaleX = 1
+            
+            if closing then
+                OK:SetEnabled(false)
+                local elapsedFade = curTime - closeStartTime
+                local progress = math.Clamp(elapsedFade / fadeDuration, 0, 1)
+                
+                fadeAlpha = 1 - progress  -- fade out from 1 to 0
+                scaleX = 1 + progress * 1  -- scale horizontally from 1 to 2 times
+                
+                if not playedfadeSound and elapsedFade >= 0.05 then
+                    playedfadeSound = true
+                    surface.PlaySound( "uvui/ps/closemenu2.wav" )
+                end
+                
+                if elapsedFade >= fadeDuration then
+                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    if IsValid(ResultPanel) then
+                        ResultPanel:Close()
+                    end
+                    return -- early exit, avoid drawing anymore
+                end
+            end
+            -- Setup transformation matrix
+            local matrix = Matrix()
+            matrix:Translate(Vector(w * 0.5, 0, 0))         -- move origin to horizontal center
+            matrix:Scale(Vector(scaleX, 1, 1))              -- scale horizontally
+            matrix:Translate(Vector(-w * 0.5, 0, 0))        -- move origin back
+            
+            cam.PushModelMatrix(matrix)
+            
             -- Draw rows and alternating backgrounds fully visible when revealed
             local startIndex = scrollOffset + 1
             local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
-    			
-			-- Black BG Textured Elements
-			surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
-			surface.SetMaterial(UVMaterials["RESULTS_PS_CURVES"])
-			surface.DrawTexturedRect(w * 0.31, h * 0.125, w * 0.125, h * 0.11)
-			
-			surface.SetMaterial(UVMaterials["RESULTS_PS_HUB"])
-			surface.DrawTexturedRectRotated(w * 0.31, h * 0.185, w * 0.1, h * 0.09, -12.5)
-			
-			surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
-			surface.DrawTexturedRectRotated(w * 0.255, h * 0.2, w * 0.07, h * 0.125, -32.5)
-			
-			surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
-			surface.DrawTexturedRectRotated(w * 0.2035, h * 0.27, w * 0.07, h * 0.125, -130)
-			
-			surface.SetMaterial(UVMaterials["RESULTS_PS_WING_INV"])
-			surface.DrawTexturedRect(w * 0.18, h * 0.26, w * 0.055, h * 0.25, 0)
-
-			local baseHeight = 0.31
-			local extraHeight = 0
-			
-			if #displaySequence > 4 then
-				local extraEntries = math.min(#displaySequence, 8) - 4
-				extraHeight = extraEntries * (h * 0.06)
-			end
-
-			-- Black BG Element
-			surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
-			surface.DrawRect(w * 0.2, h * 0.2, w * (1 - 2 * 0.2), (h * baseHeight) + extraHeight)
-
-			-- White BG Element
-			surface.SetDrawColor(200, 200, 200, 255 * fadeAlpha)
-			surface.DrawRect(w * 0.21, h * 0.25, w * (1 - 2 * 0.21), (h * (baseHeight - 0.06)) + extraHeight)
-
-			draw.SimpleText("#uv.results.race.raceresults", "UVFont2", w * 0.205, h * 0.2025, Color(255, 255, 255, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-
+            
+            -- Black BG Textured Elements
+            surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
+            surface.SetMaterial(UVMaterials["RESULTS_PS_CURVES"])
+            surface.DrawTexturedRect(w * 0.31, h * 0.125, w * 0.125, h * 0.11)
+            
+            surface.SetMaterial(UVMaterials["RESULTS_PS_HUB"])
+            surface.DrawTexturedRectRotated(w * 0.31, h * 0.185, w * 0.1, h * 0.09, -12.5)
+            
+            surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
+            surface.DrawTexturedRectRotated(w * 0.255, h * 0.2, w * 0.07, h * 0.125, -32.5)
+            
+            surface.SetMaterial(UVMaterials["RESULTS_PS_SP8"])
+            surface.DrawTexturedRectRotated(w * 0.2035, h * 0.27, w * 0.07, h * 0.125, -130)
+            
+            surface.SetMaterial(UVMaterials["RESULTS_PS_WING_INV"])
+            surface.DrawTexturedRect(w * 0.18, h * 0.26, w * 0.055, h * 0.25, 0)
+            
+            local baseHeight = 0.31
+            local extraHeight = 0
+            
+            if #displaySequence > 4 then
+                local extraEntries = math.min(#displaySequence, 8) - 4
+                extraHeight = extraEntries * (h * 0.06)
+            end
+            
+            -- Black BG Element
+            surface.SetDrawColor(0, 0, 0, 255 * fadeAlpha)
+            surface.DrawRect(w * 0.2, h * 0.2, w * (1 - 2 * 0.2), (h * baseHeight) + extraHeight)
+            
+            -- White BG Element
+            surface.SetDrawColor(200, 200, 200, 255 * fadeAlpha)
+            surface.DrawRect(w * 0.21, h * 0.25, w * (1 - 2 * 0.21), (h * (baseHeight - 0.06)) + extraHeight)
+            
+            draw.SimpleText("#uv.results.race.raceresults", "UVFont2", w * 0.205, h * 0.2025, Color(255, 255, 255, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            
             for i = startIndex, endIndex do
-				local entry = displaySequence[i]
-				local localIndex = i - startIndex + 1
-				local yPos = h * 0.255 + (localIndex - 1) * (h * 0.06)
-				
-				if entry.localPlayer then
-					surface.SetDrawColor(255, 255, 0, 255 * fadeAlpha)
-				else
-					surface.SetDrawColor(175, 175, 175, 255 * fadeAlpha)
-				end
-				surface.DrawRect(w * 0.2175, yPos, w * (1 - 2 * 0.2175), h * 0.055)
-				
+                local entry = displaySequence[i]
+                local localIndex = i - startIndex + 1
+                local yPos = h * 0.255 + (localIndex - 1) * (h * 0.06)
+                
+                if entry.localPlayer then
+                    surface.SetDrawColor(255, 255, 0, 255 * fadeAlpha)
+                else
+                    surface.SetDrawColor(175, 175, 175, 255 * fadeAlpha)
+                end
+                surface.DrawRect(w * 0.2175, yPos, w * (1 - 2 * 0.2175), h * 0.055)
+                
                 if entry.posText then
                     draw.SimpleText(entry.posText, "UVFont2", w * 0.22, yPos, Color(entry.color.r, entry.color.g, entry.color.b, 255 * fadeAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
@@ -7285,17 +7294,17 @@ UV_UI.racing.prostreet.events = {
                     draw.SimpleText(entry.timeText, "UVFont2", w * 0.775, yPos, Color(entry.color.r, entry.color.g, entry.color.b, 255 * fadeAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
             end
-			
+            
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-
-			if scrollOffset > 0 then
-				draw.SimpleText("▲", "UVFont3", w * 0.5, h * 0.2, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-			
-			if scrollOffset < #displaySequence - entriesToShow then
-				draw.SimpleText("▼", "UVFont3", w * 0.5, h * 0.725, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVFont3", w * 0.5, h * 0.2, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
+            if scrollOffset < #displaySequence - entriesToShow then
+                draw.SimpleText("▼", "UVFont3", w * 0.5, h * 0.725, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
             -- Time since panel was created
             local elapsed = CurTime() - timestart
             
@@ -7305,9 +7314,9 @@ UV_UI.racing.prostreet.events = {
             local autoCloseTimer = 0
             local autoCloseRemaining = autoCloseDuration
             
-			autoCloseTimer = elapsed
-			autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-			
+            autoCloseTimer = elapsed
+            autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+            
             local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             
@@ -7320,9 +7329,9 @@ UV_UI.racing.prostreet.events = {
             
             surface.DrawRect( w*0.2 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
             draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2125 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT )
-
-			cam.PopModelMatrix()
-			
+            
+            cam.PopModelMatrix()
+            
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
@@ -7331,54 +7340,54 @@ UV_UI.racing.prostreet.events = {
                     closeStartTime = CurTime()
                 end
             end
-		end
-
-	function OK:DoClick()
-		if not closing then
-			surface.PlaySound( "uvui/ps/closemenu.wav" )
-			closing = true
-			closeStartTime = CurTime()
-		end
-	end
-
-	local wasJumping = false
-	hook.Add("Think", "CheckJumpKeyForResults", function()
-		local ply = LocalPlayer()
-		if not IsValid(ply) then return end
-		
-		if ply:KeyDown(IN_JUMP) then
-			if not wasJumping and not closing then
-				surface.PlaySound( "uvui/ps/closemenu.wav" )
-				wasJumping = true
-				closing = true
-				closeStartTime = CurTime()
-			end
-		else
-			wasJumping = false
-		end
-	end)
-end,
+        end
+        
+        function OK:DoClick()
+            if not closing then
+                surface.PlaySound( "uvui/ps/closemenu.wav" )
+                closing = true
+                closeStartTime = CurTime()
+            end
+        end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForResults", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping and not closing then
+                    surface.PlaySound( "uvui/ps/closemenu.wav" )
+                    wasJumping = true
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            else
+                wasJumping = false
+            end
+        end)
+    end,
     
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
-		
-		-----------------------------------------
-
-		if Glide then
-			if not istable(sortedRacers) or #sortedRacers == 0 then
-				glidetext = "#uv.race.finished.statserror"
-				glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-			end
-				Glide.Notify({
-					text = glidetext,
-					lifetime = duration,
-					immediate = true,
-					icon = glideicon,
-				}) 
-		end
+        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+        
+        -----------------------------------------
+        
+        if Glide then
+            if not istable(sortedRacers) or #sortedRacers == 0 then
+                glidetext = "#uv.race.finished.statserror"
+                glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+            end
+            Glide.Notify({
+                text = glidetext,
+                lifetime = duration,
+                immediate = true,
+                icon = glideicon,
+            }) 
+        end
         
         hook.Add( "Think", "RaceResultDisplay", function()
             if CurTime() - triggerTime > duration then
@@ -7386,66 +7395,66 @@ end,
                 return
             end
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
                 UV_UI.racing.prostreet.events.ShowResults(sortedRacers)
             end
         end)
     end,
-
-onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
-	local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-	local llt = ""
-
-	if lap_final then llt = language.GetPhrase("uv.race.finallap") .. " " end
-	
-	if is_global_best then
-		UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
-	else
-		if is_local_player then
-			UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
-		else
-			return
-		end
-	end
-		local SID = 0.35
-
-		local prostreet_noti_animState = {
-			active = false,
-			startTime = 0,
-			slideInDuration = SID,
-			holdDuration = 3,
-			slideDownDuration = 0.25,
-			upper = {
-				startX = ScrW() * 0.25,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.35,
-				slideDownEndY = ScrH() * 0.6,
-			},
-			lower = {
-				startX = ScrW() * 0.75,
-				centerX = ScrW() / 2,
-				y = ScrH() * 0.385,
-				slideDownEndY = ScrH() * 0.635,
-			},
-		}
-
+    
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
+        local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        local llt = ""
+        
+        if lap_final then llt = language.GetPhrase("uv.race.finallap") .. " " end
+        
+        if is_global_best then
+            UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
+        else
+            if is_local_player then
+                UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.laptime.carbon"), Carbon_FormatRaceTime( lap_time ) )
+            else
+                return
+            end
+        end
+        local SID = 0.35
+        
+        local prostreet_noti_animState = {
+            active = false,
+            startTime = 0,
+            slideInDuration = SID,
+            holdDuration = 3,
+            slideDownDuration = 0.25,
+            upper = {
+                startX = ScrW() * 0.25,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.35,
+                slideDownEndY = ScrH() * 0.6,
+            },
+            lower = {
+                startX = ScrW() * 0.75,
+                centerX = ScrW() / 2,
+                y = ScrH() * 0.385,
+                slideDownEndY = ScrH() * 0.635,
+            },
+        }
+        
         UV_UI.racing.prostreet.events.prostreet_noti_animState = prostreet_noti_animState
         prostreet_noti_animState.active = true
         prostreet_noti_animState.startTime = CurTime()
-
+        
         ----------------------------------------------------------------------------
         
         -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
         if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.PROSTREET_NOTIFICATION_LAP then
             hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
         end
-
+        
         -- Add the HUDPaint hook freshly for this animation
         hook.Add("HUDPaint", "PROSTREET_NOTIFICATION_LAP", function()
             local elapsed = CurTime() - prostreet_noti_animState.startTime
-
+            
             local function calcPosAlpha(elapsed, elem)
                 local x, y, alpha = elem.centerX, elem.y, 255
                 if elapsed < prostreet_noti_animState.slideInDuration then
@@ -7464,28 +7473,28 @@ onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur,
                 end
                 return x, y, alpha
             end
-
+            
             local lines = string.Explode("\n", UV_UI.racing.prostreet.states.LapCompleteText or "")
             if #lines < 1 then return end
-			local upperLine = lines[1] or ""
-			local lowerLine = lines[2] or ""
-
-			-- Upper
+            local upperLine = lines[1] or ""
+            local lowerLine = lines[2] or ""
+            
+            -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, prostreet_noti_animState.upper)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
             carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
-
-			-- Lower
+            
+            -- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, prostreet_noti_animState.lower)
             carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
             carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx, ly, Color(255, 255, 255, lalpha), nil)
-
+            
             -- Disable animation and remove hook when done
             if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
                 prostreet_noti_animState.active = false
                 hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
             end
-
+            
         end)
     end
 }
@@ -7518,7 +7527,7 @@ UV_UI.racing.underground.events = {
             UV_UI.racing.underground.states.FrozenTime = false
         end)
     end,
-
+    
     ShowResults = function(sortedRacers) -- Underground 1
         local debriefcolor = Color(255, 183, 61)
         
@@ -7544,7 +7553,7 @@ UV_UI.racing.underground.events = {
         OK:SetPos(w*0.5, h*0.9)
         OK:SetSize(w*0.2, h*0.025)
         OK:SetEnabled(true)
-		OK.Paint = function() end
+        OK.Paint = function() end
         
         local timestart = CurTime()
         local displaySequence = {}
@@ -7566,7 +7575,7 @@ UV_UI.racing.underground.events = {
             
             return tA < tB
         end)
-
+        
         local entriesToShow = 9
         local scrollOffset = 0
         
@@ -7578,8 +7587,8 @@ UV_UI.racing.underground.events = {
             -- Staggered vertical layout
             local visibleIndex = i -- 1 to entriesToShow
             local rowHeight = h * 0.09
-			local yPos = h*0.08 + (i - 1) * rowHeight
-
+            local yPos = h*0.08 + (i - 1) * rowHeight
+            
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
@@ -7597,7 +7606,7 @@ UV_UI.racing.underground.events = {
         
         local closing = false
         local closeStartTime = 0
-
+        
         function ResultPanel:OnMouseWheeled(delta)
             if delta > 0 then
                 scrollOffset = math.max(scrollOffset - 1, 0)
@@ -7611,23 +7620,23 @@ UV_UI.racing.underground.events = {
         
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
-			local fadeDuration = 0.5 -- seconds
-			local fadeAlpha = 1
-
-			if closing then
-				OK:SetEnabled(false)
-				local elapsedFade = curTime - closeStartTime
-				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
-				
-				if elapsedFade >= fadeDuration then
-					hook.Remove("Think", "CheckJumpKeyForResults")
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-					end
-					return -- early exit, avoid drawing anymore
-				end
-			end
-
+            local fadeDuration = 0.5 -- seconds
+            local fadeAlpha = 1
+            
+            if closing then
+                OK:SetEnabled(false)
+                local elapsedFade = curTime - closeStartTime
+                fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
+                
+                if elapsedFade >= fadeDuration then
+                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    if IsValid(ResultPanel) then
+                        ResultPanel:Close()
+                    end
+                    return -- early exit, avoid drawing anymore
+                end
+            end
+            
             -- Main black background
             surface.SetDrawColor(0, 0, 0, 150)
             surface.DrawRect(0, 0, w, h)
@@ -7635,25 +7644,25 @@ UV_UI.racing.underground.events = {
             -- Draw rows and alternating backgrounds fully visible when revealed
             local startIndex = scrollOffset + 1
             local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
-            				
-			-- Upper blue BG
-			surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
-			surface.DrawRect(w * 0.7, 0, w * 0.33, h * 0.075)
-
-			-- Lower blue BG
-			surface.DrawRect(w * 0.7, h * 0.9, w * 0.33, h * 0.125)
-
+            
+            -- Upper blue BG
+            surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
+            surface.DrawRect(w * 0.7, 0, w * 0.33, h * 0.075)
+            
+            -- Lower blue BG
+            surface.DrawRect(w * 0.7, h * 0.9, w * 0.33, h * 0.125)
+            
             for i = startIndex, endIndex do
-				local entry = displaySequence[i]
-				local localIndex = i - startIndex + 1
-				local yPos = h * 0.08 + (localIndex - 1) * (h * 0.09)
-				
-				surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
-				surface.DrawRect(w * 0.7, yPos, w * 0.33, h * 0.085)
-				
-				surface.SetDrawColor(104, 172, 255, math.floor(200 * fadeAlpha))
-				surface.DrawRect(w * 0.7025, yPos + (h * 0.005), w * 0.33, h * 0.0375)
-
+                local entry = displaySequence[i]
+                local localIndex = i - startIndex + 1
+                local yPos = h * 0.08 + (localIndex - 1) * (h * 0.09)
+                
+                surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha))
+                surface.DrawRect(w * 0.7, yPos, w * 0.33, h * 0.085)
+                
+                surface.SetDrawColor(104, 172, 255, math.floor(200 * fadeAlpha))
+                surface.DrawRect(w * 0.7025, yPos + (h * 0.005), w * 0.33, h * 0.0375)
+                
                 if entry.posText then
                     draw.SimpleText(entry.posText, "UVFont", w * 0.715, yPos + (h * 0.04), Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
@@ -7664,17 +7673,17 @@ UV_UI.racing.underground.events = {
                     draw.SimpleText(entry.timeText, "UVFont4", w * 0.99, yPos + (h * 0.05), Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
             end
-			
+            
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-
-			if scrollOffset > 0 then
-				draw.SimpleText("▲", "UVFont3", w * 0.86, h * 0.0175, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-			
-			if scrollOffset < #displaySequence - entriesToShow then
-				draw.SimpleText("▼", "UVFont3", w * 0.86, h * 0.9, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVFont3", w * 0.86, h * 0.0175, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
+            if scrollOffset < #displaySequence - entriesToShow then
+                draw.SimpleText("▼", "UVFont3", w * 0.86, h * 0.9, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
             -- Time since panel was created
             local elapsed = CurTime() - timestart
             
@@ -7684,16 +7693,16 @@ UV_UI.racing.underground.events = {
             local autoCloseTimer = 0
             local autoCloseRemaining = autoCloseDuration
             
-			autoCloseTimer = elapsed
-			autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-						
+            autoCloseTimer = elapsed
+            autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+            
             local conttext = "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             local conttexts = (w * 0.0065 * conttextl)
             
             local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
             local autotextl = string.len(autotext)
-			local autotexts = (w * 0.00575 * autotextl)
+            local autotexts = (w * 0.00575 * autotextl)
             
             surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha) )
             
@@ -7702,7 +7711,7 @@ UV_UI.racing.underground.events = {
             
             surface.DrawRect( w*0.6975 - autotexts, h*0.925, autotexts, h*0.025)
             draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
-
+            
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
@@ -7711,54 +7720,54 @@ UV_UI.racing.underground.events = {
                     closeStartTime = CurTime()
                 end
             end
-		end
-
-	function OK:DoClick()
-		if not closing then
-			surface.PlaySound( "uvui/ug/closemenu.wav" )
-			closing = true
-			closeStartTime = CurTime()
-		end
-	end
-
-	local wasJumping = false
-	hook.Add("Think", "CheckJumpKeyForResults", function()
-		local ply = LocalPlayer()
-		if not IsValid(ply) then return end
-		
-		if ply:KeyDown(IN_JUMP) then
-			if not wasJumping and not closing then
-				surface.PlaySound( "uvui/ug/closemenu.wav" )
-				wasJumping = true
-				closing = true
-				closeStartTime = CurTime()
-			end
-		else
-			wasJumping = false
-		end
-	end)
-end,
-
+        end
+        
+        function OK:DoClick()
+            if not closing then
+                surface.PlaySound( "uvui/ug/closemenu.wav" )
+                closing = true
+                closeStartTime = CurTime()
+            end
+        end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForResults", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping and not closing then
+                    surface.PlaySound( "uvui/ug/closemenu.wav" )
+                    wasJumping = true
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            else
+                wasJumping = false
+            end
+        end)
+    end,
+    
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
-		
-		-----------------------------------------
-
-		if Glide then
-			if not istable(sortedRacers) or #sortedRacers == 0 then
-				glidetext = "#uv.race.finished.statserror"
-				glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-			end
-				Glide.Notify({
-					text = glidetext,
-					lifetime = duration,
-					immediate = true,
-					icon = glideicon,
-				}) 
-		end
+        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+        
+        -----------------------------------------
+        
+        if Glide then
+            if not istable(sortedRacers) or #sortedRacers == 0 then
+                glidetext = "#uv.race.finished.statserror"
+                glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+            end
+            Glide.Notify({
+                text = glidetext,
+                lifetime = duration,
+                immediate = true,
+                icon = glideicon,
+            }) 
+        end
         
         hook.Add( "Think", "RaceResultDisplay", function()
             if CurTime() - triggerTime > duration then
@@ -7766,7 +7775,7 @@ end,
                 return
             end
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
                 UV_UI.racing.underground.events.ShowResults(sortedRacers)
@@ -7837,11 +7846,11 @@ local function underground_racing_main( ... )
     h * 0.2,
     Color(255, 255, 255),
     TEXT_ALIGN_RIGHT)
-
+    
     -- Lap & Checkpoint Counter
     surface.SetDrawColor(0, 0, 0, 200)
     surface.DrawRect(w * 0.02, h * 0.075, w * 0.175, h * 0.095)
-
+    
     draw.DrawText(
     "#uv.race.hud.lap.ug",
     "UVFont5",
@@ -7863,7 +7872,7 @@ local function underground_racing_main( ... )
     h * 0.08,
     Color(125, 125, 255),
     TEXT_ALIGN_LEFT) -- Lap Counter
-
+    
     local racer_count = #string_array
     local lang = language.GetPhrase
     
@@ -7995,7 +8004,7 @@ UV_UI.racing.underground2.events = {
             UV_UI.racing.underground2.states.FrozenTime = false
         end)
     end,
-
+    
     ShowResults = function(sortedRacers) -- Underground 2
         local w = ScrW()
         local h = ScrH()
@@ -8018,7 +8027,7 @@ UV_UI.racing.underground2.events = {
         OK:SetText("")
         OK:SetPos(w*0.775, h*0.84)
         OK:SetSize(w*0.15, h*0.0425)
-		OK:SetEnabled(true)
+        OK:SetEnabled(true)
         OK.Paint = function() end
         
         local timestart = CurTime()
@@ -8041,7 +8050,7 @@ UV_UI.racing.underground2.events = {
             
             return tA < tB
         end)
-
+        
         local entriesToShow = 9
         local scrollOffset = 0
         
@@ -8053,26 +8062,26 @@ UV_UI.racing.underground2.events = {
             -- Staggered vertical layout
             local visibleIndex = i -- 1 to entriesToShow
             local rowHeight = h * 0.09
-			local yPos = h*0.08 + (i - 1) * rowHeight
-			local LP, LC = false, Color(255, 255, 255)
-
+            local yPos = h*0.08 + (i - 1) * rowHeight
+            local LP, LC = false, Color(255, 255, 255)
+            
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
-			if info["LocalPlayer"] then
-				LP = true
-				LC = Color(196, 208, 151)
-			end
-			
+            if info["LocalPlayer"] then
+                LP = true
+                LC = Color(196, 208, 151)
+            end
+            
             local entry = {
                 y = yPos,
                 posText = tostring(i),
                 nameText = name,
                 timeText = UV_FormatRaceEndTime(totalTime),
-				color = LC,
-				localPlayer = LP
+                color = LC,
+                localPlayer = LP
             }
             
             table.insert(displaySequence, entry)
@@ -8080,7 +8089,7 @@ UV_UI.racing.underground2.events = {
         
         local closing = false
         local closeStartTime = 0
-
+        
         function ResultPanel:OnMouseWheeled(delta)
             if delta > 0 then
                 scrollOffset = math.max(scrollOffset - 1, 0)
@@ -8094,23 +8103,23 @@ UV_UI.racing.underground2.events = {
         
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
-			local fadeDuration = 0.2 -- seconds
-			local fadeAlpha = 1
-
-			if closing then
-				OK:SetEnabled(false)
-				local elapsedFade = curTime - closeStartTime
-				fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
-				
-				if elapsedFade >= fadeDuration then
-					hook.Remove("Think", "CheckJumpKeyForResults")
-					if IsValid(ResultPanel) then
-						ResultPanel:Close()
-					end
-					return -- early exit, avoid drawing anymore
-				end
-			end
-
+            local fadeDuration = 0.2 -- seconds
+            local fadeAlpha = 1
+            
+            if closing then
+                OK:SetEnabled(false)
+                local elapsedFade = curTime - closeStartTime
+                fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
+                
+                if elapsedFade >= fadeDuration then
+                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    if IsValid(ResultPanel) then
+                        ResultPanel:Close()
+                    end
+                    return -- early exit, avoid drawing anymore
+                end
+            end
+            
             -- Main black background
             -- surface.SetDrawColor(0, 0, 0, 150)
             -- surface.DrawRect(0, 0, w, h)
@@ -8118,32 +8127,32 @@ UV_UI.racing.underground2.events = {
             -- Draw rows and alternating backgrounds fully visible when revealed
             local startIndex = scrollOffset + 1
             local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
-
-			-- BG Element
-			surface.SetDrawColor(255, 255, 255, math.floor(255 * fadeAlpha))
-			surface.SetMaterial(UVMaterials["RESULTS_UG2_BG"])
-			surface.DrawTexturedRect(0, 0, w, h) -- Upper
-
-			-- Gray BG Elements
-			surface.SetDrawColor(196, 208, 151, math.floor(255 * fadeAlpha))
-			surface.SetMaterial(UVMaterials["RESULTS_UG2_SHINE"])
-			surface.DrawTexturedRect(0, 0, w, h) -- Upper
-
-			draw.SimpleText("#uv.results.race.eventresults", "UVFont", w * 0.05, h * 0.12, Color(196, 208, 151, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.results.race.name", "UVFont", w * 0.1, h * 0.2025, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.results.race.time.finish", "UVFont", w * 0.9, h * 0.205, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-
+            
+            -- BG Element
+            surface.SetDrawColor(255, 255, 255, math.floor(255 * fadeAlpha))
+            surface.SetMaterial(UVMaterials["RESULTS_UG2_BG"])
+            surface.DrawTexturedRect(0, 0, w, h) -- Upper
+            
+            -- Gray BG Elements
+            surface.SetDrawColor(196, 208, 151, math.floor(255 * fadeAlpha))
+            surface.SetMaterial(UVMaterials["RESULTS_UG2_SHINE"])
+            surface.DrawTexturedRect(0, 0, w, h) -- Upper
+            
+            draw.SimpleText("#uv.results.race.eventresults", "UVFont", w * 0.05, h * 0.12, Color(196, 208, 151, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText("#uv.results.race.name", "UVFont", w * 0.1, h * 0.2025, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText("#uv.results.race.time.finish", "UVFont", w * 0.9, h * 0.205, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            
             for i = startIndex, endIndex do
-				local entry = displaySequence[i]
-				local localIndex = i - startIndex + 1
-				local yPos = h * 0.29 + (localIndex - 1) * (h * 0.06)
-				
-				if entry.localPlayer then
-					surface.SetDrawColor(255, 255, 255, math.floor(200 * fadeAlpha))
-					surface.SetMaterial(UVMaterials["RESULTS_UG2_LP"])
-					surface.DrawTexturedRect(0, yPos, w, h * 0.055) -- Upper
-				end
-				
+                local entry = displaySequence[i]
+                local localIndex = i - startIndex + 1
+                local yPos = h * 0.29 + (localIndex - 1) * (h * 0.06)
+                
+                if entry.localPlayer then
+                    surface.SetDrawColor(255, 255, 255, math.floor(200 * fadeAlpha))
+                    surface.SetMaterial(UVMaterials["RESULTS_UG2_LP"])
+                    surface.DrawTexturedRect(0, yPos, w, h * 0.055) -- Upper
+                end
+                
                 if entry.posText then
                     draw.SimpleText(entry.posText, "UVFont", w * 0.085, yPos, Color(entry.color.r, entry.color.g, entry.color.b, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
@@ -8154,17 +8163,17 @@ UV_UI.racing.underground2.events = {
                     draw.SimpleText(entry.timeText, "UVFont", w * 0.9, yPos, Color(entry.color.r, entry.color.g, entry.color.b, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
             end
-			
+            
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-
-			if scrollOffset > 0 then
-				draw.SimpleText("▲", "UVFont3", w * 0.5, h * 0.2425, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-			
-			if scrollOffset < #displaySequence - entriesToShow then
-				draw.SimpleText("▼", "UVFont3", w * 0.5, h * 0.815, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
-			end
-
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVFont3", w * 0.5, h * 0.2425, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
+            if scrollOffset < #displaySequence - entriesToShow then
+                draw.SimpleText("▼", "UVFont3", w * 0.5, h * 0.815, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
+            end
+            
             -- Time since panel was created
             local elapsed = CurTime() - timestart
             
@@ -8174,20 +8183,20 @@ UV_UI.racing.underground2.events = {
             local autoCloseTimer = 0
             local autoCloseRemaining = autoCloseDuration
             
-			autoCloseTimer = elapsed
-			autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-						
+            autoCloseTimer = elapsed
+            autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
+            
             local conttext = "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             local conttexts = (w * 0.0065 * conttextl)
-
+            
             surface.SetDrawColor(255, 255, 255, math.floor(200 * fadeAlpha) )
-			surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
+            surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
             surface.DrawTexturedRect( w*0.775, h*0.84, w * 0.15, h*0.0425)
             draw.DrawText( "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue"), "UVFont4", w*0.85, h*0.8475, Color( 255, 255, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_CENTER )
-
+            
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
-
+            
             if autoCloseRemaining <= 0 then
                 hook.Remove("Think", "CheckJumpKeyForResults")
                 if not closing then
@@ -8196,54 +8205,54 @@ UV_UI.racing.underground2.events = {
                     closeStartTime = CurTime()
                 end
             end
-		end
-
-	function OK:DoClick()
-		if not closing then
-			surface.PlaySound( "uvui/ug/closemenu.wav" )
-			closing = true
-			closeStartTime = CurTime()
-		end
-	end
-
-	local wasJumping = false
-	hook.Add("Think", "CheckJumpKeyForResults", function()
-		local ply = LocalPlayer()
-		if not IsValid(ply) then return end
-		
-		if ply:KeyDown(IN_JUMP) then
-			if not wasJumping and not closing then
-				surface.PlaySound( "uvui/ug/closemenu.wav" )
-				wasJumping = true
-				closing = true
-				closeStartTime = CurTime()
-			end
-		else
-			wasJumping = false
-		end
-	end)
-end,
-
+        end
+        
+        function OK:DoClick()
+            if not closing then
+                surface.PlaySound( "uvui/ug/closemenu.wav" )
+                closing = true
+                closeStartTime = CurTime()
+            end
+        end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForResults", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping and not closing then
+                    surface.PlaySound( "uvui/ug/closemenu.wav" )
+                    wasJumping = true
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            else
+                wasJumping = false
+            end
+        end)
+    end,
+    
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
-		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
-		
-		-----------------------------------------
-
-		if Glide then
-			if not istable(sortedRacers) or #sortedRacers == 0 then
-				glidetext = "#uv.race.finished.statserror"
-				glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
-			end
-				Glide.Notify({
-					text = glidetext,
-					lifetime = duration,
-					immediate = true,
-					icon = glideicon,
-				}) 
-		end
+        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
+        
+        -----------------------------------------
+        
+        if Glide then
+            if not istable(sortedRacers) or #sortedRacers == 0 then
+                glidetext = "#uv.race.finished.statserror"
+                glideicon = "unitvehicles/icons/GENERIC_ALERT.png"
+            end
+            Glide.Notify({
+                text = glidetext,
+                lifetime = duration,
+                immediate = true,
+                icon = glideicon,
+            }) 
+        end
         
         hook.Add( "Think", "RaceResultDisplay", function()
             if CurTime() - triggerTime > duration then
@@ -8251,7 +8260,7 @@ end,
                 return
             end
             
-            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and !gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+            if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
                 -- _main()
                 UV_UI.racing.underground2.events.ShowResults(sortedRacers)
@@ -8277,9 +8286,9 @@ local function underground2_racing_main( ... )
     
     -- Position Counter
     surface.SetDrawColor(255, 255, 255)
-	surface.SetMaterial(UVMaterials["RACE_BG_UPPER_UG2"])
+    surface.SetMaterial(UVMaterials["RACE_BG_UPPER_UG2"])
     surface.DrawTexturedRect(w * 0.72, h * 0.075, w * 0.255, h * 0.15)
-
+    
     draw.DrawText(
     UVHUDRaceCurrentPos,
     "UVFont3Big",
@@ -8304,9 +8313,9 @@ local function underground2_racing_main( ... )
     
     -- Lap & Checkpoint Counter
     surface.SetDrawColor(255, 255, 255)
-	surface.SetMaterial(UVMaterials["RACE_BG_LAP_UG2"])
+    surface.SetMaterial(UVMaterials["RACE_BG_LAP_UG2"])
     surface.DrawTexturedRect(w * 0.7135, h * 0.1525, w * 0.2655, h * 0.15)
-
+    
     if UVHUDRaceInfo.Info.Laps > 1 then
         draw.DrawText(
         "#uv.race.hud.lap.ug",
@@ -8338,7 +8347,7 @@ local function underground2_racing_main( ... )
         Color(255, 255, 255),
         TEXT_ALIGN_RIGHT)
     end
-
+    
     -- Racer List
     local racer_count = #string_array
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -8398,7 +8407,7 @@ local function underground2_racing_main( ... )
         end
         
         local text = alt and (status_text) or (racer_name)
-
+        
         draw.NoTexture()
         surface.DrawRect(w * 0.743, h * 0.235 + racercount, w * 0.227, h * 0.025)
         
@@ -8411,8 +8420,8 @@ local function underground2_racing_main( ... )
     end
     
     -- Timer
-	surface.SetDrawColor(255, 255, 255)
-	surface.SetMaterial(UVMaterials["RACE_BG_TIME_UG2"])
+    surface.SetDrawColor(255, 255, 255)
+    surface.SetMaterial(UVMaterials["RACE_BG_TIME_UG2"])
     surface.DrawTexturedRect(w * 0.708, h * 0.355, w * 0.276, h * 0.075)
     
     draw.DrawText(
@@ -8440,7 +8449,7 @@ local function underground2_racing_main( ... )
     h * 0.375,
     Color(255, 255, 255),
     TEXT_ALIGN_RIGHT)
-
+    
 end
 
 UV_UI.racing.underground2.main = underground2_racing_main

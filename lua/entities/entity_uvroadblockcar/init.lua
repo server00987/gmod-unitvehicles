@@ -13,7 +13,7 @@ end
 
 function ENT:Think()
 	
-	if uvtargeting and !self.deployed then
+	if UVTargeting and not self.deployed then
 		self:DeployRoadBlock()
 	end
 	

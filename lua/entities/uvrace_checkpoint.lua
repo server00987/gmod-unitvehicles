@@ -67,10 +67,10 @@ if CLIENT then
 	function ENT:Draw()
 		local id = self:GetID()
 		local speedlimit = self:GetSpeedLimit() or math.huge
-		if !id then return end
+		if not id then return end
 		local pos = self:GetPos()
 
-		if !UVHUDRace and IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "gmod_tool" then
+		if not UVHUDRace and IsValid(LocalPlayer():GetActiveWeapon()) and LocalPlayer():GetActiveWeapon():GetClass() == "gmod_tool" then
 
 			cam.Start3D()
 
@@ -133,7 +133,7 @@ if CLIENT then
 		elseif UVHUDRace then
 			
 			if not UVHUDDisplayRacing then return end
-			if !UVHUDRaceCurrentCheckpoint then return end
+			if not UVHUDRaceCurrentCheckpoint then return end
 			--Show current checkpoint and the checkpoint after that
 			local currentcheckpoint = UVHUDRaceCurrentCheckpoint + 1
 			local nextcheckpoint = currentcheckpoint + 1 
@@ -144,7 +144,7 @@ if CLIENT then
 
 			--print(nextcheckpoint)
 			//print(id, currentcheckpoint, nextcheckpoint)
-			if (id != currentcheckpoint and id != nextcheckpoint) or id == 0 then return end//or id == 0 then return end
+			if (id ~= currentcheckpoint and id ~= nextcheckpoint) or id == 0 then return end//or id == 0 then return end
 			
 			cam.Start3D()
 
@@ -161,7 +161,7 @@ if CLIENT then
 			else
 				if id == GetGlobalInt("uvrace_checkpoints") then --Finish line
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 255))
-				elseif UVHUDRaceCurrentLap != UVHUDRaceLaps or id != 1 then --Last lap
+				elseif UVHUDRaceCurrentLap ~= UVHUDRaceLaps or id ~= 1 then --Last lap
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 0))
 				end
 			end

@@ -9,11 +9,6 @@ TOOL.ClientConVar["pbcooldown"] = 60
 local conVarsDefault = TOOL:BuildConVarList()
 
 if SERVER then
-	util.AddNetworkString( "UVPursuitBreakerAdjust" )
-	util.AddNetworkString( "UVPursuitBreakerRetrieve" )
-	util.AddNetworkString( "UVPursuitBreakerCreate" )
-	util.AddNetworkString( "UVPursuitBreakerRefresh" )
-	util.AddNetworkString( "UVPursuitBreakerLoad" )
 
 	net.Receive("UVPursuitBreakerRetrieve", function( length, ply )
 		ply.UVPBTOOLMemory = net.ReadTable()
@@ -199,7 +194,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -324,7 +319,7 @@ function TOOL:RightClick(trace)
 		ply.UVPBTOOLMemory = {}
 	end
 	
-	if ent:GetClass() != "prop_physics" then return false end
+	if ent:GetClass() ~= "prop_physics" then return false end
 	
 	self:GetPursuitBreakerData( ent, ply, trace.HitPos )
 

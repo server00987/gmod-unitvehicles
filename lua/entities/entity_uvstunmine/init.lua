@@ -34,26 +34,22 @@ function ENT:Think()
 	
 	local objects = ents.FindInSphere(self.Entity:WorldSpaceCenter(), 100)
 	for k, object in pairs(objects) do
-		if !IsValid(object) then continue end
-
-		if object != self.racerdeployed and (object:GetClass() == "prop_vehicle_jeep" or object.IsSimfphyscar or object.IsGlideVehicle) then
-			if self.racerdeployed and not object.UnitVehicle then
-				if not RacerFriendlyFire:GetBool() then continue end
-			end
-			if object.esfon then
-				self.Entity:Remove()
-				UVDeactivateESF(object)
-				if IsValid(UVGetDriver(object)) then
-					UVGetDriver(object):PrintMessage( HUD_PRINTCENTER, "Stun mine countered!" )
+		if object ~= self.racerdeployed and (object:GetClass() == "prop_vehicle_jeep" or object.IsSimfphyscar or object.IsGlideVehicle) then
+			if not (self.racerdeployed and not object.UnitVehicle and not RacerFriendlyFire:GetBool()) then
+				if object.esfon then
+					self.Entity:Remove()
+					UVDeactivateESF(object)
+					if IsValid(UVGetDriver(object)) then
+						UVGetDriver(object):PrintMessage(HUD_PRINTCENTER, "Stun mine countered!")
+					end
+					return
 				end
-				return
+				if IsValid(UVGetDriver(object)) then
+					UVGetDriver(object):PrintMessage(HUD_PRINTCENTER, "YOU HIT A STUN MINE!")
+				end
+				self:UVStunmineHit()
 			end
-			if IsValid(UVGetDriver(object)) then
-				UVGetDriver(object):PrintMessage( HUD_PRINTCENTER, "YOU HIT A STUN MINE!" )
-			end
-			self:UVStunmineHit()
 		end
-
 	end
 	
 end
@@ -98,7 +94,7 @@ function ENT:StartTouch( ent )
 end
 
 function ENT:UVStunmineHit()
-
+	
 	local car = self.racerdeployed or self.Entity
 	local carchildren = {}
 	local carconstraints = {}
@@ -107,57 +103,57 @@ function ENT:UVStunmineHit()
 		carconstraints = constraint.GetAllConstrainedEntities(car)
 	end
 	local entpos = self.Entity:WorldSpaceCenter()
-    local objects = ents.FindInSphere(entpos, 1000)
-    for k, object in pairs(objects) do
-        if object != car and (!table.HasValue(carchildren, object) and !table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
-			if not object.UnitVehicle and car then
-				if not RacerFriendlyFire:GetBool() then continue end
+	local objects = ents.FindInSphere(entpos, 1000)
+	for k, object in pairs(objects) do
+		if object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
+			if not object.UnitVehicle and car and not RacerFriendlyFire:GetBool() then
+			else
+				local objectphys = object:GetPhysicsObject()
+				local vectorDifference = object:WorldSpaceCenter() - entpos
+				local angle = vectorDifference:Angle()
+				local power = UVPTStunMinePower:GetInt()
+				local damage = UVPTStunMineDamage:GetFloat()
+				local force = power * (1 - (vectorDifference:Length()/1000))
+				objectphys:ApplyForceCenter(angle:Forward()*force)
+				object.rammed = true
+				timer.Simple(3, function()
+					if IsValid(object) then
+						object.rammed = nil
+					end
+				end)
+				if object.UnitVehicle or (object.UVWanted and not AutoHealth:GetBool()) or not (object.UnitVehicle and object.UVWanted) then
+					damage = (table.HasValue(uvcommanders, object) and UVPTStunMineCommanderDamage:GetFloat()) or damage
+					if object.IsSimfphyscar then
+						local MaxHealth = object:GetMaxHealth()
+						local damage = MaxHealth*damage
+						object:ApplyDamage( damage, DMG_GENERIC )
+					elseif object.IsGlideVehicle then
+						object:SetEngineHealth( object:GetEngineHealth() - damage )
+						object:UpdateHealthOutputs()
+					elseif object:GetClass() == "prop_vehicle_jeep" then
+						
+					end
+				end
+				local e = EffectData()
+				e:SetEntity(object)
+				util.Effect("phys_unfreeze", e)
 			end
-            local objectphys = object:GetPhysicsObject()
-            local vectordifference = object:WorldSpaceCenter() - entpos
-            local angle = vectordifference:Angle()
-			local power = UVPTStunMinePower:GetInt()
-			local damage = UVPTStunMineDamage:GetFloat()
-            local force = power * (1 - (vectordifference:Length()/1000))
-            objectphys:ApplyForceCenter(angle:Forward()*force)
-            object.rammed = true
-            timer.Simple(3, function()
-                if IsValid(object) then
-                    object.rammed = nil
-                end
-            end)
-            if object.UnitVehicle or (object.UVWanted and !AutoHealth:GetBool()) or !(object.UnitVehicle and object.UVWanted) then
-				damage = (table.HasValue(uvcommanders, object) and UVPTStunMineCommanderDamage:GetFloat()) or damage
-                if object.IsSimfphyscar then
-					local MaxHealth = object:GetMaxHealth()
-                    local damage = MaxHealth*damage
-                    object:ApplyDamage( damage, DMG_GENERIC )
-                elseif object.IsGlideVehicle then
-					object:SetEngineHealth( object:GetEngineHealth() - damage )
-					object:UpdateHealthOutputs()
-                elseif object:GetClass() == "prop_vehicle_jeep" then
-
-                end
-            end
-			local e = EffectData()
-			e:SetEntity(object)
-			util.Effect("phys_unfreeze", e)
-        end
-    end
-
+		end
+	end
+	
 	if self.racerdeployed then
 		if UVGetDriver(self.racerdeployed) == false then return end
 		if UVGetDriver(self.racerdeployed):IsPlayer() then
 			UVGetDriver(self.racerdeployed):PrintMessage( HUD_PRINTCENTER, "Stun mine hit!" )
 		end
 	end
-
+	
 	local e2 = EffectData()
 	e2:SetEntity(self.Entity)
 	util.Effect("entity_remove", e2)
 	self.Entity:EmitSound( "gadgets/stunmine/hit.wav" )
 	self.Entity:Remove()
-
+	
 end
 
 function ENT:OnRemove()

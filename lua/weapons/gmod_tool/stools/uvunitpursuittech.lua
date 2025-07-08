@@ -61,12 +61,12 @@ function TOOL:LeftClick( trace )
 
 	if car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
 
-		if ( !CLIENT ) then
+		if ( not CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
 			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
 			local slot = self:GetClientNumber("slot") or 1
 			
-			if !car.PursuitTech then
+			if not car.PursuitTech then
 				car.PursuitTech = {}
 			end
 
@@ -168,7 +168,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return

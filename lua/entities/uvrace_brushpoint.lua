@@ -43,15 +43,15 @@ if SERVER then
 	end
 
 	function ENT:StartTouch(vehicle)
-		if !vehicle.uvraceparticipant then return end
+		if not vehicle.uvraceparticipant then return end
 		if vehicle.uvbusted then return end
 
 		local driver = vehicle:GetDriver()//vehicle.racedriver
 	
 		self:SetupGlobals(vehicle, vehicle)
 
-		if !UVRaceTable or !UVRaceTable['Participants'] then return end
-		if !UVRaceTable['Participants'][vehicle] then return end
+		if not UVRaceTable or not UVRaceTable['Participants'] then return end
+		if not UVRaceTable['Participants'][vehicle] then return end
 
 		local vehicle_array = UVRaceTable['Participants'][vehicle]
 
@@ -104,8 +104,7 @@ if SERVER then
 					local place = 1
 
 					for veh, array in pairs(UVRaceTable['Participants']) do
-						if vehicle == veh then continue end
-						if array.Finished then
+						if array.Finished and vehicle ~= veh then
 							place = place +1
 						end
 					end

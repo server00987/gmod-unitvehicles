@@ -1,13 +1,6 @@
 AddCSLuaFile()
 
-if SERVER then
-
-    util.AddNetworkString( "UVHUDRepairCooldown" )
-	util.AddNetworkString( "UVHUDRepair" )
-    util.AddNetworkString( "UVHUDRepairAvailable" )
-    util.AddNetworkString( "uvrepairsimfphys" )
-
-else
+if CLIENT then
     
     net.Receive("UVHUDRepairCooldown", function() --Inform the player when the repair shop can be used again
         local timeleft = net.ReadInt(32)

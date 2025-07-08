@@ -38,7 +38,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     --             return
     --         end
     
-    --         if car.uvbustingprogress and car.uvbustingprogress > 0 then
+    --         if car.UVBustingProgress and car.UVBustingProgress > 0 then
     --             timer.Remove(key)
     --             net.Start("uvrace_resetfailed")
     --             net.WriteString("uv.race.resetbusting")
@@ -53,7 +53,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     --         timer.Create( key, 1, 2, function()
     --             local remaining_reps = timer.RepsLeft( key )
     
-    --             if !IsValid(car) or car:GetDriver() ~= ply then
+    --             if not IsValid(car) or car:GetDriver() ~= ply then
     --                 timer.Remove(key)
     --             end
     
@@ -64,7 +64,7 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     --                 return
     --             end
     
-    --             if car.uvbustingprogress and car.uvbustingprogress > 0 then
+    --             if car.UVBustingProgress and car.UVBustingProgress > 0 then
     --                 timer.Remove(key)
     --                 net.Start("uvrace_resetfailed")
     --                 net.WriteString("uv.race.resetbusting")
@@ -98,22 +98,6 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
 end)
 
 if SERVER then
-    
-    util.AddNetworkString('UVUnitTakedown')
-    
-    util.AddNetworkString('UVGetNewKeybind')
-    util.AddNetworkString('UVPTKeybindRequest')
-    
-    util.AddNetworkString('UVResetPosition')
-    
-    util.AddNetworkString( "UVPTUse" )
-    
-    util.AddNetworkString( "UVWeaponESFEnable" )
-    util.AddNetworkString( "UVWeaponESFDisable" )
-    
-    util.AddNetworkString( "UVWeaponJammerEnable" )
-    util.AddNetworkString( "UVWeaponJammerDisable" )
-    
     function UVNotifyCenter( ply_array, frmt, icon_name, ... )
         for _, v in pairs( ply_array ) do
             
@@ -229,7 +213,7 @@ if SERVER then
                 return
             end
             
-            if car.uvbustingprogress and car.uvbustingprogress > 0 then
+            if car.UVBustingProgress and car.UVBustingProgress > 0 then
                 timer.Remove(key)
                 net.Start("uvrace_resetfailed")
                 net.WriteString("uv.race.resetbusting")
@@ -244,7 +228,7 @@ if SERVER then
             timer.Create( key, 1, 2, function()
                 local remaining_reps = timer.RepsLeft( key )
                 
-                if !IsValid(car) or car:GetDriver() ~= ply then
+                if not IsValid(car) or car:GetDriver() ~= ply then
                     timer.Remove(key)
                 end
                 
@@ -255,7 +239,7 @@ if SERVER then
                     return
                 end
                 
-                if car.uvbustingprogress and car.uvbustingprogress > 0 then
+                if car.UVBustingProgress and car.UVBustingProgress > 0 then
                     timer.Remove(key)
                     net.Start("uvrace_resetfailed")
                     net.WriteString("uv.race.resetbusting")
@@ -280,22 +264,24 @@ if SERVER then
     net.Receive( "UVPTKeybindRequest", function( len, ply )
         local slot = net.ReadInt( 16 )
         
-        if !slot then return end
+        if not slot then return end
         keybind_requests[ply] = slot
     end)
     
     net.Receive( "UVPTUse", function( len, ply )
         local slot = net.ReadInt( 16 )
         
-        if table.HasValue(uvplayerunittableplayers, ply) then --UNIT VEHICLES
-            for k, car in pairs(uvplayerunittablevehicle) do
-                if UVGetDriver(car) != ply or car.wrecked then continue end
-                UVDeployWeapon( car, slot )
+        if table.HasValue(UVPlayerUnitTablePlayers, ply) then --UNIT VEHICLES
+            for k, car in pairs(UVPlayerUnitTableVehicle) do
+                if UVGetDriver(car) == ply and not car.wrecked then
+                    UVDeployWeapon( car, slot ) 
+                end
             end
-        elseif next(uvrvwithpursuittech) != nil then --RACER VEHICLES
-            for k, car in pairs(uvrvwithpursuittech) do
-                if UVGetDriver(car) != ply or car.wrecked or car.uvbusted then continue end
-                UVDeployWeapon( car, slot )
+        elseif next(UVRVWithPursuitTech) ~= nil then --RACER VEHICLES
+            for k, car in pairs(UVRVWithPursuitTech) do
+                if UVGetDriver(car) == ply and not car.wrecked and not car.uvbusted then
+                    UVDeployWeapon( car, slot ) 
+                end
             end
         end
         
@@ -344,8 +330,7 @@ if SERVER then
     end
     
     function UVDeployWeapon(car, slot)
-        --if !car or !IsValid(car) then return end
-        if uvjammerdeployed and not car.jammerexempt then return end
+        if UVJammerDeployed and not car.jammerexempt then return end
         if not car.PursuitTech then return end
         
         if car.uvraceparticipant then
@@ -353,7 +338,7 @@ if SERVER then
         end
         
         local pursuit_tech = car.PursuitTech[slot]
-        if !pursuit_tech then return end
+        if not pursuit_tech then return end
         
         if pursuit_tech.Ammo <= 0 then return end
         
@@ -431,11 +416,12 @@ if SERVER then
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
-            UVDeploySpikeStrip(car, !car.UnitVehicle)
+            UVDeploySpikeStrip(car, not car.UnitVehicle)
+
             timer.Simple( .5, function()
-                if IsValid(car) and (!uvjammerdeployed or car.exemptfromjammer) then
+                if IsValid(car) and (not UVJammerDeployed or car.exemptfromjammer) then
                     if (car.UnitVehicle and pursuit_tech.Upgraded) or (car.RacerVehicle) then
-                        UVDeploySpikeStrip(car, !car.UnitVehicle)
+                        UVDeploySpikeStrip(car, not car.UnitVehicle)
                     end
                 end
             end)
@@ -506,8 +492,8 @@ if SERVER then
         phspikes:SetVelocity(ph:GetVelocity())
         timer.Simple(timecheck, function() 
             if IsValid(spikes) then 
-                if uvtargeting and !racer then
-                    uvspikestripsdodged = uvspikestripsdodged + 1
+                if UVTargeting and not racer then
+                    UVSpikestripsDodged = UVSpikestripsDodged + 1
                 end
                 spikes:Remove()
             end
@@ -544,7 +530,7 @@ if SERVER then
                 end
             end
             
-            if !repaired_tires and car:GetCurHealth() == car:GetMaxHealth() then return end
+            if not repaired_tires and car:GetCurHealth() == car:GetMaxHealth() then return end
             
             is_repaired = true
             car:EmitSound('ui/pursuit/repair.wav')
@@ -578,7 +564,7 @@ if SERVER then
                 end
             end
 
-            if !repaired and car:GetChassisHealth() >= car.MaxChassisHealth then return end
+            if not repaired and car:GetChassisHealth() >= car.MaxChassisHealth then return end
             is_repaired = true
             car:EmitSound('ui/pursuit/repair.wav')
             car:Repair()
@@ -630,36 +616,42 @@ if SERVER then
     end
     
     function UVDeactivateESF(car)
-        if !car.esfon then return end
+        if not car.esfon then return end
+
         if IsValid(car) then
             car.esfon = nil
+
             net.Start("UVWeaponESFDisable")
             net.WriteEntity(car)
             net.Broadcast()
+
             car:StopSound("gadgets/esf/onloop.wav")
+
             local e = EffectData()
             e:SetEntity(car)
             util.Effect("entity_remove", e)
             car:EmitSound("gadgets/esf/off.wav")
-            if !car.uvesfhit and car.uvesfdeployed and car.esfon then
+
+            if not car.uvesfhit and car.uvesfdeployed and car.esfon then
                 if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
                     UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF deactivated!")
                 end
             end
+
             car.uvesfhit = nil
         end
     end
     
     function UVDeployKillSwitch(car)
-        if next(uvwantedtablevehicle) != nil then
+        if next(UVWantedTableVehicle) ~= nil then
             car.uvkillswitchingtarget = nil
             
-            local suspects = uvwantedtablevehicle
+            local suspects = UVWantedTableVehicle
             local r = math.huge
             local closestdistancetosuspect, closestsuspect = r^2
             for i, w in pairs(suspects) do
-                local carpos = car:WorldSpaceCenter()
-                local distance = carpos:DistToSqr(w:WorldSpaceCenter())
+                local carPos = car:WorldSpaceCenter()
+                local distance = carPos:DistToSqr(w:WorldSpaceCenter())
                 if distance < closestdistancetosuspect then
                     closestdistancetosuspect, closestsuspect = distance, w
                 end
@@ -679,54 +671,54 @@ if SERVER then
                 end
                 timer.Simple(UVUnitPTKillSwitchLockOnTime:GetInt(), function() --HIT
                     if IsValid(car) and IsValid(car.uvkillswitchingtarget) then
-                        if car.uvkillswitching and !car.uvkillswitchingtarget.enginedisabledbyuv then
+                        if car.uvkillswitching and not car.uvkillswitchingtarget.enginedisabledbyuv then
                             car.uvkillswitching = nil
                             local kstime = UVUnitPTKillSwitchDisableDuration:GetInt()
-                            local enemyvehicle = car.uvkillswitchingtarget
-                            local enemycallsign = enemyvehicle.racer or "Racer "..enemyvehicle:EntIndex()
-                            local enemydriver = UVGetDriver(enemyvehicle)
+                            local enemyVehicle = car.uvkillswitchingtarget
+                            local enemyCallsign = enemyVehicle.racer or "Racer "..enemyVehicle:EntIndex()
+                            local enemyDriver = UVGetDriver(enemyVehicle)
                             
-                            if enemydriver:IsPlayer() then
-                                enemycallsign = enemydriver:GetName()
+                            if enemyDriver:IsPlayer() then
+                                enemyCallsign = enemyDriver:GetName()
                             end
-                            if enemyvehicle.IsSimfphyscar then
-                                enemyvehicle:SetActive(false)
-                            elseif enemyvehicle.IsGlideVehicle then
-                                enemyvehicle:TurnOff()
-                            elseif enemyvehicle:GetClass() == "prop_vehicle_jeep" then
-                                enemyvehicle:StartEngine(false)
+                            if enemyVehicle.IsSimfphyscar then
+                                enemyVehicle:SetActive(false)
+                            elseif enemyVehicle.IsGlideVehicle then
+                                enemyVehicle:TurnOff()
+                            elseif enemyVehicle:GetClass() == "prop_vehicle_jeep" then
+                                enemyVehicle:StartEngine(false)
                             end
-                            if isfunction(enemyvehicle.GetDriver) and IsValid(UVGetDriver(enemyvehicle)) and UVGetDriver(enemyvehicle):IsPlayer() then 
-                                UVGetDriver(enemyvehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN KILLSWITCHED!")
+                            if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+                                UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN KILLSWITCHED!")
                             end
                             if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-                                UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "KILLSWITCHED "..enemycallsign.."!")
+                                UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "KILLSWITCHED "..enemyCallsign.."!")
                             end
                             
-                            enemyvehicle.enginedisabledbyuv = true
+                            enemyVehicle.enginedisabledbyuv = true
                             car:StopSound("gadgets/killswitch/start1.wav")
                             car:StopSound("gadgets/killswitch/start2.wav")
-                            enemyvehicle:StopSound("gadgets/killswitch/startloop.wav")
-                            enemyvehicle:EmitSound("gadgets/killswitch/hit.wav")
+                            enemyVehicle:StopSound("gadgets/killswitch/startloop.wav")
+                            enemyVehicle:EmitSound("gadgets/killswitch/hit.wav")
                             timer.Simple(kstime, function() 
-                                if IsValid(enemyvehicle) then
-                                    if enemyvehicle.IsSimfphyscar then
-                                        enemyvehicle:SetActive(true)
-                                        enemyvehicle:StartEngine()
-                                    elseif enemyvehicle.IsGlideVehicle then
-                                        enemyvehicle:TurnOn()
-                                    elseif enemyvehicle:GetClass() == "prop_vehicle_jeep" then
-                                        enemyvehicle:StartEngine(true)
+                                if IsValid(enemyVehicle) then
+                                    if enemyVehicle.IsSimfphyscar then
+                                        enemyVehicle:SetActive(true)
+                                        enemyVehicle:StartEngine()
+                                    elseif enemyVehicle.IsGlideVehicle then
+                                        enemyVehicle:TurnOn()
+                                    elseif enemyVehicle:GetClass() == "prop_vehicle_jeep" then
+                                        enemyVehicle:StartEngine(true)
                                     end
-                                    if isfunction(enemyvehicle.GetDriver) and IsValid(UVGetDriver(enemyvehicle)) and UVGetDriver(enemyvehicle):IsPlayer() then 
-                                        UVGetDriver(enemyvehicle):PrintMessage( HUD_PRINTCENTER, "Engine restarted!")
+                                    if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+                                        UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "Engine restarted!")
                                     end
-                                    enemyvehicle.enginedisabledbyuv = nil
+                                    enemyVehicle.enginedisabledbyuv = nil
                                 end
                             end)
                             car.PursuitTechStatus = "Reloading"
                             timer.Simple(UVUnitPTDuration:GetInt(), function()
-                                if IsValid(car) and car.uvkillswitchdeployed and !car.wrecked then
+                                if IsValid(car) and car.uvkillswitchdeployed and not car.wrecked then
                                     car.uvkillswitchdeployed = nil
                                     car:EmitSound("buttons/button4.wav")
                                     car.PursuitTechStatus = "Ready"
@@ -765,13 +757,13 @@ if SERVER then
         local enemy = car.uvkillswitchingtarget
         local AI = car.UnitVehicle
         
-        if !IsValid(enemy) or (uvjammerdeployed and !car.exemptfromjammer) then
+        if not IsValid(enemy) or (UVJammerDeployed and not car.exemptfromjammer) then
             UVDeactivateKillSwitch(car)
             return
         end
         
-        local carpos = car:WorldSpaceCenter()
-        local distance = carpos:DistToSqr(enemy:WorldSpaceCenter())
+        local carPos = car:WorldSpaceCenter()
+        local distance = carPos:DistToSqr(enemy:WorldSpaceCenter())
         
         if distance > 250000 then
             UVDeactivateKillSwitch(car)
@@ -779,33 +771,39 @@ if SERVER then
     end
     
     function UVDeactivateKillSwitch(car)
-        if !car.uvkillswitching then return end
+        if not car.uvkillswitching then return end
+
         car.uvkillswitching = nil
-        local enemyvehicle = car.uvkillswitchingtarget
-        if IsValid(enemyvehicle) then
-            enemyvehicle:StopSound("gadgets/killswitch/startloop.wav")
-            enemyvehicle:EmitSound("gadgets/killswitch/miss.wav")
-            if isfunction(enemyvehicle.GetDriver) and IsValid(UVGetDriver(enemyvehicle)) and UVGetDriver(enemyvehicle):IsPlayer() then 
-                UVGetDriver(enemyvehicle):PrintMessage( HUD_PRINTCENTER, "Killswitch countered!")
+        local enemyVehicle = car.uvkillswitchingtarget
+        if IsValid(enemyVehicle) then
+            enemyVehicle:StopSound("gadgets/killswitch/startloop.wav")
+            enemyVehicle:EmitSound("gadgets/killswitch/miss.wav")
+            if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+                UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "Killswitch countered!")
             end
         end
+
         car:StopSound("gadgets/killswitch/start1.wav")
         car:StopSound("gadgets/killswitch/start2.wav")
+
         if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
             UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Killswitch missed!")
         end
+
         car.PursuitTechStatus = "Reloading"
         timer.Simple(UVUnitPTDuration:GetInt(), function()
-            if IsValid(car) and car.uvkillswitchdeployed and !car.wrecked then
+            if IsValid(car) and car.uvkillswitchdeployed and not car.wrecked then
                 car.uvkillswitchdeployed = nil
                 car:EmitSound("buttons/button4.wav")
                 car.PursuitTechStatus = "Ready"
             end
         end)
+
         car.uvkillswitchingtarget = nil
         if car.UnitVehicle then
             UVChatterKillswitchMissed(car.UnitVehicle)
         end
+
     end
     
     --EMP
@@ -817,19 +815,17 @@ if SERVER then
     function UVDeployShockwave(car)
         local carchildren = car:GetChildren()
         local carconstraints = constraint.GetAllConstrainedEntities(car)
-        local carpos = car:WorldSpaceCenter()
-        local objects = ents.FindInSphere(carpos, 1000)
+        local carPos = car:WorldSpaceCenter()
+        local objects = ents.FindInSphere(carPos, 1000)
         for k, object in pairs(objects) do
-            if not object.UnitVehicle and not car.UnitVehicle then
-				if not RacerFriendlyFire:GetBool() then continue end
-			end
-            if object != car and (!table.HasValue(carchildren, object) and !table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
+            if not object.UnitVehicle and not car.UnitVehicle and not RacerFriendlyFire:GetBool() then
+			elseif object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
                 local objectphys = object:GetPhysicsObject()
-                local vectordifference = object:WorldSpaceCenter() - carpos
-                local angle = vectordifference:Angle()
+                local vectorDifference = object:WorldSpaceCenter() - carPos
+                local angle = vectorDifference:Angle()
                 local power = UVPTShockwavePower:GetFloat()
                 local damage = UVPTShockwaveDamage:GetFloat()
-                local force = power * (1 - (vectordifference:Length()/1000))
+                local force = power * (1 - (vectorDifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 object.rammed = true
                 timer.Simple(3, function()
@@ -838,17 +834,17 @@ if SERVER then
                     end
                 end)
                 if object.UnitVehicle then
-                    damage = (table.HasValue(uvcommanders, object) and UVPTShockwaveCommanderDamage:GetFloat()) or damage
+                    damage = (table.HasValue(UVCommanders, object) and UVPTShockwaveCommanderDamage:GetFloat()) or damage
                     local phmass = math.Round(objectphys:GetMass())
-                    uvbounty = uvbounty+phmass
+                    UVBounty = UVBounty+phmass
                     if object.IsSimfphyscar then
-                        if object.UnitVehicle or object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool() then
+                        if object.UnitVehicle or object.UVWanted and not GetConVar("unitvehicle_autohealth"):GetBool() then
                             local MaxHealth = object:GetMaxHealth()
                             local damage = MaxHealth*damage
                             object:ApplyDamage( damage, DMG_GENERIC )
                         end
                     elseif object.IsGlideVehicle then
-                        if object.UnitVehicle or (object.UVWanted and !GetConVar("unitvehicle_autohealth"):GetBool()) or !(object.UnitVehicle and object.UVWanted) then
+                        if object.UnitVehicle or (object.UVWanted and not GetConVar("unitvehicle_autohealth"):GetBool()) or not (object.UnitVehicle and object.UVWanted) then
                             object:SetEngineHealth( object:GetEngineHealth() - damage )
                             object:UpdateHealthOutputs()
                         end
@@ -863,18 +859,18 @@ if SERVER then
         local effect = EffectData()
         effect:SetEntity(car)
         util.Effect("entity_remove", effect)
-        util.ScreenShake( carpos, 5, 5, 1, 1000 )
+        util.ScreenShake( carPos, 5, 5, 1, 1000 )
     end
     
     function UVDeployJammer(car)
-        if uvjammerdeployed then return end
+        if UVJammerDeployed then return end
         
-        uvjammerdeployed = true
+        UVJammerDeployed = true
         car.jammerdeployed = true
         car.jammerexempt = true
         
-        if uvbackupontheway and !uvbackuptenseconds and uvresourcepointstimermax then
-            uvresourcepointstimermax = uvresourcepointstimermax + 10
+        if UVBackupUnderway and not UVBackupTenSeconds and UVResourcePointsTimerMax then
+            UVResourcePointsTimerMax = UVResourcePointsTimerMax + 10
         end
         
         net.Start("UVWeaponJammerEnable")
@@ -903,25 +899,23 @@ if SERVER then
             end
         end
         
-        for k, unitplayers in pairs(uvplayerunittablevehicle) do
+        for k, unitplayers in pairs(UVPlayerUnitTableVehicle) do
             if IsValid(unitplayers) then
-                UVDeactivateESF(uvplayerunittablevehicle)
-                UVDeactivateKillSwitch(uvplayerunittablevehicle)
+                UVDeactivateESF(UVPlayerUnitTableVehicle)
+                UVDeactivateKillSwitch(UVPlayerUnitTableVehicle)
             end
         end
         
         for k, weapon in pairs(ents.FindByClass("entity_uv*")) do
-            if weapon:GetClass() == "entity_uvrepairshop" then
-                continue
+            if weapon:GetClass() ~= "entity_uvrepairshop" and weapon:GetClass() ~= "entity_uvbombstrip" then
+                local f = EffectData()
+                f:SetEntity(weapon)
+                util.Effect("entity_remove", f)
+                weapon:Remove()
             end
             if weapon:GetClass() == "entity_uvbombstrip" then
                 weapon:BombExplode()
-                continue
             end
-            local f = EffectData()
-            f:SetEntity(weapon)
-            util.Effect("entity_remove", f)
-            weapon:Remove()
         end
         
         UVSoundChatter(car, 1, "", 3)
@@ -929,7 +923,7 @@ if SERVER then
     end
     
     function UVEndJammer(car)
-        uvjammerdeployed = nil
+        UVJammerDeployed = nil
         car.jammerexempt = nil
         net.Start("UVWeaponJammerDisable")
         if IsValid(UVGetDriver(car)) then
@@ -939,12 +933,14 @@ if SERVER then
         car:StopSound( "gadgets/jammer/loop2.wav" )
         car:EmitSound( "gadgets/jammer/deactivate1.wav" )
         
-        if uvtargeting then
+        if UVTargeting then
             UVSoundChatter(car, 1, "dispatchjammerend", 8)
         end
     end
     
 else
+
+    UVWithESF = {}
     
     net.Receive("UVUnitTakedown", function()
         local unitType = net.ReadString()
@@ -958,7 +954,7 @@ else
     
     net.Receive("UVWeaponJammerEnable", function()
         local ply = net.ReadEntity()
-        if ply != LocalPlayer() then --VICTIM
+        if ply ~= LocalPlayer() then --VICTIM
             uvclientjammed = true
             surface.PlaySound( "gadgets/jammer/activate2.wav" )
             LocalPlayer():EmitSound("gadgets/jammer/loop1.wav", 100, 100, 1, CHAN_STATIC)
@@ -974,7 +970,7 @@ else
     
     net.Receive("UVWeaponJammerDisable", function()
         local ply = net.ReadEntity()
-        if ply != LocalPlayer() then --VICTIM
+        if ply ~= LocalPlayer() then --VICTIM
             uvclientjammed = nil
             LocalPlayer():StopSound( "gadgets/jammer/loop1.wav" )
             surface.PlaySound( "gadgets/jammer/deactivate1.wav" )
@@ -985,7 +981,7 @@ else
     end)
     
     hook.Add("Think", "UVClientWeaponThink", function()
-        if !UVWithESF then
+        if not UVWithESF then
             UVWithESF = {}
         end
     end)
@@ -1001,7 +997,6 @@ else
     end)
     
     hook.Add("PreDrawHalos", "UVWeaponESFShow", function()
-        if !UVWithESF then UVWithESF = {} end
         if next(UVWithESF) == nil then return end
         halo.Add( UVWithESF, Color(255,255,255), 10, 10, 1 )
     end)
@@ -1011,7 +1006,7 @@ else
     --         local h = ScrH()/2.7
     --         local w = ScrW()/2
             
-    --         //noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
+    --         --noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
     --         noti_draw (UVCenterNotification, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
             
     --         if UVCenterNotificationIcon then

@@ -158,11 +158,11 @@ for i = 1, MAX_HEAT_LEVEL do
 		TOOL.ClientConVar[conVarKey] = " "
 	end
 	
-	for _, conVar in pairs( HeatSettings ) do
+	for _, conVar in pairs( HEAT_SETTINGS ) do
 		local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
 		local check = (conVar == "timetillnextheat")
 		
-		TOOL.ClientConVar[conVarKey] = HeatDefaults[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
+		TOOL.ClientConVar[conVarKey] = HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
 	end
 	
 	-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
@@ -234,9 +234,6 @@ end
 local conVarsDefault = TOOL:BuildConVarList()
 
 if SERVER then
-	util.AddNetworkString( "UVUnitManagerAdjustUnit" )
-	util.AddNetworkString( "UVUnitManagerGetUnitInfo" )
-	util.AddNetworkString( "UVUnitManagerGetUnitAssignment" )
 	
 	net.Receive("UVUnitManagerGetUnitInfo", function( length, ply )
 		ply.UVTOOLMemory = net.ReadTable()
@@ -829,7 +826,7 @@ if CLIENT then
 					SetClipboardText(selecteditem)
 					
 					local JSONData = file.Read( "unitvehicles/glide/units/"..selecteditem, "DATA" )
-					if !JSONData then return end
+					if not JSONData then return end
 					
 					UVTOOLMemory = util.JSONToTable(JSONData, true)
 					
@@ -925,17 +922,17 @@ if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
 		local lang = language.GetPhrase
 		
-		if !file.Exists( "unitvehicles/glide", "DATA" ) then
+		if not file.Exists( "unitvehicles/glide", "DATA" ) then
 			file.CreateDir( "unitvehicles/glide/units" )
 			print("Created a Glide data file for the Unit Vehicles!")
 		end
 		
-		if !file.Exists( "unitvehicles/simfphys", "DATA" ) then
+		if not file.Exists( "unitvehicles/simfphys", "DATA" ) then
 			file.CreateDir( "unitvehicles/simfphys/units" )
 			print("Created a simfphys data file for the Unit Vehicles!")
 		end
 		
-		if !file.Exists( "unitvehicles/prop_vehicle_jeep", "DATA" ) then
+		if not file.Exists( "unitvehicles/prop_vehicle_jeep", "DATA" ) then
 			file.CreateDir( "unitvehicles/prop_vehicle_jeep/units" )
 			print("Created a Default Vehicle Base data file for the Unit Vehicles!")
 		end
@@ -943,7 +940,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -1648,7 +1645,7 @@ if CLIENT then
 		-- 	ToolTip = '#tool.uvunitmanager.settings.heatlevel.minbounty.desc'
 		-- },
 		
-		for _, setting_name in pairs( HeatSettings ) do
+		for _, setting_name in pairs( HEAT_SETTINGS ) do
 			local array = UnitSettings[setting_name]
 			
 			if array then
@@ -2430,7 +2427,7 @@ function TOOL:LeftClick( trace )
 		local Ents = duplicator.Paste( self:GetOwner(), ply.UVTOOLMemory.Entities, ply.UVTOOLMemory.Constraints )
 		local Ent = Ents[next(Ents)]
 		
-		if !IsValid( Ent ) then 
+		if not IsValid( Ent ) then 
 			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVTOOLMemory.SpawnName .." dosen't seem to be installed!" )
 			return 
 		end
@@ -2463,7 +2460,7 @@ function TOOL:LeftClick( trace )
 		local class = ply.UVTOOLMemory.SpawnName
 		local vehicles = list.Get("Vehicles")
 		local lst = vehicles[class]
-		if !lst then
+		if not lst then
 			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
 			return
 		end
@@ -2922,7 +2919,7 @@ function TOOL:GetVehicleData( ent, ply )
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
 		
-		if ( !ply.UVTOOLMemory ) then return false end
+		if ( not ply.UVTOOLMemory ) then return false end
 		
 		local Key = "VehicleBase"
 		ply.UVTOOLMemory[Key] = ent.Base
@@ -2937,7 +2934,7 @@ function TOOL:GetVehicleData( ent, ply )
 		ply.UVTOOLMemory.VehicleBase = ent:GetClass()
 		ply.UVTOOLMemory.SpawnName = ent:GetVehicleClass()
 		
-		if !ply.UVTOOLMemory.SpawnName then 
+		if not ply.UVTOOLMemory.SpawnName then 
 			print("This vehicle dosen't have a vehicle class set" )
 			return 
 		end

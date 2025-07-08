@@ -118,7 +118,7 @@ function ENT:GetELS(v)
 		return vehicle.SirenIsOn
 	elseif vehicle.IsSimfphyscar then
 		return vehicle:GetEMSEnabled()
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
+	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_Siren)
 	and isfunction(self.v.ELS_Lights) then
 		return self.v:ELS_Siren() and self.v:ELS_Lights()
@@ -135,7 +135,7 @@ function ENT:GetELSSound(v)
 		return vehicle.SirenIsOn
 	elseif vehicle.IsSimfphyscar then
 		return vehicle.ems and vehicle.ems:IsPlaying()
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
+	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_Siren) then
 		return self.v:ELS_Siren()
 	elseif vcmod_main and vcmod_els
@@ -163,7 +163,7 @@ function ENT:GetHorn(v)
 		return vehicle.Horn:IsPlaying()
 	elseif vehicle.IsSimfphyscar then
 		return vehicle.HornKeyIsDown
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
+	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isnumber(EMV_HORN)
 	and isfunction(vehicle.ELS_Horn) then
 		return vehicle:GetDTBool(EMV_HORN)
@@ -362,7 +362,7 @@ end
 function ENT:SetELS(on)
 	if on == self:GetELS() or self.v.DontHaveEMS then return end
 	if self.v.IsGlideVehicle then
-		if !self.v.CanSwitchSiren then return end
+		if not self.v.CanSwitchSiren then return end
 		if on then
 			self.v:SetSirenState(2)
 		else
@@ -381,7 +381,7 @@ function ENT:SetELS(on)
 		end
 	elseif self.v.IsSimfphyscar then
 		local v_list = list.Get( "simfphys_lights" )[self.v.LightsTable]
-		if !v_list then self.v.DontHaveEMS = true return end
+		if not v_list then self.v.DontHaveEMS = true return end
 		local sounds = v_list.ems_sounds or false
 		if sounds == false then self.v.DontHaveEMS = true return end
 
@@ -397,7 +397,7 @@ function ENT:SetELS(on)
 			self.v.emson = false
 			self.v:SetEMSEnabled( false )
 			if self.v.ems then
-				if on and not self.v.ems:IsPlaying() and !self.v.honking then
+				if on and not self.v.ems:IsPlaying() and not self.v.honking then
 					self.v.ems:Play()
 				elseif not on and self.v.ems:IsPlaying() or self.v.honking then
 					self.v.ems:Stop()
@@ -406,11 +406,11 @@ function ENT:SetELS(on)
 		end
 		sirenNum = math.random( 1, numsounds )
 		
-		if sirenNum != 0 and !self.v.honking then
+		if sirenNum ~= 0 and not self.v.honking then
 			self.v.ems = CreateSound(self.v, sounds[sirenNum])
 			self.v.ems:Play()
 		end
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
+	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
 	and isfunction(self.v.ELS_SirenOff)
 	and isfunction(self.v.ELS_LightsOff) then
@@ -431,7 +431,7 @@ end
 function ENT:SetELSSound(on)
 	if on == self:GetELSSound() or self.v.DontHaveEMS then return end
 	if self.v.IsGlideVehicle then
-		if !self.v.CanSwitchSiren then return end
+		if not self.v.CanSwitchSiren then return end
 		if on then
 			self.v:SetSirenState(2)
 		else
@@ -446,13 +446,13 @@ function ENT:SetELSSound(on)
 		end
 	elseif self.v.IsSimfphyscar then
 		if self.v.ems then
-			if on and not self.v.ems:IsPlaying() and !self.v.honking then
+			if on and not self.v.ems:IsPlaying() and not self.v.honking then
 				self.v.ems:Play()
 			elseif not on and self.v.ems:IsPlaying() or self.v.honking then
 				self.v.ems:Stop()
 			end
 		end
-	elseif Photon and !GetConVar("unitvehicle_vcmodelspriority"):GetBool()
+	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
 	and isfunction(self.v.ELS_SirenOff)
 	and isfunction(self.v.ELS_LightsOff) 
@@ -477,7 +477,7 @@ function ENT:SetELSSiren(on)
 		if self.v.ems then self.v.ems:Stop() end
 
 		local v_list = list.Get( "simfphys_lights" )[self.v.LightsTable]
-		if !v_list then return end
+		if not v_list then return end
 		local sounds = v_list.ems_sounds or false
 		if sounds == false then return end
 
@@ -488,7 +488,7 @@ function ENT:SetELSSiren(on)
 		
 		sirenNum = math.random( 1, numsounds )
 		
-		if sirenNum != 0 and !self.v.honking then
+		if sirenNum ~= 0 and not self.v.honking then
 			self.v.ems = CreateSound(self.v, sounds[sirenNum])
 			self.v.ems:Play()
 		end
@@ -505,7 +505,7 @@ end
 function ENT:SetHorn(on)
 	if on == self:GetHorn() then return end
 	if self.v.IsGlideVehicle then
-		if !self.v.CanSwitchSiren then return end
+		if not self.v.CanSwitchSiren then return end
 		if on then
 			self.v:TriggerInput("Horn", 1)
 		else
@@ -518,7 +518,7 @@ function ENT:SetHorn(on)
 			self.v:HornOff()
 		end
 	elseif self.v.IsSimfphyscar and self.v.snd_horn then
-		if on and !self.wrecked then
+		if on and not self.wrecked then
 			self.v:EmitSound(self.v.snd_horn)
 			self.v.honking = true
 			if self.v.ems then self.v.ems:Stop() end

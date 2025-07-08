@@ -85,7 +85,7 @@ if SERVER then
 		
 		return worldPoint
 	end
-
+	
 	local function ClosestPointOnLineSegment(p, a, b, padding)
 		local ab = b - a
 		local length = ab:Length()
@@ -134,7 +134,7 @@ if SERVER then
 				end
 			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
 			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
-			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
 				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
 				self.v:SetThrottle(0)
 				self:SetELS(false)
@@ -171,7 +171,7 @@ if SERVER then
 	end
 	
 	function ENT:StraightToRace(point)
-		if !self.v or !self.e then
+		if not self.v or not self.e then
 			return
 		end
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
@@ -191,7 +191,7 @@ if SERVER then
 			self.v.PressedKeys["D"] = false
 			self.v.PressedKeys["Shift"] = false
 			self.v.PressedKeys["Space"] = true
-		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
+		elseif isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and isfunction(self.v.SetHandbrake) and not self.v.IsGlideVehicle then
 			self.v:SetThrottle(0)
 			self.v:SetSteering(0, 0)
 			if self.v:GetVelocity():LengthSqr() < 10000 then 
@@ -209,7 +209,7 @@ if SERVER then
 	end
 	
 	function ENT:CanSeeGoal(target)
-		if !self.v or !target then
+		if not self.v or not target then
 			return
 		end
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v}}).Fraction==1
@@ -217,7 +217,7 @@ if SERVER then
 	end
 	
 	function ENT:ObstaclesNearbySide()
-		if !self.v or !self.v.width then
+		if not self.v or not self.v.width then
 			return
 		end
 		
@@ -260,16 +260,16 @@ if SERVER then
 	end
 	
 	function ENT:ObstaclesNearby()
-		if !self.v then
+		if not self.v then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction != 1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction ~= 1
 		return tobool(tr)
 	end
 	
 	function ENT:FindRace()
 		if (self.v.uvraceparticipant and UVRaceInEffect) and (UVRaceTable['Participants'] and UVRaceTable['Participants'][self.v]) then
-			if !UVRaceInProgress then self.PatrolWaypoint = nil; return end
+			if not UVRaceInProgress then self.PatrolWaypoint = nil; return end
 			
 			local array = UVRaceTable['Participants'][self.v]
 			
@@ -411,7 +411,7 @@ if SERVER then
 		
 		if self.PatrolWaypoint then
 			
-			if !self.racing then
+			if not self.racing then
 				self.racing = true
 			end
 			
@@ -423,7 +423,7 @@ if SERVER then
 				--self.v:StartEngine()
 				self.v.PressedKeys = self.v.PressedKeys or {}
 				self.v.PressedKeys["Space"] = false
-			elseif isfunction(self.v.SetHandbrake) and !self.v.IsGlideVehicle then
+			elseif isfunction(self.v.SetHandbrake) and not self.v.IsGlideVehicle then
 				self.v:SetHandbrake(false)
 			end
 			
@@ -493,12 +493,26 @@ if SERVER then
 			
 			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
 			
+			if self.v.IsSimfphyscar then
+				if self.v:GetVelocity():LengthSqr() > 10000 then
+					if istable(self.v.Wheels) then
+						for i = 1, table.Count( self.v.Wheels ) do
+							local Wheel = self.v.Wheels[ i ]
+							if not Wheel then return end
+							if Wheel:GetGripLoss() > 0 then
+								throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
+							end
+						end
+					end
+				end
+			end
+			
 			-- if self.v:GetVelocity():LengthSqr() > 10000 then
 			-- 	if self.v.IsSimfphyscar then 
 			-- 		if istable(self.v.Wheels) then
 			-- 			for i = 1, table.Count( self.v.Wheels ) do
 			-- 				local Wheel = self.v.Wheels[ i ]
-			-- 				if !Wheel then return end
+			-- 				if not Wheel then return end
 			-- 				if Wheel:GetGripLoss() > 0 then
 			-- 					throttle = throttle * Wheel:GetGripLoss() --Simfphys traction control
 			-- 				end
@@ -509,13 +523,13 @@ if SERVER then
 			-- 		local getTable = EntityMeta.GetTable
 			-- 		local selfvTbl = getTable( self.v )
 			-- 		local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
-			-- 		if wheelslip != false then
+			-- 		if wheelslip ~= false then
 			-- 			throttle = throttle - (wheelslip/10) --Glide traction control
 			-- 		end
 			-- 	end
 			-- end
 			
-			if dist:Dot(forward) < 0 and !self.stuck then
+			if dist:Dot(forward) < 0 and not self.stuck then
 				if vectdot > 0 then
 					if right.z > 0 then 
 						steer = -1 
@@ -541,7 +555,7 @@ if SERVER then
 				self.v:TriggerInput("Handbrake", 0)
 				self.v:TriggerInput("Throttle", throttle)
 				self.v:TriggerInput("Brake", throttle * -1)
-			elseif isfunction(self.v.SetThrottle) and !self.v.IsGlideVehicle then
+			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
 				self.v:SetThrottle(throttle)
 			end
 			if self.v.IsScar then
@@ -557,7 +571,7 @@ if SERVER then
 			elseif self.v.IsGlideVehicle then
 				steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.
 				self.v:TriggerInput("Steer", steer)
-			elseif isfunction(self.v.SetSteering) and !self.v.IsGlideVehicle then
+			elseif isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
 				self.v:SetSteering(steer, 0)
 			end
 			
@@ -592,7 +606,7 @@ if SERVER then
 		end
 		
 		--Pursuit Tech
-		if self.v.PursuitTech and uvtargeting then
+		if self.v.PursuitTech and UVTargeting then
 			for k, v in pairs(self.v.PursuitTech) do
 				if v.Tech ~= 'Shockwave' and v.Tech ~= 'Jammer' and v.Tech ~= 'Repair Kit' then
 					UVDeployWeapon(self.v, k)
@@ -601,41 +615,40 @@ if SERVER then
 					if self.v.IsGlideVehicle then
 						if self.v:GetChassisHealth() <= (self.v.MaxChassisHealth / 3) then
 							UVDeployWeapon(self.v, k)
-							continue
-						end
-						for _, v in pairs(self.v.wheels) do
-							if IsValid(v) and v.bursted and !self.repairtimer then
-								local id = "tire_repair"..self.v:EntIndex()
-								self.repairtimer = true
-								
-								timer.Create(id, 1, 1, function()
-									UVDeployWeapon(self.v, k)
-									timer.Simple(5, function() self.repairtimer = false; end)
-								end)
-								break
+						else
+							for _, v in pairs(self.v.wheels) do
+								if IsValid(v) and v.bursted and not self.repairtimer then
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+									
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
 							end
 						end
 					elseif self.v.IsSimfphyscar then
 						if self.v:GetCurHealth() <= (self.v:GetMaxHealth() / 3) then
 							UVDeployWeapon(self.v, k)
-							continue
-						end
-						for _, wheel in pairs(self.v.Wheels) do
-							if IsValid(wheel) and wheel:GetDamaged() and !self.repairtimer then
-								local id = "tire_repair"..self.v:EntIndex()
-								self.repairtimer = true
-								
-								timer.Create(id, 1, 1, function()
-									UVDeployWeapon(self.v, k)
-									timer.Simple(5, function() self.repairtimer = false; end)
-								end)
-								break
+						else
+							for _, wheel in pairs(self.v.Wheels) do
+								if IsValid(wheel) and wheel:GetDamaged() and not self.repairtimer then
+									local id = "tire_repair"..self.v:EntIndex()
+									self.repairtimer = true
+									
+									timer.Create(id, 1, 1, function()
+										UVDeployWeapon(self.v, k)
+										timer.Simple(5, function() self.repairtimer = false; end)
+									end)
+									break
+								end
 							end
 						end
 					elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
 						if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
 							UVDeployWeapon(self.v, k)
-							continue
 						end
 					end
 				end
@@ -644,13 +657,13 @@ if SERVER then
 	end
 	
 	function ENT:Think()
-		--if uvtargeting then return end
+		--if UVTargeting then return end
 		self:SetPos(self.v:GetPos() + Vector(0,0,50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 		
 		if self.v then
 			if self.v.raceinvited then
-				if !table.HasValue(UVRaceCurrentParticipants, self.v) then
+				if not table.HasValue(UVRaceCurrentParticipants, self.v) then
 					UVRaceAddParticipant( self.v, nil, true )
 					return
 				end
@@ -714,7 +727,7 @@ if SERVER then
 						v:SetCurHealth(math.huge)
 					end
 				end
-			elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+			elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
 				if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
 					self.v = v
 					v.RacerVehicle = self
@@ -723,7 +736,7 @@ if SERVER then
 					if GetConVar("unitvehicle_autohealth"):GetBool() then
 						if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
 							v:VC_repairFull_Admin()
-							if !v:VC_hasGodMode() then
+							if not v:VC_hasGodMode() then
 								v:VC_setGodMode(true)
 							end
 						end
@@ -769,7 +782,7 @@ if SERVER then
 							end
 							break
 						end
-					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and !v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
 						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
 							self.v = v
 							v.RacerVehicle = self
@@ -778,7 +791,7 @@ if SERVER then
 							if GetConVar("unitvehicle_autohealth"):GetBool() then
 								if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
 									v:VC_repairFull_Admin()
-									if !v:VC_hasGodMode() then
+									if not v:VC_hasGodMode() then
 										v:VC_setGodMode(true)
 									end
 								end
@@ -806,7 +819,7 @@ if SERVER then
 		util.Effect("propspawn", e) --Perform a spawn effect.
 		self.v:EmitSound( "beams/beamstart5.wav" )
 		
-		if !self.v.racer and UVNames then
+		if not self.v.racer and UVNames then
 			self.v.racer = UVNames.Racers[math.random(1, #UVNames.Racers)]
 			local joinmessage = "Racer AI (" .. self.v.racer .. ") has joined the game"
 			
@@ -864,7 +877,7 @@ if SERVER then
 			end
 		end
 		
-		if !self.uvscripted then
+		if not self.uvscripted then
 			if next(dvd.Waypoints) == nil then
 				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned!" )
 			else
