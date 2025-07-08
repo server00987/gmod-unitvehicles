@@ -86,11 +86,22 @@ if SERVER then
 				--vehicle.currentcheckpoint = 1
 
 				//if IsValid(driver) and driver:IsPlayer() then
-				net.Start("uvrace_lapcomplete")
-				net.WriteEntity(vehicle)
-				net.WriteFloat(laptime)
-				net.WriteFloat(vehicle_array['LastLapCurTime'])
-				net.Broadcast()
+				-- net.Start("uvrace_lapcomplete")
+				-- net.WriteEntity(vehicle)
+				-- net.WriteFloat(laptime)
+				-- net.WriteFloat(vehicle_array['LastLapCurTime'])
+				-- net.Broadcast()
+				for veh, data in pairs(UVRaceTable['Participants']) do
+					if not IsValid(veh) then continue end
+					local ply = veh:GetDriver()
+					if IsValid(ply) and ply:IsPlayer() then
+						net.Start("uvrace_lapcomplete")
+						net.WriteEntity(vehicle)
+						net.WriteFloat(laptime)
+						net.WriteFloat(vehicle_array['LastLapCurTime'])
+						net.Send(ply)
+					end
+				end
 				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
