@@ -867,11 +867,11 @@ if SERVER then
 					}
 				end
 				
-				table.insert(uvrvwithpursuittech, self.v)
+				table.insert(UVRVWithPursuitTech, self.v)
 				
 				self.v:CallOnRemove( "UVRVWithPursuitTechRemoved", function(car)
-					if table.HasValue(uvrvwithpursuittech, car) then
-						table.RemoveByValue(uvrvwithpursuittech, car)
+					if table.HasValue(UVRVWithPursuitTech, car) then
+						table.RemoveByValue(UVRVWithPursuitTech, car)
 					end
 				end)
 			end

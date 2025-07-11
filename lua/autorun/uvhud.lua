@@ -472,6 +472,7 @@ end
 
 function UVRenderEnemySquare(ent)
     if not IsValid(ent) then return end
+    if not RacerTags:GetBool() then return end
     
     local localPlayer = LocalPlayer()
     local box_color = (not UVHUDCopMode and Color(255, 255, 255)) or Color( 255, 132, 0 )

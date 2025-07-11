@@ -858,7 +858,7 @@ if SERVER then
 		--Flipping/crash
 		if self.v and not self.wrecked and not self.spawned and
 		(self.v:Health() < 0 and self.v:GetClass() == "prop_vehicle_jeep" or --No health 
-		self.v:GetPhysicsObject():GetAngles().z > 90 and self.v:GetPhysicsObject():GetAngles().z < 270 and (self.v.rammed or self.v:GetVelocity():LengthSqr() < 10000 and self.stuck) or --Flipped
+		self.v:GetPhysicsObject():GetAngles().z > 90 and self.v:GetPhysicsObject():GetAngles().z < 270 and (self.v.rammed or self.v:GetVelocity():LengthSqr() < 10000 and self.stuck) and CanWreck:GetBool() or --Flipped
 		self.v:WaterLevel() > 2 or --Underwater
 		self:IsOnFire()) or --On fire
 		self:IsWrecked() then --Other parameters

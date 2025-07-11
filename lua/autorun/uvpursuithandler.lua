@@ -14,6 +14,8 @@ local PURSUIT_MUSIC_FILEPATH = "uvpursuitmusic"
 
 local showhud = GetConVar("cl_drawhud")
 
+local SpawnCooldownTable = {}
+
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot.right",
 	[2] = "#uv.ptech.slot.left"
@@ -94,7 +96,7 @@ function UVSoundHeat(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local theme = PursuitTheme:GetString()
@@ -180,7 +182,7 @@ function UVSoundBusting(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/1" )
@@ -218,7 +220,7 @@ function UVSoundCooldown(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local appendingString = "/low"
@@ -270,7 +272,7 @@ function UVSoundBusted(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
@@ -312,7 +314,7 @@ function UVSoundEscaped(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
@@ -345,6 +347,8 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end
 	end 
+
+	print(FileName)
 	
 	local snd
 	local expectedEndTime
@@ -371,6 +375,12 @@ function UVPlaySound( FileName, Loop, StopLoop )
 				snd = source
 			end
 		end)
+	end
+
+	local source = (Loop and UVSoundLoop) or UVSoundSource
+
+	if source then
+		expectedEndTime = expectedEndTime or RealTime() + source:GetLength()
 	end
 	
 	UVLoadedSounds = FileName
@@ -579,9 +589,7 @@ if SERVER then
 	RepairRange = CreateConVar("unitvehicle_repairrange", 100, {FCVAR_ARCHIVE}, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
 	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
 	RacerPursuitTech = CreateConVar("unitvehicle_racerpursuittech", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
-	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
-	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
-	
+	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")	
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 	
@@ -1109,7 +1117,7 @@ if SERVER then
 				
 				if IsValid(car) and not car.wrecked and
 				(car:Health() <= 0 and car:GetClass() == "prop_vehicle_jeep" or --No health 
-				car.uvclasstospawnon ~= "npc_uvcommander" and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and car.rammed --[[or car:GetVelocity():LengthSqr() < 10000)]] or --Flipped
+				car.uvclasstospawnon ~= "npc_uvcommander" and CanWreck:GetBool() and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and car.rammed --[[or car:GetVelocity():LengthSqr() < 10000)]] or --Flipped
 				car:WaterLevel() > 2 or --Underwater
 				car:IsOnFire() or --On fire
 				UVPlayerIsWrecked(car)) then --Other parameters
@@ -2770,7 +2778,7 @@ else --HUD/Options
 		UVBountyNo = PursuitTable.Bounty
 		UVTimer = (UVTimerProgress and UVDisplayTime( UVTimerProgress )) or UVDisplayTime( 0 )
 		
-		if UVHUDDisplayPursuit and vehicle ~= NULL then
+		if UVHUDDisplayPursuit then
 			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
 				UVSoundHeat( UVHeatLevel )
 			end
@@ -3324,7 +3332,7 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.pursuit")
 			
 			panel:Help("#uv.settings.audio.title")
-			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_playmusic")
+			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_mutecheckpointsfx")
 			panel:ControlHelp("#uv.settings.audio.mutecp.desc")
 			
 			panel:Help("#uv.settings.music")

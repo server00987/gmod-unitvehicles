@@ -191,11 +191,11 @@ function TOOL:LeftClick( trace )
 			effect:SetEntity(car)
 			util.Effect("phys_freeze", effect)
 
-			table.insert(uvrvwithpursuittech, car)
+			table.insert(UVRVWithPursuitTech, car)
 
 			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
-				if table.HasValue(uvrvwithpursuittech, car) then
-					table.RemoveByValue(uvrvwithpursuittech, car)
+				if table.HasValue(UVRVWithPursuitTech, car) then
+					table.RemoveByValue(UVRVWithPursuitTech, car)
 				end
 
 				-- Clear PursuitTech on clients too

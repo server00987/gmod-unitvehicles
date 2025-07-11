@@ -1515,6 +1515,13 @@ else
 			end
 		end
 
+		-- Racer nametags
+		if not UVHUDDisplayPursuit then
+			for vehicle, _ in pairs(UVHUDRaceInfo['Participants']) do
+				UVRenderEnemySquare( vehicle )
+			end
+		end
+
 		local racer_count = #string_array
 
 		local lang = language.GetPhrase

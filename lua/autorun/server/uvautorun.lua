@@ -311,6 +311,7 @@ end)
 
 concommand.Add("uv_startpursuit", function(ply)
 	if not ply:IsSuperAdmin() then return end
+	if UVTargeting then return end
 	PrintMessage( HUD_PRINTTALK, "Starting a pursuit ... get ready!" )
 	
 	UVApplyHeatLevel()
@@ -649,7 +650,7 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 			
 			if ( neighbor:IsUnderwater() or 
 			current:ComputeAdjacentConnectionHeightChange(neighbor) > 1 ) then
-			elseif ( ( neighbor:IsOpen() || neighbor:IsClosed() ) && neighbor:GetCostSoFar() <= newCostSoFar ) then
+			elseif ( ( neighbor:IsOpen() or neighbor:IsClosed() ) and neighbor:GetCostSoFar() <= newCostSoFar ) then
 			else
 				neighbor:SetCostSoFar( newCostSoFar );
 				neighbor:SetTotalCost( newCostSoFar + UVheuristic_cost_estimate( neighbor, goal ) )
@@ -665,7 +666,7 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 					neighbor:AddToOpenList()
 				end
 				
-				cameFrom[ neighbor:GetID() ] = current:GetID()
+				cameFrom[neighbor:GetID()] = current:GetID()
 			end
 		end
 	end
