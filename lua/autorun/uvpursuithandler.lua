@@ -94,7 +94,7 @@ function UVSoundHeat(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local theme = PursuitTheme:GetString()
@@ -180,7 +180,7 @@ function UVSoundBusting(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/1" )
@@ -218,7 +218,7 @@ function UVSoundCooldown(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local appendingString = "/low"
@@ -270,7 +270,7 @@ function UVSoundBusted(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
@@ -312,7 +312,7 @@ function UVSoundEscaped(heatlevel)
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, #MAX_HEAT_LEVEL )
+		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 	
 	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
