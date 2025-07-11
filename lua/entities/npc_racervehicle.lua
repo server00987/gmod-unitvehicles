@@ -593,7 +593,7 @@ if SERVER then
 							self.stuck = nil 
 							self.PatrolWaypoint = nil 
 							
-							if self.v.uvraceparticipant and ((not self.v.uvbustingprogress) or self.v.uvbustingprogress <= 0) then
+							if self.v.uvraceparticipant and ((not self.v.UVBustingProgress) or self.v.UVBustingProgress <= 0) then
 								UVResetPosition( self.v )
 							end
 						end 

@@ -1516,10 +1516,9 @@ else
 		end
 
 		-- Racer nametags
-		if RacerTags:GetBool() then
+		if RacerTags:GetBool() and IsValid( my_vehicle ) then
 			local localPlayer = LocalPlayer()
 			local myVehicle = localPlayer:GetVehicle()
-			if not IsValid(myVehicle) then return end
 
 			local renderQueue = {}
 
@@ -1541,7 +1540,7 @@ else
 
 			for i = count, 1, -1 do
 				local data = renderQueue[i]
-				if data and IsValid(data.vehicle) then
+				if data then
 					UVRenderEnemySquare(data.vehicle)
 				end
 			end

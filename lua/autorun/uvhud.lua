@@ -613,7 +613,8 @@ function UVRenderEnemySquare(ent)
 
         cam.Start2D()
 			local pos = ent:GetPos() + Vector(0, 0, 80)
-			local bustpro = math.Clamp(math.floor((((ent.uvbustingprogress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
+            print(BustedTimer:GetInt(), ent.UVBustingProgress)
+			local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
 			
 			local rectlen = string.len(enemycallsign)

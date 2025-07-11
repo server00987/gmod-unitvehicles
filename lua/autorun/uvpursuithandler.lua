@@ -229,10 +229,10 @@ function UVSoundCooldown(heatlevel)
 	if vehicle then
 		vehicle = vehicle:GetParent() or vehicle
 	end
-		
+	
 	local appendingString = (vehicle and vehicle:GetVelocity():LengthSqr() > 500000) and "/high" or "/low"
 	
-	local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/1/low" )
+	local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/1" .. appendingString )
 	if cooldownSound then
 		UVPlaySound(cooldownSound, true)
 	else
@@ -268,7 +268,7 @@ function UVSoundBusted(heatlevel)
 	-- if not soundtable or #soundtable == 0 then return end
 	
 	-- UVPlaySound("uvpursuitmusic/" .. theme .. "/busted/" .. soundtable[math.random(1, #soundtable)], false, true)
-
+	
 	heatlevel = heatlevel or 1
 	
 	if PursuitThemePlayRandomHeat:GetBool() then
@@ -347,7 +347,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end
 	end 
-
+	
 	print(FileName)
 	
 	local snd
@@ -376,9 +376,9 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			end
 		end)
 	end
-
+	
 	local source = (Loop and UVSoundLoop) or UVSoundSource
-
+	
 	if source then
 		expectedEndTime = expectedEndTime or RealTime() + source:GetLength()
 	end
@@ -1604,41 +1604,43 @@ if SERVER then
 				
 				local timeTillNextHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
 				
-				TimeTillNextHeat = timeTillNextHeatConVar:GetInt()
-				
-				timer.Create( "UVTimeTillNextHeat", TimeTillNextHeat, 0, function()
-					if UVUTimeTillNextHeatEnabled:GetInt() ~= 1 then
-						timer.Remove( "UVTimeTillNextHeat" )
-						return
-					end
+				if timeTillNextHeatConVar then
+					TimeTillNextHeat = timeTillNextHeatConVar:GetInt()
 					
-					local nextHeat = UVHeatLevel + 1
-					local timeTillNextHeatNew = GetConVar( 'unitvehicle_unit_timetillnextheat' .. nextHeat ) or TimeTillNextHeat
-					
-					if nextHeat <= MaxHeatLevel:GetInt() then
-						UVHeatLevel = nextHeat
-						
-						timer.Adjust("UVTimeTillNextHeat", timeTillNextHeatNew:GetInt(), 0)
-						
-						-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
-						if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-							local units = ents.FindByClass("npc_uv*")
-							local random_entry = math.random(#units)
-							local unit = units[random_entry]
-							if not UVTargeting then return end
-							UVChatterHeatTwo(unit)
+					timer.Create( "UVTimeTillNextHeat", TimeTillNextHeat, 0, function()
+						if UVUTimeTillNextHeatEnabled:GetInt() ~= 1 then
+							timer.Remove( "UVTimeTillNextHeat" )
+							return
 						end
 						
-						if UVTargeting then
-							--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-							UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-						end
+						local nextHeat = UVHeatLevel + 1
+						local timeTillNextHeatNew = GetConVar( 'unitvehicle_unit_timetillnextheat' .. nextHeat ) or TimeTillNextHeat
 						
-						net.Start("UVHUDHeatLevelIncrease")
-						net.Broadcast()
-						UVUpdateHeatLevel()
-					end
-				end )
+						if nextHeat <= MaxHeatLevel:GetInt() then
+							UVHeatLevel = nextHeat
+							
+							timer.Adjust("UVTimeTillNextHeat", timeTillNextHeatNew:GetInt(), 0)
+							
+							-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
+							if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+								local units = ents.FindByClass("npc_uv*")
+								local random_entry = math.random(#units)
+								local unit = units[random_entry]
+								if not UVTargeting then return end
+								UVChatterHeatTwo(unit)
+							end
+							
+							if UVTargeting then
+								--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
+								UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
+							end
+							
+							net.Start("UVHUDHeatLevelIncrease")
+							net.Broadcast()
+							UVUpdateHeatLevel()
+						end
+					end )
+				end
 			end
 			
 		else	
@@ -2874,7 +2876,7 @@ else --HUD/Options
 				end
 			end
 		end
-
+		
 		
 		if UVHUDRoadblocks then
 			if next(UVHUDRoadblocks) ~= nil then
