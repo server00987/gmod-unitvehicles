@@ -123,6 +123,47 @@ UV_UI_Events = {
     ['UnitsChasing'] = 'onChasingUnitsChange',
     ['Heat'] = 'onHeatLevelUpdate',
 }
+        
+local BindTextReplace = {
+	KP_INS = "KP 0",
+	KP_END = "KP 1",
+	KP_DOWNARROW = "KP 2",
+	KP_PGDN = "KP 3",
+	KP_LEFTARROW = "KP 4",
+	KP_5 = "KP 5",
+	KP_RIGHTARROW = "KP 6",
+	KP_HOME = "KP 7",
+	KP_UPARROW = "KP 8",
+	KP_PGUP = "KP 9",
+	KP_SLASH = "KP /",
+	KP_MULTIPLY = "KP *",
+	KP_MINUS = "KP -",
+	KP_PLUS = "KP +",
+	KP_ENTER = "KP ↵",
+	KP_DEL = "KP .",
+	
+	ENTER = "↵",
+	SPACE = "#uv.button.space",
+}
+
+function UVBindButton(var)
+	local keyName = input.LookupBinding(var)
+	if not keyName then return "UNKNOWN" end
+
+	local resolved = BindTextReplace[keyName] or keyName
+
+	if string.StartWith(resolved, "#") then return language.GetPhrase(resolved) end
+
+	return resolved
+end
+
+
+function UVBindButtonName(var)
+	local keyName = input.GetKeyName(var)
+	if not keyName then return "UNKNOWN" end
+	local upperKeyName = string.upper(keyName)
+	return BindTextReplace[upperKeyName] or upperKeyName
+end
 
 if CLIENT then
     surface.CreateFont("UVFont", {
@@ -735,6 +776,8 @@ end
 UV_UI.general = {}
 
 local function uv_general( ... )
+	local hudyes = GetConVar("cl_drawhud"):GetBool()
+
     local w = ScrW()
     local h = ScrH()
     local vehicle = LocalPlayer():GetVehicle()
@@ -761,131 +804,78 @@ local function uv_general( ... )
             ['Spikestrip'] = '#uv.ptech.spikes.short',
             ['Repair Kit'] = '#uv.ptech.repairkit.short'
         }
-        
-        local BindTextReplace = {
-            KP_INS = "KP 0",
-            KP_END = "KP 1",
-            KP_DOWNARROW = "KP 2",
-            KP_PGDN = "KP 3",
-            KP_LEFTARROW = "KP 4",
-            KP_5 = "KP 5",
-            KP_RIGHTARROW = "KP 6",
-            KP_HOME = "KP 7",
-            KP_UPARROW = "KP 8",
-            KP_PGUP = "KP 9",
-            KP_SLASH = "KP /",
-            KP_MULTIPLY = "KP *",
-            KP_MINUS = "KP -",
-            KP_PLUS = "KP +",
-            KP_ENTER = "KP ENTER",
-            KP_DEL = "KP .",
-        }
-        
-        if not uvclientjammed then
-            for i=1, 2, 1 do
-                local var = GetConVar('unitvehicle_pursuittech_keybindslot_'..i):GetInt()
-                
-                local function GetFriendlyKeyName(var)
-                    local keyName = input.GetKeyName(var)
-                    if not keyName then return "UNKNOWN" end
-                    
-                    local upperKeyName = string.upper(keyName)
-                    return BindTextReplace[upperKeyName] or upperKeyName
-                end
-                
-                if UVHUDPursuitTech[i] then
-                    if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
-                        net.Start("UVPTUse")
-                        net.WriteInt(i, 16)
-                        net.SendToServer()
-                    end
-                    
-                    if UVHUDPursuitTech[i].Ammo > 0 and CurTime() - UVHUDPursuitTech[i].LastUsed <= UVHUDPursuitTech[i].Cooldown then
-                        local cooldown = UVHUDPursuitTech[i].Cooldown
-                        local time_since_used = CurTime() - UVHUDPursuitTech[i].LastUsed
-                        local sanitized_cooldown = math.Round(cooldown - time_since_used, 1)
-                        
-                        local blink = 255 * math.abs(math.sin(RealTime() * 3))
-                        
-                        local x = w * (0.8575 + ((i - 1) * 0.05))
-                        local y = h * 0.6
-                        local bw = w * 0.0475
-                        local bh = h * 0.05
-                        
-                        -- Background
-                        surface.SetDrawColor(0, 0, 0, 200)
-                        surface.DrawRect(x, y, bw, bh)
-                        
-                        -- Cooldown fill overlay
-                        local fill_frac = math.Clamp(time_since_used / cooldown, 0, 1)
-                        local fill_width = bw * fill_frac
-                        surface.SetDrawColor(blink, blink, 0, 100)
-                        surface.DrawRect(x, y, fill_width, bh)
-                        
-                        draw.DrawText( GetFriendlyKeyName(var), "UVFont4", w * (0.88 + ((i - 1) * 0.05)), h * 0.575, Color(255, 255, 255, 125), TEXT_ALIGN_CENTER )
-                        
-                        draw.DrawText(
-                        (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
-                        "\n"..UVHUDPursuitTech[i].Ammo,
-                        "UVFont4",
-                        w * (0.88 + ((i - 1) * 0.05)),
-                        h * 0.6,
-                        Color(255, 255, 255, 125),
-                        TEXT_ALIGN_CENTER
-                    )
-                else
-                    local kbc = Color(255, 255, 255)
-                    
-                    local x = w * (0.8575 + ((i - 1) * 0.05))
-                    local y = h * 0.6
-                    local bw = w * 0.0475
-                    local bh = h * 0.05
-                    
-                    -- Background
-                    if UVHUDPursuitTech[i].Ammo > 0 then
-                        surface.SetDrawColor( 0, 200, 0, 200 )
-                    else
-                        surface.SetDrawColor( 200, 0, 0, 100 )
-                        kbc = Color(200, 50, 50, 255)
-                    end
-                    surface.DrawRect(x, y, bw, bh)
-                    
-                    draw.DrawText( GetFriendlyKeyName(var), "UVFont4", w * (0.88 + ((i - 1) * 0.05)), h * 0.575, kbc, TEXT_ALIGN_CENTER )
-                    
-                    draw.DrawText(
-                    (PT_Replacement_Strings[UVHUDPursuitTech[i].Tech] or UVHUDPursuitTech[i].Tech) ..
-                    "\n"..(UVHUDPursuitTech[i].Ammo > 0 and UVHUDPursuitTech[i].Ammo or " - "),
-                    "UVFont4",
-                    w * (0.88 + ((i - 1) * 0.05)),
-                    h * 0.6,
-                    (UVHUDPursuitTech[i].Ammo > 0 and Color(255,255,255)) or Color(255,75,75),
-                    TEXT_ALIGN_CENTER
-                )
-            end
-        else
-            draw.DrawText(
-            GetFriendlyKeyName(var) .. "\n" ..
-            " - " ..
-            "\n ",
-            "UVFont4",
-            w * (0.88 + ((i - 1) * 0.05)),
-            h * 0.6,
-            Color( 255, 255, 255, 166),
-            TEXT_ALIGN_CENTER
-        )
-    end
-end
-else
-    draw.DrawText(
-    "#uv.ptech.jammer.hit.you",
-    "UVFont4",
-    w * 0.925,
-    h * 0.6,
-    Color( 255, 255, 255, 166),
-    TEXT_ALIGN_RIGHT
-)
-end
-end
+
+		if not uvclientjammed then
+			for i = 1, 2 do
+				local keyCode = GetConVar("unitvehicle_pursuittech_keybindslot_" .. i):GetInt()
+				local tech = UVHUDPursuitTech[i]
+
+				local xOffset = 0.8575 + ((i - 1) * 0.05)
+				local x = w * xOffset
+				local y = h * 0.6
+				local bw = w * 0.0475
+				local bh = h * 0.05
+				local keyX = w * (0.88 + ((i - 1) * 0.05))
+				local keyY = h * 0.575
+
+				local bgColor = Color(0, 0, 0, 200)
+				local fillOverlayColor = nil
+				local fillFrac = 0
+				local showFillOverlay = false
+				local textColor = Color(255, 255, 255, 125)
+				local ammoText = " - "
+				local techText = " - "
+				local keyText = UVBindButtonName(keyCode)
+
+				if tech then
+					if input.IsKeyDown(keyCode) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+						net.Start("UVPTUse")
+						net.WriteInt(i, 16)
+						net.SendToServer()
+					end
+
+					local timeSinceUsed = CurTime() - tech.LastUsed
+					local isCoolingDown = tech.Ammo > 0 and timeSinceUsed <= tech.Cooldown
+					local techName = PT_Replacement_Strings[tech.Tech] or tech.Tech
+
+					if isCoolingDown then
+						local blink = 255 * math.abs(math.sin(RealTime() * 3))
+						bgColor = Color(0, 0, 0, 200)
+						fillOverlayColor = Color(blink, blink, 0, 100)
+						fillFrac = math.Clamp(timeSinceUsed / tech.Cooldown, 0, 1)
+						showFillOverlay = true
+					else
+						if tech.Ammo > 0 then
+							bgColor = Color(0, 200, 0, 200)
+							textColor = Color(255, 255, 255)
+						else
+							bgColor = Color(200, 0, 0, 100)
+							textColor = Color(255, 75, 75)
+						end
+					end
+
+					ammoText = tech.Ammo > 0 and tech.Ammo or " - "
+					techText = techName
+				end
+
+				if hudyes then
+					-- Draw background
+					surface.SetDrawColor(bgColor)
+					surface.DrawRect(x, y, bw, bh)
+
+					-- Cooldown fill overlay
+					if showFillOverlay and fillOverlayColor then
+						surface.SetDrawColor(fillOverlayColor)
+						surface.DrawRect(x, y, bw * fillFrac, bh)
+					end
+
+					-- Draw key and tech text
+					draw.DrawText(keyText, "UVFont4", keyX, keyY, textColor, TEXT_ALIGN_CENTER)
+					draw.DrawText(techText .. "\n" .. ammoText, "UVFont4", keyX, y, textColor, TEXT_ALIGN_CENTER)
+				end
+			end
+		end
+	end
 end
 
 UV_UI.general.main = uv_general
@@ -911,7 +901,7 @@ UV_UI.racing.carbon.states = {
 UV_UI.racing.carbon.events = {
 	CenterNotification = function( params )
 		local ptext = params.text or "ERROR: NO TEXT"
-		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
+		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED_CARBON"]
 
 		local pfontUpper = params.fontUpper or "UVCarbonFont"
 		local pfontLower = params.fontLower or "UVCarbonFont-Smaller"
@@ -1481,7 +1471,7 @@ UV_UI.racing.carbon.events = {
             end
             
             -- Time remaining and closing
-            local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue")
+            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. lang("uv.results.continue")
             local conttextl = string.len(conttext)
             
             local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
@@ -1918,7 +1908,7 @@ UV_UI.pursuit.carbon.events = {
             
             
             -- Time remaining and closing
-            local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. lang("uv.results.continue")
+            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. lang("uv.results.continue")
             local conttextl = string.len(conttext)
             
             local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
@@ -2912,7 +2902,7 @@ UV_UI.racing.mostwanted.events = {
                     draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
                 end
                 
-                draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             end
             
             -- Show/Hide OK button with fade
@@ -3176,8 +3166,8 @@ UV_UI.pursuit.mostwanted.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.205, h*0.77)
-        OK:SetSize(w*0.205, h*0.0425)
+        OK:SetPos(w*0.2, h*0.77)
+        OK:SetSize(w*0.6, h*0.0425)
 		OK.Paint = function() end
         
         local timestart = CurTime()
@@ -3363,7 +3353,7 @@ UV_UI.pursuit.mostwanted.events = {
                 
                 draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
                 
-                draw.DrawText("[ " .. input.LookupBinding("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             end
             
             -- Show/Hide OK button with fade
@@ -3391,9 +3381,9 @@ UV_UI.pursuit.mostwanted.events = {
                 
                 draw.DrawText(
                 string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
-                "UVFont5UI", w * 0.795, h * 0.77,
+                "UVFont5UI", w * 0.5, h * 0.81,
                 Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-                TEXT_ALIGN_RIGHT
+                TEXT_ALIGN_CENTER
             )
             
             if autoCloseRemaining <= 0 then
@@ -3408,7 +3398,7 @@ UV_UI.pursuit.mostwanted.events = {
             -- Before auto-close timer starts, show the text but no countdown
             draw.DrawText(
             string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
-            "UVFont5UI", w * 0.795, h * 0.77,
+            "UVFont5UI", w * 0.5, h * 0.81,
             Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
             TEXT_ALIGN_RIGHT
         )
@@ -4481,7 +4471,7 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
             
-            draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
             
             if timeremaining < 1 then
@@ -4713,8 +4703,8 @@ UV_UI.pursuit.undercover.events = {
         ResultPanel:SetVisible(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.5, h*0.6425)
-        OK:SetSize(w*0.16, h*0.06)
+        OK:SetPos(w*0.33, h*0.6425)
+        OK:SetSize(w*0.33, h*0.06)
         OK:SetEnabled(true)
         OK.Paint = function() end
         
@@ -4886,9 +4876,8 @@ UV_UI.pursuit.undercover.events = {
             if timeremaining > autoCloseDelay then
                 timeremaining = autoCloseDelay
             end
-            
-            draw.DrawText( lang("uv.results.continue") .. " [" .. input.LookupBinding("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
+            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.71, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
             if timeremaining < 1 then
                 startCloseAnimation()
@@ -5770,7 +5759,7 @@ UV_UI.pursuit.original.events = {
             draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             -- Time remaining and closing
-            draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -5865,7 +5854,7 @@ UV_UI.pursuit.original.events = {
             draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             -- Time remaining and closing
-            draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -5961,7 +5950,7 @@ UV_UI.pursuit.original.events = {
             
             -- Time remaining and closing
             
-            draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -6056,7 +6045,7 @@ UV_UI.pursuit.original.events = {
             
             -- Time remaining and closing
             
-            draw.DrawText( "[ " .. input.LookupBinding("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -6948,7 +6937,7 @@ UV_UI.racing.prostreet.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
             
-            local conttext = "( " .. input.LookupBinding("+jump") .. " ) " .. language.GetPhrase("uv.results.continue")
+            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             
             local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
@@ -7327,7 +7316,7 @@ UV_UI.racing.underground.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
             
-            local conttext = "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
+            local conttext = "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             local conttexts = (w * 0.0065 * conttextl)
             
@@ -7817,14 +7806,14 @@ UV_UI.racing.underground2.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
             
-            local conttext = "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
+            local conttext = "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
             local conttextl = string.len(conttext)
             local conttexts = (w * 0.0065 * conttextl)
             
             surface.SetDrawColor(255, 255, 255, math.floor(200 * fadeAlpha) )
             surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
             surface.DrawTexturedRect( w*0.775, h*0.84, w * 0.15, h*0.0425)
-            draw.DrawText( "[" .. input.LookupBinding("+jump") .. "] " .. language.GetPhrase("uv.results.continue"), "UVFont4", w*0.85, h*0.8475, Color( 255, 255, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue"), "UVFont4", w*0.85, h*0.8475, Color( 255, 255, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_CENTER )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
             
