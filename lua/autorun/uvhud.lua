@@ -654,7 +654,6 @@ function UVRenderEnemySquare(ent)
 
         cam.Start2D()
 			local pos = ent:GetPos() + Vector(0, 0, 80)
-            print(BustedTimer:GetInt(), ent.UVBustingProgress)
 			local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
 			
@@ -902,6 +901,7 @@ UV_UI.racing.carbon.events = {
 	CenterNotification = function( params )
 		local ptext = params.text or "ERROR: NO TEXT"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED_CARBON"]
+		local pnoicon = params.noIcon
 
 		local pfontUpper = params.fontUpper or "UVCarbonFont"
 		local pfontLower = params.fontLower or "UVCarbonFont-Smaller"
@@ -1035,6 +1035,7 @@ UV_UI.racing.carbon.events = {
                 hook.Remove("HUDPaint", "UV_CENTERNOTI_CARBON")
             end
 
+			if pnoicon then return end
 			-- Other Elements
 			-- Outer Ring
 			local ring = carbon_noti_animState.ring
@@ -1230,7 +1231,7 @@ UV_UI.racing.carbon.events = {
 			end
 
 			DrawIcon(piconMat, ScrW() / 2, currentY, icon.scale, Color(255, 255, 255, icon.alpha))
-        end)
+		end)
 	end,
 	
     ShowResults = function(sortedRacers) -- Carbon
@@ -1660,10 +1661,16 @@ UV_UI.pursuit.carbon.events = {
         
     end,
     
-	onRacerBusted = function( racer, cop )
+	onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		
+		if lp then
+			cnt = "#uv.chase.busted"
+		end
+		
 		UV_UI.racing.carbon.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
-			iconMaterial = UVMaterials["UNITS"]
+			text = cnt,
+			noIcon = true,
 		})
 	end,
 	
@@ -2547,6 +2554,8 @@ UV_UI.racing.mostwanted.events = {
 	CenterNotification = function( params )
 		local ptext = params.text or "ERROR: NO TEXT"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
+		local ptextNoFall = params.textNoFall
+		local pnoIcon = params.noIcon
 
 		UV_UI.racing.mostwanted.events.notifState = {
 			active = true,
@@ -2601,6 +2610,7 @@ UV_UI.racing.mostwanted.events = {
 
 			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
 				-- Phase 4: gradual downward motion from midY to finalY (no fade)
+				if ptextNoFall then notifState.midY = notifState.startY end
 				local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
 				local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
 				pos = Vector(
@@ -2629,22 +2639,24 @@ UV_UI.racing.mostwanted.events = {
 
 			mw_noti_draw(ptext, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
 			
-			local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
-			local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
-			local iconDiffY = ScrH() * 0.0525
-			local iconStartY = notifState.startY - iconDiffY
-			local iconY
-			if not notifState.fadeStartTime then
-				local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
-				iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
-			else
-				local fadeElapsed = now - notifState.fadeStartTime
-				local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-				iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
-			end
+			if not pnoIcon then
+				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
+				local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
+				local iconDiffY = ScrH() * 0.0525
+				local iconStartY = notifState.startY - iconDiffY
+				local iconY
+				if not notifState.fadeStartTime then
+					local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
+					iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
+				else
+					local fadeElapsed = now - notifState.fadeStartTime
+					local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
+					iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+				end
 
-			DrawIcon( piconMat, ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
-			DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+				DrawIcon( piconMat, ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
+				DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
+			end
         end)
 	end,
 
@@ -3121,10 +3133,17 @@ UV_UI.pursuit.mostwanted.events = {
         
     end,
         
-	onRacerBusted = function( racer, cop )
+	onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		
+		if lp then
+			cnt = "#uv.chase.busted"
+		end
+
 		UV_UI.racing.mostwanted.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
-			iconMaterial = UVMaterials["UNITS"]
+			text = cnt,
+			textNoFall = true,
+			noIcon = true,
 		})
 	end,
 	
@@ -4643,9 +4662,15 @@ UV_UI.pursuit.undercover.events = {
         
     end,
         
-	onRacerBusted = function( racer, cop )
+	onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		
+		if lp then
+			cnt = "#uv.chase.busted"
+		end
+
 		UV_UI.racing.undercover.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
+			text = cnt,
 			color = Color(255,50,50)
 		})
 	end,

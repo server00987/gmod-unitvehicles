@@ -85,7 +85,6 @@ function UVDelaySound()
 end
 
 function UVSoundHeat(heatlevel)
-	print(heatlevel)
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
@@ -349,7 +348,7 @@ function UVPlaySound( FileName, Loop, StopLoop )
 		end
 	end 
 	
-	print(FileName)
+	-- print(FileName)
 	
 	local snd
 	local expectedEndTime
@@ -2780,58 +2779,15 @@ else --HUD/Options
 		UVBounty = string.Comma( PursuitTable.Bounty )
 		UVBountyNo = PursuitTable.Bounty
 		UVTimer = (UVTimerProgress and UVDisplayTime( UVTimerProgress )) or UVDisplayTime( 0 )
-		
+
 		if UVHUDDisplayPursuit then
 			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
 				UVSoundHeat( UVHeatLevel )
 			end
-			
-			if UVOneCommanderActive and hudyes then
-				if IsValid(UVHUDCommander) then
-					UVRenderCommander(UVHUDCommander)
-				end
-			end
-		end
-		
-		if UVHUDWantedSuspects and not uvclientjammed and RacerTags:GetBool() then
-			if next(UVHUDWantedSuspects) ~= nil then
-				for _, ent in pairs(UVHUDWantedSuspects) do
-					if IsValid(ent) and GMinimap then
-						if not ent.displayedonhud then
-							ent.displayedonhud = true
-							
-							local blip = GMinimap:AddBlip({
-								id = blipID,
-								parent = ent,
-								icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
-								scale = 1.4,
-								color = Color(255, 191, 0),
-							})
-							
-							if ent:GetClass() == "prop_vehicle_jeep" then
-								blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
-							end
-						end
-						
-						local curblip = GMinimap:FindBlipByID(blipID)
-						if not curblip then return end
-						
-						-- Break down conditions
-						local noUnitsChasing = tonumber(UVUnitsChasing) <= 0
-						local commanderEvadingDisabled = not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()
-						local hideByCopMode = UVHUDCopMode and (noUnitsChasing or not ent.inunitview) and not (commanderEvadingDisabled and UVOneCommanderActive)
-						
-						-- Final condition
-						local shouldHide = UVHUDDisplayCooldown or hideByCopMode
-						
-						curblip.alpha = shouldHide and 0 or 255
-					end
-				end
-			end
 		end
 	end)
 	
-	hook.Add( "HUDPaint", "UVHUD", function() --HUD
+	hook.Add( "HUDPaint", "UVHUDPursuit", function() --HUD
 		
 		local localPlayer = LocalPlayer()
 		local vehicle = localPlayer:GetVehicle()
@@ -2849,6 +2805,14 @@ else --HUD/Options
 		
 		if UV_UI.pursuit[hudtype] then
 			UV_UI.pursuit[hudtype].main()
+		end
+				
+		if UVHUDDisplayPursuit and vehicle ~= NULL then
+			if UVOneCommanderActive and hudyes then
+				if IsValid(UVHUDCommander) then
+					UVRenderCommander(UVHUDCommander)
+				end
+			end
 		end
 		
 		local entities = ents.GetAll()
@@ -2870,15 +2834,74 @@ else --HUD/Options
 			end
 		end
 		
-		if UVHUDWantedSuspects and not uvclientjammed and RacerTags:GetBool() then
+		if UVHUDWantedSuspects and not uvclientjammed and UVHUDCopMode and RacerTags:GetBool() then
 			if next(UVHUDWantedSuspects) ~= nil then
+				local renderQueue = {}
+
 				for _, ent in pairs(UVHUDWantedSuspects) do
-					UVRenderEnemySquare(ent)
+					if IsValid(ent) then
+						local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
+						table.insert(renderQueue, { vehicle = ent, distance = dist })
+					end
+				end
+
+				-- Sort ascending (closest first)
+				table.SortByMember(renderQueue, "distance", true)
+
+				local maxSquares = 4
+				local numToRender = math.min(#renderQueue, maxSquares)
+
+				-- Render farthest first so closest overlays on top
+				for i = numToRender, 1, -1 do
+					local data = renderQueue[i]
+					if data and IsValid(data.vehicle) then
+						UVRenderEnemySquare(data.vehicle)
+					end
+				end
+				
+				for i, data in ipairs(renderQueue) do
+				  print(i, data.vehicle, data.distance)
+				end
+
+				-- Handle minimap blips *after* rendering
+				if UVHUDCopMode then -- Only as a Cop
+					for _, ent in pairs(UVHUDWantedSuspects) do
+						if not IsValid(ent) then continue end
+
+						if not GMinimap then continue end
+						if not ent.displayedonhud then
+							ent.displayedonhud = true
+							local blip, id = GMinimap:AddBlip({
+								id = "UVBlip" .. ent:EntIndex(),
+								parent = ent,
+								icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
+								scale = 1.4,
+								color = Color(255, 191, 0),
+							})
+							if ent:GetClass() == "prop_vehicle_jeep" then
+								blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
+							end
+						end
+
+						if ent.displayedonhud then
+							local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
+							if not curblip then continue end
+
+							if UVHUDDisplayCooldown or 
+							   (UVHUDCopMode and 
+								(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
+								not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
+							then
+								curblip.alpha = 0
+							else
+								curblip.alpha = 255
+							end
+						end
+					end
 				end
 			end
 		end
-		
-		
+
 		if UVHUDRoadblocks then
 			if next(UVHUDRoadblocks) ~= nil then
 				for _, roadblock in pairs(UVHUDRoadblocks) do
@@ -3163,16 +3186,11 @@ else --HUD/Options
 		
 		local racer = array['Racer']
 		local cop = array['Cop']
-		local col = {
-			w = Color(255,255,255),
-			r = Color(255,54,54),
-			b = Color(53,134,255),
-			uv = Color(0,81,161),
-		}
+		local lp = false
 		
-		if racer == LocalPlayer() then return end
-		-- chat.AddText(Color(0, 81, 161), "[Unit Vehicles] ", Color(255, 54, 54), racer, Color(255, 255, 255), language.GetPhrase("uv.hud.racer.arrested"), Color(53, 134, 255), cop, Color(255, 255, 255), '!')
-		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBusted', racer, cop )
+		if racer == LocalPlayer():GetName() then lp = true end
+		
+		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBusted', racer, cop, lp )
 	end)
 	
 	net.Receive("UVHUDWreckedDebrief", function()
