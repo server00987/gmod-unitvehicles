@@ -3170,7 +3170,9 @@ else --HUD/Options
 			uv = Color(0,81,161),
 		}
 		
-		chat.AddText(Color(0, 81, 161), "[Unit Vehicles] ", Color(255, 54, 54), racer, Color(255, 255, 255), language.GetPhrase("uv.hud.racer.arrested"), Color(53, 134, 255), cop, Color(255, 255, 255), '!')
+		if racer == LocalPlayer() then return end
+		-- chat.AddText(Color(0, 81, 161), "[Unit Vehicles] ", Color(255, 54, 54), racer, Color(255, 255, 255), language.GetPhrase("uv.hud.racer.arrested"), Color(53, 134, 255), cop, Color(255, 255, 255), '!')
+		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBusted', racer, cop )
 	end)
 	
 	net.Receive("UVHUDWreckedDebrief", function()

@@ -1670,6 +1670,13 @@ UV_UI.pursuit.carbon.events = {
         
     end,
     
+	onRacerBusted = function( racer, cop )
+		UV_UI.racing.carbon.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
+			iconMaterial = UVMaterials["UNITS"]
+		})
+	end,
+	
     ShowDebrief = function(params) -- Carbon
         if UVHUDDisplayRacing then return end
         if IsValid(ResultPanel) then ResultPanel:Remove() end
@@ -3123,7 +3130,14 @@ UV_UI.pursuit.mostwanted.events = {
     onHeatLevelUpdate = function(...)
         
     end,
-    
+        
+	onRacerBusted = function( racer, cop )
+		UV_UI.racing.mostwanted.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
+			iconMaterial = UVMaterials["UNITS"]
+		})
+	end,
+	
     ShowDebrief = function(params) -- Most Wanted
         if UVHUDDisplayRacing then return end
         
@@ -4638,7 +4652,14 @@ UV_UI.pursuit.undercover.events = {
     onHeatLevelUpdate = function(...)
         
     end,
-    
+        
+	onRacerBusted = function( racer, cop )
+		UV_UI.racing.undercover.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop),
+			color = Color(255,50,50)
+		})
+	end,
+	
     ShowDebrief = function(params) -- Undercover
         if UVHUDDisplayRacing then return end
         
