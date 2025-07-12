@@ -85,6 +85,7 @@ function UVDelaySound()
 end
 
 function UVSoundHeat(heatlevel)
+	print(heatlevel)
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
@@ -393,10 +394,10 @@ function UVPlaySound( FileName, Loop, StopLoop )
 			if RealTime() >= expectedEndTime then
 				hook.Remove("Think", "CheckSoundFinished")
 				
-				if UVHUDDisplayBusting then
-					UVSoundBusting(UVHeatLevel)
-					return
-				end
+				-- if UVHUDDisplayBusting then
+				-- 	UVSoundBusting(UVHeatLevel)
+				-- 	return
+				-- end
 				
 				UVStopSound()
 			end
