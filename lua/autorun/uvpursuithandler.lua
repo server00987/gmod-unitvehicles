@@ -2839,14 +2839,14 @@ else --HUD/Options
 				local renderQueue = {}
 
 				for _, ent in pairs(UVHUDWantedSuspects) do
-					if IsValid(ent) then
-						local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
-						table.insert(renderQueue, { vehicle = ent, distance = dist })
-					end
+					local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
+					table.insert(renderQueue, { vehicle = ent, dist = dist })
 				end
 
-				-- Sort ascending (closest first)
-				table.SortByMember(renderQueue, "distance", true)
+				-- Sort so farther ones draw first, closer ones last (on top)
+				table.sort(renderQueue, function(a, b)
+					return a.dist < b.dist
+				end)
 
 				local maxSquares = 4
 				local numToRender = math.min(#renderQueue, maxSquares)
@@ -2857,10 +2857,6 @@ else --HUD/Options
 					if data and IsValid(data.vehicle) then
 						UVRenderEnemySquare(data.vehicle)
 					end
-				end
-				
-				for i, data in ipairs(renderQueue) do
-				  print(i, data.vehicle, data.distance)
 				end
 
 				-- Handle minimap blips *after* rendering
