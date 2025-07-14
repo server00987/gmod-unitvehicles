@@ -1583,6 +1583,7 @@ function UVAddToWantedListVehicle(vehicle)
 			
 			net.Start( "UV_RemoveWantedVehicle" )
 			net.WriteInt( ent:EntIndex(), 32 )
+			net.WriteInt( ent:GetCreationID(), 32 )
 			net.Broadcast()
 		end)
 	end
