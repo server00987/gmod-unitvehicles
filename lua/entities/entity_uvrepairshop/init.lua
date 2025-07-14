@@ -16,6 +16,7 @@ function ENT:Initialize()
 	self.Entity:GetPhysicsObject():EnableMotion(false)
 	net.Start("UVHUDAddUV")
 	net.WriteInt(self.Entity:EntIndex(), 32)
+	net.WriteInt(self.Entity:GetCreationID(), 32)
 	net.WriteString("repairshop")
 	net.Broadcast()
 end

@@ -102,6 +102,7 @@ if SERVER then
 
 			net.Start("UVHUDAddUV")
 			net.WriteInt(gib:EntIndex(), 32)
+			net.WriteInt(gib:GetCreationID(), 32)
 			net.WriteString("roadblock")
 			net.Broadcast()
 			

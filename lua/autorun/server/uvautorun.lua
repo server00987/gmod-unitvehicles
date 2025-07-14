@@ -1530,7 +1530,9 @@ function UVAddToWantedListVehicle(vehicle)
 		table.insert(UVWantedTableVehicle, vehicle)
 		
 		net.Start( "UV_AddWantedVehicle" )
-		net.WriteEntity( vehicle )
+		--net.WriteEntity( vehicle )
+		net.WriteInt( vehicle:EntIndex(), 32 )
+		net.WriteInt( vehicle:GetCreationID(), 32 )
 		net.Broadcast()
 		
 		if driver:IsPlayer() and not table.HasValue(UVWantedTableDriver, driver) then
@@ -1573,13 +1575,14 @@ function UVAddToWantedListVehicle(vehicle)
 				vehicle.FallOnCollision = nil
 			end
 		end
+
 		vehicle:CallOnRemove( "UVWantedVehicleRemoved", function(ent)
 			if table.HasValue(UVWantedTableVehicle, ent) then
 				table.RemoveByValue(UVWantedTableVehicle, ent)
 			end
 			
 			net.Start( "UV_RemoveWantedVehicle" )
-			net.WriteEntity( ent )
+			net.WriteInt( ent:EntIndex(), 32 )
 			net.Broadcast()
 		end)
 	end
@@ -1607,6 +1610,7 @@ end
 function UVAddToPlayerUnitListVehicle(vehicle, ply)
 	net.Start("UVHUDAddUV")
 	net.WriteInt(vehicle:EntIndex(), 32)
+	net.WriteInt(vehicle:GetCreationID(), 32)
 	net.WriteString("unit")
 	net.Broadcast()
 	
@@ -1866,15 +1870,19 @@ function UVBustEnemy(self, enemy)
 	if enemy.UVWanted then
 		enemy.UVWanted = nil
 	end
+
 	net.Start("UVHUDRemoveUV")
-	net.WriteInt(enemy:EntIndex(), 32)
+	net.WriteInt( enemy:EntIndex(), 32 )
+	net.WriteInt( enemy:GetCreationID(), 32 )
 	net.Broadcast()
+
 	if table.HasValue(UVWantedTableVehicle, enemy) then
 		table.RemoveByValue(UVWantedTableVehicle, enemy)
 	end
 	
 	net.Start( "UV_RemoveWantedVehicle" )
-	net.WriteEntity( enemy )
+	net.WriteInt( enemy:EntIndex(), 32 )
+	net.WriteInt( enemy:GetCreationID(), 32 )
 	net.Broadcast()
 	
 	if table.HasValue(UVPotentialSuspects, enemy) then
@@ -2626,6 +2634,7 @@ function UVPlayerWreck(vehicle)
 	
 	net.Start("UVHUDRemoveUV")
 	net.WriteInt(vehicle:EntIndex(), 32)
+	net.WriteInt(vehicle:GetCreationID(), 32)
 	net.Broadcast()
 	
 	local driver = UVGetDriver(vehicle)

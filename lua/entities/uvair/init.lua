@@ -142,6 +142,7 @@ function ENT:Initialize()
 
 	net.Start("UVHUDAddUV")
 	net.WriteInt(self:EntIndex(), 32)
+	net.WriteInt(self:GetCreationID(), 32)
 	net.WriteString("air")
 	net.Broadcast()
 	

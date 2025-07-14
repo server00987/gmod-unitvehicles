@@ -505,6 +505,14 @@ if SERVER then
 						end
 					end
 				end
+			elseif self.v.IsGlideVehicle then
+				local EntityMeta = FindMetaTable( "Entity" )
+				local getTable = EntityMeta.GetTable
+				local selfvTbl = getTable( self.v )
+				local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
+				if wheelslip ~= false then
+					throttle = throttle - (wheelslip/10) --Glide traction control
+				end
 			end
 			
 			-- if self.v:GetVelocity():LengthSqr() > 10000 then

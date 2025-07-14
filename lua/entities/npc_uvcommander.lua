@@ -135,6 +135,7 @@ if SERVER then
 			util.Effect("entity_remove", e) --Perform an effect.
 			net.Start("UVHUDRemoveUV")
 			net.WriteInt(self.v:EntIndex(), 32)
+			net.WriteInt(self.v:GetCreationID(), 32)
 			net.Broadcast()
 			if (self.uvscripted and not self.wrecked) then
 				SafeRemoveEntity(self.v)
@@ -189,7 +190,7 @@ if SERVER then
 				table.RemoveByValue(UVWantedTableVehicle, self.e)
 			end
 			net.Start( "UV_RemoveWantedVehicle" )
-			net.WriteEntity( self.e )
+			net.WriteInt( self.e:EntIndex(), 32 )
 			net.Broadcast()
 			self.e = nil
 		end
@@ -1917,6 +1918,7 @@ if SERVER then
 		
 		net.Start("UVHUDAddUV")
 		net.WriteInt(self.v:EntIndex(), 32)
+		net.WriteInt(self.v:GetCreationID(), 32)
 		net.WriteString("unit")
 		net.Broadcast()
 		
