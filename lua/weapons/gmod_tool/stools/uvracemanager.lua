@@ -181,6 +181,11 @@ if SERVER then
 		
 		local str = export and "Exported UV Race positions to " .. filename or "Imported UV Race positions from " .. filename
 		ply:ChatPrint(str)
+		-- ply.UVRaceTrackName = name
+		
+		-- net.Start("UVRace_TrackName")
+			-- net.WriteString(name)
+		-- net.Send(ply)
 	end
 	
 	local function Import(ply, cmd, args)

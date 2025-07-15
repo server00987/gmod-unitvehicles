@@ -177,6 +177,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.0462962963)),
         weight = 500,
         italic = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont-Shadow", {
@@ -184,7 +185,8 @@ if CLIENT then
         size = (math.Round(ScrH()*0.0462962963)),
         weight = 500,
         italic = true,
-        shadow = true
+        shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont-Smaller", {
@@ -192,6 +194,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.0425)),
         weight = 500,
         italic = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont-Bolder", {
@@ -199,13 +202,15 @@ if CLIENT then
         size = (math.Round(ScrH()*0.0425)),
         weight = 1000,
         italic = false,
-        shadow = true
+        shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont2", {
         font = "Arial",
         size = (math.Round(ScrH()*0.0462962963)),
         weight = 500,
+		extended = true,
     })
     
     surface.CreateFont("UVFont3", {
@@ -213,6 +218,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.0462962963)),
         weight = 500,
         shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont3Big", {
@@ -220,6 +226,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.085)),
         weight = 500,
         -- italic = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont3Bigger", {
@@ -227,6 +234,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.12)),
         weight = 500,
         -- italic = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont4", {
@@ -234,6 +242,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.02314814815)),
         weight = 1100,
         shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVCarbonFont", {
@@ -241,6 +250,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.043)),
         shadow = true,
         weight = 1000,
+		extended = true,
     })
     
     surface.CreateFont("UVCarbonFont-Smaller", {
@@ -248,6 +258,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.035)),
         shadow = true,
         weight = 1000,
+		extended = true,
     })
     
     surface.CreateFont("UVUndercoverAccentFont", {
@@ -255,6 +266,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.033)),
         shadow = true,
         weight = 1000,
+		extended = true,
     })
     
     surface.CreateFont("UVUndercoverLeaderboardFont", {
@@ -262,6 +274,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.03)),
         shadow = true,
         weight = 1000,
+		extended = true,
     })
     
     surface.CreateFont("UVUndercoverWhiteFont", {
@@ -269,6 +282,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.047)),
         shadow = true,
         weight = 1,
+		extended = true,
     })
     
     surface.CreateFont("UVCarbonLeaderboardFont", {
@@ -276,45 +290,52 @@ if CLIENT then
         size = (math.Round(ScrH()*0.02314814815)),
         shadow = true,
         weight = 1000,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.043)),
         weight = 500,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5UI", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.035)),
         weight = 500,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5UI-BottomBar", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.041)),
         weight = 500,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5WeightShadow", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.043)),
         weight = 500,
-        shadow = true
+        shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5Shadow", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.03)),
         weight = 350,
-        shadow = true
+        shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVMostWantedLeaderboardFont", {
         font = "EurostileBold",
         size = (math.Round(ScrH()*0.02314814815)),
         weight = 1000,
-        shadow = true
+        shadow = true,
+		extended = true,
     })
     
     surface.CreateFont("UVFont5ShadowBig", {
@@ -322,6 +343,7 @@ if CLIENT then
         size = (math.Round(ScrH()*0.1)),
         weight = 500,
         shadow = true,
+		extended = true,
     })
 end
 
@@ -5260,31 +5282,8 @@ local function undercover_pursuit_main( ... )
 
     -- General Icons
     DrawIcon(UVMaterials["UNITS"], w * 0.76, h * 0.355, .06, Colors.Undercover_Accent1)
-    draw.SimpleTextOutlined(ResourceText, "UVUndercoverWhiteFont", w * 0.78, h * 0.3325, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined(ResourceText .. (UVHUDDisplayBackupTimer and "   < " .. UVBackupTimer or ""), "UVUndercoverWhiteFont", w * 0.78, h * 0.3325, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
-    if UVHUDDisplayBackupTimer then
-        if not UVBackupColor then
-            UVBackupColor = Color(255, 255, 255)
-        end
-        if num then
-            if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
-                _last_backup_pulse_second = math.floor(num)
-                
-                hook.Remove("Think", "UVBackupColorPulse")
-                UVBackupColor = Color(255, 255, 0)
-                
-                hook.Add("Think","UVBackupColorPulse",function()
-                    UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
-                    if UVBackupColor.b >= 255 then
-                        hook.Remove("Think", "UVBackupColorPulse")
-                    end
-                end)
-            end
-        end
-		
-		draw.SimpleTextOutlined("         <" .. UVBackupTimer, "UVUndercoverWhiteFont", w * 0.78, h * 0.3325, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-    end
-    
     DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.76, h * 0.415, .07, Colors.Undercover_Accent1)
     draw.SimpleTextOutlined(UVTags, "UVUndercoverWhiteFont", w * 0.78, h * 0.3925, Colors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
@@ -5294,27 +5293,7 @@ local function undercover_pursuit_main( ... )
     -- Heat Level
     DrawIcon(UVMaterials["HEAT"], w * 0.76, h * 0.295, .06, Colors.Undercover_Accent1) -- Icon
     draw.SimpleTextOutlined("x" .. UVHeatLevel, "UVUndercoverWhiteFont", w * 0.8, h * 0.275, Colors.Undercover_Accent1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-    
-    -- if UVHeatLevel == 1 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
-    --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
-    -- elseif UVHeatLevel == 2 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
-    --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
-    -- elseif UVHeatLevel == 3 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
-    --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
-    -- elseif UVHeatLevel == 4 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
-    --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
-    -- elseif UVHeatLevel == 5 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
-    --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
-    -- elseif UVHeatLevel == 6 then
-    --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
-    --     UVHeatBountyMax = math.huge
-    -- end
-    
+
     local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
     local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
     

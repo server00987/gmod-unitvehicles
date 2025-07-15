@@ -2228,8 +2228,8 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	
 	if aienabled then 
 		Ent.uvclasstospawnon = "npc_racervehicle"
-	else
-		ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
+	-- else
+		-- ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
 	end
 	
 	if PT then

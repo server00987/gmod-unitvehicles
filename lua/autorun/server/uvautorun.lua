@@ -208,6 +208,7 @@ NETWORK_STRINGS = {
 	"UVRace_SetID",
 	"UVRace_SetSpeedLimit",
 	"UVStartRace",
+	-- "UVRace_TrackName",
 	
 	-- Race
 	"uvrace_begin",
@@ -269,7 +270,7 @@ concommand.Add("uv_despawnvehicles", function(ply)
 	if not ply:IsSuperAdmin() then return end
 	UVPresenceMode = false
 	
-	PrintMessage( HUD_PRINTTALK, "Despawning Unit Vehicle(s)!")
+	-- PrintMessage( HUD_PRINTTALK, "Despawning Unit Vehicle(s)!")
 	
 	for k, v in pairs(ents.FindByClass("npc_uv*")) do
 		v:Remove()

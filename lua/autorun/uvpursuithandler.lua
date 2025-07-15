@@ -3488,6 +3488,9 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.racing")
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.pursuit")
 
+			panel:CheckBox("#uv.settings.ui.preracepopup", "unitvehicle_preraceinfo")
+			panel:ControlHelp("#uv.settings.ui.preracepopup.desc")
+
 			panel:Help("#uv.settings.audio.title")
 			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_mutecheckpointsfx")
 			panel:ControlHelp("#uv.settings.audio.mutecp.desc")
