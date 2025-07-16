@@ -11,11 +11,11 @@ local showhud = GetConVar("cl_drawhud")
 if CLIENT then -- For Global Best Lap
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
+	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 end
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
-	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
