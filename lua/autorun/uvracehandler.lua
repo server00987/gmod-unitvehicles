@@ -1313,22 +1313,18 @@ else
 			end
 		end
 
-		local label = startTable[time] or " "
+		local label = startTable[time] or "#uv.race.getready"
 
-		if GetConVar("unitvehicle_preraceinfo"):GetBool() then
-			if time > 4 and not UVRaceCinematicOverlay then
-				UVRaceCinematicOverlay = {
-					startTime = CurTime(),
-					slideInDuration = 0.5,
-					slideOutDuration = 0.5,
-					state = "slidingIn",  -- can be "slidingIn", "holding", or "slidingOut"
-					holdStartTime = nil,
-				}
-			end
-		else
-			label = startTable[time] or "#uv.race.getready"
+		if time > 4 and not UVRaceCinematicOverlay then
+			UVRaceCinematicOverlay = {
+				startTime = CurTime(),
+				slideInDuration = 0.5,
+				slideOutDuration = 0.5,
+				state = "slidingIn",  -- can be "slidingIn", "holding", or "slidingOut"
+				holdStartTime = nil,
+			}
 		end
-
+		
 		-- Play sound
 		if sound then
 			surface.PlaySound(sound)
