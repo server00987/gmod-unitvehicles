@@ -15,7 +15,7 @@ end
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
-	UVPreRaceInfo = CreateConVar( "unitvehicle_preraceinfo", 0, FCVAR_ARCHIVE, "Set to 1 to have a cinematic-like race details list when a race begins." )
+	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
@@ -1592,11 +1592,10 @@ else
 	end)
 
 	hook.Add("PostRenderVGUI", "UVRaceCinematicOverlayTop", function()
-		if not UVRaceCinematicOverlay then return end
-
 		local hudyes = showhud:GetBool()
-		
+		if not UVRaceCinematicOverlay then return end
 		if gui.IsGameUIVisible() or not hudyes then return end
+		if not GetConVar("unitvehicle_preraceinfo"):GetBool() then return end
 		
 		local now = CurTime()
 		local w, h = ScrW(), ScrH()
