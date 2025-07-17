@@ -736,7 +736,7 @@ local function mw_noti_draw(text, font, x, y, color)
     
     for i, line in ipairs(lines) do
         local w,h = surface.GetTextSize(line)
-        draw.SimpleText(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleTextOutlined(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
         currentY = currentY + h
     end
 end
@@ -769,7 +769,7 @@ local function carbon_noti_draw(text, font, font2, x, y, color, color2)
         end
         
         local w,h = surface.GetTextSize(line)
-        draw.SimpleText(line, drawFont, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleTextOutlined(line, font, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
         currentY = currentY + h
     end
 end
@@ -796,7 +796,7 @@ local function DrawScaledCenteredTextLines(text, font, x, y, color, scale)
         mat:SetTranslation(Vector(x - w / 2 * scale, currentY, 0))
         
         cam.PushModelMatrix(mat)
-        draw.SimpleText(line, font, 0, 0, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleTextOutlined(line, font, 0, 0, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
         cam.PopModelMatrix()
         
         currentY = currentY + h * scale
@@ -1052,12 +1052,10 @@ UV_UI.racing.carbon.events = {
             
             -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
-            carbon_noti_draw( upperLine, pfontUpper, nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
             carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(255, 255, 255, ualpha), nil)
 
 			-- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
-            carbon_noti_draw( lowerLine, pfontLower, nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
             carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(175, 175, 175, lalpha), nil)
 
             -- Disable animation and remove hook when done
@@ -1608,7 +1606,19 @@ UV_UI.racing.carbon.events = {
 			text = UV_UI.racing.carbon.states.LapCompleteText,
 			iconMaterial = UVMaterials["CLOCK_BG"],
 		})
-	end
+	end,
+		
+	onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+
+		UV_UI.racing.carbon.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			noIcon = true,
+		})
+	end,
+
 }
 
 UV_UI.pursuit.carbon.events = {
@@ -2130,7 +2140,7 @@ local function carbon_racing_main( ... )
             color = (i > 4 and Colors.Carbon_OthersDark) or Colors.Carbon_Others
         end
         
-        local text = alt and (status_text .. "   " .. i) or (racer_name .. "   " .. i)
+        local text = alt and (status_text) or (racer_name)
         
         if is_local_player then
             surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_INVERTED"])
@@ -2138,7 +2148,8 @@ local function carbon_racing_main( ... )
             surface.DrawTexturedRect(w * 0.72, h * 0.185 + racercount, w * 0.255, h * 0.025)
         end
 
-		draw.SimpleTextOutlined(text, "UVCarbonLeaderboardFont", w * 0.97, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(i, "UVCarbonLeaderboardFont", w * 0.97, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(text, "UVCarbonLeaderboardFont", w * 0.9525, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     end
 end
 
@@ -3028,7 +3039,20 @@ end,
 			text = UV_UI.racing.mostwanted.states.LapCompleteText,
 			iconMaterial = UVMaterials['CLOCK'],
 		})
-	end
+	end,
+		
+	onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+
+		UV_UI.racing.mostwanted.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			textNoFall = true,
+			noIcon = true,
+		})
+	end,
+
 }
 
 UV_UI.pursuit.mostwanted.events = {
@@ -4168,10 +4192,8 @@ UV_UI.racing.undercover.events = {
 				offsetY = Lerp(p, 0, -30)
 			end
 
-            local shadowColor = Color(0, 0, 0, alpha)
             local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
 
-            DrawScaledCenteredTextLines(ptext, "UVUndercoverWhiteFont", x + 2, y + 2, shadowColor, scale)
             DrawScaledCenteredTextLines(ptext, "UVUndercoverWhiteFont", x, y, baseColor, scale)
         end)
 	end,
@@ -4205,8 +4227,8 @@ UV_UI.racing.undercover.events = {
         ResultPanel:SetVisible(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.5, h*0.745)
-        OK:SetSize(w*0.16, h*0.06)
+        OK:SetPos(w*0.33, h*0.745)
+        OK:SetSize(w*0.33, h*0.06)
         OK:SetEnabled(true)
         OK.Paint = function() end
         
@@ -4466,8 +4488,8 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
             
-            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.6575, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.332, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
+            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.825, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
             
             if timeremaining < 1 then
                 startCloseAnimation()
@@ -4554,7 +4576,19 @@ UV_UI.racing.undercover.events = {
 			text = UV_UI.racing.undercover.states.LapCompleteText,
 			color = Color(0,194,255)
 		})
-    end
+    end,
+	
+	onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+
+		UV_UI.racing.undercover.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			color = Color(255, 50, 50)
+		})
+	end,
+
 }
 
 UV_UI.pursuit.undercover.events = {
@@ -5130,8 +5164,7 @@ local function undercover_pursuit_main( ... )
     if not hudyes then return end
     if not UVHUDDisplayPursuit then return end
     if UVHUDDisplayRacing then return end
-    
-    
+
     local vehicle = LocalPlayer():GetVehicle()
     
     local w = ScrW()
@@ -5333,39 +5366,33 @@ local function undercover_pursuit_main( ... )
     
     -- [ Bottom Info Box ] --
     local bottomy = h * 0.86
-    local bottomy2 = h * 0.9
-    local bottomy3 = h * 0.91
-    local bottomy4 = h * 0.81
-    local bottomy5 = h * 0.83
-    local bottomy6 = h * 0.79
     
     if not UVHUDDisplayCooldown then
         -- Evade Box, All BG
-        -- surface.SetDrawColor(255,255,255,25)
-        -- surface.DrawRect(w * 0.331, bottomy - 4, w * 0.344, h * 0.041)
-        
         draw.NoTexture()
-        surface.SetDrawColor(200, 200, 200, 255)
-        surface.DrawRect(w * 0.333, bottomy - (h*0.004), w * 0.34, h * 0.004)
-        surface.DrawRect(w * 0.333, bottomy + (h*0.034), w * 0.34, h * 0.004)
-        surface.DrawTexturedRectRotated(w * 0.333, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
-        surface.DrawTexturedRectRotated(w * 0.6735, bottomy + (h*0.017), w * 0.0235, h * 0.004, 90)
-        
         surface.SetDrawColor(100, 100, 100, 230)
-        surface.DrawRect(w * 0.333  , bottomy, w * 0.34, h * 0.035)
-        
+        surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.013), w * 0.3, h * 0.03, 0)
+
+		-- Borders
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h*0.004), w * 0.304, h * 0.004, 0) -- Top
+        surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.029), w * 0.304, h * 0.004, 0) -- Bottom
+        surface.DrawTexturedRectRotated(w * 0.349, bottomy + (h*0.013), w * 0.018, h * 0.004, 90) -- Left
+        surface.DrawTexturedRectRotated(w * 0.6515, bottomy + (h*0.013), w * 0.018, h * 0.004, 90) -- Right
+
         -- Evade Box, Evade BG
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
         surface.SetDrawColor(50, 214, 255, 100)
-        surface.DrawTexturedRect(w * 0.5, bottomy, w * 0.1725, h * 0.035)
+        surface.DrawTexturedRectRotated(w * 0.575, bottomy + (h*0.013), w * 0.15, h * 0.03, 0)
         
         -- Evade Box, Busted BG
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
         surface.SetDrawColor(255, 0, 0, 100)
-        surface.DrawTexturedRect(w * 0.333, bottomy, w * 0.1725, h * 0.035)
-        
+        surface.DrawTexturedRectRotated(w * 0.425, bottomy + (h*0.014), w * 0.15, h * 0.03, 0)
+
+		-- Evade Box, slightly lightened box
         -- surface.SetDrawColor(200, 200, 200, 100)
-        -- surface.DrawRect(w * 0.333, bottomy, w * 0.34, h * 0.035)
+        -- surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.014), w * 0.3, h * 0.03, 0)
         
         -- Evade Box, Busted Meter
         if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
@@ -5398,10 +5425,10 @@ local function undercover_pursuit_main( ... )
                 states.BustedColor = Color(255, 100, 100)
             end
             
-            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1675), 0, w * 0.1675)
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.15), 0, w * 0.15)
             T = math.floor(T)
             surface.SetDrawColor(255, 0, 0)
-            surface.DrawRect(w * 0.333 + (w * 0.1675 - T), bottomy, T, h * 0.035)
+            surface.DrawRect(w * 0.35 + (w * 0.15 - T), bottomy - (h * 0.002), T, h * 0.03)
         else
             UVBustedColor = Color(255, 100, 100, 125)
             BustingProgress = 0
@@ -5415,82 +5442,25 @@ local function undercover_pursuit_main( ... )
                 UVEvadingProgress = EvadingProgress
             end
             
-            local T = math.Clamp((UVEvadingProgress) * (w * 0.1725), 0, w * 0.1725)
+            local T = math.Clamp((UVEvadingProgress) * (w * 0.15), 0, w * 0.15)
             surface.SetDrawColor(50, 173, 255)
-            surface.DrawRect(w * 0.5, bottomy, T, h * 0.035)
+            surface.DrawRect(w * 0.5, bottomy - (h * 0.002), T, h * 0.03)
             states.EvasionColor = Color(50, 173, 255, blink)
         else
             EvadingProgress = 0
         end
         
         -- Evade Box, Icons
-        DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.315, bottomy + (h*0.015), .05, states.BustedColor) -- Icon, Glow
-        DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.315, bottomy + (h*0.015), .05, Color(255,0,0, 125)) -- Icon
-        DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, states.EvasionColor) -- Icon, Glow
-        DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 173, 255, 125)) -- Icon
+        DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.33, bottomy + (h*0.012), .06, Color(255,0,0, 255)) -- Icon
+        DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.67, bottomy + (h*0.012), .06, Color(50, 173, 255, 255)) -- Icon
         
+        DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.33, bottomy + (h*0.012), .06, states.BustedColor) -- Icon, Glow
+        DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.67, bottomy + (h*0.012), .06, states.EvasionColor) -- Icon, Glow
+		
         -- Evade Box, Dividers
+		draw.NoTexture()
         surface.SetDrawColor(255, 255, 255, 255)
-        surface.DrawRect(w * 0.499, bottomy, w * 0.0015, h * 0.035)
-        
-        -- Lower Box
-        -- local shade_theme_color =
-        -- (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
-        -- local theme_color =
-        -- (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
-        
-        -- shade_theme_color.a = shade_theme_color.a - 35
-        -- theme_color.a = theme_color.a - 35
-        
-        -- surface.SetDrawColor(shade_theme_color:Unpack())
-        -- surface.DrawRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-        
-        -- surface.SetDrawColor(theme_color:Unpack())
-        -- surface.SetMaterial(UVMaterials["BACKGROUND"])
-        -- surface.DrawTexturedRect(w * 0.333, bottomy3, w * 0.34, h * 0.05)
-        
-        -- surface.SetDrawColor( 0, 0, 0, 200)
-        -- surface.DrawRect( w*0.333, bottomy3, w*0.34, h*0.05)
-        
-        -- local lbtext = "REPLACEME"
-        -- local uloc, utype = "uv.chase.unit", UnitsChasing
-        -- if not UVHUDCopMode then
-        -- if UnitsChasing ~= 1 then
-        -- uloc = "uv.chase.units"
-        -- end
-        -- else
-        -- utype = UVHUDWantedSuspectsNumber
-        -- uloc = "uv.chase.suspects"
-        -- end
-        
-        -- if not UVBackupColor then
-        -- UVBackupColor = Color(255, 255, 255)
-        -- end
-        -- local num = UVBackupTimerSeconds
-        
-        -- if not UVHUDDisplayBackupTimer then
-        -- lbtext = string.format(lang(uloc), utype)
-        -- else
-        -- if num then
-        -- if num < 10 and _last_backup_pulse_second ~= math.floor(num) then
-        -- _last_backup_pulse_second = math.floor(num)
-        
-        -- hook.Remove("Think", "UVBackupColorPulse")
-        -- UVBackupColor = Color(255, 255, 0)
-        
-        -- hook.Add("Think","UVBackupColorPulse",function()
-        -- UVBackupColor.b = UVBackupColor.b + 600 * RealFrameTime()
-        -- if UVBackupColor.b >= 255 then
-        -- hook.Remove("Think", "UVBackupColorPulse")
-        -- end
-        -- end)
-        -- end
-        -- end
-        
-        -- lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
-        -- end
-        
-        -- draw.DrawText(lbtext,"UVFont5UI-BottomBar",w * 0.5,bottomy3 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+		surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.013), w * 0.002, h * 0.03, 0)
     else
         -- Lower Box
         -- Evade Box, Cooldown Meter
@@ -5510,7 +5480,7 @@ local function undercover_pursuit_main( ... )
             -- Upper Box
             if not UVHUDCopMode then
                 DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
-                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 125)) -- Icon
+                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 255)) -- Icon
                 
                 surface.SetDrawColor(200, 200, 200, 125)
                 surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
@@ -6594,6 +6564,93 @@ UV_UI.racing.prostreet.states = {
 }
 
 UV_UI.racing.prostreet.events = {
+		CenterNotification = function( params )
+		local ptext = params.text or "ERROR: NO TEXT"
+		local pnoicon = params.noIcon
+
+		local pfontUpper = params.fontUpper or "UVCarbonFont"
+		local pfontLower = params.fontLower or "UVCarbonFont"
+
+		local pcolorUpper = params.colorUpper or Color(255, 255, 255)
+		local pcolorLower = params.colorLower or Color(255, 255, 255)
+
+		local SID = 0.35
+
+		local prostreet_noti_animState = {
+			active = false,
+			startTime = 0,
+			slideInDuration = SID,
+			holdDuration = 3,
+			slideDownDuration = 0.25,
+			upper = {
+				startX = ScrW() * 0.25,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.35,
+				slideDownEndY = ScrH() * 0.6,
+			},
+			lower = {
+				startX = ScrW() * 0.75,
+				centerX = ScrW() / 2,
+				y = ScrH() * 0.385,
+				slideDownEndY = ScrH() * 0.635,
+			},
+		}
+
+        UV_UI.racing.carbon.events.prostreet_noti_animState = prostreet_noti_animState
+        prostreet_noti_animState.active = true
+        prostreet_noti_animState.startTime = CurTime()
+        
+        ----------------------------------------------------------------------------
+        
+        -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
+        if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.UV_CENTERNOTI_PROSTREET then
+            hook.Remove("HUDPaint", "UV_CENTERNOTI_PROSTREET")
+        end
+        
+        -- Add the HUDPaint hook freshly for this animation
+        hook.Add("HUDPaint", "UV_CENTERNOTI_PROSTREET", function()
+            local elapsed = CurTime() - prostreet_noti_animState.startTime
+            
+            local function calcPosAlpha(elapsed, elem)
+                local x, y, alpha = elem.centerX, elem.y, 255
+                if elapsed < prostreet_noti_animState.slideInDuration then
+                    local t = elapsed / prostreet_noti_animState.slideInDuration
+                    x = Lerp(t, elem.startX, elem.centerX)
+                    alpha = Lerp(t, 0, 255)
+                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration then
+                    x = elem.centerX
+                    alpha = 255
+                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
+                    local t = (elapsed - prostreet_noti_animState.slideInDuration - prostreet_noti_animState.holdDuration) / prostreet_noti_animState.slideDownDuration
+                    y = Lerp(t, elem.y, elem.slideDownEndY)
+                    alpha = Lerp(t, 255, 0)
+                else
+                    alpha = 0
+                end
+                return x, y, alpha
+            end
+
+            local lines = string.Explode("\n", ptext)
+            if #lines < 1 then return end
+            local upperLine = lines[1] or ""
+            local lowerLine = lines[2] or ""
+            
+            -- Upper
+            local ux, uy, ualpha = calcPosAlpha(elapsed, prostreet_noti_animState.upper)
+            carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+
+			-- Lower
+            local lx, ly, lalpha = calcPosAlpha(elapsed, prostreet_noti_animState.lower)
+            carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(255, 255, 255, lalpha), nil)
+
+            -- Disable animation and remove hook when done
+            if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
+                prostreet_noti_animState.active = false
+                hook.Remove("HUDPaint", "UV_CENTERNOTI_PROSTREET")
+            end
+		end)
+	end,
+	
     ShowResults = function(sortedRacers) -- ProStreet
         local w = ScrW()
         local h = ScrH()
@@ -6912,85 +6969,21 @@ UV_UI.racing.prostreet.events = {
                 return
             end
         end
-        local SID = 0.35
-        
-        local prostreet_noti_animState = {
-            active = false,
-            startTime = 0,
-            slideInDuration = SID,
-            holdDuration = 3,
-            slideDownDuration = 0.25,
-            upper = {
-                startX = ScrW() * 0.25,
-                centerX = ScrW() / 2,
-                y = ScrH() * 0.35,
-                slideDownEndY = ScrH() * 0.6,
-            },
-            lower = {
-                startX = ScrW() * 0.75,
-                centerX = ScrW() / 2,
-                y = ScrH() * 0.385,
-                slideDownEndY = ScrH() * 0.635,
-            },
-        }
-        
-        UV_UI.racing.prostreet.events.prostreet_noti_animState = prostreet_noti_animState
-        prostreet_noti_animState.active = true
-        prostreet_noti_animState.startTime = CurTime()
-        
-        ----------------------------------------------------------------------------
-        
-        -- Remove any existing HUDPaint hook with the same name (avoid duplicates)
-        if hook.GetTable().HUDPaint and hook.GetTable().HUDPaint.PROSTREET_NOTIFICATION_LAP then
-            hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
-        end
-        
-        -- Add the HUDPaint hook freshly for this animation
-        hook.Add("HUDPaint", "PROSTREET_NOTIFICATION_LAP", function()
-            local elapsed = CurTime() - prostreet_noti_animState.startTime
-            
-            local function calcPosAlpha(elapsed, elem)
-                local x, y, alpha = elem.centerX, elem.y, 255
-                if elapsed < prostreet_noti_animState.slideInDuration then
-                    local t = elapsed / prostreet_noti_animState.slideInDuration
-                    x = Lerp(t, elem.startX, elem.centerX)
-                    alpha = Lerp(t, 0, 255)
-                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration then
-                    x = elem.centerX
-                    alpha = 255
-                elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
-                    local t = (elapsed - prostreet_noti_animState.slideInDuration - prostreet_noti_animState.holdDuration) / prostreet_noti_animState.slideDownDuration
-                    -- y = Lerp(t, elem.y, elem.slideDownEndY)
-                    alpha = Lerp(t, 255, 0)
-                else
-                    alpha = 0
-                end
-                return x, y, alpha
-            end
-            
-            local lines = string.Explode("\n", UV_UI.racing.prostreet.states.LapCompleteText or "")
-            if #lines < 1 then return end
-            local upperLine = lines[1] or ""
-            local lowerLine = lines[2] or ""
-            
-            -- Upper
-            local ux, uy, ualpha = calcPosAlpha(elapsed, prostreet_noti_animState.upper)
-            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux + 2, uy + 2, Color(0, 0, 0, ualpha), nil)
-            carbon_noti_draw( upperLine, "UVCarbonFont", nil, ux, uy, Color(255, 255, 255, ualpha), nil)
-            
-            -- Lower
-            local lx, ly, lalpha = calcPosAlpha(elapsed, prostreet_noti_animState.lower)
-            carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx + 2, ly + 2, Color(0, 0, 0, lalpha), nil)
-            carbon_noti_draw( lowerLine, "UVCarbonFont", nil, lx, ly, Color(255, 255, 255, lalpha), nil)
-            
-            -- Disable animation and remove hook when done
-            if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
-                prostreet_noti_animState.active = false
-                hook.Remove("HUDPaint", "PROSTREET_NOTIFICATION_LAP")
-            end
-            
-        end)
-    end
+		UV_UI.racing.prostreet.events.CenterNotification({
+			text = UV_UI.racing.prostreet.states.LapCompleteText,
+		})
+	end,
+				
+	onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+
+		UV_UI.racing.prostreet.events.CenterNotification({
+			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+		})
+	end,
+
 }
 
 -- Underground

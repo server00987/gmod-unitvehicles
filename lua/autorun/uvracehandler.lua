@@ -973,21 +973,24 @@ else
 	net.Receive( "uvrace_resetfailed", function()
 		local lang = language.GetPhrase
 
-		chat.AddText(
-			Color(255, 126, 126),
-			lang( net.ReadString() )
-		)
+		-- chat.AddText(
+			-- Color(255, 126, 126),
+			-- lang( net.ReadString() )
+		-- )
+		UVRaceNotify( lang( net.ReadString() ), 2  )
 	end)
 
 	net.Receive( "uvrace_resetcountdown", function()
 		local lang = language.GetPhrase
 		local time_left = net.ReadInt(4)
 
-		chat.AddText(
-			Color(255, 255, 255),
-			string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
-			time_left 
-		)
+		-- chat.AddText(
+			-- Color(255, 255, 255),
+			-- string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
+			-- time_left 
+		-- )
+		
+		UVRaceNotify( string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 2  )
 	end)
 
 	net.Receive( "uvrace_invite", function()
@@ -1045,6 +1048,7 @@ else
 	end)
 
 	net.Receive( "uvrace_end", function()
+		if not UVHUDRace then return end
 		if UVHUDRace and RacingMusic:GetBool() then 
 			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
@@ -1144,7 +1148,9 @@ else
 
 	net.Receive( "uvrace_disqualify", function()
 		local participant = net.ReadEntity()
-		local reason = net.ReadString()
+		local reason = net.ReadString()			
+		local driver = participant:GetDriver()
+		local is_local_player = IsValid(driver) and driver == LocalPlayer()
 
 		if UVHUDRaceInfo then
 			if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
@@ -1162,6 +1168,12 @@ else
 					UVHUDRaceInfo['Participants'][participant][reason] = true
 				end
 			end
+
+			hook.Run( 'UIEventHook', 'racing', 'onParticipantDisqualified', {
+				['Participant'] = participant,
+				['is_local_player'] = is_local_player,
+			} )
+			
 		end
 	end)
 
@@ -1400,9 +1412,9 @@ else
 			end
 
 			-- Text and BG
-			-- surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
-			-- surface.SetDrawColor(bgcol)
-			-- surface.DrawTexturedRect(0, h * 0.3475, w, h * 0.05)
+			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
+			surface.SetDrawColor(bgcol)
+			surface.DrawTexturedRect(0, h * 0.3475, w, h * 0.05)
 
 			draw.SimpleTextOutlined(UVRaceCountdown.label, "UVFont5", w * 0.5, h * 0.35, textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
 
@@ -1628,10 +1640,17 @@ else
 			alpha = 255
 
 			local squareTexts = {
-				string.format( language.GetPhrase("uv.prerace.laps"), UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps or "?" ),
-				string.format( language.GetPhrase("uv.prerace.checks"), GetGlobalInt( "uvrace_checkpoints" ) or "?" ),
-				string.format( language.GetPhrase("uv.prerace.startpos"), language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos) ), 
-				string.format( language.GetPhrase("uv.prerace.bestlap"), "--:--.---", "---" ), 
+				string.format( language.GetPhrase("uv.prerace.name"), "UNKNOWN" ), 
+				
+				string.format( language.GetPhrase("uv.prerace.laps"), UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps or "???" ),
+				
+				string.format( language.GetPhrase("uv.prerace.checks"), GetGlobalInt( "uvrace_checkpoints" ) or "???" ),
+				
+				-- string.format( language.GetPhrase("uv.prerace.participants"), "UNKNOWN" ), 
+				
+				string.format( language.GetPhrase("uv.prerace.startpos"), language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos ) ), 
+				
+				string.format( language.GetPhrase("uv.prerace.bestlap"), "--:--.---", "---" )
 			}
 
 			if not UVRaceCinematicOverlay.squares then
