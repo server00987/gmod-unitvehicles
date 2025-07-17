@@ -2510,14 +2510,15 @@ end
 
 function UVCheckIfHiding(enemy)
 	if enemy:GetVelocity():LengthSqr() < 10000 then
-		if not UVHiding then
-			UVHiding = true
-		end
-	else
-		if UVHiding then
-			UVHiding = nil
+		if enemy.IsGlideVehicle then
+			return enemy:GetEngineState() == 0
+		elseif enemy.IsSimfphyscar then
+			return enemy:EngineActive() == false
+		else
+			return true
 		end
 	end
+	return
 end
 
 function UVVisualOnTarget(unit, target)
