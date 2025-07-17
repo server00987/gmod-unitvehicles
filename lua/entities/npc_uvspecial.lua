@@ -1231,7 +1231,7 @@ if SERVER then
 				if (self.v:GetVelocity():LengthSqr()+self.e:GetVelocity():LengthSqr()) > eedist:Length2DSqr() then
 					if eeeright.z > -0.1 and eeeright.z < 0.1 then
 						steer = 0
-					else
+					elseif eeeright.z > -0.5 and eeeright.z < 0.5 then
 						if dist:Dot(eforward) < 0 then
 							if eeeright.z < 0 then 
 								steer = 1 
