@@ -1168,12 +1168,12 @@ else
 					UVHUDRaceInfo['Participants'][participant][reason] = true
 				end
 			end
-
-			hook.Run( 'UIEventHook', 'racing', 'onParticipantDisqualified', {
-				['Participant'] = participant,
-				['is_local_player'] = is_local_player,
-			} )
-			
+			if reason ~= 'Finished' then
+				hook.Run( 'UIEventHook', 'racing', 'onParticipantDisqualified', {
+					['Participant'] = participant,
+					['is_local_player'] = is_local_player,
+				} )
+			end
 		end
 	end)
 

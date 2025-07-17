@@ -1729,7 +1729,7 @@ UV_UI.pursuit.carbon.events = {
         --------------------------------------
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
+        local unit = debriefdata["Unit"] or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
@@ -2013,7 +2013,7 @@ UV_UI.pursuit.carbon.events = {
         local params = {
             dataTable = bustedtable,
             titleText = "#uv.results.bustedby.carbon",
-            titleVar = bustedtable["Unit"],
+            titleVar = language.GetPhrase( bustedtable["Unit"] ),
         }
         UV_UI.pursuit.carbon.events.ShowDebrief(params)
     end,
@@ -2075,6 +2075,7 @@ local function carbon_racing_main( ... )
     else
 		lapname = "uv.race.hud.complete"
         laptext = math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%"
+        laptextdark = "<color=0,0,0>" .. laptext .. "</color>"
     end
     
 	draw.SimpleTextOutlined("#" .. lapname, "UVCarbonFont", w * 0.875, h * 0.155, Colors.Carbon_Accent2Bright, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
@@ -3162,7 +3163,7 @@ UV_UI.pursuit.mostwanted.events = {
         --------------------------------------
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
+        local unit = debriefdata["Unit"] or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
@@ -3474,7 +3475,7 @@ onRacerBustedDebrief = function(bustedtable)
         dataTable = bustedtable,
         color = Color(255, 183, 61),
         iconMaterial = UVMaterials['RESULTCOP'],
-        titleText = string.format( language.GetPhrase("uv.results.bustedby"), bustedtable["Unit"] ),
+        titleText = string.format( language.GetPhrase("uv.results.bustedby"), language.GetPhrase( bustedtable["Unit"] ) ),
     }
     UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 end,
@@ -3485,7 +3486,7 @@ onCopBustedDebrief = function(bustedtable)
         color = Color(61, 183, 255),
         textcolor = Color(142, 221, 255, 107),
         iconMaterial = UVMaterials['RESULTCOP'],
-        titleText = string.format( language.GetPhrase("uv.results.suspects.busted"), bustedtable["Unit"] ),
+        titleText = string.format( language.GetPhrase("uv.results.suspects.busted"), language.GetPhrase( bustedtable["Unit"] ) ),
     }
     UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 end,
@@ -4697,7 +4698,7 @@ UV_UI.pursuit.undercover.events = {
         local debrieftitletext = params.titleText or "Title Text"
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
+        local unit = debriefdata["Unit"] or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
