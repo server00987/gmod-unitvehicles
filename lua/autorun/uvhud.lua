@@ -1703,7 +1703,7 @@ UV_UI.pursuit.carbon.events = {
     end,
     
 	onRacerBusted = function( racer, cop, lp )
-		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, language.GetPhrase(cop))
 		
 		if lp then
 			cnt = "#uv.chase.busted"
@@ -1729,7 +1729,7 @@ UV_UI.pursuit.carbon.events = {
         --------------------------------------
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = debriefdata["Unit"] or "Officer Replace Me"
+        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
@@ -3134,7 +3134,7 @@ UV_UI.pursuit.mostwanted.events = {
     end,
         
 	onRacerBusted = function( racer, cop, lp )
-		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, language.GetPhrase(cop))
 		
 		if lp then
 			cnt = "#uv.chase.busted"
@@ -3162,7 +3162,7 @@ UV_UI.pursuit.mostwanted.events = {
         --------------------------------------
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = debriefdata["Unit"] or "Officer Replace Me"
+        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
@@ -4673,7 +4673,7 @@ UV_UI.pursuit.undercover.events = {
     end,
         
 	onRacerBusted = function( racer, cop, lp )
-		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, cop)
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested"), racer, language.GetPhrase(cop))
 		
 		if lp then
 			cnt = "#uv.chase.busted"
@@ -4697,7 +4697,7 @@ UV_UI.pursuit.undercover.events = {
         local debrieftitletext = params.titleText or "Title Text"
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = debriefdata["Unit"] or "Officer Replace Me"
+        local unit = language.GetPhrase(debriefdata["Unit"]) or "Unknown"
         local deploys = debriefdata["Deploys"]
         local roadblocksdodged = debriefdata["Roadblocks"]
         local spikestripsdodged = debriefdata["Spikestrips"]
@@ -4954,7 +4954,7 @@ UV_UI.pursuit.undercover.events = {
     end,
     
     onRacerBustedDebrief = function(bustedtable)
-        local unit = bustedtable["Unit"]
+        local unit = language.GetPhrase(bustedtable["Unit"]) or "Unknown"
         local time = UVDisplayTime(UVTimerProgress)
         local deploys = bustedtable["Deploys"]
         local roadblocksdodged = bustedtable["Roadblocks"]
@@ -5905,7 +5905,7 @@ UV_UI.pursuit.original.events = {
         --------------------------------------
         
         local time = UVDisplayTime(UVTimerProgress)
-        local unit = bustedtable["Unit"]
+        local unit = language.GetPhrase(bustedtable["Unit"]) or "Unknown"
         local deploys = bustedtable["Deploys"]
         local roadblocksdodged = bustedtable["Roadblocks"]
         local spikestripsdodged = bustedtable["Spikestrips"]

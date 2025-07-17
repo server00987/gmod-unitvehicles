@@ -1,7 +1,7 @@
 list.Set("NPC", "npc_uvinterceptor", {
-	Name = "4: Interceptor",
+	Name = "#uv.npc.4interceptor",
 	Class = "npc_uvinterceptor",
-	Category = "Unit Vehicles"
+	Category = "#uv.settings.unitvehicles"
 })
 AddCSLuaFile("npc_uvinterceptor.lua")
 include("entities/uvapi.lua")
@@ -1708,7 +1708,8 @@ if SERVER then
 		self:SetModel(self.Modelname)
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
-		self.callsign = "Interceptor "..self:EntIndex()
+		-- self.callsign = "uv.unit.interceptor"..self:EntIndex()
+		self.callsign = "uv.unit.interceptor"
 		self.moving = CurTime()
 		self.deploying = CurTime()
 		self.rdeploying = CurTime()
