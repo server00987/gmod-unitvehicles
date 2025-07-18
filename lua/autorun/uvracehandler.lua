@@ -1149,7 +1149,7 @@ else
 	net.Receive( "uvrace_disqualify", function()
 		local participant = net.ReadEntity()
 		local reason = net.ReadString()			
-		local driver = participant:GetDriver()
+		local driver = IsValid(participant) and participant:GetDriver()
 		local is_local_player = IsValid(driver) and driver == LocalPlayer()
 
 		if UVHUDRaceInfo then
@@ -1355,11 +1355,11 @@ else
 
 		local w = ScrW()
 		local h = ScrH()
-		local hudyes = showhud:GetBool()
+		local hudyes = GetConVar("cl_drawhud"):GetBool()
 		local hudtype = GetConVar("unitvehicle_hudtype_racing"):GetString()
 
 		-- RACE COUNTDOWN LOGIC
-		if UVRaceCountdown then
+		if UVRaceCountdown and hudyes then
 			local elapsed = CurTime() - UVRaceCountdown.startTime
 			local fullDuration = 1.0
 			local alpha, alphabg = 255, 150
@@ -1600,9 +1600,9 @@ else
 	end)
 
 	hook.Add("PostRenderVGUI", "UVRaceCinematicOverlayTop", function()
-		local hudyes = showhud:GetBool()
-		if not UVRaceCinematicOverlay then return end
-		if gui.IsGameUIVisible() or not hudyes then return end
+		if not UVRaceCinematicOverlay then return end -- If the overlay isn't active
+		if gui.IsGameUIVisible() then return end -- If game ESC menu is opened
+		if not GetConVar("cl_drawhud"):GetBool() then return end
 		if not GetConVar("unitvehicle_preraceinfo"):GetBool() then return end
 		
 		local now = CurTime()

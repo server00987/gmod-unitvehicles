@@ -926,10 +926,31 @@ UV_UI.pursuit.carbon.states = {
 
 UV_UI.racing.carbon.states = {
     LapCompleteText = nil,
+	notificationQueue = {},
+	notificationActive = nil,
 }
 
 UV_UI.racing.carbon.events = {
 	CenterNotification = function( params )
+		local immediate = params.immediate or false
+
+		if UV_UI.racing.carbon.states.notificationActive then
+			if immediate then
+				hook.Remove("HUDPaint", "UV_CENTERNOTI_CARBON")
+				UV_UI.racing.carbon.states.notificationActive = false
+				UV_UI.racing.carbon.states.notificationQueue = {}
+				timer.Simple(0, function()
+					UV_UI.racing.carbon.events.CenterNotification(params)
+				end)
+				return
+			else
+				table.insert(UV_UI.racing.carbon.states.notificationQueue, params)
+				return
+			end
+		end
+
+		UV_UI.racing.carbon.states.notificationActive = true
+
 		local ptext = params.text or "ERROR: NO TEXT"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED_CARBON"]
 		local pnoicon = params.noIcon
@@ -1062,6 +1083,15 @@ UV_UI.racing.carbon.events = {
             if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
                 carbon_noti_animState.active = false
                 hook.Remove("HUDPaint", "UV_CENTERNOTI_CARBON")
+				timer.Simple(0, function()
+					UV_UI.racing.carbon.states.notificationActive = false
+					if #UV_UI.racing.carbon.states.notificationQueue > 0 then
+						local nextParams = table.remove(UV_UI.racing.carbon.states.notificationQueue, 1)
+						timer.Simple(0.05, function() -- give a few ms buffer
+							UV_UI.racing.carbon.events.CenterNotification(nextParams)
+						end)
+					end
+				end)
             end
 
 			if pnoicon then return end
@@ -1611,7 +1641,11 @@ UV_UI.racing.carbon.events = {
 	onParticipantDisqualified = function(data)
 		local participant = data.Participant
 		local is_local_player = data.is_local_player
-		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
 
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
@@ -1625,6 +1659,7 @@ UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo ),
+			immediate = true,
 		})
 	end,
     onUnitDeploy = function(...)
@@ -2535,11 +2570,32 @@ UV_UI.pursuit.mostwanted.states = {
 
 UV_UI.racing.mostwanted.states = {
     LapCompleteText = nil,
+	notificationQueue = {},
+	notificationActive = nil,
 }
 
 UV_UI.racing.mostwanted.events = {
 	notifState = {},
 	CenterNotification = function( params )
+		local immediate = params.immediate or false
+
+		if UV_UI.racing.mostwanted.states.notificationActive then
+			if immediate then
+				hook.Remove("HUDPaint", "UV_CENTERNOTI_MW")
+				UV_UI.racing.mostwanted.states.notificationActive = false
+				UV_UI.racing.mostwanted.states.notificationQueue = {}
+				timer.Simple(0, function()
+					UV_UI.racing.mostwanted.events.CenterNotification(params)
+				end)
+				return
+			else
+				table.insert(UV_UI.racing.mostwanted.states.notificationQueue, params)
+				return
+			end
+		end
+
+		UV_UI.racing.mostwanted.states.notificationActive = true
+
 		local ptext = params.text or "ERROR: NO TEXT"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
 		local ptextNoFall = params.textNoFall
@@ -2572,12 +2628,24 @@ UV_UI.racing.mostwanted.events = {
         ----------------------------------------------------------------------------
 
         if timer.Exists( 'UV_CENTERNOTI_MW_TIMER' ) then timer.Remove( "UV_CENTERNOTI_MW_TIMER" ) end 
-        
-        timer.Create( "UV_CENTERNOTI_MW_TIMER", 3, 1, function()
-            hook.Remove( "HUDPaint", "UV_CENTERNOTI_MW" )
+
+		local nextTriggerTime = notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration + (notifState.fadeDuration * 0.4)
+
+		timer.Create("UV_CENTERNOTI_MW_TIMER", nextTriggerTime, 1, function()
+			UV_UI.racing.mostwanted.states.notificationActive = false
+
+			if #UV_UI.racing.mostwanted.states.notificationQueue > 0 then
+				local nextParams = table.remove(UV_UI.racing.mostwanted.states.notificationQueue, 1)
+				UV_UI.racing.mostwanted.events.CenterNotification(nextParams)
+			end
+		end)
+
+		-- Cleanup hook fully after animation ends (optional safety)
+		timer.Create("UV_CENTERNOTI_MW_TIMER_CLEANUP", 3, 1, function()
+			hook.Remove("HUDPaint", "UV_CENTERNOTI_MW")
 			notifState.active = false
-        end)
-        
+		end)
+
 		hook.Add("HUDPaint", "UV_CENTERNOTI_MW", function()
 			local now = CurTime()
 			local elapsed = now - notifState.startTime
@@ -3045,7 +3113,11 @@ end,
 	onParticipantDisqualified = function(data)
 		local participant = data.Participant
 		local is_local_player = data.is_local_player
-		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
 
 		UV_UI.racing.mostwanted.events.CenterNotification({
 			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
@@ -3060,7 +3132,8 @@ UV_UI.pursuit.mostwanted.events = {
     notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.mostwanted.events.CenterNotification({
-			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
+			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo ),
+			immediate = true,
 		})
 	end,
     onUnitWreck = function(...)
@@ -4107,96 +4180,118 @@ UV_UI.pursuit.undercover.states = {
 
 UV_UI.racing.undercover.states = {
     LapCompleteText = nil,
+	notificationQueue = {},
+	isNotificationActive = nil,
 }
 
 UV_UI.racing.undercover.events = {
-	CenterNotification = function( params )
-		local ptext = params.text or "ERROR: NO TEXT"
-		local pcolor = params.color or Color(50, 255, 50)
+	CenterNotification = function(params)
+		local function StartNotification(p)
+			local ptext = p.text or "ERROR: NO TEXT"
+			local pcolor = p.color or Color(50, 255, 50)
 
-		local anim = {
-            startTime = CurTime(),
-            duration = 3,
-            endTime = CurTime() + 3,
+			local anim = {
+				startTime = CurTime(),
+				duration = 3,
+				endTime = CurTime() + 3,
 
-			phase1Time = 0.1,
-			phase2Time = 0.2,       -- ends at 0.2
-			pulseDuration = 2.5,    -- from 0.2 to 1.4
-			fadeDuration = 0.5,     -- from 1.4 to 1.9
-			pulses = 3,
+				phase1Time = 0.1,
+				phase2Time = 0.2,
+				pulseDuration = 2.5,
+				fadeDuration = 0.5,
+				pulses = 3,
 
-			scaleIn = 1.3,
-			scaleMid = 1.0,
-			scaleBreathIn = 0.95,
-			scaleBreathOut = 1.05,
-			scaleExit = 0.1
-        }
+				scaleIn = 1.3,
+				scaleMid = 1.0,
+				scaleBreathIn = 0.95,
+				scaleBreathOut = 1.05,
+				scaleExit = 0.1,
 
-        UV_UI.racing.undercover.states.TakedownAnim = anim
+				text = ptext,
+				color = pcolor
+			}
 
-        ----------------------------------------------------------------------------
+			UV_UI.racing.undercover.states.TakedownAnim = anim
+			UV_UI.racing.undercover.states.isNotificationActive = true
 
-        hook.Add("HUDPaint", "UV_CENTERNOTI_UNDERCOVER", function()
-            local a = UV_UI.racing.undercover.states.TakedownAnim
-            if not a then return end
+			-- Register draw hook
+			hook.Add("HUDPaint", "UV_CENTERNOTI_UNDERCOVER", function()
+				local a = UV_UI.racing.undercover.states.TakedownAnim
+				if not a then return end
 
-            local now = CurTime()
-            local t = now - a.startTime
-            if now >= a.endTime then
-                UV_UI.racing.undercover.states.TakedownAnim = nil
-                hook.Remove("HUDPaint", "UV_CENTERNOTI_UNDERCOVER")
-                return
-            end
+				local now = CurTime()
+				local t = now - a.startTime
+				if now >= a.endTime then
+					UV_UI.racing.undercover.states.TakedownAnim = nil
+					UV_UI.racing.undercover.states.isNotificationActive = false
+					hook.Remove("HUDPaint", "UV_CENTERNOTI_UNDERCOVER")
 
-            -- Phase logic
-			local scale = scale or a.scaleMid
-			local alpha = alpha or 255
-			local offsetY = offsetY or 0
-			local baseColor = pcolor
-			local t = CurTime() - a.startTime
-			local phase3Start = a.phase2Time
-			local phase3End = a.phase2Time + a.pulseDuration
-			local phase4Start = phase3End
-			local phase4End = a.endTime
-
-			-- Phase 1: Initial white burst
-			if t < a.phase1Time then
-				scale = a.scaleIn
-				alpha = 255
-				baseColor = Color(255, 255, 255)
-
-			-- Phase 2: Snap to green and shrink quickly
-			elseif t < a.phase2Time then
-				local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
-				scale = Lerp(p, a.scaleIn, a.scaleMid)
-				alpha = 255
-
-			-- Phase 3: Breathing pulses
-			elseif t < phase3End then
-				local p = (t - phase3Start) / a.pulseDuration
-				local pulseT = (p * a.pulses) % 1 -- [0,1] within a single pulse
-
-				if pulseT < 0.6 then
-					-- Inhale
-					scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
-				else
-					-- Exhale
-					scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+					-- Pop next from queue if available
+					if #UV_UI.racing.undercover.states.notificationQueue > 0 then
+						local nextParams = table.remove(UV_UI.racing.undercover.states.notificationQueue, 1)
+						timer.Simple(0.1, function()
+							StartNotification(nextParams)
+						end)
+					end
+					return
 				end
-				alpha = 255
 
-			-- Phase 4: Fade out, shrink, and move up
-			elseif t < phase4End then
-				local p = (t - phase4Start) / a.fadeDuration
-				scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
-				alpha = Lerp(p, 255, 0)
-				offsetY = Lerp(p, 0, -30)
-			end
+				-- PHASE LOGIC
+				local scale = a.scaleMid
+				local alpha = 255
+				local offsetY = 0
+				local baseColor = a.color
+				local t = CurTime() - a.startTime
+				local phase3Start = a.phase2Time
+				local phase3End = a.phase2Time + a.pulseDuration
+				local phase4Start = phase3End
+				local phase4End = a.endTime
 
-            local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
+				if t < a.phase1Time then
+					scale = a.scaleIn
+					alpha = 255
+					baseColor = Color(255, 255, 255)
+				elseif t < a.phase2Time then
+					local p = (t - a.phase1Time) / (a.phase2Time - a.phase1Time)
+					scale = Lerp(p, a.scaleIn, a.scaleMid)
+				elseif t < phase3End then
+					local p = (t - phase3Start) / a.pulseDuration
+					local pulseT = (p * a.pulses) % 1
 
-            DrawScaledCenteredTextLines(ptext, "UVUndercoverWhiteFont", x, y, baseColor, scale)
-        end)
+					if pulseT < 0.6 then
+						scale = Lerp(pulseT / 0.6, a.scaleMid, a.scaleBreathIn)
+					else
+						scale = Lerp((pulseT - 0.6) / 0.4, a.scaleBreathIn, a.scaleBreathOut)
+					end
+				elseif t < phase4End then
+					local p = (t - phase4Start) / a.fadeDuration
+					scale = Lerp(p, a.scaleBreathOut, a.scaleExit)
+					alpha = Lerp(p, 255, 0)
+					offsetY = Lerp(p, 0, -30)
+				end
+
+				local x, y = ScrW() / 2, ScrH() / 2.7 + offsetY
+				DrawScaledCenteredTextLines(a.text, "UVUndercoverWhiteFont", x, y, baseColor, scale)
+			end)
+		end
+
+		-- Handle force param
+		if params.immediate then
+			-- Clear queue and interrupt current
+			UV_UI.racing.undercover.states.notificationQueue = {}
+			UV_UI.racing.undercover.states.TakedownAnim = nil
+			UV_UI.racing.undercover.states.isNotificationActive = false
+			hook.Remove("HUDPaint", "UV_CENTERNOTI_UNDERCOVER")
+			StartNotification(params)
+			return
+		end
+
+		-- If one is showing, queue this one
+		if UV_UI.racing.undercover.states.isNotificationActive then
+			table.insert(UV_UI.racing.undercover.states.notificationQueue, params)
+		else
+			StartNotification(params)
+		end
 	end,
 
     ShowResults = function(sortedRacers) -- Undercover
@@ -4530,7 +4625,7 @@ UV_UI.racing.undercover.events = {
         local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------
-        
+
         if Glide then
             if not istable(sortedRacers) or #sortedRacers == 0 then
                 glidetext = "#uv.race.finished.statserror"
@@ -4560,10 +4655,7 @@ UV_UI.racing.undercover.events = {
 
 	onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
 		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
-		-- if is_local_player then
-			-- name = "YOU"
-		-- end
-		
+
 		if is_global_best then
 			UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
 		else
@@ -4573,6 +4665,7 @@ UV_UI.racing.undercover.events = {
 				return
 			end
 		end
+		
 		UV_UI.racing.undercover.events.CenterNotification({
 			text = UV_UI.racing.undercover.states.LapCompleteText,
 			color = Color(0,194,255)
@@ -4582,7 +4675,11 @@ UV_UI.racing.undercover.events = {
 	onParticipantDisqualified = function(data)
 		local participant = data.Participant
 		local is_local_player = data.is_local_player
-		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
 
 		UV_UI.racing.undercover.events.CenterNotification({
 			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
@@ -4595,7 +4692,8 @@ UV_UI.racing.undercover.events = {
 UV_UI.pursuit.undercover.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.undercover.events.CenterNotification({
-			text = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo )
+			text = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo ),
+			immediate = true,
 		})
     end,
     onUnitDeploy = function(...)
@@ -6562,10 +6660,31 @@ UV_UI.racing.prostreet.main = prostreet_racing_main
 
 UV_UI.racing.prostreet.states = {
     LapCompleteText = nil,
+	notificationQueue = {},
+	notificationActive = nil,
 }
 
 UV_UI.racing.prostreet.events = {
-		CenterNotification = function( params )
+	CenterNotification = function( params )
+		local immediate = params.immediate or false
+
+		if UV_UI.racing.prostreet.states.notificationActive then
+			if immediate then
+				hook.Remove("HUDPaint", "UV_CENTERNOTI_PROSTREET")
+				UV_UI.racing.prostreet.states.notificationActive = false
+				UV_UI.racing.prostreet.states.notificationQueue = {}
+				timer.Simple(0, function()
+					UV_UI.racing.prostreet.events.CenterNotification(params)
+				end)
+				return
+			else
+				table.insert(UV_UI.racing.prostreet.states.notificationQueue, params)
+				return
+			end
+		end
+
+		UV_UI.racing.prostreet.states.notificationActive = true
+
 		local ptext = params.text or "ERROR: NO TEXT"
 		local pnoicon = params.noIcon
 
@@ -6648,6 +6767,15 @@ UV_UI.racing.prostreet.events = {
             if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
                 prostreet_noti_animState.active = false
                 hook.Remove("HUDPaint", "UV_CENTERNOTI_PROSTREET")
+				timer.Simple(0, function()
+					UV_UI.racing.prostreet.states.notificationActive = false
+					if #UV_UI.racing.prostreet.states.notificationQueue > 0 then
+						local nextParams = table.remove(UV_UI.racing.prostreet.states.notificationQueue, 1)
+						timer.Simple(0.05, function() -- give a few ms buffer
+							UV_UI.racing.prostreet.events.CenterNotification(nextParams)
+						end)
+					end
+				end)
             end
 		end)
 	end,
@@ -6959,7 +7087,7 @@ UV_UI.racing.prostreet.events = {
         local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
         local llt = ""
         
-        if lap_final then llt = language.GetPhrase("uv.race.finallap") .. " " end
+        if is_local_player and lap_final then llt = language.GetPhrase("uv.race.finallap") .. " " end
         
         if is_global_best then
             UV_UI.racing.prostreet.states.LapCompleteText = llt .. string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
@@ -6978,7 +7106,11 @@ UV_UI.racing.prostreet.events = {
 	onParticipantDisqualified = function(data)
 		local participant = data.Participant
 		local is_local_player = data.is_local_player
-		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
 
 		UV_UI.racing.prostreet.events.CenterNotification({
 			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
