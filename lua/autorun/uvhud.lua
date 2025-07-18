@@ -1647,8 +1647,11 @@ UV_UI.racing.carbon.events = {
 
 		if not info then return end
 
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked"), name)
+		if is_local_player then disqtext = "#uv.chase.wrecked" end
+
 		UV_UI.racing.carbon.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			text = disqtext,
 			noIcon = true,
 		})
 	end,
@@ -3119,8 +3122,11 @@ end,
 
 		if not info then return end
 
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked"), name)
+		if is_local_player then disqtext = "#uv.chase.wrecked" end
+
 		UV_UI.racing.mostwanted.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			text = disqtext,
 			textNoFall = true,
 			noIcon = true,
 		})
@@ -4681,8 +4687,11 @@ UV_UI.racing.undercover.events = {
 
 		if not info then return end
 
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked"), name)
+		if is_local_player then disqtext = "#uv.chase.wrecked" end
+
 		UV_UI.racing.undercover.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			text = disqtext,
 			color = Color(255, 50, 50)
 		})
 	end,
@@ -7112,8 +7121,11 @@ UV_UI.racing.prostreet.events = {
 
 		if not info then return end
 
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked"), name)
+		if is_local_player then disqtext = "#uv.chase.wrecked" end
+
 		UV_UI.racing.prostreet.events.CenterNotification({
-			text = string.format(language.GetPhrase("uv.race.wrecked"), name),
+			text = disqtext,
 		})
 	end,
 
