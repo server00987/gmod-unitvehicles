@@ -736,7 +736,7 @@ local function mw_noti_draw(text, font, x, y, color)
     
     for i, line in ipairs(lines) do
         local w,h = surface.GetTextSize(line)
-		draw.SimpleTextOutlined(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, color.a ) )
         currentY = currentY + h
     end
 end
@@ -3486,7 +3486,7 @@ onCopBustedDebrief = function(bustedtable)
         color = Color(61, 183, 255),
         textcolor = Color(142, 221, 255, 107),
         iconMaterial = UVMaterials['RESULTCOP'],
-        titleText = string.format( language.GetPhrase("uv.results.suspects.busted"), language.GetPhrase( bustedtable["Unit"] ) ),
+        titleText = string.format( language.GetPhrase("uv.results.suspects.busted"), bustedtable["Unit"] ),
     }
     UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 end,
