@@ -4590,8 +4590,8 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
             
-            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.825, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_LEFT )
+            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+            draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.815, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
             if timeremaining < 1 then
                 startCloseAnimation()
