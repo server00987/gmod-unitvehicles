@@ -2664,7 +2664,7 @@ else --HUD/Options
 	net.Receive("UVHUDAddUV", function()
 		local entIndex = net.ReadInt( 32 )
 		local creationId = net.ReadInt( 32 )
-		
+
 		EntityQueue[entIndex] = {
 			creationId,
 			net.ReadString()
@@ -3058,9 +3058,11 @@ else --HUD/Options
 
 			local enemypos = localPlayer:GetPos()
 			local closestdistancetounit = math.huge
+			local found = false
 
 			for _, v in pairs(UnitTable) do
 				if IsValid(v) then
+					found = true
 					local unitPos = v:GetPos()
 					local dist = unitPos:DistToSqr(enemypos)
 
@@ -3071,46 +3073,48 @@ else --HUD/Options
 				end
 			end
 
-			local closestdistancetounit = UVHUDScannerPos:DistToSqr(enemypos)
-			surface.SetDrawColor( 0, 0, 0, 200)
-			drawCircle( w/2, h/10, 30, 50 )
-			local beepfrequency = math.Clamp(math.sqrt(closestdistancetounit/100000000),0.1,1)
-			if beepfrequency >= 1 then
+			if found then
+				local closestdistancetounit = UVHUDScannerPos:DistToSqr(enemypos)
 				surface.SetDrawColor( 0, 0, 0, 200)
-				drawCircle( w/2, h/10, 14, 50 )
-			else
-				surface.SetDrawColor(255,255,255,255)
-				drawCircle( w/2, h/10, 14, 50 )
-
-				local angle = math.rad(math.AngleDifference(EyeAngles().y, (enemypos-UVHUDScannerPos):Angle().y)) + 1.57--(math.pi/2)
-				local radius = 25
-				local centerx = w/2
-				local centery = h/10
-
-				local triangle = {
-					{ x = radius*math.cos(angle) + centerx, y = radius*math.sin(angle) + centery },
-					{ x = (radius-12)*math.cos(angle-5.5) + centerx, y = (radius-12)*math.sin(angle-5.5) + centery },
-					{ x = (radius-12)*math.cos(angle+5.5) + centerx, y = (radius-12)*math.sin(angle+5.5) + centery }
-				}
-				draw.NoTexture()
-				surface.DrawPoly( triangle )
-				local beepcolor
-				local botimeout = 10
-				if UVHUDBlipSoundTime < CurTime() and beepfrequency < 1 then
-					UVHUDBlipSoundTime = CurTime() + beepfrequency
-					surface.PlaySound(UVHUDBlipSound)
-					UVHUDBeeping = true
-					timer.Simple(beepfrequency/2, function()
-						UVHUDBeeping = false
-					end)
-				end
-				if UVHUDBeeping then
-					beepcolor = Color(0,255,0)
+				drawCircle( w/2, h/10, 30, 50 )
+				local beepfrequency = math.Clamp(math.sqrt(closestdistancetounit/100000000),0.1,1)
+				if beepfrequency >= 1 then
+					surface.SetDrawColor( 0, 0, 0, 200)
+					drawCircle( w/2, h/10, 14, 50 )
 				else
-					beepcolor = Color(0,0,0)
+					surface.SetDrawColor(255,255,255,255)
+					drawCircle( w/2, h/10, 14, 50 )
+
+					local angle = math.rad(math.AngleDifference(EyeAngles().y, (enemypos-UVHUDScannerPos):Angle().y)) + 1.57--(math.pi/2)
+					local radius = 25
+					local centerx = w/2
+					local centery = h/10
+
+					local triangle = {
+						{ x = radius*math.cos(angle) + centerx, y = radius*math.sin(angle) + centery },
+						{ x = (radius-12)*math.cos(angle-5.5) + centerx, y = (radius-12)*math.sin(angle-5.5) + centery },
+						{ x = (radius-12)*math.cos(angle+5.5) + centerx, y = (radius-12)*math.sin(angle+5.5) + centery }
+					}
+					draw.NoTexture()
+					surface.DrawPoly( triangle )
+					local beepcolor
+					local botimeout = 10
+					if UVHUDBlipSoundTime < CurTime() and beepfrequency < 1 then
+						UVHUDBlipSoundTime = CurTime() + beepfrequency
+						surface.PlaySound(UVHUDBlipSound)
+						UVHUDBeeping = true
+						timer.Simple(beepfrequency/2, function()
+							UVHUDBeeping = false
+						end)
+					end
+					if UVHUDBeeping then
+						beepcolor = Color(0,255,0)
+					else
+						beepcolor = Color(0,0,0)
+					end
+					surface.SetDrawColor(beepcolor)
+					drawCircle( w/2, h/10, 8, 50 )
 				end
-				surface.SetDrawColor(beepcolor)
-				drawCircle( w/2, h/10, 8, 50 )
 			end
 		elseif UVHUDDisplayCooldown and not UVHUDCopMode then
 			surface.SetDrawColor( 0, 0, 0, 200)

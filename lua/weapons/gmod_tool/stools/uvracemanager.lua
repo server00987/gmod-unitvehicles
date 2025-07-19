@@ -590,7 +590,7 @@ function TOOL.BuildCPanel(panel)
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.raceo"})
 	local last_lap_value
 	local lap_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.laps", "uvracemanager_laps", 1, 100, 0)
-	function lap_slider:Think()
+	lap_slider.OnValueChanged = function(self, value)
 		local value = GetConVar("uvracemanager_laps"):GetInt()
 		
 		if last_lap_value ~= value then
