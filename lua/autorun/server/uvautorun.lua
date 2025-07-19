@@ -208,6 +208,7 @@ NETWORK_STRINGS = {
 	"UVRace_SetID",
 	"UVRace_SetSpeedLimit",
 	"UVStartRace",
+	-- "UVRace_TrackName",
 	
 	-- Race
 	"uvrace_begin",
@@ -274,7 +275,7 @@ concommand.Add("uv_despawnvehicles", function(ply)
 	if not ply:IsSuperAdmin() then return end
 	UVPresenceMode = false
 	
-	PrintMessage( HUD_PRINTTALK, "Despawning Unit Vehicle(s)!")
+	-- PrintMessage( HUD_PRINTTALK, "Despawning Unit Vehicle(s)!")
 	
 	for k, v in pairs(ents.FindByClass("npc_uv*")) do
 		v:Remove()
@@ -2514,14 +2515,15 @@ end
 
 function UVCheckIfHiding(enemy)
 	if enemy:GetVelocity():LengthSqr() < 10000 then
-		if not UVHiding then
-			UVHiding = true
-		end
-	else
-		if UVHiding then
-			UVHiding = nil
+		if enemy.IsGlideVehicle then
+			return enemy:GetEngineState() == 0
+		elseif enemy.IsSimfphyscar then
+			return enemy:EngineActive() == false
+		else
+			return true
 		end
 	end
+	return
 end
 
 function UVVisualOnTarget(unit, target)

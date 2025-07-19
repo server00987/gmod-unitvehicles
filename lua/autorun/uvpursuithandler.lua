@@ -1028,7 +1028,7 @@ if SERVER then
 				UVCheckIfBeingBusted(v)
 			end
 			if #UVWantedTableVehicle == 1 and UVEnemyEscaping then
-				UVCheckIfHiding(UVWantedTableVehicle[1])
+				UVHiding = UVCheckIfHiding(UVWantedTableVehicle[1])
 			end
 		end
 
@@ -3491,6 +3491,9 @@ else --HUD/Options
 			panel:CheckBox("#uv.settings.ui.racertags", "unitvehicle_racertags")
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.racing")
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.pursuit")
+
+			panel:CheckBox("#uv.settings.ui.preracepopup", "unitvehicle_preraceinfo")
+			panel:ControlHelp("#uv.settings.ui.preracepopup.desc")
 
 			panel:Help("#uv.settings.audio.title")
 			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_mutecheckpointsfx")

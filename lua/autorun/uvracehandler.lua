@@ -4,11 +4,14 @@ local UVRacePlayIntro = true
 local UVRacePlayMusic = false 
 local UVRacePlayTransition = false
 
+local UVRaceCinematicOverlay = nil
+
 local showhud = GetConVar("cl_drawhud")
 
 if CLIENT then -- For Global Best Lap
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
+	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 end
 
 if SERVER then
@@ -199,7 +202,7 @@ if SERVER then
 			['Time'] = 0
 		}
 
-		local time = 7
+		local time = 8
 		for i, vehicle in pairs( UVRaceCurrentParticipants ) do
 			local driver = vehicle:GetDriver()
 
@@ -227,7 +230,7 @@ if SERVER then
 		net.WriteTable( UVRaceTable )
 		net.Broadcast()
 
-		timer.Create( "uvrace_start", 1, 7, function()
+		timer.Create( "uvrace_start", 1, 8, function()
 			local time = timer.RepsLeft( "uvrace_start" )
 			for _, vehicle in pairs( UVRaceCurrentParticipants ) do
 				local driver = UVGetDriver( vehicle )
@@ -970,21 +973,24 @@ else
 	net.Receive( "uvrace_resetfailed", function()
 		local lang = language.GetPhrase
 
-		chat.AddText(
-			Color(255, 126, 126),
-			lang( net.ReadString() )
-		)
+		-- chat.AddText(
+			-- Color(255, 126, 126),
+			-- lang( net.ReadString() )
+		-- )
+		UVRaceNotify( lang( net.ReadString() ), 2  )
 	end)
 
 	net.Receive( "uvrace_resetcountdown", function()
 		local lang = language.GetPhrase
 		local time_left = net.ReadInt(4)
 
-		chat.AddText(
-			Color(255, 255, 255),
-			string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
-			time_left 
-		)
+		-- chat.AddText(
+			-- Color(255, 255, 255),
+			-- string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
+			-- time_left 
+		-- )
+		
+		UVRaceNotify( string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 2  )
 	end)
 
 	net.Receive( "uvrace_invite", function()
@@ -1042,6 +1048,7 @@ else
 	end)
 
 	net.Receive( "uvrace_end", function()
+		if not UVHUDRace then return end
 		if UVHUDRace and RacingMusic:GetBool() then 
 			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
@@ -1059,7 +1066,8 @@ else
 		UVHUDRace = false
 		UVHUDRaceInfo = nil
 		UVRaceCountdown = nil
-
+		UVRaceCinematicOverlay = nil
+		
 		if UVPlayingRace then
 			UVPlayingRace = false
 		end
@@ -1140,7 +1148,9 @@ else
 
 	net.Receive( "uvrace_disqualify", function()
 		local participant = net.ReadEntity()
-		local reason = net.ReadString()
+		local reason = net.ReadString()			
+		local driver = IsValid(participant) and participant:GetDriver()
+		local is_local_player = IsValid(driver) and driver == LocalPlayer()
 
 		if UVHUDRaceInfo then
 			if UVHUDRaceInfo['Participants'] and UVHUDRaceInfo['Participants'][participant] then
@@ -1157,6 +1167,12 @@ else
 
 					UVHUDRaceInfo['Participants'][participant][reason] = true
 				end
+			end
+			if reason == 'Disqualified' then
+				hook.Run( 'UIEventHook', 'racing', 'onParticipantDisqualified', {
+					['Participant'] = participant,
+					['is_local_player'] = is_local_player,
+				} )
 			end
 		end
 	end)
@@ -1283,7 +1299,6 @@ else
 			"1",
 			"2",
 			"3",
-			"#uv.race.getready",
 		}
 
 		-- Pick correct sound
@@ -1310,12 +1325,22 @@ else
 			end
 		end
 
+		local label = startTable[time] or "#uv.race.getready"
+
+		if time > 4 and not UVRaceCinematicOverlay then
+			UVRaceCinematicOverlay = {
+				startTime = CurTime(),
+				slideInDuration = 0.5,
+				slideOutDuration = 0.5,
+				state = "slidingIn",  -- can be "slidingIn", "holding", or "slidingOut"
+				holdStartTime = nil,
+			}
+		end
+		
 		-- Play sound
 		if sound then
 			surface.PlaySound(sound)
 		end
-
-		local label = startTable[time] or "#uv.race.getready"
 
 		-- Setup countdown display state
 		UVRaceCountdown = {
@@ -1330,11 +1355,11 @@ else
 
 		local w = ScrW()
 		local h = ScrH()
-		local hudyes = showhud:GetBool()
+		local hudyes = GetConVar("cl_drawhud"):GetBool()
 		local hudtype = GetConVar("unitvehicle_hudtype_racing"):GetString()
 
 		-- RACE COUNTDOWN LOGIC
-		if UVRaceCountdown then
+		if UVRaceCountdown and hudyes then
 			local elapsed = CurTime() - UVRaceCountdown.startTime
 			local fullDuration = 1.0
 			local alpha, alphabg = 255, 150
@@ -1389,27 +1414,9 @@ else
 			-- Text and BG
 			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
 			surface.SetDrawColor(bgcol)
-			surface.DrawTexturedRect(0, h / 3, w, h * 0.1)
+			surface.DrawTexturedRect(0, h * 0.3475, w, h * 0.05)
 
-			draw.DrawText(
-				language.GetPhrase(UVRaceCountdown.label),
-				"UVFont5ShadowBig",
-				w / 2 + 2.5,
-				h / 3 + 2.5,
-				Color(0, 0, 0, alpha),
-				TEXT_ALIGN_CENTER,
-				TEXT_ALIGN_CENTER
-			)
-
-			draw.DrawText(
-				language.GetPhrase(UVRaceCountdown.label),
-				"UVFont5ShadowBig",
-				w / 2,
-				h / 3,
-				textcol,
-				TEXT_ALIGN_CENTER,
-				TEXT_ALIGN_CENTER
-			)
+			draw.SimpleTextOutlined(UVRaceCountdown.label, "UVFont5", w * 0.5, h * 0.35, textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
 
 			-- Clean up after full duration
 			if elapsed >= fullDuration then
@@ -1418,7 +1425,10 @@ else
 		end
 
 		if UVHUDNotification and hudyes then
-			draw.DrawText( UVHUDNotificationString, "UVFont5ShadowBig", ScrW()/2, ScrH()/4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
+			surface.SetDrawColor(Color( 0, 0, 0, 150 ))
+			surface.DrawTexturedRect(0, h * 0.3475, w, h * 0.05)
+			draw.SimpleTextOutlined(UVHUDNotificationString, "UVFont5", w * 0.5, h * 0.35, textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
 		end
 
 		if not UVHUDRace then UVHUDDisplayRacing = false; return end
@@ -1586,6 +1596,155 @@ else
 
 		if hudyes and UV_UI.racing[hudtype] then
 			UV_UI.racing[hudtype].main( my_vehicle, my_array, string_array )
+		end
+	end)
+
+	hook.Add("PostRenderVGUI", "UVRaceCinematicOverlayTop", function()
+		if not UVRaceCinematicOverlay then return end -- If the overlay isn't active
+		if gui.IsGameUIVisible() then return end -- If game ESC menu is opened
+		if not GetConVar("cl_drawhud"):GetBool() then return end
+		if not GetConVar("unitvehicle_preraceinfo"):GetBool() then return end
+		
+		local now = CurTime()
+		local w, h = ScrW(), ScrH()
+		local totalHeight = h * 0.1
+		local totalWidth = w * 0.125
+		local barHeight, barWidth, alpha = 0, 0, 0
+
+		local state = UVRaceCinematicOverlay.state
+		local elapsed = now - UVRaceCinematicOverlay.startTime
+
+		local squarePadding = 8
+		local squareHeight = 32
+		local extendTime = 0.3
+		local retractTime = 0.2
+		local font = "UVFont5"
+
+		surface.SetFont(font)
+
+		-- Bar Animations
+		if state == "slidingIn" then
+			local frac = math.Clamp(elapsed / UVRaceCinematicOverlay.slideInDuration, 0, 1)
+			barHeight = Lerp(frac, 0, totalHeight)
+			barWidth = Lerp(frac, 0, totalWidth)
+			alpha = Lerp(frac, 0, 255)
+
+			if frac >= 1 then
+				UVRaceCinematicOverlay.state = "holding"
+				UVRaceCinematicOverlay.holdStartTime = now
+			end
+
+		elseif state == "holding" then
+			barHeight = totalHeight
+			barWidth = totalWidth
+			alpha = 255
+
+			local squareTexts = {
+				string.format( language.GetPhrase("uv.prerace.name"), "UNKNOWN" ), 
+				
+				string.format( language.GetPhrase("uv.prerace.laps"), UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps or "???" ),
+				
+				string.format( language.GetPhrase("uv.prerace.checks"), GetGlobalInt( "uvrace_checkpoints" ) or "???" ),
+				
+				-- string.format( language.GetPhrase("uv.prerace.participants"), "UNKNOWN" ), 
+				
+				string.format( language.GetPhrase("uv.prerace.startpos"), language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos ) ), 
+				
+				string.format( language.GetPhrase("uv.prerace.bestlap"), "--:--.---", "---" )
+			}
+
+			if not UVRaceCinematicOverlay.squares then
+				UVRaceCinematicOverlay.squares = {}
+				for i, text in ipairs(squareTexts) do
+					local textW, _ = surface.GetTextSize(text)
+					table.insert(UVRaceCinematicOverlay.squares, {
+						text = text,
+						width = textW + 24, -- padding inside
+						startTime = UVRaceCinematicOverlay.startTime + UVRaceCinematicOverlay.slideInDuration + (i - 1) * extendTime,
+						progress = 0,
+						done = false
+					})
+				end
+			end
+
+			if UVRaceCountdown and UVRaceCountdown.stage == 4 then
+				UVRaceCinematicOverlay.state = "slidingOut"
+				UVRaceCinematicOverlay.outStartTime = now
+				UVRaceCinematicOverlay.retractStart = now
+			end
+
+		elseif state == "slidingOut" then
+			local frac = math.Clamp((now - UVRaceCinematicOverlay.outStartTime) / UVRaceCinematicOverlay.slideOutDuration, 0, 1)
+			barHeight = Lerp(frac, totalHeight, 0)
+			barWidth = Lerp(frac, totalWidth, 0)
+			alpha = Lerp(frac, 255, 0)
+
+			if frac >= 1 then
+				UVRaceCinematicOverlay = nil
+				return
+			end
+		end
+
+		-- Draw black bars
+		surface.SetDrawColor(0, 0, 0, alpha)
+		surface.DrawRect(0, 0, w, barHeight)
+		surface.DrawRect(0, h - barHeight, w, barHeight)
+
+		-- Draw Map Name
+		if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
+			local squareYShift = (#UVRaceCinematicOverlay.squares * (squareHeight + squarePadding)) - squarePadding
+			draw.SimpleTextOutlined( "#uv.prerace.details", font, w * 0.05, h - barHeight - (h * 0.055) - squareYShift, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
+			
+			draw.SimpleTextOutlined( game.GetMap(), font, w * 0.95, barHeight - (h * 0.05), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
+		end
+
+		-- Draw Square Info
+		if UVRaceCinematicOverlay.squares then
+			local baseX = w * 0.05
+			local baseY = h - barHeight - (h * 0.035)
+			
+			local totalHeight = (#UVRaceCinematicOverlay.squares * (squareHeight + squarePadding)) - squarePadding
+			local adjustedBaseY = baseY - (h*0.03 * #UVRaceCinematicOverlay.squares)
+
+			for i, square in ipairs(UVRaceCinematicOverlay.squares) do
+				local sqAlpha = alpha
+				local sqProgress
+
+				if state == "holding" then
+					local timeSinceStart = now - square.startTime
+					sqProgress = math.Clamp(timeSinceStart / extendTime, 0, 1)
+
+					if sqProgress >= 1 then
+						square.done = true
+					end
+
+				elseif state == "slidingOut" then
+					local retractElapsed = now - (UVRaceCinematicOverlay.retractStart or now)
+					sqProgress = 1 - math.Clamp(retractElapsed / retractTime, 0, 1)
+				else
+					sqProgress = square.done and 1 or 0
+				end
+
+				local drawWidth = square.width * sqProgress
+
+				surface.SetDrawColor(0, 0, 0, sqAlpha)
+				surface.DrawRect(baseX, adjustedBaseY, drawWidth, squareHeight)
+
+				-- Draw text with clipping based on progress
+				local clippedText = string.sub(square.text, 1, math.floor(#square.text * sqProgress))
+				draw.SimpleTextOutlined(
+					clippedText,
+					font,
+					baseX,
+					adjustedBaseY + squareHeight / 2,
+					Color(255, 255, 255, sqAlpha),
+					TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER,
+					1,
+					Color(0, 0, 0, sqAlpha)
+				)
+
+				adjustedBaseY = adjustedBaseY + squareHeight + squarePadding
+			end
 		end
 	end)
 end
