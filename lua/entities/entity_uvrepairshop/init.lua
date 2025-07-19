@@ -26,7 +26,8 @@ function ENT:Think()
 	for k, v in pairs(vehicles) do
 		if not v.uvrepairdelayed and 
 		not v.wrecked and 
-		(v:GetClass() == "prop_vehicle_jeep" or v.IsSimfphyscar or v.IsGlideVehicle) then
+		(v:GetClass() == "prop_vehicle_jeep" or v.IsSimfphyscar or v.IsGlideVehicle)
+		and not table.HasValue(UVCommanders, v) then
 			self:Repair(v)
 		end
 	end

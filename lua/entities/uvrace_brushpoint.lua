@@ -105,7 +105,7 @@ if SERVER then
 				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
-				if vehicle_array['Lap'] == UVRaceLaps:GetInt() then --Completed race
+				if vehicle_array['Lap'] == UVRaceTable.Info.Laps then --Completed race
 					vehicle_array['Lap'] = 1
 					vehicle_array['Finished'] = true
 

@@ -265,6 +265,11 @@ concommand.Add("uv_spawnvehicles", function(ply)
 	UVRestoreResourcePoints()
 end)
 
+concommand.Add( "uv_setheat", function( ply, cmd, args )
+	if not ply:IsSuperAdmin() then return end
+	UVHeatLevel = math.Clamp( (tonumber(args[1]) or 1), 1, MAX_HEAT_LEVEL )
+end)
+
 concommand.Add("uv_despawnvehicles", function(ply)
 	if not ply:IsSuperAdmin() then return end
 	UVPresenceMode = false

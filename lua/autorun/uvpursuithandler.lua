@@ -1859,6 +1859,11 @@ if SERVER then
 		net.Broadcast()
 	end)
 
+	concommand.Add( "uv_setbounty", function( ply, cmd, args )
+		if not ply:IsSuperAdmin() then return end
+		UVBounty = tonumber(args[1]) or 0
+	end)
+
 else --HUD/Options
 
 	local displaying_busted = false 
@@ -2845,7 +2850,6 @@ else --HUD/Options
 
 		for i, array in pairs( CleanupTask ) do
 			if array[3]( array[1], array[2] ) then
-				print('Cleaned', array[1], array[2])
 				table.remove( CleanupTask, i )
 			end
 		end
@@ -3594,6 +3598,15 @@ else --HUD/Options
 			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
 			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
 
+			local heatLevelSlider = panel:NumSlider("#uv.settings.pm.heatlevel", nil, 1, MAX_HEAT_LEVEL, 0)
+			heatLevelSlider:SetValue( 1 )
+			heatLevelSlider.OnValueChanged = function( self, val )
+				local roundedVal = math.Round( val - 0.5 )
+
+				if roundedVal ~= UVHeatLevel then
+					RunConsoleCommand( 'uv_setheat', roundedVal )
+				end
+			end
 		end)
 	end)
 end
