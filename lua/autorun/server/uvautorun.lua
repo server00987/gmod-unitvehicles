@@ -208,7 +208,7 @@ NETWORK_STRINGS = {
 	"UVRace_SetID",
 	"UVRace_SetSpeedLimit",
 	"UVStartRace",
-	-- "UVRace_TrackName",
+	"UVRace_TrackName",
 	
 	-- Race
 	"uvrace_begin",

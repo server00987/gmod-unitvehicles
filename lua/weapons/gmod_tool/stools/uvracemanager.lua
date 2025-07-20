@@ -176,16 +176,13 @@ if SERVER then
 	
 	local function ImportExportText(name, export, ply)
 		local nick = ply:Nick():lower():Replace(" ", "_")
+				
+		local racename = name
 		
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
-		
+
 		local str = export and "Exported UV Race positions to " .. filename or "Imported UV Race positions from " .. filename
 		ply:ChatPrint(str)
-		-- ply.UVRaceTrackName = name
-		
-		-- net.Start("UVRace_TrackName")
-			-- net.WriteString(name)
-		-- net.Send(ply)
 	end
 	
 	local function Import(ply, cmd, args)
@@ -194,7 +191,16 @@ if SERVER then
 		if not file.Exists(filename, "DATA") then return end
 		
 		local entList = file.Read(filename, "DATA"):Split("\n")
-		
+
+		local metaLine = entList[1]
+		local trackName, author = "UNKNOWN", "UNKNOWN"
+
+		if metaLine then
+			local nameExtracted, authorExtracted = metaLine:match("^name%s+(.+)%s+'(.+)'$")
+			if nameExtracted then trackName = nameExtracted end
+			if authorExtracted then author = authorExtracted end
+		end
+
 		if UVRaceInEffect then
 			UVRaceEnd()
 		end
@@ -255,6 +261,11 @@ if SERVER then
 		undo.Finish()
 		
 		local tname = args[1]:Split(".")[2]
+
+		net.Start("UVRace_TrackName")
+		net.WriteString(trackName:Replace("_", " "))
+		net.WriteString(author)
+		net.Broadcast()
 		
 		ImportExportText(tname, false, ply)
 	end
