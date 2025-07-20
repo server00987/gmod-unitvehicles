@@ -10,6 +10,8 @@ local UVRace_CurrentTrackAuthor = "UNKNOWN"
 
 local UVHUDRaceFinishCountdownStarted = false
 local UVHUDRaceFinishEndTime = nil
+local UVHUDRaceFinishStartTime = nil
+local UVHUDRaceAnimTriggered = false
 
 if CLIENT then -- For Global Best Lap
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
@@ -1467,35 +1469,91 @@ else -- CLIENT stuff
 			draw.SimpleTextOutlined(UVHUDNotificationString, "UVFont5", w * 0.5, h * 0.35, textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
 		end
 
-		if hudyes and UVHUDRaceFinishCountdownStarted then
-			local timeLeft = math.max(0, math.ceil(UVHUDRaceFinishEndTime - CurTime()))
-			local blink = 255 * math.abs(math.sin(RealTime() * 4))
-			local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-			local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-			local redblink = 255
-			
-			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
-			surface.SetDrawColor(Color( 0, 0, 0, 255 ))
-			surface.DrawTexturedRect(0, h * 0.7475, w, h * 0.1)
-			
-			if timeLeft >= 10 then
-				redblink = redblink
-			elseif timeLeft >= 5 then
-				redblink = blink
-			elseif timeLeft >= 3 then
-				redblink = blink2
-			elseif timeLeft >= 0 then
-				redblink = blink3
-			end
-			
-			draw.SimpleTextOutlined( "#uv.race.endsin", "UVFont5", w * 0.5, h * 0.75, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( timeLeft, "UVFont5", w * 0.5, h * 0.8, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
-			
-		end
-
 		if not UVHUDRace then UVHUDDisplayRacing = false; return end
 		if not UVHUDRaceInfo then UVHUDDisplayRacing = false; return end
 		if not (UVHUDRaceInfo.Info and UVHUDRaceInfo.Info.Started) then UVHUDDisplayRacing = false; return end
+
+		if UVHUDRaceFinishCountdownStarted and not UVHUDRaceAnimTriggered then
+			UVHUDRaceAnimTriggered = true
+			UVHUDRaceFinishStartTime = CurTime()
+		end
+
+		if not UVHUDRaceFinishCountdownStarted then
+			UVHUDRaceAnimTriggered = false
+		end
+		
+		if hudyes and UVHUDDisplayRacing and UVHUDRaceFinishCountdownStarted then
+			local now = CurTime()
+			local realTime = RealTime()
+			local startTime = UVHUDRaceFinishStartTime or now
+			local animTime = now - startTime
+
+			-- Phase durations
+			local delay = 0.1
+			local expandDuration = 0.25
+			local whiteFadeInDuration = 0.025
+			local blackFadeOutDuration = 1
+
+			local expandStart = delay
+			local whiteStart = expandStart + expandDuration
+			local blackStart = whiteStart + whiteFadeInDuration
+			local endAnim = blackStart + blackFadeOutDuration
+
+			-- Compute bar width
+			local barProgress = 0
+			if animTime >= expandStart then
+				barProgress = math.Clamp((animTime - expandStart) / expandDuration, 0, 1)
+			end
+
+			local currentWidth = Lerp(barProgress, 0, w)
+			local barHeight = h * 0.1
+			local barX = (w - currentWidth) / 2
+			local barY = h - barHeight
+
+			-- Compute bar color
+			local colorVal = 0
+			if animTime >= whiteStart and animTime < blackStart then
+				-- black → white
+				local p = (animTime - whiteStart) / whiteFadeInDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 0, 255)
+			elseif animTime >= blackStart then
+				-- white → black
+				local p = (animTime - blackStart) / blackFadeOutDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 255, 0)
+			end
+
+			-- Draw bar
+			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
+			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
+			surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
+
+			-- Display text only after bar is white or fading
+			if animTime >= whiteStart then
+				local timeLeft = math.max(0, math.floor(UVHUDRaceFinishEndTime - now + 0.999))
+
+				-- Blink red depending on time left
+				local blink = 255 * math.abs(math.sin(realTime * 4))
+				local blink2 = 255 * math.abs(math.sin(realTime * 6))
+				local blink3 = 255 * math.abs(math.sin(realTime * 8))
+				local redblink = 255
+
+				if timeLeft >= 10 then
+					redblink = redblink
+				elseif timeLeft >= 5 then
+					redblink = blink
+				elseif timeLeft >= 3 then
+					redblink = blink2
+				else
+					redblink = blink3
+				end
+
+				-- Outline alpha fades in as colorVal returns to black
+				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
+
+				draw.SimpleTextOutlined( "#uv.race.endsin", "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( timeLeft, "UVFont5", w * 0.5, h * 0.95, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+			end
+		end
 
 		local my_vehicle, my_array = nil, nil
 

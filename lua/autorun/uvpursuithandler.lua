@@ -3466,8 +3466,8 @@ else --HUD/Options
 			panel:Help("#uv.settings.response")
 			panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
 			panel:ControlHelp("#uv.settings.response.enable.desc")
-			panel:NumSlider("#uv.settings.response.SpeedLimit", "unitvehicle_speedlimit", 0, 100, 0)
-			panel:ControlHelp("#uv.settings.response.SpeedLimit.desc")
+			panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.response.speedlimit.desc")
 
 			panel:Help("#uv.settings.addon")
 			panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
