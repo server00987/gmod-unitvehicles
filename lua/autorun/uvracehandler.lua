@@ -8,6 +8,9 @@ local showhud = GetConVar("cl_drawhud")
 local UVRace_CurrentTrackName = "UNKNOWN"
 local UVRace_CurrentTrackAuthor = "UNKNOWN"
 
+local UVHUDRaceFinishCountdownStarted = false
+local UVHUDRaceFinishEndTime = nil
+
 if CLIENT then -- For Global Best Lap
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
@@ -16,6 +19,7 @@ end
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
+	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 1, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
 
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
@@ -345,6 +349,22 @@ if SERVER then
 		end
 	end
 
+	local function UVRaceEndCountdown()
+		if UVHUDRaceFinishCountdownStarted then return end
+		timer.Create("UVRaceFinishCountdown", GetConVar("unitvehicle_racednftimer"):GetInt(), 1, function()
+			UVRaceEnd()
+			
+			timer.Simple(0, function() -- Delay slightly to avoid conflict
+				net.Start("uvrace_end")
+				net.Broadcast()
+			end)
+		end)
+	end
+
+	net.Receive("UVRace_BeginEndCountdown", function(len, ply)
+		UVRaceEndCountdown()
+	end)
+	
 	hook.Add("player_activate", "UVRaceArrayInit", function( data )
 
 		local id = data.userid
@@ -407,7 +427,7 @@ if SERVER then
 			timer.Remove( 'RaceInviteExpire'..car:EntIndex() )
 		end
 	end)
-else
+else -- CLIENT stuff
 	function UVSoundRacingStop()
 		UVPlayingRace = false
 		-- if UVPlayingRace then
@@ -1067,7 +1087,14 @@ else
 		UVHUDRaceInfo = nil
 		UVRaceCountdown = nil
 		UVRaceCinematicOverlay = nil
+
+		if timer.Exists("UVRaceFinishCountdown") then
+			timer.Remove("UVRaceFinishCountdown")
+		end
 		
+		UVHUDRaceFinishCountdownStarted = false
+		UVHUDRaceFinishEndTime = nil
+
 		if UVPlayingRace then
 			UVPlayingRace = false
 		end
@@ -1109,6 +1136,14 @@ else
 
 				UVHUDRaceInfo['Participants'][participant].Finished = true
 				UVHUDRaceInfo['Participants'][participant].TotalTime = time
+
+				if not UVHUDRaceFinishCountdownStarted and (GetConVar("unitvehicle_racednftimer"):GetInt() > 0) then -- DNF Timer
+					net.Start("UVRace_BeginEndCountdown")
+					net.SendToServer()
+					
+					UVHUDRaceFinishCountdownStarted = true
+					UVHUDRaceFinishEndTime = CurTime() + GetConVar("unitvehicle_racednftimer"):GetInt()
+				end
 
 				if IsValid(participant) and participant:GetDriver() == LocalPlayer() and RacingMusic:GetBool() then
 					UVHUDRaceInfo['Participants'][participant].LocalPlayer = true
@@ -1430,6 +1465,32 @@ else
 			surface.SetDrawColor(Color( 0, 0, 0, 150 ))
 			surface.DrawTexturedRect(0, h * 0.3475, w, h * 0.05)
 			draw.SimpleTextOutlined(UVHUDNotificationString, "UVFont5", w * 0.5, h * 0.35, textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
+		end
+
+		if hudyes and UVHUDRaceFinishCountdownStarted then
+			local timeLeft = math.max(0, math.ceil(UVHUDRaceFinishEndTime - CurTime()))
+			local blink = 255 * math.abs(math.sin(RealTime() * 4))
+			local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
+			local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+			local redblink = 255
+			
+			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
+			surface.SetDrawColor(Color( 0, 0, 0, 255 ))
+			surface.DrawTexturedRect(0, h * 0.7475, w, h * 0.1)
+			
+			if timeLeft >= 10 then
+				redblink = redblink
+			elseif timeLeft >= 5 then
+				redblink = blink
+			elseif timeLeft >= 3 then
+				redblink = blink2
+			elseif timeLeft >= 0 then
+				redblink = blink3
+			end
+			
+			draw.SimpleTextOutlined( "#uv.race.endsin", "UVFont5", w * 0.5, h * 0.75, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( timeLeft, "UVFont5", w * 0.5, h * 0.8, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, alpha ) )
+			
 		end
 
 		if not UVHUDRace then UVHUDDisplayRacing = false; return end

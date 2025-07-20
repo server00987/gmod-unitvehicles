@@ -331,6 +331,9 @@ elseif CLIENT then
 	CreateClientConVar("unitvehicle_racetheme", "carbon - bending light")
 	CreateClientConVar("unitvehicle_sfxtheme", "unbound")
 	
+	
+	CreateClientConVar("uvracemanager_dnftimer", "30", true, false)
+	
 	CreateClientConVar("unitvehicle_cpheight", 64)
 	
 	local ang0 = Angle(0, 0, 0)
@@ -617,6 +620,18 @@ function TOOL.BuildCPanel(panel)
 			sfxtheme:AddChoice( v )
 		end
 	end
+	
+	local last_dnftimer_value
+	local dnftimer_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.dnftimer", "uvracemanager_dnftimer", 0, 90, 0)
+	dnftimer_slider.OnValueChanged = function(self, value)
+		local value = GetConVar("uvracemanager_dnftimer"):GetInt()
+		
+		if last_dnftimer_value ~= value then
+			RunConsoleCommand("uvrace_updatevars", "unitvehicle_racednftimer", value)
+			last_dnftimer_value = value
+		end
+	end
+	panel:AddControl("Label",  { Text	= "#tool.uvracemanager.settings.raceo.dnftimer.desc" })
 	
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racecreate"})
 	local speed_slider = panel:NumSlider("#tool.uvracemanager.settings.racecreate.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
