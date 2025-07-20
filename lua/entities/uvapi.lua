@@ -588,12 +588,6 @@ function ENT:SetHorn(on)
 		if not istable(states) then return end
 		states.HornOn = true
 		self.v:VC_setStates(states)
-	elseif Photon2
-    and isfunction(self.v.GetPhotonControllerFromAncestor) then
-        local pc = self.v:GetPhotonControllerFromAncestor()
-        if IsValid(pc) then
-            pc:SetChannelMode("Emergency.SirenOverride", on and "AIR" or "OFF")
-        end
 	end
 end
 
