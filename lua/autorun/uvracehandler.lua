@@ -1392,7 +1392,7 @@ else -- CLIENT stuff
 		local w = ScrW()
 		local h = ScrH()
 		local hudyes = GetConVar("cl_drawhud"):GetBool()
-		local hudtype = GetConVar("unitvehicle_hudtype_racing"):GetString()
+		local hudtype = GetConVar("unitvehicle_hudtype_main"):GetString()
 
 		-- RACE COUNTDOWN LOGIC
 		if UVRaceCountdown and hudyes then

@@ -8088,27 +8088,35 @@ UV_UI.racing.underground2.main = underground2_racing_main
 
 -- Hooks
 
--- Only used by pursuits for the time being ( underground current/best time and lap display made me change my mind ;) )
-local function onEvent( type, event, ... )
-    -- local data_type = select( 1, ... )
-    -- local data_name = select( 2, ... )
-    -- local new_data = select( 3, ... )
-    -- local old_data = select( 4, ... )
+-- local function onEvent( type, event, ... )
+    -- local ui_type = nil
     
-    --if type == 'pursuit' then
-    -- if new_data == old_data then return end
+    -- if type == 'racing' then
+        -- ui_type = UVHUDTypeRacing:GetString()
+    -- else
+        -- ui_type = UVHUDTypePursuit:GetString()
+    -- end
     
-    local ui_type = nil
-    
-    if type == 'racing' then
-        ui_type = UVHUDTypeRacing:GetString()
-    else
-        ui_type = UVHUDTypePursuit:GetString()
+    -- local event = UV_UI[type] and UV_UI[type][ui_type] and UV_UI[type][ui_type].events and UV_UI[type][ui_type].events[event]
+    -- if event then event ( ... ) end
+-- end
+
+local function onEvent(type, eventName, ...)
+    local main = UVHUDTypeMain:GetString()
+    local backup = UVHUDTypeBackup:GetString()
+
+    -- Try to resolve the event function from main UI first
+    local handler = UV_UI[type] and UV_UI[type][main] and UV_UI[type][main].events and UV_UI[type][main].events[eventName]
+
+    -- If not found, and type is pursuit, fall back to backup UI
+    if not handler and type == "pursuit" then
+        handler = UV_UI.pursuit[backup] and UV_UI.pursuit[backup].events and UV_UI.pursuit[backup].events[eventName]
     end
-    
-    local event = UV_UI[type] and UV_UI[type][ui_type] and UV_UI[type][ui_type].events and UV_UI[type][ui_type].events[event]
-    if event then event ( ... ) end
-    --end
+
+    if handler then
+        handler(...)
+    end
 end
+
 
 hook.Add( "UIEventHook", "UI_Event", onEvent )
