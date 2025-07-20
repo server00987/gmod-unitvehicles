@@ -52,6 +52,12 @@ function ENT:GetRunningLights()
 	and isfunction(self.v.VC_getStates) then
 		local states = self.v:VC_getStates()
 		return istable(states) and states.RunningLights
+	elseif Photon2
+    and isfunction(vehicle.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) and on then
+            pc:SetChannelMode("Vehicle.Lights", "AUTO")
+        end
 	end
 end
 
@@ -76,6 +82,12 @@ function ENT:GetLights(highbeams)
 	and isfunction(self.v.VC_getStates) then
 		local states = self.v:VC_getStates()
 		return istable(states) and Either(highbeams, states.HighBeams, states.LowBeams)
+	elseif Photon2
+    and isfunction(vehicle.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            return pc:GetChannelMode("Vehicle.Lights") ~= "HEADLIGHTS"
+        end
 	elseif Photon
 	and isfunction(self.v.ELS_Illuminate) then
 		return self.v:ELS_Illuminate()
@@ -118,6 +130,12 @@ function ENT:GetELS(v)
 		return vehicle.SirenIsOn
 	elseif vehicle.IsSimfphyscar then
 		return vehicle:GetEMSEnabled()
+	elseif Photon2
+    and isfunction(vehicle.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            return pc:GetChannelMode("Emergency.Warning") ~= "OFF"
+        end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_Siren)
 	and isfunction(self.v.ELS_Lights) then
@@ -135,6 +153,12 @@ function ENT:GetELSSound(v)
 		return vehicle.SirenIsOn
 	elseif vehicle.IsSimfphyscar then
 		return vehicle.ems and vehicle.ems:IsPlaying()
+	elseif Photon2
+    and isfunction(vehicle.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            return pc:GetChannelMode("Emergency.Siren") ~= "OFF"
+        end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_Siren) then
 		return self.v:ELS_Siren()
@@ -163,6 +187,12 @@ function ENT:GetHorn(v)
 		return vehicle.Horn:IsPlaying()
 	elseif vehicle.IsSimfphyscar then
 		return vehicle.HornKeyIsDown
+	elseif Photon2
+    and isfunction(vehicle.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            return pc:GetChannelMode("Emergency.SirenOverride") == "AIR"
+        end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isnumber(EMV_HORN)
 	and isfunction(vehicle.ELS_Horn) then
@@ -214,6 +244,12 @@ function ENT:SetRunningLights(on)
 	elseif vcmod_main
 	and isfunction(self.v.VC_setRunningLights) then
 		self.v:VC_setRunningLights(on)
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) and on then
+            pc:SetChannelMode("Vehicle.Lights", "AUTO")
+        end
 	end
 end
 
@@ -410,6 +446,13 @@ function ENT:SetELS(on)
 			self.v.ems = CreateSound(self.v, sounds[sirenNum])
 			self.v.ems:Play()
 		end
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            pc:SetChannelMode("Emergency.Warning", on and "MODE3" or "OFF")
+            pc:SetChannelMode("Emergency.Siren", on and "T1" or "OFF")
+        end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
 	and isfunction(self.v.ELS_SirenOff)
@@ -452,6 +495,12 @@ function ENT:SetELSSound(on)
 				self.v.ems:Stop()
 			end
 		end
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            pc:SetChannelMode("Emergency.Siren", on and "T1" or "OFF")
+        end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
 	and isfunction(self.v.ELS_SirenOff)
@@ -492,6 +541,12 @@ function ENT:SetELSSiren(on)
 			self.v.ems = CreateSound(self.v, sounds[sirenNum])
 			self.v.ems:Play()
 		end
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            pc:SetChannelMode("Emergency.SirenOverride", on and "AIR" or "OFF")
+        end
 	elseif Photon
 	and isfunction(self.v.ELS_SirenToggle) then
 		if on then
@@ -533,6 +588,12 @@ function ENT:SetHorn(on)
 		if not istable(states) then return end
 		states.HornOn = true
 		self.v:VC_setStates(states)
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) then
+            pc:SetChannelMode("Emergency.SirenOverride", on and "AIR" or "OFF")
+        end
 	end
 end
 

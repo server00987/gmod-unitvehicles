@@ -895,6 +895,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
 		Ent.VehicleTable = lst
+		Ent.VehicleName = UNITMEMORY.VehicleName
 		Ent:SetModel(lst.Model) 
 		Ent:SetPos(uvspawnpoint+ (vector_up * 50))
 		Ent:SetAngles(uvspawnpointangles)

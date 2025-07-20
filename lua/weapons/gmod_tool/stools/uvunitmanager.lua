@@ -2467,6 +2467,7 @@ function TOOL:LeftClick( trace )
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
 		Ent.VehicleTable = lst
+		Ent.VehicleName = ply.UVTOOLMemory.VehicleName
 		Ent:SetModel(lst.Model) 
 		Ent:SetPos(trace.HitPos)
 		
@@ -2933,6 +2934,7 @@ function TOOL:GetVehicleData( ent, ply )
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
 		ply.UVTOOLMemory.VehicleBase = ent:GetClass()
 		ply.UVTOOLMemory.SpawnName = ent:GetVehicleClass()
+		ply.UVTOOLMemory.VehicleName = ent.VehicleName
 		
 		if not ply.UVTOOLMemory.SpawnName then 
 			print("This vehicle dosen't have a vehicle class set" )
