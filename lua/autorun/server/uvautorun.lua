@@ -231,6 +231,7 @@ NETWORK_STRINGS = {
 	"uvrace_announcebestlaptime",
 	'UVResetPosition',
 	"UVRace_BeginEndCountdown",
+	"UVRace_StopEndCountdown",
 }
 
 if SERVER then

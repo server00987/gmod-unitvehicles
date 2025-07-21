@@ -367,6 +367,12 @@ if SERVER then
 		UVRaceEndCountdown()
 	end)
 	
+	net.Receive("UVRace_StopEndCountdown", function(len, ply)
+		if timer.Exists("UVRaceFinishCountdown") then
+			timer.Remove("UVRaceFinishCountdown")
+		end
+	end)
+
 	hook.Add("player_activate", "UVRaceArrayInit", function( data )
 
 		local id = data.userid
@@ -1090,12 +1096,11 @@ else -- CLIENT stuff
 		UVRaceCountdown = nil
 		UVRaceCinematicOverlay = nil
 
-		if timer.Exists("UVRaceFinishCountdown") then
-			timer.Remove("UVRaceFinishCountdown")
-		end
-		
 		UVHUDRaceFinishCountdownStarted = false
 		UVHUDRaceFinishEndTime = nil
+		
+		net.Start("UVRace_StopEndCountdown")
+		net.SendToServer()
 
 		if UVPlayingRace then
 			UVPlayingRace = false
