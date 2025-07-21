@@ -545,7 +545,7 @@ function ENT:SetELSSiren(on)
     and isfunction(self.v.GetPhotonControllerFromAncestor) then
         local pc = self.v:GetPhotonControllerFromAncestor()
         if IsValid(pc) then
-            pc:SetChannelMode("Emergency.SirenOverride", on and "AIR" or "OFF")
+            pc:SetChannelMode("Emergency.SirenOverride", on and "T1" or "OFF")
         end
 	elseif Photon
 	and isfunction(self.v.ELS_SirenToggle) then
