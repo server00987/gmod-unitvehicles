@@ -2000,8 +2000,8 @@ else --HUD/Options
 	UVRBMax = CreateClientConVar("unitvehicle_roadblock_maxrb", 1, true, false)
 	UVRBOverride = CreateClientConVar("unitvehicle_roadblock_override", 0, true, false)
 
-	UVHUDTypeRacing = CreateClientConVar("unitvehicle_hudtype_racing", "mostwanted", true, false, "Which HUD type to use when in a race.")
-	UVHUDTypePursuit = CreateClientConVar("unitvehicle_hudtype_pursuit", "mostwanted", true, false, "Which HUD type to use when in a pursuit.")
+	UVHUDTypeMain = CreateClientConVar("unitvehicle_hudtype_main", "mostwanted", true, false, "Unit Vehicles: Which HUD type to use when in races and pursuits.")
+	UVHUDTypeBackup = CreateClientConVar("unitvehicle_hudtype_backup", "mostwanted", true, false, "Unit Vehicles: Which HUD type to use if main does not have a Pursuit UI.")
 
 	UVUnitsColor = Color(255,255,255)
 
@@ -2930,15 +2930,23 @@ else --HUD/Options
 		local h = ScrH()
 
 		local hudyes = showhud:GetBool()
-		local hudtype = UVHUDTypePursuit:GetString()
 		local lang = language.GetPhrase
+		
+		local main = UVHUDTypeMain:GetString()
+		local backup = UVHUDTypeBackup:GetString()
+
+		local hudHandler = UV_UI.pursuit[main] and UV_UI.pursuit[main].main
+
+		if not hudHandler then
+			hudHandler = UV_UI.pursuit[backup] and UV_UI.pursuit[backup].main
+		end
+
+		if hudHandler then
+			hudHandler()
+		end
 
 		if UV_UI.general then
 			UV_UI.general.main()
-		end
-
-		if UV_UI.pursuit[hudtype] then
-			UV_UI.pursuit[hudtype].main()
 		end
 
 		if UVHUDDisplayPursuit and vehicle ~= NULL then
@@ -3458,8 +3466,8 @@ else --HUD/Options
 			panel:Help("#uv.settings.response")
 			panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
 			panel:ControlHelp("#uv.settings.response.enable.desc")
-			panel:NumSlider("#uv.settings.response.SpeedLimit", "unitvehicle_speedlimit", 0, 100, 0)
-			panel:ControlHelp("#uv.settings.response.SpeedLimit.desc")
+			panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
+			panel:ControlHelp("#uv.settings.response.speedlimit.desc")
 
 			panel:Help("#uv.settings.addon")
 			panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
@@ -3475,22 +3483,21 @@ else --HUD/Options
 			panel:Help("#uv.settings.uistyle.title")
 			panel:ControlHelp("#uv.settings.uistyle.desc")
 
-			local uistyleracing, label = panel:ComboBox( "#uv.settings.uistyle.racing", "unitvehicle_hudtype_racing" )
-			uistyleracing:AddChoice( "Most Wanted", "mostwanted")
-			uistyleracing:AddChoice( "Carbon", "carbon")
-			uistyleracing:AddChoice( "Underground", "underground")
-			uistyleracing:AddChoice( "Underground 2", "underground2")
-			uistyleracing:AddChoice( "Undercover", "undercover")
-			uistyleracing:AddChoice( "Pro Street", "prostreet")
-			uistyleracing:AddChoice( "#uv.uistyle.original", "original")
-			uistyleracing:AddChoice( "#uv.uistyle.none", "")
+			local uistylemain, label = panel:ComboBox( "#uv.settings.uistyle.main", "unitvehicle_hudtype_main" )
+			uistylemain:AddChoice( "Most Wanted", "mostwanted")
+			uistylemain:AddChoice( "Carbon", "carbon")
+			uistylemain:AddChoice( "Underground", "underground")
+			uistylemain:AddChoice( "Underground 2", "underground2")
+			uistylemain:AddChoice( "Undercover", "undercover")
+			uistylemain:AddChoice( "Pro Street", "prostreet")
+			uistylemain:AddChoice( "#uv.uistyle.original", "original")
+			uistylemain:AddChoice( "#uv.uistyle.none", "")
 
-			local uistylepursuit, label = panel:ComboBox( "#uv.settings.uistyle.pursuit", "unitvehicle_hudtype_pursuit" )
-			uistylepursuit:AddChoice( "Most Wanted", "mostwanted")
-			uistylepursuit:AddChoice( "Carbon", "carbon")
-			uistylepursuit:AddChoice( "Undercover", "undercover")
-			uistylepursuit:AddChoice( "#uv.uistyle.original", "original")
-			uistylepursuit:AddChoice( "#uv.uistyle.none", "")
+			local uistylebackup, label = panel:ComboBox( "#uv.settings.uistyle.backup", "unitvehicle_hudtype_backup" )
+			uistylebackup:AddChoice( "Most Wanted", "mostwanted")
+			uistylebackup:AddChoice( "Carbon", "carbon")
+			uistylebackup:AddChoice( "Undercover", "undercover")
+			uistylebackup:AddChoice( "#uv.uistyle.original", "original")
 
 			panel:CheckBox("#uv.settings.ui.racertags", "unitvehicle_racertags")
 			panel:ControlHelp("#uv.settings.ui.racertags.desc.racing")
