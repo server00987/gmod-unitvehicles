@@ -387,6 +387,35 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		duplicator.SetLocalAng( angle_zero )
 		
 		if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableunit.."' is missing!") return end
+
+		if UVTOOLMemory.SubMaterials then
+			if istable( UVTOOLMemory.SubMaterials ) then
+				for i = 0, table.Count( UVTOOLMemory.SubMaterials ) do
+					Ent:SetSubMaterial( i, UVTOOLMemory.SubMaterials[i] )
+				end
+			end
+
+			local groups = string.Explode( ",", UVTOOLMemory.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+
+			Ent:SetSkin( UVTOOLMemory.Skin )
+
+			local c = string.Explode( ",", UVTOOLMemory.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 
@@ -1372,6 +1401,7 @@ local function GetVehicleData( ent )
 		Memory.HasBackfire = ent:GetBackFire()
 		Memory.DoesntStall = ent:GetDoNotStall()
 		Memory.SoundOverride = ent:GetSoundoverride()
+		Memory.AddedYaw = UVCheckIfRedlineSimfphys(ent) and 180 or 90
 		
 		Memory.FrontHeight = ent:GetFrontSuspensionHeight()
 		Memory.RearHeight = ent:GetRearSuspensionHeight()
@@ -1473,6 +1503,23 @@ local function GetVehicleData( ent )
 		
 		Memory.Entities[next(Memory.Entities)].Angle = Angle(0,180,0)
 		Memory.Entities[next(Memory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+
+		local c = ent:GetColor()
+		Memory.Color = c.r..","..c.g..","..c.b..","..c.a
+		
+		local bodygroups = {}
+		for k,v in pairs(ent:GetBodyGroups()) do
+			bodygroups[k] = ent:GetBodygroup( k ) 
+		end
+		
+		Memory.BodyGroups = string.Implode( ",", bodygroups)
+		
+		Memory.Skin = ent:GetSkin()
+		
+		Memory.SubMaterials = {}
+		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
+			Memory.SubMaterials[i] = ent:GetSubMaterial( i )
+		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
 		Memory.VehicleBase = ent:GetClass()
@@ -1884,7 +1931,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		
 		local SpawnAng = ang
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = SpawnAng.yaw  + 90 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		SpawnAng.yaw = SpawnAng.yaw + Memory.AddedYaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
@@ -2145,6 +2192,35 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		duplicator.SetLocalAng( angle_zero )
 		
 		undo.Create( "Duplicator" )
+
+		if Memory.SubMaterials then
+			if istable( Memory.SubMaterials ) then
+				for i = 0, table.Count( Memory.SubMaterials ) do
+					Ent:SetSubMaterial( i, Memory.SubMaterials[i] )
+				end
+			end
+
+			local groups = string.Explode( ",", Memory.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+
+			Ent:SetSkin( Memory.Skin )
+
+			local c = string.Explode( ",", Memory.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end
 		
 		for k, ent in pairs( Ents ) do
 			undo.AddEntity( ent )
@@ -2158,6 +2234,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		undo.SetCustomUndoText( "Undone Glide" )
 		
 		undo.Finish( "Undo (" .. tostring( table.Count( Ents ) ) ..  ")" )
+		
 		
 	elseif Memory.VehicleBase == "prop_vehicle_jeep" then
 		local class = Memory.SpawnName
