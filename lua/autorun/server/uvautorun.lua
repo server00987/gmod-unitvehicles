@@ -2549,22 +2549,45 @@ function UVGetAng3(A, B, C)
 	return UVGetAng(B - A, C - B)
 end
 
-function UVGetVehicleMakeAndModel(vehicle)
+function UVCheckIfRedlineSimfphys(vehicle) --angle fix thanks to the piece of shit who made it
+	local category = UVGetVehicleMakeAndModel(vehicle, true)
+	local categories = {
+		["NFS Police Cars"] = true,
+		["Redline Bonus Cars"] = true,
+		["Redline Cars"] = true,
+		["Redline NFS Ports"] = true,
+		["Redline Police Cars"] = true,
+		["Redline Service Vehicles"] = true
+	}
+	return categories[category]
+end
+
+function UVGetVehicleMakeAndModel(vehicle, category)
 	if not IsValid(vehicle) then return end
 	if vehicle.IsSimfphyscar then
 		local c = vehicle:GetSpawn_List()
 		if ( not list.Get( "simfphys_vehicles" )[ c ] ) then return "Vehicle" end
 		local t = list.Get( "simfphys_vehicles" )[ c ]
-		local v = t.Name
-		return v or "Vehicle"
+		if category then
+			local category = t.Category
+			return category or ""
+		else
+			local name = t.Name
+			return name or "Vehicle"
+		end
 	elseif vehicle.IsGlideVehicle then
 		return vehicle.PrintName or "Vehicle"
 	elseif vehicle:GetClass() == "prop_vehicle_jeep" then
 		local c = vehicle:GetVehicleClass()
 		if ( not list.Get( "Vehicles" )[ c ] ) then return "Vehicle" end
 		local t = list.Get( "Vehicles" )[ c ]
-		local v = t.Name
-		return v or "Vehicle"
+		if category then
+			local category = t.Category
+			return category or ""
+		else
+			local name = t.Name
+			return name or "Vehicle"
+		end
 	end
 	return "Vehicle"
 end

@@ -2431,6 +2431,35 @@ function TOOL:LeftClick( trace )
 			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVTOOLMemory.SpawnName .." dosen't seem to be installed!" )
 			return 
 		end
+
+		if ply.UVTOOLMemory.SubMaterials then
+			if istable( ply.UVTOOLMemory.SubMaterials ) then
+				for i = 0, table.Count( ply.UVTOOLMemory.SubMaterials ) do
+					Ent:SetSubMaterial( i, ply.UVTOOLMemory.SubMaterials[i] )
+				end
+			end
+
+			local groups = string.Explode( ",", ply.UVTOOLMemory.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+
+			Ent:SetSkin( ply.UVTOOLMemory.Skin )
+
+			local c = string.Explode( ",", ply.UVTOOLMemory.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end
 		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
@@ -2930,6 +2959,23 @@ function TOOL:GetVehicleData( ent, ply )
 		
 		ply.UVTOOLMemory.Entities[next(ply.UVTOOLMemory.Entities)].Angle = Angle(0,180,0)
 		ply.UVTOOLMemory.Entities[next(ply.UVTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+
+		local c = ent:GetColor()
+		ply.UVTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
+		
+		local bodygroups = {}
+		for k,v in pairs(ent:GetBodyGroups()) do
+			bodygroups[k] = ent:GetBodygroup( k ) 
+		end
+		
+		ply.UVTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
+		
+		ply.UVTOOLMemory.Skin = ent:GetSkin()
+		
+		ply.UVTOOLMemory.SubMaterials = {}
+		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
+			ply.UVTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
+		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
 		ply.UVTOOLMemory.VehicleBase = ent:GetClass()
