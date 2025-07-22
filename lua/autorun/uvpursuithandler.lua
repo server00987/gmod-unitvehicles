@@ -67,11 +67,23 @@ function UVGetDriver(vehicle)
 		local seat = vehicle.seats[1]
 
 		if IsValid( seat ) then
-			return seat:GetDriver()
+			local driver = seat:GetDriver()
+			return IsValid(driver) and driver
 		end
 	end
 
 	return false
+end
+
+function UVGetDriverName(vehicle)
+	local driver = UVGetDriver(vehicle)
+    local driverName = driver and driver:GetName()
+
+    if not driverName then
+        driverName = vehicle.callsign or vehicle.racer or 'Racer ' .. vehicle:EntIndex()
+    end
+
+	return driverName
 end
 
 --Sound spam check--
@@ -1120,7 +1132,7 @@ if SERVER then
 					UVPlayerWreck(car)
 				end
 
-				if UVGetDriver(car):IsPlayer() then
+				if UVGetDriver(car) and UVGetDriver(car):IsPlayer() then
 					local driver = UVGetDriver(car)
 					if car.PursuitTech then
 						-- local status = car.PursuitTechStatus or "Ready"
@@ -2539,10 +2551,9 @@ else --HUD/Options
 			end)
 		end
 
-		if UVHUDDisplayPursuit then
+		if UVHUDDisplayPursuit and not UVPlayingRace then
 			UVSoundBusted( UVHeatLevel )
 		end
-
 	end)
 
 	net.Receive("UVHUDEvading", function()

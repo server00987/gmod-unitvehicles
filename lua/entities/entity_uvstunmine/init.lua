@@ -39,14 +39,10 @@ function ENT:Think()
 				if object.esfon then
 					self.Entity:Remove()
 					UVDeactivateESF(object)
-					if IsValid(UVGetDriver(object)) then
-						UVGetDriver(object):PrintMessage(HUD_PRINTCENTER, "Stun mine countered!")
-					end
+					ReportPTEvent( self.racerdeployed, object, "StunMine", "Counter" )
 					return
 				end
-				if IsValid(UVGetDriver(object)) then
-					UVGetDriver(object):PrintMessage(HUD_PRINTCENTER, "YOU HIT A STUN MINE!")
-				end
+				ReportPTEvent( self.racerdeployed, object, "StunMine", "Hit" )
 				self:UVStunmineHit()
 			end
 		end
@@ -63,14 +59,10 @@ function ENT:StartTouch( ent )
 		if car.esfon then
 			self.Entity:Remove()
 			UVDeactivateESF(car)
-			if IsValid(UVGetDriver(car)) then
-				UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Stun mine countered!" )
-			end
+			ReportPTEvent( self.racerdeployed, car, "StunMine", "Counter" )
 			return
 		end
-		if IsValid(UVGetDriver(car)) then
-			UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "YOU HIT A STUN MINE!" )
-		end
+		ReportPTEvent( self.racerdeployed, car, "StunMine", "Hit" )
 		self:UVStunmineHit()
 		return
 	end
@@ -81,14 +73,10 @@ function ENT:StartTouch( ent )
 		if ent.esfon then
 			self.Entity:Remove()
 			UVDeactivateESF(ent)
-			if IsValid(UVGetDriver(ent)) then
-				UVGetDriver(ent):PrintMessage( HUD_PRINTCENTER, "Stun mine countered!" )
-			end
+			ReportPTEvent( self.racerdeployed, ent, "StunMine", "Counter" )
 			return
 		end
-		if IsValid(UVGetDriver(ent)) then
-			UVGetDriver(ent):PrintMessage( HUD_PRINTCENTER, "YOU HIT A STUN MINE!" )
-		end
+		ReportPTEvent( self.racerdeployed, ent, "StunMine", "Hit" )
 		self:UVStunmineHit()
 	end
 end
@@ -122,7 +110,7 @@ function ENT:UVStunmineHit()
 					end
 				end)
 				if object.UnitVehicle or (object.UVWanted and not AutoHealth:GetBool()) or not (object.UnitVehicle and object.UVWanted) then
-					damage = (table.HasValue(uvcommanders, object) and UVPTStunMineCommanderDamage:GetFloat()) or damage
+					damage = (table.HasValue(UVCommanders, object) and UVPTStunMineCommanderDamage:GetFloat()) or damage
 					if object.IsSimfphyscar then
 						local MaxHealth = object:GetMaxHealth()
 						local damage = MaxHealth*damage
@@ -133,6 +121,13 @@ function ENT:UVStunmineHit()
 					elseif object:GetClass() == "prop_vehicle_jeep" then
 						
 					end
+
+					-- if self.racerdeployed then
+					-- 	if not UVGetDriver(self.racerdeployed) then continue end
+					-- 	if UVGetDriver(self.racerdeployed):IsPlayer() then
+					-- 		ReportPTEvent( self.racerdeployed, car, "StunMine", "Hit" )
+					-- 	end
+					-- end
 				end
 				local e = EffectData()
 				e:SetEntity(object)
@@ -140,20 +135,12 @@ function ENT:UVStunmineHit()
 			end
 		end
 	end
-	
-	if self.racerdeployed then
-		if UVGetDriver(self.racerdeployed) == false then return end
-		if UVGetDriver(self.racerdeployed):IsPlayer() then
-			UVGetDriver(self.racerdeployed):PrintMessage( HUD_PRINTCENTER, "Stun mine hit!" )
-		end
-	end
-	
+
 	local e2 = EffectData()
 	e2:SetEntity(self.Entity)
 	util.Effect("entity_remove", e2)
 	self.Entity:EmitSound( "gadgets/stunmine/hit.wav" )
 	self.Entity:Remove()
-	
 end
 
 function ENT:OnRemove()

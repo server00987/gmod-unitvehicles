@@ -76,6 +76,7 @@ NETWORK_STRINGS = {
 	-- Pursuit Tech
 	"UV_SendPursuitTech",
 	"UVPTUse",
+	"UVPTEvent",
 	
 	"UVWeaponESFEnable",
 	"UVWeaponESFDisable",
@@ -726,11 +727,11 @@ function UVPassConVarFilter(v)
 	local vehicleType = TargetVehicleType:GetInt()
 	
 	if (v:GetClass() == "prop_vehicle_jeep" or v.IsSimfphyscar or v.IsGlideVehicle) and vehicleType == 1 then
-		return (IsValid(v.MadVehicle) or UVGetDriver(v):IsPlayer() or IsValid(v.DecentVehicle) or IsValid(v.RacerVehicle) or IsValid(v.UVWanted)) and not IsValid(v.UnitVehicle)
+		return (IsValid(v.MadVehicle) or (UVGetDriver(v) and UVGetDriver(v):IsPlayer()) or IsValid(v.DecentVehicle) or IsValid(v.RacerVehicle) or IsValid(v.UVWanted)) and not IsValid(v.UnitVehicle)
 	elseif v:IsVehicle() and vehicleType == 2 then
 		return IsValid(v.DecentVehicle) and not IsValid(v.UnitVehicle)
 	elseif v:IsVehicle() and vehicleType == 3 then
-		return (IsValid(v.MadVehicle) or UVGetDriver(v):IsPlayer() or IsValid(v.RacerVehicle) or IsValid(v.UVWanted)) and not IsValid(v.DecentVehicle) and not IsValid(v.UnitVehicle)
+		return (IsValid(v.MadVehicle) or (UVGetDriver(v) and UVGetDriver(v):IsPlayer()) or IsValid(v.RacerVehicle) or IsValid(v.UVWanted)) and not IsValid(v.DecentVehicle) and not IsValid(v.UnitVehicle)
 	end
 	
 	return false
@@ -832,13 +833,41 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 					end
 				end
 
-				if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
-					UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
-				end
+				-- if IsValid(UVGetDriver(enemyVehicle))
 
-				if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-					UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
-				end
+				-- local attacker = UVGetDriver(car)
+				-- local attackerName = UVGetDriverName(car)
+
+				-- local victim = UVGetDriver(car)
+				-- local victimName = UVGetDriverName(enemyVehicle)
+
+				-- local args = {
+				-- 	['User'] = attackerName,
+				-- 	['Hit'] = victimName
+				-- }
+
+				-- local playersToSend = {}
+
+				-- if attacker then
+				-- 	table.insert( playersToSend, attacker )
+				-- end
+
+				-- if victim then
+				-- 	table.insert( playersToSend, victim )
+				-- end
+
+				-- UVPTEvent( playersToSend, "ESF", "Hit", args )
+
+				ReportPTEvent( car, enemyVehicle, 'ESF', 'Hit' )
+
+				-- if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+				-- 	UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
+				-- end
+
+				-- if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+				-- 	UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
+				-- end
+
 
 				local e = EffectData()
 				e:SetEntity(enemyVehicle)
@@ -1122,13 +1151,37 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 			end
 		end
 
-		if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
-			UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
-		end
+		-- if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+		-- 	UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
+		-- end
 
-		if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-			UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
-		end
+		-- if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+		-- 	UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
+		-- end
+
+		-- local attacker = UVGetDriver(car)
+		-- local attackerName = UVGetDriverName(car)
+
+		-- local victim = UVGetDriver(car)
+		-- local victimName = UVGetDriverName(enemyVehicle)
+
+		-- local args = {
+		-- 	['User'] = attackerName,
+		-- 	['Hit'] = victimName
+		-- }
+
+		-- local playersToSend = {}
+
+		-- if attacker then
+		-- 	table.insert( playersToSend, attacker )
+		-- end
+
+		-- if victim then
+		-- 	table.insert( playersToSend, victim )
+		-- end
+
+		-- UVPTEvent( playersToSend, "ESF", "Hit", args )
+		ReportPTEvent( car, enemyVehicle, 'ESF', 'Hit' )
 
 		local e = EffectData()
 		e:SetEntity(enemyVehicle)
@@ -1397,12 +1450,35 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					
 				end
 			end
-			if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
-				UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
-			end
-			if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-				UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
-			end
+
+			-- local attacker = UVGetDriver(car)
+			-- local attackerName = UVGetDriverName(car)
+
+			-- local victim = UVGetDriver(car)
+			-- local victimName = UVGetDriverName(enemyVehicle)
+
+			-- local args = {
+			-- 	['User'] = attackerName,
+			-- 	['Hit'] = victimName
+			-- }
+
+			-- local playersToSend = {}
+
+			-- if attacker then
+			-- 	table.insert( playersToSend, attacker )
+			-- end
+
+			-- if victim then
+			-- 	table.insert( playersToSend, victim )
+			-- end
+			ReportPTEvent( car, enemyVehicle, 'ESF', 'Hit' )
+			--UVPTEvent( playersToSend, "ESF", "Hit", args )
+			-- if isfunction(enemyVehicle.GetDriver) and IsValid(UVGetDriver(enemyVehicle)) and UVGetDriver(enemyVehicle):IsPlayer() then 
+			-- 	UVGetDriver(enemyVehicle):PrintMessage( HUD_PRINTCENTER, "YOU HAVE BEEN HIT BY AN ESF!")
+			-- end
+			-- if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+			-- 	UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "ESF HIT ON "..enemyCallsign.."!")
+			-- end
 			local e = EffectData()
 			e:SetEntity(enemyVehicle)
 			util.Effect("entity_remove", e)
@@ -1543,11 +1619,11 @@ function UVAddToWantedListVehicle(vehicle)
 		net.WriteInt( vehicle:GetCreationID(), 32 )
 		net.Broadcast()
 		
-		if driver:IsPlayer() and not table.HasValue(UVWantedTableDriver, driver) then
+		if (driver and driver:IsPlayer()) and not table.HasValue(UVWantedTableDriver, driver) then
 			UVAddToWantedListDriver(driver)
 		end
 		
-		if driver:IsPlayer() then
+		if (driver and driver:IsPlayer()) then
 			if driver:GetMaxHealth() == 100 then
 				driver:SetHealth(vehicle:GetPhysicsObject():GetMass())
 				driver:SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
@@ -1903,7 +1979,7 @@ function UVBustEnemy(self, enemy)
 	if UVTargeting or self.UVAir then --Arrest
 		if enemy:IsVehicle() then
 			local e = UVGetVehicleMakeAndModel(enemy)
-			if enemyDriver:IsPlayer() then 
+			if enemyDriver and enemyDriver:IsPlayer() then 
 				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been busted by "..self.callsign.."!")
 			else
 				print("The "..e.." has been busted by "..self.callsign.."!")
@@ -2012,7 +2088,7 @@ function UVBustEnemy(self, enemy)
 				end
 			end
 		end)
-		if enemyDriver:IsPlayer() and not enemy.DecentVehicle then
+		if enemyDriver and enemyDriver:IsPlayer() and not enemy.DecentVehicle then
 			local driver = enemyDriver
 			local bustedtable = {}
 			bustedtable["Unit"] = self.callsign
@@ -2052,7 +2128,7 @@ function UVBustEnemy(self, enemy)
 	else --Fine
 		if enemy:IsVehicle() then
 			local e = UVGetVehicleMakeAndModel(enemy)
-			if enemyDriver:IsPlayer() then 
+			if enemyDriver and enemyDriver:IsPlayer() then 
 				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been fined by "..self.callsign.."!")
 			else
 				print("The "..e.." has been fined by "..self.callsign.."!")
@@ -2085,7 +2161,7 @@ function UVBustEnemy(self, enemy)
 			net.Start( "UVHUDStopBusting" )
 			net.Broadcast()
 		end)
-		if enemyDriver:IsPlayer() then 
+		if enemyDriver and enemyDriver:IsPlayer() then 
 			local driver = enemyDriver
 			timer.Simple(0.1, function()
 				driver:SetFrags(0)
@@ -2402,9 +2478,11 @@ function UVCheckIfBeingBusted(enemy)
 	
 	--Display busting
 	if enemy.UVHUDBusting then
-		net.Start( "UVHUDBusting" )
-		net.WriteString(enemy.UVBustingProgress)
-		net.Send(enemyDriver)
+		if enemyDriver then
+			net.Start( "UVHUDBusting" )
+			net.WriteString(enemy.UVBustingProgress)
+			net.Send(enemyDriver)
+		end
 		if btimeout and btimeout > 0 and not enemy.uvbusted and enemy.UVBustingProgress >= btimeout then --Bust conditions.
 			UVBustEnemy(closestunit, enemy)
 		end

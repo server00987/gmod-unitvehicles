@@ -180,16 +180,36 @@ function ENT:DoUpdate()
 					end
 					
 					if hit and not self.reported then
-						if not array[1].UnitVehicle then
-							self.reported = true
-							
-							timer.Simple(1, function()
-								if IsValid(self.Entity) then
-									self.reported = false
-									self:UVSpikeStripHit()
-								end
-							end)
-						end
+						-- local attacker = UVGetDriver(array[1])
+						-- local attackerName = UVGetDriverName(array[1])
+
+						-- local victim = UVGetDriver(self.unitdeployed or self.racerdeployed)
+						-- local victimName = UVGetDriverName(self.unitdeployed or self.racerdeployed)
+
+						-- local args = {
+						-- 	['User'] = attackerName,
+						-- 	['Hit'] = victimName
+						-- }
+
+						-- local playersToSend = {}
+
+						-- if attacker then
+						-- 	table.insert( playersToSend, attacker )
+						-- end
+
+						-- if victim then
+						-- 	table.insert( playersToSend, victim )
+						-- end
+						self.reported = true
+						ReportPTEvent( self.unitdeployed or self.racerdeployed, array[1], 'Spikestrip', 'Hit' )
+
+						timer.Simple(1, function()
+							self.reported = false
+							if IsValid(self.Entity) and not array[1].UnitVehicle then
+								self.reported = false
+								self:UVSpikeStripHit()
+							end
+						end)
 					end
 				end
 			end
