@@ -2520,26 +2520,29 @@ function TOOL:LeftClick( trace )
 			end
 		end
 		
-		local groups = string.Explode( ",", ply.UVTOOLMemory.BodyGroups)
-		for i = 1, table.Count( groups ) do
-			Ent:SetBodygroup(i, tonumber(groups[i]) )
-		end
-		
-		Ent:SetSkin( ply.UVTOOLMemory.Skin )
-		
-		local c = string.Explode( ",", ply.UVTOOLMemory.Color )
-		local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-		
-		local dot = Color.r * Color.g * Color.b * Color.a
-		Ent.OldColor = dot
-		Ent:SetColor( Color )
-		
-		local data = {
-			Color = Color,
-			RenderMode = 0,
-			RenderFX = 0
-		}
-		duplicator.StoreEntityModifier( Ent, "colour", data )
+		timer.Simple(0.5, function()
+			if not IsValid(Ent) then return end
+			local groups = string.Explode( ",", ply.UVTOOLMemory.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+			
+			Ent:SetSkin( ply.UVTOOLMemory.Skin )
+			
+			local c = string.Explode( ",", ply.UVTOOLMemory.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+			
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+			
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end)
 		
 		undo.Create( "Vehicle" )
 		undo.SetPlayer( ply )

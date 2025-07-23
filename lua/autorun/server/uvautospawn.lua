@@ -941,7 +941,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			end
 		end
 		
-		timer.Simple(1, function()
+		timer.Simple(0.5, function()
 			if not IsValid(Ent) then return end
 			local groups = string.Explode( ",", UNITMEMORY.BodyGroups)
 			for i = 1, table.Count( groups ) do

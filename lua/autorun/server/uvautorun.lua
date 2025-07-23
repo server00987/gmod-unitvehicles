@@ -1625,8 +1625,8 @@ function UVAddToWantedListVehicle(vehicle)
 		
 		if (driver and driver:IsPlayer()) then
 			if driver:GetMaxHealth() == 100 then
-				driver:SetHealth(vehicle:GetPhysicsObject():GetMass())
-				driver:SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
+				driver:SetHealth(driver:Health()+1000000)
+				driver:SetMaxHealth(driver:GetMaxHealth()+1000000)
 			end
 		end
 
