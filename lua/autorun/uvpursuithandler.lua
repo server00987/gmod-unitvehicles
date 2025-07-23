@@ -57,12 +57,12 @@ PursuitTable = {
 }
 
 function UVGetDriver(vehicle)
-	if not IsValid(vehicle) then return false end
+	if not IsValid(vehicle) then return nil end
 
 	if vehicle.IsSimfphyscar or vehicle:GetClass() == "prop_vehicle_jeep" then
 		return vehicle:GetDriver()
 	elseif vehicle.IsGlideVehicle then
-		if not vehicle.seats or next(vehicle.seats) == nil then return false end
+		if not vehicle.seats or next(vehicle.seats) == nil then return nil end
 
 		local seat = vehicle.seats[1]
 
@@ -72,15 +72,17 @@ function UVGetDriver(vehicle)
 		end
 	end
 
-	return false
+	return nil
 end
 
 function UVGetDriverName(vehicle)
 	local driver = UVGetDriver(vehicle)
     local driverName = IsValid(driver) and driver:GetName()
 
+	print(vehicle.callsign)
+
     if not driverName then
-        driverName = vehicle.callsign or vehicle.racer or 'Racer ' .. vehicle:EntIndex()
+        driverName = (vehicle.UnitVehicle and vehicle.UnitVehicle.callsign) or vehicle.racer or 'Racer ' .. vehicle:EntIndex()
     end
 
 	return driverName
@@ -160,7 +162,7 @@ function UVSoundHeat(heatlevel)
 			UVPlayingHeat = true
 		end
 	elseif UVHeatPlayMusic then
-		local musicTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/1" )
+		local musicTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/5" )
 		if musicTrack then
 			UVPlaySound(musicTrack, true)
 			UVPlayingHeat = true
@@ -197,7 +199,7 @@ function UVSoundBusting(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/1" )
+	local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/5" )
 	if bustingSound then
 		UVPlaySound(bustingSound, true)
 	else
@@ -244,7 +246,7 @@ function UVSoundCooldown(heatlevel)
 
 	local appendingString = (vehicle and vehicle:GetVelocity():LengthSqr() > 500000) and "/high" or "/low"
 
-	local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/1" .. appendingString )
+	local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/5" .. appendingString )
 	if cooldownSound then
 		UVPlaySound(cooldownSound, true)
 	else
@@ -287,7 +289,7 @@ function UVSoundBusted(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
+	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/5" )
 	if escapedSound then
 		UVPlaySound(escapedSound, false, true)
 	else
@@ -329,7 +331,7 @@ function UVSoundEscaped(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
+	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/5" )
 	if escapedSound then
 		UVPlaySound(escapedSound, false)
 	else

@@ -761,7 +761,7 @@ function ENT:Explode()
 		local bounty = string.Comma(bountyplus)
 		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
 			--self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..UVComboBounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", '', bountyplus, UVComboBounty)
+			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", ' ', bountyplus, UVComboBounty)
 		end end
 		UVWrecks = UVWrecks + 1
 		self.crashing = true

@@ -16,11 +16,11 @@ UV_PT.Killswitch = {
         local targetString = language.GetPhrase("uv.ptech.killswitch.hit.you")
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
 			color = not displayMe and Color(255, 0, 0) or nil,
 			immediate = not displayMe and true or nil,
 			critical = not displayMe and true or nil,
-			})
+		})
     end,
     Locking = function(tbl)
         local displayMe = false
@@ -83,7 +83,7 @@ UV_PT.ESF = {
         local targetString = language.GetPhrase("uv.ptech.esf.hit.you")
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
         })
     end,
     Counter = function(tbl)
@@ -96,7 +96,7 @@ UV_PT.ESF = {
         local targetString = "%s countered your ESF!"
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
         })
     end
 }
@@ -111,7 +111,7 @@ UV_PT.Jammer = {
         local targetString = "#uv.ptech.jammer.hit.you"
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
         })
     end,
     Hit = function(...)
@@ -143,7 +143,7 @@ UV_PT.Shockwave = {
 		-- Format text with nameDisplay
 		local formattedText = string.format(
 			(displayMe and userString) or targetString,
-			nameDisplay
+			language.GetPhrase( nameDisplay )
 		)
 
 		-- Trigger notification
@@ -194,7 +194,7 @@ UV_PT.StunMine = {
         local targetString = language.GetPhrase("uv.ptech.stunmine.hit.you")
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User ) ),
         })
     end,
     Counter = function(tbl)
