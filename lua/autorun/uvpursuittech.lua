@@ -12,15 +12,15 @@ UV_PT.Killswitch = {
             displayMe = true
         end
 
-        local userString = "You killswitched %s!"
-        local targetString = "%s killswitched you!"
+        local userString = language.GetPhrase("uv.ptech.killswitch.hit")
+        local targetString = language.GetPhrase("uv.ptech.killswitch.hit.you")
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
-        })
+			color = not displayMe and Color(255, 0, 0) or nil,
+			immediate = not displayMe and true or nil,
+			critical = not displayMe and true or nil,
+			})
     end,
     Locking = function(tbl)
         local displayMe = false
@@ -28,14 +28,13 @@ UV_PT.Killswitch = {
             displayMe = true
         end
 
-        local userString = "Locking onto %s..."
-        local targetString = "%s is locking onto you!"
+        local userString = "#uv.ptech.killswitch.activated"
+        local targetString = "#uv.ptech.killswitch.lockingon"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
+        UV_UI.general.events.CenterNotification({
+            text = (displayMe and userString) or targetString,
+			color = not displayMe and Color(255, 0, 0) or nil,
+			immediate = not displayMe and true or nil,
         })
     end,
     Counter = function(tbl)
@@ -43,56 +42,36 @@ UV_PT.Killswitch = {
         if tbl.User == LocalPlayer():Nick() then
             displayMe = true
         end
-
-        local userString = "Killswitch failed!"
-        local targetString = "You countered %s!"
-
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
+		local String = "#uv.ptech.killswitch.dodged"
+		
+        UV_UI.general.events.CenterNotification({
+            text = String,
         })
     end,
     EngineRestarting = function(tbl)
-        -- local tbl = select(1, ...)
+        local userString = "#uv.ptech.killswitch.engine.on"
 
-        -- local displayMe = false
-        -- if tbl.User == LocalPlayer():Nick() then
-        --     displayMe = true
-        -- end
-
-        local userString = "Restarting engine..."
-        local targetString = "You countered %s!"
-
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
+			immediate = true,
+			critical = true,
         })
     end
 }
 UV_PT.ESF = {
     Use = function(tbl)
-        local userString = "ESF Activated!"
+        local userString = "#uv.ptech.esf.activated"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
     Deactivate = function(tbl)
         local userString = "ESF Deactivated!"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
-        })
+        -- UV_UI.general.events.CenterNotification({
+            -- text = userString,
+        -- })
     end,
     Hit = function(tbl)
         local displayMe = false
@@ -100,14 +79,11 @@ UV_PT.ESF = {
             displayMe = true
         end
 
-        local userString = "You hit %s with ESF!"
-        local targetString = "%s hit you with ESF!"
+        local userString = language.GetPhrase("uv.ptech.esf.hit")
+        local targetString = language.GetPhrase("uv.ptech.esf.hit.you")
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
     Counter = function(tbl)
@@ -119,11 +95,8 @@ UV_PT.ESF = {
         local userString = "You ESF-countered %s!"
         local targetString = "%s countered your ESF!"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end
 }
@@ -134,14 +107,11 @@ UV_PT.Jammer = {
             displayMe = true
         end
 
-        local userString = "Jammer activated!"
-        local targetString = "You are being jammed!"
+        local userString = "#uv.ptech.jammer.activated"
+        local targetString = "#uv.ptech.jammer.hit.you"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
     Hit = function(...)
@@ -155,31 +125,47 @@ UV_PT.Shockwave = {
         if tbl.User == LocalPlayer():Nick() then
             displayMe = true
         end
+		
+		local userString = language.GetPhrase("uv.ptech.shockwave.hit")
+		local targetString = language.GetPhrase("uv.ptech.shockwave.hit.you")
 
-        local userString = "You hit %s with Shockwave!"
-        local targetString = "You were hit with Shockwave!"
+		-- Get first target and count
+		local targets = tbl.Target or {}
+		local firstName = targets[1] or "UNKNOWN"
+		local extraCount = #targets - 1
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, table.concat(tbl.Target, ", ")),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
-        })
+		-- Build name string: "Name" or "Name (+X)"
+		local nameDisplay = firstName
+		if extraCount > 0 then
+			nameDisplay = string.format("%s (+%d)", firstName, extraCount)
+		end
+
+		-- Format text with nameDisplay
+		local formattedText = string.format(
+			(displayMe and userString) or targetString,
+			nameDisplay
+		)
+
+		-- Trigger notification
+		UV_UI.general.events.CenterNotification({
+			text = formattedText,
+		})
+
     end,
     Use = function(...)
-        -- used but probably obsolete since shockwave is an instant effect
-        --print('Use!', 'Shockwave')
+        local userString = "#uv.ptech.shockwave.activated"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
     end
 }
 UV_PT.Spikestrip = {
     Use = function(tbl)
-        local userString = "Dropped spikestrips!"
+        local userString = "#uv.ptech.spikes.activated"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
     Hit = function(tbl)
@@ -191,12 +177,9 @@ UV_PT.Spikestrip = {
         local userString = "%s hit your spikestrips!"
         local targetString = "You hit %s's spikestrips!"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
-        })
+        -- UV_UI.general.events.CenterNotification({
+            -- text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+        -- })
     end
 }
 UV_PT.StunMine = {
@@ -207,52 +190,40 @@ UV_PT.StunMine = {
             displayMe = true
         end
 
-        local userString = "You hit %s with Stun Mine!"
-        local targetString = "%s hit you with Stun Mine!"
+        local userString = language.GetPhrase("uv.ptech.stunmine.hit")
+        local targetString = language.GetPhrase("uv.ptech.stunmine.hit.you")
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
     Counter = function(tbl)
-        local displayMe = false
-        if tbl.User ~= LocalPlayer():Nick() then
-            displayMe = true
-        end
+        -- local displayMe = false
+        -- if tbl.User ~= LocalPlayer():Nick() then
+            -- displayMe = true
+        -- end
 
-        local userString = "You Stun mine-countered %s!"
-        local targetString = "%s countered your stun mine!"
+        -- local userString = "You Stun mine-countered %s!"
+        -- local targetString = "%s countered your stun mine!"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
-        })
+        -- UV_UI.general.events.CenterNotification({
+            -- text = string.format( (displayMe and userString) or targetString, (displayMe and tbl.Target) or tbl.User),
+        -- })
     end,
     Use = function(tbl)
-        local userString = "Stun mine dropped!"
+        local userString = "#uv.ptech.stunmine.activated"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end,
 }
 UV_PT.RepairKit = {
     Use = function(...)
-        local userString = "Repaired!"
+        local userString = "#uv.ptech.repairkit.activated"
 
-        UV_UI.racing.mostwanted.events.CenterNotification({
+        UV_UI.general.events.CenterNotification({
             text = userString,
-            textNoFall = true,
-            noIcon = true,
-            immediate = true
         })
     end
 }

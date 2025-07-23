@@ -32,6 +32,7 @@ local Colors = {
 
 UVMaterials = {
     ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
+    ["PT_BG"] = Material("unitvehicles/hud/PT_BG.png"),
     
     ["GLOW_ICON"] = Material("unitvehicles/icons/CIRCLE_GLOW_LIGHT.png"),
     ["UNITS_DAMAGED"] = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png"),
@@ -909,6 +910,179 @@ local function uv_general( ... )
 end
 
 UV_UI.general.main = uv_general
+
+UV_UI.general.states = {
+	notificationQueue = {},
+	notificationActive = false,
+	closing = false,
+	closingStartTime = nil,
+	ptext = nil,
+	startTime = nil,
+}
+
+UV_UI.general.events = {
+	CenterNotification = function(params)
+		local ptext = params.text or "REPLACEME"
+		local pcol = params.color or Color( 255, 255, 255 )
+		local immediate = params.immediate or nil
+		local iscritical = params.critical or nil
+		
+		local StartClosing
+		local closing = false
+		local closeStartTime = nil
+
+		-- Handle queue logic
+		if UV_UI.general.states.notificationActive then
+			if immediate then
+				-- Retain critical entries only
+				local retainedQueue = {}
+				for _, v in ipairs(UV_UI.general.states.notificationQueue) do
+					if v.critical then
+						table.insert(retainedQueue, v)
+					end
+				end
+
+				UV_UI.general.states.notificationQueue = retainedQueue
+				table.insert(UV_UI.general.states.notificationQueue, 1, params)
+
+				timer.Simple(0, function()
+					if not closing and StartClosing then
+						StartClosing()
+					end
+				end)
+			else
+				table.insert(UV_UI.general.states.notificationQueue, params)
+			end
+			return
+		end
+
+		UV_UI.general.states.notificationActive = true
+
+		local hookName = "UV_CENTERNOTI_PURSUITTECH"
+		local displayDuration = 3
+		local w, h = ScrW(), ScrH()
+		local startTime = CurTime()
+		local closing = false
+		local closeStartTime = nil
+
+		local delay = 0.1
+		local expandDuration = 0.15
+		local whiteFadeInDuration = 0.0175
+		local blackFadeOutDuration = 0.65
+
+		local expandStart = delay
+		local whiteStart = expandStart + expandDuration
+		local blackStart = whiteStart + whiteFadeInDuration
+
+		-- Remove any prior hook
+		hook.Remove("HUDPaint", hookName)
+
+		StartClosing = function()
+			if closing then return end
+			closing = true
+			closeStartTime = CurTime()
+
+			-- Ensure we clean everything after closing finishes
+			timer.Create("UV_CENTERNOTI_CLEANUP", expandDuration, 1, function()
+				hook.Remove("HUDPaint", hookName)
+				UV_UI.general.states.notificationActive = false
+
+				if #UV_UI.general.states.notificationQueue > 0 then
+					local nextParams = table.remove(UV_UI.general.states.notificationQueue, 1)
+					-- If the queued entry has 'immediate', allow mid-close interruption next round
+					timer.Simple(0, function()
+						UV_UI.general.events.CenterNotification(nextParams)
+					end)
+				end
+			end)
+		end
+
+		local forceTimer = iscritical and 3 or 1
+		-- Mid-life force-close handler for 'immediate' queueing
+		timer.Create("UV_CENTERNOTI_FORCECHECK", 0.05, 0, function()
+			if CurTime() - startTime >= forceTimer and not closing and #UV_UI.general.states.notificationQueue > 0 then
+				StartClosing()
+				timer.Remove("UV_CENTERNOTI_FORCECHECK")
+			end
+		end)
+
+		-- Regular close trigger
+		timer.Create("UV_CENTERNOTI_TIMER", displayDuration - expandDuration, 1, function()
+			if not closing then
+				StartClosing()
+			end
+			timer.Remove("UV_CENTERNOTI_FORCECHECK")
+		end)
+
+		hook.Add("HUDPaint", hookName, function()
+			local now = CurTime()
+			local realTime = RealTime()
+			local animTime = now - startTime
+			local barProgress = 0
+			local currentWidth
+
+			if closing then
+				local closeAnimTime = now - closeStartTime
+				barProgress = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+				currentWidth = Lerp(barProgress, 0, w)
+			else
+				if animTime >= expandStart then
+					barProgress = math.Clamp((animTime - expandStart) / expandDuration, 0, 1)
+				end
+				currentWidth = Lerp(barProgress, 0, w)
+			end
+
+			local barHeight = h * 0.1
+			local barX = (w - currentWidth) / 2
+			local barY = h * 0.725
+
+			-- Color Fade Logic
+			local colorVal = 0
+			if animTime >= whiteStart and animTime < blackStart then
+				local p = (animTime - whiteStart) / whiteFadeInDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 0, 255)
+			elseif animTime >= blackStart then
+				local p = (animTime - blackStart) / blackFadeOutDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 255, 0)
+			end
+
+			if closing then
+				-- Fade out during closing
+				local closeAnimTime = now - closeStartTime
+				local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+				colorVal = colorVal * fade
+			end
+
+			-- Draw bar
+			surface.SetMaterial(UVMaterials["PT_BG"])
+			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
+			surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
+
+			-- Text
+			if animTime >= whiteStart then
+				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
+
+				if closing then
+					local closeAnimTime = now - closeStartTime
+					local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+					outlineAlpha = outlineAlpha * fade
+				end
+
+				draw.SimpleTextOutlined(
+					ptext,
+					"UVFont5UI",
+					w * 0.5,
+					h * 0.755,
+					pcol,
+					TEXT_ALIGN_CENTER,
+					TEXT_ALIGN_TOP,
+					1.25,
+					Color(0, 0, 0, outlineAlpha)
+				)
+			end
+		end)
+	end,
+}
 
 -- Carbon
 UV_UI.racing.carbon = {}
