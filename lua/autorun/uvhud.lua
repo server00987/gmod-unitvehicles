@@ -1015,6 +1015,7 @@ UV_UI.general.events = {
 		end)
 
 		hook.Add("HUDPaint", hookName, function()
+			local showhud = GetConVar("cl_drawhud"):GetBool()
 			local now = CurTime()
 			local realTime = RealTime()
 			local animTime = now - startTime
@@ -1056,7 +1057,7 @@ UV_UI.general.events = {
 			-- Draw bar
 			surface.SetMaterial(UVMaterials["PT_BG"])
 			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
-			surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
+			if showhud then surface.DrawTexturedRect(barX, barY, currentWidth, barHeight) end
 
 			-- Text
 			if animTime >= whiteStart then
@@ -1068,17 +1069,7 @@ UV_UI.general.events = {
 					outlineAlpha = outlineAlpha * fade
 				end
 
-				draw.SimpleTextOutlined(
-					ptext,
-					"UVFont5UI",
-					w * 0.5,
-					h * 0.755,
-					pcol,
-					TEXT_ALIGN_CENTER,
-					TEXT_ALIGN_TOP,
-					1.25,
-					Color(0, 0, 0, outlineAlpha)
-				)
+				draw.SimpleTextOutlined( showhud and ptext or "", "UVFont5UI", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
 		end)
 	end,
