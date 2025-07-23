@@ -716,7 +716,7 @@ end
 
 function UVPassConVarFilter(v)
 	
-	if not IsValid(v) or v.uvbusted or not UVGetDriver(v) then
+	if not IsValid(v) or v.uvbusted then
 		return false
 	end
 	
@@ -2749,7 +2749,7 @@ function UVPlayerWreck(vehicle)
 	net.Broadcast()
 	
 	local driver = UVGetDriver(vehicle)
-	if driver:IsPlayer() then
+	if driver and driver:IsPlayer() then
 		local bustedtable = {}
 		net.Start( "UVHUDWreckedDebrief" )
 		net.Send(driver)

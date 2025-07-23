@@ -77,7 +77,7 @@ end
 
 function UVGetDriverName(vehicle)
 	local driver = UVGetDriver(vehicle)
-    local driverName = driver and driver:GetName()
+    local driverName = IsValid(driver) and driver:GetName()
 
     if not driverName then
         driverName = vehicle.callsign or vehicle.racer or 'Racer ' .. vehicle:EntIndex()
