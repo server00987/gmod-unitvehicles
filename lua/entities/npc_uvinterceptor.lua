@@ -1443,7 +1443,7 @@ if SERVER then
 							end
 						end
 					elseif vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" then
-						if self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
+						if self.v:VC_getHealth() and self.v:VC_getHealthMax() and self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
 							UVDeployWeapon(self.v, k)
 						end
 					end
