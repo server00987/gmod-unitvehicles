@@ -1470,7 +1470,7 @@ UV_UI.racing.carbon.events = {
         OK = vgui.Create("DButton", vgui.GetWorldPanel())
         OK:SetText("")
         OK:SetPos(w*0.2565, h*0.9)
-        OK:SetSize(w*0.15, h*0.035)
+        OK:SetSize(w*0.125, h*0.035)
         OK.Paint = function() end
 
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
@@ -1689,28 +1689,26 @@ UV_UI.racing.carbon.events = {
                 
                 surface.SetMaterial(UVMaterials['ARROW_CARBON'])
                 surface.DrawTexturedRect( w * 0.735, y, w * 0.015, rowHeight)
-                
-                draw.SimpleText(tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-                draw.SimpleText(name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-                draw.SimpleText(UV_FormatRaceEndTime(totalTime), "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0025, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+
+				draw.SimpleTextOutlined( tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+				draw.SimpleTextOutlined( name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+				draw.SimpleTextOutlined( UV_FormatRaceEndTime(totalTime), "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
             end
             
             -- Time remaining and closing
-            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. lang("uv.results.continue")
-            local conttextl = string.len(conttext)
-            
-            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
-            local autotextl = string.len(autotext)
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-            
-            surface.SetDrawColor( 150, 150, 150, 175 )
-            
-            surface.DrawRect( w*0.2565, h*0.9, (w*0.00575 * conttextl), h*0.035)
-            draw.DrawText( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.9025, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
-            surface.DrawRect( w*0.26 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
-            draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2625 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
+            surface.SetDrawColor( 100, 100, 100, 200 )
+            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            surface.SetDrawColor( 0, 0, 0, 255 )
+            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
+			)
+
             if scrollOffset > 0 then
                 draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.3, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
@@ -1943,8 +1941,8 @@ UV_UI.pursuit.carbon.events = {
         
         OK = vgui.Create("DButton", vgui.GetWorldPanel())
         OK:SetText("")
-        OK:SetPos(w*0.2565, h*0.675)
-        OK:SetSize(w*0.15, h*0.035)
+        OK:SetPos(w*0.2565, h*0.9)
+        OK:SetSize(w*0.125, h*0.035)
         OK.Paint = function() end
         
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
@@ -2137,42 +2135,39 @@ UV_UI.pursuit.carbon.events = {
             local h1, h2 = h*0.3825, h*0.4225
             
             -- Text
-            draw.DrawText( debrieftitletext, "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT )
+            draw.SimpleTextOutlined( debrieftitletext, "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
             
-            draw.SimpleText( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleTextOutlined( "#uv.results.chase.bounty", "UVCarbonLeaderboardFont", w*0.2565, h1, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.time", "UVCarbonLeaderboardFont", w*0.2565, h2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.units.deployed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.units.damaged", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.units.destroyed", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.dodged.blocks", "UVCarbonLeaderboardFont", w*0.2565, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( "#uv.results.chase.dodged.spikes", "UVCarbonLeaderboardFont", w*0.2565, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
             
-            draw.SimpleText( debrieftitlevar, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleTextOutlined( debrieftitlevar, "UVCarbonLeaderboardFont", w*0.74, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
             
-            draw.SimpleText( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            draw.SimpleText( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-            
-            
+            draw.SimpleTextOutlined( bounty, "UVCarbonLeaderboardFont", w*0.74, h1, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( time, "UVCarbonLeaderboardFont", w*0.74, h2, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( deploys, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( tags, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.08, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( wrecks, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( roadblocksdodged, "UVCarbonLeaderboardFont", w*0.74, h2 + h*0.16, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+            draw.SimpleTextOutlined( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
+
             -- Time remaining and closing
-            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. lang("uv.results.continue")
-            local conttextl = string.len(conttext)
-            
-            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
-            local autotextl = string.len(autotext)
-            
-            surface.SetDrawColor( 150, 150, 150, 175 )
-            
-            surface.DrawRect( w*0.2565, h*0.675, (w*0.00575 * conttextl), h*0.035)
-            draw.DrawText( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
-            surface.DrawRect( w*0.26 +  (w*0.00575 * conttextl), h*0.675, (w*0.00575 * autotextl), h*0.035)
-            draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2625 + (w*0.00575 * conttextl), h*0.6785, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
+            surface.SetDrawColor( 100, 100, 100, 200 )
+            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            surface.SetDrawColor( 0, 0, 0, 255 )
+            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
+			)
+
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
@@ -2906,8 +2901,8 @@ UV_UI.racing.mostwanted.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.205, h*0.77)
-        OK:SetSize(w*0.205, h*0.0425)
+        OK:SetPos(w*0.2, h*0.7725)
+        OK:SetSize(w*0.6, h*0.04)
         OK.Paint = function() end
         
         local timestart = CurTime()
@@ -3183,9 +3178,9 @@ UV_UI.racing.mostwanted.events = {
             -- Before auto-close timer starts, show the text but no countdown
             draw.DrawText(
             string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
-            "UVFont5UI", w * 0.795, h * 0.77,
-            Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-            TEXT_ALIGN_RIGHT
+			"UVFont5UI", w * 0.795, h * 0.77,
+			Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
+			TEXT_ALIGN_RIGHT
         )
     end
     if closing then
@@ -3430,8 +3425,8 @@ UV_UI.pursuit.mostwanted.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.2, h*0.77)
-        OK:SetSize(w*0.6, h*0.0425)
+        OK:SetPos(w*0.2, h*0.7725)
+        OK:SetSize(w*0.6, h*0.04)
 		OK.Paint = function() end
         
         local timestart = CurTime()
@@ -3645,9 +3640,9 @@ UV_UI.pursuit.mostwanted.events = {
                 
                 draw.DrawText(
                 string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
-                "UVFont5UI", w * 0.5, h * 0.81,
+                "UVFont5UI", w * 0.795, h * 0.77,
                 Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-                TEXT_ALIGN_CENTER
+                TEXT_ALIGN_RIGHT
             )
             
             if autoCloseRemaining <= 0 then
@@ -3662,9 +3657,9 @@ UV_UI.pursuit.mostwanted.events = {
             -- Before auto-close timer starts, show the text but no countdown
             draw.DrawText(
             string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
-            "UVFont5UI", w * 0.5, h * 0.81,
-            Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-            TEXT_ALIGN_RIGHT
+			"UVFont5UI", w * 0.795, h * 0.77,
+			Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
+			TEXT_ALIGN_RIGHT
         )
     end
     if closing then
@@ -4755,7 +4750,7 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
             
-            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+            draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.815, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
             if timeremaining < 1 then
@@ -5184,7 +5179,7 @@ UV_UI.pursuit.undercover.events = {
             if timeremaining > autoCloseDelay then
                 timeremaining = autoCloseDelay
             end
-            draw.DrawText( lang("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+            draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.71, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
             if timeremaining < 1 then
@@ -5945,7 +5940,7 @@ UV_UI.pursuit.original.events = {
             draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             -- Time remaining and closing
-            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -6040,7 +6035,7 @@ UV_UI.pursuit.original.events = {
             draw.SimpleText( spikestripsdodged, "UVFont5", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             -- Time remaining and closing
-            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
@@ -6136,9 +6131,9 @@ UV_UI.pursuit.original.events = {
             
             -- Time remaining and closing
             
-            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
             if timeremaining < 1 then
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
                 self:Close()
@@ -6231,9 +6226,9 @@ UV_UI.pursuit.original.events = {
             
             -- Time remaining and closing
             
-            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
             if timeremaining < 1 then
                 hook.Remove("Think", "CheckJumpKeyForDebrief")
                 self:Close()
@@ -6974,8 +6969,9 @@ UV_UI.racing.prostreet.events = {
         ResultPanel:SetKeyboardInputEnabled(false)
         
         OK:SetText("")
-        OK:SetPos(w*0.2, h*0.9)
-        OK:SetSize(w*0.15, h*0.035)
+        OK:SetPos(w*0.2565, h*0.9)
+        OK:SetSize(w*0.125, h*0.035)
+
         OK:SetEnabled(true)
         OK.Paint = function() end
         
@@ -7170,20 +7166,19 @@ UV_UI.racing.prostreet.events = {
             
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-            
-            local conttext = "( " .. UVBindButton("+jump") .. " ) " .. language.GetPhrase("uv.results.continue")
-            local conttextl = string.len(conttext)
-            
-            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
-            local autotextl = string.len(autotext)
-            
-            surface.SetDrawColor( 150, 150, 150, 175 * fadeAlpha )
-            surface.DrawRect( w*0.1965, h*0.9, (w*0.00575 * conttextl), h*0.035)
-            draw.DrawText( conttext, "UVCarbonLeaderboardFont", w*0.2085, h*0.9025, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT )
-            
-            surface.DrawRect( w*0.2 +  (w*0.00575 * conttextl), h*0.9, (w*0.00575 * autotextl), h*0.035)
-            draw.DrawText( autotext, "UVCarbonLeaderboardFont", w*0.2125 + (w*0.00575 * conttextl), h*0.9025, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT )
-            
+
+            surface.SetDrawColor( 100, 100, 100, 200 )
+            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            surface.SetDrawColor( 0, 0, 0, 255 )
+            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
+            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			
+            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
+			)
+
             cam.PopModelMatrix()
             
             if autoCloseRemaining <= 0 then
