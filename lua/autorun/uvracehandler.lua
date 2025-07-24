@@ -21,7 +21,7 @@ end
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
-	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 1, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
 
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
@@ -1634,6 +1634,7 @@ else -- CLIENT stuff
 			local normalized_velo = vehicle_velocity:GetNormalized()
 
 			local dot_product = normalized_velo:Dot(unit)
+			local LastWrongWayCheckTime = 0
 
 			if dot_product > - .8 then
 				LastWrongWayCheckTime = CurTime()
@@ -1739,8 +1740,8 @@ else -- CLIENT stuff
 		
 		local now = CurTime()
 		local w, h = ScrW(), ScrH()
-		local totalHeight = h * 0.1
-		local totalWidth = w * 0.125
+		local totalHeight = h * 0.2
+		local totalWidth = w * 0.5
 		local barHeight, barWidth, alpha = 0, 0, 0
 
 		local state = UVRaceCinematicOverlay.state
@@ -1851,8 +1852,15 @@ else -- CLIENT stuff
 
 		-- Draw black bars
 		surface.SetDrawColor(0, 0, 0, alpha)
-		surface.DrawRect(0, 0, w, barHeight)
-		surface.DrawRect(0, h - barHeight, w, barHeight)
+		
+		-- surface.DrawRect(0, 0, w, barHeight)
+		-- surface.DrawRect(0, h - barHeight, w, barHeight)
+		
+		surface.SetMaterial( Material("unitvehicles/startborders/2_left.png") )
+		surface.DrawTexturedRect(0, 0, barWidth, h)
+		
+		surface.SetMaterial( Material("unitvehicles/startborders/2_right.png") )
+		surface.DrawTexturedRect(w - barWidth, 0, barWidth, h)
 
 		-- Draw Detail Text
 		-- if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
