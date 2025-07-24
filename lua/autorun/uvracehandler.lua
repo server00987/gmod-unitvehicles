@@ -240,9 +240,11 @@ if SERVER then
 			local time = timer.RepsLeft( "uvrace_start" )
 			for _, vehicle in pairs( UVRaceCurrentParticipants ) do
 				local driver = UVGetDriver( vehicle )
-				net.Start( "uvrace_start" )
-				net.WriteInt( time, 11 )
-				net.Send( driver )
+				if driver then
+					net.Start( "uvrace_start" )
+					net.WriteInt( time, 11 )
+					net.Send( driver )
+				end
 			end
 			if time == 1 then
 				UVRaceBegin()

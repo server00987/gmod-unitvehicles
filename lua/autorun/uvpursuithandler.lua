@@ -68,7 +68,7 @@ function UVGetDriver(vehicle)
 
 		if IsValid( seat ) then
 			local driver = seat:GetDriver()
-			return IsValid(driver) and driver
+			return (IsValid(driver) and driver) or nil
 		end
 	end
 
@@ -78,8 +78,6 @@ end
 function UVGetDriverName(vehicle)
 	local driver = UVGetDriver(vehicle)
     local driverName = IsValid(driver) and driver:GetName()
-
-	print(vehicle.callsign)
 
     if not driverName then
         driverName = (vehicle.UnitVehicle and vehicle.UnitVehicle.callsign) or vehicle.racer or 'Racer ' .. vehicle:EntIndex()
