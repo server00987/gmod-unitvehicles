@@ -129,21 +129,26 @@ UV_PT.Shockwave = {
 		local userString = language.GetPhrase("uv.ptech.shockwave.hit")
 		local targetString = language.GetPhrase("uv.ptech.shockwave.hit.you")
 
-		-- Get first target and count
-		local targets = tbl.Target or {}
-		local firstName = targets[1] or "UNKNOWN"
-		local extraCount = #targets - 1
+        local display = nil
+
+        if displayMe then
+            local targets = tbl.Target or {}
+		    local firstName = targets[1] or "UNKNOWN"
+		    local extraCount = #targets - 1
 
 		-- Build name string: "Name" or "Name (+X)"
-		local nameDisplay = firstName
-		if extraCount > 0 then
-			nameDisplay = string.format("%s (+%d)", firstName, extraCount)
-		end
+		    display = firstName
+		    if extraCount > 0 then
+			    display = string.format("%s (+%d)", language.GetPhrase( firstName ), extraCount)
+		    end
+        else
+            display = language.GetPhrase( tbl.User )
+        end
 
 		-- Format text with nameDisplay
 		local formattedText = string.format(
 			(displayMe and userString) or targetString,
-			language.GetPhrase( nameDisplay )
+			display
 		)
 
 		-- Trigger notification
