@@ -2220,6 +2220,10 @@ function UVMoveToGridSlot( vehicle, aienabled )
 				RenderFX = 0
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
+
+			if isfunction(Ent.Repair) then
+				Ent:Repair()
+			end
 		end
 		
 		for k, ent in pairs( Ents ) do
