@@ -438,6 +438,8 @@ if SERVER then
 		end
 	end)
 else -- CLIENT stuff
+	UVRaceDNFTimer = CreateClientConVar("unitvehicle_racednftimer", 1, true, false, nil)
+
 	function UVSoundRacingStop()
 		UVPlayingRace = false
 		-- if UVPlayingRace then
