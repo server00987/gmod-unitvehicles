@@ -9,6 +9,15 @@ local LIGHTLEVEL = {
 	ALL = 3,
 }
 
+local function GetPhoton2Siren(vehicle)
+	local pc = vehicle:GetPhotonControllerFromAncestor()
+    if IsValid(pc) and pc.CurrentProfile.Siren then
+		local sirenname = pc.CurrentProfile.Siren[1]
+		local siren = Photon2.GetSiren( sirenname )
+		return siren
+    end
+end
+
 function ENT:GetMaxSteeringAngle()
 	if self.v.IsScar then
 		return self.v.MaxSteerForce * 3 -- Obviously this is not actually steering angle
@@ -450,8 +459,10 @@ function ENT:SetELS(on)
     and isfunction(self.v.GetPhotonControllerFromAncestor) then
         local pc = self.v:GetPhotonControllerFromAncestor()
         if IsValid(pc) then
+			local sirendata = GetPhoton2Siren(self.v)
+			local randomsiren = "T"..math.random(1, #sirendata.OrderedTones)
             pc:SetChannelMode("Emergency.Warning", on and "MODE3" or "OFF")
-            pc:SetChannelMode("Emergency.Siren", on and "T1" or "OFF")
+            pc:SetChannelMode("Emergency.Siren", on and randomsiren or "OFF")
         end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
@@ -499,7 +510,9 @@ function ENT:SetELSSound(on)
     and isfunction(self.v.GetPhotonControllerFromAncestor) then
         local pc = self.v:GetPhotonControllerFromAncestor()
         if IsValid(pc) then
-            pc:SetChannelMode("Emergency.Siren", on and "T1" or "OFF")
+			local sirendata = GetPhoton2Siren(self.v)
+			local randomsiren = "T"..math.random(1, #sirendata.OrderedTones)
+            pc:SetChannelMode("Emergency.Siren", on and randomsiren or "OFF")
         end
 	elseif Photon and not GetConVar("unitvehicle_vcmodelspriority"):GetBool()
 	and isfunction(self.v.ELS_SirenOn)
@@ -545,7 +558,9 @@ function ENT:SetELSSiren(on)
     and isfunction(self.v.GetPhotonControllerFromAncestor) then
         local pc = self.v:GetPhotonControllerFromAncestor()
         if IsValid(pc) then
-            pc:SetChannelMode("Emergency.SirenOverride", on and "T1" or "OFF")
+			local sirendata = GetPhoton2Siren(self.v)
+			local randomsiren = "T"..math.random(1, #sirendata.OrderedTones)
+            pc:SetChannelMode("Emergency.Siren", randomsiren)
         end
 	elseif Photon
 	and isfunction(self.v.ELS_SirenToggle) then
