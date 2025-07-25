@@ -13,13 +13,6 @@ local UVHUDRaceFinishEndTime = nil
 local UVHUDRaceFinishStartTime = nil
 local UVHUDRaceAnimTriggered = false
 
-if CLIENT then -- For Global Best Lap
-	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
-	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
-	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
-	UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
-end
-
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
@@ -439,8 +432,11 @@ if SERVER then
 		end
 	end)
 else -- CLIENT stuff
-	UVRaceDNFTimer = CreateClientConVar("unitvehicle_racednftimer", 1, true, false, nil)
-
+	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
+	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
+	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
+	UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+	
 	function UVSoundRacingStop()
 		UVPlayingRace = false
 		-- if UVPlayingRace then
@@ -1743,7 +1739,7 @@ else -- CLIENT stuff
 		
 		local now = CurTime()
 		local w, h = ScrW(), ScrH()
-		local totalHeight = h * 0.2
+		local totalHeight = h * 0.125
 		local totalWidth = w * 0.5
 		local barHeight, barWidth, alpha = 0, 0, 0
 
@@ -1757,6 +1753,66 @@ else -- CLIENT stuff
 		local font = "UVFont5"
 
 		surface.SetFont(font)
+
+		local squareTexts = {}
+
+		-- Static title
+		-- table.insert(squareTexts, language.GetPhrase("uv.prerace.details"))
+
+		-- Track name and author
+		table.insert(squareTexts, string.format(
+			language.GetPhrase("uv.prerace.name"),
+			-- UVRace_CurrentTrackName .. " | " .. UVRace_CurrentTrackAuthor
+			UVRace_CurrentTrackName
+		))
+
+		-- Conditionally add "laps"
+		local laps = UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps
+		if laps and tonumber(laps) and laps >= 2 then
+			table.insert(squareTexts, string.format(
+				language.GetPhrase("uv.prerace.laps"),
+				laps
+			))
+		end
+
+		-- Checkpoints
+		table.insert(squareTexts, string.format(
+			language.GetPhrase("uv.prerace.checks"),
+			GetGlobalInt("uvrace_checkpoints") or "???"
+		))
+
+		-- Starting position
+		table.insert(squareTexts, string.format(
+			language.GetPhrase("uv.prerace.startpos"),
+			language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos)
+		))
+		
+		-- Participant List (NOT WORKING)
+		-- table.insert(squareTexts, string.format(
+			-- language.GetPhrase("uv.prerace.participants"),
+			-- "UNKNOWN"
+		-- ))
+		
+		-- Best Lap (NOT WORKING)
+		-- table.insert(squareTexts, string.format(
+			-- language.GetPhrase("uv.prerace.bestlap"),
+			-- "--:--.---", -- Time
+			-- "---" -- Holder
+		-- ))
+
+		if not UVRaceCinematicOverlay.squares then
+			UVRaceCinematicOverlay.squares = {}
+			for i, text in ipairs(squareTexts) do
+				local textW, _ = surface.GetTextSize(text)
+				table.insert(UVRaceCinematicOverlay.squares, {
+					text = text,
+					width = textW + 24, -- padding inside
+					startTime = UVRaceCinematicOverlay.startTime + UVRaceCinematicOverlay.slideInDuration + (i - 1) * extendTime,
+					progress = 0,
+					done = false
+				})
+			end
+		end
 
 		-- Bar Animations
 		if state == "slidingIn" then
@@ -1774,66 +1830,6 @@ else -- CLIENT stuff
 			barHeight = totalHeight
 			barWidth = totalWidth
 			alpha = 255
-
-			local squareTexts = {}
-
-			-- Static title
-			table.insert(squareTexts, language.GetPhrase("uv.prerace.details"))
-
-			-- Track name and author
-			table.insert(squareTexts, string.format(
-				language.GetPhrase("uv.prerace.name"),
-				-- UVRace_CurrentTrackName .. " | " .. UVRace_CurrentTrackAuthor
-				UVRace_CurrentTrackName
-			))
-
-			-- Conditionally add "laps"
-			local laps = UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps
-			if laps and tonumber(laps) and laps >= 2 then
-				table.insert(squareTexts, string.format(
-					language.GetPhrase("uv.prerace.laps"),
-					laps
-				))
-			end
-
-			-- Checkpoints
-			table.insert(squareTexts, string.format(
-				language.GetPhrase("uv.prerace.checks"),
-				GetGlobalInt("uvrace_checkpoints") or "???"
-			))
-
-			-- Starting position
-			table.insert(squareTexts, string.format(
-				language.GetPhrase("uv.prerace.startpos"),
-				language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos)
-			))
-			
-			-- Participant List (NOT WORKING)
-			-- table.insert(squareTexts, string.format(
-				-- language.GetPhrase("uv.prerace.participants"),
-				-- "UNKNOWN"
-			-- ))
-			
-			-- Best Lap (NOT WORKING)
-			-- table.insert(squareTexts, string.format(
-				-- language.GetPhrase("uv.prerace.bestlap"),
-				-- "--:--.---", -- Time
-				-- "---" -- Holder
-			-- ))
-
-			if not UVRaceCinematicOverlay.squares then
-				UVRaceCinematicOverlay.squares = {}
-				for i, text in ipairs(squareTexts) do
-					local textW, _ = surface.GetTextSize(text)
-					table.insert(UVRaceCinematicOverlay.squares, {
-						text = text,
-						width = textW + 24, -- padding inside
-						startTime = UVRaceCinematicOverlay.startTime + UVRaceCinematicOverlay.slideInDuration + (i - 1) * extendTime,
-						progress = 0,
-						done = false
-					})
-				end
-			end
 
 			if UVRaceCountdown and UVRaceCountdown.stage == 4 then
 				UVRaceCinematicOverlay.state = "slidingOut"
@@ -1856,71 +1852,78 @@ else -- CLIENT stuff
 		-- Draw black bars
 		surface.SetDrawColor(0, 0, 0, alpha)
 		
-		-- surface.DrawRect(0, 0, w, barHeight)
-		-- surface.DrawRect(0, h - barHeight, w, barHeight)
+		surface.DrawRect(0, 0, w, barHeight)
+		surface.DrawRect(0, h - barHeight, w, barHeight)
 		
-		surface.SetMaterial( Material("unitvehicles/startborders/2_left.png") )
-		surface.DrawTexturedRect(0, 0, barWidth, h)
+		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"] )
+		surface.DrawTexturedRect(0, h * 0.15, barWidth, h * 0.05 + ((h * 0.04) * #UVRaceCinematicOverlay.squares))
 		
-		surface.SetMaterial( Material("unitvehicles/startborders/2_right.png") )
-		surface.DrawTexturedRect(w - barWidth, 0, barWidth, h)
+		-- surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
+		-- surface.DrawTexturedRect(w - barWidth, h * 0.6, barWidth, h * 0.3)
 
 		-- Draw Detail Text
-		-- if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
-			-- local squareYShift = (#UVRaceCinematicOverlay.squares * (squareHeight + squarePadding))
+		if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
+			draw.SimpleTextOutlined( game.GetMap(), font, w * 0.95, barHeight - (h * 0.05), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
+		end
 
-			-- draw.SimpleTextOutlined( "#uv.prerace.details", font, w * 0.05, h - barHeight - (h * 0.055) - squareYShift, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
-			
-			-- draw.SimpleTextOutlined( game.GetMap(), font, w * 0.95, barHeight - (h * 0.05), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
-		-- end
-
-		-- Draw Square Info
+		-- Draw Square Info, simplified version
 		if UVRaceCinematicOverlay.squares then
-			local baseX = w * 0.05
-			local baseY = h - barHeight - (h * 0.035)
+			local baseX = w * 0.485
+			local baseY = h * 0.215
+			local lineSpacing = h * 0.04
 			
-			local totalHeight = (#UVRaceCinematicOverlay.squares * (squareHeight + squarePadding)) - squarePadding
-			local adjustedBaseY = baseY - (h*0.03 * #UVRaceCinematicOverlay.squares)
+			draw.SimpleTextOutlined( "#uv.prerace.details", font, barWidth - baseX, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 
 			for i, square in ipairs(UVRaceCinematicOverlay.squares) do
-				local sqAlpha = alpha
-				local sqProgress
-
-				if state == "holding" then
-					local timeSinceStart = now - square.startTime
-					sqProgress = math.Clamp(timeSinceStart / extendTime, 0, 1)
-
-					if sqProgress >= 1 then
-						square.done = true
-					end
-
-				elseif state == "slidingOut" then
-					local retractElapsed = now - (UVRaceCinematicOverlay.retractStart or now)
-					sqProgress = 1 - math.Clamp(retractElapsed / retractTime, 0, 1)
-				else
-					sqProgress = square.done and 1 or 0
-				end
-
-				local drawWidth = square.width * sqProgress
-
-				surface.SetDrawColor(0, 0, 0, sqAlpha)
-				surface.DrawRect(baseX, adjustedBaseY, drawWidth, squareHeight + (h * 0.0075))
-
-				-- Draw text with clipping based on progress
-				local clippedText = string.sub(square.text, 1, math.floor(#square.text * sqProgress))
-				draw.SimpleTextOutlined(
-					clippedText,
-					font,
-					baseX,
-					adjustedBaseY + squareHeight / 2,
-					Color(255, 255, 255, sqAlpha),
-					TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER,
-					1,
-					Color(0, 0, 0, sqAlpha)
-				)
-
-				adjustedBaseY = adjustedBaseY + squareHeight + squarePadding
+				draw.SimpleTextOutlined( square.text, font, barWidth - baseX, baseY, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				baseY = baseY + lineSpacing
 			end
 		end
+		
+		-- Draw Square Info
+		-- if UVRaceCinematicOverlay.squares then
+			-- local baseX = w * 0.05
+			-- local baseY = h - barHeight - (h * 0.035)
+			
+			-- local totalHeight = (#UVRaceCinematicOverlay.squares * (squareHeight + squarePadding)) - squarePadding
+			-- local adjustedBaseY = baseY - (h*0.03 * #UVRaceCinematicOverlay.squares)
+
+			-- for i, square in ipairs(UVRaceCinematicOverlay.squares) do
+				-- draw.SimpleTextOutlined( square.text, font, baseX, adjustedBaseY + squareHeight / 2, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				-- adjustedBaseY = adjustedBaseY + squareHeight + squarePadding
+			-- end
+
+			-- local adjustedBaseY = baseY - (h*0.03 * #UVRaceCinematicOverlay.squares)
+			
+			-- for i, square in ipairs(UVRaceCinematicOverlay.squares) do
+				-- local sqAlpha = alpha
+				-- local sqProgress
+
+				-- if state == "holding" then
+					-- local timeSinceStart = now - square.startTime
+					-- sqProgress = math.Clamp(timeSinceStart / extendTime, 0, 1)
+
+					-- if sqProgress >= 1 then
+						-- square.done = true
+					-- end
+
+				-- elseif state == "slidingOut" then
+					-- local retractElapsed = now - (UVRaceCinematicOverlay.retractStart or now)
+					-- sqProgress = 1 - math.Clamp(retractElapsed / retractTime, 0, 1)
+				-- else
+					-- sqProgress = square.done and 1 or 0
+				-- end
+
+				-- local drawWidth = square.width * sqProgress
+
+				-- surface.SetDrawColor(0, 0, 0, sqAlpha)
+				-- surface.DrawRect(baseX, adjustedBaseY, drawWidth, squareHeight + (h * 0.0075))
+
+				-- local clippedText = string.sub(square.text, 1, math.floor(#square.text * sqProgress)) -- Draw text with clipping based on progress
+				-- draw.SimpleTextOutlined( clippedText, font, baseX, adjustedBaseY + squareHeight / 2, Color(255, 255, 255, sqAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, sqAlpha) )
+
+				-- adjustedBaseY = adjustedBaseY + squareHeight + squarePadding
+			-- end
+		-- end
 	end)
 end

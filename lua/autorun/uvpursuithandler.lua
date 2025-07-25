@@ -3355,54 +3355,180 @@ else --HUD/Options
 	end)
 
 	net.Receive("UVHUDWreckedDebrief", function()
-
+	    if IsValid(TotaledPanel) then TotaledPanel:Remove() end
+        
 		local w = ScrW()
 		local h = ScrH()
 
-		local ResultPanel = vgui.Create("DFrame")
 		local Yes = vgui.Create("DButton")
 		local No = vgui.Create("DButton")
 
-		ResultPanel:Add(Yes)
-		ResultPanel:Add(No)
-		ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.2777777778))
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
+		TotaledPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
+		TotaledPanel:Add(Yes)
+		TotaledPanel:Add(No)
+		TotaledPanel:SetSize(w, h)
+        TotaledPanel:SetMouseInputEnabled(true)
+        TotaledPanel:SetKeyboardInputEnabled(false)
+        TotaledPanel:SetZPos(32767)
 
-		Yes:SetText("#openurl.yes")
-		Yes:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
-		Yes:SetPos(ResultPanel:GetWide() / 8, ResultPanel:GetTall() - 22 - Yes:GetTall())
-		No:SetText("#openurl.nope")
-		No:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
-		No:SetPos(ResultPanel:GetWide() * 7 / 8 - No:GetWide(), ResultPanel:GetTall() - 22 - No:GetTall())
+		Yes:SetText("")
+		Yes:SetPos(w*0.3, h*0.6)
+		Yes:SetSize(w*0.4, h*0.07)
+        Yes.Paint = function() end
+		
+		No:SetText("")
+		No:SetPos(w*0.3, h*0.7)
+		No:SetSize(w*0.4, h*0.07)
+        No.Paint = function() end
+		
+		surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
+		surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
 
-		ResultPanel.Paint = function(self, w, h)
-			draw.RoundedBox(2, 0, 0, w, h, Color( 0, 0, 0, 225 ) )
-			draw.SimpleText("/// " .. language.GetPhrase("uv.chase.wrecked") .. " ///", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.takenout", "UVFont5", w*0.5, h*0.15, Color(255, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.rejoin", "UVFont5", w*0.5, h*0.35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.chase.wrecked.respawn", "UVFont5", w*0.5, h*0.55, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        local targetY = 0
+        local overshootY = h * 0.1  -- drops 10% below target before bouncing back
+        local startY = -h           -- start fully above the screen
+        
+        TotaledPanel:SetPos(0, startY)
+        
+        local animTime = 0.33
+        local bounceTime = 0.1
+        local startTime = CurTime()
+        
+        hook.Add("Think", "TotaledPanelEntranceAnim", function()
+            local elapsed = CurTime() - startTime
+            
+            if elapsed < animTime then
+                if elapsed < animTime - bounceTime then
+                    local frac = elapsed / (animTime - bounceTime)
+                    local y = Lerp(frac, startY, overshootY)
+                    TotaledPanel:SetPos(0, y)
+                else
+                    local frac = (elapsed - (animTime - bounceTime)) / bounceTime
+                    local y = Lerp(frac, overshootY, targetY)
+                    TotaledPanel:SetPos(0, y)
+                end
+            else
+                TotaledPanel:SetPos(0, targetY)
+                hook.Remove("Think", "TotaledPanelEntranceAnim")
+            end
+        end)
+        
+        local function AnimateAndRemovePanel(panel)
+            if not IsValid(panel) then return end
+            
+            local startY = panel:GetY()
+            local endY = ScrH()  -- off-screen below
+            local animTime = 0.33
+            local startTime = CurTime()
+            
+            -- Play sounds ONCE at start
+            -- surface.PlaySound("uvui/carbon/openmenu.wav")
+            -- surface.PlaySound("uvui/carbon/exitmenu.wav")
+            
+            -- Disable interactivity
+            panel:SetMouseInputEnabled(false)
+            gui.EnableScreenClicker(false)
+			Yes:SetEnabled(false)
+			No:SetEnabled(false)
+            
+            hook.Add("Think", "ResultPanelExitAnim", function()
+                if not IsValid(panel) then
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                    return
+                end
+                
+                local elapsed = CurTime() - startTime
+                if elapsed < animTime then
+                    local frac = elapsed / animTime
+                    local y = Lerp(frac, startY, endY)
+                    panel:SetPos(0, y)
+                else
+                    panel:Remove()
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                end
+            end)
+        end
+        
+        gui.EnableScreenClicker(true)
+
+        local timetotal = 10
+        local timestart = CurTime()
+        local exitStarted = false -- prevent repeated trigger
+
+		TotaledPanel.Paint = function(self, w, h)
+			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+			local lang = language.GetPhrase
+
+            -- Upper Background and Icons
+            surface.SetDrawColor( 0, 0, 0, 200 )
+            surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+
+            DrawIcon( UVMaterials['UNITS_DISABLED'], w*0.275, h*0.22, 0.11, Color(255, 255, 255) ) -- Left Icon
+            DrawIcon( UVMaterials['UNITS_DISABLED'], w*0.725, h*0.22, 0.11, Color(255, 255, 255) ) -- Right Icon
+            draw.DrawText( "#uv.chase.wrecked", "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+			
+			-- Main Background and Text
+			surface.SetDrawColor( 0, 0, 0, 235 )
+            surface.DrawRect( w*0.25, h*0.265, w*0.5, h*0.6)
+            			
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.text1", "UVFont5", w * 0.5, h * 0.3, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.text2", "UVFont5", w * 0.5, h * 0.375, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.text3", "UVFont5", w * 0.5, h * 0.45, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+						
+            surface.SetDrawColor( 255, 255, 255 )
+			surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
+			surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
+			surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
+			
+			draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.chase.wrecked.rejoin"), "UVFont5", w * 0.5, h * 0.61, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.abandon", "UVFont5", w * 0.5, h * 0.71, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+
+            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.78, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+
+            if not exitStarted and timeremaining < 1 then
+                exitStarted = true
+                hook.Remove("Think", "CheckJumpKeyForResults")
+                AnimateAndRemovePanel(TotaledPanel)
+            end
+            
 		end
 
 		function Yes:DoClick()
-			ResultPanel:Close()
-			local redeploysound = {
-				"ui/redeploy/redeploy1.wav",
-				"ui/redeploy/redeploy2.wav",
-				"ui/redeploy/redeploy3.wav",
-				"ui/redeploy/redeploy4.wav",
-			}
-			surface.PlaySound( redeploysound[math.random(1, #redeploysound)] )
+			hook.Remove("Think", "CheckJumpKeyForTotaled")
+            AnimateAndRemovePanel(TotaledPanel)
+			
+			surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
 			net.Start("UVHUDRespawnInUV")
 			net.SendToServer()
 		end
+		
 		function No:DoClick()
-			ResultPanel:Close()
+			hook.Remove("Think", "CheckJumpKeyForTotaled")
+            AnimateAndRemovePanel(TotaledPanel)
 		end
+        
+        local wasJumping = false
+        hook.Add("Think", "CheckJumpKeyForTotaled", function()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return end
+            
+            if ply:KeyDown(IN_JUMP) then
+                if not wasJumping then
+                    wasJumping = true
+                    if IsValid(TotaledPanel) then
+                        hook.Remove("Think", "CheckJumpKeyForTotaled")
+                        AnimateAndRemovePanel(TotaledPanel)
+						
+						surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
+						net.Start("UVHUDRespawnInUV")
+						net.SendToServer()
+                    end
+                end
+            else
+                wasJumping = false
+            end
+        end)
 
 	end)
 
