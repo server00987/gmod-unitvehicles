@@ -485,6 +485,10 @@ if SERVER then
 				steer = 0
 				throttle = throttle * -1
 			end --Getting unstuck
+
+			if self:ObstaclesNearby() and not self.v.uvraceparticipant then
+				throttle = throttle * -1
+			end --Slow down when free roaming
 			
 			-- -- slow it down for tight corners if we are going too fast
 			-- if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then

@@ -1271,7 +1271,7 @@ if SERVER then
 				end --Herding technique
 				if self.e:GetVelocity():LengthSqr() < 30976 and dist:Length2DSqr() < 100000 and not (self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20)) and self:StraightToTarget(self.e) then
 					throttle = 0 
-					self:UVHandbrakeOn()
+					if vectdot < 0 or eright.z > -0.2 and eright.z < 0.2 or UVCalm then self:UVHandbrakeOn() end
 				end --Pinning/boxing in
 				if self.invincible then
 					self.invincible = nil
@@ -1320,7 +1320,7 @@ if SERVER then
 							end
 						end
 					end -- Follow behind
-					if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < 250000 and dist:LengthSqr() < 2500000 and fdist:LengthSqr() < 250000 and self.v:GetVelocity():LengthSqr() > 1000 and self.e:GetVelocity():LengthSqr() < 250000 and not self.formationpoint then
+					if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < (UVBustSpeed*2) then
 						if fright.z < 0.1 and fright.z > -0.9 then
 							steer = 1
 						end
