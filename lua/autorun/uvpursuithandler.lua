@@ -4,6 +4,13 @@ MAX_HEAT_LEVEL = 10 -- You could theoretically change this :)
 
 local dvd = DecentVehicleDestination
 
+-- :^)
+physenv.SetPerformanceSettings(
+	{
+		['MaxVelocity'] = 99999, ['MaxAngularVelocity'] = 99999
+	}
+)
+
 --Sound--
 local UVSoundSource
 local UVSoundLoop
