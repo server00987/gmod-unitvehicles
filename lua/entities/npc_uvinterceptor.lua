@@ -1331,7 +1331,7 @@ if SERVER then
 							end
 						end
 					end -- Follow behind
-					if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < 250000 and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < 250000 and not self.formationpoint then
+					if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < (UVBustSpeed*2) then
 						if fright.z < 0.1 and fright.z > -0.9 then
 							steer = 1
 						end
