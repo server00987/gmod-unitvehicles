@@ -588,41 +588,50 @@ function UVRenderEnemySquare(ent)
 			end
 		end
 		
-		local function GetRacerPositionForEntity(ent)
-			if UVHUDCopMode then return end
-			if not UVHUDRaceInfo or not UVHUDRaceInfo.Participants then return nil end
-			local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo.Participants)
-			for i, entry in ipairs(string_array) do
-				local participant_ent = nil
-				if sorted_table and sorted_table[i] then
-					participant_ent = sorted_table[i].vehicle
-				end
-
-				if participant_ent == ent then
-					return i
-				end
-			end
-			return nil
-		end
-
 		local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
 		local enemydriver = ent:GetDriver()
-		local enemypos = "?"
+		local enemypos = false
+		
+		if UVHUDRaceInfo then
+			local function GetRacerPositionForEntity(ent)
+				if UVHUDCopMode then return end
+				if not UVHUDRaceInfo.Participants then return nil end
 
-		-- Prefer player name if valid
-		if IsValid(enemydriver) and enemydriver:IsPlayer() then
-			if localPlayer == enemydriver then return end
-			enemycallsign = enemydriver:GetName()
-		end
+				local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo.Participants)
+				if not istable(sorted_table) or not istable(string_array) then return nil end
 
-		-- Fallback: use name from leaderboard data
-		if not UVHUDCopMode then
-			if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
-				local racerInfo = UVHUDRaceInfo.Participants[ent]
-				if racerInfo then
-					enemypos = "#uv.race.pos.num." .. GetRacerPositionForEntity(ent)
-					if racerInfo.Name then
-						enemycallsign = racerInfo.Name
+				for i, entry in ipairs(string_array) do
+					local participant_ent = nil
+					if sorted_table[i] then
+						participant_ent = sorted_table[i].vehicle
+					end
+
+					if participant_ent == ent then
+						return i
+					end
+				end
+
+				return nil
+			end
+
+			-- Prefer player name if valid
+			if IsValid(enemydriver) and enemydriver:IsPlayer() then
+				if localPlayer == enemydriver then return end
+				enemycallsign = enemydriver:GetName()
+			end
+
+			-- Fallback: use name from leaderboard data
+			if not UVHUDCopMode then
+				if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
+					local racerInfo = UVHUDRaceInfo.Participants[ent]
+					if racerInfo then
+						local pos = GetRacerPositionForEntity(ent)
+						if pos then
+							enemypos = "#uv.race.pos.num." .. pos
+						end
+						if racerInfo.Name then
+							enemycallsign = racerInfo.Name
+						end
 					end
 				end
 			end
@@ -699,6 +708,8 @@ function UVRenderEnemySquare(ent)
 			local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
 			
+			enemypos = enemypos or bustdist
+			
 			local rectlen = string.len(enemycallsign)
 			local rectxpos = textX - (w * (0.00375 * rectlen))
 			local rectypos = textY + (w * 0.01)
@@ -715,11 +726,11 @@ function UVRenderEnemySquare(ent)
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
 			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05 + xheight)
 
+			draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			
 			if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
-				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-				draw.DrawText(enemypos, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(enemypos or bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			else
-				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			end
 			
