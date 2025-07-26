@@ -1211,7 +1211,7 @@ else -- CLIENT stuff
 					UVHUDRaceInfo['Participants'][participant][reason] = true
 				end
 			end
-			if reason == 'Disqualified' then
+			if reason == 'Disqualified' and #UVHUDWantedSuspects < 1 then
 				hook.Run( 'UIEventHook', 'racing', 'onParticipantDisqualified', {
 					['Participant'] = participant,
 					['is_local_player'] = is_local_player,
