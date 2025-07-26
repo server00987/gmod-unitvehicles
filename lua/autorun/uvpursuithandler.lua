@@ -2044,18 +2044,15 @@ else --HUD/Options
 		--['ChasedVehicles'] = {},
 	}
 
-	local function InitEntity( entIndex )
+	local function InitEntity( entIndex, creationId, entType )
 		local entity = Entity( entIndex )
 		if not IsValid( entity ) then return end
 
-		local entArray = EntityQueue[entIndex]
 		local localCreationId = entity:GetCreationID()
 
-		if localCreationId ~= entArray[1] then 
+		if localCreationId ~= creationId then 
 			return 
 		end
-
-		local entType = entArray[2]
 
 		if entType == "unit" or entType == "air" then
 
@@ -2139,7 +2136,8 @@ else --HUD/Options
 			table.insert( UVHUDWantedSuspects, entity )
 		end
 
-		EntityQueue[entIndex] = nil
+		return true
+		--EntityQueue[entIndex] = nil
 	end
 
 	net.Receive('UVGetNewKeybind', function()
@@ -2683,10 +2681,15 @@ else --HUD/Options
 		local entIndex = net.ReadInt( 32 )
 		local creationId = net.ReadInt( 32 )
 
-		EntityQueue[entIndex] = {
-			creationId,
-			net.ReadString()
-		}
+		table.insert( EntityQueue, {
+			entIndex = entIndex,
+			creationId = creationId,
+			entType = net.ReadString()
+		} )
+		-- EntityQueue[entIndex] = {
+		-- 	creationId,
+		-- 	net.ReadString()
+		-- }
 		-- local unitindex = net.ReadInt(32)
 		-- local typestring = net.ReadString()
 		-- local unit = Entity(unitindex)
@@ -2862,8 +2865,10 @@ else --HUD/Options
 			localPlayer:ConCommand('uv_skipsong')
 		end
 
-		for entIndex, _ in pairs( EntityQueue ) do
-			InitEntity( entIndex )
+		for i, v in pairs( EntityQueue ) do
+			if InitEntity( v.entIndex, v.creationId, v.entType ) then
+				table.remove( EntityQueue, i )
+			end
 		end
 
 		for i, array in pairs( CleanupTask ) do
@@ -3248,10 +3253,15 @@ else --HUD/Options
 		local entIndex = net.ReadInt( 32 )
 		local creationId = net.ReadInt( 32 )
 
-		EntityQueue[entIndex] = {
-			creationId,
-			'racer'
-		}
+		-- EntityQueue[entIndex] = {
+		-- 	creationId,
+		-- 	'racer'
+		-- }
+		table.insert( EntityQueue, {
+			entIndex = entIndex,
+			creationId = creationId,
+			entType = "racer"
+		} )
 	end)
 
 	net.Receive( "UV_RemoveWantedVehicle", function()
