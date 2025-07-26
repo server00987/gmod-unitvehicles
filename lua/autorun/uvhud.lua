@@ -1831,6 +1831,7 @@ UV_UI.racing.carbon.events = {
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = disqtext,
 			noIcon = true,
+			immediate = is_local_player and true or false,
 		})
 	end,
 
@@ -1928,6 +1929,7 @@ UV_UI.pursuit.carbon.events = {
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = cnt,
 			noIcon = true,
+			immediate = lp and true or false,
 		})
 	end,
 	
@@ -3336,6 +3338,7 @@ end,
 			text = disqtext,
 			textNoFall = true,
 			noIcon = true,
+			immediate = is_local_player and true or false,
 		})
 	end,
 
@@ -3431,6 +3434,7 @@ UV_UI.pursuit.mostwanted.events = {
 			text = cnt,
 			textNoFall = true,
 			noIcon = true,
+			immediate = lp and true or false,
 		})
 	end,
 	
@@ -4927,7 +4931,8 @@ UV_UI.racing.undercover.events = {
 
 		UV_UI.racing.undercover.events.CenterNotification({
 			text = disqtext,
-			color = Color(255, 50, 50)
+			color = Color(255, 50, 50),
+			immediate = is_local_player and true or false,
 		})
 	end,
 
@@ -5024,7 +5029,8 @@ UV_UI.pursuit.undercover.events = {
 
 		UV_UI.racing.undercover.events.CenterNotification({
 			text = cnt,
-			color = Color(255,50,50)
+			color = Color(255,50,50),
+			immediate = lp and true or false,
 		})
 	end,
 	
@@ -7445,6 +7451,7 @@ UV_UI.racing.prostreet.events = {
 
 		UV_UI.racing.prostreet.events.CenterNotification({
 			text = disqtext,
+			immediate = is_local_player and true or false,
 		})
 	end,
 
