@@ -56,6 +56,24 @@ UV_PT.Killswitch = {
 			immediate = true,
 			critical = true,
         })
+    end,
+    NoTarget = function(tbl)
+        local userString = "#uv.ptech.killswitch.novalid"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+			-- immediate = true,
+			-- critical = true,
+        })
+    end,
+    TooFar = function(tbl)
+        local userString = "#uv.ptech.killswitch.getclose"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+			-- immediate = true,
+			-- critical = true,
+        })
     end
 }
 UV_PT.ESF = {

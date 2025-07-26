@@ -2999,7 +2999,8 @@ else --HUD/Options
 			end
 		end
 
-		if UVHUDWantedSuspects and not uvclientjammed and UVHUDCopMode and RacerTags:GetBool() then
+		-- if RacerTags:GetBool() and UVHUDWantedSuspects and UVHUDCopMode and not uvclientjammed then
+		if RacerTags:GetBool() and UVHUDWantedSuspects and not uvclientjammed then
 			if next(UVHUDWantedSuspects) ~= nil then
 				local renderQueue = {}
 
@@ -3025,7 +3026,7 @@ else --HUD/Options
 				end
 
 				-- Handle minimap blips *after* rendering
-				if UVHUDCopMode then -- Only as a Cop
+				-- if UVHUDCopMode then -- Only as a Cop
 					for _, ent in pairs(UVHUDWantedSuspects) do
 						if not IsValid(ent) then continue end
 
@@ -3059,7 +3060,7 @@ else --HUD/Options
 							end
 						end
 					end
-				end
+				-- end
 			end
 		end
 
@@ -3512,7 +3513,7 @@ else --HUD/Options
 		end
 
 		function Yes:DoClick()
-			hook.Remove("Think", "CheckJumpKeyForTotaled")
+			hook.Remove("Think", "JumpKeyCloseTotaled")
             AnimateAndRemovePanel(TotaledPanel)
 			
 			surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
@@ -3521,31 +3522,25 @@ else --HUD/Options
 		end
 		
 		function No:DoClick()
-			hook.Remove("Think", "CheckJumpKeyForTotaled")
+			hook.Remove("Think", "JumpKeyCloseTotaled")
             AnimateAndRemovePanel(TotaledPanel)
 		end
         
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForTotaled", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(TotaledPanel) then
-                        hook.Remove("Think", "CheckJumpKeyForTotaled")
-                        AnimateAndRemovePanel(TotaledPanel)
-						
-						surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
-						net.Start("UVHUDRespawnInUV")
-						net.SendToServer()
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+		hook.Add("Think", "JumpKeyCloseTotaled", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if input.WasKeyPressed(IN_JUMP) then
+				if IsValid(TotaledPanel) then
+					hook.Remove("Think", "JumpKeyCloseTotaled")
+					AnimateAndRemovePanel(TotaledPanel)
+
+					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+					net.Start("UVHUDRespawnInUV")
+					net.SendToServer()
+				end
+			end
+		end)
 
 	end)
 

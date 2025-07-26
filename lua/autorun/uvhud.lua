@@ -159,11 +159,12 @@ function UVBindButton(var)
 
 	local resolved = BindTextReplace[keyName] or keyName
 
-	if string.StartWith(resolved, "#") then return language.GetPhrase(resolved) end
-
-	return resolved
+	if string.StartWith(resolved, "#") then 
+		return language.GetPhrase(resolved) 
+	else
+		return string.upper(resolved)
+	end
 end
-
 
 function UVBindButtonName(var)
 	local keyName = input.GetKeyName(var)
@@ -210,6 +211,13 @@ if CLIENT then
     surface.CreateFont("UVFont2", {
         font = "Arial",
         size = (math.Round(ScrH()*0.0462962963)),
+        weight = 500,
+		extended = true,
+    })
+        
+    surface.CreateFont("UVFont2-Smaller", {
+        font = "Arial",
+        size = (math.Round(ScrH()*0.0375)),
         weight = 500,
 		extended = true,
     })
@@ -509,33 +517,34 @@ function UVRenderCommander(ent)
 		fadeAlpha = math.min(fadeAlpha, edgeFadeAlpha)
 
         cam.Start2D()
-        local bustdist = math.Round(distInMeters) .. " m"
-        
-        local cname = lang("uv.unit.commander")
-        if IsValid(UVHUDCommander) then
-            local driver = UVHUDCommander:GetDriver()
-            if IsValid(driver) and driver:IsPlayer() then
-                cname = driver:Nick()
-            end
-        end
-        
-        local rectlen = string.len(cname) + 2
-        local rectxpos = textX - (w * (0.00375 * rectlen))
-        local rectypos = textY + (w * 0.0125)
-        
-        surface.SetDrawColor( 0, 161, 255, fadeAlpha )
-        surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-        surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
-        surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-        surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
-        
-        surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-        surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
-        
-        surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-        surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
-        
-        draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			if not GetConVar("cl_drawhud"):GetBool() then return end
+			local bustdist = math.Round(distInMeters) .. " m"
+			
+			local cname = lang("uv.unit.commander")
+			if IsValid(UVHUDCommander) then
+				local driver = UVHUDCommander:GetDriver()
+				if IsValid(driver) and driver:IsPlayer() then
+					cname = driver:Nick()
+				end
+			end
+			
+			local rectlen = string.len(cname) + 2
+			local rectxpos = textX - (w * (0.00375 * rectlen))
+			local rectypos = textY + (w * 0.0125)
+			
+			surface.SetDrawColor( 0, 161, 255, fadeAlpha )
+			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
+			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
+			
+			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			
+			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
+			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+			
+			draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
@@ -685,6 +694,7 @@ function UVRenderEnemySquare(ent)
 		-- end
 
         cam.Start2D()
+			if not GetConVar("cl_drawhud"):GetBool() then return end
 			local pos = ent:GetPos() + Vector(0, 0, 80)
 			local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
@@ -704,13 +714,13 @@ function UVRenderEnemySquare(ent)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
 			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05 + xheight)
-			
-			if UVHUDCopMode then
-				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
-			else
+
+			if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
 				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 				draw.DrawText(enemypos, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			else
+				draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			end
 			
 			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY - (h * 0.01), Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
@@ -1470,7 +1480,7 @@ UV_UI.racing.carbon.events = {
         OK = vgui.Create("DButton", vgui.GetWorldPanel())
         OK:SetText("")
         OK:SetPos(w*0.2565, h*0.9)
-        OK:SetSize(w*0.125, h*0.035)
+        OK:SetSize(w*0.3, h*0.035)
         OK.Paint = function() end
 
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
@@ -1719,34 +1729,28 @@ UV_UI.racing.carbon.events = {
             
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "CheckJumpKeyForResults")
+                hook.Remove("Think", "JumpKeyCloseResults")
                 AnimateAndRemovePanel(ResultPanel)
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForResults")
+            hook.Remove("Think", "JumpKeyCloseResults")
             AnimateAndRemovePanel(ResultPanel)
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        AnimateAndRemovePanel(ResultPanel)
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseResults", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseResults")
+					AnimateAndRemovePanel(ResultPanel)
+				end
+			end
+		end)
     end,
 
     onRaceEnd = function( sortedRacers, stringArray )
@@ -1942,7 +1946,7 @@ UV_UI.pursuit.carbon.events = {
         OK = vgui.Create("DButton", vgui.GetWorldPanel())
         OK:SetText("")
         OK:SetPos(w*0.2565, h*0.9)
-        OK:SetSize(w*0.125, h*0.035)
+        OK:SetSize(w*0.3, h*0.035)
         OK.Paint = function() end
         
         ResultPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
@@ -2061,7 +2065,7 @@ UV_UI.pursuit.carbon.events = {
                 end
             end
         end)
-        
+
         ResultPanel.Paint = function(self, w, h)
             local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
             local lang = language.GetPhrase
@@ -2133,7 +2137,7 @@ UV_UI.pursuit.carbon.events = {
             end
             
             local h1, h2 = h*0.3825, h*0.4225
-            
+
             -- Text
             draw.SimpleTextOutlined( debrieftitletext, "UVCarbonLeaderboardFont", w*0.2565, h*0.3425, Color( 255, 255, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
             
@@ -2156,47 +2160,81 @@ UV_UI.pursuit.carbon.events = {
             draw.SimpleTextOutlined( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
 
             -- Time remaining and closing
-            surface.SetDrawColor( 100, 100, 100, 200 )
-            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
+			local uwstext = "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas")
 			
-            surface.SetDrawColor( 0, 0, 0, 255 )
-            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
-			
-            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
-			)
+			local conttextw = surface.GetTextSize(conttext)
+			local autotextw = surface.GetTextSize(autotext)
+			local uwstextw = surface.GetTextSize(uwstext)
+			local wdist = w * 0.0006
+
+			surface.SetDrawColor( 100, 100, 100, 200 )
+			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			surface.SetDrawColor( 0, 0, 0, 255 )
+			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+
+			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+				surface.SetDrawColor( 100, 100, 100, 200 )
+				surface.DrawRect( w*0.2765 + (wdist * (conttextw + autotextw)), h*0.9, (wdist * uwstextw), h*0.035)
+				
+				surface.SetDrawColor( 0, 0, 0, 255 )
+				surface.DrawOutlinedRect( w*0.2765 + (wdist * (conttextw + autotextw)), h*0.9, (wdist * uwstextw), h*0.035)
+				
+				draw.SimpleTextOutlined( uwstext, "UVCarbonLeaderboardFont", w*0.2785 + (wdist * (conttextw + autotextw)), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			end
 
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "JumpKeyCloseDebrief")
+				hook.Remove("Think", "ReloadKeyCloseDebrief")
                 AnimateAndRemovePanel(ResultPanel)
             end
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
+			hook.Remove("Think", "ReloadKeyCloseDebrief")
             AnimateAndRemovePanel(ResultPanel)
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        AnimateAndRemovePanel(ResultPanel)
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					AnimateAndRemovePanel(ResultPanel)
+				end
+			end
+		end)
+
+		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+				local ply = LocalPlayer()
+				if not IsValid(ply) then return end
+
+				if ply:KeyPressed(IN_RELOAD) then
+					if IsValid(ResultPanel) then
+						hook.Remove("Think", "JumpKeyCloseDebrief")
+						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						AnimateAndRemovePanel(ResultPanel)
+
+						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+						net.Start("UVHUDRespawnInUV")
+						net.SendToServer()
+					end
+				end
+			end)
+		end
     end,
     
     onRacerEscapedDebrief = function(escapedtable)
@@ -2704,7 +2742,7 @@ local function carbon_pursuit_main( ... )
 
 				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", w * 0.98, h * 0.221, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
             else
-				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", w * 0.98, h * 0.19, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", w * 0.98, h * 0.225, Colors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
             end
         else
             CooldownProgress = 0
@@ -2897,9 +2935,14 @@ UV_UI.racing.mostwanted.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        
+		
+        -- ResultPanel:MakePopup()
+		ResultPanel:SetVisible(true)
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.2, h*0.7725)
         OK:SetSize(w*0.6, h*0.04)
@@ -2971,7 +3014,9 @@ UV_UI.racing.mostwanted.events = {
         
         local closing = false
         local closeStartTime = 0
-        
+                                
+		if closing then gui.EnableScreenClicker(false) end
+		
         local totalRevealTime = (revealInterval * entriesToShow) + flashDuration
         
         function ResultPanel:OnMouseWheeled(delta)
@@ -3159,65 +3204,56 @@ UV_UI.racing.mostwanted.events = {
                 autoCloseTimer = elapsed - autoCloseStartDelay
                 autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
                 
-                draw.DrawText(
-                string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
-                "UVFont5UI", w * 0.795, h * 0.77,
-                Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-                TEXT_ALIGN_RIGHT
-            )
+                draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
             
-            if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForResults")
-                if not closing then
-                    surface.PlaySound( "uvui/mw/closemenu.wav" )
-                    closing = true
-                    closeStartTime = CurTime()
-                end
-            end
-        else
-            -- Before auto-close timer starts, show the text but no countdown
-            draw.DrawText(
-            string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
-			"UVFont5UI", w * 0.795, h * 0.77,
-			Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-			TEXT_ALIGN_RIGHT
-        )
-    end
-    if closing then
-        local elapsed = curTime - closeStartTime
-        if elapsed >= totalRevealTime then
-            hook.Remove("Think", "CheckJumpKeyForResults")
-            if IsValid(ResultPanel) then
-                ResultPanel:Close()
-            end
-        end
-    end
-end
+				if autoCloseRemaining <= 0 then
+					hook.Remove("Think", "JumpKeyCloseResults")
+					if not closing then
+						gui.EnableScreenClicker(false)
+						surface.PlaySound( "uvui/mw/closemenu.wav" )
+						closing = true
+						closeStartTime = CurTime()
+					end
+				end
+			else
+				-- Before auto-close timer starts, show the text but no countdown
+				draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
+			end
+		if closing then
+			local elapsed = curTime - closeStartTime
+			if elapsed >= totalRevealTime then
+				hook.Remove("Think", "JumpKeyCloseResults")
+				if IsValid(ResultPanel) then
+					ResultPanel:Close()
+				end
+			end
+		end
+	end
 
-function OK:DoClick()
-    if not closing then
-        surface.PlaySound( "uvui/mw/closemenu.wav" )
-        closing = true
-        closeStartTime = CurTime()
-    end
-end
+	function OK:DoClick()
+		surface.PlaySound( "uvui/mw/closemenu.wav" )
+		if not closing then
+			gui.EnableScreenClicker(false)
+			closing = true
+			closeStartTime = CurTime()
+		end
+	end
 
-local wasJumping = false
-hook.Add("Think", "CheckJumpKeyForDebrief", function()
-    local ply = LocalPlayer()
-    if not IsValid(ply) then return end
-    
-    if ply:KeyDown(IN_JUMP) then
-        if not wasJumping and not closing then
-            surface.PlaySound( "uvui/mw/closemenu.wav" )
-            wasJumping = true
-            closing = true
-            closeStartTime = CurTime()
-        end
-    else
-        wasJumping = false
-    end
-end)
+	hook.Add("Think", "JumpKeyCloseResults", function()
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+
+		if ply:KeyPressed(IN_JUMP) then
+			if IsValid(ResultPanel) and not closing then
+				gui.EnableScreenClicker(false)
+				hook.Remove("Think", "JumpKeyCloseResults")
+					
+				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				closing = true
+				closeStartTime = CurTime()
+			end
+		end
+	end)
 end,
 
 	onRaceEnd = function( sortedRacers, stringArray )
@@ -3421,9 +3457,14 @@ UV_UI.pursuit.mostwanted.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        
+		
+        -- ResultPanel:MakePopup()
+		ResultPanel:SetVisible(true)
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.2, h*0.7725)
         OK:SetSize(w*0.6, h*0.04)
@@ -3471,7 +3512,7 @@ UV_UI.pursuit.mostwanted.events = {
         
         local closing = false
         local closeStartTime = 0
-        
+
         local totalRevealTime = (revealInterval * 13) + flashDuration
         
         ResultPanel.Paint = function(self, w, h)
@@ -3613,6 +3654,10 @@ UV_UI.pursuit.mostwanted.events = {
                 draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
                 
                 draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+				
+				if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+					draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont5UI", w*0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
+				end
             end
             
             -- Show/Hide OK button with fade
@@ -3638,65 +3683,84 @@ UV_UI.pursuit.mostwanted.events = {
                 autoCloseTimer = elapsed - autoCloseStartDelay
                 autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
                 
-                draw.DrawText(
-                string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)),
-                "UVFont5UI", w * 0.795, h * 0.77,
-                Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-                TEXT_ALIGN_RIGHT
-            )
+                draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.5, h * 0.81, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_CENTER )
             
-            if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
-                surface.PlaySound( "uvui/mw/closemenu.wav" )
-                if not closing then
-                    closing = true
-                    closeStartTime = CurTime()
-                end
-            end
-        else
-            -- Before auto-close timer starts, show the text but no countdown
-            draw.DrawText(
-            string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration),
-			"UVFont5UI", w * 0.795, h * 0.77,
-			Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha),
-			TEXT_ALIGN_RIGHT
-        )
-    end
-    if closing then
-        local elapsed = curTime - closeStartTime
-        if elapsed >= totalRevealTime then
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
-            if IsValid(ResultPanel) then
-                ResultPanel:Close()
-            end
-        end
-    end
-end
+				if autoCloseRemaining <= 0 then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					surface.PlaySound( "uvui/mw/closemenu.wav" )
+					gui.EnableScreenClicker(false)
+					if not closing then
+						closing = true
+						closeStartTime = CurTime()
+					end
+				end
+			else
+				-- Before auto-close timer starts, show the text but no countdown
+				draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", w * 0.5, h * 0.81, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_CENTER )
+		end
+		if closing then
+			local elapsed = curTime - closeStartTime
+			if elapsed >= totalRevealTime then
+				hook.Remove("Think", "JumpKeyCloseDebrief")
+				hook.Remove("Think", "ReloadKeyCloseDebrief")
+				if IsValid(ResultPanel) then
+					ResultPanel:Close()
+				end
+			end
+		end
+	end
 
-function OK:DoClick()
-    surface.PlaySound( "uvui/mw/closemenu.wav" )
-    if not closing then
-        closing = true
-        closeStartTime = CurTime()
-    end
-end
+	function OK:DoClick()
+		surface.PlaySound( "uvui/mw/closemenu.wav" )
+		if not closing then
+			gui.EnableScreenClicker(false)
+			hook.Remove("Think", "JumpKeyCloseDebrief")
+			hook.Remove("Think", "ReloadKeyCloseDebrief")
+			closing = true
+			closeStartTime = CurTime()
+		end
+	end
 
-local wasJumping = false
-hook.Add("Think", "CheckJumpKeyForDebrief", function()
-    local ply = LocalPlayer()
-    if not IsValid(ply) then return end
-    
-    if ply:KeyDown(IN_JUMP) then
-        if not wasJumping and not closing then
-            surface.PlaySound( "uvui/mw/closemenu.wav" )
-            wasJumping = true
-            closing = true
-            closeStartTime = CurTime()
-        end
-    else
-        wasJumping = false
-    end
-end)
+	hook.Add("Think", "JumpKeyCloseDebrief", function()
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+
+		if ply:KeyPressed(IN_JUMP) then
+			if IsValid(ResultPanel) and not closing then
+				gui.EnableScreenClicker(false)
+				hook.Remove("Think", "JumpKeyCloseDebrief")
+				hook.Remove("Think", "ReloadKeyCloseDebrief")
+
+				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				closing = true
+				closeStartTime = CurTime()
+			end
+		end
+	end)
+
+	if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+		hook.Add("Think", "ReloadKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_RELOAD) then
+				if IsValid(ResultPanel) and not closing then
+					gui.EnableScreenClicker(false)
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					
+					surface.PlaySound( "uvui/mw/closemenu.wav" )
+					closing = true
+					closeStartTime = CurTime()
+
+					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+					net.Start("UVHUDRespawnInUV")
+					net.SendToServer()
+				end
+			end
+		end)
+	end
 end,
 
 onRacerEscapedDebrief = function(escapedtable)
@@ -4484,10 +4548,14 @@ UV_UI.racing.undercover.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
+                		
+        -- ResultPanel:MakePopup()
         ResultPanel:SetVisible(false)
-        
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.33, h*0.745)
         OK:SetSize(w*0.33, h*0.06)
@@ -4502,7 +4570,7 @@ UV_UI.racing.undercover.events = {
         local function CloseResults()
             if IsValid(ResultPanel) then ResultPanel:Close() end
             if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "CheckJumpKeyForResults")
+            hook.Remove("Think", "JumpKeyCloseResults")
         end
         
         local closing = false
@@ -4523,6 +4591,7 @@ UV_UI.racing.undercover.events = {
         
         local function startCloseAnimation()
             if closing then return end
+			gui.EnableScreenClicker(false)
             closing = true
             closeStart = CurTime()
         end
@@ -4765,23 +4834,18 @@ UV_UI.racing.undercover.events = {
             startCloseAnimation()
             OK:SetEnabled(false)
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        startCloseAnimation()
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseResults", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) and not closing then
+					hook.Remove("Think", "JumpKeyCloseResults")
+					startCloseAnimation()
+				end
+			end
+		end)
     end,
     
     onRaceEnd = function( sortedRacers, stringArray )
@@ -5001,10 +5065,14 @@ UV_UI.pursuit.undercover.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
+        		
+        -- ResultPanel:MakePopup()
         ResultPanel:SetVisible(false)
-        
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.33, h*0.6425)
         OK:SetSize(w*0.33, h*0.06)
@@ -5019,7 +5087,8 @@ UV_UI.pursuit.undercover.events = {
         local function CloseResults()
             if IsValid(ResultPanel) then ResultPanel:Close() end
             if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
+            hook.Remove("Think", "ReloadKeyCloseDebrief")
         end
         
         local closing = false
@@ -5040,6 +5109,7 @@ UV_UI.pursuit.undercover.events = {
         
         local function startCloseAnimation()
             if closing then return end
+			gui.EnableScreenClicker(false)
             closing = true
             closeStart = CurTime()
         end
@@ -5179,9 +5249,16 @@ UV_UI.pursuit.undercover.events = {
             if timeremaining > autoCloseDelay then
                 timeremaining = autoCloseDelay
             end
-            draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+
+			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h*0.64, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+				draw.DrawText( language.GetPhrase("uv.settings.pm.ai.spawnas") .. " [" .. UVBindButton("+reload") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h * 0.67, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+			else
+				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+			end
+			
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.71, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
-            
+            				
             if timeremaining < 1 then
                 startCloseAnimation()
             end
@@ -5194,23 +5271,39 @@ UV_UI.pursuit.undercover.events = {
             startCloseAnimation()
             OK:SetEnabled(false)
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        startCloseAnimation()
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) and not closing then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					startCloseAnimation()
+				end
+			end
+		end)
+
+		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+				local ply = LocalPlayer()
+				if not IsValid(ply) then return end
+
+				if ply:KeyPressed(IN_RELOAD) then
+					if IsValid(ResultPanel) and not closing then
+						gui.EnableScreenClicker(false)
+						hook.Remove("Think", "JumpKeyCloseDebrief")
+						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						startCloseAnimation()
+
+						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+						net.Start("UVHUDRespawnInUV")
+						net.SendToServer()
+					end
+				end
+			end)
+		end
     end,
     
     onRacerEscapedDebrief = function(escapedtable)
@@ -5794,8 +5887,50 @@ UV_UI.pursuit.original.states = {
 }
 
 UV_UI.racing.original.events = {
-    onRaceEnd = function(...)
-        print( 'onRaceEnd', ... )
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        local laptimeprefixcolor = Color(255, 255, 255)
+        local laptimeprefix = string.format(language.GetPhrase("uv.race.laptime.original"), old_lap, name)
+        local laptimecolor = Color(255, 255, 0)
+        local laptime = UVDisplayTimeRace( lap_time )
+
+		if is_global_best then
+			laptimeprefix = string.format(language.GetPhrase("uv.race.fastest.laptime.original"), old_lap, name)
+            laptimecolor = Color(0, 255, 255)
+		end
+
+        chat.AddText(laptimeprefixcolor, laptimeprefix, laptimecolor, laptime)
+		
+    end,
+
+    onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
+
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked.original"))
+		if is_local_player then 
+            disqtext = string.format(language.GetPhrase("uv.chase.wrecked"))
+            chat.AddText(Color(255, 0, 0), disqtext)
+        else
+            chat.AddText(Color(255, 0, 0), name, Color(255, 255, 255), disqtext)
+        end
+
+	end,
+
+    onRaceEnd = function( sortedRacers, stringArray )
+        if not istable(sortedRacers) or #sortedRacers == 0 then
+            chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.statserror")))
+            return
+        end
+
+        PrintTable(sortedRacers)
+        chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.viewstats.original")))
+        
     end
 }
 
@@ -5883,6 +6018,11 @@ UV_UI.pursuit.original.events = {
     onHeatLevelUpdate = function(...)
         
     end,
+    onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested.original"), racer, language.GetPhrase(cop))
+
+		chat.AddText(Color(255, 0, 0), cnt)
+	end,
     onCopBustedDebrief = function(...)
         local w = ScrW()
         local h = ScrH()
@@ -5948,34 +6088,28 @@ UV_UI.pursuit.original.events = {
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        ResultPanel:Close()
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
     end,
     onCopEscapedDebrief = function(...)
         
@@ -6043,34 +6177,28 @@ UV_UI.pursuit.original.events = {
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
         
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        ResultPanel:Close()
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
     end,
     onRacerEscapedDebrief = function(...)
         if UVHUDDisplayRacing then return end
@@ -6139,34 +6267,28 @@ UV_UI.pursuit.original.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			
             if timeremaining < 1 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
         
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        ResultPanel:Close()
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
     end,
     onRacerBustedDebrief = function(...)
         local w = ScrW()
@@ -6229,39 +6351,56 @@ UV_UI.pursuit.original.events = {
             draw.SimpleText( spikestripsdodged, "UVFont2", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             -- Time remaining and closing
-            
-            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
-            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2-Smaller", w*0.01, h*0.825, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2-Smaller", w*0.99, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			
+			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+				draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont2-Smaller", w*0.01, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			end
+
             if timeremaining < 1 then
-                hook.Remove("Think", "CheckJumpKeyForDebrief")
+                hook.Remove("Think", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "CheckJumpKeyForDebrief")
+            hook.Remove("Think", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForDebrief", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping then
-                    wasJumping = true
-                    if IsValid(ResultPanel) then
-                        ResultPanel:Close()
-                        hook.Remove("Think", "CheckJumpKeyForDebrief")
-                    end
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
+
+		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+				local ply = LocalPlayer()
+				if not IsValid(ply) then return end
+
+				if ply:KeyPressed(IN_RELOAD) then
+					if IsValid(ResultPanel) then
+						hook.Remove("Think", "JumpKeyCloseDebrief")
+						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						ResultPanel:Close()
+
+						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+						net.Start("UVHUDRespawnInUV")
+						net.SendToServer()
+					end
+				end
+			end)
+		end
     end,
 }
 
@@ -6965,12 +7104,17 @@ UV_UI.racing.prostreet.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        
+
+        -- ResultPanel:MakePopup()
+		ResultPanel:SetVisible(true)
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.2565, h*0.9)
-        OK:SetSize(w*0.125, h*0.035)
+        OK:SetSize(w*0.3, h*0.035)
 
         OK:SetEnabled(true)
         OK.Paint = function() end
@@ -7034,7 +7178,7 @@ UV_UI.racing.prostreet.events = {
         
         local closing = false
         local closeStartTime = 0
-        
+
         function ResultPanel:OnMouseWheeled(delta)
             if delta > 0 then
                 scrollOffset = math.max(scrollOffset - 1, 0)
@@ -7056,6 +7200,7 @@ UV_UI.racing.prostreet.events = {
             
             if closing then
                 OK:SetEnabled(false)
+				gui.EnableScreenClicker(false)
                 local elapsedFade = curTime - closeStartTime
                 local progress = math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
@@ -7068,7 +7213,7 @@ UV_UI.racing.prostreet.events = {
                 end
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    hook.Remove("Think", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -7167,22 +7312,28 @@ UV_UI.racing.prostreet.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
 
-            surface.SetDrawColor( 100, 100, 100, 200 )
-            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
 			
-            surface.SetDrawColor( 0, 0, 0, 255 )
-            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
-			
-            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
-			)
+			local conttextw = surface.GetTextSize(conttext)
+			local autotextw = surface.GetTextSize(autotext)
+			local wdist = w * 0.00032
+
+			surface.SetDrawColor( 100, 100, 100, 200 )
+			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			surface.SetDrawColor( 0, 0, 0, 255 )
+			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
             cam.PopModelMatrix()
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForResults")
+                hook.Remove("Think", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ps/closemenu.wav" )
                     closing = true
@@ -7198,23 +7349,20 @@ UV_UI.racing.prostreet.events = {
                 closeStartTime = CurTime()
             end
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping and not closing then
-                    surface.PlaySound( "uvui/ps/closemenu.wav" )
-                    wasJumping = true
+
+		hook.Add("Think", "JumpKeyCloseResults", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("Think", "JumpKeyCloseResults")
+					surface.PlaySound( "uvui/ps/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
-                end
-            else
-                wasJumping = false
-            end
-        end)
+				end
+			end
+		end)
     end,
     
     onRaceEnd = function( sortedRacers, stringArray )
@@ -7338,9 +7486,14 @@ UV_UI.racing.underground.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        
+                        		
+        -- ResultPanel:MakePopup()
+        ResultPanel:SetVisible(true)
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.5, h*0.9)
         OK:SetSize(w*0.2, h*0.025)
@@ -7412,16 +7565,17 @@ UV_UI.racing.underground.events = {
         
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
-            local fadeDuration = 0.5 -- seconds
+            local fadeDuration = 0.25 -- seconds
             local fadeAlpha = 1
             
             if closing then
                 OK:SetEnabled(false)
+				gui.EnableScreenClicker(false)
                 local elapsedFade = curTime - closeStartTime
                 fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    hook.Remove("Think", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -7505,7 +7659,7 @@ UV_UI.racing.underground.events = {
             draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForResults")
+                hook.Remove("Think", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
@@ -7521,23 +7675,20 @@ UV_UI.racing.underground.events = {
                 closeStartTime = CurTime()
             end
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping and not closing then
+
+		hook.Add("Think", "JumpKeyCloseResults", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) and not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
-                    wasJumping = true
-                    closing = true
+					hook.Remove("Think", "JumpKeyCloseResults")
+					closing = true
                     closeStartTime = CurTime()
-                end
-            else
-                wasJumping = false
-            end
-        end)
+				end
+			end
+		end)
     end,
     
     onRaceEnd = function( sortedRacers, stringArray )
@@ -7813,9 +7964,14 @@ UV_UI.racing.underground2.events = {
         ResultPanel:Center()
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
-        ResultPanel:MakePopup()
         ResultPanel:SetKeyboardInputEnabled(false)
-        
+                        		
+        -- ResultPanel:MakePopup()
+        ResultPanel:SetVisible(true)
+		ResultPanel:MoveToFront()
+		ResultPanel:RequestFocus()
+		gui.EnableScreenClicker(true)
+
         OK:SetText("")
         OK:SetPos(w*0.775, h*0.84)
         OK:SetSize(w*0.15, h*0.0425)
@@ -7899,12 +8055,13 @@ UV_UI.racing.underground2.events = {
             local fadeAlpha = 1
             
             if closing then
+				gui.EnableScreenClicker(false)
                 OK:SetEnabled(false)
                 local elapsedFade = curTime - closeStartTime
                 fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "CheckJumpKeyForResults")
+                    hook.Remove("Think", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -7990,7 +8147,7 @@ UV_UI.racing.underground2.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "CheckJumpKeyForResults")
+                hook.Remove("Think", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
@@ -8006,23 +8163,19 @@ UV_UI.racing.underground2.events = {
                 closeStartTime = CurTime()
             end
         end
-        
-        local wasJumping = false
-        hook.Add("Think", "CheckJumpKeyForResults", function()
-            local ply = LocalPlayer()
-            if not IsValid(ply) then return end
-            
-            if ply:KeyDown(IN_JUMP) then
-                if not wasJumping and not closing then
-                    surface.PlaySound( "uvui/ug/closemenu.wav" )
-                    wasJumping = true
-                    closing = true
-                    closeStartTime = CurTime()
-                end
-            else
-                wasJumping = false
-            end
-        end)
+
+		hook.Add("Think", "JumpKeyCloseResults", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) and not closing then
+					hook.Remove("Think", "JumpKeyCloseResults")
+					surface.PlaySound( "uvui/ug/closemenu.wav" )
+					startCloseAnimation()
+				end
+			end
+		end)
     end,
     
     onRaceEnd = function( sortedRacers, stringArray )

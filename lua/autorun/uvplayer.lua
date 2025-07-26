@@ -756,12 +756,7 @@ if SERVER then
                 local MathSound = math.random(1,2)
                 car:EmitSound("gadgets/killswitch/start"..MathSound..".wav")
                 closestsuspect:EmitSound("gadgets/killswitch/startloop.wav")
-                -- if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-                --     UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Killswitch deployed!")
-                -- end
-                -- if isfunction(closestsuspect.GetDriver) and IsValid(closestsuspect:GetDriver()) and closestsuspect:GetDriver():IsPlayer() then 
-                --     closestsuspect:GetDriver():PrintMessage( HUD_PRINTCENTER, "YOU ARE GETTING KILLSWITCHED!")
-                -- end
+				
                 ReportPTEvent( car, closestsuspect, 'Killswitch', 'Locking' )
                 timer.Simple(UVUnitPTKillSwitchLockOnTime:GetInt(), function() --HIT
                     if IsValid(car) and IsValid(car.uvkillswitchingtarget) then
@@ -831,7 +826,10 @@ if SERVER then
                 car.uvkillswitchdeployed = nil
                 car.uvkillswitchingtarget = nil
                 if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-                    UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "Get close to an enemy to killswitch them!")
+					if not car.uvNextTooFarTime or car.uvNextTooFarTime < CurTime() then
+						UVPTEvent({UVGetDriver(car)}, 'Killswitch', 'TooFar')
+						car.uvNextTooFarTime = CurTime() + 3
+					end
                 end
                 
                 return false
@@ -841,7 +839,10 @@ if SERVER then
             car.uvkillswitchdeployed = nil
             car.uvkillswitchingtarget = nil
             if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-                UVGetDriver(car):PrintMessage( HUD_PRINTCENTER, "There's no enemies to killswitch!")
+				if not car.uvNextNoTargetTime or car.uvNextNoTargetTime < CurTime() then
+					UVPTEvent({UVGetDriver(car)}, 'Killswitch', 'NoTarget')
+					car.uvNextNoTargetTime = CurTime() + 3
+				end
             end
             
             return false
