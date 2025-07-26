@@ -3506,14 +3506,14 @@ else --HUD/Options
 
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "CheckJumpKeyForResults")
+                hook.Remove("CreateMove", "JumpKeyCloseTotaled")
                 AnimateAndRemovePanel(TotaledPanel)
             end
             
 		end
 
 		function Yes:DoClick()
-			hook.Remove("Think", "JumpKeyCloseTotaled")
+			hook.Remove("CreateMove", "JumpKeyCloseTotaled")
             AnimateAndRemovePanel(TotaledPanel)
 			
 			surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
@@ -3522,17 +3522,17 @@ else --HUD/Options
 		end
 		
 		function No:DoClick()
-			hook.Remove("Think", "JumpKeyCloseTotaled")
+			hook.Remove("CreateMove", "JumpKeyCloseTotaled")
             AnimateAndRemovePanel(TotaledPanel)
 		end
         
-		hook.Add("Think", "JumpKeyCloseTotaled", function()
+		hook.Add("CreateMove", "JumpKeyCloseTotaled", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
-			if input.WasKeyPressed(IN_JUMP) then
+			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(TotaledPanel) then
-					hook.Remove("Think", "JumpKeyCloseTotaled")
+					hook.Remove("CreateMove", "JumpKeyCloseTotaled")
 					AnimateAndRemovePanel(TotaledPanel)
 
 					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")

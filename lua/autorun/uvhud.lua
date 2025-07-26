@@ -1729,24 +1729,24 @@ UV_UI.racing.carbon.events = {
             
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "JumpKeyCloseResults")
+                hook.Remove("CreateMove", "JumpKeyCloseResults")
                 AnimateAndRemovePanel(ResultPanel)
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseResults")
+            hook.Remove("CreateMove", "JumpKeyCloseResults")
             AnimateAndRemovePanel(ResultPanel)
         end
 
-		hook.Add("Think", "JumpKeyCloseResults", function()
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					AnimateAndRemovePanel(ResultPanel)
 				end
 			end
@@ -2192,40 +2192,40 @@ UV_UI.pursuit.carbon.events = {
 
             if not exitStarted and timeremaining < 1 then
                 exitStarted = true
-                hook.Remove("Think", "JumpKeyCloseDebrief")
-				hook.Remove("Think", "ReloadKeyCloseDebrief")
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+				hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
                 AnimateAndRemovePanel(ResultPanel)
             end
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseDebrief")
-			hook.Remove("Think", "ReloadKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+			hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
             AnimateAndRemovePanel(ResultPanel)
         end
 
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
-					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					AnimateAndRemovePanel(ResultPanel)
 				end
 			end
 		end)
 
 		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
-			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 				local ply = LocalPlayer()
 				if not IsValid(ply) then return end
 
 				if ply:KeyPressed(IN_RELOAD) then
 					if IsValid(ResultPanel) then
-						hook.Remove("Think", "JumpKeyCloseDebrief")
-						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						AnimateAndRemovePanel(ResultPanel)
 
 						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
@@ -3207,7 +3207,7 @@ UV_UI.racing.mostwanted.events = {
                 draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
             
 				if autoCloseRemaining <= 0 then
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					if not closing then
 						gui.EnableScreenClicker(false)
 						surface.PlaySound( "uvui/mw/closemenu.wav" )
@@ -3222,7 +3222,7 @@ UV_UI.racing.mostwanted.events = {
 		if closing then
 			local elapsed = curTime - closeStartTime
 			if elapsed >= totalRevealTime then
-				hook.Remove("Think", "JumpKeyCloseResults")
+				hook.Remove("CreateMove", "JumpKeyCloseResults")
 				if IsValid(ResultPanel) then
 					ResultPanel:Close()
 				end
@@ -3239,14 +3239,14 @@ UV_UI.racing.mostwanted.events = {
 		end
 	end
 
-	hook.Add("Think", "JumpKeyCloseResults", function()
+	hook.Add("CreateMove", "JumpKeyCloseResults", function()
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 
 		if ply:KeyPressed(IN_JUMP) then
 			if IsValid(ResultPanel) and not closing then
 				gui.EnableScreenClicker(false)
-				hook.Remove("Think", "JumpKeyCloseResults")
+				hook.Remove("CreateMove", "JumpKeyCloseResults")
 					
 				surface.PlaySound( "uvui/mw/closemenu.wav" )
 				closing = true
@@ -3686,8 +3686,8 @@ UV_UI.pursuit.mostwanted.events = {
                 draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.5, h * 0.81, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_CENTER )
             
 				if autoCloseRemaining <= 0 then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
-					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					surface.PlaySound( "uvui/mw/closemenu.wav" )
 					gui.EnableScreenClicker(false)
 					if not closing then
@@ -3702,8 +3702,8 @@ UV_UI.pursuit.mostwanted.events = {
 		if closing then
 			local elapsed = curTime - closeStartTime
 			if elapsed >= totalRevealTime then
-				hook.Remove("Think", "JumpKeyCloseDebrief")
-				hook.Remove("Think", "ReloadKeyCloseDebrief")
+				hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+				hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 				if IsValid(ResultPanel) then
 					ResultPanel:Close()
 				end
@@ -3715,22 +3715,22 @@ UV_UI.pursuit.mostwanted.events = {
 		surface.PlaySound( "uvui/mw/closemenu.wav" )
 		if not closing then
 			gui.EnableScreenClicker(false)
-			hook.Remove("Think", "JumpKeyCloseDebrief")
-			hook.Remove("Think", "ReloadKeyCloseDebrief")
+			hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+			hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 			closing = true
 			closeStartTime = CurTime()
 		end
 	end
 
-	hook.Add("Think", "JumpKeyCloseDebrief", function()
+	hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 
 		if ply:KeyPressed(IN_JUMP) then
 			if IsValid(ResultPanel) and not closing then
 				gui.EnableScreenClicker(false)
-				hook.Remove("Think", "JumpKeyCloseDebrief")
-				hook.Remove("Think", "ReloadKeyCloseDebrief")
+				hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+				hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 
 				surface.PlaySound( "uvui/mw/closemenu.wav" )
 				closing = true
@@ -3740,15 +3740,15 @@ UV_UI.pursuit.mostwanted.events = {
 	end)
 
 	if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
-		hook.Add("Think", "ReloadKeyCloseDebrief", function()
+		hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_RELOAD) then
 				if IsValid(ResultPanel) and not closing then
 					gui.EnableScreenClicker(false)
-					hook.Remove("Think", "JumpKeyCloseDebrief")
-					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					
 					surface.PlaySound( "uvui/mw/closemenu.wav" )
 					closing = true
@@ -4570,7 +4570,7 @@ UV_UI.racing.undercover.events = {
         local function CloseResults()
             if IsValid(ResultPanel) then ResultPanel:Close() end
             if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "JumpKeyCloseResults")
+            hook.Remove("CreateMove", "JumpKeyCloseResults")
         end
         
         local closing = false
@@ -4835,13 +4835,13 @@ UV_UI.racing.undercover.events = {
             OK:SetEnabled(false)
         end
 
-		hook.Add("Think", "JumpKeyCloseResults", function()
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) and not closing then
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					startCloseAnimation()
 				end
 			end
@@ -5087,8 +5087,8 @@ UV_UI.pursuit.undercover.events = {
         local function CloseResults()
             if IsValid(ResultPanel) then ResultPanel:Close() end
             if IsValid(BackgroundPanel) then BackgroundPanel:Remove() end
-            hook.Remove("Think", "JumpKeyCloseDebrief")
-            hook.Remove("Think", "ReloadKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+            hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
         end
         
         local closing = false
@@ -5272,29 +5272,29 @@ UV_UI.pursuit.undercover.events = {
             OK:SetEnabled(false)
         end
 
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) and not closing then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
-					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					startCloseAnimation()
 				end
 			end
 		end)
 
 		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
-			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 				local ply = LocalPlayer()
 				if not IsValid(ply) then return end
 
 				if ply:KeyPressed(IN_RELOAD) then
 					if IsValid(ResultPanel) and not closing then
 						gui.EnableScreenClicker(false)
-						hook.Remove("Think", "JumpKeyCloseDebrief")
-						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						startCloseAnimation()
 
 						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
@@ -6088,24 +6088,24 @@ UV_UI.pursuit.original.events = {
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
-                hook.Remove("Think", "JumpKeyCloseDebrief")
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
 
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 					ResultPanel:Close()
 				end
 			end
@@ -6177,24 +6177,24 @@ UV_UI.pursuit.original.events = {
             
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
             if timeremaining < 1 then
-                hook.Remove("Think", "JumpKeyCloseDebrief")
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
         
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 					ResultPanel:Close()
 				end
 			end
@@ -6267,24 +6267,24 @@ UV_UI.pursuit.original.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			
             if timeremaining < 1 then
-                hook.Remove("Think", "JumpKeyCloseDebrief")
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
         
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 					ResultPanel:Close()
 				end
 			end
@@ -6359,39 +6359,39 @@ UV_UI.pursuit.original.events = {
 			end
 
             if timeremaining < 1 then
-                hook.Remove("Think", "JumpKeyCloseDebrief")
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
                 self:Close()
             end
             
         end
         
         function OK:DoClick() 
-            hook.Remove("Think", "JumpKeyCloseDebrief")
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
             ResultPanel:Close()
         end
 
-		hook.Add("Think", "JumpKeyCloseDebrief", function()
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseDebrief")
-					hook.Remove("Think", "ReloadKeyCloseDebrief")
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					ResultPanel:Close()
 				end
 			end
 		end)
 
 		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
-			hook.Add("Think", "ReloadKeyCloseDebrief", function()
+			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 				local ply = LocalPlayer()
 				if not IsValid(ply) then return end
 
 				if ply:KeyPressed(IN_RELOAD) then
 					if IsValid(ResultPanel) then
-						hook.Remove("Think", "JumpKeyCloseDebrief")
-						hook.Remove("Think", "ReloadKeyCloseDebrief")
+						hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						ResultPanel:Close()
 
 						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
@@ -7213,7 +7213,7 @@ UV_UI.racing.prostreet.events = {
                 end
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "JumpKeyCloseResults")
+                    hook.Remove("CreateMove", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -7333,7 +7333,7 @@ UV_UI.racing.prostreet.events = {
             cam.PopModelMatrix()
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "JumpKeyCloseResults")
+                hook.Remove("CreateMove", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ps/closemenu.wav" )
                     closing = true
@@ -7350,13 +7350,13 @@ UV_UI.racing.prostreet.events = {
             end
         end
 
-		hook.Add("Think", "JumpKeyCloseResults", function()
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					surface.PlaySound( "uvui/ps/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
@@ -7575,7 +7575,7 @@ UV_UI.racing.underground.events = {
                 fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "JumpKeyCloseResults")
+                    hook.Remove("CreateMove", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -7659,7 +7659,7 @@ UV_UI.racing.underground.events = {
             draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "JumpKeyCloseResults")
+                hook.Remove("CreateMove", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
@@ -7676,14 +7676,14 @@ UV_UI.racing.underground.events = {
             end
         end
 
-		hook.Add("Think", "JumpKeyCloseResults", function()
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) and not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					closing = true
                     closeStartTime = CurTime()
 				end
@@ -8061,7 +8061,7 @@ UV_UI.racing.underground2.events = {
                 fadeAlpha = 1 - math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
                 if elapsedFade >= fadeDuration then
-                    hook.Remove("Think", "JumpKeyCloseResults")
+                    hook.Remove("CreateMove", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
                         ResultPanel:Close()
                     end
@@ -8147,7 +8147,7 @@ UV_UI.racing.underground2.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
             
             if autoCloseRemaining <= 0 then
-                hook.Remove("Think", "JumpKeyCloseResults")
+                hook.Remove("CreateMove", "JumpKeyCloseResults")
                 if not closing then
                     surface.PlaySound( "uvui/ug/closemenu.wav" )
                     closing = true
@@ -8164,13 +8164,13 @@ UV_UI.racing.underground2.events = {
             end
         end
 
-		hook.Add("Think", "JumpKeyCloseResults", function()
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) and not closing then
-					hook.Remove("Think", "JumpKeyCloseResults")
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					surface.PlaySound( "uvui/ug/closemenu.wav" )
 					startCloseAnimation()
 				end
