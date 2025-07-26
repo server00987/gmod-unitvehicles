@@ -2596,18 +2596,18 @@ else --HUD/Options
 
 	end)
 
-	net.Receive("UVHUDWantedSuspects", function()
+	-- net.Receive("UVHUDWantedSuspects", function()
 
-		UVHUDWantedSuspects = net.ReadTable() or {}
-		UVHUDWantedSuspectsNumber = #UVHUDWantedSuspects
+	-- 	-- UVHUDWantedSuspects = net.ReadTable() or {}
+	-- 	-- UVHUDWantedSuspectsNumber = #UVHUDWantedSuspects
 
-		if UVHUDWantedSuspectsNumber > 1 then
-			if not UVHUDRaceInProgress then
-				UVHUDRaceInProgress = true
-			end
-		end
+	-- 	-- if UVHUDWantedSuspectsNumber > 1 then
+	-- 	-- 	if not UVHUDRaceInProgress then
+	-- 	-- 		UVHUDRaceInProgress = true
+	-- 	-- 	end
+	-- 	-- end
 
-	end)
+	-- end)
 
 	net.Receive("UVHUDCopMode", function()
 		UVHUDCopMode = true

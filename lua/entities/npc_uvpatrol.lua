@@ -170,10 +170,10 @@ if SERVER then
 		if IsValid(self.e) then
 			if table.HasValue(UVWantedTableVehicle, self.e) and not UVEnemyEscaped then
 				table.RemoveByValue(UVWantedTableVehicle, self.e)
+				net.Start( "UV_RemoveWantedVehicle" )
+				net.WriteInt( self.e:EntIndex(), 32 )
+				net.Broadcast()
 			end
-			net.Start( "UV_RemoveWantedVehicle" )
-			net.WriteInt( self.e:EntIndex(), 32 )
-			net.Broadcast()
 			self.e = nil
 		end
 		if self.edriver then
