@@ -5887,8 +5887,50 @@ UV_UI.pursuit.original.states = {
 }
 
 UV_UI.racing.original.events = {
-    onRaceEnd = function(...)
-        print( 'onRaceEnd', ... )
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        local laptimeprefixcolor = Color(255, 255, 255)
+        local laptimeprefix = string.format(language.GetPhrase("uv.race.laptime.original"), old_lap, name)
+        local laptimecolor = Color(255, 255, 0)
+        local laptime = UVDisplayTimeRace( lap_time )
+
+		if is_global_best then
+			laptimeprefix = string.format(language.GetPhrase("uv.race.fastest.laptime.original"), old_lap, name)
+            laptimecolor = Color(0, 255, 255)
+		end
+
+        chat.AddText(laptimeprefixcolor, laptimeprefix, laptimecolor, laptime)
+		
+    end,
+
+    onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
+
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked.original"))
+		if is_local_player then 
+            disqtext = string.format(language.GetPhrase("uv.chase.wrecked"))
+            chat.AddText(Color(255, 0, 0), disqtext)
+        else
+            chat.AddText(Color(255, 0, 0), name, Color(255, 255, 255), disqtext)
+        end
+
+	end,
+
+    onRaceEnd = function( sortedRacers, stringArray )
+        if not istable(sortedRacers) or #sortedRacers == 0 then
+            chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.statserror")))
+            return
+        end
+
+        PrintTable(sortedRacers)
+        chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.viewstats.original")))
+        
     end
 }
 
@@ -5976,6 +6018,11 @@ UV_UI.pursuit.original.events = {
     onHeatLevelUpdate = function(...)
         
     end,
+    onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested.original"), racer, language.GetPhrase(cop))
+
+		chat.AddText(Color(255, 0, 0), cnt)
+	end,
     onCopBustedDebrief = function(...)
         local w = ScrW()
         local h = ScrH()

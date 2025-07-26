@@ -1874,6 +1874,10 @@ if SERVER then
 		
 		if not IsValid(self.v) or not IsValid(self.v:GetPhysicsObject()) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Unit Vehicle.
 		UVDeploys = UVDeploys + 1
+
+		if isfunction(self.v.UVVehicleInitialize) then --For vehicles that has a driver bodygroup
+			self.v:UVVehicleInitialize()
+		end
 		
 		local deletiontime = self.v.roadblocking and 10 or 1
 		if self.uvscripted then
