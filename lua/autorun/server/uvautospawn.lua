@@ -165,24 +165,25 @@ end
 --(Player, boolean)
 function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderrespawn, posspecified, angles, disperse)
 	
-	-- if not ply then
-	-- 	ply = Entity(1)
-	-- end
+	if not ply then
+		ply = Entity(1)
+	end
 	
 	local uvnextclasstospawn
 	
 	local enemylocation
-	local suspect = ply
+	local suspect = dvd.Waypoints[math.random(1, #dvd.Waypoints)]
+
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
 		local random_entry = math.random(#suspects)	
 		suspect = suspects[random_entry]
-		enemylocation = (suspect:GetPos()+ (vector_up * 50))
+		enemylocation = (suspect:GetPos() + (vector_up * 50))
 	else
-		enemylocation = (suspect:GetPos()+ (vector_up * 50))
+		enemylocation = (suspect.Target + (vector_up * 50))
 	end
 	
-	local suspectvelocity = suspect:GetVelocity()
+	local suspectvelocity = (IsValid(suspect) and suspect:GetVelocity()) or Vector(0,0,0)
 	
 	if next(dvd.Waypoints) == nil then
 		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
