@@ -165,9 +165,9 @@ end
 --(Player, boolean)
 function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderrespawn, posspecified, angles, disperse)
 	
-	if not ply then
-		ply = Entity(1)
-	end
+	-- if not ply then
+	-- 	ply = Entity(1)
+	-- end
 	
 	local uvnextclasstospawn
 	
