@@ -2988,7 +2988,6 @@ else --HUD/Options
 		if not RacerTags:GetBool() or uvclientjammed then
 			if GMinimap then
 				for _, ent in pairs(UVHUDWantedSuspects) do
-
 					if ent.displayedonhud then
 						local curblip = GMinimap:FindBlipByID("UVBlip"..ent:EntIndex())
 
@@ -2996,21 +2995,20 @@ else --HUD/Options
 							curblip.alpha = 0
 						end
 					end
-
 				end
 			end
 		end
 
 		-- if RacerTags:GetBool() and UVHUDWantedSuspects and UVHUDCopMode and not uvclientjammed then
-		if RacerTags:GetBool() and UVHUDWantedSuspects and not uvclientjammed then
+		if RacerTags:GetBool() and UVHUDWantedSuspects and not uvclientjammed and not UVHUDRace then
 			if next(UVHUDWantedSuspects) ~= nil then
 				local renderQueue = {}
 
 				for _, ent in pairs(UVHUDWantedSuspects) do
+					if ent:IsVehicle() and ent:GetDriver() == LocalPlayer() then continue end
 					local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 					table.insert(renderQueue, { vehicle = ent, dist = dist })
 				end
-
 				-- Sort so farther ones draw first, closer ones last (on top)
 				table.sort(renderQueue, function(a, b)
 					return a.dist < b.dist
@@ -3046,8 +3044,8 @@ else --HUD/Options
 								blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
 							end
 						end
-
-						if ent.displayedonhud then
+						
+						if UVHUDCopMode and ent.displayedonhud then-- *This* only for Units
 							local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
 							if not curblip then continue end
 

@@ -528,21 +528,22 @@ function UVRenderCommander(ent)
 				end
 			end
 			
-			local rectlen = string.len(cname) + 2
-			local rectxpos = textX - (w * (0.00375 * rectlen))
-			local rectypos = textY + (w * 0.0125)
+			local rectlen = surface.GetTextSize(cname) + 20
+			local rectxpos = textX - math.max((w * (0.00028 * rectlen)) + 2, 25)
+			local rectypos = textY + (w * 0.012)
+			local rectywidth = math.max(w * (0.00056 * rectlen) + 6, 55)
 			
 			surface.SetDrawColor( 0, 161, 255, fadeAlpha )
 			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054) -- Right
-			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05, (w * (0.0075 * rectlen)), h*0.002) -- Down
+			surface.DrawRect( rectxpos + rectywidth, rectypos - 2, w * 0.002, h*0.054) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05, rectywidth, h*0.002) -- Down
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175, -90)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05)
+			surface.DrawRect( rectxpos, rectypos, rectywidth, h*0.05)
 			
 			draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
@@ -572,7 +573,10 @@ function UVRenderEnemySquare(ent)
             box_color = Color( 255, blink3, blink3)
         end
     end
-    
+	
+    ent._bustAlpha = ent._bustAlpha or 0
+	ent._bustOffset = ent._bustOffset or 0
+
 	if IsValid(ent) then
 		if not (UVHUDDisplayPursuit or UVHUDDisplayRacing) then return end
 
@@ -701,6 +705,9 @@ function UVRenderEnemySquare(ent)
 		-- if #enemycallsign > 20 then -- If too long
 			-- enemycallsign = string.sub(enemycallsign, 1, 20 - 3) .. "..."
 		-- end
+		
+		ent._bustAlpha = ent._bustAlpha or 0
+		ent._bustOffset = ent._bustOffset or 0
 
         cam.Start2D()
 			if not GetConVar("cl_drawhud"):GetBool() then return end
@@ -710,21 +717,44 @@ function UVRenderEnemySquare(ent)
 			
 			enemypos = enemypos or bustdist
 			
-			local rectlen = string.len(enemycallsign)
-			local rectxpos = textX - (w * (0.00375 * rectlen))
+			local rectlen = surface.GetTextSize(enemycallsign)
+			local rectxpos = textX - math.max((w * (0.00028 * rectlen)) + 2, 25)
 			local rectypos = textY + (w * 0.01)
+			local rectywidth = math.max(w * (0.00056 * rectlen) + 6, 55)
 			
+			local targetAlpha = bustpro >= 4 and 255 or 0
+			local targetOffset = bustpro >= 2 and -(h * 0.0175) or (h * 0.0175)
+
+			-- Smoothly approach the target alpha and offset
+			ent._bustAlpha = math.Approach(ent._bustAlpha, targetAlpha, FrameTime() * 600)
+			ent._bustOffset = Lerp(FrameTime() * 10, ent._bustOffset, targetOffset)
+
+			if ent._bustAlpha > 0 then
+				local T = math.Clamp(((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * rectywidth, 0, rectywidth)
+				T = math.floor(T)
+				
+				if ent.beingbusted then
+					surface.SetDrawColor(0, 0, 0, ent._bustAlpha)
+					surface.DrawRect(rectxpos, rectypos + ent._bustOffset, rectywidth, h * 0.0125)
+
+					surface.SetDrawColor(255, 0, 0, ent._bustAlpha)
+					surface.DrawRect(rectxpos, rectypos + ent._bustOffset, T, h * 0.0125)
+				end
+
+				draw.DrawText("#uv.chase.busting.other", "UVFont4", textX, textY + ent._bustOffset - (h * 0.01), Color(box_color.r, box_color.g, box_color.b, ent._bustAlpha), TEXT_ALIGN_CENTER)
+			end
+
 			surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
 			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054 + xheight) -- Left
-			surface.DrawRect( rectxpos + (w * (0.0075 * rectlen) - 1), rectypos - 2, w * 0.002, h*0.054 + xheight) -- Right
-			surface.DrawRect( rectxpos, rectypos - 2, (w * (0.0075 * rectlen)), h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05 + xheight, (w * (0.0075 * rectlen)), h*0.002) -- Down
+			surface.DrawRect( rectxpos + rectywidth, rectypos - 2, w * 0.002, h*0.054 + xheight) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, h*0.002) -- Up
+			surface.DrawRect( rectxpos, rectypos + h*0.05 + xheight, rectywidth, h*0.002) -- Down
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475) + xheight, w * 0.0075 + 5, h * 0.0175 + 5, -90)
+			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475) + xheight, w * 0.0075 + 5, h * 0.0175, -90)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, (w * (0.0075 * rectlen)), h*0.05 + xheight)
+			surface.DrawRect( rectxpos, rectypos, rectywidth, h*0.05 + xheight)
 
 			draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			
@@ -733,8 +763,6 @@ function UVRenderEnemySquare(ent)
 			else
 				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			end
-			
-			draw.DrawText((ent.beingbusted and string.format(lang("uv.chase.busting.other"), bustpro) or "") , "UVFont4", textX, textY - (h * 0.01), Color(box_color.r, box_color.g, box_color.b, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
@@ -1940,6 +1968,7 @@ UV_UI.pursuit.carbon.events = {
         local debriefdata = params.dataTable or escapedtable
         local debrieftitletext = params.titleText or "Title Text"
         local debrieftitlevar = params.titleVar or " "
+		local debriefunitspawn = params.spawnAsUnit or false
         
         local w = ScrW()
         local h = ScrH()
@@ -2193,7 +2222,7 @@ UV_UI.pursuit.carbon.events = {
 			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
-			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 				surface.SetDrawColor( 100, 100, 100, 200 )
 				surface.DrawRect( w*0.2765 + (wdist * (conttextw + autotextw)), h*0.9, (wdist * uwstextw), h*0.035)
 				
@@ -2230,7 +2259,7 @@ UV_UI.pursuit.carbon.events = {
 			end
 		end)
 
-		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+		if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 				local ply = LocalPlayer()
 				if not IsValid(ply) then return end
@@ -2263,6 +2292,7 @@ UV_UI.pursuit.carbon.events = {
             dataTable = bustedtable,
             titleText = "#uv.results.bustedby.carbon",
             titleVar = language.GetPhrase( bustedtable["Unit"] ),
+			spawnAsUnit = true,
         }
         UV_UI.pursuit.carbon.events.ShowDebrief(params)
     end,
@@ -3446,6 +3476,7 @@ UV_UI.pursuit.mostwanted.events = {
         local debrieftextcolor = params.textcolor or Colors.MW_Racer
         local debrieficon = params.iconMaterial or UVMaterials['RESULTCOP']
         local debrieftitletext = params.titleText or "Title Text"
+		local debriefunitspawn = params.spawnAsUnit or false
         
         local w = ScrW()
         local h = ScrH()
@@ -3670,7 +3701,7 @@ UV_UI.pursuit.mostwanted.events = {
                 
                 draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
 				
-				if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+				if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 					draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont5UI", w*0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
 				end
             end
@@ -3754,7 +3785,7 @@ UV_UI.pursuit.mostwanted.events = {
 		end
 	end)
 
-	if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+	if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 		hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return end
@@ -3794,6 +3825,7 @@ onRacerBustedDebrief = function(bustedtable)
         color = Color(255, 183, 61),
         iconMaterial = UVMaterials['RESULTCOP'],
         titleText = string.format( language.GetPhrase("uv.results.bustedby"), language.GetPhrase( bustedtable["Unit"] ) ),
+		spawnAsUnit = true,
     }
     UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 end,
@@ -5044,6 +5076,7 @@ UV_UI.pursuit.undercover.events = {
         
         local debriefdata = params.dataTable or escapedtable
         local debrieftitletext = params.titleText or "Title Text"
+		local debriefunitspawn = params.spawnAsUnit or false
         
         local time = UVDisplayTime(UVTimerProgress)
         local unit = debriefdata["Unit"] or "Unknown"
@@ -5267,7 +5300,7 @@ UV_UI.pursuit.undercover.events = {
                 timeremaining = autoCloseDelay
             end
 
-			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h*0.64, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
 				draw.DrawText( language.GetPhrase("uv.settings.pm.ai.spawnas") .. " [" .. UVBindButton("+reload") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h * 0.67, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
 			else
@@ -5302,7 +5335,7 @@ UV_UI.pursuit.undercover.events = {
 			end
 		end)
 
-		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+		if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
 				local ply = LocalPlayer()
 				if not IsValid(ply) then return end
@@ -5354,7 +5387,8 @@ UV_UI.pursuit.undercover.events = {
                 { text = "#uv.results.chase.units.destroyed", value = wrecks },
                 { text = "#uv.results.chase.dodged.blocks", value = roadblocksdodged },
                 { text = "#uv.results.chase.dodged.spikes", value = spikestripsdodged },
-            }
+            },
+			spawnAsUnit = true,
         }
         UV_UI.pursuit.undercover.events.ShowDebrief(params)
     end,
