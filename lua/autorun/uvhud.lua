@@ -5903,6 +5903,11 @@ UV_UI.pursuit.original.states = {
     TakedownText = nil,
 }
 
+UV_UI.racing.original.states = {
+    FrozenTime = false,
+    FrozenTimeValue = 0
+}
+
 UV_UI.racing.original.events = {
     onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
 		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
@@ -5917,7 +5922,17 @@ UV_UI.racing.original.events = {
 		end
 
         chat.AddText(laptimeprefixcolor, laptimeprefix, laptimecolor, laptime)
-		
+
+        if participant:GetDriver() ~= LocalPlayer() then return end
+        
+        UV_UI.racing.original.states.FrozenTime = true
+        UV_UI.racing.original.states.FrozenTimeValue = lap_time
+        
+        if timer.Exists( "_OG_TIME_FROZEN_DELAY" ) then timer.Remove( "_OG_TIME_FROZEN_DELAY" ) end
+        timer.Create("_OG_TIME_FROZEN_DELAY", 3, 1, function()
+            UV_UI.racing.original.states.FrozenTime = false
+        end)
+
     end,
 
     onParticipantDisqualified = function(data)
@@ -6467,6 +6482,26 @@ local function original_racing_main( ... )
     .. UVHUDRaceCurrentPos 
     .. "/" 
     .. UVHUDRaceCurrentParticipants, "UVFont", 10, h / 7, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+
+    local current_time = nil 
+
+    if UV_UI.racing.original.states.FrozenTime then
+        current_time = UVDisplayTimeRace( UV_UI.racing.original.states.FrozenTimeValue )
+    elseif not my_array.LastLapTime then
+        current_time = UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 )
+    else
+        current_time = UVDisplayTimeRace( CurTime() - my_array.LastLapCurTime )
+    end
+
+    -- Timer
+    draw.DrawText(
+    string.format(language.GetPhrase("uv.race.hud.time.ug")).." "..(current_time or UVDisplayTimeRace( 0 )).." \n"
+    ..string.format(language.GetPhrase("uv.race.hud.best.ug")).." "..(UVDisplayTimeRace(my_array.BestLapTime or 0)).." ",
+    "UVFont4",
+    w,
+    h / 7,
+    Color(255, 255, 255),
+    TEXT_ALIGN_RIGHT)
     
     -- Racer List
     for i = 1, racer_count, 1 do
@@ -6478,6 +6513,36 @@ local function original_racing_main( ... )
         local diff = entry[4]
         -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
         local racerpos = 3.75
+
+        local Strings = {
+            ["Time"] = "%s",
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
+        }
+        
+        local status_text = ""
+        
+        if entry[3] then
+            local status_string = Strings[entry[3]]
+            
+            if status_string then
+                local args = {}
+                
+                if entry[4] then
+                    local num = tonumber(entry[4])
+                    num =
+                    ((num > 0 and "+") or "-") ..
+                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+                    
+                    table.insert(args, num)
+                end
+                
+                status_text = #args <= 0 and " ("..status_string..")" or " ("..string.format(status_string, unpack(args))..")"
+            end
+        end
         
         if UVHUDRaceInfo.Info.Laps > 1 then
             racerpos = 3.25
@@ -6493,9 +6558,9 @@ local function original_racing_main( ... )
             color = Colors.Original_Others
         end
         
-        local text = alt and (status_text) or (i .. ". " .. racer_name)
+        local text = (i .. ". " .. racer_name .. status_text)
         
-        draw.DrawText(text,"UVFont4",10,(h / racerpos) + i * ((racer_count > 5 and 20) or 28),color,TEXT_ALIGN_LEFT)
+        draw.DrawText(text,"UVFont4",10,(h / racerpos) + i * ((racer_count > 10 and 20) or 28),color,TEXT_ALIGN_LEFT)
     end
 end
 
