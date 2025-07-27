@@ -88,6 +88,8 @@ NETWORK_STRINGS = {
 	"UVHUDRepairCooldown",
 	"UVHUDRepair",
 	"UVHUDRepairAvailable",
+	"UVHUDRefilledPT",
+	"UVHUDRepairCommander",
 	"uvrepairsimfphys",
 	
 	-- Pursuit Table

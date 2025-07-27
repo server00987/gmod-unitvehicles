@@ -27,7 +27,8 @@ function ENT:Think()
 		if not v.uvrepairdelayed and 
 		not v.wrecked and 
 		(v:GetClass() == "prop_vehicle_jeep" or v.IsSimfphyscar or v.IsGlideVehicle)
-		and not table.HasValue(UVCommanders, v) then
+		then
+		-- and not table.HasValue(UVCommanders, v) then
 			self:Repair(v)
 		end
 	end
@@ -82,102 +83,93 @@ function ENT:Repair(vehicle)
 			UVReplicatePT( vehicle, i )
 		end
 	end
-	
-	if vehicle:GetClass() == "prop_vehicle_jeep" then
-		if vcmod_main then
-			if not ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
-			
-			-- if vehicle.uvrepaircooldown then
-			-- 	UVRepairCooldown()
-			-- 	return
-			-- end
-			
-			vehicle:VC_repairFull_Admin()
-		else
-			if not ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
-			
-			-- if vehicle.uvrepaircooldown then
-			-- 	UVRepairCooldown()
-			-- 	return
-			-- end
-			
-			local mass = vehicle:GetPhysicsObject():GetMass()
-			vehicle:SetMaxHealth(mass)
-			vehicle:SetHealth(mass)
-			vehicle:StopParticles()
+
+	local repairnet = "UVHUDRepair"
+	local comcanrep = GetConVar("unitvehicle_unit_commanderrepair"):GetBool()
+	local canrepair = true
+
+	if not comcanrep then
+		if table.HasValue(UVCommanders, vehicle) then
+			if UVGetDriver(vehicle):IsPlayer() then
+				repairnet = "UVHUDRepairCommander"
+				canrepair = false
+			end
 		end
 	end
-	if vehicle.IsSimfphyscar then	
-		-- if vehicle.uvrepaircooldown then
-		-- 	UVRepairCooldown()
-		-- 	return
-		-- end
-		
-		local repaired_tires = false 
-		
-		if istable(vehicle.Wheels) then
-			for i = 1, table.Count( vehicle.Wheels ) do
-				local Wheel = vehicle.Wheels[ i ]
-				if IsValid(Wheel) and Wheel:GetDamaged() then
-					repaired_tires = true
-					Wheel:SetDamaged( false )
+
+	if canrepair then
+		if vehicle:GetClass() == "prop_vehicle_jeep" then
+			if vcmod_main then
+				if not ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
+
+				vehicle:VC_repairFull_Admin()
+			else
+				if not ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
+
+				local mass = vehicle:GetPhysicsObject():GetMass()
+				vehicle:SetMaxHealth(mass)
+				vehicle:SetHealth(mass)
+				vehicle:StopParticles()
+			end
+		end
+		if vehicle.IsSimfphyscar then	
+			local repaired_tires = false 
+			
+			if istable(vehicle.Wheels) then
+				for i = 1, table.Count( vehicle.Wheels ) do
+					local Wheel = vehicle.Wheels[ i ]
+					if IsValid(Wheel) and Wheel:GetDamaged() then
+						repaired_tires = true
+						Wheel:SetDamaged( false )
+					end
 				end
 			end
+			
+			if not ptrefilled and not repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
+			
+			vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
+			vehicle:SetCurHealth(vehicle:GetMaxHealth())
+			vehicle:SetOnFire( false )
+			vehicle:SetOnSmoke( false )
+			
+			net.Start( "simfphys_lightsfixall" )
+			net.WriteEntity( vehicle )
+			net.Broadcast()
+			
+			net.Start( "uvrepairsimfphys" )
+			net.WriteEntity( vehicle )
+			net.Broadcast()
+			
+			vehicle:OnRepaired()
+
 		end
-		
-		if not ptrefilled and not repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
-		
-		vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
-		vehicle:SetCurHealth(vehicle:GetMaxHealth())
-		vehicle:SetOnFire( false )
-		vehicle:SetOnSmoke( false )
-		
-		net.Start( "simfphys_lightsfixall" )
-		net.WriteEntity( vehicle )
-		net.Broadcast()
-		
-		net.Start( "uvrepairsimfphys" )
-		net.WriteEntity( vehicle )
-		net.Broadcast()
-		
-		vehicle:OnRepaired()
-		
-		-- if istable(vehicle.Wheels) then
-		-- 	for i = 1, table.Count( vehicle.Wheels ) do
-		-- 		local Wheel = vehicle.Wheels[ i ]
-		-- 		if IsValid(Wheel) then
-		-- 			Wheel:SetDamaged( false )
-		-- 		end
-		-- 	end
-		-- end
-	end
-	if vehicle.IsGlideVehicle then
-		-- if vehicle.uvrepaircooldown then
-		-- 	UVRepairCooldown()
-		-- 	return
-		-- end
-		
-		local repaired = false
-		
-		for _, v in pairs(vehicle.wheels) do
-			if IsValid(v) and v.bursted then
-				repaired = true
-				v:_restore()
+		if vehicle.IsGlideVehicle then
+			local repaired = false
+			
+			for _, v in pairs(vehicle.wheels) do
+				if IsValid(v) and v.bursted then
+					repaired = true
+					v:_restore()
+				end
 			end
+			
+			if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
+			vehicle:Repair()
 		end
-		
-		if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
-		vehicle:Repair()
 	end
-	
+
 	if UVGetDriver(vehicle) then
 		if UVGetDriver(vehicle):IsPlayer() then
 			if UVGetDriver(vehicle):GetMaxHealth() == 100 then
 				UVGetDriver(vehicle):SetHealth(vehicle:GetPhysicsObject():GetMass())
 				UVGetDriver(vehicle):SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
 			end
-			net.Start("UVHUDRepair")
+			net.Start(repairnet)
 			net.Send(UVGetDriver(vehicle))
+			if ptrefilled then
+				net.Start("UVHUDRefilledPT")
+				net.Send(UVGetDriver(vehicle))
+			end
 		end
 	end
 	

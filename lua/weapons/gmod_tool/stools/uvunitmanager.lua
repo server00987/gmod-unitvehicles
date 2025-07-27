@@ -1354,6 +1354,13 @@ if CLIENT then
 		onecommanderevade:SetTooltip("#tool.uvunitmanager.settings.commander.evading.desc")
 		onecommanderevade:SetValue(GetConVar("uvunitmanager_onecommanderevading"):GetInt())
 		CPanel:AddItem(onecommanderevade)
+				
+		local commanderrepair = vgui.Create("DCheckBoxLabel")
+		commanderrepair:SetText("#tool.uvunitmanager.settings.commander.norepair")
+		commanderrepair:SetConVar("unitvehicle_unit_commanderrepair")
+		commanderrepair:SetTooltip("#tool.uvunitmanager.settings.commander.norepair.desc")
+		commanderrepair:SetValue(GetConVar("unitvehicle_unit_commanderrepair"):GetInt())
+		CPanel:AddItem(commanderrepair)
 		
 		local onecommanderhealth = vgui.Create("DNumSlider")
 		onecommanderhealth:SetText("#tool.uvunitmanager.settings.commander.health")
