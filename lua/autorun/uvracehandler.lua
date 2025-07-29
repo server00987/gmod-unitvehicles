@@ -457,8 +457,6 @@ else -- CLIENT stuff
 	end
 
 	function UVGetRaceMusicPath(theme, my_vehicle)
-		if not RacingMusic:GetBool() then return end
-
 		local isFinalLap = IsValid(my_vehicle)
 			and UVHUDRaceLaps > 1
 			and UVHUDRaceLaps == UVHUDRaceInfo["Participants"][my_vehicle].Lap

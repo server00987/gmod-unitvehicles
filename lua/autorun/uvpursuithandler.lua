@@ -104,6 +104,7 @@ function UVDelaySound()
 end
 
 function UVSoundHeat(heatlevel)
+	if not PlayMusic:GetBool() then return end
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingHeat or UVSoundDelayed then return end
@@ -183,6 +184,7 @@ function UVSoundHeat(heatlevel)
 end
 
 function UVSoundBusting(heatlevel)
+	if not PlayMusic:GetBool() then return end
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingBusting or UVSoundDelayed then return end
@@ -221,6 +223,7 @@ function UVSoundBusting(heatlevel)
 end
 
 function UVSoundCooldown(heatlevel)
+	if not PlayMusic:GetBool() then return end
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingCooldown or UVSoundDelayed then return end
@@ -268,6 +271,7 @@ function UVSoundCooldown(heatlevel)
 end
 
 function UVSoundBusted(heatlevel)
+	if not PlayMusic:GetBool() then return end
 	if UVPlayingBusted or UVSoundDelayed then return end
 
 	if timer.Exists("UVPursuitThemeReplay") then
@@ -294,7 +298,7 @@ function UVSoundBusted(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/5" )
+	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
 	if escapedSound then
 		UVPlaySound(escapedSound, false, true)
 	else
@@ -311,6 +315,7 @@ function UVSoundBusted(heatlevel)
 end
 
 function UVSoundEscaped(heatlevel)
+	if not PlayMusic:GetBool() then return end
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
 	if RacingThemeOutsideRace:GetBool() then UVSoundRacing() return end	
 	if UVPlayingEscaped or UVSoundDelayed then return end
@@ -336,7 +341,7 @@ function UVSoundEscaped(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/5" )
+	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
 	if escapedSound then
 		UVPlaySound(escapedSound, false)
 	else
@@ -2893,6 +2898,12 @@ else --HUD/Options
 					UVSoundLoop = nil
 				end
 			end
+		elseif UVHUDDisplayPursuit and not PlayMusic:GetBool() and not RacingMusic:GetBool() then
+			UVStopSound()
+			if UVSoundLoop then
+				UVSoundLoop:Stop()
+				UVSoundLoop = nil
+			end
 		end
 
 		if vehicle == NULL then 
@@ -2942,7 +2953,13 @@ else --HUD/Options
 		if UVHUDDisplayPursuit then
 			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
 				UVSoundHeat( UVHeatLevel )
+			elseif UVHUDDisplayCooldown then
+				UVSoundCooldown( UVHeatLevel )
+			elseif UVHUDDisplayBusting then
+				UVSoundBusting( UVHeatLevel )
 			end
+		elseif UVPlayingBusted or UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
+			UVStopSound()
 		end
 	end)
 
