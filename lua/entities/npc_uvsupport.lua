@@ -384,19 +384,19 @@ if SERVER then
 		if not self.v or not self.v.width then
 			return
 		end
-		
+
 		local width = self.v.width/2
 		local turnleft = -1
 		local turnright = 1
-		
+
 		local speed = self.v:GetVelocity():LengthSqr()
 		speed = math.sqrt(speed)
-		
+
 		local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
 		local right = Vector(width,math.Clamp(speed, width, math.huge),0)
 		local leftstart = Vector(-width,0,0)
 		local rightstart = Vector(width,0,0)
-		
+
 		if self.v.IsSimfphyscar then
 			left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
 			right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
@@ -411,16 +411,63 @@ if SERVER then
 		
 		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
 		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-		
+
 		if trleft > trright then
 			return turnleft
 		end
 		if trleft < trright then
 			return turnright
 		end
-		
+
 		return false
+
+	end
+
+	function ENT:FriendlyNearbySide()
+		if not self.v or not self.v.width then
+			return
+		end
+
+		local width = self.v.width/2
+
+		local speed = self.v:GetVelocity():LengthSqr()
+		speed = math.sqrt(speed)
+
+		local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
+		local right = Vector(width,math.Clamp(speed, width, math.huge),0)
+		local leftstart = Vector(-width,0,0)
+		local rightstart = Vector(width,0,0)
+
+		if self.v.IsSimfphyscar then
+			left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			leftstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			rightstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		elseif self.v.IsGlideVehicle then
+			left:Rotate(Angle(0, -90, 0))
+			right:Rotate(Angle(0, -90, 0))
+			leftstart:Rotate(Angle(0, -90, 0))
+			rightstart:Rotate(Angle(0, -90, 0))
+		end
 		
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_SOLID})
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_SOLID})
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_SOLID})
+
+		if IsValid(tr.Entity) and tr.Entity.UnitVehicle then
+			return tr.Entity:GetVelocity():LengthSqr()
+		end
+
+		if IsValid(trleft.Entity) and trleft.Entity.UnitVehicle then
+			return trleft.Entity:GetVelocity():LengthSqr()
+		end
+
+		if IsValid(trright.Entity) and trleft.Entity.UnitVehicle then
+			return trright.Entity:GetVelocity():LengthSqr()
+		end
+		
+		return
+
 	end
 	
 	function ENT:PathFindToEnemy(vectors)
@@ -1288,96 +1335,90 @@ if SERVER then
 					end
 				end
 			end
-			
-			--Awareness to world
-			--[[if self.v.IsSimfphyscar then
-			if !UVStraightToWaypoint(self.v:WorldSpaceCenter(), (self.v:WorldSpaceCenter()+self.v:GetVelocity())) then
-				throttle = throttle * -1
-			end
-		end]]
 		
-		--Awareness to friendly vehicles
-		local t = ents.FindInSphere(self.v:WorldSpaceCenter(), 5000)
-		local distance, nearest = math.huge, nil --The nearest friendly.
-		for k, f in pairs(t) do
-			if f ~= self and (f:GetClass() == "npc_uvpatrol" or f:GetClass() == "npc_uvsupport" or f:GetClass() == "npc_uvpursuit" or f:GetClass() == "npc_uvinterceptor" or f:GetClass() == "npc_uvcommander" or f:GetClass() == "npc_uvspecial") then --Friendly conditions
-				local d = f:WorldSpaceCenter():DistToSqr(self.v:WorldSpaceCenter())
-				if distance > d then
-					distance = d
-					nearest = f --Friendly
-					local fforward = f.v.IsSimfphyscar and f.v:LocalToWorldAngles(f.v.VehicleData.LocalAngForward):Forward() or f.v:GetForward() --Forward vector.
-					local fdist = f:WorldSpaceCenter() - self.v:WorldSpaceCenter() --Distance between the vehicle and the friendly.
-					local fedist = self.e:WorldSpaceCenter() - f:WorldSpaceCenter() --Distance between the enemy and the friendly.
-					local fvect = fdist:GetNormalized() --Friendly direction vector.
-					local fvectdot = fvect:Dot(self.v:GetVelocity()) --Dot product, velocity and direction.
-					local fright = fvect:Cross(forward) --The friendly is right side or not.
-					if dist:LengthSqr() > fedist:LengthSqr() then
-						if fvectdot > 0 then
-							if UVCalm and fdist:LengthSqr() < 100000 then
-								throttle = 0
-							elseif fdist:LengthSqr() < 100000 and self.e:GetVelocity():LengthSqr() > 200000 and not self.formationpoint then
-								throttle = 0
+			--Awareness to friendly vehicles
+			local t = ents.FindInSphere(self.v:WorldSpaceCenter(), 5000)
+			local distance, nearest = math.huge, nil --The nearest friendly.
+			for k, f in pairs(t) do
+				if f ~= self and (f:GetClass() == "npc_uvpatrol" or f:GetClass() == "npc_uvsupport" or f:GetClass() == "npc_uvpursuit" or f:GetClass() == "npc_uvinterceptor" or f:GetClass() == "npc_uvcommander" or f:GetClass() == "npc_uvspecial") then --Friendly conditions
+					local d = f:WorldSpaceCenter():DistToSqr(self.v:WorldSpaceCenter())
+					if distance > d then
+						distance = d
+						nearest = f --Friendly
+						local fforward = f.v.IsSimfphyscar and f.v:LocalToWorldAngles(f.v.VehicleData.LocalAngForward):Forward() or f.v:GetForward() --Forward vector.
+						local fdist = f:WorldSpaceCenter() - self.v:WorldSpaceCenter() --Distance between the vehicle and the friendly.
+						local fedist = self.e:WorldSpaceCenter() - f:WorldSpaceCenter() --Distance between the enemy and the friendly.
+						local fvect = fdist:GetNormalized() --Friendly direction vector.
+						local fvectdot = fvect:Dot(self.v:GetVelocity()) --Dot product, velocity and direction.
+						local fright = fvect:Cross(forward) --The friendly is right side or not.
+						if dist:LengthSqr() > fedist:LengthSqr() then
+							if fvectdot > 0 then
+								if UVCalm and fdist:LengthSqr() < 100000 then
+									throttle = 0
+								elseif fdist:LengthSqr() < 100000 and self.e:GetVelocity():LengthSqr() > 200000 and not self.formationpoint then
+									throttle = 0
+								end
 							end
-						end
-					end -- Follow behind
-					if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < (UVBustSpeed*2) then
-						if fright.z < 0.1 and fright.z > -0.9 then
-							steer = 1
-						end
-						if fright.z > -0.1 and fright.z < 0.9 then 
-							steer = -1
-						end
-					end -- Surronding target vehicles
+						end -- Follow behind
+						if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < (UVBustSpeed*2) then
+							if fright.z < 0.1 and fright.z > -0.9 then
+								steer = 1
+							end
+							if fright.z > -0.1 and fright.z < 0.9 then 
+								steer = -1
+							end
+						end -- Surronding target vehicles
+					end
+				end
+			end	
+
+			--Busting 
+			local btimeout = GetConVar("unitvehicle_bustedtimer"):GetFloat()
+
+			--Resetting
+			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then --Reset conditions.
+				self.moving = CurTime()
+			end
+			if self.displaybusting then
+				self.moving = CurTime()
+			end
+			if self.stuck then 
+				self.moving = CurTime()
+				if self.v:GetVelocity():LengthSqr() > 100000 and vectdot > 0 and not UVEnemyEscaping then
+					self.stuck = nil
 				end
 			end
-		end	
-		
-		--Busting 
-		local btimeout = GetConVar("unitvehicle_bustedtimer"):GetFloat()
-		
-		--Resetting
-		if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then --Reset conditions.
-			self.moving = CurTime()
-		end
-		if self.displaybusting then
-			self.moving = CurTime()
-		end
-		if self.stuck then 
-			self.moving = CurTime()
-			if self.v:GetVelocity():LengthSqr() > 100000 and vectdot > 0 and not UVEnemyEscaping then
-				self.stuck = nil
+
+			local timeout = 1
+			if timeout and timeout > 0 then
+				if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
+					self.invincible = true
+					self.stuck = true
+					self.moving = CurTime()
+					timer.Simple(2, function() if IsValid(self.v) then self.invincible = nil end end)
+					timer.Simple(1, function() if IsValid(self.e) then self.stuck = nil self:PathFindToEnemy(self.e:WorldSpaceCenter()) end end)
+				end
 			end
-		end
-		
-		local timeout = 1
-		if timeout and timeout > 0 then
-			if CurTime() > self.moving + timeout then --If it has got stuck for enough time.
-				self.invincible = true
-				self.stuck = true
-				self.moving = CurTime()
-				timer.Simple(2, function() if IsValid(self.v) then self.invincible = nil end end)
-				timer.Simple(1, function() if IsValid(self.e) then self.stuck = nil self:PathFindToEnemy(self.e:WorldSpaceCenter()) end end)
+
+			--First encounter with enemy
+			if not self.metwithenemy and edist:LengthSqr() < 25000000 and self:StraightToTarget(self.e) then
+				self.metwithenemy = true
+				if Chatter:GetBool() and IsValid(self.v) and UVTargeting and not UVEnemyEscaping then
+					UVChatterOnScene(self) 
+				end
 			end
-		end
-		
-		--First encounter with enemy
-		if not self.metwithenemy and edist:LengthSqr() < 25000000 and self:StraightToTarget(self.e) then
-			self.metwithenemy = true
-			if Chatter:GetBool() and IsValid(self.v) and UVTargeting and not UVEnemyEscaping then
-				UVChatterOnScene(self) 
+
+			--Spawning
+			if self.toofar and edist:LengthSqr() < 25000000 and self:StraightToTarget(self.e) then
+				if not self.spawncooldown then
+					timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
+					self.invincible = true
+					self.toofar = nil
+					if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
+					self:SetELSSiren(true)
+					--if ph:GetAngles().z > 90 and ph:GetAngles().z < 270 then self.v:PointAtEntity(self.e) end
+				end	
 			end
-		end
-		
-		--Spawning
-		if self.toofar and edist:LengthSqr() < 25000000 and self:StraightToTarget(self.e) then
-			if not self.spawncooldown then
-				timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
-				self.invincible = true
-				self.toofar = nil
-				if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
-				self:SetELSSiren(true)
-				--if ph:GetAngles().z > 90 and ph:GetAngles().z < 270 then self.v:PointAtEntity(self.e) end
-			end	end
 			
 			--Bounty
 			local botimeout = 10
