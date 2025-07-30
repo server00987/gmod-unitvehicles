@@ -88,7 +88,7 @@ function ENT:Repair(vehicle)
 	local comcanrep = GetConVar("unitvehicle_unit_commanderrepair"):GetBool()
 	local canrepair = true
 
-	if not comcanrep then
+	if comcanrep then
 		if table.HasValue(UVCommanders, vehicle) then
 			if UVGetDriver(vehicle):IsPlayer() then
 				repairnet = "UVHUDRepairCommander"
