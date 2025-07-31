@@ -423,6 +423,53 @@ if SERVER then
 
 	end
 
+	function ENT:FriendlyNearbySide()
+		if not self.v or not self.v.width then
+			return
+		end
+
+		local width = self.v.width/2
+
+		local speed = self.v:GetVelocity():LengthSqr()
+		speed = math.sqrt(speed)
+
+		local left = Vector(-width,math.Clamp(speed, width, math.huge),0)
+		local right = Vector(width,math.Clamp(speed, width, math.huge),0)
+		local leftstart = Vector(-width,0,0)
+		local rightstart = Vector(width,0,0)
+
+		if self.v.IsSimfphyscar then
+			left:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			right:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			leftstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+			rightstart:Rotate(Angle(0, (self.v.VehicleData.LocalAngForward.y-90), 0))
+		elseif self.v.IsGlideVehicle then
+			left:Rotate(Angle(0, -90, 0))
+			right:Rotate(Angle(0, -90, 0))
+			leftstart:Rotate(Angle(0, -90, 0))
+			rightstart:Rotate(Angle(0, -90, 0))
+		end
+		
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_SOLID})
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_SOLID})
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_SOLID})
+
+		if IsValid(tr.Entity) and tr.Entity.UnitVehicle then
+			return tr.Entity:GetVelocity():LengthSqr()
+		end
+
+		if IsValid(trleft.Entity) and trleft.Entity.UnitVehicle then
+			return trleft.Entity:GetVelocity():LengthSqr()
+		end
+
+		if IsValid(trright.Entity) and trleft.Entity.UnitVehicle then
+			return trright.Entity:GetVelocity():LengthSqr()
+		end
+		
+		return
+
+	end
+
 	function ENT:PathFindToEnemy(vectors)
 
 		if not vectors or not isvector(vectors) or self.NavigateBlind or not GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then
@@ -1289,13 +1336,6 @@ if SERVER then
 					end
 				end
 			end
-
-			--Awareness to world
-			--[[if self.v.IsSimfphyscar then
-				if !UVStraightToWaypoint(self.v:WorldSpaceCenter(), (self.v:WorldSpaceCenter()+self.v:GetVelocity())) then
-					throttle = throttle * -1
-				end
-			end]]
 			
 			--Awareness to friendly vehicles
 			local t = ents.FindInSphere(self.v:WorldSpaceCenter(), 5000)
