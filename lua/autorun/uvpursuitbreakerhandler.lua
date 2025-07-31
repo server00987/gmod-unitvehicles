@@ -77,8 +77,73 @@ if SERVER then
         net.WriteInt(location.y, 32)
         net.WriteInt(location.z, 32)
         net.Broadcast()
-        
-        local entities, constraints = duplicator.Paste( Entity(1), pbdata.Entities, pbdata.Constraints )
+
+        --local entities, constraints = duplicator.Paste( Entity(1), pbdata.Entities, pbdata.Constraints )
+
+        local entities, constraints = {}, {}
+
+        for k, ent in pairs( pbdata.Entities ) do
+            local entClass = ent.Class
+            local entPos = ent.Pos or ent.Maxs
+            local entAng = ent.Angle or Angle(0, 0, 0)
+            local entModel = ent.Model
+           -- print(entClass, entPos, entAng, entModel)
+
+            local gib = ents.Create( entClass )
+            if not IsValid( gib ) then continue end
+
+            duplicator.DoGeneric( gib, ent )
+
+            gib:SetPos( Vector(entPos.x, entPos.y, entPos.z) )
+
+            gib:SetAngles( entAng )
+            gib:SetModel( entModel )
+
+            gib:Spawn()
+
+            gib.BoneMods = table.Copy( ent.BoneMods )
+			gib.EntityMods = table.Copy( ent.EntityMods )
+			gib.PhysicsObjects = table.Copy( ent.PhysicsObjects )
+
+            entities[k] = gib
+
+            timer.Simple(0, function()
+                if not IsValid(gib) then return end
+                
+                local phys = gib:GetPhysicsObject()
+
+                if IsValid( phys ) and gib.PhysicsObjects then
+                    phys:EnableMotion( not gib.PhysicsObjects[0].Frozen )
+                    phys:SetAngles( gib.PhysicsObjects[0].Angle )
+                    phys:SetPos( gib.PhysicsObjects[0].Pos )
+
+                    if gib.PhysicsObjects[0].Sleep then
+                        phys:Sleep()
+                    else
+                        phys:Wake()
+                    end
+                end
+            end)
+
+            table.Merge( gib:GetTable(), ent )
+
+            --gib:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+        end
+
+        for _, constraint in pairs( pbdata.Constraints ) do
+            -- local constraintType = constraint.Type
+            -- local ent1 = constraint.Ent1
+            -- local ent2 = constraint.Ent2
+            -- local constraintData = constraint.Data or {}
+            -- local newConstraint = constraint.Create(constraintType, ent1, ent2, constraintData)
+            -- if not newConstraint then continue end
+            -- table.insert(constraints, newConstraint)
+
+            local Ent = duplicator.CreateConstraintFromTable( constraint, entities, nil )
+            if IsValid( Ent ) then
+                table.insert( constraints, Ent )
+            end
+        end
         
         for k, ent in pairs( entities ) do
             ent.PursuitBreaker = jsonfile

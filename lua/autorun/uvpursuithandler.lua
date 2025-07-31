@@ -925,7 +925,7 @@ if SERVER then
 
 			if uvIdleSpawning - CurTime() + 5 <= 0 then
 				if SpawnMainUnits:GetBool() and UVPresenceMode then
-					UVAutoSpawn(ply)
+					UVAutoSpawn(nil)
 				end
 				if UVRacerPresenceMode and #ents.FindByClass("npc_racervehicle") < UVHeatLevel then
 					UVAutoSpawnRacer(ply)
@@ -1299,6 +1299,7 @@ if SERVER then
 			for k, unit in pairs(UVUnitVehicles) do
 				if not IsValid(unit) or not unit.UnitVehicle then
 					table.RemoveByValue(UVUnitVehicles, unit)
+					table.RemoveByValue(UVUnitsChasing, unit)
 				end
 			end
 			if next(UVWantedTableVehicle) ~= nil then
@@ -1781,6 +1782,10 @@ if SERVER then
 			ply:Spawn()
 
 			if IsValid(ply.uvplayerlastvehicle) and not ply.uvplayerlastvehicle.wrecked then
+				if table.HasValue(UVUnitsChasing, ply.uvplayerlastvehicle) then
+					table.RemoveByValue(UVUnitsChasing, ply.uvplayerlastvehicle)
+				end
+
 				ply.uvplayerlastvehicle:Remove()
 			end
 
@@ -2303,15 +2308,6 @@ else --HUD/Options
 		hook.Run( 'UIEventHook', 'pursuit', 'onHeatLevelUpdate', HeatLevel, UVHeatLevel )
 
 		UVHeatLevel = HeatLevel
-
-	end)
-
-	net.Receive("UVHUDUnitsChasing", function()
-
-		local chasing = net.ReadString()
-		hook.Run( 'UIEventHook', 'pursuit', 'onChasingUnitsChange', chasing, UVUnitsChasing )
-
-		UVUnitsChasing = chasing
 
 	end)
 
@@ -2863,6 +2859,7 @@ else --HUD/Options
 	outofpursuit = 0
 
 	hook.Add("Think", "UVThink", function()
+
 		local localPlayer = LocalPlayer()
 		local vehicle = localPlayer:GetVehicle()
 
@@ -3022,6 +3019,7 @@ else --HUD/Options
 				local renderQueue = {}
 
 				for _, ent in pairs(UVHUDWantedSuspects) do
+					if not IsValid(ent) then continue end
 					if ent:IsVehicle() and ent:GetDriver() == LocalPlayer() then continue end
 					local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 					table.insert(renderQueue, { vehicle = ent, dist = dist })

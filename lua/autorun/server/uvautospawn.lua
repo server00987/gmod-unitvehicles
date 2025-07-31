@@ -2,6 +2,15 @@ local dvd = DecentVehicleDestination
 
 --SIMFPHYS ONLY--
 
+-- timer.Simple(5, function()
+-- 	print("hanham")
+-- 	file.AsyncRead('myfolder/test.json', 'DATA', function( _, _, status, data )
+-- 			gmsave.LoadMap(data, Entity(1))
+-- 		end, true)
+-- 		--gmsave.LoadMap(Entity(1), "myfolder/test.json")
+-- 		--file.Write("myfolder/test.json", gmsave.SaveMap(Entity(1)));
+-- 	end)
+
 local function ValidateModel( model )
 	local v_list = list.Get( "simfphys_vehicles" )
 	for listname, _ in pairs( v_list ) do
@@ -165,80 +174,99 @@ end
 --(Player, boolean)
 function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderrespawn, posspecified, angles, disperse)
 	
-	if not ply then
-		ply = Entity(1)
+	if playercontrolled then
+		if not ply then
+			ply = Entity(1)
+		end
 	end
 	
 	local uvnextclasstospawn
-	
 	local enemylocation
-	local suspect = ply
-	if next(UVWantedTableVehicle) ~= nil then
-		local suspects = UVWantedTableVehicle
-		local random_entry = math.random(#suspects)	
-		suspect = suspects[random_entry]
-		enemylocation = (suspect:GetPos()+ (vector_up * 50))
-	else
-		enemylocation = (suspect:GetPos()+ (vector_up * 50))
-	end
-	
-	local suspectvelocity = suspect:GetVelocity()
+	local suspect
+	local suspectvelocity = Vector(0,0,0)
+	-- local suspect = ply
+	-- if next(UVWantedTableVehicle) ~= nil then
+	-- 	local suspects = UVWantedTableVehicle
+	-- 	local random_entry = math.random(#suspects)	
+	-- 	suspect = suspects[random_entry]
+	-- 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
+	-- else
+	-- 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
+	-- end
 	
 	if next(dvd.Waypoints) == nil then
 		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
 		return
+	end
+	
+	if next(UVWantedTableVehicle) ~= nil then
+		local suspects = UVWantedTableVehicle
+		local random_entry = math.random(#suspects)
+		suspect = suspects[random_entry]
+		
+		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
+		suspectvelocity = suspect:GetVelocity()
+	elseif not playercontrolled then
+		enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
 	else
-		local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
-		local enemywaypointgroup = enemywaypoint["Group"]
-		local waypointtable = {}
-		local prioritywaypointtable = {}
-		local prioritywaypointtable2 = {}
-		local prioritywaypointtable3 = {}
-		for k, v in ipairs(dvd.Waypoints) do
-			local Waypoint = v["Target"]
-			local distance = enemylocation - Waypoint
-			local vect = distance:GetNormalized()
-			local evectdot = vect:Dot(suspectvelocity)
-			if distance:LengthSqr() > 25000000 then
-				if enemywaypointgroup == v["Group"] then
-					if UVStraightToWaypoint(enemylocation, Waypoint) then
-						if evectdot < 0 then
-							table.insert(prioritywaypointtable, v)
-						elseif distance:LengthSqr() < 25000000 then
-							table.insert(prioritywaypointtable2, v)
-						end
-					elseif distance:LengthSqr() < 100000000 then
-						table.insert(prioritywaypointtable3, v)
+		enemylocation = ply:GetPos() + Vector(0, 0, 50)
+	end
+	
+	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
+	local enemywaypointgroup = enemywaypoint["Group"]
+	local waypointtable = {}
+	local prioritywaypointtable = {}
+	local prioritywaypointtable2 = {}
+	local prioritywaypointtable3 = {}
+	for k, v in ipairs(dvd.Waypoints) do
+		local Waypoint = v["Target"]
+		local distance = enemylocation - Waypoint
+		local vect = distance:GetNormalized()
+		local evectdot = vect:Dot(suspectvelocity)
+		if distance:LengthSqr() > 25000000 then
+			if enemywaypointgroup == v["Group"] then
+				if UVStraightToWaypoint(enemylocation, Waypoint) then
+					if evectdot < 0 then
+						table.insert(prioritywaypointtable, v)
+					elseif distance:LengthSqr() < 25000000 then
+						table.insert(prioritywaypointtable2, v)
 					end
 				elseif distance:LengthSqr() < 100000000 then
-					table.insert(waypointtable, v)
+					table.insert(prioritywaypointtable3, v)
 				end
+			elseif distance:LengthSqr() < 100000000 then
+				table.insert(waypointtable, v)
 			end
 		end
-		if next(prioritywaypointtable) ~= nil then
-			uvspawnpointwaypoint = prioritywaypointtable[math.random(#prioritywaypointtable)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		elseif next(prioritywaypointtable2) ~= nil then
-			uvspawnpointwaypoint = prioritywaypointtable2[math.random(#prioritywaypointtable2)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		elseif next(prioritywaypointtable3) ~= nil then
-			uvspawnpointwaypoint = prioritywaypointtable3[math.random(#prioritywaypointtable3)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		elseif next(waypointtable) ~= nil then
-			uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		else
-			uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		end
-		local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
-		if neighbor then
-			local neighborpoint = neighbor["Target"]
-			local neighbordistance = neighborpoint - uvspawnpoint
-			uvspawnpointangles = neighbordistance:Angle()+Angle(0,180,0)
-		else
-			uvspawnpointangles = Angle(0,math.random(0,360),0)
-		end
+	end
+
+	if not UVTargeting and (rhinoattack or helicopter) then return end
+
+	if next(prioritywaypointtable) ~= nil then
+		uvspawnpointwaypoint = prioritywaypointtable[math.random(#prioritywaypointtable)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	elseif next(prioritywaypointtable2) ~= nil then
+		uvspawnpointwaypoint = prioritywaypointtable2[math.random(#prioritywaypointtable2)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	elseif next(prioritywaypointtable3) ~= nil then
+		uvspawnpointwaypoint = prioritywaypointtable3[math.random(#prioritywaypointtable3)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	elseif next(waypointtable) ~= nil then
+		uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	else
+		uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	end
+
+	local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+
+	if neighbor then
+		local neighborpoint = neighbor["Target"]
+		local neighbordistance = neighborpoint - uvspawnpoint
+		uvspawnpointangles = neighbordistance:Angle()+Angle(0,180,0)
+	else
+		uvspawnpointangles = Angle(0,math.random(0,360),0)
 	end
 	
 	if UVTargeting then
@@ -248,7 +276,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
 			end
 		else
-			uvspawnpointangles = suspect:GetVelocity():Angle()
+			print("7-10, ready to take them out!")
+			uvspawnpointangles = suspect:GetVelocity():Angle() + Angle(0,180,0)
 		end
 	end
 	
@@ -311,11 +340,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
 		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
 		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
-
+		
 		if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
 			UnitsCommander = ""
 		end
-
+		
 		givenunitstable = {
 			UnitsPatrol,
 			UnitsSupport,
@@ -324,14 +353,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			UnitsSpecial,
 			UnitsCommander,
 		}
-
+		
 		for k, v in pairs(givenunitstable) do
 			if not string.match(v, "^%s*$") then --not an empty string
 				table.insert(availableunitstable, givenunitstable[k])
 				table.insert(availableclasses, givenclasses[k])
 			end
 		end
-
+		
 		local randomclassunit = math.random(1, #availableclasses)
 		appliedunits = availableunitstable[randomclassunit]
 		uvnextclasstospawn = availableclasses[randomclassunit]
@@ -347,6 +376,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local UNITMEMORY = {}
 	
 	if vehiclebase == 3 then --Glide
+		print("Ldspaolkkpodas")
 		local saved_vehicles = file.Find("unitvehicles/glide/units/*.json", "DATA")
 		
 		for k, v in pairs(saved_vehicles) do
@@ -380,35 +410,51 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		duplicator.SetLocalPos( pos )
 		duplicator.SetLocalAng( ang )
 		
-		local Ents = duplicator.Paste( ply, UVTOOLMemory.Entities, UVTOOLMemory.Constraints )
-		local Ent = Ents[next(Ents)]
+		-- local Ents = duplicator.Paste( nil, UVTOOLMemory.Entities, UVTOOLMemory.Constraints )
+		-- --print(type(Ents), "a", PrintTable(Ents))
+		-- local Ent = Ents[next(Ents)]
+		local entArray = UVTOOLMemory.Entities[next(UVTOOLMemory.Entities)]
+
+		local Ent = ents.Create( entArray.Class )
+		duplicator.DoGeneric( Ent, entArray )
 		
-		duplicator.SetLocalPos( vector_origin )
-		duplicator.SetLocalAng( angle_zero )
+		Ent:SetPos( pos )
+		Ent:SetAngles( ang )
+
+		Ent:Spawn()
+		Ent:Activate()
+
+		table.Merge( Ent:GetTable(), UVTOOLMemory.Entities[next(UVTOOLMemory.Entities)] )
+		
+		-- duplicator.SetLocalPos( vector_origin )
+		-- duplicator.SetLocalAng( angle_zero )
+
+		-- local Ent = duplicator.CreateEntityFromTable( nil, UVTOOLMemory.Entities )
+		-- print(Ent, "b")
 		
 		if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableunit.."' is missing!") return end
-
+		
 		if UVTOOLMemory.SubMaterials then
 			if istable( UVTOOLMemory.SubMaterials ) then
 				for i = 0, table.Count( UVTOOLMemory.SubMaterials ) do
 					Ent:SetSubMaterial( i, UVTOOLMemory.SubMaterials[i] )
 				end
 			end
-
+			
 			local groups = string.Explode( ",", UVTOOLMemory.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
-
+			
 			Ent:SetSkin( UVTOOLMemory.Skin )
-
+			
 			local c = string.Explode( ",", UVTOOLMemory.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-
+			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 			Ent:SetColor( Color )
-
+			
 			local data = {
 				Color = Color,
 				RenderMode = 0,
@@ -418,7 +464,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		end
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
-
+		
 		if rhinoattack then
 			Ent.uvclasstospawnon = "npc_uvspecial"
 			Ent.rhino = true
@@ -426,7 +472,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			
 			if UVUPursuitTech:GetBool() then
 				Ent.PursuitTech = {}
-
+				
 				local pool = {}
 				
 				if UVUPursuitTech_ESF:GetBool() then
@@ -500,7 +546,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		else
 			table.insert(UVSimfphysVehicleInitializing, Ent)
 		end
-
+		
 		if Ent.PursuitTech then
 			timer.Simple(1, function()
 				for i=1,2 do
@@ -800,7 +846,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 								table.remove(pool, i)
 							end
 						end
-
+						
 						--UVReplicatePT( Ent, i )
 					end
 				end
@@ -846,7 +892,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		if disperse then
 			Ent.disperse = true
 		end
-
+		
 		if Ent.PursuitTech then
 			timer.Simple(1, function()
 				for i=1,2 do
@@ -854,7 +900,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				end
 			end)
 		end	
-
+		
 	elseif vehiclebase == 1 then --Default Vehicle Base
 		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/units/*.txt", "DATA")
 		
@@ -1047,7 +1093,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		else
 			table.insert(UVSimfphysVehicleInitializing, Ent)
 		end
-
+		
 		if Ent.PursuitTech then
 			timer.Simple(1, function()
 				for i=1,2 do
@@ -1500,10 +1546,13 @@ local function GetVehicleData( ent )
 		local Key2 = "SpawnName"
 		Memory[Key2] = ent:GetClass()
 		Memory.Mins = Vector(Memory.Mins.x,Memory.Mins.y,0)
+
+		-- TODO: 
+		-- Vehicles with spoilers attached via Bonemerge are currently not supported and will result in an error due to the code below.
 		
 		Memory.Entities[next(Memory.Entities)].Angle = Angle(0,180,0)
 		Memory.Entities[next(Memory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
-
+		
 		local c = ent:GetColor()
 		Memory.Color = c.r..","..c.g..","..c.b..","..c.a
 		
@@ -1838,7 +1887,7 @@ function UVTeleportSimfphysVehicle( vehicle, pos, ang )
 	
 	if Ent.PursuitTech then
 		table.insert(UVRVWithPursuitTech, Ent)
-
+		
 		for i=1,2 do
 			UVReplicatePT( Ent, i )
 		end
@@ -2192,35 +2241,35 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		duplicator.SetLocalAng( angle_zero )
 		
 		undo.Create( "Duplicator" )
-
+		
 		if Memory.SubMaterials then
 			if istable( Memory.SubMaterials ) then
 				for i = 0, table.Count( Memory.SubMaterials ) do
 					Ent:SetSubMaterial( i, Memory.SubMaterials[i] )
 				end
 			end
-
+			
 			local groups = string.Explode( ",", Memory.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
-
+			
 			Ent:SetSkin( Memory.Skin )
-
+			
 			local c = string.Explode( ",", Memory.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-
+			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 			Ent:SetColor( Color )
-
+			
 			local data = {
 				Color = Color,
 				RenderMode = 0,
 				RenderFX = 0
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
-
+			
 			if isfunction(Ent.Repair) then
 				Ent:Repair()
 			end
@@ -2310,7 +2359,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	
 	if aienabled then 
 		Ent.uvclasstospawnon = "npc_racervehicle"
-	-- else
+		-- else
 		-- ply:PrintMessage( HUD_PRINTTALK, "Moving your vehicle to the grid slot..." ) 
 	end
 	
@@ -2320,7 +2369,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	
 	if Ent.PursuitTech then
 		table.insert(UVRVWithPursuitTech, Ent)
-
+		
 		for i=1,2 do
 			UVReplicatePT( Ent, i )
 		end

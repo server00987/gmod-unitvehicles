@@ -331,7 +331,7 @@ concommand.Add("uv_startpursuit", function(ply)
 	ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_start.wav", 0, 100, 0.5, CHAN_STATIC)
 	
 	if SpawnMainUnits:GetBool() then
-		UVAutoSpawn(ply)
+		UVAutoSpawn(nil)
 		
 		uvIdleSpawning = CurTime()
 		UVPresenceMode = true
@@ -419,12 +419,12 @@ function UVApplyHeatLevel()
 end
 
 function UVUpdateHeatLevel()
-	local ply = Entity(1)
-	if not ply then return end
+	-- local ply = Entity(1)
+	-- if not ply then return end
 	
 	UVHeatLevel = CalculateHeatLevel(UVBounty, UVHeatLevel)
 	ApplyHeatSettings(UVHeatLevel)
-	HandleVehicleSpawning(ply)
+	HandleVehicleSpawning()
 end
 
 function CalculateHeatLevel(bounty, currentHeat)
@@ -507,7 +507,7 @@ function ApplyHeatSettings(heatLevel)
 end
 
 -- Helper function for vehicle spawning logic
-function HandleVehicleSpawning(ply)
+function HandleVehicleSpawning()
 	local function CheckVehicleLimit()
 		return (#ents.FindByClass("npc_uv*") + #UVWreckedVehicles) < UVMaxUnits or #ents.FindByClass("npc_uv*") < 1
 	end
@@ -515,7 +515,6 @@ function HandleVehicleSpawning(ply)
 	if (not UVTargeting) or UVJammerDeployed then return end
 	if not CheckVehicleLimit() then return end
 	
-	-- Handle racer spawning
 	if UVRacerPresenceMode then
 		local racerChance = math.random(1,2)
 		
@@ -536,7 +535,7 @@ function HandleVehicleSpawning(ply)
 	elseif specialChance == 1 and not UVEnemyEscaping then
 		
 		if not SpawnMainUnits:GetBool() then return end
-		UVAutoSpawn(ply, true) --RHINO
+		UVAutoSpawn(nil, true) --RHINO
 		
 	elseif specialChance >= 2 and specialChance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvRoadblockDeployable then
 		
@@ -547,11 +546,11 @@ function HandleVehicleSpawning(ply)
 	elseif specialChance == 6 and #ents.FindByClass("uvair") < 1 and uvHelicopterDeployable and CurTime() - UVHeliCooldown > 120 then
 		
 		if not SpawnMainUnits:GetBool() then return end
-		UVAutoSpawn(ply, nil, true) --HELICOPTER
+		UVAutoSpawn(nil, nil, true) --HELICOPTER
 		
 	elseif SpawnMainUnits:GetBool() and UVResourcePoints > (#ents.FindByClass("npc_uv*")) then
 		
-		UVAutoSpawn(ply) --NORMAL
+		UVAutoSpawn(nil) --NORMAL
 		
 	end
 end
