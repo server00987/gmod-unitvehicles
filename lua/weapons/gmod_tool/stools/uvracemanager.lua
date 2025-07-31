@@ -181,7 +181,7 @@ if SERVER then
 		
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
 
-		local str = export and "Exported UV Race positions to " .. filename or "Imported UV Race positions from " .. filename
+		local str = export and "Exported UV Race to " .. filename or "Imported UV Race from " .. filename
 		ply:ChatPrint(str)
 	end
 	
@@ -189,85 +189,92 @@ if SERVER then
 		if not ply:IsSuperAdmin() then return end
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1]
 		if not file.Exists(filename, "DATA") then return end
-		
-		local entList = file.Read(filename, "DATA"):Split("\n")
 
-		local metaLine = entList[1]
-		local trackName, author = "UNKNOWN", "UNKNOWN"
+		local jsonfilename = string.Replace( "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1], ".txt", ".json" )
+		if file.Exists(jsonfilename, "DATA") then 
+			gmsave.LoadMap( file.Read(jsonfilename) )
+		end
+		
+		timer.Simple(0.2, function() --wait for gmsave.LoadMap to finish executing(0.1 seconds)
+			local entList = file.Read(filename, "DATA"):Split("\n")
 
-		if metaLine then
-			local nameExtracted, authorExtracted = metaLine:match("^name%s+(.+)%s+'(.+)'$")
-			if nameExtracted then trackName = nameExtracted end
-			if authorExtracted then author = authorExtracted end
-		end
+			local metaLine = entList[1]
+			local trackName, author = "UNKNOWN", "UNKNOWN"
 
-		if UVRaceInEffect then
-			UVRaceEnd()
-		end
-		
-		--Delete all checkpoints and spawns
-		for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
-			ent:Remove()
-		end
-		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
-			ent:Remove()
-		end
-		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
-			ent:Remove()
-		end
-		
-		undo.Create("UVRaceEnt")
-		undo.SetPlayer(ply)
-		
-		for _, data in ipairs(entList) do
-			local params = data:Split(" ")
-			
-			local cid = tonumber(params[1])
-			if cid then
-				local check = ents.Create("uvrace_checkpoint")
-				
-				local speedlimit = tonumber(params[8]) or 0
-				local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
-				local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
-				
-				local pos = Vector(posx, posy, posz)
-				check:SetPos(pos)
-				check:SetMaxPos(Vector(mx, my, mz))
-				check:SetID(cid)
-				check:SetSpeedLimit(speedlimit)
-				check:Spawn()
-				
-				undo.AddEntity(check)
-				ply:AddCleanup("uvrace_ents", check)
-			elseif params[1] == "spawn" then
-				local spawn = ents.Create("uvrace_spawn")
-				
-				local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
-				spawn:SetPos(Vector(posx, posy, posz))
-				
-				local angy = tonumber(params[5])
-				spawn:SetAngles(Angle(0, angy, 0))
-				
-				spawn:SetGridSlot(tonumber(params[6]))
-				
-				spawn:Spawn()
-				
-				undo.AddEntity(spawn)
-				ply:AddCleanup("uvrace_ents", spawn)
+			if metaLine then
+				local nameExtracted, authorExtracted = metaLine:match("^name%s+(.+)%s+'(.+)'$")
+				if nameExtracted then trackName = nameExtracted end
+				if authorExtracted then author = authorExtracted end
 			end
-			
-		end
-		
-		undo.Finish()
-		
-		local tname = args[1]:Split(".")[2]
 
-		net.Start("UVRace_TrackName")
-		net.WriteString(trackName:Replace("_", " "))
-		net.WriteString(author)
-		net.Broadcast()
-		
-		ImportExportText(tname, false, ply)
+			if UVRaceInEffect then
+				UVRaceEnd()
+			end
+
+			--Delete all checkpoints and spawns
+			for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
+				ent:Remove()
+			end
+			for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+				ent:Remove()
+			end
+			for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+				ent:Remove()
+			end
+
+			undo.Create("UVRaceEnt")
+			undo.SetPlayer(ply)
+
+			for _, data in ipairs(entList) do
+				local params = data:Split(" ")
+
+				local cid = tonumber(params[1])
+				if cid then
+					local check = ents.Create("uvrace_checkpoint")
+
+					local speedlimit = tonumber(params[8]) or 0
+					local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+					local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
+
+					local pos = Vector(posx, posy, posz)
+					check:SetPos(pos)
+					check:SetMaxPos(Vector(mx, my, mz))
+					check:SetID(cid)
+					check:SetSpeedLimit(speedlimit)
+					check:Spawn()
+
+					undo.AddEntity(check)
+					ply:AddCleanup("uvrace_ents", check)
+				elseif params[1] == "spawn" then
+					local spawn = ents.Create("uvrace_spawn")
+
+					local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+					spawn:SetPos(Vector(posx, posy, posz))
+
+					local angy = tonumber(params[5])
+					spawn:SetAngles(Angle(0, angy, 0))
+
+					spawn:SetGridSlot(tonumber(params[6]))
+
+					spawn:Spawn()
+
+					undo.AddEntity(spawn)
+					ply:AddCleanup("uvrace_ents", spawn)
+				end
+
+			end
+
+			undo.Finish()
+
+			local tname = args[1]:Split(".")[2]
+
+			net.Start("UVRace_TrackName")
+			net.WriteString(trackName:Replace("_", " "))
+			net.WriteString(author)
+			net.Broadcast()
+
+			ImportExportText(tname, false, ply)
+		end)
 	end
 	concommand.Add("uvrace_import", Import)
 	
@@ -289,15 +296,22 @@ if SERVER then
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".txt"
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			ent.DoNotDuplicate = true
 			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .."\n"
 		end
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			ent.DoNotDuplicate = true
 			str = str .. "spawn " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetAngles().y) .. " " .. tostring(ent:GetGridSlot()) .. "\n"
 		end
 		
 		file.CreateDir("unitvehicles/races/" .. game.GetMap())
 		file.Write(filename, str)
+
+		local jsonfilename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".json"
+		local jsonstr = gmsave.SaveMap( ply )
+
+		file.Write(jsonfilename, jsonstr)
 		
 		ImportExportText(name, true, ply)
 	end
@@ -442,7 +456,7 @@ elseif CLIENT then
 		local dlist = vgui.Create("DScrollPanel", dframe)
 		dlist:Dock(FILL)
 		
-		for _, item in ipairs(file.Find("unitvehicles/races/" .. game.GetMap() .. "/*", "DATA")) do
+		for _, item in ipairs(file.Find("unitvehicles/races/" .. game.GetMap() .. "/*.txt", "DATA")) do
 			local dbutton = dlist:Add("DButton")
 			
 			local name = file.Read("unitvehicles/races/" .. game.GetMap() .. "/" .. item, "DATA"):Split("\n")[1]
@@ -454,6 +468,7 @@ elseif CLIENT then
 			dbutton:DockMargin(0, 0, 0, 5)
 			
 			function dbutton:DoClick()
+				chat.AddText("Importing UV Race...")
 				RunConsoleCommand("uvrace_import", item)
 				dframe:Close()
 			end
@@ -477,6 +492,7 @@ elseif CLIENT then
 	
 	local function QueryExport()
 		Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvracemanager.export.desc", cpID, function(txt)
+			chat.AddText("Exporting UV Race...")
 			RunConsoleCommand("uvrace_export", txt)
 		end, nil, "#addons.confirm", "#addons.cancel")
 	end
