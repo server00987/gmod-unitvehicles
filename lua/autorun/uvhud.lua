@@ -593,7 +593,7 @@ function UVRenderEnemySquare(ent)
 		end
 		
 		local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
-		local enemydriver = ent:GetDriver()
+		local enemydriver = UVGetDriver( ent )
 		local enemypos = false
 		
 		if UVHUDRaceInfo then
@@ -619,7 +619,7 @@ function UVRenderEnemySquare(ent)
 			end
 
 			-- Prefer player name if valid
-			if IsValid(enemydriver) and enemydriver:IsPlayer() then
+			if IsValid(enemydriver) then
 				if localPlayer == enemydriver then return end
 				enemycallsign = enemydriver:GetName()
 			end
