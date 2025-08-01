@@ -977,8 +977,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		Ent:SetVehicleClass( class )
 		Ent:Spawn()
 		Ent:Activate()
+		
 		local vehicle = Ent
-		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
+		if IsValid(Entity(1)) then
+			gamemode.Call( "PlayerSpawnedVehicle", Entity(1), vehicle ) --Some vehicles has different models implanted together, so do that.
+		end
 		
 		if istable( UNITMEMORY.SubMaterials ) then
 			for i = 0, table.Count( UNITMEMORY.SubMaterials ) do
@@ -2314,7 +2317,9 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		Ent:Activate()
 		
 		local vehicle = Ent
-		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
+		if IsValid(Entity(1)) then
+			gamemode.Call( "PlayerSpawnedVehicle", Entity(1), vehicle ) --Some vehicles has different models implanted together, so do that.
+		end
 		
 		if istable( Memory.SubMaterials ) then
 			for i = 0, table.Count( Memory.SubMaterials ) do
