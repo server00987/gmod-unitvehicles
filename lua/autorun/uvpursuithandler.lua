@@ -2947,16 +2947,18 @@ else --HUD/Options
 		UVBountyNo = PursuitTable.Bounty
 		UVTimer = (UVTimerProgress and UVDisplayTime( UVTimerProgress )) or UVDisplayTime( 0 )
 
-		if UVHUDDisplayPursuit then
-			if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
-				UVSoundHeat( UVHeatLevel )
-			elseif UVHUDDisplayCooldown then
-				UVSoundCooldown( UVHeatLevel )
-			elseif UVHUDDisplayBusting then
-				UVSoundBusting( UVHeatLevel )
+		if not UVBustedState then
+			if UVHUDDisplayPursuit then
+				if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
+					UVSoundHeat( UVHeatLevel )
+				elseif UVHUDDisplayCooldown then
+					UVSoundCooldown( UVHeatLevel )
+				elseif UVHUDDisplayBusting then
+					UVSoundBusting( UVHeatLevel )
+				end
+			elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
+				UVStopSound()
 			end
-		elseif UVPlayingBusted or UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
-			UVStopSound()
 		end
 	end)
 

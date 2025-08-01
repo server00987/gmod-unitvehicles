@@ -376,7 +376,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local UNITMEMORY = {}
 	
 	if vehiclebase == 3 then --Glide
-		print("Ldspaolkkpodas")
 		local saved_vehicles = file.Find("unitvehicles/glide/units/*.json", "DATA")
 		
 		for k, v in pairs(saved_vehicles) do
