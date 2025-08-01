@@ -276,7 +276,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
 			end
 		else
-			print("7-10, ready to take them out!")
 			uvspawnpointangles = suspect:GetVelocity():Angle() + Angle(0,180,0)
 		end
 	end
