@@ -947,7 +947,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						UVTags = UVTags + 1
 						if car.rhino and not car.rhinohit then
 							car.rhinohit = true
-							if Chatter:GetBool() and UVTargeting and not NPC:IsPlayer() then
+							if Chatter:GetBool() and UVTargeting and not NPC:IsPlayer() and not car.roadblocking and not car.disperse then
 								UVSoundChatter(NPC, NPC.voice, "rhinohit", 1)
 							end
 						end
@@ -1265,7 +1265,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				UVTags = UVTags + 1
 				if car.rhino and not car.rhinohit then
 					car.rhinohit = true
-					if Chatter:GetBool() and UVTargeting and not NPC:IsPlayer() then
+					if Chatter:GetBool() and UVTargeting and not NPC:IsPlayer() and not car.roadblocking and not car.disperse then
 						UVSoundChatter(NPC, NPC.voice, "rhinohit", 1)
 					end
 				end
@@ -1545,7 +1545,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					UVTags = UVTags + 1
 					if car.rhino and not car.rhinohit then
 						car.rhinohit = true
-						if Chatter:GetBool() and UVTargeting then
+						if Chatter:GetBool() and UVTargeting and not car.roadblocking and not car.disperse then
 							UVSoundChatter(NPC, NPC.voice, "rhinohit", 1)
 						end
 					end

@@ -329,41 +329,37 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	
 	local appliedUnits = nil
 	
-	if rhinoattack then
-		appliedunits = string.Trim( GetConVar( 'unitvehicle_unit_rhinos' .. UVHeatLevel ):GetString() )
-		if appliedunits == "" then return end
-	else
-		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
-		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
-		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
-		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
-		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
-		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
-		
-		if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-			UnitsCommander = ""
-		end
-		
-		givenunitstable = {
-			UnitsPatrol,
-			UnitsSupport,
-			UnitsPursuit,
-			UnitsInterceptor,
-			UnitsSpecial,
-			UnitsCommander,
-		}
-		
-		for k, v in pairs(givenunitstable) do
-			if not string.match(v, "^%s*$") then --not an empty string
-				table.insert(availableunitstable, givenunitstable[k])
-				table.insert(availableclasses, givenclasses[k])
-			end
-		end
-		
-		local randomclassunit = math.random(1, #availableclasses)
-		appliedunits = availableunitstable[randomclassunit]
-		uvnextclasstospawn = availableclasses[randomclassunit]
+	local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
+	local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
+	local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
+	local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
+	local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
+	local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
+	local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_rhinos' .. UVHeatLevel ):GetString() )
+	
+	if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+		UnitsCommander = ""
 	end
+	
+	givenunitstable = {
+		UnitsPatrol,
+		UnitsSupport,
+		UnitsPursuit,
+		UnitsInterceptor,
+		UnitsSpecial,
+		UnitsCommander,
+	}
+	
+	for k, v in pairs(givenunitstable) do
+		if not string.match(v, "^%s*$") then --not an empty string
+			table.insert(availableunitstable, givenunitstable[k])
+			table.insert(availableclasses, givenclasses[k])
+		end
+	end
+	
+	local randomclassunit = math.random(1, #availableclasses)
+	appliedunits = rhinoattack and not string.match(UnitsRhino, "^%s*$") and UnitsRhino or availableunitstable[randomclassunit]
+	uvnextclasstospawn = availableclasses[randomclassunit]
 	
 	if not isstring(appliedunits) then
 		PrintMessage( HUD_PRINTTALK, "There's currently no assigned Units to spawn. Use the Unit Manager tool to assign Units at that particular Heat Level!")

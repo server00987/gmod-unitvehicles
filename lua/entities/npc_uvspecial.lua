@@ -1010,7 +1010,11 @@ if SERVER then
 					self.moving = CurTime()
 					self.toofar = nil
 					if Chatter:GetBool() and IsValid(self) then
-						UVChatterResponding(self)
+						if self.v.roadblocking then
+							UVChatterRoadblockDeployed(self)
+						else
+							UVChatterResponding(self)
+						end
 					end
 				end
 			end
@@ -1266,7 +1270,7 @@ if SERVER then
 					end
 					if not self.v.rhinohit then
 						self.v.rhinohit = true
-						if Chatter:GetBool() and UVTargeting then
+						if Chatter:GetBool() and UVTargeting and not self.v.roadblocking and not self.v.disperse then
 							UVSoundChatter(UVGetDriver(self.e), self.voice, "rhinomiss", 1)
 						end
 					end
@@ -1592,7 +1596,7 @@ if SERVER then
 			--First encounter with enemy
 			if not self.metwithenemy and edist:LengthSqr() < 25000000 and self:StraightToTarget(self.e) then
 				self.metwithenemy = true
-				if Chatter:GetBool() and IsValid(self.v) and UVTargeting and not UVEnemyEscaping then
+				if Chatter:GetBool() and IsValid(self.v) and UVTargeting and not UVEnemyEscaping and not self.v.roadblocking and not self.v.disperse then
 					UVChatterOnScene(self) 
 				end
 			end
@@ -1976,7 +1980,11 @@ if SERVER then
 		if not UVTargeting then self.v:EmitSound( "plats/tram_hit1.wav" ) end
 		self.mass = math.Round(self.v:GetPhysicsObject():GetMass())
 		if Chatter:GetBool() and IsValid(self.v) and not UVTargeting then
-			UVChatterInitialize(self) 
+			if self.v.roadblocking then
+				UVChatterRoadblockDeployed(self)
+			else
+				UVChatterInitialize(self) 
+			end
 		end
 		
 		local collisionmin, collisionmax = self.v:GetCollisionBounds()

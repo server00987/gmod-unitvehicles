@@ -76,6 +76,7 @@ if SERVER then
 		local location = rbdata.Location or rbdata.Maxs
 		local angles = rbdata.Angle or angle_zero
 		local disperse = rbdata.DisperseAfterPassing
+		local rhino = math.random(1,2) == 1 and true or false
 		
 		if UVRBOverride:GetInt() == 1 then
 			disperse = true
@@ -201,6 +202,7 @@ if SERVER then
 			ent.UVRoadblock = ent
 			ent.RoadblockLoc = location
 			ent.Disperse = disperse
+			ent.Rhino = rhino
 			UVRemoveConstraints( ent, "Weld" )
 			if ent:GetClass() ~= "entity_uvroadblockcar" then
 				ent:GetPhysicsObject():EnableMotion( true )
