@@ -105,6 +105,9 @@ if SERVER then
 			gib.EntityMods = table.Copy( ent.EntityMods )
 			gib.PhysicsObjects = table.Copy( ent.PhysicsObjects )
 
+            duplicator.ApplyEntityModifiers( Entity(1), gib )
+	        duplicator.ApplyBoneModifiers( Entity(1), gib )
+
             entities[k] = gib
 
             timer.Simple(0, function()

@@ -358,7 +358,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	end
 	
 	local randomclassunit = math.random(1, #availableclasses)
-	appliedunits = rhinoattack and not string.match(UnitsRhino, "^%s*$") and UnitsRhino or availableunitstable[randomclassunit]
+	
+	if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
+		appliedunits = UnitsRhino
+	else
+		rhinoattack = nil
+		appliedunits = availableunitstable[randomclassunit]
+	end
+
 	uvnextclasstospawn = availableclasses[randomclassunit]
 	
 	if not isstring(appliedunits) then

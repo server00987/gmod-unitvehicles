@@ -168,7 +168,7 @@ if SERVER then
                 local phys = gib:GetPhysicsObject()
 
                 if IsValid( phys ) and gib.PhysicsObjects then
-                    phys:EnableMotion( not gib.PhysicsObjects[0].Frozen )
+                    phys:EnableMotion( true )
                     phys:SetAngles( gib.PhysicsObjects[0].Angle )
                     phys:SetPos( gib.PhysicsObjects[0].Pos )
 
