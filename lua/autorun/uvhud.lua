@@ -722,11 +722,11 @@ function UVRenderEnemySquare(ent)
 			local rectypos = textY + (w * 0.01)
 			local rectywidth = math.max(w * (0.00056 * rectlen) + 6, 55)
 			
-			local targetAlpha = bustpro >= 4 and 255 or 0
+			local targetAlpha = bustpro >= 4 and 1 or 0
 			local targetOffset = bustpro >= 2 and -(h * 0.0175) or (h * 0.0175)
 
 			-- Smoothly approach the target alpha and offset
-			ent._bustAlpha = math.Approach(ent._bustAlpha, targetAlpha, FrameTime() * 600)
+			ent._bustAlpha = math.Approach(ent._bustAlpha, fadeAlpha * targetAlpha, FrameTime() * 600)
 			ent._bustOffset = Lerp(FrameTime() * 10, ent._bustOffset, targetOffset)
 
 			if ent._bustAlpha > 0 then
@@ -1746,17 +1746,23 @@ UV_UI.racing.carbon.events = {
             
             -- Time remaining and closing
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-            surface.SetDrawColor( 100, 100, 100, 200 )
-            surface.DrawRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawRect( w*0.4, h*0.9, w*0.125, h*0.035)
+			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
 			
-            surface.SetDrawColor( 0, 0, 0, 255 )
-            surface.DrawOutlinedRect( w*0.2565, h*0.9, w * 0.125, h*0.035)
-            surface.DrawOutlinedRect( w*0.4, h*0.9, w*0.125, h*0.035)
-			
-            draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVCarbonLeaderboardFont", w*0.4025, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0)
-			)
+			local conttextw = surface.GetTextSize(conttext)
+			local autotextw = surface.GetTextSize(autotext)
+			local wdist = w * 0.0006
+
+			surface.SetDrawColor( 100, 100, 100, 200 )
+			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			surface.SetDrawColor( 0, 0, 0, 255 )
+			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
+			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
+
+			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
             if scrollOffset > 0 then
                 draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.3, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
@@ -3698,12 +3704,13 @@ UV_UI.pursuit.mostwanted.events = {
                 draw.DrawText("#uv.results.pursuit", "UVFont5", w * 0.25, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 
                 draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
-                
-                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-				
+
+				local ustext = ""
 				if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-					draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont5UI", w*0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
+					ustext = "  [ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas")
 				end
+				                
+                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue") .. ustext, "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             end
             
             -- Show/Hide OK button with fade
@@ -3729,7 +3736,7 @@ UV_UI.pursuit.mostwanted.events = {
                 autoCloseTimer = elapsed - autoCloseStartDelay
                 autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
                 
-                draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.5, h * 0.81, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_CENTER )
+                draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", debriefunitspawn and w * 0.5 or w * 0.795, debriefunitspawn and h * 0.81 or h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), debriefunitspawn and TEXT_ALIGN_CENTER or TEXT_ALIGN_RIGHT )
             
 				if autoCloseRemaining <= 0 then
 					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
@@ -3743,7 +3750,7 @@ UV_UI.pursuit.mostwanted.events = {
 				end
 			else
 				-- Before auto-close timer starts, show the text but no countdown
-				draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", w * 0.5, h * 0.81, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_CENTER )
+				draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", debriefunitspawn and w * 0.5 or w * 0.795, debriefunitspawn and h * 0.81 or h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), debriefunitspawn and TEXT_ALIGN_CENTER or TEXT_ALIGN_RIGHT )
 		end
 		if closing then
 			local elapsed = curTime - closeStartTime
