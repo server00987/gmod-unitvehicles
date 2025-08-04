@@ -47,7 +47,7 @@ if SERVER then
 		return highestid
 	end
 
-	function UVRaceMakeCheckpoints()
+	function UVRaceMakeCheckpoints( laps )
 		UVRaceRemoveCheckpoints() --Remove old checkpoints
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
@@ -65,7 +65,7 @@ if SERVER then
 		end
 
 		timer.Simple(2, function()
-			UVRaceStart()
+			UVRaceStart( laps )
 		end)
 	end
 
@@ -167,7 +167,7 @@ if SERVER then
 		vehicle.bestlaptime = nil
 	end
 
-	function UVRaceStart() --Start procedure
+	function UVRaceStart( laps ) --Start procedure
 		if #UVRaceCurrentParticipants == 0 then
 			UVRaceEnd()
 			PrintMessage( HUD_PRINTTALK, "No participants found!" )
@@ -197,7 +197,7 @@ if SERVER then
 		UVRaceTable['Participants'] = {}
 		UVRaceTable['Info'] = {
 			['Started'] = false,
-			['Laps'] = UVRaceLaps:GetInt(),
+			['Laps'] = laps or UVRaceLaps:GetInt(),
 			['Racers'] = 0,
 			['Time'] = 0
 		}

@@ -106,7 +106,7 @@ if SERVER then
 		UVRacePrep = true
 		UVRaceInEffect = true
 		
-		UVRaceMakeCheckpoints()
+		UVRaceMakeCheckpoints( tonumber( args[1] ) ) -- args[1] is the number of laps
 		
 		timer.Simple(2, function()
 			//UVRaceMakeCheckpoints()
@@ -608,7 +608,9 @@ function TOOL.BuildCPanel(panel)
 	
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racec", Description = "Race"})
 	-- panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.start", Command = "uvrace_startrace"})
-	panel:Button("#tool.uvracemanager.settings.racec.start", "uvrace_startrace")
+	panel:Button("#tool.uvracemanager.settings.racec.start").DoClick = function()
+		RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+	end
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.stop", Command = "uvrace_stop"})
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.invite", Command = "uvrace_startinvite"})
 	
@@ -620,14 +622,14 @@ function TOOL.BuildCPanel(panel)
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.raceo"})
 	local last_lap_value
 	local lap_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.laps", "uvracemanager_laps", 1, 100, 0)
-	lap_slider.OnValueChanged = function(self, value)
-		local value = GetConVar("uvracemanager_laps"):GetInt()
+	--lap_slider.OnValueChanged = function(self, value)
+		-- local value = GetConVar("uvracemanager_laps"):GetInt()
 		
-		if last_lap_value ~= value then
-			RunConsoleCommand("uvrace_updatevars", "unitvehicle_racelaps", value)
-			last_lap_value = value
-		end
-	end
+		-- if last_lap_value ~= value then
+		-- 	RunConsoleCommand("uvrace_updatevars", "unitvehicle_racelaps", value)
+		-- 	last_lap_value = value
+		-- end
+	--end
 	
 	local sfxtheme, label = panel:ComboBox( "#tool.uvracemanager.settings.raceo.sfx", "unitvehicle_sfxtheme" )
 	local files, folders = file.Find( "sound/uvracesfx/*", "GAME" )
