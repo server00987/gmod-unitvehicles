@@ -107,6 +107,93 @@ function UVDelaySound()
 	end)
 end
 
+local PursuitFilePathsTable = {}
+
+function PopulatePursuitFilePaths( theme )
+	if PursuitFilePathsTable[theme] then return end
+	PursuitFilePathsTable[theme] = {}
+
+	local path = PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/"
+	
+	local function scanFolderRecursive(basePath, tbl)
+		local _, folders = file.Find( "sound/" .. basePath .. "*", "GAME")
+		for _, folder in pairs(folders) do
+			if folder ~= "." and folder ~= ".." then
+				local subfolderPath = basePath .. folder .. "/"
+				local files2, folders2 = file.Find("sound/" .. subfolderPath .. "*", "GAME")
+
+				if not tbl[folder] then
+					tbl[folder] = {}
+				end
+
+				if #folders2 == 0 then
+					for _, v in pairs( files2 ) do
+						table.insert(tbl[folder], subfolderPath .. v)
+					end
+				else
+					for _, v in pairs( folders2 ) do
+						tbl[folder][v] = {}
+					end
+				end
+
+				-- for _, folderName in pairs(folders) do
+				-- 	local filePath = subfolderPath .. fileName
+				-- 	if not file.IsDir(filePath, "GAME") then
+				-- 		table.insert(tbl[folder], filePath)
+				-- 	end
+				-- end
+
+				-- Recursively scan subfolders
+				scanFolderRecursive(subfolderPath, tbl[folder])
+			end
+		end
+	end
+
+	scanFolderRecursive(path, PursuitFilePathsTable[theme])
+	-- local introFiles = file.Find(path .. "intro/*", "GAME")
+	-- if introFiles and #introFiles > 0 then
+	-- 	PursuitFilePathsTable[theme].intro = {}
+	-- 	for _, v in ipairs(introFiles) do
+	-- 		PursuitFilePathsTable[theme].intro[#PursuitFilePathsTable[theme].intro + 1] = path .. "intro/" .. v	
+	-- 	end
+	-- end
+
+	-- local transitionFiles = file.Find(path .. "transition/*", "GAME")
+	-- if transitionFiles and #transitionFiles > 0 then
+	-- 	PursuitFilePathsTable[theme].transition = {}
+	-- 	for _, v in ipairs(transitionFiles) do
+	-- 		PursuitFilePathsTable[theme].transition[#PursuitFilePathsTable[theme].transition + 1] = path .. "transition/" .. v	
+	-- 	end
+	-- end
+
+	-- local heatFiles = file.Find(path .. "heat/*", "GAME")
+	-- if heatFiles and #heatFiles > 0 then
+	-- 	PursuitFilePathsTable[theme].heat = {}
+	-- 	for _, v in ipairs(heatFiles) do
+	-- 		PursuitFilePathsTable[theme].heat[#PursuitFilePathsTable[theme].heat + 1] = path .. "heat/" .. v	
+	-- 	end
+	-- end
+
+	-- local bustedFiles = file.Find(path .. "busted/*", "GAME")
+	-- if bustedFiles and #bustedFiles > 0 then
+	-- 	PursuitFilePathsTable[theme].busted = {}
+	-- 	for _, v in ipairs(bustedFiles) do
+	-- 		PursuitFilePathsTable[theme].busted[#PursuitFilePathsTable[theme].busted + 1] = path .. "busted/" .. v	
+	-- 	end
+	-- end
+
+	-- local escapedFiles = file.Find(path .. "escaped/*", "GAME")
+	-- if escapedFiles and #escapedFiles > 0 then
+	-- 	PursuitFilePathsTable[theme].escaped = {}
+	-- 	for _, v in ipairs(escapedFiles) do
+	-- 		PursuitFilePathsTable[theme].escaped[#PursuitFilePathsTable[theme].escaped + 1] = path .. "escaped/" .. v	
+	-- 	end
+	-- end
+
+	return PursuitFilePathsTable[theme]
+end
+--print("hhahahaha")
+
 function UVSoundHeat(heatlevel)
 	if not PlayMusic:GetBool() then return end
 	if RacingMusicPriority:GetBool() and RacingMusic:GetBool() and UVHUDDisplayRacing then return end
@@ -122,6 +209,8 @@ function UVSoundHeat(heatlevel)
 	if PursuitThemePlayRandomHeat:GetBool() then
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
+
+	heatlevel = tostring(heatlevel)
 
 	local theme = PursuitTheme:GetString()
 
@@ -150,6 +239,10 @@ function UVSoundHeat(heatlevel)
 	-- 	end
 	-- end
 
+	if not PursuitFilePathsTable[theme] then
+		PopulatePursuitFilePaths(theme)
+	end
+
 	if UVHeatLevelIncrease then
 		UVHeatPlayIntro = true
 	end
@@ -158,24 +251,59 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayIntro = false
 		UVHeatPlayMusic = true
 
-		local introTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/intro/" .. heatlevel )
-		if introTrack then
-			UVPlaySound(introTrack, true)
-			UVPlayingHeat = true
+		--local introArray = (PursuitFilePathsTable[theme].intro and PursuitFilePathsTable[theme].intro[heatlevel]) or {}
+		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["6"]))
+
+		if introArray and #introArray > 0 then
+			local introTrack = introArray[math.random(1, #introArray)]
+
+			if introTrack then
+				UVPlaySound(introTrack, true)
+				UVPlayingHeat = true
+			end
 		end
+
+		-- local introTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/intro/" .. heatlevel )
+		-- if introTrack then
+		-- 	UVPlaySound(introTrack, true)
+		-- 	UVPlayingHeat = true
+		-- end
 	elseif UVHeatPlayTransition then
 		UVHeatPlayTransition = false
 
-		local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
-		if transitionTrack then
-			UVPlaySound(transitionTrack, true)
-			UVPlayingHeat = true
+		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["6"]) or {}
+
+		if transitionArray and #transitionArray > 0 then
+			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
+
+			if transitionTrack then
+				UVPlaySound(transitionTrack, true)
+				UVPlayingHeat = true
+			end
 		end
+		-- local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
+		-- if transitionTrack then
+		-- 	UVPlaySound(transitionTrack, true)
+		-- 	UVPlayingHeat = true
+		-- end
 	elseif UVHeatPlayMusic then
-		local musicTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/5" )
-		if musicTrack then
-			UVPlaySound(musicTrack, true)
-			UVPlayingHeat = true
+		-- local musicTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/heat/5" )
+		-- if musicTrack then
+		-- 	UVPlaySound(musicTrack, true)
+		-- 	UVPlayingHeat = true
+		-- end
+
+		--local heatArray = (PursuitFilePathsTable[theme].heat and PursuitFilePathsTable[theme].heat[heatlevel]) or {}
+		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["6"]) or {}
+
+		if heatArray and #heatArray > 0 then
+			local heatTrack = heatArray[math.random(1, #heatArray)]
+
+			if heatTrack then
+				UVPlaySound(heatTrack, true)
+				UVPlayingHeat = true
+			end
 		end
 	end
 
@@ -206,13 +334,37 @@ function UVSoundBusting(heatlevel)
 
 	heatlevel = heatlevel or 1
 
+	if not PursuitFilePathsTable[theme] then
+		PopulatePursuitFilePaths(theme)
+	end
+
 	if PursuitThemePlayRandomHeat:GetBool() then
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/5" )
-	if bustingSound then
-		UVPlaySound(bustingSound, true)
+	heatlevel = tostring(heatlevel)
+
+
+	-- local bustingSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busting/5" )
+	-- if bustingSound then
+	-- 	UVPlaySound(bustingSound, true)
+	-- else
+	-- 	UVSoundHeat( UVHeatLevel )
+	-- 	return
+	-- end
+	
+	--local bustingArray = (PursuitFilePathsTable[theme].busting and PursuitFilePathsTable[theme].busting[heatlevel]) or {}
+	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["6"]) or {}
+
+	if bustingArray and #bustingArray > 0 then
+		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
+
+		if bustingTrack then
+			UVPlaySound(bustingTrack, true)
+		else
+			UVSoundHeat( UVHeatLevel )
+			return
+		end
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
@@ -245,22 +397,44 @@ function UVSoundCooldown(heatlevel)
 
 	heatlevel = heatlevel or 1
 
+	if not PursuitFilePathsTable[theme] then
+		PopulatePursuitFilePaths(theme)
+	end
+
 	if PursuitThemePlayRandomHeat:GetBool() then
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local appendingString = "/low"
+	heatlevel = tostring(heatlevel)
+
+	local appendingString = "low"
 
 	local vehicle = LocalPlayer():GetVehicle()
 	if vehicle then
 		vehicle = vehicle:GetParent() or vehicle
 	end
 
-	local appendingString = (vehicle and vehicle:GetVelocity():LengthSqr() > 500000) and "/high" or "/low"
+	appendingString = (vehicle and vehicle:GetVelocity():LengthSqr() > 500000) and "high" or "low"
 
-	local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/5" .. appendingString )
-	if cooldownSound then
-		UVPlaySound(cooldownSound, true)
+	-- local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/5" .. appendingString )
+	-- if cooldownSound then
+	-- 	UVPlaySound(cooldownSound, true)
+	-- else
+	-- 	UVSoundHeat( UVHeatLevel )
+	-- 	return
+	-- end
+	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["6"])
+	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
+
+	if cooldownArray and #cooldownArray > 0 then
+		local cooldownTrack = cooldownArray[math.random(1, #cooldownArray)]
+
+		if cooldownTrack then
+			UVPlaySound(cooldownTrack, true)
+		else
+			UVSoundHeat( UVHeatLevel )
+			return
+		end
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
@@ -302,9 +476,28 @@ function UVSoundBusted(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
-	if escapedSound then
-		UVPlaySound(escapedSound, false, true)
+	heatlevel = tostring(heatlevel)
+
+
+	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
+	-- if escapedSound then
+	-- 	UVPlaySound(escapedSound, false, true)
+	-- else
+	-- 	UVSoundHeat( UVHeatLevel )
+	-- 	return
+	-- end
+
+	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["6"]) or {}
+
+	if bustedArray and #bustedArray > 0 then
+		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
+
+		if bustedTrack then
+			UVPlaySound(bustedTrack, false, true)
+		else
+			UVSoundHeat( UVHeatLevel )
+			return
+		end
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
@@ -345,9 +538,27 @@ function UVSoundEscaped(heatlevel)
 		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 	end
 
-	local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
-	if escapedSound then
-		UVPlaySound(escapedSound, false)
+	heatlevel = tostring(heatlevel)
+
+	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
+	-- if escapedSound then
+	-- 	UVPlaySound(escapedSound, false)
+	-- else
+	-- 	UVSoundHeat( UVHeatLevel )
+	-- 	return
+	-- end
+
+	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["6"]) or {}
+
+	if escapedArray and #escapedArray > 0 then
+		local escapedTrack = escapedArray[math.random(1, #escapedArray)]
+
+		if escapedTrack then
+			UVPlaySound(escapedTrack, false)
+		else
+			UVSoundHeat( UVHeatLevel )
+			return
+		end
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
@@ -2957,7 +3168,7 @@ else --HUD/Options
 					UVSoundHeat( UVHeatLevel )
 				elseif UVHUDDisplayCooldown then
 					UVSoundCooldown( UVHeatLevel )
-				elseif UVHUDDisplayBusting then
+				elseif UVHUDDisplayBusting and (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode then
 					UVSoundBusting( UVHeatLevel )
 				end
 			elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then

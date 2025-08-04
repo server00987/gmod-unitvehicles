@@ -2692,12 +2692,12 @@ local function carbon_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(193, 66, 0, blink2)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(193, 66, 0, blink3)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             end
             
@@ -2774,7 +2774,7 @@ local function carbon_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown(UVHeatLevel)
+            --UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
@@ -4267,12 +4267,12 @@ local function mw_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(255, 0, 0, blink2)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(255, 0, 0, blink3)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             else
                 states.BustedColor = Color(255, 0, 0)
@@ -4396,7 +4396,7 @@ local function mw_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown(UVHeatLevel)
+            --UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
@@ -5833,12 +5833,12 @@ local function undercover_pursuit_main( ... )
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(255, 100, 100, blink2)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(255, 100, 100, blink3)
                 if playbusting then
-                    UVSoundBusting(UVHeatLevel)
+                    --UVSoundBusting(UVHeatLevel)
                 end
             else
                 states.BustedColor = Color(255, 100, 100)
@@ -5893,7 +5893,7 @@ local function undercover_pursuit_main( ... )
                 CooldownProgress = CurTime()
             end
             
-            UVSoundCooldown(UVHeatLevel)
+            --UVSoundCooldown(UVHeatLevel)
             EvadingProgress = 0
             
             -- Upper Box
@@ -6869,7 +6869,7 @@ local function original_pursuit_main( ... )
                     draw.DrawText( busttext, "UVFont-Smaller",w/2,h/1.05, bustcol, TEXT_ALIGN_CENTER )
                     iconhigh = h*0.035
                 end
-                UVSoundHeat(UVHeatLevel)
+                --UVSoundHeat(UVHeatLevel)
             elseif not UVHUDDisplayCooldown then
                 if not EvadingProgress or EvadingProgress == 0 then
                     EvadingProgress = CurTime()
@@ -6888,7 +6888,7 @@ local function original_pursuit_main( ... )
                 surface.SetDrawColor(Color( 0, 255, 0))
                 local T = math.Clamp((UVEvadingProgress)*(w/3-20),0,w/3-20)
                 surface.DrawRect(w/3+16,h/1.1+16,T,8)
-                UVSoundHeat(UVHeatLevel)
+                --UVSoundHeat(UVHeatLevel)
                 iconhigh = h*0.035
             else
                 EvadingProgress = 0
@@ -6947,7 +6947,7 @@ local function original_pursuit_main( ... )
             CooldownProgress = CurTime()
         end
         
-        UVSoundCooldown(UVHeatLevel)
+        --UVSoundCooldown(UVHeatLevel)
         
         if not UVHUDCopMode then
             surface.SetDrawColor( 0, 0, 0, 200)
