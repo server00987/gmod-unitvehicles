@@ -3169,7 +3169,12 @@ else --HUD/Options
 				elseif UVHUDDisplayCooldown then
 					UVSoundCooldown( UVHeatLevel )
 				elseif UVHUDDisplayBusting and (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode then
-					UVSoundBusting( UVHeatLevel )
+					local UVBustTimer = BustedTimer:GetFloat()
+					local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+
+					if timeLeft <= UVBustTimer * 0.7 then
+						UVSoundBusting( UVHeatLevel )
+					end
 				end
 			elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
 				UVStopSound()
