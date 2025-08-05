@@ -478,6 +478,9 @@ function UVSoundBusted(heatlevel)
 
 	heatlevel = tostring(heatlevel)
 
+	if not PursuitFilePathsTable[theme] then
+		PopulatePursuitFilePaths(theme)
+	end
 
 	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
 	-- if escapedSound then
@@ -539,6 +542,10 @@ function UVSoundEscaped(heatlevel)
 	end
 
 	heatlevel = tostring(heatlevel)
+
+	if not PursuitFilePathsTable[theme] then
+		PopulatePursuitFilePaths(theme)
+	end
 
 	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
 	-- if escapedSound then
