@@ -407,9 +407,10 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local pos = uvspawnpoint+Vector( 0, 0, 50 )
 		local ang = uvspawnpointangles
+		ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
 		
-		duplicator.SetLocalPos( pos )
-		duplicator.SetLocalAng( ang )
+		--duplicator.SetLocalPos( pos )
+		--duplicator.SetLocalAng( ang )
 		
 		-- local Ents = duplicator.Paste( nil, UVTOOLMemory.Entities, UVTOOLMemory.Constraints )
 		-- --print(type(Ents), "a", PrintTable(Ents))
