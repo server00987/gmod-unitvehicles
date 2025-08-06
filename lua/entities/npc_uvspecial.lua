@@ -569,10 +569,6 @@ if SERVER then
 	
 	function ENT:Patrol()
 		
-		if self.v.rhino and not UVTargeting then
-			SafeRemoveEntity(self)
-		end
-		
 		if next(dvd.Waypoints) == nil then
 			return
 		end
