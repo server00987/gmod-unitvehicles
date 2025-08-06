@@ -367,6 +367,7 @@ concommand.Add("uv_startpursuit", function(ply)
 end)
 
 concommand.Add("uv_stoppursuit", function(ply)
+	if not ply:IsSuperAdmin() then return end
 	UVCooldownTimerProgress = 1
 end)
 
