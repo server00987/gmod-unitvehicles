@@ -155,6 +155,10 @@ function ENT:Repair(vehicle)
 			
 			if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
 			vehicle:Repair()
+			
+			if cffunctions then
+				CFRefillNitrous(vehicle)
+			end
 		end
 	end
 

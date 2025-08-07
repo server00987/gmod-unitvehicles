@@ -1574,6 +1574,25 @@ local function GetVehicleData( ent )
 		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
 			Memory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
+
+		if cffunctions then
+			Memory.NitrousPower = ent.NitrousPower or 2
+			Memory.NitrousDepletionRate = ent.NitrousDepletionRate or 0.5
+			Memory.NitrousRegenRate = ent.NitrousRegenRate or 0.1
+			Memory.NitrousRegenDelay = ent.NitrousRegenDelay or 2
+			Memory.NitrousPitchChangeFrequency = ent.NitrousPitchChangeFrequency or 1 
+			Memory.NitrousPitchMultiplier = ent.NitrousPitchMultiplier or 0.2
+			Memory.NitrousBurst = ent.NitrousBurst or false
+			Memory.NitrousColor = ent.NitrousColor or Color(35, 204, 255)
+			Memory.NitrousStartSound = ent.NitrousStartSound or "glide_nitrous/nitrous_burst.wav"
+			Memory.NitrousLoopingSound = ent.NitrousLoopingSound or "glide_nitrous/nitrous_burst.wav"
+			Memory.NitrousEndSound = ent.NitrousEndSound or "glide_nitrous/nitrous_activation_whine.wav"
+			Memory.NitrousEmptySound = ent.NitrousEmptySound or "glide_nitrous/nitrous_empty.wav"
+			Memory.NitrousReadyBurstSound = ent.NitrousReadyBurstSound or "glide_nitrous/nitrous_burst/ready/ready.wav"
+			Memory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
+			Memory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
+			Memory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
+		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
 		Memory.VehicleBase = ent:GetClass()
@@ -2292,6 +2311,39 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		undo.SetCustomUndoText( "Undone Glide" )
 		
 		undo.Finish( "Undo (" .. tostring( table.Count( Ents ) ) ..  ")" )
+
+		if cffunctions then
+			Ent.NitrousPower = Memory.NitrousPower
+			Ent.NitrousDepletionRate = Memory.NitrousDepletionRate
+			Ent.NitrousRegenRate = Memory.NitrousRegenRate
+			Ent.NitrousRegenDelay = Memory.NitrousRegenDelay
+			Ent.NitrousPitchChangeFrequency = Memory.NitrousPitchChangeFrequency
+			Ent.NitrousPitchMultiplier = Memory.NitrousPitchMultiplier
+			Ent.NitrousBurst = Memory.NitrousBurst
+			Ent.NitrousColor = Memory.NitrousColor
+			Ent.NitrousStartSound = Memory.NitrousStartSound
+			Ent.NitrousLoopingSound = Memory.NitrousLoopingSound
+			Ent.NitrousEndSound = Memory.NitrousEndSound
+			Ent.NitrousEmptySound = Memory.NitrousEmptySound
+			Ent.NitrousReadyBurstSound = Memory.NitrousReadyBurstSound
+			Ent.NitrousStartBurstSound = Memory.NitrousStartBurstSound
+			Ent.NitrousStartBurstAnnotationSound = Memory.NitrousStartBurstAnnotationSound
+			Ent.CriticalDamageSound = Memory.CriticalDamageSound
+			
+			if Ent.NitrousColor then
+				local r = Ent.NitrousColor.r
+    			local g = Ent.NitrousColor.g
+    			local b = Ent.NitrousColor.b
+			
+    			net.Start( "cfnitrouscolor" )
+    			    net.WriteEntity(Ent)
+    			    net.WriteInt(r, 9)
+    			    net.WriteInt(g, 9)
+    			    net.WriteInt(b, 9)
+					net.WriteBool(Ent.NitrousBurst)
+    			net.Broadcast()
+			end
+		end
 		
 		
 	elseif Memory.VehicleBase == "prop_vehicle_jeep" then
