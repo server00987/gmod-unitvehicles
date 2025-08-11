@@ -90,7 +90,7 @@ function ENT:Repair(vehicle)
 
 	if comcanrep then
 		if table.HasValue(UVCommanders, vehicle) then
-			if UVGetDriver(vehicle):IsPlayer() then
+			if UVGetDriver(vehicle) and UVGetDriver(vehicle):IsPlayer() then
 				repairnet = "UVHUDRepairCommander"
 				canrepair = false
 			end
