@@ -2882,10 +2882,6 @@ else --HUD/Options
 		end)
 	end)
 
-	net.Receive("UVHUDPursuitBreakers", function()
-		UVHUDPursuitBreakers = net.ReadTable() or {}
-	end)
-
 	net.Receive("UVHUDPursuitTech", function()
 		local PursuitTech = net.ReadTable()
 		UVHUDPursuitTech = PursuitTech
@@ -3326,6 +3322,16 @@ else --HUD/Options
 			end
 		end
 
+		if UVHUDMarkedPursuitBreakers then
+			if next(UVHUDMarkedPursuitBreakers) ~= nil then
+				for _, pb in pairs(UVHUDMarkedPursuitBreakers) do
+					if pb.location and pb.name then
+						UVRenderMarkedPursuitBreaker(pb.location, pb.name)
+					end
+				end
+			end
+		end
+
 		local areUnitsPresent = (#UnitTable > 0)
 
 		--Police Scanner
@@ -3399,6 +3405,40 @@ else --HUD/Options
 		end
 
 	end)
+
+	function UVMarkAllLocationsPB()
+		if not UVHUDMarkedPursuitBreakers then
+			UVHUDMarkedPursuitBreakers = {}
+		else
+			if next(UVHUDMarkedPursuitBreakers) ~= nil then
+				return
+			end
+		end
+
+		local saved_pbs = file.Find("unitvehicles/pursuitbreakers/"..game.GetMap().."/*.json", "DATA")
+		for k,jsonfile in pairs(saved_pbs) do
+			local JSONData = file.Read( "unitvehicles/pursuitbreakers/"..game.GetMap().."/"..jsonfile, "DATA" )
+			if not JSONData then return end
+
+			local rbdata = util.JSONToTable(JSONData, true) --Load PB
+
+			local name = jsonfile
+			local location = rbdata.Location or rbdata.Maxs
+			if not location then return end
+
+			local tabletoinsert = {}
+			tabletoinsert.location = location
+			tabletoinsert.name = name
+
+			table.insert(UVHUDMarkedPursuitBreakers, tabletoinsert)
+
+			timer.Simple(10, function()
+				if not UVHUDMarkedPursuitBreakers then return end
+				UVHUDMarkedPursuitBreakers = {}
+			end)
+
+		end
+	end
 
 	function UVMarkAllLocations()
 		if not UVHUDRoadblocks then
@@ -3490,6 +3530,36 @@ else --HUD/Options
 			local textY = MinY - 20
 			cam.Start2D()
 			draw.DrawText("⛛", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
+			cam.End2D()
+		end
+	end
+
+	function UVRenderMarkedPursuitBreaker(pos, name)
+		local localPlayer = LocalPlayer()
+		local box_color = Color(255, 0, 0)
+
+		if IsValid(localPlayer) then
+			local pos = pos
+
+			local MaxX, MinX, MaxY, MinY
+			local isVisible = false
+
+			local p = pos
+			local screenPos = p:ToScreen()
+			isVisible = screenPos.visible
+
+			if MaxX ~= nil then
+				MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
+				MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
+			else
+				MaxX, MaxY = screenPos.x, screenPos.y
+				MinX, MinY = screenPos.x, screenPos.y
+			end
+
+			local textX = (MinX + MaxX) / 2
+			local textY = MinY - 20
+			cam.Start2D()
+			draw.DrawText(name.."\nv", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
 			cam.End2D()
 		end
 	end

@@ -179,6 +179,7 @@ NETWORK_STRINGS = {
 	"UVPursuitBreakerCreate",
 	"UVPursuitBreakerRefresh",
 	"UVPursuitBreakerLoad",
+	"UVPursuitBreakerLoadAll",
 	
 	-- Roadblocks
 	"UVAddRoadblock",

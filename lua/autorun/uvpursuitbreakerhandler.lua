@@ -256,6 +256,9 @@ if SERVER then
         
         net.Start("UVTriggerPursuitBreaker")
         net.WriteString(jsonfile)
+        net.WriteInt(location.x, 32)
+        net.WriteInt(location.y, 32)
+        net.WriteInt(location.z, 32)
         net.Broadcast()
         
         duplicator.GetAllConstrainedEntitiesAndConstraints(hitent, entities, constraints)
@@ -359,10 +362,19 @@ if SERVER then
     end
     
 else
+
+    UVHUDPursuitBreakers = {}
+
+    hook.Add("PostCleanupMap", "UVPBCleanup", function()
+        UVHUDPursuitBreakers = {}
+    end)
     
     net.Receive("UVAddPursuitBreaker", function()
         local jsonfile = net.ReadString()
         local location = Vector(net.ReadInt(32), net.ReadInt(32), net.ReadInt(32))
+
+        table.insert(UVHUDPursuitBreakers, location)
+
         if GMinimap then
             blip, id = GMinimap:AddBlip( {
                 id = jsonfile,
@@ -377,6 +389,10 @@ else
     
     net.Receive("UVTriggerPursuitBreaker", function()
         local jsonfile = net.ReadString()
+        local location = Vector(net.ReadInt(32), net.ReadInt(32), net.ReadInt(32))
+
+        table.RemoveByValue(UVHUDPursuitBreakers, location)
+
         if GMinimap then
             GMinimap:RemoveBlipById( jsonfile )
         end

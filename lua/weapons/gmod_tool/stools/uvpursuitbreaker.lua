@@ -41,13 +41,20 @@ if SERVER then
 		UVLoadPursuitBreaker(jsonfile)
 	end)
 	
+	net.Receive("UVPursuitBreakerLoadAll", function( length, ply )
+		--Load ALL Pursuit Breakers
+		local pursuitbreakers = file.Find( "unitvehicles/pursuitbreakers/"..game.GetMap().."/*.json", "DATA" )
+		for k,v in pairs(pursuitbreakers) do
+			UVLoadPursuitBreaker(v)
+		end
+	end)
+
 end
 
 if CLIENT then
 
 	TOOL.Information = {
 		{ name = "info"},
-		{ name = "left" },
 		{ name = "right" },
 	}
 
@@ -253,6 +260,32 @@ if CLIENT then
 		
 		UVPursuitBreakerGetSaves( UVPursuitBreakerScrollPanel )
 
+		local MarkAll = vgui.Create( "DButton", CPanel )
+		MarkAll:SetText( "#tool.uvpursuitbreaker.markall" )
+		MarkAll:SetSize( 280, 20 )
+		MarkAll.DoClick = function( self )
+			UVMarkAllLocationsPB()
+			notification.AddLegacy( "#tool.uvpursuitbreaker.markedall", NOTIFY_UNDO, 10 )
+			surface.PlaySound( "buttons/button15.wav" )
+		end
+		CPanel:AddItem(MarkAll)
+
+		local LoadAll = vgui.Create( "DButton", CPanel )
+		LoadAll:SetText( "#tool.uvpursuitbreaker.load.all" )
+		LoadAll:SetSize( 280, 20 )
+		LoadAll.DoClick = function( self )
+			if not LocalPlayer():IsSuperAdmin() then
+				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
+				surface.PlaySound( "buttons/button10.wav" )
+				return
+			end
+			net.Start("UVPursuitBreakerLoadAll")
+			net.SendToServer()
+			notification.AddLegacy( "#tool.uvpursuitbreaker.loaded.all", NOTIFY_UNDO, 5 )
+			surface.PlaySound( "buttons/button15.wav" )
+		end
+		CPanel:AddItem(LoadAll)
+
 		local Refresh = vgui.Create( "DButton", CPanel )
 		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
@@ -331,13 +364,7 @@ end
 
 function TOOL:LeftClick( trace )
 	if CLIENT then return true end
-
-	--Load ALL Pursuit Breakers
-	local pursuitbreakers = file.Find( "unitvehicles/pursuitbreakers/"..game.GetMap().."/*.json", "DATA" )
-	for k,v in pairs(pursuitbreakers) do
-		UVLoadPursuitBreaker(v)
-	end
-		
+		--:thinking:
 	return true
 end
 
