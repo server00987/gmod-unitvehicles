@@ -38,6 +38,7 @@ if SERVER then
 	local Relentless = GetConVar("unitvehicle_relentless")
 	local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
 	local DVWaypointsPriority = GetConVar("unitvehicle_dvwaypointspriority")
+	local OptimizeRespawn = GetConVar("unitvehicle_optimizerespawn") 
 	
 	function ENT:OnRemove()
 		if table.HasValue(UVUnitsChasing, self) then
@@ -983,7 +984,11 @@ if SERVER then
 			end
 			if UVTargeting and closestdistancetosuspect > 100000000 and not self:StraightToTarget(closestsuspect) and 
 			not UVEnemyBusted and not UVEnemyEscaped and self.uvmarkedfordeletion and (not UVRacerPresenceMode or self.stuck) then
-				SafeRemoveEntity(self)
+				if not OptimizeRespawn:GetBool() or (UVResourcePoints <= (#ents.FindByClass("npc_uv*")) and #ents.FindByClass("npc_uv*") ~= 1) then
+					SafeRemoveEntity(self)
+				else
+					UVOptimizeRespawn(self.v)
+				end
 				if Chatter:GetBool() and IsValid(self.v) and not UVEnemyEscaping and not self.invincible and not UVEnemyBusted then
 					UVChatterLeftPursuit(self) 
 				end

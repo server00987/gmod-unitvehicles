@@ -113,6 +113,178 @@ if SERVER then
             
         end
     end
+
+    function UVOptimizeRespawn( vehicle )
+        if UVOptimizeRespawnDelayed then return end
+
+        UVOptimizeRespawnDelayed = true
+        timer.Simple(1, function()
+            UVOptimizeRespawnDelayed = nil
+        end)
+
+        local NPC = vehicle.UnitVehicle
+        if not NPC then return end
+
+        local vehicle_class = vehicle:GetClass()
+        
+        if vehicle_class == "gmod_sent_vehicle_fphysics_base" then
+            SafeRemoveEntity(NPC) --yeahhh
+            return
+        end
+
+        NPC.uvmarkedfordeletion = nil
+        timer.Simple(1, function()
+            NPC.uvmarkedfordeletion = true
+        end)
+        
+        local phys = vehicle:GetPhysicsObject()
+        phys:SetVelocity(vector_origin)
+        
+        local uvnextclasstospawn
+	    local enemylocation
+	    local suspect
+	    local suspectvelocity = Vector(0,0,0)
+        local uvspawnpoint
+        local uvspawnpointwaypoint
+        local uvspawnpointangles
+        
+	    if next(dvd.Waypoints) == nil then
+	    	PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+	    	return
+	    end
+    
+	    if next(UVWantedTableVehicle) ~= nil then
+	    	local suspects = UVWantedTableVehicle
+	    	local random_entry = math.random(#suspects)
+	    	suspect = suspects[random_entry]
+        
+	    	enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
+	    	suspectvelocity = suspect:GetVelocity()
+	    elseif not playercontrolled then
+	    	enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
+	    else
+	    	enemylocation = ply:GetPos() + Vector(0, 0, 50)
+	    end
+    
+	    local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
+	    local enemywaypointgroup = enemywaypoint["Group"]
+	    local waypointtable = {}
+	    local prioritywaypointtable = {}
+	    local prioritywaypointtable2 = {}
+	    local prioritywaypointtable3 = {}
+	    for k, v in ipairs(dvd.Waypoints) do
+	    	local Waypoint = v["Target"]
+	    	local distance = enemylocation - Waypoint
+	    	local vect = distance:GetNormalized()
+	    	local evectdot = vect:Dot(suspectvelocity)
+	    	if distance:LengthSqr() > 25000000 then
+	    		if enemywaypointgroup == v["Group"] then
+	    			if UVStraightToWaypoint(enemylocation, Waypoint) then
+	    				if evectdot < 0 then
+	    					table.insert(prioritywaypointtable, v)
+	    				elseif distance:LengthSqr() < 25000000 then
+	    					table.insert(prioritywaypointtable2, v)
+	    				end
+	    			elseif distance:LengthSqr() < 100000000 then
+	    				table.insert(prioritywaypointtable3, v)
+	    			end
+	    		elseif distance:LengthSqr() < 100000000 then
+	    			table.insert(waypointtable, v)
+	    		end
+	    	end
+	    end
+
+	    if next(prioritywaypointtable) ~= nil then
+	    	uvspawnpointwaypoint = prioritywaypointtable[math.random(#prioritywaypointtable)]
+	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
+	    elseif next(prioritywaypointtable2) ~= nil then
+	    	uvspawnpointwaypoint = prioritywaypointtable2[math.random(#prioritywaypointtable2)]
+	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
+	    elseif next(prioritywaypointtable3) ~= nil then
+	    	uvspawnpointwaypoint = prioritywaypointtable3[math.random(#prioritywaypointtable3)]
+	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
+	    elseif next(waypointtable) ~= nil then
+	    	uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
+	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
+	    else
+	    	uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
+	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
+	    end
+
+	    local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+
+	    if neighbor then
+	    	local neighborpoint = neighbor["Target"]
+	    	local neighbordistance = neighborpoint - uvspawnpoint
+	    	uvspawnpointangles = neighbordistance:Angle()+Angle(0,180,0)
+	    else
+	    	uvspawnpointangles = Angle(0,math.random(0,360),0)
+	    end
+
+        if vehicle.IsGlideVehicle then
+            local pos = uvspawnpoint+(vector_up * 50)
+		    local ang = uvspawnpointangles
+
+            if not vehicle.UVCommander then
+                local repaired = false
+                
+			    for _, v in pairs(vehicle.wheels) do
+			    	if IsValid(v) and v.bursted then
+			    		repaired = true
+			    		v:_restore()
+			    	end
+			    end
+            
+			    vehicle:Repair()
+            
+			    if cffunctions then
+			    	CFRefillNitrous(vehicle)
+			    end --Repair
+            end
+
+            vehicle:SetPos( pos )
+            vehicle:SetAngles( ang )
+            vehicle:PhysWake()
+        else
+            local physObj = vehicle:GetPhysicsObject()
+            physObj:EnableMotion(false)
+
+            local pos = uvspawnpoint+(vector_up * 50)
+		    local ang = uvspawnpointangles
+            
+            ang.yaw = ang.yaw - 90
+            
+            vehicle:SetPos( pos )
+            vehicle:SetAngles( ang )
+            vehicle:SetVelocity(Vector(0,0,0))
+
+            if not vehicle.UVCommander then
+                if vcmod_main and isfunction(vehicle.VC_repairFull_Admin) then
+			    	vehicle:VC_repairFull_Admin()
+			    else
+			    	local mass = vehicle:GetPhysicsObject():GetMass()
+			    	vehicle:SetMaxHealth(mass)
+			    	vehicle:SetHealth(mass)
+			    	vehicle:StopParticles()
+			    end --Repair
+            end
+            
+            timer.Simple(.5, function()
+                physObj:EnableMotion(true)
+                physObj:Wake()
+            end)
+        end
+
+        if vehicle.roadblocking then
+            vehicle.roadblocking = nil
+        end
+
+        if NPC.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not UVOneCommanderActive then
+			UVResourcePoints = (UVResourcePoints - 1)
+		end
+
+        NPC.metwithenemy = nil
+    end
     
     function UVResetPosition( vehicle )
         -- Check if vehicle is a race participant

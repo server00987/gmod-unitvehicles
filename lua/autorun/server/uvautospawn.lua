@@ -629,7 +629,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = SpawnAng.yaw + 180 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		SpawnAng.yaw = rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
+		SpawnAng.yaw = SpawnAng.yaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
@@ -969,6 +970,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		end
 		
 		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
+		uvspawnpointangles.yaw = rhinoattack and not posspecified and uvspawnpointangles.yaw or uvspawnpointangles.yaw + 180
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
 		Ent.VehicleTable = lst
