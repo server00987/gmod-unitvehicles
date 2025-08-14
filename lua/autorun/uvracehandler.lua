@@ -1004,7 +1004,11 @@ else -- CLIENT stuff
 			-- Color(255, 126, 126),
 			-- lang( net.ReadString() )
 		-- )
-		UVRaceNotify( lang( net.ReadString() ), 2  )
+		-- UVRaceNotify( lang( net.ReadString() ), 2  )
+
+		UV_UI.general.events.CenterNotification({
+            text = lang( net.ReadString() ),
+		})
 	end)
 
 	net.Receive( "uvrace_resetcountdown", function()
@@ -1017,7 +1021,11 @@ else -- CLIENT stuff
 			-- time_left 
 		-- )
 		
-		UVRaceNotify( string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 2  )
+		-- UVRaceNotify( string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 2  )
+		
+		UV_UI.general.events.CenterNotification({
+            text = string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
+		})
 	end)
 
 	net.Receive( "uvrace_invite", function()
@@ -1622,31 +1630,43 @@ else -- CLIENT stuff
 		end
 
 		-- check for wrong way
+		UVLastWrongWayCheckTime = UVLastWrongWayCheckTime or CurTime()
+
 		if _UVCurrentCheckpoint and IsValid(_UVCurrentCheckpoint) then
 			local vehicle_center = my_vehicle:WorldSpaceCenter()
-			local vehicle_velocity = my_vehicle:GetVelocity() -- :Dot((_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2)
+			local vehicle_velocity = my_vehicle:GetVelocity()
 			local check_center_pos = (_UVCurrentCheckpoint:GetPos() + _UVCurrentCheckpoint:GetMaxPos()) / 2
 
-			local unit = ((check_center_pos - vehicle_center)):GetNormalized()
-			local normalized_velo = vehicle_velocity:GetNormalized()
+			local speed = vehicle_velocity:Length()
+			local min_speed = 50 -- units/sec threshold to consider movement
 
-			local dot_product = normalized_velo:Dot(unit)
-			local LastWrongWayCheckTime = 0
+			if speed >= min_speed then
+				local to_checkpoint = (check_center_pos - vehicle_center):GetNormalized()
+				local normalized_velo = vehicle_velocity:GetNormalized()
 
-			if dot_product > - .8 then
-				LastWrongWayCheckTime = CurTime()
-			end
+				local dot_product = normalized_velo:Dot(to_checkpoint)
 
-			if CurTime() - LastWrongWayCheckTime > 3 then
-				if not UVHUDNotification and not UVRaceCountdown then
-					local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
-					local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/wrongway/*", "GAME" )
-					if soundfiles and #soundfiles > 0 then
-						local audio_path = "uvracesfx/".. theme .."/wrongway/".. soundfiles[math.random(1, #soundfiles)]
-						surface.PlaySound(audio_path)
+				-- If moving more than 90° away from checkpoint
+				if dot_product < 0 then
+					-- moving away
+					if CurTime() - UVLastWrongWayCheckTime > 3 then
+						if not UVHUDNotification and not UVRaceCountdown then
+							local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+							local soundfiles = file.Find("sound/uvracesfx/" .. theme .. "/wrongway/*", "GAME")
+							if soundfiles and #soundfiles > 0 then
+								local audio_path = "uvracesfx/" .. theme .. "/wrongway/" .. soundfiles[math.random(1, #soundfiles)]
+								surface.PlaySound(audio_path)
+							end
+							if hudyes then UVRaceNotify("#uv.race.wrongway", 1.5) end
+						end
 					end
-					if hudyes then UVRaceNotify("#uv.race.wrongway", 1.5) end
+				else
+					-- moving toward or not too far off-course
+					UVLastWrongWayCheckTime = CurTime()
 				end
+			else
+				-- If stationary, don't trigger wrong way
+				UVLastWrongWayCheckTime = CurTime()
 			end
 		end
 

@@ -20,6 +20,7 @@ UV_PT.Killswitch = {
 			color = not displayMe and Color(255, 0, 0) or nil,
 			immediate = not displayMe and true or nil,
 			critical = not displayMe and true or nil,
+			time = not displayMe and 3 or 1,
 		})
     end,
     Locking = function(tbl)
@@ -55,6 +56,7 @@ UV_PT.Killswitch = {
             text = userString,
 			immediate = true,
 			critical = true,
+			time = 3,
         })
     end,
     NoTarget = function(tbl)
