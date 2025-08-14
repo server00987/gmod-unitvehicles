@@ -975,6 +975,8 @@ UV_UI.general.events = {
 		local pcol = params.color or Color( 255, 255, 255 )
 		local immediate = params.immediate or nil
 		local iscritical = params.critical or nil
+		local notitimer = params.timer or 1
+		
 		
 		local StartClosing
 		local closing = false
@@ -1046,10 +1048,9 @@ UV_UI.general.events = {
 			end)
 		end
 
-		local forceTimer = iscritical and 3 or 1
 		-- Mid-life force-close handler for 'immediate' queueing
 		timer.Create("UV_CENTERNOTI_FORCECHECK", 0.05, 0, function()
-			if CurTime() - startTime >= forceTimer and not closing and #UV_UI.general.states.notificationQueue > 0 then
+			if CurTime() - startTime >= notitimer and not closing and #UV_UI.general.states.notificationQueue > 0 then
 				StartClosing()
 				timer.Remove("UV_CENTERNOTI_FORCECHECK")
 			end

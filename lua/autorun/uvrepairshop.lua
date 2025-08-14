@@ -8,11 +8,13 @@ if CLIENT then
             text = "#uv.repairshop.cooldown",
 			color = Color(255, 0, 0),
 			critical = true,
+			time = 3,
         })
 		
 		UV_UI.general.events.CenterNotification({
             text = string.format( language.GetPhrase("uv.repairshop.cooldown.time"), timeleft ),
 			critical = true,
+			time = 3,
         })
         surface.PlaySound("ui/pursuit/repairunavailable.wav")
     end)
@@ -21,6 +23,7 @@ if CLIENT then
 		UV_UI.general.events.CenterNotification({
             text = "#uv.repairshop.used",
 			critical = true,
+			time = 3,
         })
         surface.PlaySound("ui/pursuit/repair.wav")
     end)
@@ -30,6 +33,7 @@ if CLIENT then
             text = "#uv.repairshop.nocommander",
 			color = Color(255, 0, 0),
 			critical = true,
+			time = 2,
         })
         surface.PlaySound("ui/pursuit/repairunavailable.wav")
     end)
@@ -38,6 +42,7 @@ if CLIENT then
 		UV_UI.general.events.CenterNotification({
             text = "#uv.repairshop.used.pt",
 			critical = true,
+			time = 2,
         })
     end)
 
@@ -46,6 +51,7 @@ if CLIENT then
             text = "#uv.repairshop.available",
 			color = Color(50, 255, 50),
 			critical = true,
+			time = 3,
         })
         surface.PlaySound("ui/pursuit/repairavailable.wav")
     end)
