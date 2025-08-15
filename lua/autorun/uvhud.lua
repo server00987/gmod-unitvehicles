@@ -527,25 +527,30 @@ function UVRenderCommander(ent)
 					cname = driver:Nick()
 				end
 			end
-			
-			local rectlen = surface.GetTextSize(cname) + 20
-			local rectxpos = textX - math.max((w * (0.00028 * rectlen)) + 2, 25)
-			local rectypos = textY + (w * 0.012)
-			local rectywidth = math.max(w * (0.00056 * rectlen) + 6, 55)
+
+			surface.SetFont("UVFont4")
+			local textWidth, textHeight = surface.GetTextSize(cname)
+			local padding = 8
+
+			local rectywidth = math.max(textWidth + padding, 75)
+			local rectxpos = textX - (rectywidth / 2)
+			local rectypos = textY + 22.5
 			
 			surface.SetDrawColor( 0, 161, 255, fadeAlpha )
-			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054) -- Left
-			surface.DrawRect( rectxpos + rectywidth, rectypos - 2, w * 0.002, h*0.054) -- Right
-			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05, rectywidth, h*0.002) -- Down
+			surface.DrawRect( rectxpos - 3, rectypos - 2, 4, 59) -- Left
+			surface.DrawRect( rectxpos + rectywidth - 1, rectypos - 2, 4, 59) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, 3) -- Up
+			surface.DrawRect( rectxpos, rectypos + 54, rectywidth, 3) -- Down
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475), w * 0.0075 + 5, h * 0.0175, -90)
+			surface.DrawTexturedRectRotated( textX, textY + 87.5 + 5, 17.5, 17.5, -90)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, rectywidth, h*0.05)
+			surface.DrawRect( rectxpos, rectypos, rectywidth, 54)
 			
-			draw.DrawText("\n" .. cname .. "\n" .. bustdist, "UVFont4", textX, textY, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			draw.DrawText(cname, "UVFont4", textX, textY + 20 + 5, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			
+			draw.DrawText(bustdist, "UVFont4", textX, textY + 42.5 + 5, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
         cam.End2D()
     end
 end
@@ -705,7 +710,7 @@ function UVRenderEnemySquare(ent)
 		-- if #enemycallsign > 20 then -- If too long
 			-- enemycallsign = string.sub(enemycallsign, 1, 20 - 3) .. "..."
 		-- end
-		
+
 		ent._bustAlpha = ent._bustAlpha or 0
 		ent._bustOffset = ent._bustOffset or 0
 
@@ -716,14 +721,17 @@ function UVRenderEnemySquare(ent)
 			local bustdist = math.Round(distInMeters) .. " m"
 			
 			enemypos = enemypos or bustdist
-			
-			local rectlen = surface.GetTextSize(enemycallsign)
-			local rectxpos = textX - math.max((w * (0.00028 * rectlen)) + 2, 25)
-			local rectypos = textY + (w * 0.01)
-			local rectywidth = math.max(w * (0.00056 * rectlen) + 6, 55)
+
+			surface.SetFont("UVFont4")
+			local textWidth, textHeight = surface.GetTextSize(enemycallsign)
+			local padding = 8
+
+			local rectywidth = math.max(textWidth + padding, 75)
+			local rectxpos = textX - (rectywidth / 2)
+			local rectypos = textY + 17.5
 			
 			local targetAlpha = bustpro >= 4 and 1 or 0
-			local targetOffset = bustpro >= 2 and -(h * 0.0175) or (h * 0.0175)
+			local targetOffset = bustpro >= 2 and -20 or -40
 
 			-- Smoothly approach the target alpha and offset
 			ent._bustAlpha = math.Approach(ent._bustAlpha, fadeAlpha * targetAlpha, FrameTime() * 600)
@@ -745,23 +753,23 @@ function UVRenderEnemySquare(ent)
 			end
 
 			surface.SetDrawColor( box_color.r, box_color.g, box_color.b, fadeAlpha )
-			surface.DrawRect( rectxpos - 3, rectypos - 2, w * 0.002, h*0.054 + xheight) -- Left
-			surface.DrawRect( rectxpos + rectywidth, rectypos - 2, w * 0.002, h*0.054 + xheight) -- Right
-			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, h*0.002) -- Up
-			surface.DrawRect( rectxpos, rectypos + h*0.05 + xheight, rectywidth, h*0.002) -- Down
+			surface.DrawRect( rectxpos - 3, rectypos - 2, 4, 59 + xheight) -- Left
+			surface.DrawRect( rectxpos + rectywidth - 1, rectypos - 2, 4, 59 + xheight) -- Right
+			surface.DrawRect( rectxpos, rectypos - 2, rectywidth, 3) -- Up
+			surface.DrawRect( rectxpos, rectypos + 54 + xheight, rectywidth, 3) -- Down
 			
 			surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-			surface.DrawTexturedRectRotated( textX, textY + (w * 0.0475) + xheight, w * 0.0075 + 5, h * 0.0175, -90)
+			surface.DrawTexturedRectRotated( textX, textY + 87.5 + xheight, 17.5, 17.5, -90)
 			
 			surface.SetDrawColor( 0, 0, 0, math.min(200, fadeAlpha) )
-			surface.DrawRect( rectxpos, rectypos, rectywidth, h*0.05 + xheight)
+			surface.DrawRect( rectxpos, rectypos, rectywidth, 54 + xheight)
 
-			draw.DrawText(enemycallsign, "UVFont4", textX, textY + (h * 0.02), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+			draw.DrawText(enemycallsign, "UVFont4", textX, textY + 20, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			
 			if UVHUDRaceInfo and UVHUDRaceInfo.Participants then
-				draw.DrawText(enemypos or bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(enemypos or bustdist, "UVFont4", textX, textY + 42.5, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			else
-				draw.DrawText(bustdist, "UVFont4", textX, textY + (h * 0.04), Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(bustdist, "UVFont4", textX, textY + 42.5, Color(255, 255, 255, fadeAlpha), TEXT_ALIGN_CENTER)
 			end
         cam.End2D()
     end
@@ -1749,7 +1757,8 @@ UV_UI.racing.carbon.events = {
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
 			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
-			
+
+			surface.SetFont("UVCarbonLeaderboardFont")
 			local conttextw = surface.GetTextSize(conttext)
 			local autotextw = surface.GetTextSize(autotext)
 			local wdist = w * 0.0006
@@ -2212,11 +2221,12 @@ UV_UI.pursuit.carbon.events = {
 			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
 			local uwstext = "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas")
-			
+
+			surface.SetFont("UVCarbonLeaderboardFont")
 			local conttextw = surface.GetTextSize(conttext)
 			local autotextw = surface.GetTextSize(autotext)
 			local uwstextw = surface.GetTextSize(uwstext)
-			local wdist = w * 0.0006
+			local wdist = w * 0.000565
 
 			surface.SetDrawColor( 100, 100, 100, 200 )
 			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
@@ -7439,9 +7449,10 @@ UV_UI.racing.prostreet.events = {
 			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
 			
+			surface.SetFont("UVCarbonLeaderboardFont")
 			local conttextw = surface.GetTextSize(conttext)
 			local autotextw = surface.GetTextSize(autotext)
-			local wdist = w * 0.00032
+			local wdist = w * 0.000565
 
 			surface.SetDrawColor( 100, 100, 100, 200 )
 			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
