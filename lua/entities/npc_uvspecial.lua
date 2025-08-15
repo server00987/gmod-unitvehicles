@@ -1266,7 +1266,7 @@ if SERVER then
 				end --K/J turn
 				local eeeevectdot = eevect:Dot(self.e:GetVelocity()) --Fixed enemy's dot product, velocity and direction.
 				if edist:LengthSqr() < 25000000 and eeeevectdot > 0 and self.e:GetVelocity():LengthSqr() > self.v:GetVelocity():LengthSqr() then
-					if self.v:GetVelocity():LengthSqr() > 250000 then
+					if self.v:GetVelocity():LengthSqr() > 250000 and not Relentless:GetBool() then
 						throttle = 0
 					end
 					if not self.v.rhinohit then
