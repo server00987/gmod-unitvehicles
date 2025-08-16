@@ -157,7 +157,7 @@ UV_PT.Shockwave = {
 		    local extraCount = #targets - 1
 
 		-- Build name string: "Name" or "Name (+X)"
-		    display = firstName
+		    display = language.GetPhrase( firstName )
 		    if extraCount > 0 then
 			    display = string.format("%s (+%d)", language.GetPhrase( firstName ), extraCount)
 		    end
