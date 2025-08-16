@@ -6768,6 +6768,15 @@ local function original_pursuit_main( ... )
         elseif HeatProgress >= 1 then
             surface.SetDrawColor(Color(255,0,0))
         end
+
+        local num = UVBackupTimerSeconds or 0
+        if num > 10 then
+			UVResourcePointsColor = Color( 255, 255, 255)
+		elseif math.floor(num)==math.Round(num) then
+			UVResourcePointsColor = Color( 255, 255, 255)
+		else
+			UVResourcePointsColor = Color( 255, 255, 0)
+		end
         
         surface.DrawRect(w/1.099,h/120,B,39)
         local ResourceText = "⛉\n"..UVResourcePoints
@@ -6926,7 +6935,7 @@ local function original_pursuit_main( ... )
         draw.DrawText( UVTags .. " ☄", "UVFont3", w * 0.335, h * 0.955, UVTagsColor, TEXT_ALIGN_RIGHT )
         
         -- DrawIcon(UVMaterials['UNITS'], w / 2, h * 0.885 - iconhigh, .06, UVUnitsColor)
-        draw.DrawText( ResourceText, "UVFont3", w/2, h * 0.85 - iconhigh, UVUnitsColor, TEXT_ALIGN_CENTER )
+        draw.DrawText( ResourceText, "UVFont3", w/2, h * 0.85 - iconhigh, UVResourcePointsColor, TEXT_ALIGN_CENTER )
     end
     
     if vehicle == NULL then 

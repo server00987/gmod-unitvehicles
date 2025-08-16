@@ -24,13 +24,13 @@ TOOL.ClientConVar["maxammo_killswitch"] = 5
 TOOL.ClientConVar["maxammo_repairkit"] = 5
 
 --cooldowns
-TOOL.ClientConVar["cooldown_esf"] = 5
-TOOL.ClientConVar["cooldown_spikestrip"] = 5
-TOOL.ClientConVar["cooldown_killswitch"] = 5
-TOOL.ClientConVar["cooldown_repairkit"] = 5
+TOOL.ClientConVar["cooldown_esf"] = 30
+TOOL.ClientConVar["cooldown_spikestrip"] = 30
+TOOL.ClientConVar["cooldown_killswitch"] = 30
+TOOL.ClientConVar["cooldown_repairkit"] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
-TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfpower"] = 1000000
 TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["spikestripduration"] = 60
 TOOL.ClientConVar["killswitchlockontime"] = 3

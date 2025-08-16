@@ -38,23 +38,23 @@ TOOL.ClientConVar['maxammo_stunmine'] = 5
 TOOL.ClientConVar['maxammo_repairkit'] = 5
 
 -- cooldowns
-TOOL.ClientConVar['cooldown_esf'] = 5
-TOOL.ClientConVar['cooldown_jammer'] = 5
-TOOL.ClientConVar['cooldown_shockwave'] = 5
-TOOL.ClientConVar['cooldown_spikestrip'] = 5
-TOOL.ClientConVar['cooldown_stunmine'] = 5
-TOOL.ClientConVar['cooldown_repairkit'] = 5
+TOOL.ClientConVar['cooldown_esf'] = 30
+TOOL.ClientConVar['cooldown_jammer'] = 30
+TOOL.ClientConVar['cooldown_shockwave'] = 30
+TOOL.ClientConVar['cooldown_spikestrip'] = 30
+TOOL.ClientConVar['cooldown_stunmine'] = 30
+TOOL.ClientConVar['cooldown_repairkit'] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
-TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfpower"] = 1000000
 TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["esfcommanderdamage"] = 0.1
 TOOL.ClientConVar["jammerduration"] = 10
-TOOL.ClientConVar["shockwavepower"] = 2000000
+TOOL.ClientConVar["shockwavepower"] = 1000000
 TOOL.ClientConVar["shockwavedamage"] = 0.1
 TOOL.ClientConVar["shockwavecommanderdamage"] = 0.1
 TOOL.ClientConVar["spikestripduration"] = 60
-TOOL.ClientConVar["stunminepower"] = 2000000
+TOOL.ClientConVar["stunminepower"] = 1000000
 TOOL.ClientConVar["stunminedamage"] = 0.1
 TOOL.ClientConVar["stunminecommanderdamage"] = 0.1
 
