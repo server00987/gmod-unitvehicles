@@ -177,7 +177,7 @@ if SERVER then
                     
                     if not IsValid(car) then return end
                     
-                    if car.UnitVehicle then
+                    if car.UnitVehicle or car.TrafficVehicle then
                         if car.UnitVehicle:IsNPC() then
                             car.UnitVehicle:Wreck()
                         else

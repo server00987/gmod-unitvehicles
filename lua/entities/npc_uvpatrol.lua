@@ -21,9 +21,6 @@ local dvd = DecentVehicleDestination
 
 if SERVER then	
 	--Setting ConVars.
-	local TargetAllVehicle = GetConVar("unitvehicle_targetallvehicle")
-	local TargetDecentVehicle = GetConVar("unitvehicle_targetdecentvehicle")
-	local TargetOtherVehicle = GetConVar("unitvehicle_targetothervehicle")
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local NeverEvade = GetConVar("unitvehicle_neverevade")
 	local BustedTimer = GetConVar("unitvehicle_bustedtimer")
