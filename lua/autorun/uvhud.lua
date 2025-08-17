@@ -1156,6 +1156,7 @@ UV_UI.racing.carbon.states = {
 UV_UI.racing.carbon.events = {
 	CenterNotification = function( params )
 		local immediate = params.immediate or false
+		local racenoti = params.raceNoti or false
 
 		if UV_UI.racing.carbon.states.notificationActive then
 			if immediate then
@@ -1878,6 +1879,218 @@ UV_UI.racing.carbon.events = {
 			immediate = is_local_player and true or false,
 		})
 	end,
+
+	onRaceStartTimer = function(data)
+		local starttime = data.starttime
+		if starttime ~= 5 then return end  -- trigger only once
+
+		-- Include carbon_noti_animState locally
+		local carbon_noti_animState = {
+			ring = {scale = 1, alpha = 150, duration = 0.25},
+			circle = {scale = 1, alpha = 150, duration = 0.25},
+			upper = {scale = 1, alpha = 255, duration = 0.25}, -- for future text
+		}
+
+		local tickDuration = 1
+		local initialDelay = 0.75
+		local numTicks = 4 -- countdown 4→1
+
+		-- Use correct materials from UVMaterials
+		local ringMat = UVMaterials["TAKEDOWN_RING_CARBON"]
+		local circleMat = UVMaterials["TAKEDOWN_CIRCLE_CARBON"]
+		local flashMat = UVMaterials["GLOW_ICON"]
+		local animState = carbon_noti_animState
+
+		local Animations = {}
+
+		for i = 0, numTicks-1 do
+			timer.Simple(initialDelay + i * tickDuration, function()
+				local stage = 4 - i 
+
+				-- Ring
+				local ringData = animState.ring
+				Animations["Ring_"..stage] = {
+					start = CurTime(),
+					duration = ringData.duration,
+					baseSize = ringData.scale * 512,
+					minSize = ringData.scale * 96,
+					alpha = ringData.alpha,
+					material = ringMat,
+					active = true
+				}
+
+				-- Flashes
+				Animations["Flash_"..stage] = {
+					startTime = 0,
+					duration = 0.15,
+					alpha = 0,
+					size = animState.circle.scale * 512,
+					material = flashMat,
+					active = false
+				}
+
+				-- Text
+				Animations["Text"] = {
+					value = stage == 1 and "#uv.race.go" or (stage - 1),
+					color = Color(0, 255, 255),
+					alpha = 0,
+					flash = false,
+					active = false,
+				}
+
+				timer.Simple(ringData.duration, function()
+					local flash = Animations["Flash_"..stage]
+					flash.startTime = CurTime()
+					flash.active = true
+
+					local textAnim = Animations["Text"]
+					if textAnim then
+						textAnim.flash = true
+						textAnim.color = Color(255, 255, 255)
+						textAnim.alpha = 255
+					end
+				end)
+
+				timer.Simple(ringData.duration + Animations["Flash_"..stage].duration, function()
+					local textAnim = Animations["Text"]
+					if textAnim then
+						textAnim.flash = false
+						textAnim.color = Color(0, 255, 255)
+						textAnim.alphaDelayStart = CurTime()
+						textAnim.alphaDelayDuration = stage == 1 and 1.5 or 0.5
+					end
+				end)
+
+				-- Circle starts after ring shrinks
+				if stage == 4 then
+					local circData = animState.circle
+					timer.Simple(ringData.duration, function()
+						Animations["Circle"] = {
+							start = CurTime(),
+							duration = circData.duration,
+							size = circData.scale * 96,
+							alpha = circData.alpha,
+							spin = 0,
+							material = circleMat,
+							active = true,
+							expanding = false
+						}
+					end)
+					timer.Simple(ringData.duration, function()
+						local textAnim = Animations["Text"]
+						if textAnim then
+							textAnim.active = true   -- start rendering the text
+						end
+					end)
+				end
+			end)
+		end
+
+		-- Expand & fade circle on last tick (GO)
+		timer.Simple(initialDelay + (numTicks-1) * tickDuration, function()
+			local textAnim = Animations["Text"]
+			local circle = Animations["Circle"]
+			
+			if textAnim then
+				textAnim.fadeStart = CurTime()
+				textAnim.fadeDuration = fadeTimeBeforeNext
+				textAnim.startAlpha = textAnim.alpha
+			end
+			
+			timer.Simple(animState.ring.duration, function()
+				if circle then
+					circle.expanding = true
+					circle.expandStart = CurTime()
+					circle.expandDuration = animState.circle.duration
+					circle.startAlpha = circle.alpha
+				end
+			end)
+		end)
+
+		-- Draw hook
+		hook.Add("HUDPaint", "UV_RaceCountdown_Circle", function()
+			local now = CurTime()
+
+			-- Draw rings
+			for key, ring in pairs(Animations) do
+				if not ring.active or not ring.baseSize then continue end
+				local t = math.min((now - ring.start) / ring.duration, 1)
+				local size = Lerp(t, ring.baseSize, ring.minSize)
+				local alpha = Lerp(t, ring.alpha, 0)
+
+				surface.SetDrawColor(86, 214, 205, alpha)  -- aqua
+				surface.SetMaterial(ring.material)
+				surface.DrawTexturedRectRotated(ScrW()/2, ScrH() * 0.375, size, size, 0)
+
+				if t >= 1 then ring.active = false end
+			end
+
+			-- Draw Flashes
+			for key, flash in pairs(Animations) do
+				if string.sub(key, 1, 6) == "Flash_" and flash.active then
+					local t = (CurTime() - flash.startTime) / flash.duration
+					if t >= 1 then
+						flash.active = false
+						flash.alpha = 0
+					else
+						if t < 0.5 then
+							flash.alpha = Lerp(t / 0.5, 0, 175)
+						else
+							flash.alpha = Lerp((t-0.5)/0.5, 175, 0)
+						end
+					end
+
+					surface.SetDrawColor(255, 255, 255, flash.alpha)
+					surface.SetMaterial(flash.material)
+					surface.DrawTexturedRectRotated(ScrW()/2, ScrH()*0.375, 128, 128, 0)
+				end
+			end
+
+			-- Draw spinning circle
+			local circle = Animations["Circle"]
+			if circle and circle.active then
+				circle.spin = circle.spin - FrameTime() * 90
+				local size = circle.size
+				local alpha = circle.alpha
+
+				if circle.expanding then
+					local t = math.min((now - circle.expandStart) / circle.expandDuration, 1)
+					size = Lerp(t, circle.size, circle.size * 3)
+					alpha = Lerp(t, circle.startAlpha, 0)
+					if t >= 1 then circle.active = false end
+				end
+
+				surface.SetDrawColor(86, 214, 205, alpha)
+				surface.SetMaterial(circle.material)
+				surface.DrawTexturedRectRotated(ScrW()/2, ScrH() * 0.375, size, size, circle.spin)
+			end
+			
+			-- Text
+			local textAnim = Animations["Text"]
+			if textAnim then
+				if textAnim.alphaDelayStart then
+					local t = (CurTime() - textAnim.alphaDelayStart)
+					if t > textAnim.alphaDelayDuration then
+						local fadeT = math.min((t - textAnim.alphaDelayDuration) / 0.15, 1)
+						textAnim.alpha = Lerp(fadeT, 255, 0)
+					end
+				end
+
+				draw.SimpleTextOutlined(
+					textAnim.value,
+					"UVFont5",
+					ScrW() * 0.5,
+					ScrH() * 0.35,
+					Color(textAnim.color.r, textAnim.color.g, textAnim.color.b, textAnim.alpha),  -- main text with alpha
+					TEXT_ALIGN_CENTER,
+					TEXT_ALIGN_TOP,
+					1.25,
+					Color(0, 0, 0, textAnim.alpha)  -- outline respects same alpha
+				)
+			end
+
+		end)
+	end
 
 }
 
@@ -2858,9 +3071,12 @@ UV_UI.racing.mostwanted.events = {
 		UV_UI.racing.mostwanted.states.notificationActive = true
 
 		local ptext = params.text or "ERROR: NO TEXT"
+		local ptextcol = params.textCol or Color(255, 255, 255)
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
 		local ptextNoFall = params.textNoFall
+		local ptextFlyRight = params.textFlyRight
 		local pnoIcon = params.noIcon
+		local ptextFlyRightNoFall = params.textFlyRightNoFall
 
 		UV_UI.racing.mostwanted.events.notifState = {
 			active = true,
@@ -2872,6 +3088,11 @@ UV_UI.racing.mostwanted.events = {
 			startY = ScrH() * 0.325,
 			midY = ScrH() * 0.4,
 			finalY = ScrH() * 0.9,
+			
+			-- For Racing Noti
+			startX = ScrW() * 0.5,
+			midX = ScrW() * 0.6,
+			finalX = ScrW() * 0.9,
 
 			randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
 			randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
@@ -2928,13 +3149,23 @@ UV_UI.racing.mostwanted.events = {
 			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
 				-- Phase 4: gradual downward motion from midY to finalY (no fade)
 				if ptextNoFall then notifState.midY = notifState.startY end
+				if ptextFlyRightNoFall then notifState.midX = notifState.startX end
+				
 				local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
 				local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
-				pos = Vector(
-					notifState.centerPos.x,
-					Lerp(t, notifState.startY, notifState.midY),
-					0
-				)
+				if ptextFlyRight then
+					pos = Vector(
+						Lerp(t, notifState.startX, notifState.midX),
+						notifState.midY,
+						0
+					)
+				else
+					pos = Vector(
+						notifState.midX,
+						Lerp(t, notifState.startY, notifState.midY),
+						0
+					)
+				end
 				alpha = 255
 
 			else
@@ -2947,14 +3178,14 @@ UV_UI.racing.mostwanted.events = {
 				local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
 
 				pos = Vector(
-					notifState.centerPos.x,
-					Lerp(t, notifState.midY, notifState.finalY),
+					pracenoti and Lerp(t, notifState.midX, notifState.finalY) or notifState.centerPos.x,
+					pracenoti and notifState.midY or Lerp(t, notifState.midY, notifState.finalY),
 					0
 				)
 				alpha = Lerp(t, 255, 0)
 			end
 
-			mw_noti_draw(ptext, "UVFont5Shadow", pos.x, pos.y, Color(255, 255, 255, alpha))
+			mw_noti_draw(ptext, "UVFont5Shadow", pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
 			
 			if not pnoIcon then
 				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
@@ -3389,6 +3620,36 @@ end,
 		})
 	end,
 
+	onRaceStartTimer = function(data)
+		local starttime = data.starttime
+
+		local countdownTexts = {
+			[4] = 3,
+			[3] = 2,
+			[2] = 1,
+			[1] = "#uv.race.go"
+		}
+
+		local textToShow = countdownTexts[starttime]
+		if not textToShow then return end
+
+		-- Determine extra options for the "GO!" notification
+		local extraOpts = {}
+		if starttime == 1 then
+			extraOpts.textFlyRightNoFall = true
+		end
+
+		-- Call the notification function once
+		UV_UI.racing.mostwanted.events.CenterNotification(
+			table.Merge({
+				text = textToShow,
+				textCol = Color(0, 255, 0),
+				textFlyRight = true,
+				noIcon = true,
+				immediate = true
+			}, extraOpts)
+		)
+	end
 }
 
 UV_UI.pursuit.mostwanted.events = {
