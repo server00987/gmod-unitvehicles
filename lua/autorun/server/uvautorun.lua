@@ -1015,7 +1015,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 							UVPreInfractionCount = UVPreInfractionCount + 1
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
-								if UVPassConVarFilter(car) then
+								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 									UVCallInitiate(car, 3)
 								end
 							end
@@ -1025,7 +1025,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 							UVPreInfractionCount = UVPreInfractionCount + 1
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
-								if UVPassConVarFilter(car) then
+								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 									UVCallInitiate(car, 2)
 								end
 							end
@@ -1348,7 +1348,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 					UVPreInfractionCount = UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
-						if UVPassConVarFilter(car) then
+						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 							UVCallInitiate(car, 3)
 						end
 					end
@@ -1358,7 +1358,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 					UVPreInfractionCount = UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
-						if UVPassConVarFilter(car) then
+						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 							UVCallInitiate(car, 2)
 						end
 					end
@@ -1623,7 +1623,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					UVPreInfractionCount = UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
-						if UVPassConVarFilter(car) then
+						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 							UVCallInitiate(car, 3)
 						end
 					end
@@ -1633,7 +1633,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					UVPreInfractionCount = UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
-						if UVPassConVarFilter(car) then
+						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
 							UVCallInitiate(car, 2)
 						end
 					end
