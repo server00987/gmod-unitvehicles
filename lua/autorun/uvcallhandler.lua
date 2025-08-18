@@ -15,9 +15,6 @@ local dvd = DecentVehicleDestination
 
 if SERVER then
 
-    local TrafficSpawnCondition = UVTSpawnCondition:GetInt()
-    local TrafficMaxTraffic = UVTMaxTraffic:GetInt()
-
     UVTimeToCheckForPotentialSuspects = CurTime()
     
     hook.Add("Think", "UVCheckForCalls", function()
@@ -36,10 +33,10 @@ if SERVER then
         local ctimeout = 1
         
         if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
-            if #ents.FindByClass("npc_trafficvehicle") < TrafficMaxTraffic then
-                if TrafficSpawnCondition == 3 then
+            if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
+                if UVTSpawnCondition:GetInt() == 3 then
                     UVAutoSpawnTraffic(ply)
-                elseif TrafficSpawnCondition == 2 and next(UVPotentialSuspects) ~= nil then
+                elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
                     UVAutoSpawnTraffic(ply)
                 end
             end

@@ -235,7 +235,7 @@ if SERVER then
 		if not self.v then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction ~= 1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), filter = self.v, mask = MASK_ALL}).Fraction ~= 1
 		return tobool(tr)
 	end
 
@@ -268,8 +268,8 @@ if SERVER then
 			rightstart:Rotate(Angle(0, -90, 0))
 		end
 		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,25)), filter = self.v, mask = MASK_ALL}).Fraction
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,25)), filter = self.v, mask = MASK_ALL}).Fraction
 
 		if trleft > trright then
 			return turnleft
@@ -289,7 +289,17 @@ if SERVER then
 		end
 
 		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-		self.PatrolWaypoint = Waypoint
+		if Waypoint.Neighbors then
+			local WaypointTable = {}
+			for k, v in pairs(Waypoint.Neighbors) do
+				if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+					table.insert(WaypointTable, v)
+				end
+			end --Don't turn around
+			self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+		else
+			self.PatrolWaypoint = Waypoint
+		end
 
 	end
 
@@ -320,9 +330,6 @@ if SERVER then
 			end
 
 			self.waypointPos = self.PatrolWaypoint["Target"]+Vector(0,0,50)
-			self:SetELS(false)
-			self:SetELSSound(false)
-			self:SetHorn(false)
 			
 			--Patrolling techniques
 			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
@@ -389,6 +396,7 @@ if SERVER then
 					end
 				end
 			end --K turn
+			
 			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (self.v:GetVelocity():LengthSqr()*2) and self.v:GetVelocity():LengthSqr() > 774400 then
 				if self.v:GetClass() == "prop_vehicle_jeep" then
 					throttle = 0
@@ -396,6 +404,7 @@ if SERVER then
 					throttle = -1
 				end
 			end --Slow down
+
 			local turn = self:ObstaclesNearbySide()
 			if turn then
 				if turn == -1 then
@@ -412,6 +421,12 @@ if SERVER then
 						steer = -1
 					end
 				end
+			end
+
+			if self.v.rammed then
+				self:SetHorn(true)
+			else
+				self:SetHorn(false)
 			end
 
 			--When there
@@ -683,7 +698,7 @@ if SERVER then
 			e:SetEntity(self.v)
 			util.Effect("propspawn", e) --Perform a spawn effect.
 		end
-		if not UVTargeting then self.v:EmitSound( "buttons/lever6.wav" ) end
+		if not UVTargeting then self.v:EmitSound( "vo/npc/male01/hi02.wav" ) end
 		self.mass = math.Round(self.v:GetPhysicsObject():GetMass())
 
 		local collisionmin, collisionmax = self.v:GetCollisionBounds()

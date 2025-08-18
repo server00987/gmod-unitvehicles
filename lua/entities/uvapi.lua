@@ -192,7 +192,9 @@ end
 function ENT:GetHorn(v)
 	local vehicle = v or self.v
 	if not (IsValid(vehicle) and vehicle:IsVehicle()) then return end
-	if vehicle.IsScar then
+	if self.v.IsGlideVehicle then
+		return vehicle:GetIsHonking()
+	elseif vehicle.IsScar then
 		return vehicle.Horn:IsPlaying()
 	elseif vehicle.IsSimfphyscar then
 		return vehicle.HornKeyIsDown
@@ -575,7 +577,6 @@ end
 function ENT:SetHorn(on)
 	if on == self:GetHorn() then return end
 	if self.v.IsGlideVehicle then
-		if not self.v.CanSwitchSiren then return end
 		if on then
 			self.v:TriggerInput("Horn", 1)
 		else

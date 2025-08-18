@@ -176,10 +176,12 @@ if SERVER then
                     end
                     
                     if not IsValid(car) then return end
+
+                    local driver = car.UnitVehicle or car.TrafficVehicle
                     
-                    if car.UnitVehicle or car.TrafficVehicle then
-                        if car.UnitVehicle:IsNPC() then
-                            car.UnitVehicle:Wreck()
+                    if driver then
+                        if driver:IsNPC() then
+                            driver:Wreck()
                         else
                             UVPlayerWreck(car)
                         end

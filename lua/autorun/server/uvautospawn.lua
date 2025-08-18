@@ -1148,17 +1148,13 @@ function UVAutoSpawnTraffic(ply)
 	end
 	
 	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
-	local enemywaypointgroup = enemywaypoint["Group"]
 	local waypointtable = {}
-	local prioritywaypointtable = {}
-	local prioritywaypointtable2 = {}
-	local prioritywaypointtable3 = {}
 	for k, v in ipairs(dvd.Waypoints) do
 		local Waypoint = v["Target"]
 		local distance = enemylocation - Waypoint
 		local vect = distance:GetNormalized()
 		local evectdot = vect:Dot(suspectvelocity)
-		if distance:LengthSqr() > 25000000 then
+		if distance:LengthSqr() > 25000000 and v["Group"] == 0 then
 			table.insert(waypointtable, v)
 		end
 	end
