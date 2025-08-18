@@ -2009,6 +2009,7 @@ UV_UI.racing.carbon.events = {
 
 		-- Draw hook
 		hook.Add("HUDPaint", "UV_RaceCountdown_Circle", function()
+			if not UVRaceCountdown then return end
 			local now = CurTime()
 
 			-- Draw rings
@@ -3161,7 +3162,7 @@ UV_UI.racing.mostwanted.events = {
 					)
 				else
 					pos = Vector(
-						notifState.midX,
+						notifState.centerPos.x,
 						Lerp(t, notifState.startY, notifState.midY),
 						0
 					)
@@ -3177,11 +3178,19 @@ UV_UI.racing.mostwanted.events = {
 				local fadeElapsed = now - notifState.fadeStartTime
 				local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
 
-				pos = Vector(
-					pracenoti and Lerp(t, notifState.midX, notifState.finalY) or notifState.centerPos.x,
-					pracenoti and notifState.midY or Lerp(t, notifState.midY, notifState.finalY),
-					0
-				)
+				if ptextFlyRight then
+					pos = Vector(
+						Lerp(t, notifState.midX, notifState.finalX),
+						notifState.midY,
+						0
+					)
+				else
+					pos = Vector(
+						notifState.centerPos.x,
+						Lerp(t, notifState.midY, notifState.finalY),
+						0
+					)
+				end
 				alpha = Lerp(t, 255, 0)
 			end
 

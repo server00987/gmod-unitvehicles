@@ -210,6 +210,7 @@ if SERVER then
 				['Lap'] = 1,
 				['Position'] = i,
 				['Name'] = ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())),
+				['IsAI'] = (not IsValid(driver) or not driver:IsPlayer()),
 				--['Laps'] = {},
 				--['BestLapTime'] = CurTime(),
 				--['LastLapTime'] = CurTime(),
@@ -1900,10 +1901,42 @@ else -- CLIENT stuff
 		
 		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"] )
 		surface.DrawTexturedRect(0, h * 0.15, barWidth, h * 0.05 + ((h * 0.04) * #UVRaceCinematicOverlay.squares))
-		
-		-- surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
-		-- surface.DrawTexturedRect(w - barWidth, h * 0.6, barWidth, h * 0.3)
+				
+		if UVHUDRaceInfo and UVHUDRaceInfo.Participants and table.Count(UVHUDRaceInfo.Participants) > 1 then
+			local participants = UVHUDRaceInfo.Participants
+			local numParticipants = table.Count(participants)
+			local numParticipantsCapped = math.min(numParticipants, 16)
+			local partX = w * 0.455
+			local partY = h * 0.215
+			local partlineSpacing = h * 0.04
 
+			surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
+			surface.DrawTexturedRect(w - barWidth, h * 0.15, barWidth, h * 0.05 + ((h * 0.04) * numParticipantsCapped))
+			
+			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.participants"), numParticipants ), font, w - barWidth + partX, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+			local i = 1
+			local sorted, leaderboard = UVFormLeaderboard(UVHUDRaceInfo.Participants)
+			for i, v in ipairs(sorted) do
+				if i > 15 then 
+					draw.SimpleTextOutlined( " ... ", font, w - barWidth + partX - (w * 0.025), partY, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+					break
+				end
+
+				local array = v.array
+				local displayName = array.Name
+				if array.IsAI then
+					displayName = displayName .. " (AI)"
+				end
+
+				draw.SimpleTextOutlined( displayName .. " | ", font, w - barWidth + partX, partY, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				
+				draw.SimpleTextOutlined(i, font, w - barWidth + partX, partY, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				partY = partY + partlineSpacing
+				i = i + 1
+			end
+		end
+		
 		-- Draw Detail Text
 		if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
 			draw.SimpleTextOutlined( game.GetMap(), font, w * 0.95, barHeight - (h * 0.05), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
