@@ -21,9 +21,6 @@ if SERVER then
         for _, ent in ents.Iterator() do
             if UVPassConVarFilter(ent) and not table.HasValue(UVPotentialSuspects, ent) then
                 table.insert(UVPotentialSuspects, ent)
-                if ent.IsSimfphyscar and ent:IsInitialized() then
-                    print(ent:GetMaxHealth())
-                end
                 ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
                     if table.HasValue(UVPotentialSuspects, vehicle) then
                         table.RemoveByValue(UVPotentialSuspects, vehicle)
