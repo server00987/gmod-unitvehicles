@@ -1378,7 +1378,7 @@ if CLIENT then
 		local helicoptermodel = vgui.Create("DNumSlider")
 		helicoptermodel:SetText("#tool.uvunitmanager.settings.heli.model")
 		helicoptermodel:SetTooltip("#tool.uvunitmanager.settings.heli.model.desc")
-		helicoptermodel:SetMinMax(1, 5)
+		helicoptermodel:SetMinMax(1, 7)
 		helicoptermodel:SetDecimals(0)
 		helicoptermodel:SetValue(GetConVar("uvunitmanager_helicoptermodel"))
 		helicoptermodel:SetConVar("uvunitmanager_helicoptermodel")

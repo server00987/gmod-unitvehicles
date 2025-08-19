@@ -1196,9 +1196,14 @@ function UVAutoSpawnTraffic(ply)
 		end
 		
 		if saved_vehicles == nil or next(saved_vehicles) == nil then
-			PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			if not UVNoTrafficNotify then
+				UVNoTrafficNotify = true
+				PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			end
 			return
 		end
+
+		UVNoTrafficNotify = nil
 		
 		availabletraffic = saved_vehicles[math.random(1, #saved_vehicles)]
 		
@@ -1267,9 +1272,14 @@ function UVAutoSpawnTraffic(ply)
 		end
 		
 		if saved_vehicles == nil or next(saved_vehicles) == nil then
-			PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			if not UVNoTrafficNotify then
+				UVNoTrafficNotify = true
+				PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			end
 			return
 		end
+
+		UVNoTrafficNotify = nil
 		
 		availabletraffic = saved_vehicles[math.random(1, #saved_vehicles)]
 		
@@ -1512,9 +1522,14 @@ function UVAutoSpawnTraffic(ply)
 		end
 		
 		if saved_vehicles == nil or next(saved_vehicles) == nil then
-			PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			if not UVNoTrafficNotify then
+				UVNoTrafficNotify = true
+				PrintMessage( HUD_PRINTTALK, "There's currently no Traffic to spawn. Use the Traffic Manager tool to add Traffic!")
+			end
 			return
 		end
+
+		UVNoTrafficNotify = nil
 		
 		availabletraffic = saved_vehicles[math.random(1, #saved_vehicles)]
 		
