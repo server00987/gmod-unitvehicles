@@ -48,12 +48,12 @@ if CLIENT then
 		
 		local Intro = vgui.Create( "DLabel", TrafficAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( string.format( lang("tool.uvtrafficmanager.create.base"), UVTrafficTOOLMemory.VehicleBase ) )
+		Intro:SetText( string.format( lang("tool.uvunitmanager.create.base"), UVTrafficTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 		
 		local Intro2 = vgui.Create( "DLabel", TrafficAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( string.format( lang("tool.uvtrafficmanager.create.rawname"), UVTrafficTOOLMemory.SpawnName ) )
+		Intro2:SetText( string.format( lang("tool.uvunitmanager.create.rawname"), UVTrafficTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 		
 		local Intro3 = vgui.Create( "DLabel", TrafficAdjust )
@@ -602,7 +602,7 @@ if CLIENT then
 
 		local vehiclebase = vgui.Create("DNumSlider")
 		vehiclebase:SetText("#tool.uvtrafficmanager.settings.base")
-		vehiclebase:SetTooltip("#tool.uvtrafficmanager.settings.base.type")
+		vehiclebase:SetTooltip("#tool.uvunitmanager.settings.base.type")
 		vehiclebase:SetMinMax(1, 3)
 		vehiclebase:SetDecimals(0)
 		vehiclebase:SetValue(GetConVar("uvtrafficmanager_vehiclebase"))
