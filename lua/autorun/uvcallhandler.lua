@@ -31,6 +31,22 @@ if SERVER then
                 end)
             end
         end
+
+        local timeout = 3
+        local ctimeout = 1
+        
+        if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
+            if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
+                if UVTSpawnCondition:GetInt() == 3 then
+                    UVAutoSpawnTraffic(ply)
+                elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
+                    UVAutoSpawnTraffic(ply)
+                end
+            end
+
+            UVCheckForSpeeders()
+            UVTimeToCheckForPotentialSuspects = CurTime()
+        end
         
         if GetConVar("ai_ignoreplayers"):GetBool() or not GetConVar("unitvehicle_callresponse"):GetBool() or UVTargeting or uvcallexists then
             if UVCallLocation and UVTargeting then --Remove the call, allow for new calls to come in
@@ -39,25 +55,6 @@ if SERVER then
             if UVPreInfractionCount and UVPreInfractionCount > 0 then
                 UVPreInfractionCount = 0
             end
-            return 
-        end
-        
-        local timeout = 3
-        local ctimeout = 1
-        
-        if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
-            -- for _, ent in ents.Iterator() do
-            --     if UVPassConVarFilter(ent) and not table.HasValue(UVPotentialSuspects, ent) then
-            --         table.insert(UVPotentialSuspects, ent)
-            --         ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
-            --             if table.HasValue(UVPotentialSuspects, vehicle) then
-            --                 table.RemoveByValue(UVPotentialSuspects, vehicle)
-            --             end
-            --         end)
-            --     end
-            -- end
-            UVCheckForSpeeders()
-            UVTimeToCheckForPotentialSuspects = CurTime()
         end
         
     end)

@@ -1,36 +1,63 @@
 include("shared.lua")
 
-local mat = Material("sprites/light_ignorez")
+local mat = Material("sprites/light_glow02_add")
 local matr = Matrix()
 local Headlights = GetConVar("unitvehicle_enableheadlights")
 
 function ENT:Initialize()
 
-	local modeltable = {
-		"models/nfs_mwpolhel/nfs_mwpolhel.mdl",
-		"models/nfs_ucpolhel/nfs_ucpolhel.mdl",
-		"models/nfs_hppolhel/nfs_hppolhel.mdl",
-		"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
-		"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
-	}
-
-	self.Model = self:GetModel()--modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
+	self.Model = self:GetModel()
+	print(self.Model)
 
 	if self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
 		self.SpotlightPos = Vector(85,0,25)
-		self.RedLightPos = Vector(-295,0,140)
+		self.StrobePos = Vector(-295,0,140)
+		self.StrobePos2 = Vector(-28.07,0,17.35)
+		self.PortPos = Vector(-6.28,77.58,32.67)
+		self.StarboardPos = Vector(-6.28,-77.58,32.67)
+		self.SternPos = Vector(-298.67,-0.15,109.86)
 	elseif self.Model == "models/nfs_ucpolhel/nfs_ucpolhel.mdl" then
 		self.SpotlightPos = Vector(-110,0,35)
-		self.RedLightPos = Vector(-390,0,165)
+		self.StrobePos = Vector(-390,0,165)
+		self.StrobePos2 = Vector(21.35,0,31.85)
+		self.PortPos = Vector(-390.39,59.07,160.17)
+		self.StarboardPos = Vector(-390.39,-59.07,160.17)
+		self.SternPos = Vector(-390.09,0,129.25)
 	elseif self.Model == "models/nfs_hppolhel/nfs_hppolhel.mdl" then
 		self.SpotlightPos = Vector(124,0,21.9)
-		self.RedLightPos = Vector(-357.5,0,182.5)
+		self.StrobePos = Vector(-357.5,0,182.5)
+		self.StrobePos2 = Vector(22.04,0,31.47)
+		self.PortPos = Vector(-299.36,69.42,85.83)
+		self.StarboardPos = Vector(-299.36,-69.42,85.83)
+		self.SternPos = Vector(-386.26,0,104.55)
 	elseif self.Model == "models/nfs_nlpolhel/nfs_nlpolhel.mdl" then
 		self.SpotlightPos = Vector(96,0,13)
-		self.RedLightPos = Vector(-352,0,189)
+		self.StrobePos = Vector(-352,0,189)
+		self.StrobePos2 = Vector(-207.08,0,66.06)
+		self.PortPos = Vector(-260.58,60.42,97.85)
+		self.StarboardPos = Vector(-260.58,-60.42,97.85)
+		self.SternPos = Vector(-394.18,0,180.08)
 	elseif self.Model == "models/nfs_paybackpolhel/nfs_paybackpolhel.mdl" then
 		self.SpotlightPos = Vector(26,0,10)
-		self.RedLightPos = Vector(-457,0,220)
+		self.StrobePos = Vector(-457,0,220)
+		self.StrobePos2 = Vector(-126.1,-0.61,42.66)
+		self.PortPos = Vector(-95.66,77.16,71.55)
+		self.StarboardPos = Vector(-95.66,-77.16,71.55)
+		self.SternPos = Vector(-462.08,-0.74,72.05)
+	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
+		self.SpotlightPos = Vector(77.65,0,-60.62)
+		self.StrobePos = Vector(-71.47,0,25.84)
+		self.StrobePos2 = Vector(-7.27,0,-68.58)
+		self.PortPos = Vector(-247.8,39.53,60.79)
+		self.StarboardPos = Vector(-247.8,-49.77,60.79)
+		self.SternPos = Vector(-234.44,-5.02,-5.88)
+	elseif self.Model == "models/unboundheli/unboundheli.mdl" then
+		self.SpotlightPos = Vector(28.63,0,-0.05)
+		self.StrobePos = Vector(-465.71,0,200.94)
+		self.StrobePos2 = Vector(-128.14,0,20.19)
+		self.PortPos = Vector(-102.39,76.75,50.76)
+		self.StarboardPos = Vector(-102.39,-76.75,50.76)
+		self.SternPos = Vector(-472.19,0,50.45)
 	end
 
 	self.RotorSoundPatch = "<chopper/mwheli.wav"
@@ -76,26 +103,73 @@ function ENT:Draw()
 	self:DrawModel()
 	
 	local spotpos = self.Spotlight:GetPos()
-	local redpos = LocalToWorld(self.RedLightPos*self.Scale,Angle(),self:GetPos(),self:GetAngles())
-	local dist = EyePos():Distance(spotpos)
-	local dist2 = EyePos():Distance(redpos)
+	local strobepos = LocalToWorld(self.StrobePos*self.Scale,Angle(),self:GetPos(),self:GetAngles())
+	local strobepos2 = LocalToWorld(self.StrobePos2*self.Scale,Angle(),self:GetPos(),self:GetAngles())
+	local portpos = LocalToWorld(self.PortPos*self.Scale,Angle(),self:GetPos(),self:GetAngles())
+	local starboardpos = LocalToWorld(self.StarboardPos*self.Scale,Angle(),self:GetPos(),self:GetAngles())
+	local sternpos = LocalToWorld(self.SternPos*self.Scale,Angle(),self:GetPos(),self:GetAngles())
 	
-	if dist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+	local spotdist = EyePos():Distance(spotpos)
+	local strobedist = EyePos():Distance(strobepos)
+	local strobedist2 = EyePos():Distance(strobepos2)
+	local portdist = EyePos():Distance(portpos)
+	local starboarddist = EyePos():Distance(starboardpos)
+	local sterndist = EyePos():Distance(sternpos)
+	
+	if spotdist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
-			render.DrawSprite(spotpos,256,256,Color(255,255,255,255-dist/10000*255))
+			render.DrawSprite(spotpos,256,256,Color(255,255,255,255-spotdist/10000*255))
 		
 		mat:SetInt("$ignorez",1)
 	end
-	if dist2<10000 and math.floor(CurTime()*1.5)==math.Round(CurTime()*1.5) and util.TraceLine({start = EyePos(),endpos = redpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+	
+	if strobedist<10000 and math.floor(CurTime()*1)==math.Round(CurTime()*1) and util.TraceLine({start = EyePos(),endpos = strobepos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
-			render.DrawSprite(redpos,128,128,Color(255,0,0,255-dist2/10000*255))
+			render.DrawSprite(strobepos,128,128,Color(255,0,0,255-strobedist/10000*255))
 		
 		mat:SetInt("$ignorez",1)
 	end
+
+	if strobedist2<10000 and math.floor(CurTime()*1.1)==math.Round(CurTime()*1.1) and util.TraceLine({start = EyePos(),endpos = strobepos2,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+		mat:SetInt("$ignorez",0)
+		
+			render.SetMaterial(mat)
+			render.DrawSprite(strobepos2,128,128,Color(255,0,0,255-strobedist2/10000*255))
+		
+		mat:SetInt("$ignorez",1)
+	end
+
+	if portdist<10000 and util.TraceLine({start = EyePos(),endpos = portpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+		mat:SetInt("$ignorez",0)
+		
+			render.SetMaterial(mat)
+			render.DrawSprite(portpos,128,128,Color(255,0,0,255-portdist/10000*255))
+		
+		mat:SetInt("$ignorez",1)
+	end
+
+	if starboarddist<10000 and util.TraceLine({start = EyePos(),endpos = starboardpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+		mat:SetInt("$ignorez",0)
+		
+			render.SetMaterial(mat)
+			render.DrawSprite(starboardpos,128,128,Color(0,255,0,255-starboarddist/10000*255))
+		
+		mat:SetInt("$ignorez",1)
+	end
+
+	if sterndist<10000 and util.TraceLine({start = EyePos(),endpos = sternpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+		mat:SetInt("$ignorez",0)
+		
+			render.SetMaterial(mat)
+			render.DrawSprite(sternpos,128,128,Color(255,255,255,255-sterndist/10000*255))
+		
+		mat:SetInt("$ignorez",1)
+	end
+
 end
 
 function ENT:Think()

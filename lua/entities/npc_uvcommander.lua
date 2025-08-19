@@ -21,9 +21,6 @@ local dvd = DecentVehicleDestination
 
 if SERVER then	
 	--Setting ConVars.
-	local TargetAllVehicle = GetConVar("unitvehicle_targetallvehicle")
-	local TargetDecentVehicle = GetConVar("unitvehicle_targetdecentvehicle")
-	local TargetOtherVehicle = GetConVar("unitvehicle_targetothervehicle")
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local NeverEvade = GetConVar("unitvehicle_neverevade")
 	local BustedTimer = GetConVar("unitvehicle_bustedtimer")
@@ -126,6 +123,10 @@ if SERVER then
 					self.v:TriggerInput("Brake", 0)
 				end
 			end
+
+			if self.v.roadblocking then
+				self.roadblocking = true
+			end
 			
 			self:SetELS(false)
 			self:SetELSSound(false)
@@ -144,7 +145,7 @@ if SERVER then
 			
 		end
 		
-		if self.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not UVOneCommanderActive then
+		if self.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not UVOneCommanderActive and not self.roadblocking then
 			UVResourcePoints = (UVResourcePoints - 1)
 		end	
 		

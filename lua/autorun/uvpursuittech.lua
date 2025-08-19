@@ -20,6 +20,7 @@ UV_PT.Killswitch = {
 			color = not displayMe and Color(255, 0, 0) or nil,
 			immediate = not displayMe and true or nil,
 			critical = not displayMe and true or nil,
+			time = not displayMe and 3 or 1,
 		})
     end,
     Locking = function(tbl)
@@ -55,6 +56,7 @@ UV_PT.Killswitch = {
             text = userString,
 			immediate = true,
 			critical = true,
+			time = 3,
         })
     end,
     NoTarget = function(tbl)
@@ -155,7 +157,7 @@ UV_PT.Shockwave = {
 		    local extraCount = #targets - 1
 
 		-- Build name string: "Name" or "Name (+X)"
-		    display = firstName
+		    display = language.GetPhrase( firstName )
 		    if extraCount > 0 then
 			    display = string.format("%s (+%d)", language.GetPhrase( firstName ), extraCount)
 		    end

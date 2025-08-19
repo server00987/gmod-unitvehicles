@@ -275,13 +275,13 @@ if SERVER then
             end)
         end
 
+        if NPC.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not UVOneCommanderActive and not vehicle.roadblocking then
+			UVResourcePoints = (UVResourcePoints - 1)
+		end
+
         if vehicle.roadblocking then
             vehicle.roadblocking = nil
         end
-
-        if NPC.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not UVOneCommanderActive then
-			UVResourcePoints = (UVResourcePoints - 1)
-		end
 
         NPC.metwithenemy = nil
     end

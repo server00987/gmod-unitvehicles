@@ -4,7 +4,6 @@ include("shared.lua")
 local CanWreck = GetConVar("unitvehicle_canwreck")
 local Chatter = GetConVar("unitvehicle_chatter")
 local ChatterText = GetConVar("unitvehicle_chattertext")
-local TargetDecentVehicle = GetConVar("unitvehicle_targetdecentvehicle")
 local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
 local Relentless = GetConVar("unitvehicle_relentless")
 local Barrels = GetConVar("unitvehicle_unit_helicopterbarrels")
@@ -54,6 +53,8 @@ function ENT:Initialize()
 		"models/nfs_hppolhel/nfs_hppolhel.mdl",
 		"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
 		"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
+		"models/hp2heliai/hp2heliai.mdl",
+		"models/unboundheli/unboundheli.mdl"
 	}
 
 	self.Model = modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
@@ -80,6 +81,10 @@ function ENT:Initialize()
 		self.phys:SetMass(42382)
 	elseif self.Model == "models/nfs_paybackpolhel/nfs_paybackpolhel.mdl" then
 		self.phys:SetMass(85322)
+	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
+		self.phys:SetMass(30830)
+	elseif self.Model == "models/unboundheli/unboundheli.mdl" then
+		self.phys:SetMass(123078)
 	end
 	
 	self.bountytimer = CurTime()

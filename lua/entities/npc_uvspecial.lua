@@ -21,9 +21,6 @@ local dvd = DecentVehicleDestination
 
 if SERVER then	
 	--Setting ConVars.
-	local TargetAllVehicle = GetConVar("unitvehicle_targetallvehicle")
-	local TargetDecentVehicle = GetConVar("unitvehicle_targetdecentvehicle")
-	local TargetOtherVehicle = GetConVar("unitvehicle_targetothervehicle")
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local NeverEvade = GetConVar("unitvehicle_neverevade")
 	local BustedTimer = GetConVar("unitvehicle_bustedtimer")
@@ -108,6 +105,10 @@ if SERVER then
 					self.v:TriggerInput("Brake", 0)
 				end
 			end
+
+			if self.v.roadblocking then
+				self.roadblocking = true
+			end
 			
 			self:SetELS(false)
 			self:SetELSSound(false)
@@ -126,7 +127,7 @@ if SERVER then
 			
 		end
 		
-		if self.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not self.v.rhino and not UVOneCommanderActive then
+		if self.metwithenemy and not UVResourcePointsRefreshing and UVResourcePoints > 1 and not self.v.rhino and not UVOneCommanderActive and not self.roadblocking then
 			UVResourcePoints = (UVResourcePoints - 1)
 		end	
 		
@@ -1266,7 +1267,7 @@ if SERVER then
 				end --K/J turn
 				local eeeevectdot = eevect:Dot(self.e:GetVelocity()) --Fixed enemy's dot product, velocity and direction.
 				if edist:LengthSqr() < 25000000 and eeeevectdot > 0 and self.e:GetVelocity():LengthSqr() > self.v:GetVelocity():LengthSqr() then
-					if self.v:GetVelocity():LengthSqr() > 250000 then
+					if self.v:GetVelocity():LengthSqr() > 250000 and not Relentless:GetBool() then
 						throttle = 0
 					end
 					if not self.v.rhinohit then
