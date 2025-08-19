@@ -726,6 +726,10 @@ function UVPassConVarFilter(v)
 	if v:GetClass() == "prop_vehicle_prisoner_pod" then 
 		return false 
 	end
+
+	if v.IsSimfphyscar then
+		if not v:IsInitialized() then return false end
+	end
 	
 	local vehicleType = TargetVehicleType:GetInt()
 	

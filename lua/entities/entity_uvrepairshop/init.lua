@@ -127,8 +127,9 @@ function ENT:Repair(vehicle)
 			
 			if not ptrefilled and not repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
 			
-			vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
-			vehicle:SetCurHealth(vehicle:GetMaxHealth())
+			--vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
+			print((AutoHealth:GetBool() and math.huge) or (vehicle.simfphysoldhealth or vehicle:GetMaxHealth()))
+			vehicle:SetCurHealth((AutoHealth:GetBool() and math.huge) or (vehicle.simfphysoldhealth or vehicle:GetMaxHealth()))
 			vehicle:SetOnFire( false )
 			vehicle:SetOnSmoke( false )
 			
