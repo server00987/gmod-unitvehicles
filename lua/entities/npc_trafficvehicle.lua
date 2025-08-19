@@ -501,8 +501,11 @@ if SERVER then
 					self.invincible = true
 					self.stuck = true
 					self.moving = CurTime()
-					timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
-					timer.Simple(1, function() if IsValid(self.v) then self.stuck = nil self.PatrolWaypoint = nil end end)
+					timer.Simple(1, function() 
+						if IsValid(self.v) then 
+							self.stuck = nil 
+						end 
+					end)
 					if not self.respondingtocall then
 						self.returningtopatrol = true
 					end
