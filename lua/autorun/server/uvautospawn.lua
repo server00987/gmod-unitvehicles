@@ -195,9 +195,13 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	-- end
 	
 	if next(dvd.Waypoints) == nil then
-		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	end
+	UVNoDVWaypointsNotify = nil
 	
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
@@ -1129,10 +1133,15 @@ function UVAutoSpawnTraffic(ply)
 	local suspect
 	local suspectvelocity = Vector(0,0,0)
 	
+	
 	if next(dvd.Waypoints) == nil then
-		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	end
+	UVNoDVWaypointsNotify = nil
 	
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
@@ -1652,9 +1661,15 @@ function UVAutoSpawnRacer(ply)
 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	
 	if next(dvd.Waypoints) == nil then
-		PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	else
+
+		UVNoDVWaypointsNotify = nil
+
 		local waypointtable = {}
 		local prioritywaypointtable = {}
 		local prioritywaypointtable2 = {}
