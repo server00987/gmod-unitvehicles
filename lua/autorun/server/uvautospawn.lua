@@ -1120,19 +1120,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	
 end
 
-function UVAutoSpawnTraffic(ply)
+function UVAutoSpawnTraffic()
 	
-	if playercontrolled then
-		if not ply then
-			ply = Entity(1)
-		end
-	end
+	local ply = Entity(1)
 	
 	local uvnextclasstospawn = "npc_trafficvehicle"
 	local enemylocation
 	local suspect
 	local suspectvelocity = Vector(0,0,0)
-	
 	
 	if next(dvd.Waypoints) == nil then
 		if not UVNoDVWaypointsNotify then

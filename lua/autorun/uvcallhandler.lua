@@ -35,9 +35,9 @@ if SERVER then
         if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
             if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
                 if UVTSpawnCondition:GetInt() == 3 then
-                    UVAutoSpawnTraffic(ply)
+                    UVAutoSpawnTraffic()
                 elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
-                    UVAutoSpawnTraffic(ply)
+                    UVAutoSpawnTraffic()
                 end
             end
 
