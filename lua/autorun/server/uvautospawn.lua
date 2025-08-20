@@ -1253,7 +1253,20 @@ function UVAutoSpawnTraffic()
 			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
-			Ent:SetColor( Color )
+
+			if MEMORY.SaveColor then
+				Ent:SetColor( Color )
+			else
+				if isfunction(Ent.GetSpawnColor) then
+					Color = Ent:GetSpawnColor()
+					Ent:SetColor( Color )
+				else
+					Color.r = math.random(0, 255)
+					Color.g = math.random(0, 255)
+					Color.b = math.random(0, 255)
+					Ent:SetColor( Color )
+				end
+			end
 			
 			local data = {
 				Color = Color,
