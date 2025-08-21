@@ -252,7 +252,7 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayMusic = true
 
 		--local introArray = (PursuitFilePathsTable[theme].intro and PursuitFilePathsTable[theme].intro[heatlevel]) or {}
-		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["6"]))
+		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["1"]))
 
 		if introArray and #introArray > 0 then
 			local introTrack = introArray[math.random(1, #introArray)]
@@ -272,7 +272,7 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayTransition = false
 
 		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
-		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["6"]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["1"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
 			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
@@ -295,7 +295,7 @@ function UVSoundHeat(heatlevel)
 		-- end
 
 		--local heatArray = (PursuitFilePathsTable[theme].heat and PursuitFilePathsTable[theme].heat[heatlevel]) or {}
-		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["6"]) or {}
+		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["1"]) or {}
 
 		if heatArray and #heatArray > 0 then
 			local heatTrack = heatArray[math.random(1, #heatArray)]
@@ -354,7 +354,7 @@ function UVSoundBusting(heatlevel)
 	-- end
 	
 	--local bustingArray = (PursuitFilePathsTable[theme].busting and PursuitFilePathsTable[theme].busting[heatlevel]) or {}
-	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["6"]) or {}
+	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["1"]) or {}
 
 	if bustingArray and #bustingArray > 0 then
 		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
@@ -423,7 +423,7 @@ function UVSoundCooldown(heatlevel)
 	-- 	UVSoundHeat( UVHeatLevel )
 	-- 	return
 	-- end
-	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["6"])
+	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["1"])
 	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
 
 	if cooldownArray and #cooldownArray > 0 then
@@ -490,7 +490,7 @@ function UVSoundBusted(heatlevel)
 	-- 	return
 	-- end
 
-	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["6"]) or {}
+	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["1"]) or {}
 
 	if bustedArray and #bustedArray > 0 then
 		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
@@ -555,7 +555,7 @@ function UVSoundEscaped(heatlevel)
 	-- 	return
 	-- end
 
-	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["6"]) or {}
+	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["1"]) or {}
 
 	if escapedArray and #escapedArray > 0 then
 		local escapedTrack = escapedArray[math.random(1, #escapedArray)]
