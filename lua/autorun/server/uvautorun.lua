@@ -622,7 +622,7 @@ function UVRequestVectorsnavmesh( start, goal, carwidth )
 	local startArea = navmesh.GetNearestNavArea( start )
 	local goalArea = navmesh.GetNearestNavArea( goal )
 	
-	if UVEnemyEscaping then
+	if UVEnemyEscaping and not Relentless:GetBool() then
 		local navmeshtable = navmesh.GetAllNavAreas()
 		if next(navmeshtable) ~= nil then
 			goalArea = navmeshtable[math.random(#navmeshtable)] --Go to a random spot when searching
