@@ -11,7 +11,7 @@ local unitspursuit = {}
 local unitsinterceptor = {}
 local unitsspecial = {}
 local unitscommander = {}
-local rhinos = {}
+local unitsrhino = {}
 local heatlevel = {}
 local heatminimumbounty = {}
 local maxunits = {}
@@ -141,7 +141,7 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 -- 	TOOL.ClientConVar["unitsinterceptor" .. i] = " "
 -- 	TOOL.ClientConVar["unitsspecial" .. i] = " "
 -- 	TOOL.ClientConVar["unitscommander" .. i] = " "
--- 	TOOL.ClientConVar["rhinos" .. i] = " "
+-- 	TOOL.ClientConVar["unitsrhino" .. i] = " "
 -- end
 
 for i = 1, MAX_HEAT_LEVEL do
@@ -152,7 +152,7 @@ for i = 1, MAX_HEAT_LEVEL do
 	-- TOOL.ClientConVar['bountytime' .. i] = HeatDefaults['bountytime'][tostring( i )] or 0
 	-- TOOL.ClientConVar['timetillnextheat' .. timeTillNextHeatId] = HeatDefaults['timetillnextheat'][tostring( timeTillNextHeatId )] or 0
 	
-	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 		local lowercaseUnit = string.lower( v )
 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 		
@@ -167,10 +167,6 @@ for i = 1, MAX_HEAT_LEVEL do
 		
 		TOOL.ClientConVar[conVarKey] = HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
 	end
-	
-	-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
-	-- poor guy, now he's lonely outside of the for loop : (
-	TOOL.ClientConVar["rhinos" .. i] = " "
 end
 
 -- for key, array in pairs( HeatDefaultSettings ) do
@@ -242,235 +238,7 @@ if SERVER then
 		ply.UVTOOLMemory = net.ReadTable()
 		ply:SelectWeapon( "gmod_tool" )
 	end)
-	
-	net.Receive("UVUnitManagerGetUnitAssignment", function()
-		local unit = net.ReadString()
-		local unitassigned
-		
-		local UnitsPatrol1 = string.Trim(UVUUnitsPatrol1:GetString())
-		if string.find( UnitsPatrol1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 1")
-		end
-		local UnitsSupport1 = string.Trim(UVUUnitsSupport1:GetString())
-		if string.find( UnitsSupport1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 1")
-		end
-		local UnitsPursuit1 = string.Trim(UVUUnitsPursuit1:GetString())
-		if string.find( UnitsPursuit1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 1")
-		end
-		local UnitsInterceptor1 = string.Trim(UVUUnitsInterceptor1:GetString())
-		if string.find( UnitsInterceptor1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 1")
-		end
-		local UnitsSpecial1 = string.Trim(UVUUnitsSpecial1:GetString())
-		if string.find( UnitsSpecial1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 1")
-		end
-		local UnitsCommander1 = string.Trim(UVUUnitsCommander1:GetString())
-		if string.find( UnitsCommander1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 1")
-		end
-		local UnitsRhino1 = string.Trim(UVURhinos1:GetString())
-		if string.find( UnitsRhino1, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 1")
-		end
-		
-		local UnitsPatrol2 = string.Trim(UVUUnitsPatrol2:GetString())
-		if string.find( UnitsPatrol2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 2")
-		end
-		local UnitsSupport2 = string.Trim(UVUUnitsSupport2:GetString())
-		if string.find( UnitsSupport2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 2")
-		end
-		local UnitsPursuit2 = string.Trim(UVUUnitsPursuit2:GetString())
-		if string.find( UnitsPursuit2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 2")
-		end
-		local UnitsInterceptor2 = string.Trim(UVUUnitsInterceptor2:GetString())
-		if string.find( UnitsInterceptor2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 2")
-		end
-		local UnitsSpecial2 = string.Trim(UVUUnitsSpecial2:GetString())
-		if string.find( UnitsSpecial2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 2")
-		end
-		local UnitsCommander2 = string.Trim(UVUUnitsCommander2:GetString())
-		if string.find( UnitsCommander2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 2")
-		end
-		local UnitsRhino2 = string.Trim(UVURhinos2:GetString())
-		if string.find( UnitsRhino2, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 2")
-		end
-		
-		local UnitsPatrol3 = string.Trim(UVUUnitsPatrol3:GetString())
-		if string.find( UnitsPatrol3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 3")
-		end
-		local UnitsSupport3 = string.Trim(UVUUnitsSupport3:GetString())
-		if string.find( UnitsSupport3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 3")
-		end
-		local UnitsPursuit3 = string.Trim(UVUUnitsPursuit3:GetString())
-		if string.find( UnitsPursuit3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 3")
-		end
-		local UnitsInterceptor3 = string.Trim(UVUUnitsInterceptor3:GetString())
-		if string.find( UnitsInterceptor3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 3")
-		end
-		local UnitsSpecial3 = string.Trim(UVUUnitsSpecial3:GetString())
-		if string.find( UnitsSpecial3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 3")
-		end
-		local UnitsCommander3 = string.Trim(UVUUnitsCommander3:GetString())
-		if string.find( UnitsCommander3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 3")
-		end
-		local UnitsRhino3 = string.Trim(UVURhinos3:GetString())
-		if string.find( UnitsRhino3, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 3")
-		end
-		
-		local UnitsPatrol4 = string.Trim(UVUUnitsPatrol4:GetString())
-		if string.find( UnitsPatrol4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 4")
-		end
-		local UnitsSupport4 = string.Trim(UVUUnitsSupport4:GetString())
-		if string.find( UnitsSupport4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 4")
-		end
-		local UnitsPursuit4 = string.Trim(UVUUnitsPursuit4:GetString())
-		if string.find( UnitsPursuit4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 4")
-		end
-		local UnitsInterceptor4 = string.Trim(UVUUnitsInterceptor4:GetString())
-		if string.find( UnitsInterceptor4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 4")
-		end
-		local UnitsSpecial4 = string.Trim(UVUUnitsSpecial4:GetString())
-		if string.find( UnitsSpecial4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 4")
-		end
-		local UnitsCommander4 = string.Trim(UVUUnitsCommander4:GetString())
-		if string.find( UnitsCommander4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 4")
-		end
-		local UnitsRhino4 = string.Trim(UVURhinos4:GetString())
-		if string.find( UnitsRhino4, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 4")
-		end
-		
-		local UnitsPatrol5 = string.Trim(UVUUnitsPatrol5:GetString())
-		if string.find( UnitsPatrol5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 5")
-		end
-		local UnitsSupport5 = string.Trim(UVUUnitsSupport5:GetString())
-		if string.find( UnitsSupport5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 5")
-		end
-		local UnitsPursuit5 = string.Trim(UVUUnitsPursuit5:GetString())
-		if string.find( UnitsPursuit5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 5")
-		end
-		local UnitsInterceptor5 = string.Trim(UVUUnitsInterceptor5:GetString())
-		if string.find( UnitsInterceptor5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 5")
-		end
-		local UnitsSpecial5 = string.Trim(UVUUnitsSpecial5:GetString())
-		if string.find( UnitsSpecial5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 5")
-		end
-		local UnitsCommander5 = string.Trim(UVUUnitsCommander5:GetString())
-		if string.find( UnitsCommander5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 5")
-		end
-		local UnitsRhino5 = string.Trim(UVURhinos5:GetString())
-		if string.find( UnitsRhino5, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 5")
-		end
-		
-		local UnitsPatrol6 = string.Trim(UVUUnitsPatrol6:GetString())
-		if string.find( UnitsPatrol6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Patrol Unit at Heat Level 6")
-		end
-		local UnitsSupport6 = string.Trim(UVUUnitsSupport6:GetString())
-		if string.find( UnitsSupport6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Support Unit at Heat Level 6")
-		end
-		local UnitsPursuit6 = string.Trim(UVUUnitsPursuit6:GetString())
-		if string.find( UnitsPursuit6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Pursuit Unit at Heat Level 6")
-		end
-		local UnitsInterceptor6 = string.Trim(UVUUnitsInterceptor6:GetString())
-		if string.find( UnitsInterceptor6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as an Interceptor Unit at Heat Level 6")
-		end
-		local UnitsSpecial6 = string.Trim(UVUUnitsSpecial6:GetString())
-		if string.find( UnitsSpecial6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Special Unit at Heat Level 6")
-		end
-		local UnitsCommander6 = string.Trim(UVUUnitsCommander6:GetString())
-		if string.find( UnitsCommander6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Commander Unit at Heat Level 6")
-		end
-		local UnitsRhino6 = string.Trim(UVURhinos6:GetString())
-		if string.find( UnitsRhino6, unit ) then
-			unitassigned = true
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is assigned as a Rhino Unit at Heat Level 6")
-		end
-		
-		if unitassigned then
-			Entity(1):EmitSound("buttons/button15.wav", 0, 100, 0.5, CHAN_STATIC)
-		else
-			PrintMessage( HUD_PRINTTALK, "'"..unit.."' is currently NOT assigned to anything!")
-			Entity(1):EmitSound("buttons/button10.wav", 0, 100, 0.5, CHAN_STATIC)
-		end
-		
-	end)
+
 end
 
 if CLIENT then
@@ -691,11 +459,11 @@ if CLIENT then
 							RunConsoleCommand("uvunitmanager_unitscommander"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					elseif string.StartsWith(UnitClass, "7") then
-						local availableunits = GetConVar("uvunitmanager_rhinos"..HeatLevel):GetString()
+						local availableunits = GetConVar("uvunitmanager_unitsrhino"..HeatLevel):GetString()
 						if availableunits == "" or availableunits == " " then --blank
-							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, Name.."."..file_ext)
+							RunConsoleCommand("uvunitmanager_unitsrhino"..HeatLevel, Name.."."..file_ext)
 						else
-							RunConsoleCommand("uvunitmanager_rhinos"..HeatLevel, availableunits.." "..Name.."."..file_ext)
+							RunConsoleCommand("uvunitmanager_unitsrhino"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					end
 					notification.AddLegacy( string.format( lang("tool.uvunitmanager.saved.heatlevel"), Name, HeatLevel ), NOTIFY_UNDO, 5 )
@@ -993,7 +761,7 @@ if CLIENT then
 				convar_table['unitvehicle_unit_unitsinterceptor' .. i] = GetConVar('uvunitmanager_unitsinterceptor' .. i):GetString()
 				convar_table['unitvehicle_unit_unitsspecial' .. i] = GetConVar('uvunitmanager_unitsspecial' .. i):GetString()
 				convar_table['unitvehicle_unit_unitscommander' .. i] = GetConVar('uvunitmanager_unitscommander' .. i):GetString()
-				convar_table['unitvehicle_unit_rhinos' .. i] = GetConVar('uvunitmanager_rhinos' .. i):GetString()
+				convar_table['unitvehicle_unit_unitsrhino' .. i] = GetConVar('uvunitmanager_unitsrhino' .. i):GetString()
 				convar_table['unitvehicle_unit_heatminimumbounty' .. i] = GetConVar('uvunitmanager_heatminimumbounty' .. i):GetInt()
 				convar_table['unitvehicle_unit_maxunits' .. i] = GetConVar('uvunitmanager_maxunits' .. i):GetInt()
 				convar_table['unitvehicle_unit_unitsavailable' .. i] = GetConVar('uvunitmanager_unitsavailable' .. i):GetInt()
@@ -1040,7 +808,7 @@ if CLIENT then
 			-- 	RunConsoleCommand("unitvehicle_unit_unitsinterceptor" .. i, GetConVar("uvunitmanager_unitsinterceptor" .. i):GetString())
 			-- 	RunConsoleCommand("unitvehicle_unit_unitsspecial" .. i, GetConVar("uvunitmanager_unitsspecial" .. i):GetString())
 			-- 	RunConsoleCommand("unitvehicle_unit_unitscommander" .. i, GetConVar("uvunitmanager_unitscommander" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_rhinos" .. i, GetConVar("uvunitmanager_rhinos" .. i):GetString())
+			-- 	RunConsoleCommand("unitvehicle_unit_unitsrhino" .. i, GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
 			-- 	RunConsoleCommand("unitvehicle_unit_heatminimumbounty" .. i, GetConVar("uvunitmanager_heatminimumbounty" .. i):GetInt())
 			-- 	RunConsoleCommand("unitvehicle_unit_maxunits" .. i, GetConVar("uvunitmanager_maxunits" .. i):GetInt())
 			-- 	RunConsoleCommand("unitvehicle_unit_unitsavailable" .. i, GetConVar("uvunitmanager_unitsavailable" .. i):GetInt())
@@ -1096,18 +864,6 @@ if CLIENT then
 		
 		UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
 		
-		local Assignment = vgui.Create( "DButton", CPanel )
-		Assignment:SetText( "#tool.uvunitmanager.settings.getunitassign" )
-		Assignment:SetSize( 280, 20 )
-		Assignment.DoClick = function( self )
-			if isstring(selecteditem) then
-				net.Start("UVUnitManagerGetUnitAssignment")
-				net.WriteString(selecteditem)
-				net.SendToServer()
-			end
-		end
-		CPanel:AddItem(Assignment)
-		
 		local Refresh = vgui.Create( "DButton", CPanel )
 		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
@@ -1161,18 +917,6 @@ if CLIENT then
 		
 		UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
 		
-		local AssignmentGlide = vgui.Create( "DButton", CPanel )
-		AssignmentGlide:SetText( "#tool.uvunitmanager.settings.getunitassign" )
-		AssignmentGlide:SetSize( 280, 20 )
-		AssignmentGlide.DoClick = function( self )
-			if isstring(selecteditem) then
-				net.Start("UVUnitManagerGetUnitAssignment")
-				net.WriteString(selecteditem)
-				net.SendToServer()
-			end
-		end
-		CPanel:AddItem(AssignmentGlide)
-		
 		local RefreshGlide = vgui.Create( "DButton", CPanel )
 		RefreshGlide:SetText( "#refresh" )
 		RefreshGlide:SetSize( 280, 20 )
@@ -1225,18 +969,6 @@ if CLIENT then
 		UVUnitManagerScrollPanelJeep:SetPos( 0, 0 )
 		
 		UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
-		
-		local AssignmentJeep = vgui.Create( "DButton", CPanel )
-		AssignmentJeep:SetText( "#tool.uvunitmanager.settings.getunitassign" )
-		AssignmentJeep:SetSize( 280, 20 )
-		AssignmentJeep.DoClick = function( self )
-			if isstring(selecteditem) then
-				net.Start("UVUnitManagerGetUnitAssignment")
-				net.WriteString(selecteditem)
-				net.SendToServer()
-			end
-		end
-		CPanel:AddItem(AssignmentJeep)
 		
 		local RefreshJeep = vgui.Create( "DButton", CPanel )
 		RefreshJeep:SetText( "#refresh" )
@@ -1591,7 +1323,7 @@ if CLIENT then
 		local selectedHeatConVar = GetConVar( 'uvunitmanager_selected_heat' )
 		local selectedHeat = selectedHeatConVar:GetInt()
 		
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 			local undercaseName = string.lower( v )
 			local locString = "#uv.unit." .. undercaseName
 			local unitKey = 'Units' .. v
@@ -1630,44 +1362,6 @@ if CLIENT then
 				_onChange( textBox )
 			end, unitKey )
 		end
-		
-		-- Rhino is very lonely... : (
-		-- Come on Roboboy...
-		local locString = "#uv.unit.rhino"
-		local unitConvarString = string.format( "uvunitmanager_rhinos%s", selectedHeat )
-		local heatChangeCallbackId = 'UnitsRhinos'
-		
-		local unitConvar = GetConVar( unitConvarString )
-		
-		---------------------------------------
-		
-		local function _onChange( self )
-			local text = self:GetText()
-			local unitConvarString = string.format( "uvunitmanager_rhinos%s", GetConVar( 'uvunitmanager_selected_heat' ):GetInt() )
-			
-			if ( text == "" ) then self:SetText( emptydefault ) end
-			RunConsoleCommand( unitConvarString, text )
-		end
-		
-		CPanel:AddControl("Label", {
-			Text = locString
-		})
-		
-		local textBox = vgui.Create( 'DTextEntry' )
-		UIElements[heatChangeCallbackId] = textBox
-		
-		textBox:SetPlaceholderText( " " )
-		textBox:SetText( unitConvar:GetString() )
-		textBox:SetTooltip( "#tool.uvunitmanager.settings.heatlvl" .. selectedHeat .. ".desc" )
-		textBox.OnLoseFocus = _onChange
-		
-		CPanel:AddItem( textBox )
-		
-		cvars.RemoveChangeCallback( "uvunitmanager_selected_heat", heatChangeCallbackId )
-		cvars.AddChangeCallback( "uvunitmanager_selected_heat", function(_, o_v, n_v)
-			textBox:SetText( GetConVar( string.format( "uvunitmanager_rhinos%s", n_v ) ):GetString() )
-			_onChange( textBox )
-		end, heatChangeCallbackId )
 		
 		-- 	{
 		-- 	Class = 'DNumSlider',
@@ -1934,24 +1628,24 @@ if CLIENT then
 		-- 		Text = "#uv.unit.rhino",
 		-- 	})
 		
-		-- 	rhinos[i] = vgui.Create( "DTextEntry" )
-		-- 	rhinos[i]:SetPlaceholderText( " " )
-		-- 	rhinos[i]:SetText(GetConVar("uvunitmanager_rhinos" .. i):GetString())
-		-- 	rhinos[i]:SetConVar("uvunitmanager_rhinos" .. i)
-		-- 	rhinos[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	rhinos[i].OnLoseFocus = function( self )
+		-- 	unitsrhino[i] = vgui.Create( "DTextEntry" )
+		-- 	unitsrhino[i]:SetPlaceholderText( " " )
+		-- 	unitsrhino[i]:SetText(GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
+		-- 	unitsrhino[i]:SetConVar("uvunitmanager_unitsrhino" .. i)
+		-- 	unitsrhino[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
+		-- 	unitsrhino[i].OnLoseFocus = function( self )
 		-- 		if ( self:GetText() == "" ) then
 		-- 			self:SetText( emptydefault )
 		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_rhinos" .. i, self:GetText())
+		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
 		-- 	end
-		-- 	rhinos[i].OnEnter = function( self )
+		-- 	unitsrhino[i].OnEnter = function( self )
 		-- 		if ( self:GetText() == "" ) then
 		-- 			self:SetText( emptydefault )
 		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_rhinos" .. i, self:GetText())
+		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
 		-- 	end
-		-- 	CPanel:AddItem(rhinos[i])
+		-- 	CPanel:AddItem(unitsrhino[i])
 		
 		-- 	heatminimumbounty[i] = vgui.Create("DNumSlider")
 		-- 	heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
@@ -2163,24 +1857,24 @@ if CLIENT then
 		-- 		Text = "#uv.unit.rhino",
 		-- 	})
 		
-		-- 	rhinos[i] = vgui.Create( "DTextEntry" )
-		-- 	rhinos[i]:SetPlaceholderText( " " )
-		-- 	rhinos[i]:SetText(GetConVar("uvunitmanager_rhinos" .. i):GetString())
-		-- 	rhinos[i]:SetConVar("uvunitmanager_rhinos" .. i)
-		-- 	rhinos[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	rhinos[i].OnLoseFocus = function( self )
+		-- 	unitsrhino[i] = vgui.Create( "DTextEntry" )
+		-- 	unitsrhino[i]:SetPlaceholderText( " " )
+		-- 	unitsrhino[i]:SetText(GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
+		-- 	unitsrhino[i]:SetConVar("uvunitmanager_unitsrhino" .. i)
+		-- 	unitsrhino[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
+		-- 	unitsrhino[i].OnLoseFocus = function( self )
 		-- 		if ( self:GetText() == "" ) then
 		-- 			self:SetText( emptydefault )
 		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_rhinos" .. i, self:GetText())
+		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
 		-- 	end
-		-- 	rhinos[i].OnEnter = function( self )
+		-- 	unitsrhino[i].OnEnter = function( self )
 		-- 		if ( self:GetText() == "" ) then
 		-- 			self:SetText( emptydefault )
 		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_rhinos" .. i, self:GetText())
+		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
 		-- 	end
-		-- 	CPanel:AddItem(rhinos[i])
+		-- 	CPanel:AddItem(unitsrhino[i])
 		
 		-- 	heatminimumbounty[i] = vgui.Create("DNumSlider")
 		-- 	heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
