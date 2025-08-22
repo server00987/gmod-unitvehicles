@@ -3873,10 +3873,6 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
 			panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
 			panel:ControlHelp("#uv.settings.heatlevels.aiunits.desc")
-			panel:NumSlider("#uv.settings.heatlevels.min", "unitvehicle_minheatlevel", 1, MAX_HEAT_LEVEL, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.min.desc")
-			panel:NumSlider("#uv.settings.heatlevels.max", "unitvehicle_maxheatlevel", 1, MAX_HEAT_LEVEL, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.max.desc")
 
 			panel:Help("#uv.settings.pursuit")
 			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")

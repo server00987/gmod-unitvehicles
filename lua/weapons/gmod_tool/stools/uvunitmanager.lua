@@ -104,6 +104,9 @@ TOOL.ClientConVar["pursuittech_spikestrip"] = 1
 TOOL.ClientConVar["pursuittech_killswitch"] = 1
 TOOL.ClientConVar["pursuittech_repairkit"] = 1
 
+TOOL.ClientConVar["minheat"] = 1
+TOOL.ClientConVar["maxheat"] = 6
+
 TOOL.ClientConVar["bountypatrol"] = 1000
 TOOL.ClientConVar["bountysupport"] = 5000
 TOOL.ClientConVar["bountypursuit"] = 10000
@@ -555,7 +558,7 @@ if CLIENT then
 		HeatLevelEntry:SetPos( 20, 300 )
 		HeatLevelEntry:SetText("#tool.uvunitmanager.create.optional.heatlevel")
 		HeatLevelEntry:SetValue(1)
-		HeatLevelEntry:SetMinMax(1, 6)
+		HeatLevelEntry:SetMinMax(1, MAX_HEAT_LEVEL)
 		HeatLevelEntry:SetDecimals(0)
 		HeatLevelEntry:SetSize(UnitAdjust:GetWide() / 2, 22)
 		
@@ -959,7 +962,8 @@ if CLIENT then
 			convar_table['unitvehicle_unit_pursuittech_killswitch'] = GetConVar('uvunitmanager_pursuittech_killswitch'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_repairkit'] = GetConVar('uvunitmanager_pursuittech_repairkit'):GetInt()
 			
-			
+			convar_table['unitvehicle_minheatlevel'] = GetConVar('uvunitmanager_minheat'):GetInt()
+			convar_table['unitvehicle_maxheatlevel'] = GetConVar('uvunitmanager_maxheat'):GetInt()
 			
 			convar_table['unitvehicle_unit_helicoptermodel'] = GetConVar('uvunitmanager_helicoptermodel'):GetString()
 			convar_table['unitvehicle_unit_helicopterspikestrip'] = GetConVar('uvunitmanager_helicopterspikestrip'):GetInt()
@@ -1513,7 +1517,7 @@ if CLIENT then
 			Text = "#tool.uvunitmanager.settings.bounty.10s",
 		})
 		
-		for i = 1, 6 do
+		for i = 1, MAX_HEAT_LEVEL do
 			bountytime[i] = vgui.Create("DNumSlider")
 			bountytime[i]:SetText( string.format( lang("uv.hud.heatlvl"), i ) )
 			bountytime[i]:SetTooltip("#tool.uvunitmanager.settings.bounty.10s.desc")
@@ -1525,7 +1529,7 @@ if CLIENT then
 		end
 		
 		CPanel:AddControl("Label", {
-			Text = "Timed Heat",
+			Text = "#tool.uvunitmanager.settings.heatlvl.timed.title",
 		})
 		
 		local TimeTillNextHeatEnabled = vgui.Create("DCheckBoxLabel")
@@ -1545,6 +1549,28 @@ if CLIENT then
 		-- 	timetillnextheat[i]:SetConVar("uvunitmanager_timetillnextheat" .. i)
 		-- 	CPanel:AddItem(timetillnextheat[i])
 		-- end
+
+		CPanel:AddControl("Label", {
+			Text = "#tool.uvunitmanager.settings.minmaxheatlvl.title",
+		})
+
+		local MinHeat = vgui.Create("DNumSlider")
+		MinHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.min")
+		MinHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.min.desc")
+		MinHeat:SetMinMax(1, MAX_HEAT_LEVEL)
+		MinHeat:SetDecimals(0)
+		MinHeat:SetValue(GetConVar("uvunitmanager_minheat"))
+		MinHeat:SetConVar("uvunitmanager_minheat")
+		CPanel:AddItem(MinHeat)
+
+		local MaxHeat = vgui.Create("DNumSlider")
+		MaxHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.max")
+		MaxHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.max.desc")
+		MaxHeat:SetMinMax(1, MAX_HEAT_LEVEL)
+		MaxHeat:SetDecimals(0)
+		MaxHeat:SetValue(GetConVar("uvunitmanager_maxheat"))
+		MaxHeat:SetConVar("uvunitmanager_maxheat")
+		CPanel:AddItem(MaxHeat)
 		
 		local emptydefault = " "
 		
