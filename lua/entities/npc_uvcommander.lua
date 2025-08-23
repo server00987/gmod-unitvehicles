@@ -1084,6 +1084,7 @@ if SERVER then
 					self.aggressive = nil
 					if (UVBounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt() or self.e.uvraceparticipant) and not UVTargeting and not UVEnemyBusted then
 						timer.Simple(0.1, function()
+							if UVTargeting then return end
 							UVTargeting = true
 							if Chatter:GetBool() and IsValid(self) then
 								UVChatterPursuitStartWanted(self)
@@ -1806,11 +1807,18 @@ if SERVER then
 		self.spawned = true
 		self.toofar = true
 		self.spikesdeployed = 0
-		if UVUOneCommander:GetBool() then
-			self.voice = 12
-		else
-			self.voice = math.random(9,10)
+
+		local selectedVoice = GetConVar("unitvehicle_unit_commander_voice"):GetString()
+		local splittedText = string.Explode( ",", selectedVoice )
+
+		local ya = {}
+
+		for k, v in pairs( splittedText ) do
+			table.insert( ya, string.Trim( v ) )
 		end
+
+		self.voice = ya[math.random(1, #ya)]
+
 		UVCalm = nil
 		UVEnemyBusted = nil
 		UVEnemyEscaped = nil

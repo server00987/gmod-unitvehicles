@@ -866,6 +866,12 @@ if SERVER then
 	UVUBountyRhino = CreateConVar("unitvehicle_unit_bountyrhino", 50000, {FCVAR_ARCHIVE})
 
 	UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
+	
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+		local lowercaseUnit = string.lower( v )
+		local conVarKey = string.format( '%s', lowercaseUnit )
+		CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_voice", "", {FCVAR_ARCHIVE})
+	end
 
 	for i = 1, MAX_HEAT_LEVEL do
 		local prevIterator = i - 1
@@ -879,6 +885,7 @@ if SERVER then
 			-------------------------------------------
 
 			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE})
+			CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_voice", "", {FCVAR_ARCHIVE})
 		end
 
 		for _, conVar in pairs( HEAT_SETTINGS ) do

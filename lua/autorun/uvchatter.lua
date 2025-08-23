@@ -1641,14 +1641,14 @@ if SERVER then
 	function UVChatterPursuitStartAcknowledge(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			if #UVWantedTableVehicle > 1 then
-				return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemultipleenemies", 8)
+				return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemultipleenemies", nil, "DISPATCH")
 			else
 				if UVHeatLevel < 2 then
-					return UVSoundChatter(self, self.voice, "pursuitstartacknowledge", 8)
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledge", nil, "DISPATCH")
 				elseif UVHeatLevel < 5 then
-					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemed", 8)
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgemed", nil, "DISPATCH")
 				else
-					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgehigh", 8)
+					return UVSoundChatter(self, self.voice, "pursuitstartacknowledgehigh", nil, "DISPATCH")
 				end
 			end
 		end

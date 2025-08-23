@@ -143,6 +143,13 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 -- 	TOOL.ClientConVar["unitscommander" .. i] = " "
 -- 	TOOL.ClientConVar["unitsrhino" .. i] = " "
 -- end
+TOOL.ClientConVar["voiceprofile"] = "nfsmw"
+
+for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+	local lowercaseUnit = string.lower( v )
+	local conVarKey = string.format( '%s_voice', lowercaseUnit )
+	TOOL.ClientConVar[conVarKey] = " "
+end
 
 for i = 1, MAX_HEAT_LEVEL do
 	local prevIterator = i - 1
@@ -746,6 +753,13 @@ if CLIENT then
 			convar_table['unitvehicle_unit_bountyspecial'] = GetConVar('uvunitmanager_bountyspecial'):GetString()
 			convar_table['unitvehicle_unit_bountycommander'] = GetConVar('uvunitmanager_bountycommander'):GetString()
 			convar_table['unitvehicle_unit_bountyrhino'] = GetConVar('uvunitmanager_bountyrhino'):GetString()
+
+			convar_table['unitvehicle_unit_voiceprofile'] = GetConVar('uvunitmanager_voiceprofile'):GetString()
+
+			for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+				local conVarKey = string.format( '%s_voice', v )
+				convar_table['unitvehicle_unit_' .. conVarKey] = GetConVar('uvunitmanager_' .. conVarKey):GetString()
+			end
 			
 			convar_table['unitvehicle_unit_timetillnextheatenabled'] = GetConVar('uvunitmanager_timetillnextheatenabled'):GetInt()
 			
@@ -1308,6 +1322,48 @@ if CLIENT then
 		
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.assunits.title",
+		})
+		
+		CPanel:AddControl("Label", {
+			Text = "#tool.uvunitmanager.settings.voiceprofile.title",
+		})
+
+		local voiceprofile = CPanel:AddControl("ComboBox", {
+			Label = "Selected Profile",
+		})
+
+		local files, folders = file.Find( "sound/chatter2/*", "GAME" )
+		if folders ~= nil then
+			for k, v in pairs(folders) do
+				voiceprofile:AddChoice( v )
+			end
+		end
+
+		voiceprofile:SetValue( GetConVar("uvunitmanager_voiceprofile"):GetString() )
+		voiceprofile:SetConVar("uvunitmanager_voiceprofile")
+		
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+			local conVarKey = string.format( 'uvunitmanager_%s_voice', v )
+			local conVar = GetConVar( conVarKey )
+			local unitKey = v .. "_voice"
+
+			CPanel:AddControl("Label", {
+				Text = v
+			})
+			
+			local textBox = vgui.Create( 'DTextEntry' )
+			UIElements[unitKey] = textBox
+			
+			textBox:SetPlaceholderText( " " )
+			textBox:SetText( conVar:GetString() )
+			textBox:SetConVar( conVarKey )
+			textBox:SetTooltip( "Voice profile for " .. v )
+
+			CPanel:AddItem( textBox )
+		end
+
+		CPanel:AddControl("Label", {
+			Text = "——— Assigned Vehicles ———",
 		})
 		
 		local cBox = CPanel:ComboBox("Selected Heat", "uvunitmanager_selected_heat")
