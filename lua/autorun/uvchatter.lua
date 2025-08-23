@@ -2730,7 +2730,7 @@ if SERVER then
 		UVTextChatter(self, args, 'SpottedEnemy')
 	end
 
-	function UVChatterAirLowOnFuel(self)
+	function UVChatterLowOnFuel(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "lowonfuel")
