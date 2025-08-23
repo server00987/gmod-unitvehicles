@@ -804,7 +804,7 @@ function ENT:StartTouch(prop)
 			self:SetHealth(self:Health()/2)
 			ParticleEffectAttach("smoke_burning_engine_01", PATTACH_ABSORIGIN_FOLLOW, self, 0)
 			if Chatter:GetBool() and not ChatterText:GetBool() then
-				UVSoundChatter(self, self.voice, "airhit")
+				UVSoundChatter(self, self.voice, "hit")
 			end
 		else
 			MathCrash = math.random(1,2)
