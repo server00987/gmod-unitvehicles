@@ -1646,7 +1646,7 @@ if SERVER then
 		self.stuck = nil
 		self.spawned = true
 		self.toofar = true
-		self.voice = math.random(3,8)
+		self.voice = math.random(1,3)
 		UVCalm = nil
 		UVEnemyBusted = nil
 		UVEnemyEscaped = nil

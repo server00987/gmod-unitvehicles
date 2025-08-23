@@ -865,6 +865,7 @@ if SERVER then
 	UVUBountyCommander = CreateConVar("unitvehicle_unit_bountycommander", 100000, {FCVAR_ARCHIVE})
 	UVUBountyRhino = CreateConVar("unitvehicle_unit_bountyrhino", 50000, {FCVAR_ARCHIVE})
 
+	UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
 
 	for i = 1, MAX_HEAT_LEVEL do
 		local prevIterator = i - 1
@@ -1875,7 +1876,7 @@ if SERVER then
 								local random_entry = math.random(#units)
 								local unit = units[random_entry]
 								if not UVTargeting then return end
-								UVChatterHeatTwo(unit)
+								UVChatterReportHeat(unit, nextHeat)
 							end
 
 							if UVTargeting then

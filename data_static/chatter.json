@@ -1054,6 +1054,73 @@
       {"text": "[%s]: Asshole won't see this!", "variables": ["UNIT_CALLSIGN"]}
     ]
   },
+  "Heat": {
+    "2": [
+      {"text": "[DISPATCH]: We're now at Condition 2. Reports have confirmed that the suspect is still in the area.", "variables": []},
+      {"text": "[DISPATCH]: Escalate this chase to Condition 2. 10-85 are inbound.", "variables": []},
+      {"text": "[DISPATCH]: Condition 2, all nearby units - 10-32 remains in the vicinity.", "variables": []},
+      {"text": "[DISPATCH]: All units be advised, Code 7. We are now at Conditon 2. Condition 2.", "variables": []},
+      {"text": "[DISPATCH]: Attention all units, we got an officer in need of assistance. 10-85, Condition 2, in um ... %s.", "variables": ["MAP_GET"]},
+      {"text": "[DISPATCH]: Code 7. Condition is now 2.", "variables": []},
+      {"text": "[DISPATCH]: All Support units are cleared to this call. We're at Condition 2.", "variables": []},
+      {"text": "[DISPATCH]: This is Central, be advised we are turning up the heat on this driver.", "variables": []},
+      {"text": "[DISPATCH]: PDT update issued to all local units. 10-85 is now at Condition 2.", "variables": []},
+      {"text": "[DISPATCH]: Attention, we have a report of a 10-85, now at Condition 2. Support units need to respond, over.", "variables": []}
+    ],
+    "3": [
+      {"text": "[DISPATCH]: Jesus Christ, step it up to Condition 3. Moron's still at flight risk. Code 3, I repeat, Code 3.", "variables": []},
+      {"text": "[DISPATCH]: Calling all cars - we're now in Condition 3, Code 6 is unstable. Proceed with caution.", "variables": []},
+      {"text": "[DISPATCH]: Code 7! All Pursuit units, respond to this call and throw a book at this asshole!", "variables": []},
+      {"text": "[DISPATCH]: All units, all units. Pursuit Condition now has increased to 3.", "variables": []},
+      {"text": "[DISPATCH]: Attention all units. Pursuit now Condition 3.", "variables": []},
+      {"text": "[DISPATCH]: Now at Condition 3. Go to Condition 3.", "variables": []},
+      {"text": "[DISPATCH]: We have confirmed reports of the Code 6 still causing trouble. Let the Pursuit units handle this.", "variables": []},
+      {"text": "[DISPATCH]: Target's still at large, Code 7 - what the hell is going on?!", "variables": []},
+      {"text": "[DISPATCH]: See if gettin' hot in there. Code 7, 10-85 on the way.", "variables": []},
+      {"text": "[DISPATCH]: Dispatch to any available Pursuit units, come and fix this!", "variables": []}
+      
+    ],
+    "4": [
+      {"text": "[DISPATCH]: Attention all units, pursuit has been escalated to Condition 4. Patrol units are to fall back, over.", "variables": []},
+      {"text": "[DISPATCH]: Deploying Interceptor units to take this punk out for good. You're welcome.", "variables": []},
+      {"text": "[DISPATCH]: This is Dispatch, we're moving this pursuit to Condition 4. I don't care what you have to do, just do it!", "variables": []},
+      {"text": "[DISPATCH]: Listen up, we're now at Condition 4. Let's keep it tight.", "variables": []},
+      {"text": "[DISPATCH]: All 10-23 units, move to Condition 4. I do not want this punk to get away!", "variables": []},
+      {"text": "[DISPATCH]: Control here, 10-87 has been upgraded to Condition 4.", "variables": []},
+      {"text": "[DISPATCH]: Condition 4, all units. Let me know you wanna escalate this further.", "variables": []},
+      {"text": "[DISPATCH]: 10-87 Condition has been upgraded. All the units I've just dispatched until now are just out of luck.", "variables": []},
+      {"text": "[DISPATCH]: Code 7, sitch's spirallin' outta control. Sendin' reinforcements.", "variables": []},
+      {"text": "[DISPATCH]: Pursuit has been escalated to Condition 4. Interceptors are being mobilized.", "variables": []}
+      
+    ],
+    "5": [
+      {"text": "[DISPATCH]: All Support units, Condition 5 is in full goddamn effect. Tactical team is en route. Clear out immediately.", "variables": []},
+      {"text": "[DISPATCH]: Fucking hell - escalating to Condition 5. Suspect is extremely dangerous. Special units dispatched and en route.", "variables": []},
+      {"text": "[DISPATCH]: Shit, 10-83 is getting outta control! Need armored reinforcements, stat!", "variables": []},
+      {"text": "[DISPATCH]: Pursuit now escalated to Condition 5. Condition 5.", "variables": []},
+      {"text": "[DISPATCH]: 10-87 is now 5. I repeat, we're at Condition 5.", "variables": []},
+      {"text": "[DISPATCH]: Everyone, go to Condition 5! Do whatever it takes!", "variables": []},
+      {"text": "[DISPATCH]: We are bringing this up to Condition 5! Condition 5! Let's get this perp!", "variables": []},
+      {"text": "[DISPATCH]: This moron - yeah, this moron dosen't want to give up. All units, take pursuit to Condition 5.", "variables": []},
+      {"text": "[DISPATCH]: Sending the big boys!", "variables": []},
+      {"text": "[DISPATCH]: Special units are asking me if they can put this motherfucker down - why the fuck not?! Code 7!", "variables": []},
+      {"text": "[DISPATCH]: Code 7, do not let that perp get away!", "variables": []}
+      
+    ],
+    "6": [
+      {"text": "[DISPATCH]: Give 'em hell, people!", "variables": []},
+      {"text": "[DISPATCH]: All 10-23 units, Code 7 - Commander's gonna hang you by the balls if the Code 6 ain't caught. Got that?", "variables": []},
+      {"text": "[DISPATCH]: Why the fuck is our target still movin'? Code 7! Asses in gear, now!", "variables": []},
+      {"text": "[DISPATCH]: Got a Condition 6 in %s! Repeat - Condition 6!", "variables": ["MAP_GET"]},
+      {"text": "[DISPATCH]: Attention! Go to Condition 6! Repeat, we're at Condition 6! This is not a drill!", "variables": []},
+      {"text": "[DISPATCH]: Throw everything you got at 'em! We're now at Condition 6! I say again, Condition 6!", "variables": []},
+      {"text": "[DISPATCH]: All units, special instructions, piggy bank is broken. Repeat, broken. All units, respond Code 3.", "variables": []},
+      {"text": "[DISPATCH]: This is Dispatch, we're moving this pursuit to Condition 6. Everyone got that? This is it. Let's move! Let's get this asshole!", "variables": []},
+      {"text": "[DISPATCH]: Attention all units. 10-87 is now Condition 6. Repeat, we're at 6! I'm not bullshitting here!", "variables": []},
+      {"text": "[DISPATCH]: Code 7. We got a real live one boys!", "variables": []}
+      
+    ]
+  },
   "HeatTwo": [
     {"text": "[DISPATCH]: We're now at Condition 2. Reports have confirmed that the suspect is still in the area.", "variables": []},
     {"text": "[DISPATCH]: Escalate this chase to Condition 2. 10-85 are inbound.", "variables": []},
