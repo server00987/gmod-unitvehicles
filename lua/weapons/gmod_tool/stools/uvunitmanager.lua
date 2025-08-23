@@ -145,7 +145,7 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 -- end
 
 
-for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 	local lowercaseUnit = string.lower( v )
 	local conVarKey = string.format( '%s_voice', lowercaseUnit )
 	local conVarKeyVoiceProfile = string.format( '%s_voiceprofile', lowercaseUnit )
@@ -762,7 +762,7 @@ if CLIENT then
 			convar_table['unitvehicle_unit_bountycommander'] = GetConVar('uvunitmanager_bountycommander'):GetString()
 			convar_table['unitvehicle_unit_bountyrhino'] = GetConVar('uvunitmanager_bountyrhino'):GetString()
 
-			for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+			for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 				local lowercaseUnit = string.lower( v )
 				convar_table['unitvehicle_unit_' .. lowercaseUnit .. '_voice'] = GetConVar('uvunitmanager_' .. lowercaseUnit .. '_voice'):GetString()
 				convar_table['unitvehicle_unit_' .. lowercaseUnit .. '_voiceprofile'] = GetConVar('uvunitmanager_' .. lowercaseUnit .. '_voiceprofile'):GetString()
@@ -1362,7 +1362,7 @@ if CLIENT then
 		-- voiceprofile:SetValue( GetConVar("uvunitmanager_voiceprofile"):GetString() )
 		-- voiceprofile:SetConVar("uvunitmanager_voiceprofile")
 		
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 			CPanel:AddControl("Label", {
 				Text = v
 			})

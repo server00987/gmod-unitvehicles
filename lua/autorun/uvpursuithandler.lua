@@ -867,7 +867,7 @@ if SERVER then
 
 	--UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
 	
-	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 		local lowercaseUnit = string.lower( v )
 		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", "", {FCVAR_ARCHIVE})
 		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "", {FCVAR_ARCHIVE})
@@ -1140,7 +1140,7 @@ if SERVER then
 
 		local botimeout = 10
 		if UVBountyTimerProgress >= botimeout then
-			UVBounty = UVBounty+uvBountyTime
+			UVBounty = UVBounty+UVBountyTime
 			UVBountyTimer = CurTime()
 			if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
 				UVAutoLoadPursuitBreaker()
@@ -1722,7 +1722,7 @@ if SERVER then
 						local random_entry = math.random(#airUnits)	
 						local unit = airUnits[random_entry]
 						if not (unit.crashing or unit.disengaging) then
-							UVChatterAirFoundEnemy(unit)
+							UVChatterFoundEnemy(unit)
 						else
 							ChatterChopperUnavailable()
 						end

@@ -89,8 +89,21 @@ function ENT:Initialize()
 	
 	self.bountytimer = CurTime()
 	self.callsign = "Air "..self:EntIndex()
-	local selfvoicetable = {2, 19}
-	self.voice = selfvoicetable[math.random(1,2)]
+	self.type = "air"
+
+
+	local selectedVoice = GetConVar("unitvehicle_unit_air_voice"):GetString()
+	local splittedText = string.Explode( ",", selectedVoice )
+
+	local ya = {}
+
+	for k, v in pairs( splittedText ) do
+		table.insert( ya, string.Trim( v ) )
+	end
+
+	self.voice = ya[math.random(1, #ya)]
+
+
 	self.deployingspikes = CurTime()
 	self.LastUpdate = CurTime()
 	self.ReplicTime = CurTime()
@@ -133,14 +146,14 @@ function ENT:Initialize()
 	timer.Simple((math.random(60,180)), function() 
 		if IsValid(self) then --Fuel is randomized 
 			if Chatter:GetBool() and not (self.crashing or self.disengaging) then
-				UVChatterAirLowOnFuel(self)
+				UVChatterLowOnFuel(self)
 			end
 			self.disengaging = true
 		end
 	end)
 	
 	if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-		UVChatterAirInitialize(self) 
+		UVChatterInitialize(self) 
 	end
 
 	UVDeploys = UVDeploys + 1
@@ -191,7 +204,7 @@ function ENT:Think()
 			UVLosing = CurTime()
 			timer.Simple(20, function() self.cooldown = nil end)
 			if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-				UVChatterAirSpottedEnemy(self) 
+				UVChatterSpottedEnemy(self) 
 			end
 		end
 
@@ -221,11 +234,11 @@ function ENT:Think()
 					timer.Simple(10, function() if IsValid(spikes) then 
 					spikes:Remove() 
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirSpikeStripMiss(self) 
+						UVChatterSpikeStripMiss(self) 
 					end
 					end end)
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirSpikeStripDeployed(self) 
+						UVChatterSpikeStripDeployed(self) 
 					end
 				elseif self.WeaponChoice == 'barrels' then
 					local bomb = ents.Create("entity_uvbombstrip")
@@ -245,7 +258,7 @@ function ENT:Think()
 					bomb:BombExplode()
 					end end)
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirExplosiveBarrelDeployed(self) 
+						UVChatterExplosiveBarrelDeployed(self) 
 					end
 				end
 			end
@@ -346,7 +359,7 @@ function ENT:PhysicsUpdate()
 		--Bounty
 		local botimeout = 10
 		if CurTime() > self.bountytimer + botimeout and IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
-			UVBounty = UVBounty+uvBountyTime
+			UVBounty = UVBounty+UVBountyTime
 			self.bountytimer = CurTime()
 			local MathAggressive = math.random(1,10) 
 			if MathAggressive == 1 then
@@ -356,13 +369,13 @@ function ENT:PhysicsUpdate()
 					end
 					self.aggressive = true
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
-						UVChatterAirAggressive(self) 
+						UVChatterAggressive(self) 
 					end
 				else
 					self.engaging = nil
 					self.aggressive = nil
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
-						UVChatterAirPassive(self) 
+						UVChatterPassive(self) 
 					end
 				end
 			end
@@ -372,7 +385,7 @@ function ENT:PhysicsUpdate()
 				self:GetTarget()driver = nil
 			end
 			if IsValid(self:GetTarget()) and Chatter:GetBool() and not (self.crashing or self.disengaging) and self:GetTarget():GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive ~= 1 then
-				UVChatterAirCloseToEnemy(self)
+				UVChatterCloseToEnemy(self)
 			end
 		end
 		
@@ -396,7 +409,7 @@ function ENT:PhysicsUpdate()
 			if next(UVWantedTableVehicle) == nil then
 				self.disengaging = true
 				if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-					UVChatterAirDisengaging(self)
+					UVChatterDisengaging(self)
 				end
 			else
 				local suspecttable = UVWantedTableVehicle
@@ -658,6 +671,8 @@ function ENT:StartCrush()
 	
 	self.DownTime = CurTime()
 	self.DownState = false
+
+	print(self.crashing)
 	
 	if not self.crashing then
 		if not timer.Exists("uvcombotime") then
@@ -683,7 +698,8 @@ function ENT:StartCrush()
 		util.Effect("Explosion",eff)
 		util.BlastDamage(self,self,self:GetPos(),1000,10)
 		if Chatter:GetBool() and IsValid(self) then
-			UVChatterAirWreck(self)
+			print("hi")
+			UVChatterWreck(self)
 		end
 		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)
@@ -760,7 +776,7 @@ function ENT:Explode()
 			end)
 		end
 		if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-			UVChatterAirOnRemove(self)
+			UVChatterOnRemove(self)
 		end
 		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)

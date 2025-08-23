@@ -426,7 +426,7 @@ if SERVER then
 		else
 			local unitType = unit and unit.type
 			if not unitType then return nil end
-			
+
 			voiceProfile = GetConVar("unitvehicle_unit_" .. unitType .. "_voiceprofile"):GetString()
 		end
 
@@ -588,6 +588,7 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 			
 		elseif parameters == 3 then
+			print(unitVoiceProfile, voice, chattertype)
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
@@ -1197,7 +1198,7 @@ if SERVER then
 	end
 	
 	function UVChatterWreck(self)
-		if UVChatterDelayed or not uvTargeting then return end
+		if UVChatterDelayed or not UVTargeting then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "wreck", 3)
 		end
@@ -2364,10 +2365,311 @@ if SERVER then
 	
 	--UV mid chatter goes here--
 	
-	function UVChatterAirOnRemove(self)
+	-- function UVChatterAirOnRemove(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "aironremove")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirOnRemove')
+	-- end
+	
+	-- function UVChatterAirArrest(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airarrest")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local e = UVGetVehicleMakeAndModel(self:GetTarget())
+		
+	-- 	UVTextChatter(self, {['suspectmodel'] = e}, 'AirArrest')
+	-- end
+	
+	-- function UVChatterAirArrestAcknowledge(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airarrestacknowledge")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirArrestAcknowledge')
+	-- end
+	
+	-- function UVChatterAirWreck(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airwreck")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirWreck')
+	-- end
+	
+	-- function UVChatterAirSpikeStripDeployed(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airspikestripdeployed")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirSpikeStripDeployed')
+	-- end
+	
+	-- function UVChatterAirBusting(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airbusting")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirBusting')
+	-- end
+	
+	-- function UVChatterAirBustEvadedUpdate(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airbustevadedupdate")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirBustEvadedUpdate')
+	-- end
+	
+	-- function UVChatterAirBustEvaded(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airbustevaded")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirBustEvaded')
+	-- end
+	
+	-- function UVChatterAirAggressive(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airaggressive")
+	-- 	end
+	-- 	if UVChatterDelayed then return end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirAggressive')
+	-- end
+	
+	-- function UVChatterAirPassive(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airpassive")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirPassive')
+	-- end
+	
+	-- function UVChatterAirCloseToEnemy(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airclosetoenemy", 2)
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self:GetTarget()) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self:GetTarget())
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirCloseToEnemy')
+	-- end
+	
+	-- function UVChatterAirFoundEnemy(self)
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airfoundenemy", 4)
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirFoundEnemy')
+	-- end
+	
+	-- function UVChatterAirInitialize(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		local randomno = math.random(1,2)
+	-- 		if randomno == 1 then
+	-- 			UVSoundChatter(self, self.voice, "airinitialize")
+	-- 		else
+	-- 			UVSoundChatter(self, self.voice, "airinitialize", 1)
+	-- 		end
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirInitialize')
+	-- end
+	
+	-- function UVChatterAirSpottedEnemy(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airspottedenemy")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirSpottedEnemy')
+	-- end
+	
+	-- function UVChatterAirLowOnFuel(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airlowonfuel")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirLowOnFuel')
+	-- end
+	
+	-- function UVChatterAirDisengaging(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airdisengaging")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirDisengaging')
+	-- end
+	
+	-- function UVChatterAirSpikeStripMiss(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airspikestripmiss")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirSpikeStripMiss')
+	-- end
+	
+	-- function UVChatterAirSpikeStripHit(unit)
+	-- 	--if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(unit, unit.voice, "airspikestriphit")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(unit.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(unit.e)
+	-- 	end
+		
+	-- 	UVTextChatter(unit, args, 'AirSpikeStripHit')
+	-- end
+	
+	-- function UVChatterAirExplosiveBarrelDeployed(self)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(self, self.voice, "airexplosivebarreldeployed")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(self.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
+	-- 	end
+		
+	-- 	UVTextChatter(self, args, 'AirExplosiveBarrelDeployed')
+	-- end
+	
+	-- function UVChatterAirExplosiveBarrelHit(unit)
+	-- 	if UVChatterDelayed then return end
+	-- 	if not GetConVar("unitvehicle_chattertext"):GetBool() then
+	-- 		return UVSoundChatter(unit, unit.voice, "airexplosivebarrelhit")
+	-- 	end
+	-- 	UVDelayChatter()
+		
+	-- 	local args = {}
+	-- 	if IsValid(unit.e) then
+	-- 		args['suspectmodel'] = UVGetVehicleMakeAndModel(unit.e)
+	-- 	end
+		
+	-- 	UVTextChatter(unit, args, 'AirExplosiveBarrelHit')
+	-- end
+
+	function UVChatterDisengaging(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "aironremove")
+			return UVSoundChatter(self, self.voice, "disengaging")
 		end
 		UVDelayChatter()
 		
@@ -2376,23 +2678,13 @@ if SERVER then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
 		
-		UVTextChatter(self, args, 'AirOnRemove')
+		UVTextChatter(self, args, 'Disengaging')
 	end
-	
-	function UVChatterAirArrest(self)
+
+	function UVChatterExplosiveBarrelDeployed(self)
+		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airarrest")
-		end
-		UVDelayChatter()
-		
-		local e = UVGetVehicleMakeAndModel(self:GetTarget())
-		
-		UVTextChatter(self, {['suspectmodel'] = e}, 'AirArrest')
-	end
-	
-	function UVChatterAirArrestAcknowledge(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airarrestacknowledge")
+			return UVSoundChatter(self, self.voice, "explosivebarreldeployed")
 		end
 		UVDelayChatter()
 		
@@ -2401,105 +2693,28 @@ if SERVER then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
 		
-		UVTextChatter(self, args, 'AirArrestAcknowledge')
+		UVTextChatter(self, args, 'ExplosiveBarrelDeployed')
 	end
-	
-	function UVChatterAirWreck(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airwreck")
-		end
+
+	function UVChatterSpikeStripMiss(self)
 		if UVChatterDelayed then return end
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "spikestripmiss")
+		end
 		UVDelayChatter()
 		
 		local args = {}
-		if IsValid(self.e) then
+		if IsValid(self.e) then	
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
 		
-		UVTextChatter(self, args, 'AirWreck')
+		UVTextChatter(self, args, 'SpikeStripMiss')
 	end
-	
-	function UVChatterAirSpikeStripDeployed(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airspikestripdeployed")
-		end
-		if UVChatterDelayed then return end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirSpikeStripDeployed')
-	end
-	
-	function UVChatterAirBusting(self)
+
+	function UVChatterSpottedEnemy(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airbusting")
-		end
-		if UVChatterDelayed then return end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirBusting')
-	end
-	
-	function UVChatterAirBustEvadedUpdate(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airbustevadedupdate")
-		end
-		if UVChatterDelayed then return end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirBustEvadedUpdate')
-	end
-	
-	function UVChatterAirBustEvaded(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airbustevaded")
-		end
-		if UVChatterDelayed then return end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirBustEvaded')
-	end
-	
-	function UVChatterAirAggressive(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airaggressive")
-		end
-		if UVChatterDelayed then return end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirAggressive')
-	end
-	
-	function UVChatterAirPassive(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airpassive")
+			return UVSoundChatter(self, self.voice, "spottedenemy")
 		end
 		UVDelayChatter()
 		
@@ -2508,77 +2723,13 @@ if SERVER then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
 		
-		UVTextChatter(self, args, 'AirPassive')
+		UVTextChatter(self, args, 'SpottedEnemy')
 	end
-	
-	function UVChatterAirCloseToEnemy(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airclosetoenemy", 2)
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self:GetTarget()) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self:GetTarget())
-		end
-		
-		UVTextChatter(self, args, 'AirCloseToEnemy')
-	end
-	
-	function UVChatterAirFoundEnemy(self)
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airfoundenemy", 4)
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirFoundEnemy')
-	end
-	
-	function UVChatterAirInitialize(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			local randomno = math.random(1,2)
-			if randomno == 1 then
-				UVSoundChatter(self, self.voice, "airinitialize")
-			else
-				UVSoundChatter(self, self.voice, "airinitialize", 1)
-			end
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirInitialize')
-	end
-	
-	function UVChatterAirSpottedEnemy(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airspottedenemy")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirSpottedEnemy')
-	end
-	
+
 	function UVChatterAirLowOnFuel(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airlowonfuel")
+			return UVSoundChatter(self, self.voice, "lowonfuel")
 		end
 		UVDelayChatter()
 		
@@ -2587,83 +2738,9 @@ if SERVER then
 			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
 		end
 		
-		UVTextChatter(self, args, 'AirLowOnFuel')
+		UVTextChatter(self, args, 'LowOnFuel')
 	end
-	
-	function UVChatterAirDisengaging(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airdisengaging")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirDisengaging')
-	end
-	
-	function UVChatterAirSpikeStripMiss(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airspikestripmiss")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirSpikeStripMiss')
-	end
-	
-	function UVChatterAirSpikeStripHit(unit)
-		--if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(unit, unit.voice, "airspikestriphit")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(unit.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(unit.e)
-		end
-		
-		UVTextChatter(unit, args, 'AirSpikeStripHit')
-	end
-	
-	function UVChatterAirExplosiveBarrelDeployed(self)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "airexplosivebarreldeployed")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(self.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(self.e)
-		end
-		
-		UVTextChatter(self, args, 'AirExplosiveBarrelDeployed')
-	end
-	
-	function UVChatterAirExplosiveBarrelHit(unit)
-		if UVChatterDelayed then return end
-		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(unit, unit.voice, "airexplosivebarrelhit")
-		end
-		UVDelayChatter()
-		
-		local args = {}
-		if IsValid(unit.e) then
-			args['suspectmodel'] = UVGetVehicleMakeAndModel(unit.e)
-		end
-		
-		UVTextChatter(unit, args, 'AirExplosiveBarrelHit')
-	end
+
 	
 	function UVChatterSpikeStripHit(unit)
 		--if UVChatterDelayed then return end
@@ -2933,7 +3010,7 @@ if SERVER then
 	end
 	
 	function UVChatterDamaged(self)
-		if UVChatterDelayed or not uvTargeting then return end
+		if UVChatterDelayed or not UVTargeting then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local function ChatterChopperUnavailable()
 				if next(ents.FindByClass("npc_uv*")) ~= nil then
@@ -3278,7 +3355,7 @@ if SERVER then
 	end
 	
 	function UVChatterMultipleUnitsDown(self)
-		if UVChatterDelayed or not uvTargeting then return end
+		if UVChatterDelayed or not UVTargeting then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local randomno = math.random(1,2)
 			local timecheck = 5
@@ -3713,7 +3790,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1)
 		end
-		if uvTargeting or not self or not make then return end
+		if UVTargeting or not self or not make then return end
 		local color = UVColorName(make)
 		local seconds = UVDelayChatter()
 		if self.v.UVPatrol or self.v.UVSupport then
@@ -3730,7 +3807,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1)
 		end
-		if uvTargeting then return end
+		if UVTargeting then return end
 		local seconds = UVDelayChatter()
 		
 		local args = {}
@@ -3752,7 +3829,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "callrequestdescription", 1)
 		end
-		if uvTargeting then return end
+		if UVTargeting then return end
 		
 		local seconds = UVDelayChatter()
 		
@@ -3782,7 +3859,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "callresponding", 5)
 		end
-		if uvTargeting then return end
+		if UVTargeting then return end
 		local seconds = UVDelayChatter()
 		
 		local args = {}
