@@ -1830,6 +1830,7 @@ if SERVER then
 		self:SetModel(self.Modelname)
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
+		self.type = "special"
 		-- self.callsign = "uv.unit.special"..self:EntIndex()
 		self.callsign = "uv.unit.special"
 		self.moving = CurTime()

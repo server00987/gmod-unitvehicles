@@ -415,12 +415,34 @@ if SERVER then
 	-- 	-- Default case (similar to parameter 1)
 	-- 	return HandleCallSounds()
 	-- end
+
+	local function GetUnitVoiceProfile(unit, isDispatch, isMisc)
+		local voiceProfile = ""
+
+		if isDispatch then
+			voiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
+		elseif isMisc then
+			voiceProfile = GetConVar("unitvehicle_unit_misc_voiceprofile"):GetString()
+		else
+			local unitType = unit and unit.type
+			if not unitType then return nil end
+			
+			voiceProfile = GetConVar("unitvehicle_unit_" .. unitType .. "_voiceprofile"):GetString()
+		end
+
+		return voiceProfile
+	end
 	
 	function UVSoundChatter(self, voice, chattertype, parameters, ...)
 		
 		if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 5 
 		end
+
+		local isDispatch = (select(1, ...) == "DISPATCH")
+
+		local unitVoiceProfile = GetUnitVoiceProfile(self, isDispatch, false)
+		local miscVoiceProfile = GetUnitVoiceProfile(self, isDispatch, true)
 		
 		local soundtable
 		voice = tostring(voice)
@@ -432,10 +454,10 @@ if SERVER then
 		end
 		
 		if uvJammerDeployed then
-			local staticFiles = file.Find("sound/chatter2/" .. UVUVoiceProfile:GetString() .. "/MISC/static/*", "GAME")
+			local staticFiles = file.Find("sound/chatter2/" .. miscVoiceProfile .. "/MISC/static/*", "GAME")
 			if next(staticFiles) == nil then return 5 end
 			
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/static/"..staticFiles[math.random(1, #staticFiles)]
+			local soundFile = "chatter2/"..miscVoiceProfile.."/MISC/static/"..staticFiles[math.random(1, #staticFiles)]
 			UVRelayToClients(soundFile, parameters, true)
 			return 5
 		end
@@ -539,18 +561,16 @@ if SERVER then
 		-- end
 		
 		print(self, voice, chattertype, parameters, ...)
-
-		local param1 = select(1, ...)
 		
 		local function HandleCallSounds()
-			if param1 == "DISPATCH" then
+			if isDispatch then
 				voice = "DISPATCH"
 				print("dispatch talking")
 			end
 
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			UVRelayToClients(soundFile, parameters, false)
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
@@ -560,23 +580,23 @@ if SERVER then
 			return HandleCallSounds()
 			
 		elseif parameters == 2 then
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/bullhorn/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			self:EmitSound(soundFile, 5000, 100, 1, CHAN_STATIC)
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 			
 		elseif parameters == 3 then
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			if not soundFile then return 5 end
 			
-			local staticFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/MISC/static/*", "GAME")
+			local staticFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/MISC/static/*", "GAME")
 			if next(staticFiles) == nil then return 5 end
-			local staticFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/static/"..staticFiles[math.random(1, #staticFiles)]
+			local staticFile = "chatter2/"..miscVoiceProfile.."/MISC/static/"..staticFiles[math.random(1, #staticFiles)]
 			
 			UVRelayToClients(staticFile, parameters, true)
 			timer.Simple(SoundDuration(staticFile), function()
@@ -586,13 +606,13 @@ if SERVER then
 			return UVDelayChatter(SoundDuration(soundFile) + SoundDuration(staticFile) + math.random(1, 2))
 			
 		elseif parameters == 4 then
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			if not soundFile then return 5 end
 			
-			local emergencyFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/emergency/copresponse.mp3"
+			local emergencyFile = "chatter2/"..miscVoiceProfile.."/MISC/emergency/copresponse.mp3"
 			local emergencyDuration = SoundDuration(emergencyFile)
 			
 			UVRelayToClients(emergencyFile, parameters, true)
@@ -603,15 +623,15 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(soundFile) + emergencyDuration + math.random(1, 2)))
 			
 		elseif parameters == 5 then
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			if not soundFile then return 5 end
 			
-			local identifyFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/"..voice.."/identify/*", "GAME")
+			local identifyFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/"..voice.."/identify/*", "GAME")
 			if next(identifyFiles) == nil then return 5 end
-			local identifyFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/identify/"..identifyFiles[math.random(1, #identifyFiles)]
+			local identifyFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/identify/"..identifyFiles[math.random(1, #identifyFiles)]
 			
 			UVRelayToClients(identifyFile, parameters, true)
 			timer.Simple(SoundDuration(identifyFile), function()
@@ -646,15 +666,15 @@ if SERVER then
 			-- local requestFiles = file.Find("sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME")
 			-- local requestFile = "chatter/!call/"..basedirectory.."/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
 			
-			local emergencyFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/emergency/copresponse.mp3"
-			local addressFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/addressgroup/*", "GAME")
-			local addressFile = "chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
+			local emergencyFile = "chatter2/"..miscVoiceProfile.."/MISC/emergency/copresponse.mp3"
+			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/addressgroup/*", "GAME")
+			local addressFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
 			
-			local locationFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/d_location/*", "GAME")
-			local locationFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/d_location/"..locationFiles[math.random(1, #locationFiles)]
+			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/d_location/*", "GAME")
+			local locationFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/d_location/"..locationFiles[math.random(1, #locationFiles)]
 			
-			local requestFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/unitrequest/*", "GAME")
-			local requestFile = "chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
+			local requestFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/unitrequest/*", "GAME")
+			local requestFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
 			
 			UVRelayToClients(emergencyFile, parameters, true)
 			timer.Simple(SoundDuration(emergencyFile), function()
@@ -689,15 +709,15 @@ if SERVER then
 			-- local quadrantFiles = file.Find("sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME")
 			-- local quadrantFile = "chatter/!call/"..basedirectory.."/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
 			
-			local emergencyFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/emergency/copresponse.mp3"
-			local breakawayFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/dispbreakaway/*", "GAME")
-			local breakawayFile = "chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/dispbreakaway/"..breakawayFiles[math.random(1, #breakawayFiles)]
+			local emergencyFile = "chatter2/"..miscVoiceProfile.."/MISC/emergency/copresponse.mp3"
+			local breakawayFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/dispbreakaway/*", "GAME")
+			local breakawayFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/dispbreakaway/"..breakawayFiles[math.random(1, #breakawayFiles)]
 			
-			local locationFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/d_location/*", "GAME")
-			local locationFile = "chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/d_location/"..locationFiles[math.random(1, #locationFiles)]
+			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/d_location/*", "GAME")
+			local locationFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/d_location/"..locationFiles[math.random(1, #locationFiles)]
 			
-			local quadrantFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/quadrant/*", "GAME")
-			local quadrantFile = "chatter2/"..UVUVoiceProfile:GetString().."/DISPATCH/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
+			local quadrantFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/quadrant/*", "GAME")
+			local quadrantFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
 			
 			UVRelayToClients(emergencyFile, parameters, true)
 			timer.Simple(SoundDuration(emergencyFile), function()
@@ -716,11 +736,11 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(emergencyFile) + SoundDuration(breakawayFile) + SoundDuration(locationFile) + SoundDuration(quadrantFile) + math.random(1, 2)))
 			
 		elseif parameters == 8 then
-			local soundFiles = file.Find("sound/chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
-			local soundFile = "chatter2/"..UVUVoiceProfile:GetString()..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
-			local emergencyFile = "chatter2/"..UVUVoiceProfile:GetString().."/MISC/emergency/copresponse.mp3"
+			local emergencyFile = "chatter2/"..miscVoiceProfile.."/MISC/emergency/copresponse.mp3"
 			UVRelayToClients(emergencyFile, parameters, true)
 			timer.Simple(SoundDuration(emergencyFile), function()
 				UVRelayToClients(soundFile, parameters, true)
@@ -2149,7 +2169,7 @@ if SERVER then
 			else
 				timecheck = UVSoundChatter(self, self.voice, "losing")
 			end
-			print(timecheck)
+
 			timer.Simple(timecheck, function()
 				if next(ents.FindByClass("npc_uv*")) ~= nil and UVEnemyEscaping then
 					local units = ents.FindByClass("npc_uv*")

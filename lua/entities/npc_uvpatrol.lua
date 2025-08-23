@@ -1649,6 +1649,7 @@ if SERVER then
 		self:SetModel(self.Modelname)
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
+		self.type = "patrol"
 		-- self.callsign = "uv.unit.patrol"..self:EntIndex()
 		self.callsign = "uv.unit.patrol"
 		self.moving = CurTime()

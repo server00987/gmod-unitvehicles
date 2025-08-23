@@ -1649,6 +1649,7 @@ if SERVER then
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
 		-- self.callsign = "uv.unit.support"..self:EntIndex()
+		self.type = "support"
 		self.callsign = "uv.unit.support"
 		self.moving = CurTime()
 		self.deploying = CurTime()

@@ -1774,6 +1774,7 @@ if SERVER then
 		self.bountytimer = CurTime()
 		-- self.callsign = "uv.unit.interceptor"..self:EntIndex()
 		self.callsign = "uv.unit.interceptor"
+		self.type = "interceptor"
 		self.moving = CurTime()
 		self.deploying = CurTime()
 		self.rdeploying = CurTime()
