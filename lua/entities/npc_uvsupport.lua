@@ -375,11 +375,18 @@ if SERVER then
 	end
 	
 	function ENT:ObstaclesNearby()
-		if not self.v then
+		if not self.v or not self.v.rideheight then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC}).Fraction ~= 1
-		return tobool(tr)
+
+		local pos = self.v:GetPos()
+		pos.z = pos.z + self.v.rideheight
+
+		local tr = util.TraceLine({start = pos, endpos = (pos+(self.v:GetVelocity()*2)), mask = MASK_NPCWORLDSTATIC})
+		local Fraction = tr.Fraction ~= 1
+		local HitNormal = tr.HitNormal.z < 0.45 --Ignore small inclines
+
+		return tobool(Fraction and HitNormal)
 	end
 	
 	function ENT:ObstaclesNearbySide()
@@ -411,13 +418,18 @@ if SERVER then
 			rightstart:Rotate(Angle(0, -90, 0))
 		end
 		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC})
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC})
 
-		if trleft > trright then
+		local Fraction = trleft.Fraction ~= 1 or trright.Fraction ~= 1
+		local HitNormal = trleft.HitNormal.z < 0.45 or trright.HitNormal.z < 0.45 --Ignore small inclines
+
+		if not tobool(Fraction and HitNormal) then return false end
+
+		if trleft.Fraction > trright.Fraction then
 			return turnleft
 		end
-		if trleft < trright then
+		if trleft.Fraction < trright.Fraction then
 			return turnright
 		end
 
@@ -529,7 +541,7 @@ if SERVER then
 		end
 		
 		if closestwaypointid == 1 then
-			if closestdistancetowaypoint < 250000 and UVStraightToWaypoint(self.v:WorldSpaceCenter(), closestwaypoint) then
+			if (closestdistancetowaypoint < 250000 or (UVTargeting and not UVHiding)) and UVStraightToWaypoint(self.v:WorldSpaceCenter(), closestwaypoint) then
 				self.tableroutetoenemy = {}
 			end
 			return closestwaypoint
@@ -1496,7 +1508,7 @@ if SERVER then
 						end
 					end
 					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
-						if (math.abs(steer) > 0.5 or (self:ObstaclesNearby() and not Relentless:GetBool())) and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
+						if math.abs(steer) > 0.5 and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
 							if self.v:GetGear() >= 3 then
 								throttle = -1
 							else
@@ -1517,7 +1529,7 @@ if SERVER then
 						throttle = 1
 					end --Straighten out
 					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
-						if (math.abs(steer) > 0.5 or (self:ObstaclesNearby() and not Relentless:GetBool())) and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
+						if math.abs(steer) > 0.5 and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
 							if self.v:GetGear() >= 1 then
 								throttle = -1
 							else
@@ -1807,6 +1819,8 @@ if SERVER then
 				self.v.length = ((collisionmax.y)-(collisionmin.y))
 			end
 		end
+
+		self.v.rideheight = collisionmin.z
 		
 		local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.
 		if not isvector(max) then min, max = self.v:GetModelBounds() end --If getting hit box bounds is failed, get model bounds instead.

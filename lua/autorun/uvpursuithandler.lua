@@ -872,7 +872,7 @@ if SERVER then
 
 		local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
 
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 			local lowercaseUnit = string.lower( v )
 			local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 
@@ -880,10 +880,6 @@ if SERVER then
 
 			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE})
 		end
-
-		-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
-		-- poor guy, now he's lonely outside of the for loop : (
-		CreateConVar( "unitvehicle_unit_rhinos" .. i, "", {FCVAR_ARCHIVE})
 
 		for _, conVar in pairs( HEAT_SETTINGS ) do
 			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
@@ -2197,7 +2193,7 @@ else --HUD/Options
 
 		local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
 
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander'} ) do
+		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 			local lowercaseUnit = string.lower( v )
 			local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 
@@ -2205,10 +2201,6 @@ else --HUD/Options
 
 			CreateClientConVar( "unitvehicle_unit_" .. conVarKey, "", true, false)
 		end
-
-		-- roboboy hated him, so he decided to not assign him a "units" at the start of his key...
-		-- poor guy, now he's lonely outside of the for loop : (
-		CreateClientConVar( "unitvehicle_unit_rhinos" .. i, "", true, false)
 
 		for _, conVar in pairs( HEAT_SETTINGS ) do
 			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
@@ -3874,10 +3866,6 @@ else --HUD/Options
 			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
 			panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
 			panel:ControlHelp("#uv.settings.heatlevels.aiunits.desc")
-			panel:NumSlider("#uv.settings.heatlevels.min", "unitvehicle_minheatlevel", 1, MAX_HEAT_LEVEL, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.min.desc")
-			panel:NumSlider("#uv.settings.heatlevels.max", "unitvehicle_maxheatlevel", 1, MAX_HEAT_LEVEL, 0)
-			panel:ControlHelp("#uv.settings.heatlevels.max.desc")
 
 			panel:Help("#uv.settings.pursuit")
 			panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
