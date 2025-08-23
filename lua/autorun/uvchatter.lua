@@ -425,7 +425,7 @@ if SERVER then
 			voiceProfile = GetConVar("unitvehicle_unit_misc_voiceprofile"):GetString()
 		else
 			local unitType = unit and unit.type
-			if not unitType then return nil end
+			if not unitType then return GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString() end
 
 			voiceProfile = GetConVar("unitvehicle_unit_" .. unitType .. "_voiceprofile"):GetString()
 		end
@@ -666,13 +666,17 @@ if SERVER then
 			
 			-- local requestFiles = file.Find("sound/chatter/!call/"..basedirectory.."/unitrequest/*", "GAME")
 			-- local requestFile = "chatter/!call/"..basedirectory.."/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
+
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/"..chattertype.."/*", "GAME")
+			if next(soundFiles) == nil then return 5 end
+			local soundFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/MISC/emergency/copresponse.mp3"
 			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/addressgroup/*", "GAME")
 			local addressFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
 			
 			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/d_location/*", "GAME")
-			local locationFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/d_location/"..locationFiles[math.random(1, #locationFiles)]
+			local locationFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/d_location/"..locationFiles[math.random(1, #locationFiles)]
 			
 			local requestFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/DISPATCH/unitrequest/*", "GAME")
 			local requestFile = "chatter2/"..unitVoiceProfile.."/DISPATCH/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
@@ -682,7 +686,7 @@ if SERVER then
 				UVRelayToClients(addressFile, parameters, true)
 				timer.Simple(SoundDuration(addressFile), function()
 					UVRelayToClients(soundFile, parameters, true)
-					timer.Simple(soundDuration, function()
+					timer.Simple(SoundDuration(soundFile), function()
 						UVRelayToClients(locationFile, parameters, true)
 						timer.Simple(SoundDuration(locationFile), function()
 							UVRelayToClients(requestFile, parameters, true)

@@ -1286,7 +1286,7 @@ if SERVER then
 					if not self.v.rhinohit then
 						self.v.rhinohit = true
 						if Chatter:GetBool() and UVTargeting and not self.v.roadblocking and not self.v.disperse then
-							UVSoundChatter(UVGetDriver(self.e), self.voice, "rhinomiss", 1)
+							UVSoundChatter(self, self.voice, "rhinomiss", 1)
 						end
 					end
 				end
