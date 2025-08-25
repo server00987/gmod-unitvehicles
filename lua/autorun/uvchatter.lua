@@ -2703,7 +2703,7 @@ if SERVER then
 	function UVChatterSpikeStripMiss(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "ptspikestripmiss")
+			return UVSoundChatter(self, self.voice, "ptspikestripmissed")
 		end
 		UVDelayChatter()
 		
