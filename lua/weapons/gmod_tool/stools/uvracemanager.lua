@@ -83,8 +83,13 @@ if SERVER then
 					local driver = v:GetDriver()
 					local is_player = IsValid(driver) and driver:IsPlayer()
 					
-					if is_player and driver == ply then
-						UVRaceAddParticipant(v, nil, true)
+					-- if is_player and driver == ply then
+						-- UVRaceAddParticipant(v, nil, true)
+					-- end
+					
+					local id = v:EntIndex()
+					if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
+						UVRaceAddParticipant(v, driver, true)
 					end
 				end
 			end
@@ -108,6 +113,9 @@ if SERVER then
 		
 		UVRaceMakeCheckpoints( tonumber( args[1] ) ) -- args[1] is the number of laps
 		
+		net.Start("UVRace_HideRacersList")
+		net.Send(ply)
+
 		timer.Simple(2, function()
 			//UVRaceMakeCheckpoints()
 			UVRacePrep = false
@@ -151,12 +159,20 @@ if SERVER then
 						v.raceinvited = true
 						v.lastraceinv = CurTime()
 						
+						local name = (is_player and driver:Nick()) or (v.racer or "Racer " .. v:EntIndex())
+
+						UVSetInviteByVehicle(v, name, "Invited")
+
 						if is_player then
 							net.Start("uvrace_invite")
 							net.Send(driver)
 						end
 						
 						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10, 1, function()
+							if UVRaceInvites[v:EntIndex()] and UVRaceInvites[v:EntIndex()].status == "Invited" then
+								UVRaceInvites[v:EntIndex()].status = "Declined"
+								UVBroadcastRacerList()
+							end
 							-- v.racer = nil
 							v.raceinvited = false
 						end)
@@ -261,17 +277,27 @@ if SERVER then
 					undo.AddEntity(spawn)
 					ply:AddCleanup("uvrace_ents", spawn)
 				end
-
+				
+				undo.AddFunction(function(undoTable, ent)
+					net.Start("UVRace_TrackReady")
+						net.WriteString("?")
+						net.WriteString("?")
+					net.Broadcast()
+				end)
 			end
 
 			undo.Finish()
 
 			local tname = args[1]:Split(".")[2]
 
-			net.Start("UVRace_TrackName")
+			net.Start("UVRace_TrackReady")
 			net.WriteString(trackName:Replace("_", " "))
 			net.WriteString(author)
+			net.WriteString(ply:Nick())
 			net.Broadcast()
+			
+			-- local hostID = ply:EntIndex()
+			-- UVRaceInvites[hostID] = { ent = ply:GetVehicle(), name = ply:Nick(), status = "Host" }
 
 			ImportExportText(tname, false, ply)
 		end)

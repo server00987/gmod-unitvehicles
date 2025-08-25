@@ -5,8 +5,9 @@ local UVRacePlayMusic = false
 local UVRacePlayTransition = false
 
 local showhud = GetConVar("cl_drawhud")
-local UVRace_CurrentTrackName = "UNKNOWN"
-local UVRace_CurrentTrackAuthor = "UNKNOWN"
+local UVRace_CurrentTrackName = UVRace_CurrentTrackName or nil
+local UVRace_CurrentTrackAuthor = UVRace_CurrentTrackAuthor or nil
+local UVRace_CurrentTrackHost = UVRace_CurrentTrackHost or nil
 
 local UVHUDRaceFinishCountdownStarted = false
 local UVHUDRaceFinishEndTime = nil
@@ -18,8 +19,10 @@ if SERVER then
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
 
 	UVRaceTable = {}
-	UVRaceCurrentParticipants = {}
+	UVRaceCurrentParticipants = UVRaceCurrentParticipants or {}
 	UVRaceStartTime = CurTime()
+	
+	UVRaceInvites = UVRaceInvites or {}
 
 	function UVRaceCheckFinishLine()
 		local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
@@ -75,9 +78,59 @@ if SERVER then
 		end
 	end
 
+	function UVBroadcastRacerList()
+		local list = {}
+		local seen = {}
+
+		for id, data in pairs(UVRaceInvites) do
+			if not IsValid(data.ent) then
+				UVRaceInvites[id] = nil
+			end
+		end
+
+		for id, data in pairs(UVRaceInvites) do
+			if IsValid(data.ent) and not seen[data.ent:EntIndex()] then
+				table.insert(list, { id = data.ent:EntIndex(), name = data.name, status = data.status })
+				seen[data.ent:EntIndex()] = true
+			end
+		end
+
+		net.Start("UVRace_RacersList")
+		net.WriteTable(list)
+		net.Broadcast()
+	end
+
+	local function UVSetInviteByVehicle(vehicle, name, status)
+		if not IsValid(vehicle) then return end
+		local id = vehicle:EntIndex()
+		local entry = UVRaceInvites[id]
+
+		if not entry then
+			UVRaceInvites[id] = { ent = vehicle, name = name or ("Racer "..id), status = status }
+		else
+			-- Only update the status, never duplicate
+			entry.status = status
+			entry.name = name or entry.name
+			entry.ent = vehicle
+		end
+
+		UVBroadcastRacerList()
+	end
+
 	-- Use vehicles as participants
 	function UVRaceAddParticipant( vehicle, driver, sendmsg )
+		if not IsValid(vehicle) then return end
+
+		local id = vehicle:EntIndex()
+		local name = (IsValid(driver) and driver:IsPlayer() and driver:Nick()) 
+			or (vehicle.racer or "Racer " .. id)
+
+		if UVRaceInvites[id] and UVRaceInvites[id].status == "Accepted" then
+			return
+		end
+
 		table.insert( UVRaceCurrentParticipants, vehicle )
+		UVSetInviteByVehicle(vehicle, (IsValid(driver) and driver:IsPlayer() and driver:Nick()) or vehicle.racer, "Accepted")
 
 		vehicle.raceinvited = false
 		timer.Remove('RaceInviteExpire'..vehicle:EntIndex())
@@ -91,13 +144,14 @@ if SERVER then
 		vehicle.isresetting = false
 
 		if sendmsg then
-			PrintMessage( HUD_PRINTTALK, ((IsValid(driver) and driver:GetName()) or (vehicle.racer or "Racer "..vehicle:EntIndex())).. " has joined the race!" )
+			-- PrintMessage( HUD_PRINTTALK, name .. " has joined the race!" )
 		end
 
 		vehicle:CallOnRemove( "uvrace_participantremoved", function( ent )
 			local driver = UVGetDriver( vehicle )
 
 			if vehicle.isresetting then return end
+			UVSetInviteByVehicle(ent, nil, "Disqualified")
 			UVRaceRemoveParticipant( ent, 'Disqualified' )
 		end )
 	end
@@ -284,6 +338,15 @@ if SERVER then
 		uvbestlaptime = nil
 		UVRaceInEffect = nil
 		UVRaceInProgress = nil
+		
+		net.Start("UVRace_TrackReady")
+			net.WriteString("?")
+			net.WriteString("?")
+			net.WriteString("?")
+		net.Broadcast()
+		
+		UVRaceInvites = {}
+		UVBroadcastRacerList()
 
 		table.Empty(UVRaceTable)
 
@@ -425,19 +488,27 @@ if SERVER then
 		if not car then return end
 		if not car.raceinvited then return end
 
+		local id = car:EntIndex()
+		local entry = UVRaceInvites[id]
+		if not entry then return end
+
 		if bool then
 			UVRaceAddParticipant( car, ply, true )
+			entry.status = "Accepted"
 		else
 			car.raceinvited = false;
 			timer.Remove( 'RaceInviteExpire'..car:EntIndex() )
+			entry.status = "Declined"
 		end
+
+		UVBroadcastRacerList()
 	end)
 else -- CLIENT stuff
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
 	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 	UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
-	
+
 	function UVSoundRacingStop()
 		UVPlayingRace = false
 		-- if UVPlayingRace then
@@ -946,7 +1017,7 @@ else -- CLIENT stuff
 		local racers = net.ReadTable()
 
 		for _, v in pairs(racers) do
-			chat.AddText(Color(255, 255, 255), language.GetPhrase("uv.race.invite.sentto"), Color(0,255,0), v)
+			-- chat.AddText(Color(255, 255, 255), language.GetPhrase("uv.race.invite.sentto"), Color(0,255,0), v)
 		end
 	end)
 
@@ -1083,6 +1154,8 @@ else -- CLIENT stuff
 		timer.Create( "RaceInvite", 10, 1, function() ResultPanel:Close() end )
 	end)
 
+	local UVRaceStarting = false
+
 	net.Receive( "uvrace_end", function()
 		if not UVHUDRace then return end
 		if UVHUDRace and RacingMusic:GetBool() then 
@@ -1106,7 +1179,9 @@ else -- CLIENT stuff
 
 		UVHUDRaceFinishCountdownStarted = false
 		UVHUDRaceFinishEndTime = nil
-		
+
+		UVRaceStarting = false
+
 		net.Start("UVRace_StopEndCountdown")
 		net.SendToServer()
 
@@ -1339,11 +1414,15 @@ else -- CLIENT stuff
 
 		hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
 	end)
+	
+	net.Receive("UVRace_HideRacersList", function()
+		UVRaceStarting = true
+	end)
 
 	net.Receive( "uvrace_start", function()
 		local time = net.ReadInt( 11 )
 		local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
-		
+
 		local startTable = {}
 		for i = 0, time do
 			startTable[i] = i
@@ -1769,10 +1848,88 @@ else -- CLIENT stuff
 			UV_UI.racing[hudtype].main( my_vehicle, my_array, string_array )
 		end
 	end)
+	
+	local UVRace_RacerList = {}
 
-	net.Receive("UVRace_TrackName", function()
-		UVRace_CurrentTrackName = net.ReadString()
-		UVRace_CurrentTrackAuthor = net.ReadString()
+	net.Receive("UVRace_RacersList", function()
+		local list = net.ReadTable() or {}
+		UVRace_RacerList = list
+
+		local seen, dedup = {}, {}
+		for _, r in ipairs(UVRace_RacerList) do
+			if r.id and not seen[r.id] then
+				seen[r.id] = true
+				dedup[#dedup+1] = r
+			end
+		end
+		UVRace_RacerList = dedup
+	end)
+
+	net.Receive("UVRace_TrackReady", function()
+		local name = net.ReadString()
+		local author = net.ReadString()
+		local hostedby = net.ReadString()
+
+		if name == "?" and author == "?" then
+			UVRace_CurrentTrackName = nil
+			UVRace_CurrentTrackAuthor = nil
+			UVRace_CurrentTrackHost = nil
+		else
+			UVRace_CurrentTrackName = name
+			UVRace_CurrentTrackAuthor = author
+			UVRace_CurrentTrackHost = hostedby
+		end
+	end)
+
+	hook.Add("HUDPaint", "UVRace_DisplayTrackInfo", function()
+		local h, w = ScrH(), ScrW()
+
+		local alpha = 255
+
+		if not UVRace_CurrentTrackName then return end
+		if UVRaceStarting then return end
+		-- if not UVRace_RacerList or #UVRace_RacerList == 0 then return end
+
+		surface.SetDrawColor(0, 0, 0, alpha)
+		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
+		surface.DrawTexturedRect(w - w * 0.3, h * 0.15, w * 0.3, h * (0.05 * 3))
+			
+		draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5", w * 0.99, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+		draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5", w * 0.99, h * 0.225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		
+		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5", w * 0.99, h * 0.275, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+		local x, x2, y = w * 0.75, w * 0.75, h * 0.325
+		local lineHeight = 30
+		
+		if UVRace_RacerList and #UVRace_RacerList > 0 then
+			for _, racer in ipairs(UVRace_RacerList) do
+				local statusstr = "#uv.race.invite.status.invited"
+				local clr = Color(200,200,200, alpha)
+				local racername = racer.name
+				
+				if racer.status == "Host" then 
+					clr = Color(255,255,0, alpha)
+					statusstr = "#uv.race.invite.status.host"
+				elseif racer.status == "Accepted" then 
+					clr = Color(100,255,100, alpha)
+					statusstr = "#uv.race.invite.status.accepted"
+				elseif racer.status == "Declined" or racer.status == "Disqualified" then 
+					clr = Color(255,100,100, alpha)
+					statusstr = "#uv.race.invite.status.declined"
+				end
+
+				if #racername > 30 then -- If too long
+					racername = string.sub(racername, 1, 30 - 3) .. "..."
+				end
+
+				draw.SimpleTextOutlined( " | " .. racername, "UVCarbonFont-Smaller", x2, y, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				draw.SimpleTextOutlined( statusstr, "UVCarbonFont-Smaller", x, y, clr, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+				y = y + lineHeight
+			end
+		end
 	end)
 
 	hook.Add("PostRenderVGUI", "UVRaceCinematicOverlayTop", function()
@@ -1804,11 +1961,13 @@ else -- CLIENT stuff
 		-- table.insert(squareTexts, language.GetPhrase("uv.prerace.details"))
 
 		-- Track name and author
-		table.insert(squareTexts, string.format(
-			language.GetPhrase("uv.prerace.name"),
-			-- UVRace_CurrentTrackName .. " | " .. UVRace_CurrentTrackAuthor
-			UVRace_CurrentTrackName
-		))
+		if UVRace_CurrentTrackName then
+			table.insert(squareTexts, string.format(
+				language.GetPhrase("uv.prerace.name"),
+				-- UVRace_CurrentTrackName .. " | " .. UVRace_CurrentTrackAuthor
+				UVRace_CurrentTrackName
+			))
+		end
 
 		-- Conditionally add "laps"
 		local laps = UVHUDRaceInfo and UVHUDRaceInfo['Info'].Laps
