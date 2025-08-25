@@ -3669,7 +3669,18 @@ else --HUD/Options
 		local audio_file = "sound/"..array.FileName
 		local can_skip = array.CanSkip
 
-		if can_skip and IsValid(uvchatterplaying) and parameters ~= 2 then
+		-- if can_skip and IsValid(uvchatterplaying) and parameters ~= 2 then
+		-- 	uvchatterplaying:Stop()
+		-- end
+
+		if not lastCanSkip and IsValid(uvchatterplaying) then
+			local state = uvchatterplaying:GetState()
+			if state ~= GMOD_CHANNEL_STOPPED and state ~= GMOD_CHANNEL_PAUSED then return end
+		end
+
+		lastCanSkip = can_skip
+
+		if IsValid(uvchatterplaying) then
 			uvchatterplaying:Stop()
 		end
 
