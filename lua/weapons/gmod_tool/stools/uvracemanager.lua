@@ -83,16 +83,16 @@ if SERVER then
 					local driver = v:GetDriver()
 					local is_player = IsValid(driver) and driver:IsPlayer()
 					
-					-- if is_player and driver == ply then
-						-- UVRaceAddParticipant(v, nil, true)
-					-- end
-					
-					local id = v:EntIndex()
-					if (is_player and driver == ply) or v.RacerVehicle then
-						if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
-							UVRaceAddParticipant(v, driver, true)
-						end
+					if is_player and driver == ply then
+						UVRaceAddParticipant(v, nil, true)
 					end
+					
+					-- local id = v:EntIndex()
+					-- if (is_player and driver == ply) or v.RacerVehicle then
+						-- if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
+							-- UVRaceAddParticipant(v, driver, true)
+						-- end
+					-- end
 				end
 			end
 		end
@@ -163,14 +163,14 @@ if SERVER then
 						
 						local name = (is_player and driver:Nick()) or (v.racer or "Racer " .. v:EntIndex())
 
-						-- UVSetInviteByVehicle(v, name, "Invited")
+						UVSetInviteByVehicle(v, name, "Invited")
 
 						if is_player then
 							net.Start("uvrace_invite")
 							net.Send(driver)
 						end
 						
-						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10, 1, function()
+						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10.25, 1, function()
 							-- if UVRaceInvites[v:EntIndex()] and UVRaceInvites[v:EntIndex()].status == "Invited" then
 								-- UVRaceInvites[v:EntIndex()].status = "Declined"
 								-- UVBroadcastRacerList()

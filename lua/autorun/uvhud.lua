@@ -2610,7 +2610,7 @@ local function carbon_racing_main( ... )
         local mode = entry[3]
         local diff = entry[4]
         
-        local racercount = i * w * 0.0135
+        local racercount = i * (h * 0.025)
         
         local status_text = "-----"
         
@@ -4208,7 +4208,7 @@ local function mw_racing_main( ... )
         local mode = entry[3]
         local diff = entry[4]
         -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
-        local racercount = i * w * 0.01407
+        local racercount = i * (h * 0.025)
         -- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
         
         local Strings = {

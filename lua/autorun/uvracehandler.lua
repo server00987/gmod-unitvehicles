@@ -1111,54 +1111,167 @@ else -- CLIENT stuff
 		local w = ScrW()
 		local h = ScrH()
 
-		local faded_black = Color(0, 0, 0, 225)
+		-- local faded_black = Color(0, 0, 0, 225)
 
-		local ResultPanel = vgui.Create("DFrame")
 		local Yes = vgui.Create("DButton")
 		local No = vgui.Create("DButton")
 
-		ResultPanel:Add(Yes)
-		ResultPanel:Add(No)
-		ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.1777778))
-		ResultPanel:SetBackgroundBlur(true)
-		ResultPanel:ShowCloseButton(false)
-		ResultPanel:Center()
-		ResultPanel:SetTitle("")
-		ResultPanel:SetDraggable(false)
-		ResultPanel:MakePopup()
+		InvitePanel = vgui.Create("DPanel", vgui.GetWorldPanel())
+		InvitePanel:Add(Yes)
+		InvitePanel:Add(No)
+		InvitePanel:SetSize(w, h)
+        InvitePanel:SetMouseInputEnabled(true)
+        InvitePanel:SetKeyboardInputEnabled(false)
+        InvitePanel:SetZPos(32767)
 
-		Yes:SetText("#openurl.yes")
-		Yes:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
-		Yes:SetPos(ResultPanel:GetWide() / 8, ResultPanel:GetTall() - 22 - Yes:GetTall())
-		No:SetText("#openurl.nope")
-		No:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
-		No:SetPos(ResultPanel:GetWide() * 7 / 8 - No:GetWide(), ResultPanel:GetTall() - 22 - No:GetTall())
+		Yes:SetText("")
+		Yes:SetPos(w*0.3, h*0.575)
+		Yes:SetSize(w*0.4, h*0.07)
+        Yes.Paint = function() end
+		
+		No:SetText("")
+		No:SetPos(w*0.3, h*0.65)
+		No:SetSize(w*0.4, h*0.07)
+        No.Paint = function() end
 
-		ResultPanel.Paint = function(self, w, h)
-			draw.RoundedBox(2, 0, 0, w, h, faded_black)
-			draw.SimpleText("#uv.race.invite", "UVFont", 500, 5, Color(30, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.SimpleText("#uv.race.invite.desc", "UVFont5", 500, 60, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
+		surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
+
+        local targetY = 0
+        local overshootY = h * 0.1  -- drops 10% below target before bouncing back
+        local startY = -h           -- start fully above the screen
+        
+        InvitePanel:SetPos(0, startY)
+        
+        local animTime = 0.33
+        local bounceTime = 0.1
+        local startTime = CurTime()
+        
+        hook.Add("Think", "InvitePanelEntranceAnim", function()
+            local elapsed = CurTime() - startTime
+            
+            if elapsed < animTime then
+                if elapsed < animTime - bounceTime then
+                    local frac = elapsed / (animTime - bounceTime)
+                    local y = Lerp(frac, startY, overshootY)
+                    InvitePanel:SetPos(0, y)
+                else
+                    local frac = (elapsed - (animTime - bounceTime)) / bounceTime
+                    local y = Lerp(frac, overshootY, targetY)
+                    InvitePanel:SetPos(0, y)
+                end
+            else
+                InvitePanel:SetPos(0, targetY)
+                hook.Remove("Think", "InvitePanelEntranceAnim")
+            end
+        end)
+        
+        local function AnimateAndRemovePanel(panel)
+            if not IsValid(panel) then return end
+            
+            local startY = panel:GetY()
+            local endY = ScrH()  -- off-screen below
+            local animTime = 0.33
+            local startTime = CurTime()
+            
+            -- Play sounds ONCE at start
+            -- surface.PlaySound("uvui/carbon/openmenu.wav")
+            -- surface.PlaySound("uvui/carbon/exitmenu.wav")
+            
+            -- Disable interactivity
+            panel:SetMouseInputEnabled(false)
+            gui.EnableScreenClicker(false)
+			Yes:SetEnabled(false)
+			No:SetEnabled(false)
+            
+            hook.Add("Think", "ResultPanelExitAnim", function()
+                if not IsValid(panel) then
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                    return
+                end
+                
+                local elapsed = CurTime() - startTime
+                if elapsed < animTime then
+                    local frac = elapsed / animTime
+                    local y = Lerp(frac, startY, endY)
+                    panel:SetPos(0, y)
+                else
+                    panel:Remove()
+                    hook.Remove("Think", "ResultPanelExitAnim")
+                end
+            end)
+        end
+        
+        gui.EnableScreenClicker(true)
+
+        local timetotal = 10
+        local timestart = CurTime()
+        local exitStarted = false -- prevent repeated trigger
+
+		InvitePanel.Paint = function(self, w, h)
+			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+			local lang = language.GetPhrase
+
+            -- Upper Background and Icons
+            surface.SetDrawColor( 0, 0, 0, 200 )
+            surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.05)
+
+            -- DrawIcon( UVMaterials['HIDECAR'], w*0.275, h*0.22, 0.11, Color(255, 255, 255) ) -- Left Icon
+            -- DrawIcon( UVMaterials['HIDECAR'], w*0.725, h*0.22, 0.11, Color(255, 255, 255) ) -- Right Icon
+            draw.DrawText( "#uv.race.invite", "UVFont5", w * 0.5, h * 0.3, Color(255, 255, 0), TEXT_ALIGN_CENTER)
+			
+			-- Main Background and Text
+			surface.SetDrawColor( 0, 0, 0, 235 )
+            surface.DrawRect( w*0.25, h*0.375, w*0.5, h*0.4)
+
+			draw.SimpleTextOutlined( "#uv.race.invite.desc", "UVFont5", w * 0.5, h * 0.38, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( "#uv.race.invite.desc2", "UVFont5", w * 0.5, h * 0.42, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			
+			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), "UVFont5UI", w * 0.5, h * 0.5, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5UI", w * 0.5, h * 0.535, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+
+            surface.SetDrawColor( 255, 255, 255 )
+			surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
+			surface.DrawTexturedRect( w*0.3, h*0.575, w * 0.4, h*0.07)
+			surface.DrawTexturedRect( w*0.3, h*0.65, w * 0.4, h*0.07)
+			
+			draw.SimpleTextOutlined( "#uv.race.invite.accept", "UVFont5", w * 0.5, h * 0.585, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+
+			draw.SimpleTextOutlined( "#uv.race.invite.decline", "UVFont5", w * 0.5, h * 0.66, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+
+            -- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.invite.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.78, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.autodecline"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.715, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+
+            if not exitStarted and timeremaining < 1 then
+				net.Start("uvrace_invite")
+				net.WriteBool(false)
+				net.SendToServer()
+				
+                exitStarted = true
+                AnimateAndRemovePanel(InvitePanel)
+            end
 		end
 
 		function Yes:DoClick()
-			ResultPanel:Close()
-			timer.Remove("RaceInvite")
+            AnimateAndRemovePanel(InvitePanel)
+			-- timer.Remove("RaceInvite")
+			-- surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
 
 			net.Start("uvrace_invite")
 			net.WriteBool(true)
 			net.SendToServer()
 		end
-
+		
 		function No:DoClick()
-			ResultPanel:Close()
-			timer.Remove("RaceInvite")
+            AnimateAndRemovePanel(InvitePanel)
+			-- timer.Remove("RaceInvite")
 
 			net.Start("uvrace_invite")
 			net.WriteBool(false)
 			net.SendToServer()
 		end
 
-		timer.Create( "RaceInvite", 10, 1, function() ResultPanel:Close() end )
+		-- timer.Create( "RaceInvite", 10, 1, function() ResultPanel:Close() end )
 	end)
 
 	local UVRaceStarting = false
@@ -1897,23 +2010,47 @@ else -- CLIENT stuff
 		local function ShouldShowRacerHUD()
 			if not UVRace_RacerList or not istable(UVRace_RacerList) then return false end
 
-			local localId = LocalPlayer():EntIndex()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return false end
 
-			-- Always allow host to see it
-			if UVRace_CurrentTrackHost and IsValid(LocalPlayer()) and LocalPlayer():Nick() == UVRace_CurrentTrackHost then
+			-- Host always sees it
+			if UVRace_CurrentTrackHost and ply:Nick() == UVRace_CurrentTrackHost then
 				return true
 			end
 
-			-- Check if local player is invited or accepted
+			-- Try to resolve the player's "main" vehicle on the client
+			local car
+			do
+				local veh = ply:GetVehicle()
+				if IsValid(veh) then
+					-- If they're in a seat, prefer the parent as the main vehicle
+					local parent = veh:GetParent()
+					car = IsValid(parent) and parent or veh
+				end
+			end
+
+			-- Primary check: compare vehicle EntIndex against the list's id (which is a vehicle EntIndex)
+			if IsValid(car) then
+				local carId = car:EntIndex()
+				for _, r in ipairs(UVRace_RacerList) do
+					-- if r.id == carId and (r.status == "Invited" or r.status == "Accepted") then
+					if r.id == carId and r.status == "Accepted" then
+						return true
+					end
+				end
+			end
+
+			-- Fallback: compare by player name if not currently in vehicle
 			for _, r in ipairs(UVRace_RacerList) do
-				if r.id == localId and (r.status == "Invited" or r.status == "Accepted") then
+				-- if r.name == ply:Nick() and (r.status == "Invited" or r.status == "Accepted") then
+				if r.name == ply:Nick() and r.status == "Accepted" then
 					return true
 				end
 			end
 
 			return false
 		end
-		
+
 		if not ShouldShowRacerHUD() then return end
 
 		local h, w = ScrH(), ScrW()
