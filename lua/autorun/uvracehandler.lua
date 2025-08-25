@@ -90,7 +90,7 @@ if SERVER then
 
 		for id, data in pairs(UVRaceInvites) do
 			if IsValid(data.ent) and not seen[data.ent:EntIndex()] then
-				table.insert(list, { id = data.ent:EntIndex(), name = data.name, status = data.status })
+				table.insert(list, { id = data.ent:EntIndex(), name = data.name, status = data.status, isAI = data.isAI })
 				seen[data.ent:EntIndex()] = true
 			end
 		end
@@ -100,18 +100,20 @@ if SERVER then
 		net.Broadcast()
 	end
 
-	local function UVSetInviteByVehicle(vehicle, name, status)
+	function UVSetInviteByVehicle(vehicle, name, status)
 		if not IsValid(vehicle) then return end
 		local id = vehicle:EntIndex()
 		local entry = UVRaceInvites[id]
+		local isAI = not (IsValid(vehicle:GetDriver()) and vehicle:GetDriver():IsPlayer())
 
 		if not entry then
-			UVRaceInvites[id] = { ent = vehicle, name = name or ("Racer "..id), status = status }
+			UVRaceInvites[id] = { ent = vehicle, name = name or ("Racer "..id), status = status, isAI = isAI }
 		else
 			-- Only update the status, never duplicate
 			entry.status = status
 			entry.name = name or entry.name
 			entry.ent = vehicle
+			entry.isAI = isAI
 		end
 
 		UVBroadcastRacerList()
@@ -1881,14 +1883,34 @@ else -- CLIENT stuff
 		end
 	end)
 
+	local function ShouldShowRacerList()
+		if not UVRace_RacerList then return false end
+
+		local myName = LocalPlayer():Nick()
+
+		-- Host always sees it
+		if UVRace_CurrentTrackHost and myName == UVRace_CurrentTrackHost then
+			return true
+		end
+
+		-- Otherwise, check if I’m in the list with Invited/Accepted
+		for _, r in ipairs(UVRace_RacerList) do
+			if r.name == myName and (r.status == "Invited" or r.status == "Accepted") then
+				return true
+			end
+		end
+
+		return false
+	end
+
 	hook.Add("HUDPaint", "UVRace_DisplayTrackInfo", function()
+		if not UVRace_CurrentTrackName then return end -- No track
+		if not UVRace_RacerList then return false end -- No invite, no accepted invite, not host
+		if UVRaceStarting then return end -- Race is starting; hide it
+
 		local h, w = ScrH(), ScrW()
 
 		local alpha = 255
-
-		if not UVRace_CurrentTrackName then return end
-		if UVRaceStarting then return end
-		-- if not UVRace_RacerList or #UVRace_RacerList == 0 then return end
 
 		surface.SetDrawColor(0, 0, 0, alpha)
 		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
@@ -1922,6 +1944,10 @@ else -- CLIENT stuff
 
 				if #racername > 30 then -- If too long
 					racername = string.sub(racername, 1, 30 - 3) .. "..."
+				end
+
+				if racer.isAI then
+					racername = "AI | " .. racername
 				end
 
 				draw.SimpleTextOutlined( " | " .. racername, "UVCarbonFont-Smaller", x2, y, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
