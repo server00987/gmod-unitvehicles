@@ -1751,6 +1751,7 @@ UV_UI.racing.carbon.events = {
 
 				draw.SimpleTextOutlined( tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 				draw.SimpleTextOutlined( name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+				-- draw.SimpleTextOutlined( info["VehicleName"], "UVCarbonLeaderboardFont", w * 0.52, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 				draw.SimpleTextOutlined( UV_FormatRaceEndTime(totalTime), "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
             end
             

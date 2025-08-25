@@ -19,7 +19,7 @@ if SERVER then
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
 
 	UVRaceTable = {}
-	UVRaceCurrentParticipants = UVRaceCurrentParticipants or {}
+	UVRaceCurrentParticipants = {}
 	UVRaceStartTime = CurTime()
 	
 	UVRaceInvites = UVRaceInvites or {}
@@ -261,6 +261,9 @@ if SERVER then
 		local starttimer = 8
 		for i, vehicle in pairs( UVRaceCurrentParticipants ) do
 			local driver = vehicle:GetDriver()
+			local vehiclename = vehicle.PrintName 
+			or vehicle.VehicleName 
+			or vehicle:GetClass()
 
 			UVRaceTable['Participants'][vehicle] = {
 				['Lap'] = 1,
@@ -273,7 +276,9 @@ if SERVER then
 				['Finished'] = false,
 				['Disqualified'] = false,
 				['Busted'] = false,
-				['Checkpoints'] = {}
+				['Checkpoints'] = {},
+				['Vehicle'] = vehicle,
+				['VehicleName'] = vehiclename,
 			}
 
 			if IsValid(driver) and driver:IsPlayer() then
@@ -1883,30 +1888,33 @@ else -- CLIENT stuff
 		end
 	end)
 
-	local function ShouldShowRacerList()
-		if not UVRace_RacerList then return false end
-
-		local myName = LocalPlayer():Nick()
-
-		-- Host always sees it
-		if UVRace_CurrentTrackHost and myName == UVRace_CurrentTrackHost then
-			return true
-		end
-
-		-- Otherwise, check if I’m in the list with Invited/Accepted
-		for _, r in ipairs(UVRace_RacerList) do
-			if r.name == myName and (r.status == "Invited" or r.status == "Accepted") then
-				return true
-			end
-		end
-
-		return false
-	end
-
 	hook.Add("HUDPaint", "UVRace_DisplayTrackInfo", function()
+		if not IsValid(LocalPlayer()) then return end -- Am I invalid? Tough shit
 		if not UVRace_CurrentTrackName then return end -- No track
 		if not UVRace_RacerList then return false end -- No invite, no accepted invite, not host
 		if UVRaceStarting then return end -- Race is starting; hide it
+
+		local function ShouldShowRacerHUD()
+			if not UVRace_RacerList or not istable(UVRace_RacerList) then return false end
+
+			local localId = LocalPlayer():EntIndex()
+
+			-- Always allow host to see it
+			if UVRace_CurrentTrackHost and IsValid(LocalPlayer()) and LocalPlayer():Nick() == UVRace_CurrentTrackHost then
+				return true
+			end
+
+			-- Check if local player is invited or accepted
+			for _, r in ipairs(UVRace_RacerList) do
+				if r.id == localId and (r.status == "Invited" or r.status == "Accepted") then
+					return true
+				end
+			end
+
+			return false
+		end
+		
+		if not ShouldShowRacerHUD() then return end
 
 		local h, w = ScrH(), ScrW()
 

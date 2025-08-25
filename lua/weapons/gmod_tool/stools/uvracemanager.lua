@@ -88,8 +88,10 @@ if SERVER then
 					-- end
 					
 					local id = v:EntIndex()
-					if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
-						UVRaceAddParticipant(v, driver, true)
+					if (is_player and driver == ply) or v.RacerVehicle then
+						if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
+							UVRaceAddParticipant(v, driver, true)
+						end
 					end
 				end
 			end
@@ -114,7 +116,7 @@ if SERVER then
 		UVRaceMakeCheckpoints( tonumber( args[1] ) ) -- args[1] is the number of laps
 		
 		net.Start("UVRace_HideRacersList")
-		net.Send(ply)
+		net.Broadcast()
 
 		timer.Simple(2, function()
 			//UVRaceMakeCheckpoints()
@@ -161,7 +163,7 @@ if SERVER then
 						
 						local name = (is_player and driver:Nick()) or (v.racer or "Racer " .. v:EntIndex())
 
-						UVSetInviteByVehicle(v, name, "Invited")
+						-- UVSetInviteByVehicle(v, name, "Invited")
 
 						if is_player then
 							net.Start("uvrace_invite")
@@ -169,10 +171,10 @@ if SERVER then
 						end
 						
 						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10, 1, function()
-							if UVRaceInvites[v:EntIndex()] and UVRaceInvites[v:EntIndex()].status == "Invited" then
-								UVRaceInvites[v:EntIndex()].status = "Declined"
-								UVBroadcastRacerList()
-							end
+							-- if UVRaceInvites[v:EntIndex()] and UVRaceInvites[v:EntIndex()].status == "Invited" then
+								-- UVRaceInvites[v:EntIndex()].status = "Declined"
+								-- UVBroadcastRacerList()
+							-- end
 							-- v.racer = nil
 							v.raceinvited = false
 						end)
