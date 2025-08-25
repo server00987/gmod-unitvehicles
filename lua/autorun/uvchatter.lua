@@ -2688,7 +2688,7 @@ if SERVER then
 	function UVChatterExplosiveBarrelDeployed(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "explosivebarreldeployed")
+			return UVSoundChatter(self, self.voice, "ptexplosivebarreldeployed")
 		end
 		UVDelayChatter()
 		
@@ -2782,7 +2782,7 @@ if SERVER then
 	function UVChatterExplosiveBarrelHit(unit)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(unit, unit.voice, "explosivebarrelhit")
+			return UVSoundChatter(unit, unit.voice, "ptexplosivebarrelhit")
 		end
 		UVDelayChatter()
 		
