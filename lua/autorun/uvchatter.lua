@@ -1810,7 +1810,7 @@ if SERVER then
 	function UVChatterKillswitchStart(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "killswitchstart")
+			return UVSoundChatter(self, self.voice, "ptksstart")
 		end
 		UVDelayChatter()
 		
@@ -1831,7 +1831,7 @@ if SERVER then
 	function UVChatterKillswitchMissed(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "killswitchmissed")
+			return UVSoundChatter(self, self.voice, "ptksmissed")
 		end
 		UVDelayChatter()
 		
@@ -1852,7 +1852,7 @@ if SERVER then
 	function UVChatterKillswitchHit(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "killswitchhit")
+			return UVSoundChatter(self, self.voice, "ptkshit")
 		end
 		UVDelayChatter()
 		
