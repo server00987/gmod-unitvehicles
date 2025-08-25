@@ -1782,7 +1782,7 @@ if SERVER then
 			end
 			local randomno = math.random(1,10)
 			if randomno == 1 then
-				return UVSoundChatter(self, self.voice, "responding", 5)
+				return UVSoundChatter(self, self.voice, "responding")
 			elseif randomno == 2 then
 				return UVSoundChatter(self, self.voice, "responding", 1)
 			else
