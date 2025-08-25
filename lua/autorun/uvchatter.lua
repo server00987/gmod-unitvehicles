@@ -1810,7 +1810,7 @@ if SERVER then
 	function UVChatterKillswitchStart(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "ptksstart")
+			return UVSoundChatter(self, self.voice, "ptkillswitchstart")
 		end
 		UVDelayChatter()
 		
@@ -1831,7 +1831,7 @@ if SERVER then
 	function UVChatterKillswitchMissed(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "ptksmissed")
+			return UVSoundChatter(self, self.voice, "ptkillswitchmissed")
 		end
 		UVDelayChatter()
 		
@@ -1852,7 +1852,7 @@ if SERVER then
 	function UVChatterKillswitchHit(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "ptkshit")
+			return UVSoundChatter(self, self.voice, "ptkillswitchhit")
 		end
 		UVDelayChatter()
 		
@@ -1873,7 +1873,7 @@ if SERVER then
 	function UVChatterSpikeStripDeployed(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "spikestripdeployed")
+			return UVSoundChatter(self, self.voice, "ptspikestripdeployed")
 		end
 		UVDelayChatter()
 		
@@ -2703,7 +2703,7 @@ if SERVER then
 	function UVChatterSpikeStripMiss(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "spikestripmiss")
+			return UVSoundChatter(self, self.voice, "ptspikestripmiss")
 		end
 		UVDelayChatter()
 		
@@ -2755,14 +2755,14 @@ if SERVER then
 				local random_entry = math.random(#airUnits)	
 				local unit = airUnits[random_entry]
 				if not (unit.crashing or unit.disengaging) and airrandomno == 1 then
-					return UVSoundChatter(unit, unit.voice, "spikestriphit")
+					return UVSoundChatter(unit, unit.voice, "ptspikestriphit")
 				end
 			end
 			local randomno = math.random(1,2)
 			if randomno == 1 then
-				return UVSoundChatter(unit, unit.voice, "spikestriphit")
+				return UVSoundChatter(unit, unit.voice, "ptspikestriphit")
 			else
-				return UVSoundChatter(unit, unit.voice, "spikestriphit", 1)
+				return UVSoundChatter(unit, unit.voice, "ptspikestriphit", 1)
 			end
 		end
 		UVDelayChatter()
