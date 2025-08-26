@@ -3694,7 +3694,7 @@ else --HUD/Options
 
 		if lastCanSkip == false and IsValid(uvchatterplaying) then
 			local state = uvchatterplaying:GetState()
-			if state ~= GMOD_CHANNEL_STOPPED and state ~= GMOD_CHANNEL_PAUSED then return end
+			if state ~= GMOD_CHANNEL_STOPPED then print("no pley") return end
 		end
 
 		if not can_skip then print("CANNOT SKIP") end
