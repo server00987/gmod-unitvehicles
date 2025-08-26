@@ -562,22 +562,24 @@ if SERVER then
 		
 		print(self, voice, chattertype, parameters, ...)
 		
-		local function HandleCallSounds()
-			if isDispatch then
+		local function HandleCallSounds(is_dispatch)
+			if is_dispatch or isDispatch then
 				voice = "DISPATCH"
-				print("dispatch talking")
+				unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			end
 
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+
+			print(soundFile)
 			
 			UVRelayToClients(soundFile, parameters, false)
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 		end
 		
 		if parameters == 1 then
-			return HandleCallSounds()
+			return HandleCallSounds(true)
 			
 		elseif parameters == 2 then
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
