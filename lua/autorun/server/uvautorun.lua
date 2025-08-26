@@ -353,7 +353,7 @@ concommand.Add("uv_startpursuit", function(ply)
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
-					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 8)
+					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 1)
 				end
 				
 				RunConsoleCommand("ai_ignoreplayers", "0")
@@ -2447,7 +2447,7 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVSoundChatter(unit, unit.voice, "airarrest", 2)
+					UVSoundChatter(unit, unit.voice, "arrest", 2)
 				else
 					UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
 				end

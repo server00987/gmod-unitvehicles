@@ -1996,7 +1996,17 @@ if SERVER then
 		
 		if self.v.rhino then
 			self.callsign = "Rhino "..self:EntIndex()
-			self.voice = 11
+
+			local selectedVoice = GetConVar("unitvehicle_unit_rhino_voice"):GetString()
+			local splittedText = string.Explode( ",", selectedVoice )
+
+			local ya = {}
+
+			for k, v in pairs( splittedText ) do
+				table.insert( ya, string.Trim( v ) )
+			end
+
+			self.voice = ya[math.random(1, #ya)]
 		end
 		
 		if not self.uvscripted then
