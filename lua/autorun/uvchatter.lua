@@ -910,7 +910,7 @@ if SERVER then
 			-- 	end)
 			-- end)
 			
-			return UVDelayChatter((SoundDuration(emergencyFile) + SoundDuration(breakawayFile) + SoundDuration(locationFile) + SoundDuration(quadrantFile) + math.random(1, 2)))
+			return UVDelayChatter((SoundDuration(emergencyFile or "") + SoundDuration(breakawayFile or "") + SoundDuration(locationFile or "") + SoundDuration(quadrantFile or "") + math.random(1, 2)))
 			
 		elseif parameters == 8 then
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
