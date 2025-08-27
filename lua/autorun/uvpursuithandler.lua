@@ -2164,6 +2164,7 @@ else --HUD/Options
 	RacingMusicPriority = CreateClientConVar("unitvehicle_racingmusicpriority", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits while racing.")
 	RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
 	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
+	ChatterVolume = CreateClientConVar("unitvehicle_chattervolume", 1, true, false, "Unit Vehicles: Determines volume of the Unit Vehicles' radio chatter.")
 	NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
 	SpawnCooldown = CreateClientConVar("unitvehicle_spawncooldown", 30, true, false, "Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
@@ -2236,7 +2237,6 @@ else --HUD/Options
 	UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 1000000, true, false)
 	UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
 	UVPTESFCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.2, true, false)
-
 
 	UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
 	UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 1000000, true, false)
@@ -3708,6 +3708,7 @@ else --HUD/Options
 			if IsValid(source) then
 				uvchatterplaying = source
 				source:Play()
+				source:SetVolume(ChatterVolume:GetFloat())
 			end
 		end)
 	end)
@@ -4014,6 +4015,15 @@ else --HUD/Options
 			volume_theme.OnValueChanged = function( self, value )
 				if UVSoundLoop then
 					UVSoundLoop:SetVolume( value )
+				end
+			end
+
+			local volume_chatter = panel:NumSlider("#uv.settings.music.chatter", "unitvehicle_chattervolume", 0, 5, 1)
+			panel:ControlHelp("#uv.settings.music.chatter.desc")
+
+			volume_chatter.OnValueChanged = function( self, value )
+				if uvchatterplaying then
+					uvchatterplaying:SetVolume( value )
 				end
 			end
 

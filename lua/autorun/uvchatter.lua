@@ -1773,7 +1773,7 @@ if SERVER then
 	function UVChatterReportHeat(self, heat)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timeCheck = 5
-			local randomChance = 3
+			local randomChance = math.random(1,3)
 			
 			if randomChance == 1 then
 				local airRandomChance = math.random(1,2)
