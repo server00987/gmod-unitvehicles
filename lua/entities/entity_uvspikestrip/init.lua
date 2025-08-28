@@ -399,7 +399,7 @@ function ENT:UVSpikeStripHit()
 		local random_entry = math.random(#unitss)	
 		local unit = unitss[random_entry]
 		if GetConVar("unitvehicle_chatter"):GetBool() and UVTargeting then
-			UVChatterAirSpikeStripHit(unit)
+			UVChatterSpikeStripHit(unit)
 		end
 	elseif #ents.FindByClass("npc_uv*") > 0 then
 		local units = ents.FindByClass("npc_uv*")

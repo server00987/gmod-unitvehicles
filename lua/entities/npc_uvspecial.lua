@@ -1070,6 +1070,7 @@ if SERVER then
 					self.aggressive = nil
 					if (UVBounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt() or self.e.uvraceparticipant) and not UVTargeting and not UVEnemyBusted then
 						timer.Simple(0.1, function()
+							if UVTargeting then return end
 							UVTargeting = true
 							if Chatter:GetBool() and IsValid(self) then
 								UVChatterPursuitStartWanted(self)
@@ -1285,7 +1286,7 @@ if SERVER then
 					if not self.v.rhinohit then
 						self.v.rhinohit = true
 						if Chatter:GetBool() and UVTargeting and not self.v.roadblocking and not self.v.disperse then
-							UVSoundChatter(UVGetDriver(self.e), self.voice, "rhinomiss", 1)
+							UVSoundChatter(self, self.voice, "rhinomiss", 1)
 						end
 					end
 				end
@@ -1829,6 +1830,7 @@ if SERVER then
 		self:SetModel(self.Modelname)
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
+		self.type = "special"
 		-- self.callsign = "uv.unit.special"..self:EntIndex()
 		self.callsign = "uv.unit.special"
 		self.moving = CurTime()
@@ -1839,7 +1841,18 @@ if SERVER then
 		self.stuck = nil
 		self.spawned = true
 		self.toofar = true
-		self.voice = math.random(9,10)
+
+		local selectedVoice = GetConVar("unitvehicle_unit_special_voice"):GetString()
+		local splittedText = string.Explode( ",", selectedVoice )
+
+		local ya = {}
+
+		for k, v in pairs( splittedText ) do
+			table.insert( ya, string.Trim( v ) )
+		end
+
+		self.voice = ya[math.random(1, #ya)]
+
 		UVCalm = nil
 		UVEnemyBusted = nil
 		UVEnemyEscaped = nil
@@ -1909,6 +1922,7 @@ if SERVER then
 					v.UVSpecial = self
 					v.UnitVehicle = self
 					v:SetEngineState(2)
+					v.inputThrottleModifierMode = 2
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
@@ -1955,6 +1969,7 @@ if SERVER then
 							v.UVSpecial = self
 							v.UnitVehicle = self
 							v:TurnOn()
+							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
@@ -1983,7 +1998,17 @@ if SERVER then
 		
 		if self.v.rhino then
 			self.callsign = "Rhino "..self:EntIndex()
-			self.voice = 11
+
+			local selectedVoice = GetConVar("unitvehicle_unit_rhino_voice"):GetString()
+			local splittedText = string.Explode( ",", selectedVoice )
+
+			local ya = {}
+
+			for k, v in pairs( splittedText ) do
+				table.insert( ya, string.Trim( v ) )
+			end
+
+			self.voice = ya[math.random(1, #ya)]
 		end
 		
 		if not self.uvscripted then

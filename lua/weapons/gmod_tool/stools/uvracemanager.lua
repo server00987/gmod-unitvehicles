@@ -142,8 +142,8 @@ if SERVER then
 		
 		for _, v in ents.Iterator() do
 			if not table.HasValue(UVRaceCurrentParticipants, v) then
-				if (v.IsGlideVehicle or v.IsSimfphyscar or v:GetClass() == "prop_vehicle_jeep") and not v.wrecked and not v.UnitVehicle and not v.uvbusted then
-					
+				if v:IsVehicle() and (v.IsGlideVehicle or v.IsSimfphyscar or v:GetClass() == "prop_vehicle_jeep") and not v.wrecked and not v.UnitVehicle and not v.uvbusted then
+
 					local driver = v:GetDriver()
 					local is_player = IsValid(driver) and driver:IsPlayer()
 					

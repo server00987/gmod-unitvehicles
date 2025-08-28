@@ -1074,6 +1074,7 @@ if SERVER then
 					self.aggressive = nil
 					if (UVBounty >= GetConVar( 'unitvehicle_unit_heatminimumbounty1' ):GetInt() or self.e.uvraceparticipant) and not UVTargeting and not UVEnemyBusted then
 						timer.Simple(0.1, function()
+							if UVTargeting then return end
 							UVTargeting = true
 							if Chatter:GetBool() and IsValid(self) then
 								UVChatterPursuitStartWanted(self)
@@ -1765,6 +1766,7 @@ if SERVER then
 		self:SetHealth(-1)
 		self.bountytimer = CurTime()
 		-- self.callsign = "uv.unit.pursuit"..self:EntIndex()
+		self.type = "pursuit"
 		self.callsign = "uv.unit.pursuit"
 		self.moving = CurTime()
 		self.deploying = CurTime()
@@ -1774,7 +1776,18 @@ if SERVER then
 		self.stuck = nil
 		self.spawned = true
 		self.toofar = true
-		self.voice = math.random(13,18)
+
+		local selectedVoice = GetConVar("unitvehicle_unit_pursuit_voice"):GetString()
+		local splittedText = string.Explode( ",", selectedVoice )
+
+		local ya = {}
+
+		for k, v in pairs( splittedText ) do
+			table.insert( ya, string.Trim( v ) )
+		end
+
+		self.voice = ya[math.random(1, #ya)]
+		
 		UVCalm = nil
 		UVEnemyBusted = nil
 		UVEnemyEscaped = nil
@@ -1844,6 +1857,7 @@ if SERVER then
 					v.UVPursuit = self
 					v.UnitVehicle = self
 					v:SetEngineState(2)
+					v.inputThrottleModifierMode = 2
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
@@ -1890,6 +1904,7 @@ if SERVER then
 							v.UVPursuit = self
 							v.UnitVehicle = self
 							v:TurnOn()
+							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end

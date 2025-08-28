@@ -244,6 +244,8 @@ function UVSoundHeat(heatlevel)
 	end
 
 	if UVHeatLevelIncrease then
+		UVHeatLevelIncrease = false
+		UVHeatPlayTransition = true
 		UVHeatPlayIntro = true
 	end
 
@@ -252,7 +254,7 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayMusic = true
 
 		--local introArray = (PursuitFilePathsTable[theme].intro and PursuitFilePathsTable[theme].intro[heatlevel]) or {}
-		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["1"]))
+		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["default"]))
 
 		if introArray and #introArray > 0 then
 			local introTrack = introArray[math.random(1, #introArray)]
@@ -272,7 +274,7 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayTransition = false
 
 		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
-		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["1"]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
 			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
@@ -295,7 +297,7 @@ function UVSoundHeat(heatlevel)
 		-- end
 
 		--local heatArray = (PursuitFilePathsTable[theme].heat and PursuitFilePathsTable[theme].heat[heatlevel]) or {}
-		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["1"]) or {}
+		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["default"]) or {}
 
 		if heatArray and #heatArray > 0 then
 			local heatTrack = heatArray[math.random(1, #heatArray)]
@@ -354,7 +356,7 @@ function UVSoundBusting(heatlevel)
 	-- end
 	
 	--local bustingArray = (PursuitFilePathsTable[theme].busting and PursuitFilePathsTable[theme].busting[heatlevel]) or {}
-	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["1"]) or {}
+	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["default"]) or {}
 
 	if bustingArray and #bustingArray > 0 then
 		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
@@ -423,7 +425,7 @@ function UVSoundCooldown(heatlevel)
 	-- 	UVSoundHeat( UVHeatLevel )
 	-- 	return
 	-- end
-	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["1"])
+	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["default"])
 	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
 
 	if cooldownArray and #cooldownArray > 0 then
@@ -490,7 +492,7 @@ function UVSoundBusted(heatlevel)
 	-- 	return
 	-- end
 
-	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["1"]) or {}
+	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["default"]) or {}
 
 	if bustedArray and #bustedArray > 0 then
 		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
@@ -502,7 +504,7 @@ function UVSoundBusted(heatlevel)
 			return
 		end
 	else
-		UVSoundHeat( UVHeatLevel )
+		--UVSoundHeat( UVHeatLevel )
 		return
 	end
 
@@ -555,7 +557,7 @@ function UVSoundEscaped(heatlevel)
 	-- 	return
 	-- end
 
-	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["1"]) or {}
+	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["default"]) or {}
 
 	if escapedArray and #escapedArray > 0 then
 		local escapedTrack = escapedArray[math.random(1, #escapedArray)]
@@ -865,6 +867,18 @@ if SERVER then
 	UVUBountyCommander = CreateConVar("unitvehicle_unit_bountycommander", 100000, {FCVAR_ARCHIVE})
 	UVUBountyRhino = CreateConVar("unitvehicle_unit_bountyrhino", 50000, {FCVAR_ARCHIVE})
 
+	--UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
+	
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
+		local lowercaseUnit = string.lower( v )
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", "", {FCVAR_ARCHIVE})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "", {FCVAR_ARCHIVE})
+	end
+
+	for _, v in pairs( {'Misc', 'Dispatch'} ) do
+		local lowercaseType = string.lower( v )
+		CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE})
+	end
 
 	for i = 1, MAX_HEAT_LEVEL do
 		local prevIterator = i - 1
@@ -1128,7 +1142,7 @@ if SERVER then
 
 		local botimeout = 10
 		if UVBountyTimerProgress >= botimeout then
-			UVBounty = UVBounty+uvBountyTime
+			UVBounty = UVBounty+UVBountyTime
 			UVBountyTimer = CurTime()
 			if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
 				UVAutoLoadPursuitBreaker()
@@ -1710,7 +1724,7 @@ if SERVER then
 						local random_entry = math.random(#airUnits)	
 						local unit = airUnits[random_entry]
 						if not (unit.crashing or unit.disengaging) then
-							UVChatterAirFoundEnemy(unit)
+							UVChatterFoundEnemy(unit)
 						else
 							ChatterChopperUnavailable()
 						end
@@ -1871,7 +1885,7 @@ if SERVER then
 								local random_entry = math.random(#units)
 								local unit = units[random_entry]
 								if not UVTargeting then return end
-								UVChatterHeatTwo(unit)
+								UVChatterReportHeat(unit, nextHeat)
 							end
 
 							if UVTargeting then
@@ -2152,6 +2166,7 @@ else --HUD/Options
 	RacingMusicPriority = CreateClientConVar("unitvehicle_racingmusicpriority", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits while racing.")
 	RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
 	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
+	ChatterVolume = CreateClientConVar("unitvehicle_chattervolume", 1, true, false, "Unit Vehicles: Determines volume of the Unit Vehicles' radio chatter.")
 	NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
 	BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
 	SpawnCooldown = CreateClientConVar("unitvehicle_spawncooldown", 30, true, false, "Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
@@ -2224,7 +2239,6 @@ else --HUD/Options
 	UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 1000000, true, false)
 	UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
 	UVPTESFCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.2, true, false)
-
 
 	UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
 	UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 1000000, true, false)
@@ -2370,26 +2384,26 @@ else --HUD/Options
 		--EntityQueue[entIndex] = nil
 	end
 
-	net.Receive('UVGetNewKeybind', function()
-		--if IsSettingKeybind then return end
-		local slot = net.ReadInt(16)
-		local key = net.ReadInt(16)
+	-- net.Receive('UVGetNewKeybind', function()
+	-- 	--if IsSettingKeybind then return end
+	-- 	local slot = net.ReadInt(16)
+	-- 	local key = net.ReadInt(16)
 
-		local entry = KeyBindButtons[slot]
+	-- 	local entry = KeyBindButtons[slot]
 
-		if entry then
-			local convar = GetConVar( entry[1] )
+	-- 	if entry then
+	-- 		local convar = GetConVar( entry[1] )
 
-			if convar then
-				convar:SetInt( key )
-				entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
-			end
-		else
-			warn("Invalid slot key; if you run into this please report it to a developer!")
-		end
+	-- 		if convar then
+	-- 			convar:SetInt( key )
+	-- 			entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
+	-- 		end
+	-- 	else
+	-- 		warn("Invalid slot key; if you run into this please report it to a developer!")
+	-- 	end
 
-		IsSettingKeybind = false
-	end)
+	-- 	IsSettingKeybind = false
+	-- end)
 
 	net.Receive("UV_SendPursuitTech", function()
 		local car = net.ReadEntity()
@@ -2873,9 +2887,9 @@ else --HUD/Options
 			UVStopSound()
 		end
 
-		timer.Simple(0.1, function()
-			UVHeatLevelIncrease = nil
-		end)
+		-- timer.Simple(0.1, function()
+		-- 	UVHeatLevelIncrease = nil
+		-- end)
 	end)
 
 	net.Receive("UVHUDPursuitTech", function()
@@ -3142,6 +3156,7 @@ else --HUD/Options
 			end
 		else
 			UVHeatPlayIntro = true 
+			UVHeatLevelIncrease = false
 			-- UVHeatPlayTransition = false 
 			-- UVHeatPlayMusic = false
 		end
@@ -3650,14 +3665,38 @@ else --HUD/Options
 			end
 		end)
 	end)
+	
+	-- net.Receive('UV_Chatter', function()
+	-- 	local array = net.ReadTable()
+		
+	-- 	local audio_file = "sound/"..array.FileName
+	-- 	local can_skip = array.CanSkip
+		
+	-- 	if can_skip and IsValid(uvchatterplaying) and parameters != 2 then
+	-- 		uvchatterplaying:Stop()
+	-- 	end
+		
+	-- 	sound.PlayFile(audio_file, "", function(source, err, errname)
+	-- 		if IsValid(source) then
+	-- 			uvchatterplaying = source
+	-- 			source:Play()
+	-- 		end
+	-- 	end)
+	-- end)
 
 	net.Receive('UV_Chatter', function()
-		local array = net.ReadTable()
+		local audio_file = "sound/"..net.ReadString()
+		local can_skip = net.ReadBool()
 
-		local audio_file = "sound/"..array.FileName
-		local can_skip = array.CanSkip
+		if lastCanSkip == false and IsValid(uvchatterplaying) then
+			local state = uvchatterplaying:GetState()
+			if state ~= GMOD_CHANNEL_STOPPED then print("no pley") return end
+		end
 
-		if can_skip and IsValid(uvchatterplaying) and parameters ~= 2 then
+		if not can_skip then print("CANNOT SKIP") end
+		lastCanSkip = can_skip
+
+		if IsValid(uvchatterplaying) then
 			uvchatterplaying:Stop()
 		end
 
@@ -3665,6 +3704,7 @@ else --HUD/Options
 			if IsValid(source) then
 				uvchatterplaying = source
 				source:Play()
+				source:SetVolume(ChatterVolume:GetFloat())
 			end
 		end)
 	end)
@@ -3971,6 +4011,15 @@ else --HUD/Options
 			volume_theme.OnValueChanged = function( self, value )
 				if UVSoundLoop then
 					UVSoundLoop:SetVolume( value )
+				end
+			end
+
+			local volume_chatter = panel:NumSlider("#uv.settings.music.chatter", "unitvehicle_chattervolume", 0, 5, 1)
+			panel:ControlHelp("#uv.settings.music.chatter.desc")
+
+			volume_chatter.OnValueChanged = function( self, value )
+				if uvchatterplaying then
+					uvchatterplaying:SetVolume( value )
 				end
 			end
 

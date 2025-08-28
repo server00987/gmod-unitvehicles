@@ -245,7 +245,6 @@ NETWORK_STRINGS = {
 
 if SERVER then
 	for _, v in pairs( NETWORK_STRINGS ) do
-		print('Adding', v)
 		util.AddNetworkString( v )
 	end
 end
@@ -355,7 +354,7 @@ concommand.Add("uv_startpursuit", function(ply)
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
-					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 8)
+					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 1)
 				end
 				
 				RunConsoleCommand("ai_ignoreplayers", "0")
@@ -501,8 +500,8 @@ function ApplyHeatSettings(heatLevel)
 	heatLevel = math.Clamp(heatLevel or 1, 1, MaxHeatLevel:GetInt())
 	
 	UVMaxUnits = GetConVar("unitvehicle_unit_maxunits"..heatLevel):GetInt()
-	uvBountyMultiplier = heatLevel
-	uvBountyTime = GetConVar("unitvehicle_unit_bountytime"..heatLevel):GetInt()
+	UVBountyMultiplier = heatLevel
+	UVBountyTime = GetConVar("unitvehicle_unit_bountytime"..heatLevel):GetInt()
 	UVCooldownTimer = GetConVar("unitvehicle_unit_cooldowntimer"..heatLevel):GetInt()
 	UVBackupTimerMax = GetConVar("unitvehicle_unit_backuptimer"..heatLevel):GetInt()
 	
@@ -2030,7 +2029,7 @@ function UVBustEnemy(self, enemy)
 				if not self.UVAir then
 					timeacknowledge = UVChatterArrest(self) or 5
 				else
-					timeacknowledge = UVChatterAirArrest(self) or 5
+					timeacknowledge = UVChatterArrest(self) or 5
 				end
 			end
 			if next(UVPlayerUnitTablePlayers) ~= nil then
@@ -2126,7 +2125,7 @@ function UVBustEnemy(self, enemy)
 				if not self.UVAir then
 					UVChatterArrestAcknowledge(self)
 				else
-					UVChatterAirArrestAcknowledge(self)
+					UVChatterArrestAcknowledge(self)
 				end
 			end
 		end)
@@ -2413,7 +2412,7 @@ function UVCheckIfBeingBusted(enemy)
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
 					if unit:GetTarget() == enemy then
-						UVChatterAirBusting(unit)
+						UVChatterBusting(unit)
 					else
 						UVChatterBusting(closestunit)
 					end
@@ -2449,7 +2448,7 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVSoundChatter(unit, unit.voice, "airarrest", 2)
+					UVSoundChatter(unit, unit.voice, "arrest", 2)
 				else
 					UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
 				end
@@ -2495,7 +2494,7 @@ function UVCheckIfBeingBusted(enemy)
 						local random_entry = math.random(#airUnits)	
 						local unit = airUnits[random_entry]
 						if unit:GetTarget() == enemy then
-							UVChatterAirBustEvaded(unit)
+							UVChatterBustEvaded(unit)
 						else
 							UVChatterBustEvaded(closestunit)
 						end
@@ -2597,7 +2596,7 @@ function UVCheckIfBeingBusted(enemy)
 		
 		--Stunt roll
 		if not enemy.UVStuntSpin then
-			if enemyAnglesVelo.y > 180 then
+			if enemyAnglesVelo.z > 180 then
 				enemy.UVStuntSpin = true
 				timer.Simple(10, function()
 					enemy.UVStuntSpin = nil
