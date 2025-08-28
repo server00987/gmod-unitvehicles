@@ -20,12 +20,6 @@ TOOL.ClientConVar["override"] = 0
 local conVarsDefault = TOOL:BuildConVarList()
 
 if SERVER then
-	util.AddNetworkString( "UVRoadblocksAdjust" )
-	util.AddNetworkString( "UVRoadblocksRetrieve" )
-	util.AddNetworkString( "UVRoadblocksCreate" )
-	util.AddNetworkString( "UVRoadblocksRefresh" )
-	util.AddNetworkString( "UVRoadblocksLoad" )
-	util.AddNetworkString( "UVRoadblocksLoadAll" )
 
 	net.Receive("UVRoadblocksRetrieve", function( length, ply )
 		ply.UVRBTOOLMemory = net.ReadTable()
@@ -202,7 +196,7 @@ if CLIENT then
 				selecteditem = self.printname
 				if isstring(selecteditem) then
 
-					if !LocalPlayer():IsSuperAdmin() then
+					if not LocalPlayer():IsSuperAdmin() then
 						notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 						surface.PlaySound( "buttons/button10.wav" )
 						return
@@ -233,7 +227,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -307,7 +301,7 @@ if CLIENT then
 		LoadAll:SetText( "#tool.uvroadblock.load.all" )
 		LoadAll:SetSize( 280, 20 )
 		LoadAll.DoClick = function( self )
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -416,7 +410,7 @@ function TOOL:RightClick(trace)
 		ply.UVRBTOOLMemory = {}
 	end
 	
-	if (ent:GetClass() != "prop_physics" and ent:GetClass() != "entity_uvspikestrip" and ent:GetClass() != "entity_uvroadblockcar") then return false end
+	if (ent:GetClass() ~= "prop_physics" and ent:GetClass() ~= "entity_uvspikestrip" and ent:GetClass() ~= "entity_uvroadblockcar") then return false end
 	
 	self:GetRoadblocksData( ent, ply, trace.HitPos )
 
@@ -464,7 +458,7 @@ function TOOL:LeftClick( trace )
 
 	--Spawn a spikestrip
     local prop = ents.Create(proptable[rbselected])
-	if prop:GetClass() != "entity_uvspikestrip" and prop:GetClass() != "entity_uvroadblockcar" then
+	if prop:GetClass() ~= "entity_uvspikestrip" and prop:GetClass() ~= "entity_uvroadblockcar" then
 		prop:SetModel(modeltable[rbselected])
 	end
     prop:SetPos(tr.HitPos+Vector(0,0,1))

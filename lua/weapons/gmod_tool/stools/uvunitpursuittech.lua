@@ -24,13 +24,13 @@ TOOL.ClientConVar["maxammo_killswitch"] = 5
 TOOL.ClientConVar["maxammo_repairkit"] = 5
 
 --cooldowns
-TOOL.ClientConVar["cooldown_esf"] = 5
-TOOL.ClientConVar["cooldown_spikestrip"] = 5
-TOOL.ClientConVar["cooldown_killswitch"] = 5
-TOOL.ClientConVar["cooldown_repairkit"] = 5
+TOOL.ClientConVar["cooldown_esf"] = 30
+TOOL.ClientConVar["cooldown_spikestrip"] = 30
+TOOL.ClientConVar["cooldown_killswitch"] = 30
+TOOL.ClientConVar["cooldown_repairkit"] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
-TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfpower"] = 1000000
 TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["spikestripduration"] = 60
 TOOL.ClientConVar["killswitchlockontime"] = 3
@@ -57,20 +57,16 @@ if CLIENT then
 end
 
 function TOOL:LeftClick( trace )
-	if SERVER then
-		util.AddNetworkString("UV_SendPursuitTech")
-	end
-
 	local car = trace.Entity
 
 	if car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
 
-		if ( !CLIENT ) then
+		if ( not CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
 			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
 			local slot = self:GetClientNumber("slot") or 1
 			
-			if !car.PursuitTech then
+			if not car.PursuitTech then
 				car.PursuitTech = {}
 			end
 
@@ -99,25 +95,29 @@ function TOOL:LeftClick( trace )
 			effect:SetEntity(car)
 			util.Effect("phys_freeze", effect)
 
-			table.insert(uvrvwithpursuittech, car)
+			table.insert(UVRVWithPursuitTech, car)
 
 			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
-				if table.HasValue(uvrvwithpursuittech, car) then
-					table.RemoveByValue(uvrvwithpursuittech, car)
+				if table.HasValue(UVRVWithPursuitTech, car) then
+					table.RemoveByValue(UVRVWithPursuitTech, car)
 				end
 
 				-- Clear PursuitTech on clients too
-				net.Start("UV_SendPursuitTech")
-					net.WriteEntity(car)
-					net.WriteTable({})
-				net.Broadcast()
+				-- net.Start("UV_SendPursuitTech")
+				-- 	net.WriteEntity(car)
+				-- 	net.WriteTable({})
+				-- net.Broadcast()
 			end)
 
             -- Network the PursuitTech to all clients
-            net.Start("UV_SendPursuitTech")
-                net.WriteEntity(car)
-                net.WriteTable(car.PursuitTech)
-            net.Broadcast()
+            -- net.Start("UV_SendPursuitTech")
+            --     net.WriteEntity(car)
+            --     net.WriteTable(car.PursuitTech)
+            -- net.Broadcast()
+			-- In case one pt is replaced
+			for i=1,2 do
+				UVReplicatePT( car, i )
+			end
 
 			return true
 		end
@@ -168,7 +168,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -184,20 +184,20 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
 
-			RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat())
-			RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfdamage", GetConVar("uvunitpursuittech_esfdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_spikestripduration", GetConVar("uvunitpursuittech_spikestripduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_killswitchlockontime", GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_unitpursuittech_killswitchdisableduration", GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat())
 
 			for _, v in pairs(pttable) do
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
 				convar_table['unitvehicle_unitpursuittech_maxammo_'..sanitized_pt] = GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt()
 				convar_table['unitvehicle_unitpursuittech_cooldown_'..sanitized_pt] = GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt()
-				RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt())
-				RunConsoleCommand("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt, GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt, GetConVar("uvunitpursuittech_maxammo_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt, GetConVar("uvunitpursuittech_cooldown_"..sanitized_pt):GetInt())
 			end
 
 			net.Start("UVUpdateSettings")

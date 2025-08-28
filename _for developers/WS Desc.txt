@@ -1,0 +1,112 @@
+[h1]!!! THIS ADDON IS CURRENTLY WORK-IN-PROGRESS !!![/h1]
+
+[b]Unit Vehicles[/b] is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police and thrilling races on any map.
+
+[b][url=https://discord.gg/PzSTUD25Xf] >>> JOIN TALONSOLID'S HIDEOUT DISCORD SERVER <<<[/url][/b]
+
+[h3] Requirements [/h3]
+Before we get started: [b]Decent Vehicle - Basic AI[/b] is [b]REQUIRED[/b] for Unit Vehicles to function properly.
+
+[hr][/hr]
+[h1] Features [/h1]
+[h3] Races [/h3]
+[list]
+	[*] Participate in Sprint or Circuit racing against your friends or AI!
+	[*] Fight your opponents with various Pursuit Techs!
+	[*] Create your own Races using the [b]Race Manager[/b] tool!
+[/list]
+[h3] Pursuits [/h3]
+[list]
+	[*] Participate in thrilling Pursuits as a Racer or a Unit!
+	[*] Utilize Pursuit Breakers to keep the Units off your back!
+	[*] Fight the Racers or Units with various Pursuit Techs!
+	[*] Up to 10 Heat Levels - the higher the level, the tougher the Units!
+	[*] Create your own Pursuit Breakers, Roadblocks and Units using the [b]Unit Manager[/b] tool!
+[/list]
+[h3] General [/h3]
+[list]
+	[*] Offers support for Glide, Simfphys, Photon 2 and Base HL2 Jeeps
+	[*] Various UI Styles resembling older NFS titles to choose from
+	[*] Fine-tune every little bit of the addon to fit your preference
+	[*] Localization support:
+	[table]
+		[tr]
+			[th]Partial[/th]
+			[th]Full[/th]
+		[/tr]
+		[tr]
+			[td]
+			Danish
+			German
+			Greek
+			Finnish
+			French
+			Hungarian
+			Italian
+			Japanese
+			Korean
+			Dutch
+			Polish
+			Slovakian
+			Traditional Chinese
+			[/td]
+			[td]
+			English
+			Czech
+			Spanish
+			Brazilian Portuguese
+			Russian
+			Swedish
+			Thai
+			Simplified Chinese
+			[/td]
+		[/tr]
+	[/table]
+[/list]
+
+And [b]so much more[/b]!
+
+[hr][/hr]
+[h3] FAQ [/h3]
+[table]
+    [tr]
+        [th]Question[/th]
+        [th]Answer[/th]
+    [/tr]
+    [tr]
+        [td]There are no races, Units or anything![/td]
+        [td]You will need to create all of the main assets yourself. Alternatively, you can utilize the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556]Starter Data Pack[/url] to get you started with a bunch of presets![/td]
+    [/tr]
+    [tr]
+        [td]What vehicle bases are supported?[/td]
+        [td][b]Glide[/b] is highly recommended and has the most support, but you can also use [b]Simfphys[/b], [b]Proton 2[/b] or even [b]Base HL2[/b].[/td]
+    [/tr]
+    [tr]
+        [td]Where is my created data stored?[/td]
+        [td]It is stored in the game's [b]data[/b] folder. Here you'll find Unit data, Racer Names, Pursuit Breaker data, Race data and Roadblock data.[/td]
+    [/tr]
+[/table]
+
+[hr][/hr]
+[h3] Credits [/h3]
+[list]
+[*][b]Roboboy[/b] - Main idea & Coding
+[*][b]AludriX[/b] - Coding
+[*][b]Moka[/b] - Coding & UI Design
+[*][b]TalonSolid[/b] - Misc. Contributions & Tester
+[/list]
+
+[h1] Translators [/h1]
+[list]
+[*][b]Moka[/b] - Swedish
+[*][b]TalonSolid[/b] - Greek
+[*][b]WladZ[/b] - Russian
+[*][b]Despe[/b] - Czech
+[*][b]Dami[/b] - Spanish
+[*][b]Raiden[/b] - Brazilian Portuguese
+[*][b]sting[/b] - Vietnamese
+[*][b]Pathfinder_FUFU[/b] - Simplified Chinese
+[*][b]Tak036[/b] - Thai
+[/list]
+
+[url=https://discord.gg/PzSTUD25Xf][img]https://i.imgur.com/VXlIFxe.jpeg[/img][/url]

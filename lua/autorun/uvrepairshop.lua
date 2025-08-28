@@ -1,27 +1,58 @@
 AddCSLuaFile()
 
-if SERVER then
-
-    util.AddNetworkString( "UVHUDRepairCooldown" )
-	util.AddNetworkString( "UVHUDRepair" )
-    util.AddNetworkString( "UVHUDRepairAvailable" )
-    util.AddNetworkString( "uvrepairsimfphys" )
-
-else
+if CLIENT then
     
     net.Receive("UVHUDRepairCooldown", function() --Inform the player when the repair shop can be used again
         local timeleft = net.ReadInt(32)
-        chat.AddText(Color(255, 0, 0), "Repair unavailable, come back in ", Color(255, 255, 255), timeleft.." s")
+		UV_UI.general.events.CenterNotification({
+            text = "#uv.repairshop.cooldown",
+			color = Color(255, 0, 0),
+			critical = true,
+			time = 3,
+        })
+		
+		UV_UI.general.events.CenterNotification({
+            text = string.format( language.GetPhrase("uv.repairshop.cooldown.time"), timeleft ),
+			critical = true,
+			time = 3,
+        })
         surface.PlaySound("ui/pursuit/repairunavailable.wav")
     end)
 
     net.Receive("UVHUDRepair", function()
-        chat.AddText(Color(0, 255, 0), "Vehicle repaired")
+		UV_UI.general.events.CenterNotification({
+            text = "#uv.repairshop.used",
+			critical = true,
+			time = 3,
+        })
         surface.PlaySound("ui/pursuit/repair.wav")
     end)
 
+    net.Receive("UVHUDRepairCommander", function()
+		UV_UI.general.events.CenterNotification({
+            text = "#uv.repairshop.nocommander",
+			color = Color(255, 0, 0),
+			critical = true,
+			time = 2,
+        })
+        surface.PlaySound("ui/pursuit/repairunavailable.wav")
+    end)
+
+    net.Receive("UVHUDRefilledPT", function()
+		UV_UI.general.events.CenterNotification({
+            text = "#uv.repairshop.used.pt",
+			critical = true,
+			time = 2,
+        })
+    end)
+
     net.Receive("UVHUDRepairAvailable", function()
-        chat.AddText(Color(0, 255, 0), "Repair Shop now available")
+		UV_UI.general.events.CenterNotification({
+            text = "#uv.repairshop.available",
+			color = Color(50, 255, 50),
+			critical = true,
+			time = 3,
+        })
         surface.PlaySound("ui/pursuit/repairavailable.wav")
     end)
 

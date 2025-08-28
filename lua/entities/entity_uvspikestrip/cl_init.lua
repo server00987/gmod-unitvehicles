@@ -93,7 +93,7 @@ function ENT:Draw()
 	-- render.DrawWireframeBox( tr.HitPos, Angle( 0, 0, 0 ), mins, maxs, clr, true )
 
 	self.Entity:DrawModel() 
-	if model != "models/unitvehiclesprops/policespikes/police_spike.mdl" then
+	if model ~= "models/unitvehiclesprops/policespikes/police_spike.mdl" then
 		self.Entity.YellowLightPos1 = Vector(87,0,1)
 		self.Entity.YellowLightPos2 = Vector(-87,0,1)
 		local yellowpos1 = LocalToWorld(self.Entity.YellowLightPos1,Angle(),self.Entity:GetPos(),self.Entity:GetAngles())

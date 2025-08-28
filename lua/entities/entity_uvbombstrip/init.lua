@@ -29,10 +29,10 @@ function ENT:BombExplode()
     for k, object in pairs(objects) do
         if IsValid(object:GetPhysicsObject()) then
             local objectphys = object:GetPhysicsObject()
-            local vectordifference = object:WorldSpaceCenter() - entpos
-            local angle = vectordifference:Angle()
+            local vectorDifference = object:WorldSpaceCenter() - entpos
+            local angle = vectorDifference:Angle()
 			local power = 1000000
-            local force = power * (1 - (vectordifference:Length()/1000))
+            local force = power * (1 - (vectorDifference:Length()/1000))
             objectphys:ApplyForceCenter(angle:Forward()*force)
             object.rammed = true
             timer.Simple(3, function()
@@ -48,19 +48,19 @@ end
 function ENT:StartTouch( ent )
 	if IsValid(ent:GetPhysicsObject()) and (ent:GetVelocity():LengthSqr()+self.Entity:GetVelocity():LengthSqr()) >= 250000 then
 		self:BombExplode() --Remove explosive barrel
-		if ent.UVWanted and !IsValid(ent.UVPatrol) and !IsValid(ent.UVSupport) and !IsValid(ent.UVPursuit) and !IsValid(ent.UVInterceptor) and !IsValid(ent.UVCommander) and !IsValid(ent.UVSpecial) then
+		if ent.UVWanted and not IsValid(ent.UVPatrol) and not IsValid(ent.UVSupport) and not IsValid(ent.UVPursuit) and not IsValid(ent.UVInterceptor) and not IsValid(ent.UVCommander) and not IsValid(ent.UVSpecial) then
 			if #ents.FindByClass("uvair") > 0 then
 				local unitss = table.Add(units, ents.FindByClass("uvair"))
 				local random_entry = math.random(#unitss)	
 				local unit = unitss[random_entry]
-				if GetConVar("unitvehicle_chatter"):GetBool() and uvtargeting then
-					UVChatterAirExplosiveBarrelHit(unit)
+				if GetConVar("unitvehicle_chatter"):GetBool() and UVTargeting then
+					UVChatterExplosiveBarrelHit(unit)
 				end
 			elseif #ents.FindByClass("npc_uv*") > 0 then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
-				if GetConVar("unitvehicle_chatter"):GetBool() and uvtargeting then
+				if GetConVar("unitvehicle_chatter"):GetBool() and UVTargeting then
 					UVChatterExplosiveBarrelHit(unit)
 				end
 			end

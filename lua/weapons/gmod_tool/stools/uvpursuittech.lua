@@ -38,23 +38,23 @@ TOOL.ClientConVar['maxammo_stunmine'] = 5
 TOOL.ClientConVar['maxammo_repairkit'] = 5
 
 -- cooldowns
-TOOL.ClientConVar['cooldown_esf'] = 5
-TOOL.ClientConVar['cooldown_jammer'] = 5
-TOOL.ClientConVar['cooldown_shockwave'] = 5
-TOOL.ClientConVar['cooldown_spikestrip'] = 5
-TOOL.ClientConVar['cooldown_stunmine'] = 5
-TOOL.ClientConVar['cooldown_repairkit'] = 5
+TOOL.ClientConVar['cooldown_esf'] = 30
+TOOL.ClientConVar['cooldown_jammer'] = 30
+TOOL.ClientConVar['cooldown_shockwave'] = 30
+TOOL.ClientConVar['cooldown_spikestrip'] = 30
+TOOL.ClientConVar['cooldown_stunmine'] = 30
+TOOL.ClientConVar['cooldown_repairkit'] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
-TOOL.ClientConVar["esfpower"] = 2000000
+TOOL.ClientConVar["esfpower"] = 1000000
 TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["esfcommanderdamage"] = 0.1
 TOOL.ClientConVar["jammerduration"] = 10
-TOOL.ClientConVar["shockwavepower"] = 2000000
+TOOL.ClientConVar["shockwavepower"] = 1000000
 TOOL.ClientConVar["shockwavedamage"] = 0.1
 TOOL.ClientConVar["shockwavecommanderdamage"] = 0.1
 TOOL.ClientConVar["spikestripduration"] = 60
-TOOL.ClientConVar["stunminepower"] = 2000000
+TOOL.ClientConVar["stunminepower"] = 1000000
 TOOL.ClientConVar["stunminedamage"] = 0.1
 TOOL.ClientConVar["stunminecommanderdamage"] = 0.1
 
@@ -153,20 +153,16 @@ if CLIENT then
 end
 
 function TOOL:LeftClick( trace )
-	if SERVER then
-		util.AddNetworkString("UV_SendPursuitTech")
-	end
-
 	local car = trace.Entity
 
-	if !car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
+	if not car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
 
-		if ( !CLIENT ) then
+		if ( not CLIENT ) then
 			local ptselected = self:GetClientInfo("pursuittech")
 			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
 			local slot = self:GetClientNumber("slot") or 1
 			
-			if !car.PursuitTech then
+			if not car.PursuitTech then
 				car.PursuitTech = {}
 			end
 
@@ -195,25 +191,29 @@ function TOOL:LeftClick( trace )
 			effect:SetEntity(car)
 			util.Effect("phys_freeze", effect)
 
-			table.insert(uvrvwithpursuittech, car)
+			table.insert(UVRVWithPursuitTech, car)
 
 			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
-				if table.HasValue(uvrvwithpursuittech, car) then
-					table.RemoveByValue(uvrvwithpursuittech, car)
+				if table.HasValue(UVRVWithPursuitTech, car) then
+					table.RemoveByValue(UVRVWithPursuitTech, car)
 				end
 
 				-- Clear PursuitTech on clients too
-				net.Start("UV_SendPursuitTech")
-					net.WriteEntity(car)
-					net.WriteTable({})
-				net.Broadcast()
+				-- net.Start("UV_SendPursuitTech")
+				-- 	net.WriteEntity(car)
+				-- 	net.WriteTable({})
+				-- net.Broadcast()
 			end)
 
             -- Network the PursuitTech to all clients
-            net.Start("UV_SendPursuitTech")
-                net.WriteEntity(car)
-                net.WriteTable(car.PursuitTech)
-            net.Broadcast()
+            -- net.Start("UV_SendPursuitTech")
+            --     net.WriteEntity(car)
+            --     net.WriteTable(car.PursuitTech)
+            -- net.Broadcast()
+			-- In case one pt is replaced
+			for i=1,2 do
+				UVReplicatePT( car, i )
+			end
 
 			return true
 		end
@@ -259,21 +259,21 @@ end
 
 if CLIENT then
 
-	net.Receive("UV_SendPursuitTech", function()
-		local car = net.ReadEntity()
-		local data = net.ReadTable()
+	-- net.Receive("UV_SendPursuitTech", function()
+	-- 	local car = net.ReadEntity()
+	-- 	local data = net.ReadTable()
 
-		if IsValid(car) then
-			car.PursuitTech = data
-		end
-	end)
+	-- 	if IsValid(car) then
+	-- 		car.PursuitTech = data
+	-- 	end
+	-- end)
 
 	function TOOL.BuildCPanel(CPanel)
 
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -297,19 +297,19 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
 
 
-			RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
-			RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
+			-- RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
 
 			
 
@@ -317,8 +317,8 @@ if CLIENT then
 				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
 				convar_table['unitvehicle_pursuittech_maxammo_'..sanitized_pt] = GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt()
 				convar_table['unitvehicle_pursuittech_cooldown_'..sanitized_pt] = GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt()
-				RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
-				RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
+				-- RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
 			end
 
 			net.Start("UVUpdateSettings")

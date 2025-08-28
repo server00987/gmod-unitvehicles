@@ -1,8 +1,8 @@
 ENT.Type = "anim"
-ENT.PrintName = "4: Air"
+ENT.PrintName = "#uv.unit.helicopter"
 ENT.Author = "Cross"
 ENT.Purpose = "To ensure that dirtbags gets fucked by the long arm of the law."
-ENT.Category = "Unit Vehicles"
+ENT.Category = "#uv.settings.unitvehicles"
 ENT.Spawnable = true
 ENT.AdminOnly = false
 

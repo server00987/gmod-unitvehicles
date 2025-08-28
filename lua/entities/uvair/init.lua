@@ -4,7 +4,6 @@ include("shared.lua")
 local CanWreck = GetConVar("unitvehicle_canwreck")
 local Chatter = GetConVar("unitvehicle_chatter")
 local ChatterText = GetConVar("unitvehicle_chattertext")
-local TargetDecentVehicle = GetConVar("unitvehicle_targetdecentvehicle")
 local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
 local Relentless = GetConVar("unitvehicle_relentless")
 local Barrels = GetConVar("unitvehicle_unit_helicopterbarrels")
@@ -54,6 +53,8 @@ function ENT:Initialize()
 		"models/nfs_hppolhel/nfs_hppolhel.mdl",
 		"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
 		"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
+		"models/hp2heliai/hp2heliai.mdl",
+		"models/unboundheli/unboundheli.mdl"
 	}
 
 	self.Model = modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
@@ -80,16 +81,33 @@ function ENT:Initialize()
 		self.phys:SetMass(42382)
 	elseif self.Model == "models/nfs_paybackpolhel/nfs_paybackpolhel.mdl" then
 		self.phys:SetMass(85322)
+	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
+		self.phys:SetMass(30830)
+	elseif self.Model == "models/unboundheli/unboundheli.mdl" then
+		self.phys:SetMass(123078)
 	end
 	
 	self.bountytimer = CurTime()
 	self.callsign = "Air "..self:EntIndex()
-	local selfvoicetable = {2, 19}
-	self.voice = selfvoicetable[math.random(1,2)]
+	self.type = "air"
+
+
+	local selectedVoice = GetConVar("unitvehicle_unit_air_voice"):GetString()
+	local splittedText = string.Explode( ",", selectedVoice )
+
+	local ya = {}
+
+	for k, v in pairs( splittedText ) do
+		table.insert( ya, string.Trim( v ) )
+	end
+
+	self.voice = ya[math.random(1, #ya)]
+
+
 	self.deployingspikes = CurTime()
 	self.LastUpdate = CurTime()
 	self.ReplicTime = CurTime()
-	--uvlosing = CurTime()
+	--UVLosing = CurTime()
 	self.Downed = false
 	self:SetHealth(500)
 	self:SetCustomCollisionCheck(true)
@@ -99,8 +117,8 @@ function ENT:Initialize()
 	self.crashing = nil
 	self.spotted = nil
 	self.cooldown = true
-	uvenemybusted = nil
-	uvenemyescaped = nil
+	UVEnemyBusted = nil
+	UVEnemyEscaped = nil
 	
 	self.RotateVelocity = 0
 	
@@ -127,21 +145,22 @@ function ENT:Initialize()
 		
 	timer.Simple((math.random(60,180)), function() 
 		if IsValid(self) then --Fuel is randomized 
-			if Chatter:GetBool() and !(self.crashing or self.disengaging) then
-				UVChatterAirLowOnFuel(self)
+			if Chatter:GetBool() and not (self.crashing or self.disengaging) then
+				UVChatterLowOnFuel(self)
 			end
 			self.disengaging = true
 		end
 	end)
 	
-	if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-		UVChatterAirInitialize(self) 
+	if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+		UVChatterInitialize(self) 
 	end
 
-	uvdeploys = uvdeploys + 1
+	UVDeploys = UVDeploys + 1
 
 	net.Start("UVHUDAddUV")
 	net.WriteInt(self:EntIndex(), 32)
+	net.WriteInt(self:GetCreationID(), 32)
 	net.WriteString("air")
 	net.Broadcast()
 	
@@ -161,20 +180,20 @@ function ENT:OnRemove()
 			v.displaybusting = nil
 		end
 	end
-	if table.HasValue(uvunitschasing, self) then
-		table.RemoveByValue(uvunitschasing, self)
+	if table.HasValue(UVUnitsChasing, self) then
+		table.RemoveByValue(UVUnitsChasing, self)
 	end
 end
 
 function ENT:Think()
 
-	if IsValid(self:GetTarget()) and self:IsSeeTarget() and !self.Downed and !self.disengaging then
-		if !table.HasValue(uvunitschasing, self) then
-			table.insert(uvunitschasing, self)
+	if IsValid(self:GetTarget()) and self:IsSeeTarget() and not self.Downed and not self.disengaging then
+		if not table.HasValue(UVUnitsChasing, self) then
+			table.insert(UVUnitsChasing, self)
 		end
 	else
-		if table.HasValue(uvunitschasing, self) then
-			table.RemoveByValue(uvunitschasing, self)
+		if table.HasValue(UVUnitsChasing, self) then
+			table.RemoveByValue(UVUnitsChasing, self)
 		end
 	end
 
@@ -182,19 +201,19 @@ function ENT:Think()
 		
 		if self.CloseToTarget and self:IsSeeTarget() and not self.spotted then
 			self.spotted = true
-			uvlosing = CurTime()
+			UVLosing = CurTime()
 			timer.Simple(20, function() self.cooldown = nil end)
-			if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-				UVChatterAirSpottedEnemy(self) 
+			if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+				UVChatterSpottedEnemy(self) 
 			end
 		end
 
 		--Busting
 		local btimeout = GetConVar("unitvehicle_bustedtimer"):GetFloat()
 		
-		if self.CloseToTarget and self:IsSeeTarget() and !self.Downed then
+		if self.CloseToTarget and self:IsSeeTarget() and not self.Downed then
 			
-			if !self.cooldown and self.aggressive and PursuitTech:GetBool() then
+			if not self.cooldown and self.aggressive and PursuitTech:GetBool() then
 
 
 				self.cooldown = true
@@ -214,12 +233,12 @@ function ENT:Think()
 					timer.Simple((math.random(5,10)), function() self.cooldown = nil end)
 					timer.Simple(10, function() if IsValid(spikes) then 
 					spikes:Remove() 
-					if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirSpikeStripMiss(self) 
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+						UVChatterSpikeStripMiss(self) 
 					end
 					end end)
-					if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirSpikeStripDeployed(self) 
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+						UVChatterSpikeStripDeployed(self) 
 					end
 				elseif self.WeaponChoice == 'barrels' then
 					local bomb = ents.Create("entity_uvbombstrip")
@@ -238,8 +257,8 @@ function ENT:Think()
 					timer.Simple(10, function() if IsValid(bomb) then 
 					bomb:BombExplode()
 					end end)
-					if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterAirExplosiveBarrelDeployed(self) 
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+						UVChatterExplosiveBarrelDeployed(self) 
 					end
 				end
 			end
@@ -247,13 +266,13 @@ function ENT:Think()
 		end
 	end
 
-	uvhelicooldown = CurTime()
+	uvHeliCooldown = CurTime()
 	
 	if self.Downed then
-		if table.HasValue(uvunitschasing, self) then
-			table.RemoveByValue(uvunitschasing, self)
+		if table.HasValue(UVUnitsChasing, self) then
+			table.RemoveByValue(UVUnitsChasing, self)
 		end
-		if !self.DownState and CurTime()-self.DownTime>2.5 then
+		if not self.DownState and CurTime()-self.DownTime>2.5 then
 			self.DownState = true
 			self.DownTime = CurTime()
 			
@@ -301,8 +320,8 @@ end
 
 function ENT:PhysicsUpdate()
 	if self.disengaging then
-		if table.HasValue(uvunitschasing, self) then
-			table.RemoveByValue(uvunitschasing, self)
+		if table.HasValue(UVUnitsChasing, self) then
+			table.RemoveByValue(UVUnitsChasing, self)
 		end
 		self:ApplyAngles()
 		self:ApplyHeight("up")
@@ -312,7 +331,7 @@ function ENT:PhysicsUpdate()
 		
 		self.LastUpdate = CurTime()
 		self.CloseToTarget = false
-		if self.displaybusting and !uvenemybusted then
+		if self.displaybusting and not UVEnemyBusted then
 			UVHUDBusting = nil
 			net.Start( "UVHUDStopBusting" )
 			net.Broadcast()
@@ -327,36 +346,36 @@ function ENT:PhysicsUpdate()
 		end
 		return
 	end
-	if !self.Downed and !self.disengaging then
+	if not self.Downed and not self.disengaging then
 
 		if self:Health()<=0 then
 			self:StartCrush()
 		end
 		
-		if IsValid(self:GetTarget()) and self:IsSeeTarget() and uvtargeting then
-			uvlosing = CurTime()
+		if IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
+			UVLosing = CurTime()
 		end
 		
 		--Bounty
 		local botimeout = 10
-		if CurTime() > self.bountytimer + botimeout and IsValid(self:GetTarget()) and self:IsSeeTarget() and uvtargeting then
-			uvbounty = uvbounty+uvbountytime
+		if CurTime() > self.bountytimer + botimeout and IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
+			UVBounty = UVBounty+UVBountyTime
 			self.bountytimer = CurTime()
 			local MathAggressive = math.random(1,10) 
 			if MathAggressive == 1 then
-				if !self.aggressive and uvtargeting then
+				if not self.aggressive and UVTargeting then
 					if Relentless:GetBool() then
 						self.engaging = true
 					end
 					self.aggressive = true
-					if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not uvcalm then
-						UVChatterAirAggressive(self) 
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
+						UVChatterAggressive(self) 
 					end
 				else
 					self.engaging = nil
 					self.aggressive = nil
-					if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not uvcalm then
-						UVChatterAirPassive(self) 
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
+						UVChatterPassive(self) 
 					end
 				end
 			end
@@ -365,12 +384,12 @@ function ENT:PhysicsUpdate()
 				else
 				self:GetTarget()driver = nil
 			end
-			if IsValid(self:GetTarget()) and Chatter:GetBool() and !(self.crashing or self.disengaging) and self:GetTarget():GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive != 1 then
-				UVChatterAirCloseToEnemy(self)
+			if IsValid(self:GetTarget()) and Chatter:GetBool() and not (self.crashing or self.disengaging) and self:GetTarget():GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive ~= 1 then
+				UVChatterCloseToEnemy(self)
 			end
 		end
 		
-		if !IsValid(self:GetTarget()) and self.Owner!=game.GetWorld() then self:SetTarget(self.Owner) end
+		if not IsValid(self:GetTarget()) and self.Owner~=game.GetWorld() then self:SetTarget(self.Owner) end
 		
 		local closetotar = self.CloseToTarget
 		self.CloseToTarget = false
@@ -386,14 +405,14 @@ function ENT:PhysicsUpdate()
 			return
 		end
 		
-		if !IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
-			if next(uvwantedtablevehicle) == nil then
+		if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
+			if next(UVWantedTableVehicle) == nil then
 				self.disengaging = true
-				if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-					UVChatterAirDisengaging(self)
+				if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+					UVChatterDisengaging(self)
 				end
 			else
-				local suspecttable = uvwantedtablevehicle
+				local suspecttable = UVWantedTableVehicle
 				for k, v in pairs(suspecttable) do
 					if v.uvbusted then
 						table.remove(suspecttable, k)
@@ -406,8 +425,8 @@ function ENT:PhysicsUpdate()
 			self:RotateToTarget(self:GetTargetPos())
 		end
 		
-		if IsValid(self:GetTarget()) and !uvenemyescaping and !uvjammerdeployed then
-			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((self:GetTargetPos()+self:GetTarget():GetVelocity()))^2) and !(self:DistIgnoreZ(self:GetTargetPos()) <= 500 and self:IsSeeTarget()) then
+		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not uvJammerDeployed then
+			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((self:GetTargetPos()+self:GetTarget():GetVelocity()))^2) and not (self:DistIgnoreZ(self:GetTargetPos()) <= 500 and self:IsSeeTarget()) then
 				self:FlyTo(self:GetTargetPos())
 			else
 				if self.engaging then
@@ -418,7 +437,7 @@ function ENT:PhysicsUpdate()
 				self.CloseToTarget = true
 			end
 		else
-			if not uvenemybusted then 
+			if not UVEnemyBusted then 
 				self:RotateAround(uverespawn)
 			end
 			self:ApplyHeight("up")
@@ -429,7 +448,7 @@ function ENT:PhysicsUpdate()
 		local time = CurTime()-self.LastUpdate
 		
 		local vel = self.phys:GetVelocity()
-		self.DownedRotate = self.DownedRotate+(!self.DownState and 90*time or (CurTime()-self.DownTime)*2/2)
+		self.DownedRotate = self.DownedRotate+(not self.DownState and 90*time or (CurTime()-self.DownTime)*2/2)
 		self.phys:SetAngles(select(2,LocalToWorld(Vector(),Angle(0,self.DownedRotate,0),Vector(),self.DownedAng)))
 		self.phys:AddAngleVelocity(-self.phys:GetAngleVelocity())
 		self.phys:SetVelocity(vel)
@@ -458,17 +477,17 @@ end
 function ENT:ApplyHeight(height)
 	height = height or self:CheckWorldHeight()
 	
-	if (!height or height=="stop") and IsValid(self:GetTarget()) then
+	if (not height or height=="stop") and IsValid(self:GetTarget()) then
 		local d = self:GetPos().z-self:GetTargetPos().z
 		
-		height = d<(self.StayInAir and 250 or 300) and "up" or d>(self.StayInAir and 1000 or 950) and height!="stop" and "down" or false
+		height = d<(self.StayInAir and 250 or 300) and "up" or d>(self.StayInAir and 1000 or 950) and height~="stop" and "down" or false
 	end
 	
 	local vel = self.phys:GetVelocity()
 	local time = CurTime()-self.LastUpdate
 	local max = 400
 	
-	if height and height!="stop" then
+	if height and height~="stop" then
 		self.StayInAir = false
 	
 		if height=="up" then
@@ -480,7 +499,7 @@ function ENT:ApplyHeight(height)
 				vel.z = math.max(vel.z-200*time,-max)
 			end
 		end
-	elseif math.Round(vel.z)!=0 and !self.StayInAir then
+	elseif math.Round(vel.z)~=0 and not self.StayInAir then
 		if vel.z>0 then
 			vel.z = math.max(vel.z-200*vel.z/30*time,0)
 		else
@@ -505,7 +524,7 @@ function ENT:StopRotating()
 end
 
 function ENT:RotateToTarget(pos)
-	if !pos then
+	if not pos then
 		self:StopRotating()
 		return 
 	end
@@ -527,7 +546,7 @@ function ENT:RotateToTarget(pos)
 end
 
 function ENT:RotateAround(pos)
-	if !pos then return end
+	if not pos then return end
 	local time = CurTime()-self.LastUpdate
 	local ang = (Vector(pos.x,pos.y,self:GetPos().z)-self:GetPos()):Angle()
 	local vel1 = WorldToLocal(self.phys:GetVelocity(),Angle(),Vector(),ang)
@@ -539,11 +558,11 @@ function ENT:RotateAround(pos)
 	
 	if vel1.y>spd or dist<50 then return end
 	
-	local vel = Vector(math.max(math.abs(vel2.x),dist>50 and 20 or 0)*(vel2.x!=0 and vel2.x/math.abs(vel2.x) or 1),vel1.y>spd and vel1.y or spd,vel2.z)
+	local vel = Vector(math.max(math.abs(vel2.x),dist>50 and 20 or 0)*(vel2.x~=0 and vel2.x/math.abs(vel2.x) or 1),vel1.y>spd and vel1.y or spd,vel2.z)
 	vel = LocalToWorld(vel,Angle(),Vector(),ang)
 	self.phys:SetVelocity(vel)
 
-	if uvjammerdeployed then
+	if uvJammerDeployed then
 		self.RotateVelocity = -45
 	end
 end
@@ -623,9 +642,9 @@ function ENT:CheckWorldHeight()
 end
 
 function ENT:IsSeeTarget()
-	if !util.IsInWorld(self:WorldSpaceCenter()) then return end
+	if not util.IsInWorld(self:WorldSpaceCenter()) then return end
 	local tr = util.TraceLine({start = self:WorldSpaceCenter(), endpos = self:GetTarget():WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, self:GetTarget()}}).Fraction==1
-	if uvhiding then
+	if UVHiding then
 		return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 2000
 	else
 		return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 10000
@@ -633,7 +652,7 @@ function ENT:IsSeeTarget()
 end
 
 function ENT:OnTakeDamage(dmg)
-	if GetConVar("unitvehicle_canwreck"):GetBool() and !self.Downed then
+	if GetConVar("unitvehicle_canwreck"):GetBool() and not self.Downed then
 		self:SetHealth(self:Health()-dmg:GetDamage())
 	end
 end
@@ -654,21 +673,21 @@ function ENT:StartCrush()
 	self.DownState = false
 	
 	if not self.crashing then
-		if !timer.Exists("uvcombotime") then
+		if not timer.Exists("uvcombotime") then
 			timer.Create("uvcombotime", 5, 1, function() 
-				uvcombobounty = 1 
+				UVComboBounty = 1 
 				timer.Remove("uvcombotime")
 			end)
 		else
 			timer.Remove("uvcombotime")
 			timer.Create("uvcombotime", 5, 1, function() 
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and !(self.crashing or self.disengaging) and uvcombobounty >= 3 then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and not (self.crashing or self.disengaging) and UVComboBounty >= 3 then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
 					UVChatterMultipleUnitsDown(unit)
 				end
-				uvcombobounty = 1
+				UVComboBounty = 1
 				timer.Remove("uvcombotime")
 			end)
 		end
@@ -677,20 +696,20 @@ function ENT:StartCrush()
 		util.Effect("Explosion",eff)
 		util.BlastDamage(self,self,self:GetPos(),1000,10)
 		if Chatter:GetBool() and IsValid(self) then
-			UVChatterAirWreck(self)
+			UVChatterWreck(self)
 		end
-		local bountyplus = (UVUBountyAir:GetInt())*(uvcombobounty)
+		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)
 		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
-			-- self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", '', bounty, uvcombobounty)
+			-- self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..UVComboBounty..": "..bounty)
+			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", '', bountyplus, UVComboBounty)
 		end end
-		uvwrecks = uvwrecks + 1
+		UVWrecks = UVWrecks + 1
 		self.crashing = true
 		self:EmitSound( "npc/attack_helicopter/aheli_damaged_alarm1.wav" )
 		self:EmitSound( "npc/combine_gunship/gunship_crashing1.wav" )
-		uvbounty = (uvbounty+bountyplus)
-		uvcombobounty = uvcombobounty + 1
+		UVBounty = (UVBounty+bountyplus)
+		UVComboBounty = UVComboBounty + 1
 	end
 	
 end
@@ -726,7 +745,7 @@ function ENT:Explode()
 	util.Effect("entity_remove", e)
 	timer.Simple(60, function() if IsValid(wreck) then wreck:Remove() end end)
 	timer.Simple(math.random(1,3), function()
-		if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and !(self.crashing or self.disengaging) then
+		if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and not (self.crashing or self.disengaging) then
 			local units = ents.FindByClass("npc_uv*")
 			local random_entry = math.random(#units)	
 			local unit = units[random_entry]
@@ -735,37 +754,37 @@ function ENT:Explode()
 		end
 	end)
 	if not self.crashing then
-		if !timer.Exists("uvcombotime") then
+		if not timer.Exists("uvcombotime") then
 			timer.Create("uvcombotime", 5, 1, function() 
-				uvcombobounty = 1 
+				UVComboBounty = 1 
 				timer.Remove("uvcombotime")
 			end)
 		else
 			timer.Remove("uvcombotime")
 			timer.Create("uvcombotime", 5, 1, function() 
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and !(self.crashing or self.disengaging) and uvcombobounty >= 3 then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and not (self.crashing or self.disengaging) and UVComboBounty >= 3 then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
 					UVChatterMultipleUnitsDown(unit)
 				end
-				uvcombobounty = 1
+				UVComboBounty = 1
 				timer.Remove("uvcombotime")
 			end)
 		end
-		if Chatter:GetBool() and !(self.crashing or self.disengaging) and IsValid(self) then
-			UVChatterAirOnRemove(self)
+		if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+			UVChatterOnRemove(self)
 		end
-		local bountyplus = (UVUBountyAir:GetInt())*(uvcombobounty)
+		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)
 		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
-			--self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..uvcombobounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", '', bounty, uvcombobounty)
+			--self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..UVComboBounty..": "..bounty)
+			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", ' ', bountyplus, UVComboBounty)
 		end end
-		uvwrecks = uvwrecks + 1
+		UVWrecks = UVWrecks + 1
 		self.crashing = true
-		uvbounty = (uvbounty+bountyplus)
-		uvcombobounty = uvcombobounty + 1
+		UVBounty = (UVBounty+bountyplus)
+		UVComboBounty = UVComboBounty + 1
 	end
 end
 
@@ -777,12 +796,12 @@ function ENT:StartTouch(prop)
 	timer.Simple(1, function() self.damagecooldown = nil end)
 
 	if prop:GetClass() == "prop_physics" or prop:IsVehicle() then
-		if !self.damaged then
+		if not self.damaged then
 			self.damaged = true
 			self:SetHealth(self:Health()/2)
 			ParticleEffectAttach("smoke_burning_engine_01", PATTACH_ABSORIGIN_FOLLOW, self, 0)
-			if Chatter:GetBool() and !ChatterText:GetBool() then
-				UVSoundChatter(self, self.voice, "airhit")
+			if Chatter:GetBool() and not ChatterText:GetBool() then
+				UVSoundChatter(self, self.voice, "hit")
 			end
 		else
 			MathCrash = math.random(1,2)
@@ -797,7 +816,7 @@ function ENT:StartTouch(prop)
 end
 
 local function check(ent1,ent2)
-	if (ent1:GetClass()=="uvair" or ent1.Base=="uvair") and !ent1.Downed and (ent2==game.GetWorld() or (ent2:GetClass() != "prop_physics" and !ent2:IsVehicle())) then
+	if (ent1:GetClass()=="uvair" or ent1.Base=="uvair") and not ent1.Downed and (ent2==game.GetWorld() or (ent2:GetClass() ~= "prop_physics" and not ent2:IsVehicle())) then
 		return false
 	end
 end

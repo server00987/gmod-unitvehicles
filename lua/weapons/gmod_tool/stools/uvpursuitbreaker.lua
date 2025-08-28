@@ -9,11 +9,6 @@ TOOL.ClientConVar["pbcooldown"] = 60
 local conVarsDefault = TOOL:BuildConVarList()
 
 if SERVER then
-	util.AddNetworkString( "UVPursuitBreakerAdjust" )
-	util.AddNetworkString( "UVPursuitBreakerRetrieve" )
-	util.AddNetworkString( "UVPursuitBreakerCreate" )
-	util.AddNetworkString( "UVPursuitBreakerRefresh" )
-	util.AddNetworkString( "UVPursuitBreakerLoad" )
 
 	net.Receive("UVPursuitBreakerRetrieve", function( length, ply )
 		ply.UVPBTOOLMemory = net.ReadTable()
@@ -46,13 +41,20 @@ if SERVER then
 		UVLoadPursuitBreaker(jsonfile)
 	end)
 	
+	net.Receive("UVPursuitBreakerLoadAll", function( length, ply )
+		--Load ALL Pursuit Breakers
+		local pursuitbreakers = file.Find( "unitvehicles/pursuitbreakers/"..game.GetMap().."/*.json", "DATA" )
+		for k,v in pairs(pursuitbreakers) do
+			UVLoadPursuitBreaker(v)
+		end
+	end)
+
 end
 
 if CLIENT then
 
 	TOOL.Information = {
 		{ name = "info"},
-		{ name = "left" },
 		{ name = "right" },
 	}
 
@@ -199,7 +201,7 @@ if CLIENT then
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
-			if !LocalPlayer():IsSuperAdmin() then
+			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
@@ -210,8 +212,8 @@ if CLIENT then
 
 			convar_table['unitvehicle_pursuitbreaker_maxpb'] = GetConVar("uvpursuitbreaker_maxpb"):GetInt()
 			convar_table['unitvehicle_pursuitbreaker_pbcooldown'] = GetConVar("uvpursuitbreaker_pbcooldown"):GetInt()
-			RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
-			RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
+			-- RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
+			-- RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
 
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
@@ -257,6 +259,32 @@ if CLIENT then
 		UVPursuitBreakerScrollPanel:SetPos( 0, 0 )
 		
 		UVPursuitBreakerGetSaves( UVPursuitBreakerScrollPanel )
+
+		local MarkAll = vgui.Create( "DButton", CPanel )
+		MarkAll:SetText( "#tool.uvpursuitbreaker.markall" )
+		MarkAll:SetSize( 280, 20 )
+		MarkAll.DoClick = function( self )
+			UVMarkAllLocationsPB()
+			notification.AddLegacy( "#tool.uvpursuitbreaker.markedall", NOTIFY_UNDO, 10 )
+			surface.PlaySound( "buttons/button15.wav" )
+		end
+		CPanel:AddItem(MarkAll)
+
+		local LoadAll = vgui.Create( "DButton", CPanel )
+		LoadAll:SetText( "#tool.uvpursuitbreaker.load.all" )
+		LoadAll:SetSize( 280, 20 )
+		LoadAll.DoClick = function( self )
+			if not LocalPlayer():IsSuperAdmin() then
+				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
+				surface.PlaySound( "buttons/button10.wav" )
+				return
+			end
+			net.Start("UVPursuitBreakerLoadAll")
+			net.SendToServer()
+			notification.AddLegacy( "#tool.uvpursuitbreaker.loaded.all", NOTIFY_UNDO, 5 )
+			surface.PlaySound( "buttons/button15.wav" )
+		end
+		CPanel:AddItem(LoadAll)
 
 		local Refresh = vgui.Create( "DButton", CPanel )
 		Refresh:SetText( "#refresh" )
@@ -324,7 +352,7 @@ function TOOL:RightClick(trace)
 		ply.UVPBTOOLMemory = {}
 	end
 	
-	if ent:GetClass() != "prop_physics" then return false end
+	if ent:GetClass() ~= "prop_physics" then return false end
 	
 	self:GetPursuitBreakerData( ent, ply, trace.HitPos )
 
@@ -336,13 +364,7 @@ end
 
 function TOOL:LeftClick( trace )
 	if CLIENT then return true end
-
-	--Load ALL Pursuit Breakers
-	local pursuitbreakers = file.Find( "unitvehicles/pursuitbreakers/"..game.GetMap().."/*.json", "DATA" )
-	for k,v in pairs(pursuitbreakers) do
-		UVLoadPursuitBreaker(v)
-	end
-		
+		--:thinking:
 	return true
 end
 

@@ -26,7 +26,7 @@ end
 
 if CLIENT then
 	function ENT:Draw()
-		if !IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() != "gmod_tool" or UVHUDRace then return end
+		if not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() ~= "gmod_tool" or UVHUDRace then return end
 
 		self:DrawModel()
 

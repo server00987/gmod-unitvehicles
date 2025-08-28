@@ -13,7 +13,7 @@ end
 
 function ENT:Think()
 	
-	if uvtargeting and !self.deployed then
+	if UVTargeting and not self.deployed then
 		self:DeployRoadBlock()
 	end
 	
@@ -27,9 +27,17 @@ function ENT:DeployRoadBlock()
 
 	if SpawnMainUnits:GetBool() then
 		if self.Entity.Disperse == true then
-			UVAutoSpawn(nil, nil, nil, nil, nil, pos, Angles, true)
+			if self.Entity.Rhino == true then
+				UVAutoSpawn(nil, true, nil, nil, nil, pos, Angles, true)
+			else
+				UVAutoSpawn(nil, nil, nil, nil, nil, pos, Angles, true)
+			end
 		else
-			UVAutoSpawn(nil, nil, nil, nil, nil, pos, Angles)
+			if self.Entity.Rhino == true then
+				UVAutoSpawn(nil, true, nil, nil, nil, pos, Angles)
+			else
+				UVAutoSpawn(nil, nil, nil, nil, nil, pos, Angles)
+			end
 		end
 	end
 

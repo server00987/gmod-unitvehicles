@@ -14,80 +14,74 @@ Type 4 = Street Racing
 local dvd = DecentVehicleDestination
 
 if SERVER then
+
+    UVTimeToCheckForPotentialSuspects = CurTime()
     
-    util.AddNetworkString( "UVHUDWanted" )
-    
-    hook.Add("Think", "UVCheckForCalls", function()
+    --hook.Add("Think", "UVCheckForCalls", function()
+    timer.Create("UVCheckForCalls", 2, 0, function()
         for _, ent in ents.Iterator() do
-            if UVPassConVarFilter(ent) and !table.HasValue(uvpotentialsuspects, ent) then
-                table.insert(uvpotentialsuspects, ent)
+            if UVPassConVarFilter(ent) and not table.HasValue(UVPotentialSuspects, ent) then
+                table.insert(UVPotentialSuspects, ent)
                 ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
-                    if table.HasValue(uvpotentialsuspects, vehicle) then
-                        table.RemoveByValue(uvpotentialsuspects, vehicle)
+                    if table.HasValue(UVPotentialSuspects, vehicle) then
+                        table.RemoveByValue(UVPotentialSuspects, vehicle)
                     end
                 end)
             end
         end
-        
-        if GetConVar("ai_ignoreplayers"):GetBool() or !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then
-            if uvcalllocation and uvtargeting then --Remove the call, allow for new calls to come in
-                uvcalllocation = nil
-            end
-            if uvpreinfractioncount and uvpreinfractioncount > 0 then
-                uvpreinfractioncount = 0
-            end
-            return 
-        end
-        
-        if !uvtimetocheckforpotentialsuspects then
-            uvtimetocheckforpotentialsuspects = CurTime()
-        end
-        
+
         local timeout = 3
         local ctimeout = 1
         
-        if CurTime() > uvtimetocheckforpotentialsuspects + timeout then --Check for potential suspects
-            -- for _, ent in ents.Iterator() do
-            --     if UVPassConVarFilter(ent) and !table.HasValue(uvpotentialsuspects, ent) then
-            --         table.insert(uvpotentialsuspects, ent)
-            --         ent:CallOnRemove( "UVWantedPotentialSuspectRemoved", function(vehicle)
-            --             if table.HasValue(uvpotentialsuspects, vehicle) then
-            --                 table.RemoveByValue(uvpotentialsuspects, vehicle)
-            --             end
-            --         end)
-            --     end
-            -- end
+        if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
+            if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
+                if UVTSpawnCondition:GetInt() == 3 then
+                    UVAutoSpawnTraffic()
+                elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
+                    UVAutoSpawnTraffic()
+                end
+            end
+
             UVCheckForSpeeders()
-            uvtimetocheckforpotentialsuspects = CurTime()
+            UVTimeToCheckForPotentialSuspects = CurTime()
+        end
+        
+        if GetConVar("ai_ignoreplayers"):GetBool() or not GetConVar("unitvehicle_callresponse"):GetBool() or UVTargeting or uvcallexists then
+            if UVCallLocation and UVTargeting then --Remove the call, allow for new calls to come in
+                UVCallLocation = nil
+            end
+            if UVPreInfractionCount and UVPreInfractionCount > 0 then
+                UVPreInfractionCount = 0
+            end
         end
         
     end)
     
     function UVCheckForSpeeders()
-        if next(uvpotentialsuspects) == nil or next(dvd.Waypoints) == nil then return end
+        if next(UVPotentialSuspects) == nil or next(dvd.Waypoints) == nil then return end
         
         local SpeedTable = {}
         
-        for k, v in pairs(uvpotentialsuspects) do
+        for k, v in pairs(UVPotentialSuspects) do
             local speed = v:GetVelocity():Length2DSqr()
             table.insert(SpeedTable, speed)
         end
         
-        local fastestspeeder = table.GetWinningKey(SpeedTable)
-        local suspect = uvpotentialsuspects[fastestspeeder]
-        local speed = SpeedTable[fastestspeeder]
+        local fastestSpeeder = table.GetWinningKey(SpeedTable)
+        local suspect = UVPotentialSuspects[fastestSpeeder]
+        local speed = SpeedTable[fastestSpeeder]
         
         if next(dvd.Waypoints) == nil then
             local Waypoint = dvd.GetNearestWaypoint(suspect:WorldSpaceCenter())
-            local speedlimitmph = Waypoint["SpeedLimit"]
-            speedlimit = speedlimitmph^2
+            local speedLimitMph = Waypoint["SpeedLimit"]
+            SpeedLimit = speedLimitMph^2
         else
-            speedlimit = (GetConVar("unitvehicle_speedlimit"):GetFloat()*17.6)^2
+            SpeedLimit = (GetConVar("unitvehicle_speedlimit"):GetFloat()*17.6)^2
         end
         
-        if speed > (speedlimit+30976) then
-            uvpreinfractioncount = uvpreinfractioncount + 1
-            if uvpreinfractioncount >= 10 then
+        if speed > (SpeedLimit+30976) then
+            UVPreInfractionCount = UVPreInfractionCount + 1
+            if UVPreInfractionCount >= 10 then
                 UVCallInitiate(suspect, 1)
             end
         end
@@ -95,9 +89,9 @@ if SERVER then
     end
     
     function UVCallInitiate(suspectvehicle, type)
-        if !GetConVar("unitvehicle_callresponse"):GetBool() or uvtargeting or uvcallexists then return end
+        if not GetConVar("unitvehicle_callresponse"):GetBool() or UVTargeting or uvcallexists then return end
         
-        uvpreinfractioncount = 0
+        UVPreInfractionCount = 0
         
         uvcallexists = true
         
@@ -107,7 +101,7 @@ if SERVER then
             Entity(1):EmitSound("ui/pursuit/spotting_start.wav", 0, 100, 0.5)
         end
         
-        if #uvpotentialsuspects > 1 then --Multiple suspects
+        if #UVPotentialSuspects > 1 then --Multiple suspects
             type = 4
         end
         
@@ -115,19 +109,19 @@ if SERVER then
         
         if type == 1 then --Speeding
             if GetConVar("unitvehicle_chatter"):GetBool() then
-                timecheck = UVChatterDispatchCallSpeeding(uvheatlevel)
+                timecheck = UVChatterDispatchCallSpeeding(UVHeatLevel)
             end
         elseif type == 2 then --Damage To Property
             if GetConVar("unitvehicle_chatter"):GetBool() then
-                timecheck = UVChatterDispatchCallDamageToProperty(uvheatlevel)
+                timecheck = UVChatterDispatchCallDamageToProperty(UVHeatLevel)
             end
         elseif type == 3 then --Hit and Run
             if GetConVar("unitvehicle_chatter"):GetBool() then
-                timecheck = UVChatterDispatchCallHitAndRun(uvheatlevel)
+                timecheck = UVChatterDispatchCallHitAndRun(UVHeatLevel)
             end
         elseif type == 4 then --Street Racing
             if GetConVar("unitvehicle_chatter"):GetBool() then
-                timecheck = UVChatterDispatchCallStreetRacing(uvheatlevel)
+                timecheck = UVChatterDispatchCallStreetRacing(UVHeatLevel)
             end
         end
         
@@ -135,17 +129,17 @@ if SERVER then
             UVApplyHeatLevel()
             UVUpdateHeatLevel()
             UVAutoSpawn()
-            uvidlespawning = CurTime()
-            uvpresencemode = true
+            uvIdleSpawning = CurTime()
+            UVPresenceMode = true
             UVRestoreResourcePoints()
         end)
         
         timer.Simple(timecheck, function()
-            if type != 4 then
+            if type ~= 4 then
                 UVCallReportDescription(suspectvehicle, calllocation)
             else
                 UVCallRespond(suspectvehicle, true) --No questions asked
-                uvcalllocation = calllocation
+                UVCallLocation = calllocation
             end
         end)
         
@@ -153,7 +147,7 @@ if SERVER then
     
     function UVCallReportDescription(suspectvehicle, calllocation)
         
-        if uvtargeting then return end
+        if UVTargeting then return end
         
         local timecheck = 5
         
@@ -165,7 +159,7 @@ if SERVER then
         end
         
         timer.Simple(timecheck, function()
-            if !IsValid(suspectvehicle) or uvtargeting then return end
+            if not IsValid(suspectvehicle) or UVTargeting then return end
             local timecheck2 = 5
             local mathdescription = math.random(1,2)
             if mathdescription == 1 then --Known description
@@ -178,7 +172,7 @@ if SERVER then
                 end
                 timer.Simple(timecheck2, function()
                     UVCallRespond(suspectvehicle)
-                    uvcalllocation = calllocation
+                    UVCallLocation = calllocation
                 end)
             else --Unknown description
                 if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
@@ -189,7 +183,7 @@ if SERVER then
                 end
                 timer.Simple(timecheck2, function()
                     UVCallRespond(suspectvehicle)
-                    uvcalllocation = calllocation
+                    UVCallLocation = calllocation
                 end)
             end
         end)
@@ -198,7 +192,7 @@ if SERVER then
     
     function UVCallRespond(suspectvehicle)
         
-        if uvtargeting then return end
+        if UVTargeting then return end
         
         uvcallexists = nil
         
@@ -211,7 +205,7 @@ if SERVER then
             UVChatterCallResponding(unit)
         end
         
-        for k, v in pairs(uvpotentialsuspects) do
+        for k, v in pairs(UVPotentialSuspects) do
             UVAddToWantedListVehicle(v)
         end
         
@@ -221,7 +215,7 @@ else
     
     net.Receive("UVHUDWanted", function()
         local soundfiles = file.Find("sound/ui/pursuit/wanted/*", "GAME" )
-        if !soundfiles or #soundfiles == 0 then return end
+        if not soundfiles or #soundfiles == 0 then return end
         surface.PlaySound("ui/pursuit/wanted/"..soundfiles[math.random(1, #soundfiles)])
         
         if Glide then

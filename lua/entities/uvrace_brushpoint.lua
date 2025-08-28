@@ -43,15 +43,15 @@ if SERVER then
 	end
 
 	function ENT:StartTouch(vehicle)
-		if !vehicle.uvraceparticipant then return end
+		if not vehicle.uvraceparticipant then return end
 		if vehicle.uvbusted then return end
 
 		local driver = vehicle:GetDriver()//vehicle.racedriver
 	
 		self:SetupGlobals(vehicle, vehicle)
 
-		if !UVRaceTable or !UVRaceTable['Participants'] then return end
-		if !UVRaceTable['Participants'][vehicle] then return end
+		if not UVRaceTable or not UVRaceTable['Participants'] then return end
+		if not UVRaceTable['Participants'][vehicle] then return end
 
 		local vehicle_array = UVRaceTable['Participants'][vehicle]
 
@@ -86,15 +86,26 @@ if SERVER then
 				--vehicle.currentcheckpoint = 1
 
 				//if IsValid(driver) and driver:IsPlayer() then
-				net.Start("uvrace_lapcomplete")
-				net.WriteEntity(vehicle)
-				net.WriteFloat(laptime)
-				net.WriteFloat(vehicle_array['LastLapCurTime'])
-				net.Broadcast()
+				-- net.Start("uvrace_lapcomplete")
+				-- net.WriteEntity(vehicle)
+				-- net.WriteFloat(laptime)
+				-- net.WriteFloat(vehicle_array['LastLapCurTime'])
+				-- net.Broadcast()
+				for veh, data in pairs(UVRaceTable['Participants']) do
+					if not IsValid(veh) then continue end
+					local ply = veh:GetDriver()
+					if IsValid(ply) and ply:IsPlayer() then
+						net.Start("uvrace_lapcomplete")
+						net.WriteEntity(vehicle)
+						net.WriteFloat(laptime)
+						net.WriteFloat(vehicle_array['LastLapCurTime'])
+						net.Send(ply)
+					end
+				end
 				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
-				if vehicle_array['Lap'] == UVRaceLaps:GetInt() then --Completed race
+				if vehicle_array['Lap'] == UVRaceTable.Info.Laps then --Completed race
 					vehicle_array['Lap'] = 1
 					vehicle_array['Finished'] = true
 
@@ -104,8 +115,7 @@ if SERVER then
 					local place = 1
 
 					for veh, array in pairs(UVRaceTable['Participants']) do
-						if vehicle == veh then continue end
-						if array.Finished then
+						if array.Finished and vehicle ~= veh then
 							place = place +1
 						end
 					end
@@ -114,21 +124,21 @@ if SERVER then
 					net.WriteEntity(vehicle)
 					//net.WriteString(vehicle_array.Name)
 					net.WriteInt(place, 32)
-					net.WriteFloat(CurTime() - vehicle.racestart)
+					net.WriteFloat(CurTime() - UVRaceTable.Info.Time)
 					net.Broadcast()
 					
 					UVRaceRemoveParticipant( vehicle, 'Finished' )
 				else
 					vehicle_array['Lap'] = vehicle_array['Lap'] +1
 
-					if vehicle_array['Lap'] == UVRaceLaps:GetInt() then
-						if IsValid(driver) and driver:IsPlayer() then
-							net.Start("uvrace_notification")
-							net.WriteString("#uv.race.finallap")
-							net.WriteFloat(3)
-							net.Send(driver)
-						end
-					end
+					-- if vehicle_array['Lap'] == UVRaceLaps:GetInt() then
+						-- if IsValid(driver) and driver:IsPlayer() then
+							-- net.Start("uvrace_notification")
+							-- net.WriteString("#uv.race.finallap")
+							-- net.WriteFloat(3)
+							-- net.Send(driver)
+						-- end
+					-- end
 					--vehicle.currentlap = vehicle.currentlap + 1
 				end
 

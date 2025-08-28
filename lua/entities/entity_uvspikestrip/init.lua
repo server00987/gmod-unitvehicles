@@ -57,7 +57,7 @@ function ENT:Initialize()
 			end
 		end
 	end
-
+	
 	hook.Add("Think", "UVSpikeStripThink"..self:EntIndex(), function()
 		if IsValid(self) then
 			self:DoUpdate()
@@ -69,125 +69,149 @@ end
 
 -- Glide support
 function ENT:DoUpdate()
-
+	
 	local startpos = self:GetPos()
 	local dir = self:GetUp()
 	local len = 20
-
+	
 	local mins = self:OBBMins()
 	local maxs = self:OBBMaxs()
-
+	
 	local found = {}
 	local model = self.Entity:GetModel()
-
+	
 	if models[model] == 'X' then
 		for x = mins.x, maxs.x, 10 do
 			--for y = mins.y, maxs.y, 10 do 
-				local offset = Vector(x, 0, 0)
-				local pos = self.Entity:LocalToWorld(offset)
-	
-				local tr = util.TraceLine({
-					start = pos,
-					endpos = pos + dir * len,
-					filter = self.Entity,
-					ignoreworld = true
-				})
-	
-				if tr.Hit and tr.Entity then
-					if self.racerdeployed and self.racerdeployed == tr.Entity then continue end
+			local offset = Vector(x, 0, 0)
+			local pos = self.Entity:LocalToWorld(offset)
+			
+			local tr = util.TraceLine({
+				start = pos,
+				endpos = pos + dir * len,
+				filter = self.Entity,
+				ignoreworld = true
+			})
+			
+			if tr.Hit and tr.Entity then
+				if not (self.racerdeployed and self.racerdeployed == tr.Entity) then
 					table.insert(found, {tr.Entity, tr.HitPos})
 				end
+			end
 			--end
 		end
 	elseif models[model] == 'Y' then
 		for x = mins.y, maxs.y, 10 do
 			--for y = mins.y, maxs.y, 10 do 
-				local offset = Vector(0, x, 0)
-				local pos = self.Entity:LocalToWorld(offset)
-	
-				local tr = util.TraceLine({
-					start = pos,
-					endpos = pos + dir * len,
-					filter = self.Entity,
-					ignoreworld = true
-				})
-	
-				if tr.Hit and tr.Entity then
-					if self.racerdeployed and self.racerdeployed == tr.Entity then continue end
+			local offset = Vector(0, x, 0)
+			local pos = self.Entity:LocalToWorld(offset)
+			
+			local tr = util.TraceLine({
+				start = pos,
+				endpos = pos + dir * len,
+				filter = self.Entity,
+				ignoreworld = true
+			})
+			
+			if tr.Hit and tr.Entity then
+				if not (self.racerdeployed and self.racerdeployed == tr.Entity) then
 					table.insert(found, {tr.Entity, tr.HitPos})
 				end
+			end
 			--end
 		end
 	end
-
+	
+	local reported = false
+	
 	for _, array in pairs(found) do
-		if !array[1].IsGlideVehicle then continue end
-		if !self.racerdeployed and IsValid(array[1].UnitVehicle) then continue end
-		if self.racerdeployed and not array[1].UnitVehicle then
-			if not RacerFriendlyFire:GetBool() then return end
-		end
-
-		local hit = false
-
-		for i, j in pairs(array[1].wheels) do
-			if j.bursted then continue end
-			local dist = (j:GetPos() - array[2]):Length()
-
-			local og_forwardtractionmax = j.params.forwardTractionMax
-			local og_sidetractionmax = j.params.sideTractionMax
-
-			local og_radius = j.params.radius
-
-			function j:_restore() -- temp func
-				j.bursted = false
-				j.params.forwardTractionMax = og_forwardtractionmax
-				j.params.sideTractionMax = og_sidetractionmax
-				j:SetRadius( og_radius )
-				timer.Remove("uvspiked"..j:EntIndex())
-			end
-
-			if dist < 50 then
-				hit = true
-				j.bursted = true
-				j.params.forwardTractionMax = og_forwardtractionmax * .1
-				j.params.sideTractionMax = og_sidetractionmax * .1
-
-				local e = EffectData()
-				e:SetEntity(j.Entity)
-				util.Effect("entity_remove", e)
-
-				j:EmitSound("glide/wheels/blowout.wav")
-
-				local radius = j.params.radius * 0.8
-
-   				local size = j.params.modelScale * radius * 2
-				local obbSize = j:OBBMaxs() - j:OBBMins()
-    			local scale = Vector( size[1] / obbSize[1], size[2] / obbSize[2], size[3] / obbSize[3] )
-
-				j:SetRadius( radius )
-				constraint.NoCollide(j,self.Entity,0,0)
-
-				timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
-					if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
-						if array[1].wrecked then return end
-						-- j.bursted = false
-						-- j.params.forwardTractionMax = og_forwardtractionmax
-						-- j.params.sideTractionMax = og_sidetractionmax
-						j:EmitSound("gadgets/spikestrip/tirereinflatesound.wav")
-						-- j:Repair()
-						j:_restore()
+		if array[1].IsGlideVehicle then
+			if not (not self.racerdeployed and IsValid(array[1].UnitVehicle)) then
+				if not (self.racerdeployed and not array[1].UnitVehicle and not RacerFriendlyFire:GetBool()) then
+					local hit = false
+					
+					for i, j in pairs(array[1].wheels) do
+						if not j.bursted then
+							local dist = (j:GetPos() - array[2]):Length()
+							
+							local og_forwardtractionmax = j.params.forwardTractionMax
+							local og_sidetractionmax = j.params.sideTractionMax
+							
+							local og_radius = j.params.radius
+							
+							function j:_restore() -- temp func
+								j.bursted = false
+								j.params.forwardTractionMax = og_forwardtractionmax
+								j.params.sideTractionMax = og_sidetractionmax
+								j:SetRadius(og_radius)
+								timer.Remove("uvspiked"..j:EntIndex())
+							end
+							
+							if dist < 50 then
+								hit = true
+								j.bursted = true
+								j.params.forwardTractionMax = og_forwardtractionmax * .1
+								j.params.sideTractionMax = og_sidetractionmax * .1
+								
+								local e = EffectData()
+								e:SetEntity(j.Entity)
+								util.Effect("entity_remove", e)
+								
+								j:EmitSound("glide/wheels/blowout.wav")
+								
+								local radius = j.params.radius * 0.8
+								
+								local size = j.params.modelScale * radius * 2
+								local obbSize = j:OBBMaxs() - j:OBBMins()
+								local scale = Vector(size[1] / obbSize[1], size[2] / obbSize[2], size[3] / obbSize[3])
+								
+								j:SetRadius(radius)
+								constraint.NoCollide(j, self.Entity, 0, 0)
+								
+								timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
+									if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
+										if array[1].wrecked then return end
+										j:EmitSound("gadgets/spikestrip/tirereinflatesound.wav")
+										j:_restore()
+									end
+								end)
+							end
+						end
 					end
-				end)
-			end
-		end
+					
+					if hit and not self.reported then
+						-- local attacker = UVGetDriver(array[1])
+						-- local attackerName = UVGetDriverName(array[1])
 
-		if hit then
-			if array[1].UnitVehicle then
-				timer.Simple(1, function()
-					if IsValid(self.Entity) then
-						self:UVSpikeStripHit()
+						-- local victim = UVGetDriver(self.unitdeployed or self.racerdeployed)
+						-- local victimName = UVGetDriverName(self.unitdeployed or self.racerdeployed)
+
+						-- local args = {
+						-- 	['User'] = attackerName,
+						-- 	['Hit'] = victimName
+						-- }
+
+						-- local playersToSend = {}
+
+						-- if attacker then
+						-- 	table.insert( playersToSend, attacker )
+						-- end
+
+						-- if victim then
+						-- 	table.insert( playersToSend, victim )
+						-- end
+						self.reported = true
+						ReportPTEvent( self.unitdeployed or self.racerdeployed, array[1], 'Spikestrip', 'Hit' )
+
+						timer.Simple(1, function()
+							self.reported = false
+							if IsValid(self.Entity) and not array[1].UnitVehicle then
+								self.reported = false
+								self:UVSpikeStripHit()
+							end
+						end)
 					end
-				end)
+				end
 			end
 		end
 	end
@@ -198,7 +222,7 @@ function ENT:StartTouch( ent )
 		if ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then
 			if ent:GetDamaged() then return end
 			local car = ent:GetBaseEnt()
-			if car.UnitVehicle or car.UVWanted and !AutoHealth:GetBool() then
+			if car.UnitVehicle or car.UVWanted and not AutoHealth:GetBool() then
 				if self.racerdeployed and car.UVWanted then
 					if not RacerFriendlyFire:GetBool() then return end
 				end
@@ -206,11 +230,11 @@ function ENT:StartTouch( ent )
 				local damage = MaxHealth*0.1
 				car:ApplyDamage( damage, DMG_GENERIC )
 				car.rammed = true
-                timer.Simple(3, function()
-                    if IsValid(car) then
-                        car.rammed = nil
-                    end
-                end)
+				timer.Simple(3, function()
+					if IsValid(car) then
+						car.rammed = nil
+					end
+				end)
 			end
 			local ogwheelpos = ent.GhostEnt:GetLocalPos()
 			ent:SetDamaged(true)
@@ -269,7 +293,7 @@ function ENT:StartTouch( ent )
 			ent:EmitSound("weapons/357_fire2.wav")
 		end
 	end
-	if !IsValid(ent.UnitVehicle) then
+	if not IsValid(ent.UnitVehicle) then
 		if ent.cnWheelHealth then
 			ent:EmitSound("spikestrip/tiredeflatesound.wav")
 			ent:EmitSound("weapons/357_fire2.wav")
@@ -277,16 +301,16 @@ function ENT:StartTouch( ent )
 		elseif ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then
 			local car = ent:GetBaseEnt()
 			if ent:GetDamaged() or car.UnitVehicle then return end
-			if car.UnitVehicle or (car.UVWanted and !AutoHealth:GetBool()) then
+			if car.UnitVehicle or (car.UVWanted and not AutoHealth:GetBool()) then
 				local MaxHealth = car:GetMaxHealth()
 				local damage = MaxHealth*0.1
 				car:ApplyDamage( damage, DMG_GENERIC )
 				car.rammed = true
-                timer.Simple(3, function()
-                    if IsValid(car) then
-                        car.rammed = nil
-                    end
-                end)
+				timer.Simple(3, function()
+					if IsValid(car) then
+						car.rammed = nil
+					end
+				end)
 			end
 			local ogwheelpos
 			if ent.GhostEnt then
@@ -313,7 +337,7 @@ function ENT:StartTouch( ent )
 				end
 			end)
 		elseif ent:GetClass() == "prop_vehicle_jeep" then
-			if isfunction(ent.GetDriver) and IsValid(ent:GetDriver()) and !IsValid(ent.DecentVehicle) and ent:GetDriver():IsPlayer() then 
+			if isfunction(ent.GetDriver) and IsValid(ent:GetDriver()) and not IsValid(ent.DecentVehicle) and ent:GetDriver():IsPlayer() then 
 				ent:GetDriver():PrintMessage( HUD_PRINTCENTER, "YOU HIT A SPIKE STRIP!")
 			end	
 			local ogmaterial0 = ent:GetWheel(0):GetMaterial()
@@ -347,7 +371,7 @@ function ENT:StartTouch( ent )
 					ent:GetWheel(2):SetMaterial(ogmaterial2)
 					ent:GetWheel(3):SetMaterial(ogmaterial3)
 					ent.cnWheelHealth = nil 
-					if ent:IsVehicle() and isfunction(ent.GetDriver) and IsValid(ent:GetDriver()) and !IsValid(ent.DecentVehicle) and ent:GetDriver():IsPlayer() then 
+					if ent:IsVehicle() and isfunction(ent.GetDriver) and IsValid(ent:GetDriver()) and not IsValid(ent.DecentVehicle) and ent:GetDriver():IsPlayer() then 
 						ent:GetDriver():PrintMessage( HUD_PRINTCENTER, "Tires reinflated!")
 					end
 				else
@@ -363,27 +387,27 @@ function ENT:StartTouch( ent )
 end
 
 function ENT:UVSpikeStripHit()
-
+	
 	local e = EffectData()
 	e:SetEntity(self.Entity)
 	util.Effect("entity_remove", e)
 	self.Entity:Remove() --Remove spike strip
-
+	
 	if self.racerdeployed then return end
 	if #ents.FindByClass("uvair") > 0 then
 		local unitss = table.Add(units, ents.FindByClass("uvair"))
 		local random_entry = math.random(#unitss)	
 		local unit = unitss[random_entry]
-		if GetConVar("unitvehicle_chatter"):GetBool() and uvtargeting then
-			UVChatterAirSpikeStripHit(unit)
+		if GetConVar("unitvehicle_chatter"):GetBool() and UVTargeting then
+			UVChatterSpikeStripHit(unit)
 		end
 	elseif #ents.FindByClass("npc_uv*") > 0 then
 		local units = ents.FindByClass("npc_uv*")
 		local random_entry = math.random(#units)	
 		local unit = units[random_entry]
-		if GetConVar("unitvehicle_chatter"):GetBool() and uvtargeting then
+		if GetConVar("unitvehicle_chatter"):GetBool() and UVTargeting then
 			UVChatterSpikeStripHit(unit)
 		end
 	end
-
+	
 end
