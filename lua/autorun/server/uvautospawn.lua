@@ -2,15 +2,6 @@ local dvd = DecentVehicleDestination
 
 --SIMFPHYS ONLY--
 
--- timer.Simple(5, function()
--- 	print("hanham")
--- 	file.AsyncRead('myfolder/test.json', 'DATA', function( _, _, status, data )
--- 			gmsave.LoadMap(data, Entity(1))
--- 		end, true)
--- 		--gmsave.LoadMap(Entity(1), "myfolder/test.json")
--- 		--file.Write("myfolder/test.json", gmsave.SaveMap(Entity(1)));
--- 	end)
-
 local function ValidateModel( model )
 	local v_list = list.Get( "simfphys_vehicles" )
 	for listname, _ in pairs( v_list ) do

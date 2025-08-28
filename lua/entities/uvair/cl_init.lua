@@ -7,7 +7,6 @@ local Headlights = GetConVar("unitvehicle_enableheadlights")
 function ENT:Initialize()
 
 	self.Model = self:GetModel()
-	print(self.Model)
 
 	if self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
 		self.SpotlightPos = Vector(85,0,25)

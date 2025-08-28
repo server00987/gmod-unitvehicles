@@ -671,8 +671,6 @@ function ENT:StartCrush()
 	
 	self.DownTime = CurTime()
 	self.DownState = false
-
-	print(self.crashing)
 	
 	if not self.crashing then
 		if not timer.Exists("uvcombotime") then
@@ -698,7 +696,6 @@ function ENT:StartCrush()
 		util.Effect("Explosion",eff)
 		util.BlastDamage(self,self,self:GetPos(),1000,10)
 		if Chatter:GetBool() and IsValid(self) then
-			print("hi")
 			UVChatterWreck(self)
 		end
 		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)

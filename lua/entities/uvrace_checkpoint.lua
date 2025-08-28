@@ -142,8 +142,6 @@ if CLIENT then
 				nextcheckpoint = 1
 			end
 
-			--print(nextcheckpoint)
-			//print(id, currentcheckpoint, nextcheckpoint)
 			if (id ~= currentcheckpoint and id ~= nextcheckpoint) or id == 0 then return end//or id == 0 then return end
 			
 			cam.Start3D()

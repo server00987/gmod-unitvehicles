@@ -271,7 +271,6 @@ function UVSoundHeat(heatlevel)
 		-- 	UVPlayingHeat = true
 		-- end
 	elseif UVHeatPlayTransition then
-		print("ok")
 		UVHeatPlayTransition = false
 
 		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
@@ -3687,14 +3686,7 @@ else --HUD/Options
 
 	net.Receive('UV_Chatter', function()
 		local audio_file = "sound/"..net.ReadString()
-		--local parameters = net.ReadString()
 		local can_skip = net.ReadBool()
-
-		-- if can_skip and IsValid(uvchatterplaying) and parameters ~= 2 then
-		-- 	uvchatterplaying:Stop()
-		-- end
-		
-		print(audio_file)
 
 		if lastCanSkip == false and IsValid(uvchatterplaying) then
 			local state = uvchatterplaying:GetState()

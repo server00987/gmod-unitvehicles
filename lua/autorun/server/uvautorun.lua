@@ -243,7 +243,6 @@ NETWORK_STRINGS = {
 
 if SERVER then
 	for _, v in pairs( NETWORK_STRINGS ) do
-		print('Adding', v)
 		util.AddNetworkString( v )
 	end
 end
