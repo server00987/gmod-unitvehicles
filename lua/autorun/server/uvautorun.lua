@@ -2595,7 +2595,7 @@ function UVCheckIfBeingBusted(enemy)
 		
 		--Stunt roll
 		if not enemy.UVStuntSpin then
-			if enemyAnglesVelo.y > 180 then
+			if enemyAnglesVelo.z > 180 then
 				enemy.UVStuntSpin = true
 				timer.Simple(10, function()
 					enemy.UVStuntSpin = nil
