@@ -1922,6 +1922,7 @@ if SERVER then
 					v.UVSpecial = self
 					v.UnitVehicle = self
 					v:SetEngineState(2)
+					v.inputThrottleModifierMode = 2
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
@@ -1968,6 +1969,7 @@ if SERVER then
 							v.UVSpecial = self
 							v.UnitVehicle = self
 							v:TurnOn()
+							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
