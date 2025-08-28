@@ -244,6 +244,8 @@ function UVSoundHeat(heatlevel)
 	end
 
 	if UVHeatLevelIncrease then
+		UVHeatLevelIncrease = false
+		UVHeatPlayTransition = true
 		UVHeatPlayIntro = true
 	end
 
@@ -252,7 +254,7 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayMusic = true
 
 		--local introArray = (PursuitFilePathsTable[theme].intro and PursuitFilePathsTable[theme].intro[heatlevel]) or {}
-		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["1"]))
+		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["default"]))
 
 		if introArray and #introArray > 0 then
 			local introTrack = introArray[math.random(1, #introArray)]
@@ -269,10 +271,11 @@ function UVSoundHeat(heatlevel)
 		-- 	UVPlayingHeat = true
 		-- end
 	elseif UVHeatPlayTransition then
+		print("ok")
 		UVHeatPlayTransition = false
 
 		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
-		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["1"]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
 			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
@@ -295,7 +298,7 @@ function UVSoundHeat(heatlevel)
 		-- end
 
 		--local heatArray = (PursuitFilePathsTable[theme].heat and PursuitFilePathsTable[theme].heat[heatlevel]) or {}
-		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["1"]) or {}
+		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["default"]) or {}
 
 		if heatArray and #heatArray > 0 then
 			local heatTrack = heatArray[math.random(1, #heatArray)]
@@ -354,7 +357,7 @@ function UVSoundBusting(heatlevel)
 	-- end
 	
 	--local bustingArray = (PursuitFilePathsTable[theme].busting and PursuitFilePathsTable[theme].busting[heatlevel]) or {}
-	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["1"]) or {}
+	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["default"]) or {}
 
 	if bustingArray and #bustingArray > 0 then
 		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
@@ -423,7 +426,7 @@ function UVSoundCooldown(heatlevel)
 	-- 	UVSoundHeat( UVHeatLevel )
 	-- 	return
 	-- end
-	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["1"])
+	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["default"])
 	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
 
 	if cooldownArray and #cooldownArray > 0 then
@@ -490,7 +493,7 @@ function UVSoundBusted(heatlevel)
 	-- 	return
 	-- end
 
-	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["1"]) or {}
+	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["default"]) or {}
 
 	if bustedArray and #bustedArray > 0 then
 		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
@@ -502,7 +505,7 @@ function UVSoundBusted(heatlevel)
 			return
 		end
 	else
-		UVSoundHeat( UVHeatLevel )
+		--UVSoundHeat( UVHeatLevel )
 		return
 	end
 
@@ -555,7 +558,7 @@ function UVSoundEscaped(heatlevel)
 	-- 	return
 	-- end
 
-	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["1"]) or {}
+	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["default"]) or {}
 
 	if escapedArray and #escapedArray > 0 then
 		local escapedTrack = escapedArray[math.random(1, #escapedArray)]
@@ -2382,26 +2385,26 @@ else --HUD/Options
 		--EntityQueue[entIndex] = nil
 	end
 
-	net.Receive('UVGetNewKeybind', function()
-		--if IsSettingKeybind then return end
-		local slot = net.ReadInt(16)
-		local key = net.ReadInt(16)
+	-- net.Receive('UVGetNewKeybind', function()
+	-- 	--if IsSettingKeybind then return end
+	-- 	local slot = net.ReadInt(16)
+	-- 	local key = net.ReadInt(16)
 
-		local entry = KeyBindButtons[slot]
+	-- 	local entry = KeyBindButtons[slot]
 
-		if entry then
-			local convar = GetConVar( entry[1] )
+	-- 	if entry then
+	-- 		local convar = GetConVar( entry[1] )
 
-			if convar then
-				convar:SetInt( key )
-				entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
-			end
-		else
-			warn("Invalid slot key; if you run into this please report it to a developer!")
-		end
+	-- 		if convar then
+	-- 			convar:SetInt( key )
+	-- 			entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
+	-- 		end
+	-- 	else
+	-- 		warn("Invalid slot key; if you run into this please report it to a developer!")
+	-- 	end
 
-		IsSettingKeybind = false
-	end)
+	-- 	IsSettingKeybind = false
+	-- end)
 
 	net.Receive("UV_SendPursuitTech", function()
 		local car = net.ReadEntity()
@@ -2885,9 +2888,9 @@ else --HUD/Options
 			UVStopSound()
 		end
 
-		timer.Simple(0.1, function()
-			UVHeatLevelIncrease = nil
-		end)
+		-- timer.Simple(0.1, function()
+		-- 	UVHeatLevelIncrease = nil
+		-- end)
 	end)
 
 	net.Receive("UVHUDPursuitTech", function()
@@ -3154,6 +3157,7 @@ else --HUD/Options
 			end
 		else
 			UVHeatPlayIntro = true 
+			UVHeatLevelIncrease = false
 			-- UVHeatPlayTransition = false 
 			-- UVHeatPlayMusic = false
 		end
