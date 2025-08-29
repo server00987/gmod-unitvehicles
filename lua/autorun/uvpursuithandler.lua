@@ -2609,6 +2609,21 @@ else --HUD/Options
 
 	end)
 
+	net.Receive( "UVPullOver", function()
+		print('onpullover')
+		hook.Run( 'UIEventHook', 'pursuit', 'onPullOverRequest' )
+	end)
+
+	net.Receive( "UVFined", function()
+		print('onfine')
+		hook.Run( 'UIEventHook', 'pursuit', 'onFined' )
+	end)
+
+	net.Receive( "UVFineArrest", function()
+		print('onfinearrest')
+		hook.Run( 'UIEventHook', 'pursuit', 'onFineArrest' )
+	end)
+
 	net.Receive("UVHUDDeploys", function()
 
 		local deploys = net.ReadString()

@@ -1045,14 +1045,14 @@ if SERVER then
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
 						self.edriver = UVGetDriver(self.e)
 						UVAddToWantedListDriver(self.edriver)
-					else
+						else
 						self.edriver = nil
 					end
 					self.moving = CurTime()
 					UVLosing = CurTime()
 					self.idle = nil
-					UVCalm = true
 					timer.Simple(15, function() 
+						UVTrafficStop = false
 						if UVCalm and IsValid(self.e) and not UVHUDBusting then
 							UVRestoreResourcePoints()
 							UVTargeting = true
@@ -1078,8 +1078,13 @@ if SERVER then
 						end)
 						return
 					end
+					if UVTrafficStop then return end
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
-						UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "PULL OVER TO PAY A FINE!")
+						--UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "PULL OVER TO PAY A FINE!")
+						if UVGetDriver(self.e) and UVGetDriver(self.e):IsPlayer() then
+							net.Start( "UVPullOver" )
+							net.Send(UVGetDriver(self.e))
+						end
 					end
 					if not UVCalm then
 						UVCalm = true
@@ -1093,6 +1098,7 @@ if SERVER then
 							UVChatterTrafficStopRammed(self) 
 						end
 					end
+					UVTrafficStop = true
 				end
 			end 
 			

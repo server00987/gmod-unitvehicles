@@ -495,7 +495,7 @@ if SERVER then
 				end
 			end
 
-			local timeout = 1
+			local timeout = 3
 			if timeout and timeout > 0 then
 				if CurTime() > self.moving + timeout and not UVTargeting then --If it has got stuck for enough time.
 					self.invincible = true

@@ -132,6 +132,11 @@ NETWORK_STRINGS = {
 	"UVHUDStopCooldown",
 	"UVHUDHiding",
 	"UVHUDStopHiding",
+
+	-- Fined
+	"UVPullOver",
+	"UVFined",
+	"UVFineArrest",
 	
 	-- Wanted Suspects
 	"UVHUDWantedSuspects",
@@ -1973,8 +1978,8 @@ function UVChangeTactics(tactic)
 	end
 end
 
-function UVBustEnemy(self, enemy)
-	if not IsValid(self) or not IsValid(enemy) or enemy.uvbusted then return end
+function UVBustEnemy(self, enemy, finearrest)
+	if not IsValid(self) or not IsValid(enemy) or (enemy.uvbusted and not finearrest) then return end
 
 	if not self.callsign then
 		self.callsign = "the Unit Vehicles"
@@ -2017,7 +2022,7 @@ function UVBustEnemy(self, enemy)
 	local timeacknowledge = 5
 	local enemyDriver = UVGetDriver(enemy)
 	
-	if UVTargeting or self.UVAir then --Arrest
+	if UVTargeting or self.UVAir or finearrest then --Arrest
 		if enemy:IsVehicle() then
 			local e = UVGetVehicleMakeAndModel(enemy)
 			if enemyDriver and enemyDriver:IsPlayer() then 
@@ -2026,8 +2031,10 @@ function UVBustEnemy(self, enemy)
 				print("The "..e.." has been busted by "..self.callsign.."!")
 			end
 			if Chatter:GetBool() then
-				if not self.UVAir then
-					timeacknowledge = UVChatterArrest(self) or 5
+				if finearrest then
+					net.Start( "UVFineArrest" )
+					net.Send(enemyDriver)
+					timeacknowledge = UVChatterFineArrest(self) or 5
 				else
 					timeacknowledge = UVChatterArrest(self) or 5
 				end
@@ -2137,9 +2144,9 @@ function UVBustEnemy(self, enemy)
 			bustedtable["Roadblocks"] = UVRoadblocksDodged
 			bustedtable["Spikestrips"] = UVSpikestripsDodged
 			timer.Create('MakeArrest', 3, 1, function()
-				net.Start( "UVHUDBustedDebrief" )
-				net.WriteTable(bustedtable)
-				net.Send(driver)
+				-- net.Start( "UVHUDBustedDebrief" )
+				-- net.WriteTable(bustedtable)
+				-- net.Send(driver)
 				driver:KillSilent()
 				driver:SetNoDraw(true)
 				driver:Spectate(OBS_MODE_DEATHCAM)
@@ -2167,17 +2174,6 @@ function UVBustEnemy(self, enemy)
 		end)
 		self.displaybusting = nil
 	else --Fine
-		if enemy:IsVehicle() then
-			local e = UVGetVehicleMakeAndModel(enemy)
-			if enemyDriver and enemyDriver:IsPlayer() then 
-				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been fined by "..self.callsign.."!")
-			else
-				print("The "..e.." has been fined by "..self.callsign.."!")
-			end
-			if Chatter:GetBool() and IsValid(self.v) then
-				UVChatterFine(self)
-			end 
-		end
 		timer.Simple(0.01, function()
 			UVTargeting = nil
 			self.chasing = nil
@@ -2187,15 +2183,42 @@ function UVBustEnemy(self, enemy)
 			net.Start( "UVHUDStopBusting" )
 			net.Broadcast()
 		end)
+		UVEnemyBusted = true
+		if not UVTargeting then
+			enemy.UVHUDBusting = nil
+			enemy.UVHUDBustingDelayed = nil
+
+			UVBounty = 0
+		end
+		if enemy:IsVehicle() then
+			local e = UVGetVehicleMakeAndModel(enemy)
+			if enemyDriver and enemyDriver:IsPlayer() then 
+				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been fined by "..self.callsign.."!")
+			else
+				print("The "..e.." has been fined by "..self.callsign.."!")
+			end
+			if not enemy.UVFinedCount then
+				enemy.UVFinedCount = 0
+			end
+			enemy.UVFinedCount = enemy.UVFinedCount + 1
+			if enemy.UVFinedCount >= 3 then
+				UVBustEnemy(self, enemy, true)
+				return
+			end
+			if Chatter:GetBool() and IsValid(self.v) then
+				UVChatterFinePaid(self)
+			end
+		end
 		if enemyDriver and enemyDriver:IsPlayer() then 
 			local driver = enemyDriver
 			timer.Simple(0.1, function()
 				driver:SetFrags(0)
-				driver:PrintMessage( HUD_PRINTCENTER, "You have been fined! You have 10 seconds to drive away.")
+				-- driver:PrintMessage( HUD_PRINTCENTER, "You have been fined! You have 10 seconds to drive away.")
+				net.Start( "UVFined" )
+				net.Send(driver)
 			end)
 			driver:EmitSound("ui/pursuit/fined.wav", 0, 100, 0.5)
 		end
-		UVEnemyBusted = true
 		self.aggressive = nil
 		timer.Simple(10, function()
 			UVEnemyBusted = nil
