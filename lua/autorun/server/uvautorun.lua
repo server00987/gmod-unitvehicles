@@ -2181,21 +2181,6 @@ function UVBustEnemy(self, enemy)
 		timer.Simple(0.01, function()
 			UVTargeting = nil
 			self.chasing = nil
-			if IsValid(self.v) then
-				if self.v.UVPatrol then
-					self.v:EmitSound( "npc/metropolice/vo/allrightyoucango.wav" )
-				elseif self.v.UVSupport then
-					self.v:EmitSound( "npc/metropolice/vo/clearno647no10-107.wav" )
-				elseif self.v.UVPursuit then
-					self.v:EmitSound( "npc/combine_soldier/vo/affirmativewegothimnow.wav" )
-				elseif self.v.UVInterceptor then
-					self.v:EmitSound( "npc/combine_soldier/vo/thatsitwrapitup.wav" )
-				elseif self.v.UVSpecial then
-					self.v:EmitSound( "npc/combine_soldier/vo/prison_soldier_bunker3.wav" )
-				elseif self.v.UVCommander then
-					self.v:EmitSound( "npc/combine_soldier/vo/off2.wav" )
-				end
-			end
 			for k, v in pairs(ents.FindByClass("npc_uv*")) do
 				v:ForgetEnemy()
 			end

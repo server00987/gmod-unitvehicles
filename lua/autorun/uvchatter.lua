@@ -1007,7 +1007,12 @@ if SERVER then
 	
 	function UVChatterFine(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "fine")
+			local randomno = math.random(1,2)
+			if randomno == 1 then
+				return UVSoundChatter(self, self.voice, "finepaid", 2)
+			else
+				return UVSoundChatter(self, self.voice, "fine")
+			end
 		end
 		UVDelayChatter()
 		if not IsValid(self.e) then return end
@@ -1457,8 +1462,12 @@ if SERVER then
 	
 	function UVChatterPursuitStartRanAway(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			local timecheck = 5
-			timecheck = UVSoundChatter(self, self.voice, "pursuitstartranaway", 4)
+			local timecheck = 0.1
+			if randomno == 1 then
+				timecheck = UVSoundChatter(self, self.voice, "finearrest", 2)
+			else
+				timecheck = UVSoundChatter(self, self.voice, "pursuitstartranaway", 4)
+			end
 			timer.Simple(timecheck, function()
 				if IsValid(self) then
 					UVChatterPursuitStartAcknowledge(self)
