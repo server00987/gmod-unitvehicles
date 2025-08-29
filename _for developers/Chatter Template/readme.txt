@@ -1,0 +1,3 @@
+- Place this under sound/chatter2
+- You can rename and duplicate 'airunit' and 'groundunit' folders if you like for added variety
+- 'dispatch' and 'misc' folders are already handled by the chatter system, DO NOT RENAME THEM
