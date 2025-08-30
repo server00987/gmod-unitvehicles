@@ -2616,7 +2616,7 @@ else --HUD/Options
 
 	net.Receive( "UVFined", function()
 		print('onfine')
-		hook.Run( 'UIEventHook', 'pursuit', 'onFined' )
+		hook.Run( 'UIEventHook', 'pursuit', 'onFined', net.ReadUInt( 3 ) )
 	end)
 
 	net.Receive( "UVFineArrest", function()
