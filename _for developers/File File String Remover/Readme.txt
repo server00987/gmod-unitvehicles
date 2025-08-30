@@ -8,3 +8,5 @@ This tool allows you to quickly remove text from *all* present files in the same
 2) Run the .py file!
 3) Type in which strings you'd like to remove, including quotes - " 1080p" for example.
 4) Hit Enter and voila!
+
+Alt. place the _removetextsub.py file in one directory and it will change files in that directory, and all subcategories it can find within that directory.

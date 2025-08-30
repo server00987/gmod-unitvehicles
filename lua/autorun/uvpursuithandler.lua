@@ -2610,17 +2610,15 @@ else --HUD/Options
 	end)
 
 	net.Receive( "UVPullOver", function()
-		print('onpullover')
 		hook.Run( 'UIEventHook', 'pursuit', 'onPullOverRequest' )
 	end)
 
 	net.Receive( "UVFined", function()
-		print('onfine')
-		hook.Run( 'UIEventHook', 'pursuit', 'onFined', net.ReadUInt( 3 ) )
+		local finenr = net.ReadUInt(2)
+		hook.Run( 'UIEventHook', 'pursuit', 'onFined', finenr )
 	end)
 
 	net.Receive( "UVFineArrest", function()
-		print('onfinearrest')
 		hook.Run( 'UIEventHook', 'pursuit', 'onFineArrest' )
 	end)
 

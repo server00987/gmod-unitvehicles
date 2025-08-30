@@ -2546,6 +2546,21 @@ UV_UI.pursuit.carbon.events = {
         }
         UV_UI.pursuit.carbon.events.ShowDebrief(params)
     end,
+	
+	onPullOverRequest = function(...)
+		UV_UI.racing.carbon.events.CenterNotification({
+			text = language.GetPhrase("uv.hud.fine.pullover"),
+			noIcon = true,
+			immediate = true,
+		})
+	end,
+	onFined = function( finenr )
+		UV_UI.racing.carbon.events.CenterNotification({
+			text = string.format( language.GetPhrase("uv.hud.fine.fined"), finenr),
+			noIcon = true,
+			immediate = true,
+		})
+	end,
 }
 
 local function carbon_racing_main( ... )
@@ -4140,6 +4155,23 @@ onCopEscapedDebrief = function(escapedtable)
     }
     UV_UI.pursuit.mostwanted.events.ShowDebrief(params)
 end,
+
+	onPullOverRequest = function(...)
+		UV_UI.racing.mostwanted.events.CenterNotification({
+			text = language.GetPhrase("uv.hud.fine.pullover"),
+			textNoFall = true,
+			noIcon = true,
+			immediate = true,
+		})
+	end,
+	onFined = function( finenr )
+		UV_UI.racing.mostwanted.events.CenterNotification({
+			text = string.format( language.GetPhrase("uv.hud.fine.fined"), finenr),
+			textNoFall = true,
+			noIcon = true,
+			immediate = true,
+		})
+	end,
 }
 
 -- Functions
@@ -5737,6 +5769,21 @@ UV_UI.pursuit.undercover.events = {
         }
         UV_UI.pursuit.undercover.events.ShowDebrief(params)
     end,
+
+	onPullOverRequest = function(...)
+		UV_UI.racing.undercover.events.CenterNotification({
+			text = language.GetPhrase("uv.hud.fine.pullover"),
+			color = Color(0,194,255),
+			immediate = true,
+		})
+	end,
+	onFined = function( finenr )
+		UV_UI.racing.undercover.events.CenterNotification({
+			text = string.format( language.GetPhrase("uv.hud.fine.fined"), finenr),
+			color = Color(0,194,255),
+			immediate = true,
+		})
+	end,
 }
 
 local function undercover_racing_main( ... )
