@@ -1033,7 +1033,7 @@ if SERVER then
 			end
 			
 			if not UVTargeting and not IsValid(self.e) then
-				local enemy = self:TargetEnemy() --Find an enemy.			
+				local enemy = self:TargetEnemy() --Find an enemy.		
 				if IsValid(enemy) then
 					self.e = enemy
 					UVAddToWantedListVehicle(self.e)
@@ -1051,6 +1051,7 @@ if SERVER then
 					UVLosing = CurTime()
 					self.idle = nil
 					timer.Simple(15, function() 
+						UVTrafficStop = false
 						if UVCalm and IsValid(self.e) and not UVHUDBusting then
 							UVRestoreResourcePoints()
 							UVTargeting = true
@@ -1076,8 +1077,13 @@ if SERVER then
 						end)
 						return
 					end
+					if UVTrafficStop then return end
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
-						UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "PULL OVER TO PAY A FINE!")
+						--UVGetDriver(self.e):PrintMessage( HUD_PRINTCENTER, "PULL OVER TO PAY A FINE!")
+						if UVGetDriver(self.e) and UVGetDriver(self.e):IsPlayer() then
+							net.Start( "UVPullOver" )
+							net.Send(UVGetDriver(self.e))
+						end
 					end
 					if not UVCalm then
 						UVCalm = true
@@ -1091,6 +1097,7 @@ if SERVER then
 							UVChatterTrafficStopRammed(self) 
 						end
 					end
+					UVTrafficStop = true
 				end
 			end 
 			

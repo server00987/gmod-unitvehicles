@@ -122,14 +122,21 @@ if SERVER then
 	
 	--Spam check--
 	
-	function UVRelayToClients( sound_name, param, can_skip )
+	function UVRelayToClients( sound_name, param, can_skip, players )
+		if players and type(players) == "table" then
+			if #players == 0 then return end
+		end
+
 		net.Start('UV_Chatter')
 		
 		net.WriteString(sound_name)
-		--net.WriteString(param)
 		net.WriteBool(can_skip)
 		
-		net.Broadcast()
+		if players and type(players) == "table" then
+			net.Send( players )
+		else
+			net.Broadcast()
+		end
 	end
 	
 	function UVRelaySoundToClients( sound_name, can_skip )
@@ -199,15 +206,6 @@ if SERVER then
 		
 		local unitVoiceProfile = GetUnitVoiceProfile(self, isDispatch, false)
 		local miscVoiceProfile = GetUnitVoiceProfile(self, isDispatch, true)
-		
-		local soundtable
-		voice = tostring(voice)
-		local nestedFolders = {...}
-		local basePath = "chatter/"..chattertype
-		local fullPath = basePath
-		for _, folder in ipairs(nestedFolders) do
-			fullPath = fullPath.."/"..folder
-		end
 		
 		if uvJammerDeployed then
 			local staticFiles = file.Find("sound/chatter2/" .. miscVoiceProfile .. "/misc/static/*", "GAME")
@@ -578,6 +576,16 @@ if SERVER then
 			end)
 			
 			return UVDelayChatter((SoundDuration(soundFile) + SoundDuration(emergencyFile) + math.random(1, 2)))
+		elseif parameters == 9 then -- in person chatter
+			local players = select(1, ...)
+
+			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/" ..chattertype.."/*", "GAME")
+			if next(soundFiles) == nil then return 5 end
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
+			
+			UVRelayToClients(soundFile, parameters, true, players)
+
+			return 0
 		end
 		
 		return HandleCallSounds()
@@ -1004,14 +1012,37 @@ if SERVER then
 			UVTextChatter(self, {}, 'ArrestAcknowledge', 'UVCommander')
 		end
 	end
-	
-	function UVChatterFine(self)
+
+	function UVChatterFineArrest(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			local randomno = math.random(1,2)
-			if randomno == 1 then
-				return UVSoundChatter(self, self.voice, "finepaid", 2)
-			else
-				return UVSoundChatter(self, self.voice, "fine")
+			local driver = UVGetDriver(self.e)
+			if driver and driver:IsPlayer() then
+				return UVSoundChatter(self, self.voice, "finearrest", 9, {driver})
+			end
+		end
+		UVDelayChatter()
+		if not IsValid(self.e) then return end
+		local e = UVGetVehicleMakeAndModel(self.e)
+		if self.v.UVPatrol then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVPatrol')
+		elseif self.v.UVSupport then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVSupport')
+		elseif self.v.UVPursuit then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVPursuit')
+		elseif self.v.UVInterceptor then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVInterceptor')
+		elseif self.v.UVSpecial then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVSpecial')
+		elseif self.v.UVCommander then
+			UVTextChatter(self, {['suspectmodel'] = e}, 'FineArrest', 'UVCommander')
+		end
+	end
+	
+	function UVChatterFinePaid(self)
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			local driver = UVGetDriver(self.e)
+			if driver and driver:IsPlayer() then
+				return UVSoundChatter(self, self.voice, "finepaid", 9, {driver})
 			end
 		end
 		UVDelayChatter()
