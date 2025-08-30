@@ -2144,9 +2144,11 @@ function UVBustEnemy(self, enemy, finearrest)
 			bustedtable["Roadblocks"] = UVRoadblocksDodged
 			bustedtable["Spikestrips"] = UVSpikestripsDodged
 			timer.Create('MakeArrest', 3, 1, function()
-				-- net.Start( "UVHUDBustedDebrief" )
-				-- net.WriteTable(bustedtable)
-				-- net.Send(driver)
+				if not finearrest then
+					net.Start( "UVHUDBustedDebrief" )
+					net.WriteTable(bustedtable)
+					net.Send(driver)
+				end
 				driver:KillSilent()
 				driver:SetNoDraw(true)
 				driver:Spectate(OBS_MODE_DEATHCAM)
