@@ -59,11 +59,12 @@ if SERVER then
 
 		local last_checkpoint = #vehicle_array['Checkpoints']
 		local next_checkpoint = last_checkpoint + 1
+		local total_checkpoints = GetGlobalInt("uvrace_checkpoints", 0)
+		local splits = 3
 
 		local checkp_id = self:GetID()
 
 		if next_checkpoint == checkp_id then --Checkpoint passed
-
 			vehicle_array['Checkpoints'][checkp_id] = CurTime()
 
 			net.Start("uvrace_checkpointcomplete")
@@ -71,10 +72,6 @@ if SERVER then
 			net.WriteInt(checkp_id, 11)
 			net.WriteFloat(vehicle_array['Checkpoints'][checkp_id])
 			net.Broadcast()
-			
-			-- local participant = net.ReadEntity()
-			-- local checkpoint = net.ReadInt(11)
-			-- local time = net.ReadInt(32)
 
 			if #vehicle_array['Checkpoints'] >= GetGlobalInt("uvrace_checkpoints") then -- Lap completed
 
@@ -83,14 +80,7 @@ if SERVER then
 				vehicle_array['LastLapCurTime'] = CurTime()
 
 				table.Empty(vehicle_array['Checkpoints'])
-				--vehicle.currentcheckpoint = 1
 
-				//if IsValid(driver) and driver:IsPlayer() then
-				-- net.Start("uvrace_lapcomplete")
-				-- net.WriteEntity(vehicle)
-				-- net.WriteFloat(laptime)
-				-- net.WriteFloat(vehicle_array['LastLapCurTime'])
-				-- net.Broadcast()
 				for veh, data in pairs(UVRaceTable['Participants']) do
 					if not IsValid(veh) then continue end
 					local ply = veh:GetDriver()
@@ -102,7 +92,6 @@ if SERVER then
 						net.Send(ply)
 					end
 				end
-				//end
 				UVCheckLapTime( vehicle, vehicle_array.Name, laptime )
 				
 				if vehicle_array['Lap'] == UVRaceTable.Info.Laps then --Completed race
@@ -122,7 +111,6 @@ if SERVER then
 
 					net.Start("uvrace_racecomplete")
 					net.WriteEntity(vehicle)
-					//net.WriteString(vehicle_array.Name)
 					net.WriteInt(place, 32)
 					net.WriteFloat(CurTime() - UVRaceTable.Info.Time)
 					net.Broadcast()
@@ -130,25 +118,40 @@ if SERVER then
 					UVRaceRemoveParticipant( vehicle, 'Finished' )
 				else
 					vehicle_array['Lap'] = vehicle_array['Lap'] +1
-
-					-- if vehicle_array['Lap'] == UVRaceLaps:GetInt() then
-						-- if IsValid(driver) and driver:IsPlayer() then
-							-- net.Start("uvrace_notification")
-							-- net.WriteString("#uv.race.finallap")
-							-- net.WriteFloat(3)
-							-- net.Send(driver)
-						-- end
-					-- end
-					--vehicle.currentlap = vehicle.currentlap + 1
 				end
 
 			end
 
-			-- if IsValid(driver) and driver:IsPlayer() then
-			-- 	net.Start("uvrace_checkpointcomplete")
-			-- 	net.Send(driver)
-			-- end
+		end
 
+		vehicle_array.SplitCheckpoints = {}
+
+		if total_checkpoints <= 1 then -- If just one checkpoint, don't trigger at all
+			vehicle_array.SplitCheckpoints = {}
+		elseif total_checkpoints <= splits then -- If less than or up to 3 checkpoints, trigger on every single one
+			for i = 1, total_checkpoints do
+				vehicle_array.SplitCheckpoints[i] = true
+			end
+		else -- Otherwise, trigger at 25, 50 and 75% completion
+			for i = 1, splits do
+				local split_cp = math.floor((total_checkpoints / (splits + 1)) * i)
+				if split_cp > 0 then
+					vehicle_array.SplitCheckpoints[split_cp] = true
+				end
+			end
+		end
+
+		if vehicle_array.SplitCheckpoints[checkp_id] then
+			local driver = vehicle:GetDriver()
+			local numParticipants = table.Count(UVRaceTable.Participants or {})
+			
+			if IsValid(driver) and driver:IsPlayer() then
+				net.Start("uvrace_checkpointsplit")
+				net.WriteEntity(vehicle)
+				net.WriteInt(checkp_id, 11)
+				net.WriteUInt(numParticipants, 8)
+				net.Send(driver)
+			end
 		end
 
 		self:KillGlobals()

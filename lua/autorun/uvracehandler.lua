@@ -1335,6 +1335,19 @@ else -- CLIENT stuff
 		end
 	end)
 
+	net.Receive( "uvrace_checkpointsplit", function()
+		local participant = net.ReadEntity()
+		local checkpoint = net.ReadInt(11)
+		local numParticipants = net.ReadUInt(8)
+
+		if not IsValid(participant) then return end
+
+		local driver = participant:GetDriver()
+		local is_local_player = (driver == LocalPlayer())
+
+		hook.Run( "UIEventHook", "racing", "onLapSplit", participant, checkpoint, is_local_player, numParticipants )
+	end)
+
 	net.Receive( "uvrace_racecomplete", function()
 		local participant = net.ReadEntity()
 		local place = net.ReadInt(32)

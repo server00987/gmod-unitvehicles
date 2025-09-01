@@ -237,6 +237,7 @@ NETWORK_STRINGS = {
 	"uvrace_replace",
 	"uvrace_disqualify",
 	"uvrace_checkpointcomplete",
+	"uvrace_checkpointsplit",
 	"uvrace_lapcomplete",
 	"uvrace_racecomplete",
 	"uvrace_info",

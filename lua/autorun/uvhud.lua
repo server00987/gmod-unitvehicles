@@ -2092,8 +2092,23 @@ UV_UI.racing.carbon.events = {
 			end
 
 		end)
-	end
+	end,
 
+	onLapSplit = function( participant, checkpoint, is_local_player, numParticipants )
+		if not is_local_player then return end	
+		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), "{TIME}" )
+	
+		if numParticipants == 1 then
+			-- splittext = string.format( language.GetPhrase("uv.prerace.checks"), "{TIME}" )
+			return
+		end
+		
+		UV_UI.racing.carbon.events.CenterNotification({
+			text = splittext,
+			iconMaterial = UVMaterials["CLOCK_BG"],
+		})
+	end,
 }
 
 UV_UI.pursuit.carbon.events = {
@@ -3089,6 +3104,7 @@ UV_UI.racing.mostwanted.events = {
 
 		local ptext = params.text or "ERROR: NO TEXT"
 		local ptextcol = params.textCol or Color(255, 255, 255)
+		local ptextfont = params.textFont or "UVFont5Shadow"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
 		local ptextNoFall = params.textNoFall
 		local ptextFlyRight = params.textFlyRight
@@ -3210,7 +3226,7 @@ UV_UI.racing.mostwanted.events = {
 				alpha = Lerp(t, 255, 0)
 			end
 
-			mw_noti_draw(ptext, "UVFont5Shadow", pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
+			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
 			
 			if not pnoIcon then
 				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
@@ -3669,6 +3685,7 @@ end,
 			table.Merge({
 				text = textToShow,
 				textCol = Color(0, 255, 0),
+				textFont = "UVFont5WeightShadow",
 				textFlyRight = true,
 				noIcon = true,
 				immediate = true
