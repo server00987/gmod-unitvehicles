@@ -983,10 +983,10 @@ if SERVER then
 			end
 			if UVTargeting and closestdistancetosuspect > 100000000 and not self:StraightToTarget(closestsuspect) and 
 			not UVEnemyBusted and not UVEnemyEscaped and self.uvmarkedfordeletion and (not UVRacerPresenceMode or self.stuck) then
-				if self.v.rhino or not OptimizeRespawn:GetBool() or (UVResourcePoints <= (#ents.FindByClass("npc_uv*")) and #ents.FindByClass("npc_uv*") ~= 1) then
+				if not OptimizeRespawn:GetBool() or (UVResourcePoints <= (#ents.FindByClass("npc_uv*")) and #ents.FindByClass("npc_uv*") ~= 1) then
 					SafeRemoveEntity(self)
 				else
-					UVOptimizeRespawn(self.v)
+					UVOptimizeRespawn(self.v, self.v.rhino)
 				end
 				if Chatter:GetBool() and IsValid(self.v) and not UVEnemyEscaping and not self.invincible and not UVEnemyBusted then
 					UVChatterLeftPursuit(self) 

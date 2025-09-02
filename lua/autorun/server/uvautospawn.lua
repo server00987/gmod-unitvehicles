@@ -271,7 +271,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
 			end
 		else
-			uvspawnpointangles = suspect:GetVelocity():Angle() + Angle(0,180,0)
+			uvspawnpointangles = suspectvelocity:Angle() + Angle(0,180,0)
 		end
 	end
 	

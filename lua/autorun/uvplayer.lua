@@ -114,7 +114,7 @@ if SERVER then
         end
     end
 
-    function UVOptimizeRespawn( vehicle )
+    function UVOptimizeRespawn( vehicle, rhino )
         if UVOptimizeRespawnDelayed then return end
 
         UVOptimizeRespawnDelayed = true
@@ -220,6 +220,17 @@ if SERVER then
 	    else
 	    	uvspawnpointangles = Angle(0,math.random(0,360),0)
 	    end
+    
+	    if UVTargeting then
+	    	if not rhino then
+	    		local mathangle = math.random(1,2)
+	    		if mathangle == 2 then
+	    			uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
+	    		end
+	    	else
+	    		uvspawnpointangles = suspectvelocity:Angle() + Angle(0,180,0)
+	    	end
+	    end
 
         if vehicle.IsGlideVehicle then
             local pos = uvspawnpoint+(vector_up * 50)
@@ -284,6 +295,7 @@ if SERVER then
         end
 
         NPC.metwithenemy = nil
+        NPC.rhinohit = nil
     end
     
     function UVResetPosition( vehicle )
