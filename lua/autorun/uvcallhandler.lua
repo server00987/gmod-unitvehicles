@@ -95,7 +95,7 @@ if SERVER then
         
         uvcallexists = true
         
-        local calllocation = suspectvehicle:GetPos()+Vector(0,0,50)
+        local calllocation = suspectvehicle:GetPos()+(vector_up * 50)
         
         if GetConVar("unitvehicle_chattertext"):GetBool() then
             Entity(1):EmitSound("ui/pursuit/spotting_start.wav", 0, 100, 0.5)

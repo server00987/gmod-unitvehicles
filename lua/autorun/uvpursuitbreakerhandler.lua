@@ -39,9 +39,9 @@ if SERVER then
                 local suspects = UVWantedTableVehicle
                 local random_entry = math.random(#suspects)	
                 suspect = suspects[random_entry]
-                enemylocation = (suspect:GetPos()+Vector(0,0,50))
+                enemylocation = (suspect:GetPos()+(vector_up * 50))
             else
-                enemylocation = (suspect:GetPos()+Vector(0,0,50))
+                enemylocation = (suspect:GetPos()+(vector_up * 50))
             end
             local distance = enemylocation:DistToSqr(location)
             if distance < 25000000 then

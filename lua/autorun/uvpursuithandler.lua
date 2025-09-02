@@ -1594,7 +1594,7 @@ if SERVER then
 					if #UVWantedTableVehicle == 1 and not UVRacerPresenceMode then
 						local carPos = car:GetPos()
 						local suspect = UVWantedTableVehicle[1]
-						local enemylocation = (suspect:GetPos()+Vector(0,0,50))
+						local enemylocation = (suspect:GetPos()+(vector_up * 50))
 						local distance = enemylocation - carPos
 						if distance:LengthSqr() > 100000000 then
 							car:Remove()

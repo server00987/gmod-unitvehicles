@@ -261,9 +261,9 @@ if SERVER then
 				-- 	local suspects = UVWantedTableVehicle
 				-- 	local random_entry = math.random(#suspects)	
 				-- 	suspect = suspects[random_entry]
-				-- 	enemylocation = (suspect:GetPos()+Vector(0,0,50))
+				-- 	enemylocation = (suspect:GetPos()+(vector_up * 50))
 				-- else
-				-- 	enemylocation = (suspect:GetPos()+Vector(0,0,50))
+				-- 	enemylocation = (suspect:GetPos()+(vector_up * 50))
 				-- end
 				if next(UVWantedTableVehicle) == nil then return end
 
@@ -273,7 +273,7 @@ if SERVER then
 
 				if not IsValid(suspect) then return end
 
-				local enemylocation = (suspect:GetPos()+Vector(0,0,50))
+				local enemylocation = (suspect:GetPos()+(vector_up * 50))
 
 				local suspectvelocity = suspect:GetVelocity()
 				local distance = enemylocation - location

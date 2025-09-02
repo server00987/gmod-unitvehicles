@@ -329,7 +329,7 @@ if SERVER then
 				self.v:TriggerInput("Handbrake", 0)
 			end
 
-			self.waypointPos = self.PatrolWaypoint["Target"]+Vector(0,0,50)
+			self.waypointPos = self.PatrolWaypoint["Target"]+(vector_up * 50)
 			
 			--Patrolling techniques
 			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
@@ -550,7 +550,7 @@ if SERVER then
 	end
 	
 	function ENT:Think()
-		self:SetPos(self.v:GetPos() + Vector(0,0,50))
+		self:SetPos(self.v:GetPos() + (vector_up * 50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 
 		--Flipping/crash

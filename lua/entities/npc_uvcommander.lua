@@ -438,8 +438,8 @@ if SERVER then
 			rightstart:Rotate(Angle(0, -90, 0))
 		end
 		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC})
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC})
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+(vector_up * 50)), mask = MASK_NPCWORLDSTATIC})
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+(vector_up * 50)), mask = MASK_NPCWORLDSTATIC})
 
 		local Fraction = trleft.Fraction ~= 1 or trright.Fraction ~= 1
 		local HitNormal = trleft.HitNormal.z < 0.45 or trright.HitNormal.z < 0.45 --Ignore small inclines
@@ -485,8 +485,8 @@ if SERVER then
 		end
 		
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), mask = MASK_SOLID})
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_SOLID})
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_SOLID})
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+(vector_up * 50)), mask = MASK_SOLID})
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+(vector_up * 50)), mask = MASK_SOLID})
 
 		if IsValid(tr.Entity) and tr.Entity.UnitVehicle then
 			return tr.Entity:GetVelocity():LengthSqr()
@@ -636,7 +636,7 @@ if SERVER then
 			
 			if not self.respondingtocall and not self.returningtopatrol then
 				self.tableroutetoenemy = {}
-				self.waypointPos = self.PatrolWaypoint["Target"]+Vector(0,0,50)
+				self.waypointPos = self.PatrolWaypoint["Target"]+(vector_up * 50)
 				self:SetELS(false)
 				self:SetELSSound(false)
 				self:SetHorn(false)
@@ -894,12 +894,12 @@ if SERVER then
 	function ENT:Think()
 		
 		-- if UVTargeting then return end
-		self:SetPos(self.v:GetPos() + Vector(0,0,50))
+		self:SetPos(self.v:GetPos() + (vector_up * 50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 		if not IsValid(uvenemylocation) then
 			uvenemylocation = ents.Create("prop_physics") --Enemy location
 			uvenemylocation:SetModel("models/props_lab/huladoll.mdl")
-			uvenemylocation:SetPos(self.v:GetPos() + Vector(0,0,50))
+			uvenemylocation:SetPos(self.v:GetPos() + (vector_up * 50))
 			uvenemylocation:Spawn()
 			uvenemylocation:SetCollisionGroup(10)
 			uvenemylocation:SetNoDraw(true)
@@ -1141,7 +1141,7 @@ if SERVER then
 			
 		else --It does.
 			
-			uvenemylocation:SetPos(self.e:GetPos() + Vector(0,0,50))
+			uvenemylocation:SetPos(self.e:GetPos() + (vector_up * 50))
 			uvenemylocation:SetAngles(self.e:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 			
 			self.chasing = true

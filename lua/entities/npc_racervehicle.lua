@@ -245,8 +245,8 @@ if SERVER then
 			rightstart:Rotate(Angle(0, -90, 0))
 		end
 		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+(vector_up * 50)), mask = MASK_NPCWORLDSTATIC}).Fraction
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+(vector_up * 50)), mask = MASK_NPCWORLDSTATIC}).Fraction
 		
 		if trleft > trright then
 			return turnleft
@@ -670,7 +670,7 @@ if SERVER then
 	
 	function ENT:Think()
 		--if UVTargeting then return end
-		self:SetPos(self.v:GetPos() + Vector(0,0,50))
+		self:SetPos(self.v:GetPos() + (vector_up * 50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 		
 		if self.v then
