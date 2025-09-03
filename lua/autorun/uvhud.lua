@@ -827,7 +827,7 @@ local function carbon_noti_draw(text, font, font2, x, y, color, color2)
         end
         
         local w,h = surface.GetTextSize(line)
-		draw.SimpleTextOutlined(line, font, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(line, font, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, drawColor.alpha ) )
         currentY = currentY + h
     end
 end
@@ -2763,7 +2763,7 @@ local function carbon_racing_main( ... )
             ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -2771,21 +2771,23 @@ local function carbon_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
 
-					-- table.insert(args, num)
+					table.insert(args, num)
 				end
 
-				-- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
 			end
-        end
+		end
         
         local color = nil
         
@@ -3193,6 +3195,9 @@ UV_UI.racing.mostwanted.states = {
     LapCompleteText = nil,
 	notificationQueue = {},
 	notificationActive = nil,
+	
+	notificationQueue2 = {}, -- Alt Noti.
+	notificationActive2 = nil,
 }
 
 UV_UI.racing.mostwanted.events = {
@@ -3362,6 +3367,110 @@ UV_UI.racing.mostwanted.events = {
 				DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
 			end
         end)
+	end,
+	
+	notifState2 = {},
+	CenterNotification2 = function( params )
+		local immediate = params.immediate or false
+
+		if UV_UI.racing.mostwanted.states.notificationActive2 then
+			if immediate then
+				hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
+				UV_UI.racing.mostwanted.states.notificationActive2 = false
+				UV_UI.racing.mostwanted.states.notificationQueue2 = {}
+				timer.Simple(0, function()
+					UV_UI.racing.mostwanted.events.CenterNotification2(params)
+				end)
+				return
+			else
+				table.insert(UV_UI.racing.mostwanted.states.notificationQueue2, params)
+				return
+			end
+		end
+
+		UV_UI.racing.mostwanted.states.notificationActive2 = true
+
+		local ptext = params.text or "ERROR: NO TEXT"
+		local ptextcol = params.textCol or Color(255, 255, 255)
+		local ptextfont = params.textFont or "UVFont5Shadow"
+
+		UV_UI.racing.mostwanted.events.notifState2 = {
+			active = true,
+			startTime = CurTime(),
+			fadeStartTime = nil,
+
+			-- Animation timing
+			introDuration = 0.5,
+			holdDuration = 3,
+			outroDuration = 0.5,
+
+			-- Positioning
+			startY = ScrH() * 0.275,
+			endY = ScrH() * 0.35,
+			x = ScrW() * 0.5,
+		}
+
+		local notifState = UV_UI.racing.mostwanted.events.notifState2
+
+        ----------------------------------------------------------------------------
+
+		if timer.Exists("UV_CENTERNOTI_MW_TIMER2") then
+			timer.Remove("UV_CENTERNOTI_MW_TIMER2")
+		end
+
+		-- Total duration = intro + hold + outro
+		local nextTriggerTime = notifState.introDuration + notifState.holdDuration + notifState.outroDuration
+
+		timer.Create("UV_CENTERNOTI_MW_TIMER2", nextTriggerTime, 1, function()
+			UV_UI.racing.mostwanted.states.notificationActive2 = false
+
+			if #UV_UI.racing.mostwanted.states.notificationQueue2 > 0 then
+				local nextParams = table.remove(UV_UI.racing.mostwanted.states.notificationQueue2, 1)
+				UV_UI.racing.mostwanted.events.CenterNotification2(nextParams)
+			end
+		end)
+
+		-- Cleanup hook fully after animation ends (optional safety)
+		timer.Create("UV_CENTERNOTI_MW_TIMER2_CLEANUP", nextTriggerTime + 0.25, 1, function()
+			hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
+			notifState.active = false
+		end)
+
+		hook.Add("HUDPaint", "UV_CENTERNOTI_MW2", function()
+			local now = CurTime()
+			local elapsed = now - notifState.startTime
+			local posY = notifState.endY
+			local alpha = 255
+
+			if elapsed < notifState.introDuration then
+				-- Phase 1: fall in + fade in
+				local t = math.Clamp(elapsed / notifState.introDuration, 0, 1)
+				posY = Lerp(t, notifState.startY, notifState.endY)
+				alpha = Lerp(t, 0, 255)
+
+			elseif elapsed < notifState.introDuration + notifState.holdDuration then
+				-- Phase 2: hold steady
+				posY = notifState.endY
+				alpha = 255
+
+			elseif elapsed < notifState.introDuration + notifState.holdDuration + notifState.outroDuration then
+				-- Phase 3: rise out + fade out
+				local t = math.Clamp((elapsed - notifState.introDuration - notifState.holdDuration) / notifState.outroDuration, 0, 1)
+				posY = Lerp(t, notifState.endY, notifState.startY)
+				alpha = Lerp(t, 255, 0)
+
+			else
+				-- Animation fully done → cleanup
+				if notifState.active then
+					notifState.active = false
+					hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
+				end
+			end
+
+			-- Draw text
+			mw_noti_draw(ptext, ptextfont, notifState.x, posY, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
+		end)
+
 	end,
 
     ShowResults = function(sortedRacers) -- Most Wanted
@@ -3806,7 +3915,46 @@ end,
 				immediate = true
 			}, extraOpts)
 		)
-	end
+	end,
+
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local showahead = false
+		local noticol = Color(0, 255, 0)
+
+		if aheadDiff == "N/A" and behindDiff ~= "N/A" then -- 1st place
+			splittime = "+ " .. behindDiff
+		elseif aheadDiff ~= "N/A" then -- 2nd place or below
+			splittime = "- " .. aheadDiff
+			showahead = true
+			noticol = Color(200, 75, 75)
+		end
+		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
+
+		UV_UI.racing.mostwanted.events.CenterNotification2({
+			text = splittext,
+			textCol = noticol,
+		})
+	end,
+
 }
 
 UV_UI.pursuit.mostwanted.events = {
@@ -4386,7 +4534,7 @@ local function mw_racing_main( ... )
         
         local status_text = "- - - - -"
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -4394,21 +4542,23 @@ local function mw_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
         
         local color = nil
         
@@ -5426,6 +5576,45 @@ UV_UI.racing.undercover.events = {
 		})
 	end,
 
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local showahead = false
+		local noticol = false
+
+		if aheadDiff == "N/A" and behindDiff ~= "N/A" then -- 1st place
+			splittime = behindDiff
+		elseif aheadDiff ~= "N/A" then -- 2nd place or below
+			splittime = "-" .. aheadDiff
+			showahead = true
+			noticol = Color(200, 75, 75)
+		end
+		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
+
+		UV_UI.racing.undercover.events.CenterNotification({
+			text = splittext,
+			color = noticol,
+			immediate = true,
+		})
+	end,
+
 }
 
 UV_UI.pursuit.undercover.events = {
@@ -5990,7 +6179,7 @@ local function undercover_racing_main( ... )
             ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -5998,21 +6187,24 @@ local function undercover_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
+
         local color = nil
         
         if is_local_player then
@@ -7037,7 +7229,7 @@ local function original_racing_main( ... )
         
         local status_text = ""
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -7045,21 +7237,23 @@ local function original_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and " (+") or " (-") .. string.format(lapText, math.abs(num)) .. ")"
-					else
-						status_text = ((num > 0 and " (+") or " (-") .. string.format("%.2f", math.abs(num)) .. ")"
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+") or "-") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and " ("..status_string..")" or " ("..string.format(status_string, unpack(args))..")"
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and " (" .. status_string .. ")" or " (" .. string.format(status_string, unpack(args)) .. ")"
+			end
+		end
         
         if UVHUDRaceInfo.Info.Laps > 1 then
             racerpos = 3.25
@@ -7526,7 +7720,7 @@ local function prostreet_racing_main( ... )
         
         local status_text = "-----"
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -7534,21 +7728,23 @@ local function prostreet_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
         
         local color = nil
         
@@ -7615,6 +7811,8 @@ UV_UI.racing.prostreet.events = {
 		local pcolorUpper = params.colorUpper or Color(255, 255, 255)
 		local pcolorLower = params.colorLower or Color(255, 255, 255)
 
+		local ptextposLower = params.textPosLower or 0.385
+
 		local SID = 0.35
 
 		local prostreet_noti_animState = {
@@ -7632,7 +7830,7 @@ UV_UI.racing.prostreet.events = {
 			lower = {
 				startX = ScrW() * 0.75,
 				centerX = ScrW() / 2,
-				y = ScrH() * 0.385,
+				y = ScrH() * ptextposLower,
 				slideDownEndY = ScrH() * 0.635,
 			},
 		}
@@ -7663,7 +7861,7 @@ UV_UI.racing.prostreet.events = {
                     alpha = 255
                 elseif elapsed < prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
                     local t = (elapsed - prostreet_noti_animState.slideInDuration - prostreet_noti_animState.holdDuration) / prostreet_noti_animState.slideDownDuration
-                    y = Lerp(t, elem.y, elem.slideDownEndY)
+                    -- y = Lerp(t, elem.y, elem.slideDownEndY)
                     alpha = Lerp(t, 255, 0)
                 else
                     alpha = 0
@@ -7678,11 +7876,11 @@ UV_UI.racing.prostreet.events = {
             
             -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, prostreet_noti_animState.upper)
-            carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+            carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(pcolorUpper.r, pcolorUpper.g, pcolorUpper.b, ualpha), nil)
 
 			-- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, prostreet_noti_animState.lower)
-            carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(255, 255, 255, lalpha), nil)
+            carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(pcolorLower.r, pcolorLower.g, pcolorLower.b, lalpha), nil)
 
             -- Disable animation and remove hook when done
             if elapsed > prostreet_noti_animState.slideInDuration + prostreet_noti_animState.holdDuration + prostreet_noti_animState.slideDownDuration then
@@ -8052,6 +8250,49 @@ UV_UI.racing.prostreet.events = {
 		})
 	end,
 
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local showahead = false
+		local noticol = false
+		
+		local splittext = ""
+
+		if aheadDiff ~= "N/A" then -- If car is ahead
+			splittext = string.format( language.GetPhrase("uv.race.car.ahead"), "+" .. aheadDiff )
+		end
+		
+		if behindDiff ~= "N/A" then -- If car is behind
+			splittext = splittext .. "\n" .. string.format( language.GetPhrase("uv.race.car.behind"), "-" .. behindDiff )
+		end
+
+		UV_UI.racing.prostreet.events.CenterNotification({
+			text = splittext,
+			colorUpper = Color(200, 75, 75),
+			colorLower = Color(100, 255, 100),
+			fontUpper = "UVCarbonLeaderboardFont",
+			fontLower = "UVCarbonLeaderboardFont",
+			textPosLower = 0.37,
+			immediate = true,
+		})
+	end,
+
 }
 
 -- Underground
@@ -8339,7 +8580,62 @@ UV_UI.racing.underground.events = {
                 UV_UI.racing.underground.events.ShowResults(sortedRacers)
             end
         end)
-    end
+    end,
+
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local noticol = Color(0, 255, 0)
+
+		if aheadDiff == "N/A" and behindDiff ~= "N/A" then -- 1st place
+			splittime = "+ " .. behindDiff
+		elseif aheadDiff ~= "N/A" then -- 2nd place or below
+			splittime = "- " .. aheadDiff
+			noticol = Color(200, 75, 75)
+		end
+		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
+
+		-- Display for 1 second using HUDPaint
+		local startTime = CurTime()
+		local duration = 1.5
+
+		hook.Remove("HUDPaint", "UV_SPLITTIME")
+		hook.Add("HUDPaint", "UV_SPLITTIME", function()
+			local elapsed = CurTime() - startTime
+			if elapsed > duration then
+				hook.Remove("HUDPaint", "UV_SPLITTIME")
+				return
+			end
+
+			local x, y = ScrW() * 0.5, ScrH() * 0.3
+			draw.SimpleTextOutlined(
+				splittime,
+				"UVFont-Shadow",
+				x, y,
+				noticol,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+				0.5, Color(0,0,0,200)
+			)
+		end)
+	end,
+
 }
 
 local function underground_racing_main( ... )
@@ -8485,7 +8781,7 @@ local function underground_racing_main( ... )
         
         local status_text = "-----"
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -8493,21 +8789,23 @@ local function underground_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
         
         local color = nil
         
@@ -8831,7 +9129,61 @@ UV_UI.racing.underground2.events = {
                 UV_UI.racing.underground2.events.ShowResults(sortedRacers)
             end
         end)
-    end
+    end,
+	
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local noticol = Color(0, 255, 0)
+
+		if aheadDiff == "N/A" and behindDiff ~= "N/A" then -- 1st place
+			splittime = "+ " .. behindDiff
+		elseif aheadDiff ~= "N/A" then -- 2nd place or below
+			splittime = "- " .. aheadDiff
+			noticol = Color(200, 75, 75)
+		end
+		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
+
+		-- Display for 1 second using HUDPaint
+		local startTime = CurTime()
+		local duration = 1.5
+
+		hook.Remove("HUDPaint", "UV_SPLITTIME")
+		hook.Add("HUDPaint", "UV_SPLITTIME", function()
+			local elapsed = CurTime() - startTime
+			if elapsed > duration then
+				hook.Remove("HUDPaint", "UV_SPLITTIME")
+				return
+			end
+
+			local x, y = ScrW() * 0.5, ScrH() * 0.3
+			draw.SimpleTextOutlined(
+				splittime,
+				"UVFont2-Smaller",
+				x, y,
+				noticol,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+				0.5, Color(0,0,0,200)
+			)
+		end)
+	end,
 }
 
 local function underground2_racing_main( ... )
@@ -8939,7 +9291,7 @@ local function underground2_racing_main( ... )
         
         local status_text = "-----"
         
-        if entry[3] then
+		if entry[3] then
 			local status_string = Strings[entry[3]]
 
 			if status_string then
@@ -8947,21 +9299,23 @@ local function underground2_racing_main( ... )
 
 				if entry[4] then
 					local num = tonumber(entry[4])
-					
-					if entry[3] == "Lap" then
-						-- Choose singular or plural string based on number of laps
-						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
-					else
-						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
 					end
-                    
-                    -- table.insert(args, num)
-                end
-                
-                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
-        end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
         
         local color = nil
         
