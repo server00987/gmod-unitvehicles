@@ -3993,7 +3993,8 @@ else --HUD/Options
 			uistylemain:AddChoice( "Underground", "underground")
 			uistylemain:AddChoice( "Underground 2", "underground2")
 			uistylemain:AddChoice( "Undercover", "undercover")
-			uistylemain:AddChoice( "Pro Street", "prostreet")
+			uistylemain:AddChoice( "ProStreet", "prostreet")
+			uistylemain:AddChoice( "World", "world")
 			uistylemain:AddChoice( "#uv.uistyle.original", "original")
 			uistylemain:AddChoice( "#uv.uistyle.none", "")
 
@@ -4001,6 +4002,7 @@ else --HUD/Options
 			uistylebackup:AddChoice( "Most Wanted", "mostwanted")
 			uistylebackup:AddChoice( "Carbon", "carbon")
 			uistylebackup:AddChoice( "Undercover", "undercover")
+			uistylebackup:AddChoice( "World", "world")
 			uistylebackup:AddChoice( "#uv.uistyle.original", "original")
 
 			panel:CheckBox("#uv.settings.ui.racertags", "unitvehicle_racertags")
