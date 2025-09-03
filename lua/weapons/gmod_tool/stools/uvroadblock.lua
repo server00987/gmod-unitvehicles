@@ -11,6 +11,7 @@ local rbtable = {
 	"Barrel",
 	"Cone",
 	"Spikestrip",
+	"Explosive Barrel",
 }
 
 TOOL.ClientConVar["maxrb"] = 1
@@ -384,6 +385,7 @@ if CLIENT then
 			['Barrel'] = '#tool.uvroadblock.type.barrel',
 			['Cone'] = '#tool.uvroadblock.type.cone',
 			['Spikestrip'] = '#tool.uvroadblock.type.spikes',
+			['Explosive Barrel'] = '#tool.uvroadblock.type.explosivebarrel',
 		}
 
 	
@@ -410,7 +412,7 @@ function TOOL:RightClick(trace)
 		ply.UVRBTOOLMemory = {}
 	end
 	
-	if (ent:GetClass() ~= "prop_physics" and ent:GetClass() ~= "entity_uvspikestrip" and ent:GetClass() ~= "entity_uvroadblockcar") then return false end
+	if (ent:GetClass() ~= "prop_physics" and ent:GetClass() ~= "entity_uvspikestrip" and ent:GetClass() ~= "entity_uvroadblockcar" and ent:GetClass() ~= "entity_uvbombstrip") then return false end
 	
 	self:GetRoadblocksData( ent, ply, trace.HitPos )
 
@@ -435,7 +437,8 @@ function TOOL:LeftClick( trace )
 		["Sawhorse Barricade"] = "prop_physics",
 		["Barrel"] = "prop_physics",
 		["Cone"] = "prop_physics",
-		["Spikestrip"] = "entity_uvspikestrip"
+		["Spikestrip"] = "entity_uvspikestrip",
+		["Explosive Barrel"] = "entity_uvbombstrip"
 	}
 
 	local modeltable = {
@@ -453,12 +456,13 @@ function TOOL:LeftClick( trace )
 		["Sawhorse Barricade"] = Angle(180,ANGZ.y-90,180),
 		["Barrel"] = Angle(180,ANGZ.y,180),
 		["Cone"] = Angle(180,ANGZ.y+90,180),
-		["Spikestrip"] = Angle(180,ANGZ.y+90,180)
+		["Spikestrip"] = Angle(180,ANGZ.y+90,180),
+		["Explosive Barrel"] = Angle(0,ANGZ.y,0),
 	}
 
 	--Spawn a spikestrip
     local prop = ents.Create(proptable[rbselected])
-	if prop:GetClass() ~= "entity_uvspikestrip" and prop:GetClass() ~= "entity_uvroadblockcar" then
+	if prop:GetClass() ~= "entity_uvspikestrip" and prop:GetClass() ~= "entity_uvroadblockcar" and prop:GetClass() ~= "entity_uvbombstrip" then
 		prop:SetModel(modeltable[rbselected])
 	end
     prop:SetPos(tr.HitPos+Vector(0,0,1))
@@ -466,6 +470,7 @@ function TOOL:LeftClick( trace )
 	prop:Spawn()
 	prop.PhysgunDisabled = false
 	prop:GetPhysicsObject():EnableMotion(true)
+	prop:GetPhysicsObject():Wake()
 
 	undo.Create(rbselected)
 	 	undo.AddEntity(prop)
