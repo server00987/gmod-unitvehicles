@@ -11,8 +11,6 @@ timer.Simple(5, function()
 			['MaxVelocity'] = 99999, ['MaxAngularVelocity'] = 99999
 		}
 	)
-	RunConsoleCommand("sv_crazyphysics_defuse", 0)
-	RunConsoleCommand("sv_crazyphysics_remove", 0)
 end)
 
 --Sound--
