@@ -1133,6 +1133,85 @@ UV_UI.general.events = {
 	end,
 }
 
+UV_UI.general.racing = {}
+
+UV_UI.general.racing.SplitDiffCache = UV_UI.general.racing.SplitDiffCache or {}
+
+local function general_racing_main( ... )
+    local w = ScrW()
+    local h = ScrH()
+    
+    local my_vehicle = select(1, ...)
+    local my_array = select(2, ...)
+    local string_array = select(3, ...)
+
+    local racer_count = #string_array
+    if racer_count <= 1 then return end
+
+    local checkpoint_count = #my_array["Checkpoints"]
+    
+    -- Find local player's index
+    local myIndex
+    for i = 1, #string_array do
+        if string_array[i][2] then -- is_local_player
+            myIndex = i
+            break
+        end
+    end
+    if not myIndex then return end
+
+    local aheadText, behindText = "N/A", "N/A"
+
+    -- Check nearest ahead racer
+    for i = myIndex - 1, 1, -1 do
+        local entry = string_array[i]
+        if entry[3] == "Lap" and entry[4] then
+			local laps = math.abs(entry[4])
+			local lapText = (laps > 1) and language.GetPhrase("uv.race.suffix.laps") or language.GetPhrase("uv.race.suffix.lap")
+			aheadText = string.format(lapText, laps)
+            break
+        elseif entry[4] then
+            aheadText = string.format("%.2f", math.abs(entry[4]))
+            break
+        end
+    end
+
+    -- Check nearest behind racer
+    for i = myIndex + 1, #string_array do
+        local entry = string_array[i]
+        if entry[3] == "Lap" and entry[4] then
+			local laps = math.abs(entry[4])
+			local lapText = (laps > 1) and language.GetPhrase("uv.race.suffix.laps") or language.GetPhrase("uv.race.suffix.lap")
+			behindText = string.format(lapText, laps)
+            break
+        elseif entry[4] then
+            behindText = string.format("%.2f", math.abs(entry[4]))
+            break
+        end
+    end
+
+	-- draw.SimpleTextOutlined( -- Debug
+		-- "DEBUG Leaderboard Diffs - Ahead: " .. aheadText .. " | Behind: " .. behindText,
+		-- "DermaDefaultBold",
+		-- ScrW() * 0.5,
+		-- 20,
+		-- Color(255, 255, 0),
+		-- TEXT_ALIGN_CENTER,
+		-- TEXT_ALIGN_TOP,
+		-- 1,
+		-- Color(0,0,0)
+	-- )
+	
+	UV_UI.general.racing.SplitDiffCache[my_vehicle] = { -- Store said debug data
+		Ahead = aheadText,
+		Behind = behindText,
+		LastCheckpoint = checkpoint_count -- optional
+	}
+
+end
+
+UV_UI.general.racing.main = general_racing_main
+
 -- Carbon
 UV_UI.racing.carbon = {}
 UV_UI.pursuit.carbon = {}
@@ -1182,28 +1261,34 @@ UV_UI.racing.carbon.events = {
 		local pfontUpper = params.fontUpper or "UVCarbonFont"
 		local pfontLower = params.fontLower or "UVCarbonFont-Smaller"
 
-		-- local pcolorUpper = params.colorUpper or Color(255, 255, 255)
-		-- local pcolorLower = params.colorLower or Color(175, 175, 175)
+		local pcolUpper = params.colorUpper or Color(255, 255, 255)
+		local pcolLower = params.colorLower or Color(175, 175, 175)
 
-		local SID = 0.35
+		local printCol = params.ringColor or Color(175, 175, 175)
+		
+		local pflyUp = params.flyUp or false
+
+		local SID = 0.2
 
 		local carbon_noti_animState = {
 			active = false,
 			startTime = 0,
 			slideInDuration = SID,
 			holdDuration = 3,
-			slideDownDuration = 0.25,
+			slideDownDuration = 0.2,
 			upper = {
 				startX = ScrW() * 0.25,
 				centerX = ScrW() / 2,
 				y = ScrH() * 0.35,
 				slideDownEndY = ScrH() * 0.6,
+				slideUpEndY = ScrH() * 0.2,
 			},
 			lower = {
 				startX = ScrW() * 0.75,
 				centerX = ScrW() / 2,
 				y = ScrH() * 0.385,
 				slideDownEndY = ScrH() * 0.635,
+				slideUpEndY = ScrH() * 0.235,
 			},
 			ring = {
 				scaleStart = 0.5,
@@ -1282,7 +1367,7 @@ UV_UI.racing.carbon.events = {
                     alpha = 255
                 elseif elapsed < carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
                     local t = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
-                    y = Lerp(t, elem.y, elem.slideDownEndY)
+                    y = Lerp(t, elem.y, (pflyUp and elem.slideUpEndY or elem.slideDownEndY))
                     alpha = Lerp(t, 255, 0)
                 else
                     alpha = 0
@@ -1294,14 +1379,14 @@ UV_UI.racing.carbon.events = {
             if #lines < 1 then return end
             local upperLine = lines[1] or ""
             local lowerLine = lines[2] or ""
-            
+
             -- Upper
             local ux, uy, ualpha = calcPosAlpha(elapsed, carbon_noti_animState.upper)
-            carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(255, 255, 255, ualpha), nil)
+            carbon_noti_draw( upperLine, pfontUpper, nil, ux, uy, Color(pcolUpper.r, pcolUpper.g, pcolUpper.b, ualpha), nil)
 
 			-- Lower
             local lx, ly, lalpha = calcPosAlpha(elapsed, carbon_noti_animState.lower)
-            carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(175, 175, 175, lalpha), nil)
+            carbon_noti_draw( lowerLine, pfontLower, nil, lx, ly, Color(pcolLower.r, pcolLower.g, pcolLower.b, lalpha), nil)
 
             -- Disable animation and remove hook when done
             if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration + carbon_noti_animState.slideDownDuration then
@@ -1355,7 +1440,7 @@ UV_UI.racing.carbon.events = {
 				ring.alpha = Lerp(t, ring.alphaEnd, 0)   -- fade out
 			end
 
-			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(175, 175, 175, ring.alpha))
+			DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, ScrH() / 3.35, ring.scale, Color(printCol.r, printCol.g, printCol.b, ring.alpha))
 
 			-- Outer Ring Duplicate
 			local clone = carbon_noti_animState.ringClone
@@ -1414,7 +1499,7 @@ UV_UI.racing.carbon.events = {
 
 					-- Move the clone downward (same offset as text)
 					local slideOffset = Lerp(t, 0, ScrH() * 0.2)
-					clone.drawY = (ScrH() / 3.35) + slideOffset
+					clone.drawY = (ScrH() / 3.35) + (pflyUp and -slideOffset or slideOffset)
 
 					-- Fade out over time
 					clone.alpha = Lerp(t, clone.alpha, 0)
@@ -1423,7 +1508,7 @@ UV_UI.racing.carbon.events = {
 				end
 
 				if clone.visible then
-					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(175, 175, 175, clone.alpha))
+					DrawIcon(UVMaterials["TAKEDOWN_RING_CARBON"], ScrW() / 2, clone.drawY, clone.scale, Color(printCol.r, printCol.g, printCol.b, clone.alpha))
 				end
 			end
 
@@ -1455,11 +1540,11 @@ UV_UI.racing.carbon.events = {
 			if elapsed > carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration then
 				local slideT = (elapsed - carbon_noti_animState.slideInDuration - carbon_noti_animState.holdDuration) / carbon_noti_animState.slideDownDuration
 				local slideOffset = Lerp(slideT, 0, ScrH() * 0.2)
-				circle.drawY = (ScrH() / 3.35) + slideOffset
+				circle.drawY = (ScrH() / 3.35) + (pflyUp and -slideOffset or slideOffset)
 				circle.alpha = Lerp(slideT, circle.alphaEnd, 0)
 			end
 
-			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(175, 175, 175, circle.alpha), { rotation = circle.rotation } )
+			DrawIcon( UVMaterials["TAKEDOWN_CIRCLE_CARBON"], ScrW() / 2, circle.drawY, circle.scale, Color(printCol.r, printCol.g, printCol.b, circle.alpha), { rotation = circle.rotation } )
 
 			-- Takedown Icon
 			local icon = carbon_noti_animState.icon
@@ -1476,7 +1561,7 @@ UV_UI.racing.carbon.events = {
 				slideOffset = ScrH() * 0.2
 			end
 
-			local currentY = (ScrH() / 3.35) + slideOffset
+			local currentY = (ScrH() / 3.35) + (pflyUp and -slideOffset or slideOffset)
 			local shrinkEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.ring.shrinkDuration
 			local expandEnd = carbon_noti_animState.slideInDuration + carbon_noti_animState.holdDuration
 
@@ -2094,19 +2179,44 @@ UV_UI.racing.carbon.events = {
 		end)
 	end,
 
-	onLapSplit = function( participant, checkpoint, is_local_player, numParticipants )
-		if not is_local_player then return end	
-		
-		local splittext = string.format( language.GetPhrase("uv.race.splittime"), "{TIME}" )
-	
-		if numParticipants == 1 then
-			-- splittext = string.format( language.GetPhrase("uv.prerace.checks"), "{TIME}" )
-			return
+	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
+		if not is_local_player then return end
+		if numParticipants <= 1 then return end
+
+		-- Use the participant vehicle directly
+		local my_vehicle = participant
+		if not IsValid(my_vehicle) then return end
+
+		-- Pull cached diffs from general racing HUD
+		local cached = UV_UI.general.racing.SplitDiffCache and UV_UI.general.racing.SplitDiffCache[my_vehicle]
+		local aheadDiff, behindDiff = "N/A", "N/A"
+
+		if cached then
+			aheadDiff = cached.Ahead or "N/A"
+			behindDiff = cached.Behind or "N/A"
+		end
+
+		-- CenterNoti itself
+		local splittime = "--:--.---"
+		local showahead = false
+		local noticol = Color(0, 255, 255)
+
+		if aheadDiff == "N/A" and behindDiff ~= "N/A" then -- 1st place
+			splittime = behindDiff
+		elseif aheadDiff ~= "N/A" then -- 2nd place or below
+			splittime = "-" .. aheadDiff
+			showahead = true
+			noticol = Color(200, 75, 75)
 		end
 		
+		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
+
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = splittext,
 			iconMaterial = UVMaterials["CLOCK_BG"],
+			colorLower = noticol,
+			ringColor = noticol,
+			flyUp = true,
 		})
 	end,
 }
@@ -2626,7 +2736,7 @@ local function carbon_racing_main( ... )
     markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
     markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
     markup.Parse("<font=UVCarbonFont>" .. laptext):Draw(w * 0.97,h * 0.155,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
-    
+
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
     for i = 1, racer_count, 1 do
@@ -2647,29 +2757,34 @@ local function carbon_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+ ") or "- ") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
-                    
-                    table.insert(args, num)
-                end
-                
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
-            end
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
+
+					-- table.insert(args, num)
+				end
+
+				-- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+			end
         end
         
         local color = nil
@@ -4263,7 +4378,7 @@ local function mw_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
@@ -4272,21 +4387,26 @@ local function mw_racing_main( ... )
         local status_text = "- - - - -"
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
             end
         end
         
@@ -5864,28 +5984,33 @@ local function undercover_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
         }
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
             end
         end
         local color = nil
@@ -6904,7 +7029,7 @@ local function original_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
@@ -6913,21 +7038,26 @@ local function original_racing_main( ... )
         local status_text = ""
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and " (+") or " (-") .. string.format(lapText, math.abs(num)) .. ")"
+					else
+						status_text = ((num > 0 and " (+") or " (-") .. string.format("%.2f", math.abs(num)) .. ")"
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and " ("..status_string..")" or " ("..string.format(status_string, unpack(args))..")"
+                -- status_text = #args <= 0 and " ("..status_string..")" or " ("..string.format(status_string, unpack(args))..")"
             end
         end
         
@@ -7388,7 +7518,7 @@ local function prostreet_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
@@ -7397,21 +7527,26 @@ local function prostreet_racing_main( ... )
         local status_text = "-----"
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
             end
         end
         
@@ -8342,7 +8477,7 @@ local function underground_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
@@ -8351,21 +8486,26 @@ local function underground_racing_main( ... )
         local status_text = "-----"
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
             end
         end
         
@@ -8791,7 +8931,7 @@ local function underground2_racing_main( ... )
         local Strings = {
             ["Time"] = "%s",
             ["Lap"] = lang("uv.race.suffix.lap"),
-            -- ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
             ["Finished"] = lang("uv.race.suffix.finished"),
             ["Disqualified"] = lang("uv.race.suffix.dnf"),
             ["Busted"] = lang("uv.race.suffix.busted"),
@@ -8800,21 +8940,26 @@ local function underground2_racing_main( ... )
         local status_text = "-----"
         
         if entry[3] then
-            local status_string = Strings[entry[3]]
-            
-            if status_string then
-                local args = {}
-                
-                if entry[4] then
-                    local num = tonumber(entry[4])
-                    num =
-                    ((num > 0 and "+") or "-") ..
-                    string.format((entry[3] == "Lap" and "%s") or "%.2f", math.abs(num))
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+					
+					if entry[3] == "Lap" then
+						-- Choose singular or plural string based on number of laps
+						local lapText = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format(lapText, math.abs(num))
+					else
+						status_text = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
                     
-                    table.insert(args, num)
+                    -- table.insert(args, num)
                 end
                 
-                status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
+                -- status_text = #args <= 0 and status_string or string.format(status_string, unpack(args))
             end
         end
         

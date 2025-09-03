@@ -1977,6 +1977,10 @@ else -- CLIENT stuff
 
 		local lang = language.GetPhrase
 
+		if hudyes and UV_UI.general.racing then
+			UV_UI.general.racing.main( my_vehicle, my_array, string_array )
+		end
+		
 		if hudyes and UV_UI.racing[hudtype] then
 			UV_UI.racing[hudtype].main( my_vehicle, my_array, string_array )
 		end
