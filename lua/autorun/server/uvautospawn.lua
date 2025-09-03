@@ -283,17 +283,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	end
 	
 	if helicopter then
-		local modeltable = {
-			"models/nfs_mwpolhel/nfs_mwpolhel.mdl",
-			"models/nfs_ucpolhel/nfs_ucpolhel.mdl",
-			"models/nfs_hppolhel/nfs_hppolhel.mdl",
-			"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
-			"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
-		}
-		
 		local heli = ents.Create("uvair")
-		heli.Model = modeltable[math.random(#modeltable)]
-		heli:SetPos(uvspawnpoint +Vector(0,0,1000))
+		heli:SetPos(uvspawnpoint + (vector_up * 1000))
+		heli:SetAngles(Angle(0, math.random(-180, 180), 0))
 		heli:Spawn()
 		heli:Activate()
 		heli:SetTarget(suspect)

@@ -103,11 +103,9 @@ function ENT:Initialize()
 
 	self.voice = ya[math.random(1, #ya)]
 
-
 	self.deployingspikes = CurTime()
 	self.LastUpdate = CurTime()
 	self.ReplicTime = CurTime()
-	--UVLosing = CurTime()
 	self.Downed = false
 	self:SetHealth(500)
 	self:SetCustomCollisionCheck(true)
@@ -211,37 +209,43 @@ function ENT:Think()
 		--Busting
 		local btimeout = GetConVar("unitvehicle_bustedtimer"):GetFloat()
 		
-		if self.CloseToTarget and self:IsSeeTarget() and not self.Downed then
-			
+		if self:IsSeeTarget() and not self.Downed then
 			if not self.cooldown and self.aggressive and PursuitTech:GetBool() then
-
-
 				self.cooldown = true
 				self.deployingspikes = CurTime()
+
 				if self.WeaponChoice == 'spikestrips' then
 					local spikes = ents.Create("entity_uvspikestrip")
+
 					spikes.uvdeployed = true
 					spikes:SetPos(self:GetPos())
 					spikes:SetAngles(self.phys:GetAngles() +Angle(0,90,0))
 					spikes:Spawn()
+
 					spikes.PhysgunDisabled = false
 					spikes:GetPhysicsObject():EnableMotion(true)
 					constraint.NoCollide(self,spikes,0,0)
+
 					local phspikes = spikes:GetPhysicsObject()
-					phspikes:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*10)
+					phspikes:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*2)
 					phspikes:SetMass(100)
+
 					timer.Simple((math.random(5,10)), function() self.cooldown = nil end)
-					timer.Simple(10, function() if IsValid(spikes) then 
-					spikes:Remove() 
-					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-						UVChatterSpikeStripMiss(self) 
-					end
-					end end)
+					timer.Simple(10, function() 
+						if IsValid(spikes) then 
+							spikes:Remove() 
+							if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+								UVChatterSpikeStripMiss(self) 
+							end
+						end 
+					end)
+
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
 						UVChatterSpikeStripDeployed(self) 
 					end
 				elseif self.WeaponChoice == 'barrels' then
 					local bomb = ents.Create("entity_uvbombstrip")
+
 					constraint.NoCollide(self,bomb,0,0)
 					bomb:SetPos(self:GetPos())
 					bomb:SetAngles(self.phys:GetAngles() +Angle(0,90,0))
@@ -249,20 +253,25 @@ function ENT:Think()
 					bomb:Ignite(10)
 					bomb.PhysgunDisabled = false
 					bomb:GetPhysicsObject():EnableMotion(true)
+
 					local phbomb = bomb:GetPhysicsObject()
-					phbomb:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*10)
+					phbomb:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*2)
 					phbomb:SetMass(100)
+
 					self:EmitSound( "npc/attack_helicopter/aheli_mine_drop1.wav" )
 					timer.Simple((math.random(1,5)), function() self.cooldown = nil end)
-					timer.Simple(10, function() if IsValid(bomb) then 
-					bomb:BombExplode()
-					end end)
+
+					timer.Simple(10, function() 
+						if IsValid(bomb) then 
+							bomb:BombExplode()
+						end 
+					end)
+
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
 						UVChatterExplosiveBarrelDeployed(self) 
 					end
 				end
 			end
-
 		end
 	end
 
@@ -309,23 +318,36 @@ function ENT:Think()
 		end
 	end
 	
-	local p = self:GetPos()
-	if math.abs(p.x)>16384 or math.abs(p.y)>16384 or math.abs(p.z)>16384 then
-		self:SetPos(Vector(math.Clamp(p.x,-16384,16384),math.Clamp(p.y,-16384,16384),math.Clamp(p.z,-16384,16384)))
-	end
-	
 	self:NextThink(CurTime()+0.25)
 	return true
 end
 
+function ENT:SelfRotate()
+	if self:GetVelocity() == vector_origin then
+		self:StopRotating()
+	else
+		self:RotateToTarget(self:GetPos()+self:GetVelocity())
+	end
+end
+
 function ENT:PhysicsUpdate()
+
+	local p = self:GetPos()
+	if math.abs(p.x)>16000 or math.abs(p.y)>16000 or math.abs(p.z)>16000 then
+		if self.disengaging then
+			self:Remove()
+		end
+
+		self:SetPos(Vector(math.Clamp(p.x,-16000,16000),math.Clamp(p.y,-16000,16000),math.Clamp(p.z,-16000,16000))) -- out of bounds
+	end
+
 	if self.disengaging then
 		if table.HasValue(UVUnitsChasing, self) then
 			table.RemoveByValue(UVUnitsChasing, self)
 		end
 		self:ApplyAngles()
 		self:ApplyHeight("up")
-		self:StopRotating()
+		self:SelfRotate()
 		
 		timer.Simple(30, function() if IsValid(self) then self:Remove() end end)
 		
@@ -404,6 +426,15 @@ function ENT:PhysicsUpdate()
 			self.LastUpdate = CurTime()
 			return
 		end
+
+		local targetpos = vector_origin
+		if self.engaging then
+			targetpos = IsValid(self:GetTarget()) and (self:GetTargetPos()+(self:GetTarget():GetVelocity()/2)) or vector_origin
+		elseif self.aggressive then
+			targetpos = IsValid(self:GetTarget()) and (self:GetTargetPos()+self:GetTarget():GetVelocity()) or vector_origin
+		else
+			targetpos = IsValid(self:GetTarget()) and self:GetTargetPos() or vector_origin
+		end
 		
 		if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
 			if next(UVWantedTableVehicle) == nil then
@@ -422,15 +453,15 @@ function ENT:PhysicsUpdate()
 				self:SetTarget(randomsuspect)
 			end
 		else
-			self:RotateToTarget(self:GetTargetPos())
+			self:RotateToTarget(targetpos)
 		end
 		
 		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not uvJammerDeployed then
-			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((self:GetTargetPos()+self:GetTarget():GetVelocity()))^2) and not (self:DistIgnoreZ(self:GetTargetPos()) <= 500 and self:IsSeeTarget()) then
-				self:FlyTo(self:GetTargetPos())
+			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((targetpos+self:GetTarget():GetVelocity()))^2) and not (self:DistIgnoreZ(targetpos) <= 500 and self:IsSeeTarget()) then
+				self:FlyTo(targetpos)
 			else
 				if self.engaging then
-					self:FlyTo(self:GetTargetPos())
+					self:FlyTo(targetpos)
 				else
 					self:SlowDown()
 				end
@@ -438,10 +469,10 @@ function ENT:PhysicsUpdate()
 			end
 		else
 			if not UVEnemyBusted then 
-				self:RotateAround(uverespawn)
+				self:RotateAround(targetpos)
 			end
 			self:ApplyHeight("up")
-			self:StopRotating()
+			self:SelfRotate()
 			self.LastUpdate = CurTime()
 		end
 	else
@@ -465,9 +496,9 @@ function ENT:ApplyAngles()
 	local vel = WorldToLocal(absvel,Angle(),Vector(),Angle(0,ang.y,0))
 	local speed = vel:Length2D()
 	
-	ang.p = math.Clamp(vel.x/2000*30,-30,30)*(speed==0 and 1 or math.abs(vel.x)/speed)
+	ang.p = math.Clamp(vel.x/2000*30,-15,15)*(speed==0 and 1 or math.abs(vel.x)/speed)
 	ang.y = ang.y+self.RotateVelocity*time
-	ang.r = math.Clamp(-vel.y/2000*30,-30,30)*(speed==0 and 1 or math.abs(vel.y)/speed)
+	ang.r = math.Clamp(-vel.y/2000*30,-15,15)*(speed==0 and 1 or math.abs(vel.y)/speed)
 	
 	self.phys:SetAngles(ang)
 	self.phys:AddAngleVelocity(-self.phys:GetAngleVelocity())
@@ -536,7 +567,7 @@ function ENT:RotateToTarget(pos)
 	local mv = WorldToLocal(self.phys:GetVelocity(),Angle(),Vector(),(pos-Vector(self:GetPos().x,self:GetPos().y,pos.z)):Angle())
 	local spd = mv:Length2D()
 	
-	if math.abs(ang.y)>(spd>1000 and (spd==0 and 1 or math.abs(mv.x/mv.y)>3) and 10 or 10) then
+	if math.abs(ang.y)>(spd>2000 and (spd==0 and 1 or math.abs(mv.x/mv.y)>3) and 10 or 10) then
 		if math.abs(vel)<60 then
 			self.RotateVelocity = math.Clamp(self.RotateVelocity+90*side*time,-60,60)
 		end
