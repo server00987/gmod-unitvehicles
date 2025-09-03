@@ -1013,7 +1013,6 @@ if SERVER then
 					if not enemy.UVWanted then
 						enemy.UVWanted = enemy
 					end
-					if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
 						self.edriver = UVGetDriver(self.e)
 						UVAddToWantedListDriver(self.edriver)
@@ -1040,7 +1039,6 @@ if SERVER then
 					if not enemy.UVWanted then
 						enemy.UVWanted = enemy
 					end
-					if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
 					if isfunction(self.e.GetDriver) and IsValid(UVGetDriver(self.e)) and UVGetDriver(self.e):IsPlayer() then 
 						self.edriver = UVGetDriver(self.e)
 						UVAddToWantedListDriver(self.edriver)
@@ -1124,9 +1122,6 @@ if SERVER then
 			
 			if self.idle then
 				self.idle = nil
-				if not UVEnemyEscaping then 
-					uverespawn = self.e:GetPos() 
-				end
 			end
 			
 			--Drive the vehicle.
@@ -1444,7 +1439,6 @@ if SERVER then
 					timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
 					self.invincible = true
 					self.toofar = nil
-					if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
 					self:SetELSSiren(true)
 					--if ph:GetAngles().z > 90 and ph:GetAngles().z < 270 then self.v:PointAtEntity(self.e) end
 				end	
@@ -1484,7 +1478,7 @@ if SERVER then
 						end
 					else
 						local MathAggressive2 = math.random(1,10)
-						if Chatter:GetBool() and MathAggressive2 == 1 then
+						if Chatter:GetBool() and MathAggressive2 == 1 and not UVEnemyEscaping then
 							UVChatterRequestDisengage(self)
 						end
 					end
@@ -1636,7 +1630,6 @@ if SERVER then
 			
 			--When too far to chase enemy
 			if edist:LengthSqr() > 25000000 and not self.toofar and not self:VisualOnTarget(self.e) then
-				if not UVEnemyEscaping then uverespawn = self.e:GetPos() end
 				self.toofar = true
 			end
 			
@@ -1692,8 +1685,6 @@ if SERVER then
 		if MathAggressive == 1 then
 			self.aggressive = true
 		end
-		self.respawn = self:GetPos()
-		--uverespawn = self:GetPos()
 		self.Speeding = (SpeedLimit:GetFloat()*17.6)^2 --MPH to in/s^2
 		timer.Simple(1, function() 
 			if IsValid(self.v) then
