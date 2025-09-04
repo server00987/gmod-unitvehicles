@@ -2935,7 +2935,7 @@ local function carbon_pursuit_main( ... )
         if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
             local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
             
-            local maxtime = timedHeatConVar:GetInt()
+            local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
             HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
@@ -4746,7 +4746,7 @@ local function mw_pursuit_main( ... )
         if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
             local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
             
-            local maxtime = timedHeatConVar:GetInt()
+            local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
             HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
@@ -6431,7 +6431,7 @@ local function undercover_pursuit_main( ... )
         if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
             local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
             
-            local maxtime = timedHeatConVar:GetInt()
+            local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
             HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
@@ -7418,7 +7418,7 @@ local function original_pursuit_main( ... )
             if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
                 local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
                 
-                local maxtime = timedHeatConVar:GetInt()
+                local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
                 HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
             else
                 HeatProgress = ((UVBountyNo-UVHeatBountyMin)/(UVHeatBountyMax-UVHeatBountyMin))
@@ -10980,7 +10980,7 @@ local function world_pursuit_main( ... )
         if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
             local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
             
-            local maxtime = timedHeatConVar:GetInt()
+            local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
             HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
         else
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
