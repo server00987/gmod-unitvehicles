@@ -1998,7 +1998,6 @@ if SERVER then
 
 			ply:ExitVehicle()
 			ply:Spawn()
-			ply.uvplayerlastvehicle:Remove()
 			UVAutoSpawn(ply, nil, nil, true)
 		else
 			if not SpawnCooldownTable[ply] then

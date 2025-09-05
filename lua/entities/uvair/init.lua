@@ -428,12 +428,14 @@ function ENT:PhysicsUpdate()
 		end
 
 		local targetpos = vector_origin
-		if self.engaging then
-			targetpos = IsValid(self:GetTarget()) and (self:GetTargetPos()+(self:GetTarget():GetVelocity()/2)) or vector_origin
-		elseif self.aggressive then
-			targetpos = IsValid(self:GetTarget()) and (self:GetTargetPos()+self:GetTarget():GetVelocity()) or vector_origin
-		else
-			targetpos = IsValid(self:GetTarget()) and self:GetTargetPos() or vector_origin
+		if IsValid(self:GetTarget()) then
+			if self.engaging then
+				targetpos = (self:GetTargetPos()+(self:GetTarget():GetVelocity()/2))
+			elseif self.aggressive then
+				targetpos = (self:GetTargetPos()+self:GetTarget():GetVelocity())
+			else
+				targetpos = self:GetTargetPos()
+			end
 		end
 		
 		if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then

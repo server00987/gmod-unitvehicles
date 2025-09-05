@@ -236,8 +236,8 @@ if SERVER then
 			self.wrecked = true
 			self.v.wrecked = true
 			local despawntime = 60
-			if #UVWantedTableVehicle > 1 then
-				despawntime = 10
+			if not UVTargeting and IsValid(self.e) then
+				UVTargeting = true
 			end
 			table.insert(UVWreckedVehicles, self.v)
 			self.v:CallOnRemove("UVWreckedVehicleRemoved", function()
