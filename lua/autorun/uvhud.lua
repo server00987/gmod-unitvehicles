@@ -832,7 +832,7 @@ function UVRenderEnemySquare(ent)
     end
 end
 
-local function mw_noti_draw(text, font, x, y, color)
+local function mw_noti_draw(text, font, x, y, color, colorbg)
     surface.SetFont(font)
     local lines = string.Explode("\n", text)
     
@@ -849,9 +849,11 @@ local function mw_noti_draw(text, font, x, y, color)
     
     local currentY = y - tH/2
     
+	if not colorbg then colorbg = Color(0, 0, 0) end
+	
     for i, line in ipairs(lines) do
         local w,h = surface.GetTextSize(line)
-		draw.SimpleTextOutlined(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, color.a ) )
+		draw.SimpleTextOutlined(line, font, x - w/2, currentY, Color(color.r, color.g, color.b, color.a), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( colorbg.r, colorbg.g, colorbg.b, colorbg.a or color.a ) )
         currentY = currentY + h
     end
 end
@@ -9460,276 +9462,164 @@ UV_UI.racing.world.states = {
 }
 
 UV_UI.racing.world.events = {
-	notifState = {},
-	CenterNotification = function( params )
-		local immediate = params.immediate or false
+	CenterNotification = function(params)
+		local ptext = params.text or "REPLACEME"
+		local pcol = params.color or Color( 255, 255, 255 )
+		local pcolbg = params.colorbg or Color( 0, 0, 0 )
+		local immediate = params.immediate or nil
+		local iscritical = params.critical or nil
+		local notitimer = params.timer or 1
 
+		local StartClosing
+		local closing = false
+		local closeStartTime = nil
+
+		-- Handle queue logic
 		if UV_UI.racing.world.states.notificationActive then
 			if immediate then
-				hook.Remove("HUDPaint", "UV_CENTERNOTI_MW")
-				UV_UI.racing.world.states.notificationActive = false
-				UV_UI.racing.world.states.notificationQueue = {}
+				-- Retain critical entries only
+				local retainedQueue = {}
+				for _, v in ipairs(UV_UI.racing.world.states.notificationQueue) do
+					if v.critical then
+						table.insert(retainedQueue, v)
+					end
+				end
+
+				UV_UI.racing.world.states.notificationQueue = retainedQueue
+				table.insert(UV_UI.racing.world.states.notificationQueue, 1, params)
+
 				timer.Simple(0, function()
-					UV_UI.racing.world.events.CenterNotification(params)
+					if not closing and StartClosing then
+						StartClosing()
+					end
 				end)
-				return
 			else
 				table.insert(UV_UI.racing.world.states.notificationQueue, params)
-				return
 			end
+			return
 		end
 
 		UV_UI.racing.world.states.notificationActive = true
 
-		local ptext = params.text or "ERROR: NO TEXT"
-		local ptextcol = params.textCol or Color(255, 255, 255)
-		local ptextfont = params.textFont or "UVFont5Shadow"
-		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED"]
-		local ptextNoFall = params.textNoFall
-		local ptextFlyRight = params.textFlyRight
-		local pnoIcon = params.noIcon
-		local ptextFlyRightNoFall = params.textFlyRightNoFall
+		local hookName = "UV_CENTERNOTI_WORLD"
+		local displayDuration = 3
+		local w, h = ScrW(), ScrH()
+		local startTime = CurTime()
+		local closing = false
+		local closeStartTime = nil
 
-		UV_UI.racing.world.events.notifState = {
-			active = true,
-			startTime = CurTime(),
-			fadeStartTime = nil,
+		local delay = 0.1
+		local expandDuration = 0.15
+		local whiteFadeInDuration = 0.0175
+		local blackFadeOutDuration = 0.65
 
-			phase1Duration = 2.5,
-			fadeDuration = 0.3,
-			startY = ScrH() * 0.325,
-			midY = ScrH() * 0.4,
-			finalY = ScrH() * 0.9,
-			
-			-- For Racing Noti
-			startX = ScrW() * 0.5,
-			midX = ScrW() * 0.6,
-			finalX = ScrW() * 0.9,
+		local expandStart = delay
+		local whiteStart = expandStart + expandDuration
+		local blackStart = whiteStart + whiteFadeInDuration
 
-			randomStart = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			randomBurst1 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			randomBurst2 = Vector(math.Rand(ScrW() * 0.3, ScrW() * 0.6), math.Rand(ScrH() * 0.3, ScrH() * 0.5), 0),
-			centerPos = Vector(ScrW() / 2, ScrH() * 0.275, 0),
+		-- Remove any prior hook
+		hook.Remove("HUDPaint", hookName)
 
-			burstDuration = 0.025,
-			burstDuration2 = 0.025,
-			toCenterDuration = 0.1,
-			holdDuration = 2.3,
-		}
+		StartClosing = function()
+			if closing then return end
+			closing = true
+			closeStartTime = CurTime()
 
-		local notifState = UV_UI.racing.world.events.notifState
+			-- Ensure we clean everything after closing finishes
+			timer.Create("UV_CENTERNOTI_WORLD_CLEANUP", expandDuration, 1, function()
+				hook.Remove("HUDPaint", hookName)
+				UV_UI.racing.world.states.notificationActive = false
 
-        ----------------------------------------------------------------------------
+				if #UV_UI.racing.world.states.notificationQueue > 0 then
+					local nextParams = table.remove(UV_UI.racing.world.states.notificationQueue, 1)
+					-- If the queued entry has 'immediate', allow mid-close interruption next round
+					timer.Simple(0, function()
+						UV_UI.racing.world.events.CenterNotification(nextParams)
+					end)
+				end
+			end)
+		end
 
-        if timer.Exists( 'UV_CENTERNOTI_MW_TIMER' ) then timer.Remove( "UV_CENTERNOTI_MW_TIMER" ) end 
-
-		local nextTriggerTime = notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration + (notifState.fadeDuration * 0.4)
-
-		timer.Create("UV_CENTERNOTI_MW_TIMER", nextTriggerTime, 1, function()
-			UV_UI.racing.world.states.notificationActive = false
-
-			if #UV_UI.racing.world.states.notificationQueue > 0 then
-				local nextParams = table.remove(UV_UI.racing.world.states.notificationQueue, 1)
-				UV_UI.racing.world.events.CenterNotification(nextParams)
+		-- Mid-life force-close handler for 'immediate' queueing
+		timer.Create("UV_CENTERNOTI_WORLD_FORCECHECK", 0.05, 0, function()
+			if CurTime() - startTime >= notitimer and not closing and #UV_UI.racing.world.states.notificationQueue > 0 then
+				StartClosing()
+				timer.Remove("UV_CENTERNOTI_WORLD_FORCECHECK")
 			end
 		end)
 
-		-- Cleanup hook fully after animation ends (optional safety)
-		timer.Create("UV_CENTERNOTI_MW_TIMER_CLEANUP", 3, 1, function()
-			hook.Remove("HUDPaint", "UV_CENTERNOTI_MW")
-			notifState.active = false
+		-- Regular close trigger
+		timer.Create("UV_CENTERNOTI_WORLD_TIMER", displayDuration - expandDuration, 1, function()
+			if not closing then
+				StartClosing()
+			end
+			timer.Remove("UV_CENTERNOTI_WORLD_FORCECHECK")
 		end)
 
-		hook.Add("HUDPaint", "UV_CENTERNOTI_MW", function()
+		hook.Add("HUDPaint", hookName, function()
+			local showhud = GetConVar("cl_drawhud"):GetBool()
 			local now = CurTime()
-			local elapsed = now - notifState.startTime
-			local pos = Vector()
-			local alpha = 255
+			local realTime = RealTime()
+			local animTime = now - startTime
+			local barProgress = 0
+			local currentWidth
 
-			if elapsed < notifState.burstDuration then
-				-- Phase 1: teleport at randomStart
-				pos = notifState.randomStart
+			if closing then
+				local closeAnimTime = now - closeStartTime
+				barProgress = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+				currentWidth = Lerp(barProgress, 0, w)
+			else
+				if animTime >= expandStart then
+					barProgress = math.Clamp((animTime - expandStart) / expandDuration, 0, 1)
+				end
+				currentWidth = Lerp(barProgress, 0, w)
+			end
 
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 then
-				-- Phase 2: teleport at randomBurst1
-				pos = notifState.randomBurst1
+			local barHeight = h * 0.175
+			local barX = (w - currentWidth) / 2
+			local barY = h * 0.2
 
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration then
-				-- Phase 3: teleport at randomBurst2
-				pos = notifState.randomBurst2
+			-- Color Fade Logic
+			local colorVal = 0
+			if animTime >= whiteStart and animTime < blackStart then
+				local p = (animTime - whiteStart) / whiteFadeInDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 0, 255)
+			elseif animTime >= blackStart then
+				local p = (animTime - blackStart) / blackFadeOutDuration
+				colorVal = Lerp(math.Clamp(p, 0, 1), 255, 0)
+			end
 
-			elseif elapsed < notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration + notifState.holdDuration then
-				-- Phase 4: gradual downward motion from midY to finalY (no fade)
-				if ptextNoFall then notifState.midY = notifState.startY end
-				if ptextFlyRightNoFall then notifState.midX = notifState.startX end
+			if closing then
+				-- Fade out during closing
+				local closeAnimTime = now - closeStartTime
+				local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+				colorVal = colorVal * fade
+			end
+
+			-- Draw bar
+			if showhud then 
+				surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
+				surface.SetDrawColor(Color(255, 255, 255))
+				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
 				
-				local holdElapsed = elapsed - (notifState.burstDuration + notifState.burstDuration2 + notifState.toCenterDuration)
-				local t = math.Clamp(holdElapsed / notifState.holdDuration, 0, 1)
-				if ptextFlyRight then
-					pos = Vector(
-						Lerp(t, notifState.startX, notifState.midX),
-						notifState.midY,
-						0
-					)
-				else
-					pos = Vector(
-						notifState.centerPos.x,
-						Lerp(t, notifState.startY, notifState.midY),
-						0
-					)
-				end
-				alpha = 255
-
-			else
-				-- Phase 5: smooth fall + fade (as before)
-				if not notifState.fadeStartTime then
-					notifState.fadeStartTime = now
-				end
-
-				local fadeElapsed = now - notifState.fadeStartTime
-				local t = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-
-				if ptextFlyRight then
-					pos = Vector(
-						Lerp(t, notifState.midX, notifState.finalX),
-						notifState.midY,
-						0
-					)
-				else
-					pos = Vector(
-						notifState.centerPos.x,
-						Lerp(t, notifState.midY, notifState.finalY),
-						0
-					)
-				end
-				alpha = Lerp(t, 255, 0)
+				surface.SetMaterial(UVMaterials["PT_BG"])
+				surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 125))
+				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
 			end
 
-			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
-			
-			if not pnoIcon then
-				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
-				local iconblink = 150 * math.abs(math.sin(RealTime() * 8)) * baseAlphaFactor
-				local iconDiffY = ScrH() * 0.0525
-				local iconStartY = notifState.startY - iconDiffY
-				local iconY
-				if not notifState.fadeStartTime then
-					local t = math.Clamp(elapsed / notifState.phase1Duration, 0, 1)
-					iconY = Lerp(t, iconStartY, notifState.midY - iconDiffY)
-				else
-					local fadeElapsed = now - notifState.fadeStartTime
-					local fadeT = math.Clamp(fadeElapsed / notifState.fadeDuration, 0, 1)
-					iconY = Lerp(fadeT, notifState.midY - iconDiffY, notifState.finalY - iconDiffY)
+			-- Text
+			if animTime >= whiteStart then
+				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
+
+				if closing then
+					local closeAnimTime = now - closeStartTime
+					local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
+					outlineAlpha = outlineAlpha * fade
 				end
 
-				DrawIcon( piconMat, ScrW() / 2, iconY, 0.06, Color(255, 255, 255, alpha) )
-				DrawIcon( UVMaterials['GLOW_ICON'], ScrW() / 2, iconY, 0.1, Color(223, 184, 127, iconblink) )
-			end
-        end)
-	end,
-	
-	notifState2 = {},
-	CenterNotification2 = function( params )
-		local immediate = params.immediate or false
-
-		if UV_UI.racing.world.states.notificationActive2 then
-			if immediate then
-				hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
-				UV_UI.racing.world.states.notificationActive2 = false
-				UV_UI.racing.world.states.notificationQueue2 = {}
-				timer.Simple(0, function()
-					UV_UI.racing.world.events.CenterNotification2(params)
-				end)
-				return
-			else
-				table.insert(UV_UI.racing.world.states.notificationQueue2, params)
-				return
-			end
-		end
-
-		UV_UI.racing.world.states.notificationActive2 = true
-
-		local ptext = params.text or "ERROR: NO TEXT"
-		local ptextcol = params.textCol or Color(255, 255, 255)
-		local ptextfont = params.textFont or "UVFont5Shadow"
-
-		UV_UI.racing.world.events.notifState2 = {
-			active = true,
-			startTime = CurTime(),
-			fadeStartTime = nil,
-
-			-- Animation timing
-			introDuration = 0.5,
-			holdDuration = 3,
-			outroDuration = 0.5,
-
-			-- Positioning
-			startY = ScrH() * 0.275,
-			endY = ScrH() * 0.35,
-			x = ScrW() * 0.5,
-		}
-
-		local notifState = UV_UI.racing.world.events.notifState2
-
-        ----------------------------------------------------------------------------
-
-		if timer.Exists("UV_CENTERNOTI_MW_TIMER2") then
-			timer.Remove("UV_CENTERNOTI_MW_TIMER2")
-		end
-
-		-- Total duration = intro + hold + outro
-		local nextTriggerTime = notifState.introDuration + notifState.holdDuration + notifState.outroDuration
-
-		timer.Create("UV_CENTERNOTI_MW_TIMER2", nextTriggerTime, 1, function()
-			UV_UI.racing.world.states.notificationActive2 = false
-
-			if #UV_UI.racing.world.states.notificationQueue2 > 0 then
-				local nextParams = table.remove(UV_UI.racing.world.states.notificationQueue2, 1)
-				UV_UI.racing.world.events.CenterNotification2(nextParams)
+				mw_noti_draw(showhud and ptext, "UVWorldFont2", w * 0.5, h * 0.285, pcol, pcolbg)
 			end
 		end)
-
-		-- Cleanup hook fully after animation ends (optional safety)
-		timer.Create("UV_CENTERNOTI_MW_TIMER2_CLEANUP", nextTriggerTime + 0.25, 1, function()
-			hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
-			notifState.active = false
-		end)
-
-		hook.Add("HUDPaint", "UV_CENTERNOTI_MW2", function()
-			local now = CurTime()
-			local elapsed = now - notifState.startTime
-			local posY = notifState.endY
-			local alpha = 255
-
-			if elapsed < notifState.introDuration then
-				-- Phase 1: fall in + fade in
-				local t = math.Clamp(elapsed / notifState.introDuration, 0, 1)
-				posY = Lerp(t, notifState.startY, notifState.endY)
-				alpha = Lerp(t, 0, 255)
-
-			elseif elapsed < notifState.introDuration + notifState.holdDuration then
-				-- Phase 2: hold steady
-				posY = notifState.endY
-				alpha = 255
-
-			elseif elapsed < notifState.introDuration + notifState.holdDuration + notifState.outroDuration then
-				-- Phase 3: rise out + fade out
-				local t = math.Clamp((elapsed - notifState.introDuration - notifState.holdDuration) / notifState.outroDuration, 0, 1)
-				posY = Lerp(t, notifState.endY, notifState.startY)
-				alpha = Lerp(t, 255, 0)
-
-			else
-				-- Animation fully done → cleanup
-				if notifState.active then
-					notifState.active = false
-					hook.Remove("HUDPaint", "UV_CENTERNOTI_MW2")
-				end
-			end
-
-			-- Draw text
-			mw_noti_draw(ptext, ptextfont, notifState.x, posY, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
-		end)
-
 	end,
 
     ShowResults = function(sortedRacers) -- Most Wanted
@@ -10120,7 +10010,8 @@ end,
 		end
 		UV_UI.racing.world.events.CenterNotification({
 			text = UV_UI.racing.world.states.LapCompleteText,
-			iconMaterial = UVMaterials['CLOCK'],
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 		})
 	end,
 		
@@ -10138,9 +10029,10 @@ end,
 
 		UV_UI.racing.world.events.CenterNotification({
 			text = disqtext,
-			textNoFall = true,
-			noIcon = true,
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 			immediate = is_local_player and true or false,
+			timer = is_local_player and 3 or 1,
 		})
 	end,
 
@@ -10167,7 +10059,8 @@ end,
 		UV_UI.racing.world.events.CenterNotification(
 			table.Merge({
 				text = textToShow,
-				textCol = Color(0, 255, 0),
+				color = Color( 203, 248, 250 ),
+				colorbg = Color(66, 194, 222, 50),
 				textFont = "UVFont5WeightShadow",
 				textFlyRight = true,
 				noIcon = true,
@@ -10208,9 +10101,10 @@ end,
 		
 		local splittext = string.format( language.GetPhrase("uv.race.splittime"), splittime )
 
-		UV_UI.racing.world.events.CenterNotification2({
+		UV_UI.racing.world.events.CenterNotification({
 			text = splittext,
-			textCol = noticol,
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 		})
 	end,
 
@@ -10221,6 +10115,8 @@ UV_UI.pursuit.world.events = {
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.world.events.CenterNotification({
 			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo ),
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
 		})
 	end,
@@ -10304,8 +10200,8 @@ UV_UI.pursuit.world.events = {
 
 		UV_UI.racing.world.events.CenterNotification({
 			text = cnt,
-			textNoFall = true,
-			noIcon = true,
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 			immediate = lp and true or false,
 		})
 	end,
@@ -10698,17 +10594,19 @@ end,
 	onPullOverRequest = function(...)
 		UV_UI.racing.world.events.CenterNotification({
 			text = language.GetPhrase("uv.hud.fine.pullover"),
-			textNoFall = true,
-			noIcon = true,
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
+			timer = 3,
 		})
 	end,
 	onFined = function( finenr )
 		UV_UI.racing.world.events.CenterNotification({
 			text = string.format( language.GetPhrase("uv.hud.fine.fined"), finenr),
-			textNoFall = true,
-			noIcon = true,
+			color = Color( 203, 248, 250 ),
+			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
+			timer = 5,
 		})
 	end,
 }
@@ -10958,6 +10856,9 @@ local function world_pursuit_main( ... )
 		regbg = Color( 0, 0, 0),
 		val = Color( 203, 248, 250 ),
 		valbg = Color( 89, 176, 193, 50 ),
+				
+		busted = Color( 255, 240, 240, 255 ),
+		bustedbg = Color( 222, 66, 66, 50 ),
 	}
 	
     outofpursuit = CurTime()
@@ -11032,10 +10933,7 @@ local function world_pursuit_main( ... )
 	DrawIcon(UVMaterials["UNIT_WORLD"], w * 0.94, h * 0.19, 0.06, Color(255, 255, 255) ) -- Wrecks
 	DrawIcon(UVMaterials["UNIT_CROSS_WORLD"], w * 0.94, h * 0.19, 0.03, Color(255, 255, 255) ) -- Wrecked Cross
 	draw.SimpleTextOutlined( UVWrecks, "UVWorldFont3", w * 0.9525, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
-	
-	-- draw.DrawText(ResourceText,"UVFont5UI-BottomBar",w * 0.5,h * 0.825,UVUnitsColor,TEXT_ALIGN_CENTER)
-	-- DrawIcon(UVMaterials["UNITS"], w * 0.5, h * 0.8, .07, UVUnitsColor)
-        
+
     -- Cost to State
 	draw.SimpleTextOutlined( "#uv.chase.cts.world", "UVWorldFont1",w * 0.885,h * 0.21, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
 	
@@ -11155,7 +11053,7 @@ local function world_pursuit_main( ... )
 	DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], w * 0.62, bottomy, .035, Color( 255, 255, 255 )) -- Cop Icon
 	
 	DrawIcon(UVMaterials["CHASEBAR_ARROW_LEFT_WORLD"], w * 0.3675, bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Left Arrow
-	DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.6325, bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Left Arrow
+	DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.6325, bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Right Arrow
 	
 	-- Borders
     draw.NoTexture()
@@ -11175,10 +11073,8 @@ local function world_pursuit_main( ... )
 	surface.DrawTexturedRect(w * 0.5, bottomy + (h*0.00725), w * 0.125, h * 0.03)
 
     if not UVHUDDisplayCooldown then
-		        
         -- Evade Meter
         if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
-            --UVSoundHeat(UVHeatLevel)
             if not EvadingProgress or EvadingProgress == 0 then
                 EvadingProgress = CurTime()
                 UVEvadingProgress = EvadingProgress
@@ -11226,6 +11122,28 @@ local function world_pursuit_main( ... )
             UVBustedColor = Color(255, 100, 100, 125)
             BustingProgress = 0
         end
+		
+		local btrm = 0
+		
+		-- Resource & Backup Timer
+		if UVHUDDisplayBackupTimer then
+			if UVBackupTimerSeconds > 10 then 
+				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255 ))
+			elseif UVBackupTimerSeconds < 10 then
+				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink ))
+			elseif UVBackupTimerSeconds < 5 then
+				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink2 ))
+			elseif UVBackupTimerSeconds < 3 then
+				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink3 ))
+			end
+
+			draw.SimpleTextOutlined( UVBackupTimer, "UVWorldFont4",w * 0.4675, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+			btrm = w * 0.0525
+		end
+		
+		DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], w * 0.495 + btrm, bottomy + (h * 0.05), .035, Color( 255, 255, 255 )) -- Racer Icon
+		draw.SimpleTextOutlined( ResourceText, "UVWorldFont4",w * 0.505 + btrm, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+
     else
         -- Cooldown Meter
         if UVHUDDisplayCooldown then
