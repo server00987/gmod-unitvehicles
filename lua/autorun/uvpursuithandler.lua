@@ -1861,7 +1861,7 @@ if SERVER then
 				local timeTillNextHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
 
 				if timeTillNextHeatConVar then
-					TimeTillNextHeat = timeTillNextHeatConVar:GetInt()
+					TimeTillNextHeat = timeTillNextHeatConVar and timeTillNextHeatConVar:GetInt() or 0
 
 					timer.Create( "UVTimeTillNextHeat", TimeTillNextHeat, 0, function()
 						if UVUTimeTillNextHeatEnabled:GetInt() ~= 1 then
@@ -1875,7 +1875,7 @@ if SERVER then
 						if nextHeat <= MaxHeatLevel:GetInt() then
 							UVHeatLevel = nextHeat
 
-							timer.Adjust("UVTimeTillNextHeat", timeTillNextHeatNew:GetInt(), 0)
+							timer.Adjust("UVTimeTillNextHeat", (isnumber(timeTillNextHeatNew) and timeTillNextHeatNew or timeTillNextHeatNew:GetInt()), 0)
 
 							-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
 							if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
