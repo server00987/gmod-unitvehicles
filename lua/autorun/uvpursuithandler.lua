@@ -2474,26 +2474,26 @@ else --HUD/Options
 		--EntityQueue[entIndex] = nil
 	end
 
-	-- net.Receive('UVGetNewKeybind', function()
-	-- 	--if IsSettingKeybind then return end
-	-- 	local slot = net.ReadInt(16)
-	-- 	local key = net.ReadInt(16)
+	net.Receive('UVGetNewKeybind', function()
+		--if IsSettingKeybind then return end
+		local slot = net.ReadInt(16)
+		local key = net.ReadInt(16)
 
-	-- 	local entry = KeyBindButtons[slot]
+		local entry = KeyBindButtons[slot]
 
-	-- 	if entry then
-	-- 		local convar = GetConVar( entry[1] )
+		if entry then
+			local convar = GetConVar( entry[1] )
 
-	-- 		if convar then
-	-- 			convar:SetInt( key )
-	-- 			entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
-	-- 		end
-	-- 	else
-	-- 		warn("Invalid slot key; if you run into this please report it to a developer!")
-	-- 	end
+			if convar then
+				convar:SetInt( key )
+				entry[2]:SetText( language.GetPhrase( Control_Strings [slot] ) .. " - " ..string.upper( input.GetKeyName(key) ) )
+			end
+		else
+			warn("Invalid slot key; if you run into this please report it to a developer!")
+		end
 
-	-- 	IsSettingKeybind = false
-	-- end)
+		IsSettingKeybind = false
+	end)
 
 	net.Receive("UV_SendPursuitTech", function()
 		local car = net.ReadEntity()
