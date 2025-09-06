@@ -2686,8 +2686,7 @@ UV_UI.pursuit.carbon.events = {
 						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						AnimateAndRemovePanel(ResultPanel)
 
-						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-						net.Start("UVHUDRespawnInUV")
+						net.Start("UVHUDRespawnInUVGetInfo")
 						net.SendToServer()
 					end
 				end
@@ -4443,8 +4442,7 @@ UV_UI.pursuit.mostwanted.events = {
 					closing = true
 					closeStartTime = CurTime()
 
-					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-					net.Start("UVHUDRespawnInUV")
+					net.Start("UVHUDRespawnInUVGetInfo")
 					net.SendToServer()
 				end
 			end
@@ -6053,8 +6051,7 @@ UV_UI.pursuit.undercover.events = {
 						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						startCloseAnimation()
 
-						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-						net.Start("UVHUDRespawnInUV")
+						net.Start("UVHUDRespawnInUVGetInfo")
 						net.SendToServer()
 					end
 				end
@@ -7189,8 +7186,7 @@ UV_UI.pursuit.original.events = {
 						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 						ResultPanel:Close()
 
-						surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-						net.Start("UVHUDRespawnInUV")
+						net.Start("UVHUDRespawnInUVGetInfo")
 						net.SendToServer()
 					end
 				end
@@ -10539,8 +10535,7 @@ UV_UI.pursuit.world.events = {
 					closing = true
 					closeStartTime = CurTime()
 
-					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-					net.Start("UVHUDRespawnInUV")
+					net.Start("UVHUDRespawnInUVGetInfo")
 					net.SendToServer()
 				end
 			end

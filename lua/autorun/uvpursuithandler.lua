@@ -1076,7 +1076,7 @@ if SERVER then
 	UVResourcePoints = 10
 	UVMaxUnits = 3
 	UVTacticFormationNo = 1
-	UVSimfphysVehicleInitializing = {}
+	UVVehicleInitializing = {}
 	UVPlayerUnitTableVehicle = {}
 	UVPlayerUnitTablePlayers = {}
 	UVCommanders = {}
@@ -1299,8 +1299,8 @@ if SERVER then
 			end
 		end
 
-		if next(UVSimfphysVehicleInitializing) ~= nil then
-			for k, car in pairs(UVSimfphysVehicleInitializing) do
+		if next(UVVehicleInitializing) ~= nil then
+			for k, car in pairs(UVVehicleInitializing) do
 				if IsValid(car) and ((isfunction(car.IsInitialized) and car:IsInitialized()) or car.IsGlideVehicle or car:GetClass() == "prop_vehicle_jeep") then
 					if car.uvclasstospawnon == "npc_uvpatrol" then
 						car.playerbounty = UVUBountyPatrol:GetInt()
@@ -1311,7 +1311,11 @@ if SERVER then
 					elseif car.uvclasstospawnon == "npc_uvinterceptor" then
 						car.playerbounty = UVUBountyInterceptor:GetInt()
 					elseif car.uvclasstospawnon == "npc_uvspecial" then
-						car.playerbounty = UVUBountySpecial:GetInt()
+						if car.rhino then
+							car.playerbounty = UVUBountyRhino:GetInt()
+						else
+							car.playerbounty = UVUBountySpecial:GetInt()
+						end
 					elseif car.uvclasstospawnon == "npc_uvcommander" then
 						car.playerbounty = UVUBountyCommander:GetInt()
 						local health = car.uvlasthealth or UVUOneCommanderHealth:GetInt()
@@ -1355,7 +1359,7 @@ if SERVER then
 							car.UnitVehicle:EnterVehicle(car)
 						end
 					end
-					table.RemoveByValue(UVSimfphysVehicleInitializing, car)
+					table.RemoveByValue(UVVehicleInitializing, car)
 				end
 			end
 		end
@@ -1993,37 +1997,77 @@ if SERVER then
 	end)
 
 	net.Receive("UVHUDRespawnInUV", function( length, ply )
+		local unit = net.ReadString()
+		local unitnpc = net.ReadString()
+		local isrhino = net.ReadBool()
+
+		local playercontrolled = {
+			["unit"] = unit,
+			["unitnpc"] = unitnpc
+		}
+
+		local cooldown = SpawnCooldownTable[ply] and math.Round(SpawnCooldown:GetInt() - (CurTime() - SpawnCooldownTable[ply])) or 0
+
 		if IsValid(ply.uvplayerlastvehicle) and ply.uvplayerlastvehicle.wrecked then
 			SpawnCooldownTable[ply] = CurTime()
 
+			ply:EmitSound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
+
 			ply:ExitVehicle()
 			ply:Spawn()
-			UVAutoSpawn(ply, nil, nil, true)
+			UVAutoSpawn(ply, isrhino, nil, playercontrolled)
 		else
 			if not SpawnCooldownTable[ply] then
 				SpawnCooldownTable[ply] = 0
 			else
 				if CurTime() - SpawnCooldownTable[ply] < SpawnCooldown:GetInt() then
-					ply:PrintMessage( HUD_PRINTTALK, "You must wait "..math.Round(SpawnCooldown:GetInt() - (CurTime() - SpawnCooldownTable[ply]), 1).." seconds before respawning." )
-					return
+					ply:PrintMessage( HUD_PRINTTALK, "Spawning in "..cooldown.." seconds!" )
 				end
 			end
 
-			SpawnCooldownTable[ply] = CurTime()
+			timer.Simple(cooldown, function()
+				SpawnCooldownTable[ply] = CurTime()
 
-			ply:ExitVehicle()
-			ply:Spawn()
+				ply:EmitSound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
 
-			if IsValid(ply.uvplayerlastvehicle) and not ply.uvplayerlastvehicle.wrecked then
-				if table.HasValue(UVUnitsChasing, ply.uvplayerlastvehicle) then
-					table.RemoveByValue(UVUnitsChasing, ply.uvplayerlastvehicle)
+				ply:ExitVehicle()
+				ply:Spawn()
+
+				if IsValid(ply.uvplayerlastvehicle) and not ply.uvplayerlastvehicle.wrecked then
+					if table.HasValue(UVUnitsChasing, ply.uvplayerlastvehicle) then
+						table.RemoveByValue(UVUnitsChasing, ply.uvplayerlastvehicle)
+					end
+
+					ply.uvplayerlastvehicle:Remove()
 				end
 
-				ply.uvplayerlastvehicle:Remove()
-			end
-
-			UVAutoSpawn(ply, nil, nil, true)
+				UVAutoSpawn(ply, isrhino, nil, playercontrolled)
+			end)
 		end
+	end)
+	
+	net.Receive("UVHUDRespawnInUVGetInfo", function( length, ply )
+		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
+		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
+		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
+		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
+		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
+		local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
+		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
+		
+		if UVOneCommanderActive or UVOneCommanderDeployed then
+			UnitsCommander = ""
+		end
+
+		net.Start("UVHUDRespawnInUVSelect")
+		net.WriteString(UnitsPatrol)
+		net.WriteString(UnitsSupport)
+		net.WriteString(UnitsPursuit)
+		net.WriteString(UnitsInterceptor)
+		net.WriteString(UnitsSpecial)
+		net.WriteString(UnitsRhino)
+		net.WriteString(UnitsCommander)
+		net.Send(ply)
 	end)
 
 	-- net.Receive("UVHUDReAddUV", function( length, ply )
@@ -2517,7 +2561,7 @@ else --HUD/Options
 	end)
 
 	concommand.Add("uv_spawn_as_unit", function(ply)
-		net.Start("UVHUDRespawnInUV")
+		net.Start("UVHUDRespawnInUVGetInfo")
 		net.SendToServer()
 	end)
 
@@ -3585,6 +3629,111 @@ else --HUD/Options
 		end
 	end
 
+	net.Receive( "UVHUDRespawnInUVSelect", function()
+		local UnitsPatrol = net.ReadString()
+		local UnitsSupport = net.ReadString()
+		local UnitsPursuit = net.ReadString()
+		local UnitsInterceptor = net.ReadString()
+		local UnitsSpecial = net.ReadString()
+		local UnitsRhino = net.ReadString()
+		local UnitsCommander = net.ReadString()
+
+		local unittable = {
+			UnitsPatrol,
+			UnitsSupport,
+			UnitsPursuit,
+			UnitsInterceptor,
+			UnitsSpecial,
+			UnitsRhino,
+			UnitsCommander
+		}
+
+		local unittablename = {
+			"#uv.unit.patrol",
+			"#uv.unit.support",
+			"#uv.unit.pursuit",
+			"#uv.unit.interceptor",
+			"#uv.unit.special",
+			"#uv.unit.rhino",
+			"#uv.unit.commander"
+		}
+
+		local unittablenpc = {
+			"npc_uvpatrol",
+			"npc_uvsupport",
+			"npc_uvpursuit",
+			"npc_uvinterceptor",
+			"npc_uvspecial",
+			"npc_uvspecial", --Rhino
+			"npc_uvcommander"
+		}
+
+		local unitnpc
+		local isrhino
+		
+		local w = ScrW()
+		local h = ScrH()
+		
+		local dframe = vgui.Create("DFrame")
+		dframe:SetSize(w / 8, h / 2)
+		dframe:SetPos((w / 2) - ((w / 8) / 2), (h / 2) - ((h / 2) / 2))
+		dframe:SetTitle("#uv.chase.select.menu")
+    	dframe:ShowCloseButton(true)
+		dframe:MakePopup()
+		
+		local dlist = vgui.Create("DScrollPanel", dframe)
+		dlist:Dock(FILL)
+		
+		for unitclass, units in pairs(unittable) do
+			local availableunitstable = {}
+
+			for unit in string.gmatch(units, "%S+") do
+			    table.insert(availableunitstable, unit)
+			end
+
+			if next(availableunitstable) ~= nil then
+				local label = unittablename[unitclass]
+				local titleLabel = dlist:Add("DLabel")
+				titleLabel:SetText(label)
+				titleLabel:SetFont("DermaLarge")
+				titleLabel:SetTextColor(Color(255, 255, 255))
+				titleLabel:SetTall(30)
+				titleLabel:Dock(TOP)
+							
+				local separator = dlist:Add("DPanel")
+				separator:SetTall(2)
+				separator:Dock(TOP)
+				function separator:Paint(w, h)
+				    surface.SetDrawColor(50, 50, 50, 255)
+				    surface.DrawRect(0, 0, w, h)
+				end
+
+				for _, unit in pairs(availableunitstable) do
+					local dbutton = dlist:Add("DButton")
+
+					dbutton:SetText(unit)
+					dbutton:Dock(TOP)
+					dbutton:DockMargin(0, 0, 0, 5)
+
+					function dbutton:DoClick()
+						dframe:Close()
+
+						unitnpc = unittablenpc[unitclass]
+						if unitclass == 6 then
+							isrhino = true
+						end
+
+						net.Start("UVHUDRespawnInUV")
+						net.WriteString(unit)
+						net.WriteString(unitnpc)
+						net.WriteBool(isrhino)
+						net.SendToServer()
+					end
+				end
+			end
+		end
+	end)
+
 	net.Receive( "UV_AddWantedVehicle", function()
 		local entIndex = net.ReadInt( 32 )
 		local creationId = net.ReadInt( 32 )
@@ -3876,8 +4025,7 @@ else --HUD/Options
 			hook.Remove("CreateMove", "JumpKeyCloseTotaled")
             AnimateAndRemovePanel(TotaledPanel)
 			
-			surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
-			net.Start("UVHUDRespawnInUV")
+			net.Start("UVHUDRespawnInUVGetInfo")
 			net.SendToServer()
 		end
 		
@@ -3895,8 +4043,7 @@ else --HUD/Options
 					hook.Remove("CreateMove", "JumpKeyCloseTotaled")
 					AnimateAndRemovePanel(TotaledPanel)
 
-					surface.PlaySound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
-					net.Start("UVHUDRespawnInUV")
+					net.Start("UVHUDRespawnInUVGetInfo")
 					net.SendToServer()
 				end
 			end

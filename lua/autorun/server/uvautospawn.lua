@@ -235,8 +235,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		end
 	end
 
-	if not UVTargeting and (rhinoattack or helicopter) then return end
-
 	if next(prioritywaypointtable) ~= nil then
 		uvspawnpointwaypoint = prioritywaypointtable[math.random(#prioritywaypointtable)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
@@ -270,7 +268,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			if mathangle == 2 then
 				uvspawnpointangles = uvspawnpointangles+Angle(0,180,0)
 			end
-		else
+		elseif suspectvelocity then
 			uvspawnpointangles = suspectvelocity:Angle() + Angle(0,180,0)
 		end
 	end
@@ -293,67 +291,71 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	end
 	
 	local vehiclebase = UVUVehicleBase:GetInt()
+	local appliedUnits
 	
-	--FIND UNITS
-	local givenunitstable
-	local givenclasses = {
-		"npc_uvpatrol",
-		"npc_uvsupport",
-		"npc_uvpursuit",
-		"npc_uvinterceptor",
-		"npc_uvspecial",
-		"npc_uvcommander",
-	}
-	
-	local availableunitstable = {}
-	local availableclasses = {}
-	
-	if UVHeatLevel <= 1 then
-		UVHeatLevel = 1
-	elseif UVHeatLevel > MAX_HEAT_LEVEL then
-		UVHeatLevel = MAX_HEAT_LEVEL
-	end
-	
-	local appliedUnits = nil
-	
-	local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
-	local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
-	local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
-	local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
-	local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
-	local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
-	local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
-	
-	if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-		UnitsCommander = ""
-	end
-	
-	givenunitstable = {
-		UnitsPatrol,
-		UnitsSupport,
-		UnitsPursuit,
-		UnitsInterceptor,
-		UnitsSpecial,
-		UnitsCommander,
-	}
-	
-	for k, v in pairs(givenunitstable) do
-		if not string.match(v, "^%s*$") then --not an empty string
-			table.insert(availableunitstable, givenunitstable[k])
-			table.insert(availableclasses, givenclasses[k])
-		end
-	end
-	
-	local randomclassunit = math.random(1, #availableclasses)
-	
-	if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
-		appliedunits = UnitsRhino
-	else
-		rhinoattack = nil
-		appliedunits = availableunitstable[randomclassunit]
-	end
+	if not playercontrolled then
+		--FIND UNITS
+		local givenunitstable
+		local givenclasses = {
+			"npc_uvpatrol",
+			"npc_uvsupport",
+			"npc_uvpursuit",
+			"npc_uvinterceptor",
+			"npc_uvspecial",
+			"npc_uvcommander",
+		}
 
-	uvnextclasstospawn = availableclasses[randomclassunit]
+		local availableunitstable = {}
+		local availableclasses = {}
+
+		if UVHeatLevel <= 1 then
+			UVHeatLevel = 1
+		elseif UVHeatLevel > MAX_HEAT_LEVEL then
+			UVHeatLevel = MAX_HEAT_LEVEL
+		end
+
+		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
+		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
+		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
+		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
+		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
+		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
+		local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
+
+		if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+			UnitsCommander = ""
+		end
+
+		givenunitstable = {
+			UnitsPatrol,
+			UnitsSupport,
+			UnitsPursuit,
+			UnitsInterceptor,
+			UnitsSpecial,
+			UnitsCommander,
+		}
+
+		for k, v in pairs(givenunitstable) do
+			if not string.match(v, "^%s*$") then --not an empty string
+				table.insert(availableunitstable, givenunitstable[k])
+				table.insert(availableclasses, givenclasses[k])
+			end
+		end
+
+		local randomclassunit = math.random(1, #availableclasses)
+
+		if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
+			appliedunits = UnitsRhino
+		else
+			rhinoattack = nil
+			appliedunits = availableunitstable[randomclassunit]
+		end
+
+		uvnextclasstospawn = availableclasses[randomclassunit]
+	else
+		appliedunits = playercontrolled.unit
+		uvnextclasstospawn = playercontrolled.unitnpc
+	end
 	
 	if not isstring(appliedunits) then
 		PrintMessage( HUD_PRINTTALK, "There's currently no assigned Units to spawn. Use the Unit Manager tool to assign Units at that particular Heat Level!")
@@ -394,7 +396,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local pos = uvspawnpoint+Vector( 0, 0, 50 )
 		local ang = uvspawnpointangles
-		ang.yaw = rhinoattack and not posspecified and ang.yaw or ang.yaw + 180 --Points the other way when spawning based on player
+		ang.yaw = UVTargeting and rhinoattack and not posspecified and ang.yaw or ang.yaw + 180 --Points the other way when spawning based on player
 		
 		--duplicator.SetLocalPos( pos )
 		--duplicator.SetLocalAng( ang )
@@ -530,10 +532,10 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				Ent.UnitVehicle = ply
 				Ent.callsign = ply:GetName()
 				UVAddToPlayerUnitListVehicle(Ent)
-				table.insert(UVSimfphysVehicleInitializing, Ent)
+				table.insert(UVVehicleInitializing, Ent)
 			end)
 		else
-			table.insert(UVSimfphysVehicleInitializing, Ent)
+			table.insert(UVVehicleInitializing, Ent)
 		end
 		
 		if Ent.PursuitTech then
@@ -616,7 +618,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
+		Spawnang.yaw = UVTargeting and rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
 		SpawnAng.yaw = SpawnAng.yaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
@@ -855,15 +857,15 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				Ent.UnitVehicle = ply
 				Ent.callsign = ply:GetName()
 				UVAddToPlayerUnitListVehicle(Ent)
-				table.insert(UVSimfphysVehicleInitializing, Ent)
+				table.insert(UVVehicleInitializing, Ent)
 			end)
 		else
-			table.insert(UVSimfphysVehicleInitializing, Ent)
+			table.insert(UVVehicleInitializing, Ent)
 		end
 		
 		Ent:CallOnRemove( "UVSimfphysVehicleRemoved", function(car)
-			if table.HasValue(UVSimfphysVehicleInitializing, car) then
-				table.RemoveByValue(UVSimfphysVehicleInitializing, car)
+			if table.HasValue(UVVehicleInitializing, car) then
+				table.RemoveByValue(UVVehicleInitializing, car)
 			end
 			if table.HasValue(UVCommanders, car) then
 				table.RemoveByValue(UVCommanders, car)
@@ -1082,10 +1084,10 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				Ent.UnitVehicle = ply
 				Ent.callsign = ply:GetName()
 				UVAddToPlayerUnitListVehicle(Ent)
-				table.insert(UVSimfphysVehicleInitializing, Ent)
+				table.insert(UVVehicleInitializing, Ent)
 			end)
 		else
-			table.insert(UVSimfphysVehicleInitializing, Ent)
+			table.insert(UVVehicleInitializing, Ent)
 		end
 		
 		if Ent.PursuitTech then
@@ -1200,7 +1202,7 @@ function UVAutoSpawnTraffic()
 		
 		local pos = uvspawnpoint+Vector( 0, 0, 50 )
 		local ang = uvspawnpointangles
-		ang.yaw = rhinoattack and not posspecified and ang.yaw or ang.yaw + 180 --Points the other way when spawning based on player
+		ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
 	
 		local entArray = MEMORY.Entities[next(MEMORY.Entities)]
 
@@ -1261,7 +1263,7 @@ function UVAutoSpawnTraffic()
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 		
-		table.insert(UVSimfphysVehicleInitializing, Ent)
+		table.insert(UVVehicleInitializing, Ent)
 		
 	elseif vehiclebase == 2 then --simfphys
 		
@@ -1335,7 +1337,7 @@ function UVAutoSpawnTraffic()
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
+		Spawnang.yaw = SpawnAng.yaw + 180
 		SpawnAng.yaw = SpawnAng.yaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
@@ -1512,7 +1514,7 @@ function UVAutoSpawnTraffic()
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 
-		table.insert(UVSimfphysVehicleInitializing, Ent)
+		table.insert(UVVehicleInitializing, Ent)
 		
 	elseif vehiclebase == 1 then --Default Vehicle Base
 		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/traffic/*.txt", "DATA")
@@ -1630,7 +1632,7 @@ function UVAutoSpawnTraffic()
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 
-		table.insert(UVSimfphysVehicleInitializing, Ent)
+		table.insert(UVVehicleInitializing, Ent)
 		
 	else
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
@@ -1925,11 +1927,11 @@ function UVAutoSpawnRacer(ply)
 		
 		Ent.uvclasstospawnon = "npc_racervehicle"
 		
-		table.insert(UVSimfphysVehicleInitializing, Ent)
+		table.insert(UVVehicleInitializing, Ent)
 		
 		Ent:CallOnRemove( "UVSimfphysVehicleRemoved", function(car)
-			if table.HasValue(UVSimfphysVehicleInitializing, car) then
-				table.RemoveByValue(UVSimfphysVehicleInitializing, car)
+			if table.HasValue(UVVehicleInitializing, car) then
+				table.RemoveByValue(UVVehicleInitializing, car)
 			end
 			if table.HasValue(UVCommanders, car) then
 				table.RemoveByValue(UVCommanders, car)
