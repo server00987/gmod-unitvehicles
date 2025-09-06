@@ -2001,6 +2001,29 @@ if SERVER then
 		local unitnpc = net.ReadString()
 		local isrhino = net.ReadBool()
 
+		if (UVOneCommanderActive or UVOneCommanderDeployed) and unitnpc == "npc_uvcommander" then --Trying to spawn a Commander when it shouldn't...
+			ply:PrintMessage( HUD_PRINTTALK, "#uv.chase.select.commander.deployed" )
+
+			local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
+			local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
+			local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
+			local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
+			local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
+			local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
+			local UnitsCommander = ""
+
+			net.Start("UVHUDRespawnInUVSelect")
+			net.WriteString(UnitsPatrol)
+			net.WriteString(UnitsSupport)
+			net.WriteString(UnitsPursuit)
+			net.WriteString(UnitsInterceptor)
+			net.WriteString(UnitsSpecial)
+			net.WriteString(UnitsRhino)
+			net.WriteString(UnitsCommander)
+			net.Send(ply)
+			return
+		end
+
 		local playercontrolled = {
 			["unit"] = unit,
 			["unitnpc"] = unitnpc
