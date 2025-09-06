@@ -1172,9 +1172,19 @@ UV_UI.general.events = {
 			end
 
 			-- Draw bar
-			surface.SetMaterial(UVMaterials["PT_BG"])
-			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
-			if showhud then surface.DrawTexturedRect(barX, barY, currentWidth, barHeight) end
+			-- surface.SetMaterial(UVMaterials["PT_BG"])
+			-- surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
+			
+			if showhud then 
+				surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
+				surface.SetDrawColor(Color(0, 0, 0))
+				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
+				
+				surface.SetMaterial(UVMaterials["PT_BG"])
+				surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
+				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
+			end
+			-- if showhud then surface.DrawTexturedRect(barX, barY, currentWidth, barHeight) end
 
 			-- Text
 			if animTime >= whiteStart then
@@ -1185,8 +1195,10 @@ UV_UI.general.events = {
 					local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
 					outlineAlpha = outlineAlpha * fade
 				end
-
-				draw.SimpleTextOutlined( showhud and ptext or "", "UVFont5UI", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				
+				mw_noti_draw(showhud and ptext, "UVFont5UI", w * 0.5, h * 0.775, pcol, pcolbg)
+				
+				-- draw.SimpleTextOutlined( showhud and ptext or "", "UVFont5UI", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
 		end)
 	end,

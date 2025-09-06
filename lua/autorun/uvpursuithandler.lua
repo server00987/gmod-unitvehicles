@@ -2000,9 +2000,15 @@ if SERVER then
 		local unit = net.ReadString()
 		local unitnpc = net.ReadString()
 		local isrhino = net.ReadBool()
+		local unitname = net.ReadString()
 
 		if ply.uvspawningunit then
-			ply:PrintMessage( HUD_PRINTTALK, "#uv.chase.select.spam" )
+			-- ply:PrintMessage( HUD_PRINTTALK, "#uv.chase.select.spam" )
+			net.Start( "UVHUDRespawnInUVPlyMsg" )
+			net.WriteString("uv.chase.select.spam")
+			-- net.WriteString("")
+			-- net.WriteString("")
+			net.Send(ply)
 			return
 		end
 
@@ -2035,6 +2041,9 @@ if SERVER then
 		}
 
 		local cooldown = SpawnCooldownTable[ply] and math.Round(SpawnCooldown:GetInt() - (CurTime() - SpawnCooldownTable[ply])) or 0
+		local cooldownmsg = ""
+
+		local plymsg = { msg = "uv.chase.select.spawning", unit = unit, cooldown = nil }
 
 		if IsValid(ply.uvplayerlastvehicle) and ply.uvplayerlastvehicle.wrecked then
 			SpawnCooldownTable[ply] = CurTime()
@@ -2044,17 +2053,26 @@ if SERVER then
 			ply:ExitVehicle()
 			ply:Spawn()
 			UVAutoSpawn(ply, isrhino, nil, playercontrolled)
+			plymsg.msg = "uv.chase.select.spawning"
 		else
 			if not SpawnCooldownTable[ply] then
 				SpawnCooldownTable[ply] = 0
 			else
 				if CurTime() - SpawnCooldownTable[ply] < SpawnCooldown:GetInt() then
-					ply:PrintMessage( HUD_PRINTTALK, "Spawning in "..cooldown.." seconds!" )
+					-- ply:PrintMessage( HUD_PRINTTALK, "Spawning in "..cooldown.." seconds!" )
+					plymsg.msg = "uv.chase.select.spawning.cooldown"
+					plymsg.cooldown = cooldown
 				end
 			end
 
 			ply.uvspawningunit = true
-
+			
+			net.Start( "UVHUDRespawnInUVPlyMsg" )
+			net.WriteString(plymsg.msg)
+			net.WriteString(unitname)
+			net.WriteString(cooldown)
+			net.Send(ply)
+			
 			timer.Simple(cooldown, function()
 				SpawnCooldownTable[ply] = CurTime()
 				ply.uvspawningunit = nil
@@ -3659,7 +3677,22 @@ else --HUD/Options
 			cam.End2D()
 		end
 	end
+	
+	net.Receive( "UVHUDRespawnInUVPlyMsg", function()
+		local msg = net.ReadString()
+		local unit = net.ReadString()
+		local cooldown = net.ReadString()
+		local msgt = string.format( language.GetPhrase(msg), language.GetPhrase(unit), cooldown )
+			
+		if not cooldown then
+			msgt = string.format( language.GetPhrase(msg), language.GetPhrase(unit) )
+		end
 
+		UV_UI.general.events.CenterNotification({
+			text = msgt
+		})
+	end)
+	
 	net.Receive( "UVHUDRespawnInUVSelect", function()
 		if UVHUDRespawnInUVSelectOpen then return end
 
@@ -3707,6 +3740,9 @@ else --HUD/Options
 		local w = ScrW()
 		local h = ScrH()
 		
+		local cooldown = SpawnCooldownTable[self] and math.Round(SpawnCooldown:GetInt() - (CurTime() - SpawnCooldownTable[self])) or 0
+		local cooldownmsg = ""
+
 		local dframe = vgui.Create("DFrame")
 		dframe:SetSize(w / 8, h / 2)
 		dframe:SetPos((w / 2) - ((w / 8) / 2), (h / 2) - ((h / 2) / 2))
@@ -3726,6 +3762,7 @@ else --HUD/Options
 
 			if next(availableunitstable) ~= nil then
 				local label = unittablename[unitclass]
+				local labelname = string.Trim(label, "#")
 				local titleLabel = dlist:Add("DLabel")
 				titleLabel:SetText(label)
 				titleLabel:SetFont("DermaLarge")
@@ -3760,6 +3797,7 @@ else --HUD/Options
 						net.WriteString(unit)
 						net.WriteString(unitnpc)
 						net.WriteBool(isrhino)
+						net.WriteString(labelname)
 						net.SendToServer()
 					end
 				end
