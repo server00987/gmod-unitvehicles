@@ -10726,8 +10726,8 @@ local function world_racing_main( ... )
 			draw.SimpleTextOutlined( btt, "UVWorldFont2", w * 0.85, h * 0.175, worldcols.val, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 		end
     else -- Single Lap / Sprint
-		draw.SimpleTextOutlined( "#uv.race.hud.complete", "UVWorldFont1",w * 0.83,h * 0.1825, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2",w * 0.8225,h * 0.2, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+		draw.SimpleTextOutlined( "#uv.race.hud.complete", "UVWorldFont1",w * 0.83,h * 0.1675, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2",w * 0.8225,h * 0.175, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     end
 
     local racer_count = #string_array
