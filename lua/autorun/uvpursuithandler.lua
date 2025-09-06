@@ -2001,6 +2001,11 @@ if SERVER then
 		local unitnpc = net.ReadString()
 		local isrhino = net.ReadBool()
 
+		if ply.uvspawningunit then
+			ply:PrintMessage( HUD_PRINTTALK, "#uv.chase.select.spam" )
+			return
+		end
+
 		if (UVOneCommanderActive or UVOneCommanderDeployed) and unitnpc == "npc_uvcommander" then --Trying to spawn a Commander when it shouldn't...
 			ply:PrintMessage( HUD_PRINTTALK, "#uv.chase.select.commander.deployed" )
 
@@ -2048,8 +2053,11 @@ if SERVER then
 				end
 			end
 
+			ply.uvspawningunit = true
+
 			timer.Simple(cooldown, function()
 				SpawnCooldownTable[ply] = CurTime()
+				ply.uvspawningunit = nil
 
 				ply:EmitSound("ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav")
 
@@ -3653,6 +3661,8 @@ else --HUD/Options
 	end
 
 	net.Receive( "UVHUDRespawnInUVSelect", function()
+		if UVHUDRespawnInUVSelectOpen then return end
+
 		local UnitsPatrol = net.ReadString()
 		local UnitsSupport = net.ReadString()
 		local UnitsPursuit = net.ReadString()
@@ -3754,6 +3764,11 @@ else --HUD/Options
 					end
 				end
 			end
+		end
+
+		UVHUDRespawnInUVSelectOpen = true
+		function dframe:OnClose()
+			UVHUDRespawnInUVSelectOpen = nil
 		end
 	end)
 
