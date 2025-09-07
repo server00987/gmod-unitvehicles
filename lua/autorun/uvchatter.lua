@@ -483,17 +483,24 @@ if SERVER then
 				UVRelayToClients(radioOnFile, parameters, true)
 			end
 			timer.Simple(soundDuration_radioOnFile, function()
+				print('radioon', soundDuration_radioOnFile)
 				UVRelayToClients(emergencyFile or "", parameters, true)
 				timer.Simple(soundDuration_emergencyFile, function()
+					print('emergency', soundDuration_emergencyFile)
 					UVRelayToClients(addressFile or "", parameters, true)
 					timer.Simple(soundDuration_addressFile, function()
+						print('address', soundDuration_addressFile)
 						UVRelayToClients(soundFile or "", parameters, true)
 						timer.Simple(soundDuration_soundFile, function()
+							print('main', soundDuration_soundFile)
 							UVRelayToClients(locationFile or "", parameters, true)
 							timer.Simple(soundDuration_locationFile, function()
+								print('location', soundDuration_locationFile)
 								UVRelayToClients(requestFile or "", parameters, true)
 								timer.Simple(soundDuration_requestFile, function()
+									print('request', soundDuration_requestFile)
 									if radioOffFile then
+										print('radiooff', soundDuration_radioOffFile)
 										UVRelayToClients(radioOffFile or "", parameters, true)
 									end
 								end)
@@ -502,6 +509,8 @@ if SERVER then
 					end)
 				end)
 			end)
+			--print(soundDuration_soundFile, soundDuration_emergencyFile, soundDuration_addressFile, soundDuration_locationFile, soundDuration_requestFile, soundDuration_radioOffFile, math.random(1, 2))
+			print(soundDuration_radioOnFile, soundDuration_emergencyFile, soundDuration_addressFile, soundDuration_soundFile, soundDuration_locationFile, soundDuration_requestFile, soundDuration_radioOffFile, math.random(1, 2))
 			return UVDelayChatter((soundDuration_soundFile + soundDuration_emergencyFile + soundDuration_addressFile + soundDuration_locationFile + soundDuration_requestFile + soundDuration_radioOffFile + math.random(1, 2)))
 			
 		elseif parameters == 7 then
