@@ -266,6 +266,17 @@ local DEFAULTS = {
 	['uvunitmanager_maxheat'] = 6,
 }
 
+local function _setConVar( cvar, value )
+	local valueType = type( value )
+	local cvarClass = GetConVar( cvar )
+
+	if valueType == 'number' then
+		cvarClass:SetFloat( value )
+	else
+		cvarClass:SetString( value )
+	end
+end
+
 if SERVER then
 	
 	net.Receive("UVUnitManagerGetUnitInfo", function( length, ply )
@@ -836,14 +847,24 @@ if CLIENT then
 			CVars = conVarList
 		})
 
+		PrintTable(conVarList)
+
 		function presetComboBox:OnSelect(index, value, data)
+			--print(#data)
 			local warned = false
+			local count = 0
+			local count1 = 0
+
+			-- for _, newCV in pairs(data) do
+			-- 	count = count + 1
+			-- end
 			
 			for _, newCV in pairs(conVarList) do
-				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
+				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
 			end
 
 			for incomingCV, incomingValue in pairs(data) do
+				count1 = count1 + 1
 				local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
 				local number = string.sub( incomingCV, string.len(incomingCV) - 1, string.len(incomingCV) )
 
@@ -855,18 +876,24 @@ if CLIENT then
 					end
 
 					if LEGACY_CONVARS[cvNoNumber].HasNumber then
-						RunConsoleCommand( LEGACY_CONVARS[cvNoNumber].Replacement .. number, incomingValue )
+						_setConVar( LEGACY_CONVARS[cvNoNumber].Replacement .. number, incomingValue  )
 					else
-						RunConsoleCommand( LEGACY_CONVARS[cvNoNumber].Replacement, incomingValue )
+						_setConVar( LEGACY_CONVARS[cvNoNumber].Replacement, incomingValue )
 					end
 					
 					continue
 				end
 
 				if not PROTECTED_CONVARS[incomingCV] then
-					RunConsoleCommand(incomingCV, incomingValue)
+					-- if incomingCV == "uvunitmanager_patrol_voiceprofile" then
+					-- 	print('I got here!', incomingCV, incomingValue)
+					-- end -- this is supposed to run
+					-- THANK YOU GARRY'S MOD !!!
+					_setConVar( incomingCV, incomingValue )
 				end
 			end
+
+			--print(count, count1)
 		end
 		
 		CPanel:AddControl("Label", {
