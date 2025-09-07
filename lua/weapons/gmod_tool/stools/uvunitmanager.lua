@@ -847,7 +847,7 @@ if CLIENT then
 			CVars = conVarList
 		})
 
-		PrintTable(conVarList)
+		--PrintTable(conVarList)
 
 		function presetComboBox:OnSelect(index, value, data)
 			--print(#data)
