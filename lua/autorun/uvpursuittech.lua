@@ -131,7 +131,8 @@ UV_PT.Jammer = {
         local targetString = "#uv.ptech.jammer.hit.you"
 
         UV_UI.general.events.CenterNotification({
-            text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
+            -- text = string.format( (displayMe and userString) or targetString, (displayMe and language.GetPhrase( tbl.Target )) or language.GetPhrase( tbl.User )),
+			text = displayMe and userString or targetString,
         })
     end,
     Hit = function(...)
