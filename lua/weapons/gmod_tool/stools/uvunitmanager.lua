@@ -247,6 +247,25 @@ end
 
 local conVarsDefault = TOOL:BuildConVarList()
 
+local conVarList = table.GetKeys(conVarsDefault)
+
+local LEGACY_CONVARS = {
+	["uvunitmanager_rhinos"] = {
+		Replacement = "uvunitmanager_unitsrhino",
+		HasNumber = true,
+	},
+}
+
+local PROTECTED_CONVARS = {
+	['uvunitmanager_selected_heat'] = true,
+}
+
+local DEFAULTS = {
+	['uvunitmanager_selected_heat'] = 1,
+	['uvunitmanager_minheat'] = 1,
+	['uvunitmanager_maxheat'] = 6,
+}
+
 if SERVER then
 	
 	net.Receive("UVUnitManagerGetUnitInfo", function( length, ply )
@@ -801,49 +820,6 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 			
-			-- RunConsoleCommand("unitvehicle_unit_vehiclebase", GetConVar("uvunitmanager_vehiclebase"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_pursuittech", GetConVar("uvunitmanager_pursuittech"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_pursuittech_esf", GetConVar("uvunitmanager_pursuittech_esf"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_pursuittech_spikestrip", GetConVar("uvunitmanager_pursuittech_spikestrip"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_pursuittech_killswitch", GetConVar("uvunitmanager_pursuittech_killswitch"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_pursuittech_repairkit", GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_onecommander", GetConVar("uvunitmanager_onecommander"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_onecommanderhealth", GetConVar("uvunitmanager_onecommanderhealth"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_onecommanderevading", GetConVar("uvunitmanager_onecommanderevading"):GetInt())
-			-- RunConsoleCommand("unitvehicle_unit_helicoptermodel", GetConVar("uvunitmanager_helicoptermodel"):GetString())
-			
-			-- RunConsoleCommand("unitvehicle_unit_bountypatrol", GetConVar("uvunitmanager_bountypatrol"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountysupport", GetConVar("uvunitmanager_bountysupport"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountypursuit", GetConVar("uvunitmanager_bountypursuit"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountyinterceptor", GetConVar("uvunitmanager_bountyinterceptor"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountyair", GetConVar("uvunitmanager_bountyair"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountyspecial", GetConVar("uvunitmanager_bountyspecial"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountycommander", GetConVar("uvunitmanager_bountycommander"):GetString())
-			-- RunConsoleCommand("unitvehicle_unit_bountyrhino", GetConVar("uvunitmanager_bountyrhino"):GetString())
-			
-			-- RunConsoleCommand("unitvehicle_unit_timetillnextheatenabled", GetConVar("uvunitmanager_timetillnextheatenabled"):GetInt())
-			-- for i = 1, MAX_HEAT_LEVEL - 1 do
-			-- 	RunConsoleCommand("unitvehicle_unit_timetillnextheat" .. i, GetConVar("uvunitmanager_timetillnextheat" .. i):GetInt())
-			-- end
-			
-			-- for i = 1, MAX_HEAT_LEVEL do
-			-- 	RunConsoleCommand("unitvehicle_unit_bountytime" .. i, GetConVar("uvunitmanager_bountytime" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitspatrol" .. i, GetConVar("uvunitmanager_unitspatrol" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitssupport" .. i, GetConVar("uvunitmanager_unitssupport" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitspursuit" .. i, GetConVar("uvunitmanager_unitspursuit" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitsinterceptor" .. i, GetConVar("uvunitmanager_unitsinterceptor" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitsspecial" .. i, GetConVar("uvunitmanager_unitsspecial" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitscommander" .. i, GetConVar("uvunitmanager_unitscommander" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitsrhino" .. i, GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
-			-- 	RunConsoleCommand("unitvehicle_unit_heatminimumbounty" .. i, GetConVar("uvunitmanager_heatminimumbounty" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_maxunits" .. i, GetConVar("uvunitmanager_maxunits" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_unitsavailable" .. i, GetConVar("uvunitmanager_unitsavailable" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_backuptimer" .. i, GetConVar("uvunitmanager_backuptimer" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_cooldowntimer" .. i, GetConVar("uvunitmanager_cooldowntimer" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_roadblocks" .. i, GetConVar("uvunitmanager_roadblocks" .. i):GetInt())
-			-- 	RunConsoleCommand("unitvehicle_unit_helicopters" .. i, GetConVar("uvunitmanager_helicopters" .. i):GetInt())
-			-- end
-			
 			notification.AddLegacy( "#tool.uvunitmanager.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 			Msg( "#tool.uvunitmanager.applied" )
@@ -851,14 +827,47 @@ if CLIENT then
 		end
 		CPanel:AddItem(applysettings)
 		
-		CPanel:AddControl("ComboBox", {
+		local presetComboBox = CPanel:AddControl("ComboBox", {
 			MenuButton = 1,
 			Folder = "units",
 			Options = {
 				["#preset.default"] = conVarsDefault
 			},
-			CVars = table.GetKeys(conVarsDefault)
+			CVars = conVarList
 		})
+
+		function presetComboBox:OnSelect(index, value, data)
+			local warned = false
+			
+			for _, newCV in pairs(conVarList) do
+				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
+			end
+
+			for incomingCV, incomingValue in pairs(data) do
+				local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
+				local number = string.sub( incomingCV, string.len(incomingCV) - 1, string.len(incomingCV) )
+
+				if LEGACY_CONVARS[cvNoNumber] then
+					if not warned then
+						warned = true
+						local warning = string.format( lang "tool.uvunitmanager.presets.legacy.warning", value )
+						notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
+					end
+
+					if LEGACY_CONVARS[cvNoNumber].HasNumber then
+						RunConsoleCommand( LEGACY_CONVARS[cvNoNumber].Replacement .. number, incomingValue )
+					else
+						RunConsoleCommand( LEGACY_CONVARS[cvNoNumber].Replacement, incomingValue )
+					end
+					
+					continue
+				end
+
+				if not PROTECTED_CONVARS[incomingCV] then
+					RunConsoleCommand(incomingCV, incomingValue)
+				end
+			end
+		end
 		
 		CPanel:AddControl("Label", {
 			Text = "#tool.settings.clickapply",
@@ -1374,6 +1383,7 @@ if CLIENT then
 			local unitKey = v .. "_voiceprofile"
 
 			local comboBawx = CPanel:ComboBox( "Voice Profile", conVarKey )
+			comboBawx:SetConVar( conVarKey )
 			for _, v in pairs( availableVoiceProfiles ) do
 				comboBawx:AddChoice( v )
 			end
@@ -1405,6 +1415,7 @@ if CLIENT then
 			local conVar = GetConVar( conVarKey )
 
 			local comboBawx = CPanel:ComboBox( "Voice Profile", conVarKey )
+			comboBawx:SetConVar( conVarKey )
 			for _, v in pairs( availableVoiceProfiles ) do
 				comboBawx:AddChoice( v )
 			end
@@ -1463,6 +1474,7 @@ if CLIENT then
 			cvars.RemoveChangeCallback( "uvunitmanager_selected_heat", unitKey )
 			cvars.AddChangeCallback( "uvunitmanager_selected_heat", function(_, o_v, n_v)
 				textBox:SetText( GetConVar( string.format( "uvunitmanager_units%s%s", undercaseName, n_v ) ):GetString() )
+				textBox:SetConVar( string.format( "uvunitmanager_units%s%s", undercaseName, n_v ) )
 				_onChange( textBox )
 			end, unitKey )
 		end
