@@ -402,13 +402,22 @@ if SERVER then
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
 			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
-			local addressFile = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
+			local addressFile
+			if addressFiles then
+				addressFile = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
+			end
 			
 			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
-			local locationFile = "chatter2/"..unitVoiceProfile.."/dispatch/d_location/"..locationFiles[math.random(1, #locationFiles)]
+			local locationFile
+			if locationFiles then
+				locationFile = "chatter2/"..unitVoiceProfile.."/dispatch/d_location/"..locationFiles[math.random(1, #locationFiles)]
+			end
 			
 			local requestFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/*", "GAME")
-			local requestFile = "chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
+			local requestFile
+			if requestFiles then
+				requestFile = "chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/"..requestFiles[math.random(1, #requestFiles)]
+			end
 
 			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			local radioOnFile
@@ -422,30 +431,78 @@ if SERVER then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
 			
+			-- function PlaySound( i )
+			-- 	if i == 1 then
+			-- 		UVRelayToClients(radioOnFile, parameters, true)
+			-- 		return SoundDuration(radioOnFile or "")
+			-- 	elseif i == 2 then
+			-- 		UVRelayToClients(emergencyFile, parameters, true)
+			-- 		return SoundDuration(emergencyFile or "")
+			-- 	elseif i == 3 then
+			-- 		UVRelayToClients(addressFile, parameters, true)
+			-- 		return SoundDuration(addressFile or "")
+			-- 	elseif i == 4 then
+			-- 		UVRelayToClients(soundFile, parameters, true)
+			-- 		return SoundDuration(soundFile or "")
+			-- 	elseif i == 5 then
+			-- 		UVRelayToClients(locationFile, parameters, true)
+			-- 		return SoundDuration(locationFile or "")
+			-- 	elseif i == 6 then
+			-- 		UVRelayToClients(requestFile, parameters, true)
+			-- 		return SoundDuration(requestFile or "")
+			-- 	elseif i == 7 then
+			-- 		UVRelayToClients(radioOffFile, parameters, true)
+			-- 		return SoundDuration(radioOffFile or "")
+			-- 	else return nil end
+			-- end
 
+			-- timer.Simple(PlaySound(1), function()
+			-- 	timer.Simple(PlaySound(2), function()
+			-- 		timer.Simple(PlaySound(3), function()
+			-- 			timer.Simple(PlaySound(4), function()
+			-- 				timer.Simple(PlaySound(5), function()
+			-- 					timer.Simple(PlaySound(6), function()
+			-- 						timer.Simple(PlaySound(7), function()
+			-- 						end)
+			-- 					end)
+			-- 				end)
+			-- 			end)
+			-- 		end)
+			-- 	end)
+			-- end)
 			
+			local soundDuration_soundFile = SoundDuration(soundFile or "")
+			local soundDuration_emergencyFile = SoundDuration(emergencyFile or "")
+			local soundDuration_addressFile = SoundDuration(addressFile or "")
+			local soundDuration_locationFile = SoundDuration(locationFile or "")
+			local soundDuration_requestFile = SoundDuration(requestFile or "")
+			local soundDuration_radioOffFile = SoundDuration(radioOffFile or "")
+			local soundDuration_radioOnFile = SoundDuration(radioOnFile or "")
+
 			if radioOnFile then
 				UVRelayToClients(radioOnFile, parameters, true)
 			end
-			timer.Simple(SoundDuration(radioOnFile or ""), function()
-				UVRelayToClients(emergencyFile, parameters, true)
-				timer.Simple(SoundDuration(emergencyFile or ""), function()
-					UVRelayToClients(addressFile, parameters, true)
-					timer.Simple(SoundDuration(addressFile or ""), function()
-						UVRelayToClients(locationFile, parameters, true)
-						timer.Simple(SoundDuration(locationFile or ""), function()
-							UVRelayToClients(requestFile, parameters, true)
-							timer.Simple(SoundDuration(requestFile or ""), function()
-								if radioOffFile then
-									UVRelayToClients(radioOffFile, parameters, true)
-								end
+			timer.Simple(soundDuration_radioOnFile, function()
+				UVRelayToClients(emergencyFile or "", parameters, true)
+				timer.Simple(soundDuration_emergencyFile, function()
+					UVRelayToClients(addressFile or "", parameters, true)
+					timer.Simple(soundDuration_addressFile, function()
+						UVRelayToClients(soundFile or "", parameters, true)
+						timer.Simple(soundDuration_soundFile, function()
+							UVRelayToClients(locationFile or "", parameters, true)
+							timer.Simple(soundDuration_locationFile, function()
+								UVRelayToClients(requestFile or "", parameters, true)
+								timer.Simple(soundDuration_requestFile, function()
+									if radioOffFile then
+										UVRelayToClients(radioOffFile or "", parameters, true)
+									end
+								end)
 							end)
 						end)
 					end)
 				end)
 			end)
-			
-			return UVDelayChatter((SoundDuration(soundFile) + SoundDuration(emergencyFile) + SoundDuration(addressFile) + SoundDuration(locationFile) + SoundDuration(requestFile) + math.random(1, 2)))
+			return UVDelayChatter((soundDuration_soundFile + soundDuration_emergencyFile + soundDuration_addressFile + soundDuration_locationFile + soundDuration_requestFile + soundDuration_radioOffFile + math.random(1, 2)))
 			
 		elseif parameters == 7 then
 			if not UVEnemyEscaping then return 5 end
