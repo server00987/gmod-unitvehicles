@@ -198,7 +198,7 @@ if SERVER then
         
         if next(ents.FindByClass("npc_uv*" )) == nil then return end
         
-        if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
+        if GetConVar("unitvehicle_chatter"):GetBool() then
             local units = ents.FindByClass("npc_uv*" )
             local random_entry = math.random(#units)	
             local unit = units[random_entry]

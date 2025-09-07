@@ -255,7 +255,7 @@ if SERVER then
 		end
 		
 		if parameters == 1 then
-			return HandleCallSounds(true, true)
+			return HandleCallSounds(isDispatch, true)
 			
 		elseif parameters == 2 then
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
@@ -1051,7 +1051,7 @@ if SERVER then
 	function UVChatterArrestAcknowledge(self)
 		if #UVWantedTableVehicle > 0 then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "arrestacknowledge", 1)
+			return UVSoundChatter(self, self.voice, "arrestacknowledge", 1, "DISPATCH")
 		end
 		if not IsValid(self.v) then return end
 		UVDelayChatter()
@@ -1178,10 +1178,11 @@ if SERVER then
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local randomno = math.random(1,2)
+			local a = {"DISPATCH", nil}; local selected = a[math.random(1, #a)]
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "roadblockmissed")
 			else
-				return UVSoundChatter(self, self.voice, "roadblockmissed", 1)
+				return UVSoundChatter(self, self.voice, "roadblockmissed", 1, selected)
 			end
 		end
 		UVDelayChatter()
@@ -1202,10 +1203,11 @@ if SERVER then
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local randomno = math.random(1,2)
+			local a = {"DISPATCH", nil}; local selected = a[math.random(1, #a)]
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "roadblockhit")
 			else
-				return UVSoundChatter(self, self.voice, "roadblockhit", 1)
+				return UVSoundChatter(self, self.voice, "roadblockhit", 1, selected)
 			end
 		end
 		UVDelayChatter()
@@ -1235,10 +1237,11 @@ if SERVER then
 				end
 			end
 			local randomno = math.random(1,2)
+			local a = {"DISPATCH", nil}; local selected = a[math.random(1, #a)]
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "roadblockdeployed")
 			else
-				return UVSoundChatter(self, self.voice, "roadblockdeployed", 1)
+				return UVSoundChatter(self, self.voice, "roadblockdeployed", 1, selected)
 			end
 		end
 		UVDelayChatter()
@@ -1700,14 +1703,18 @@ if SERVER then
 	function UVChatterResponding(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			if self.v.rhino then
-				return UVSoundChatter(self, self.voice, "responding")
-			end
+			-- if self.v.rhino then
+			-- 	return UVSoundChatter(self, self.voice, "responding")
+			-- end
 			local randomno = math.random(1,10)
+			local a = {"DISPATCH", nil}; local selected = a[math.random(1, #a)]
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "responding")
 			elseif randomno == 2 then
-				return UVSoundChatter(self, self.voice, "responding", 1)
+				if self.v.rhino then
+					return UVSoundChatter(self, self.voice, "rhinoresponding", 1, selected)
+				end
+				return UVSoundChatter(self, self.voice, "responding", 1, selected)
 			else
 				return
 			end
@@ -2211,9 +2218,9 @@ if SERVER then
 	function UVChatterLost(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = 5
-			timecheck = UVSoundChatter(self, self.voice, "lost", 1)
+			timecheck = UVSoundChatter(self, self.voice, "lost", 1, "DISPATCH") -- MIGHT BE BETTER TO PUT THIS INSIDE THE UNITS FOLDER TOO
 			timer.Simple(timecheck, function()
-				UVSoundChatter(Entity(0), 1, "lostacknowledge", 1)
+				UVSoundChatter(Entity(0), 1, "lostacknowledge", 1, "DISPATCH")
 			end)
 			return
 		end
@@ -2244,7 +2251,7 @@ if SERVER then
 	
 	function UVChatterLostAcknowledge(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "lostacknowledge", 1)
+			return UVSoundChatter(self, self.voice, "lostacknowledge", 1, "DISPATCH")
 		end
 		UVDelayChatter()
 		
@@ -2683,14 +2690,15 @@ if SERVER then
 				local random_entry = math.random(#airUnits)	
 				local unit = airUnits[random_entry]
 				if not (unit.crashing or unit.disengaging) and airrandomno == 1 then
-					return UVSoundChatter(unit, unit.voice, "ptspikestriphit")
+					return UVSoundChatter(unit, unit.voice, "ptspikestriphit", 1, "DISPATCH")
 				end
 			end
 			local randomno = math.random(1,2)
+			local a = {"DISPATCH", nil}; local selected = a[math.random(1, #a)]
 			if randomno == 1 then
 				return UVSoundChatter(unit, unit.voice, "ptspikestriphit")
 			else
-				return UVSoundChatter(unit, unit.voice, "ptspikestriphit", 1)
+				return UVSoundChatter(unit, unit.voice, "ptspikestriphit", 1, selected)
 			end
 		end
 		UVDelayChatter()
@@ -2917,7 +2925,7 @@ if SERVER then
 	function UVChatterIdleTalk(self)
 		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "idletalk", 1)
+			return UVSoundChatter(self, self.voice, "idletalk", 1, "DISPATCH")
 		end
 		UVDelayChatter()
 		
@@ -3148,11 +3156,12 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = 5
 			local randomno = math.random(1,2)
-			if randomno == 1 then
-				timecheck = UVSoundChatter(self, self.voice, "backupontheway")
-			else
-				timecheck = UVSoundChatter(self, self.voice, "backupontheway", 1)
-			end
+			-- if randomno == 1 then
+			-- 	timecheck = UVSoundChatter(self, self.voice, "backupontheway")
+			-- else
+			-- 	timecheck = UVSoundChatter(self, self.voice, "backupontheway", 1, "DISPATCH")
+			-- end
+			timecheck = UVSoundChatter(self, self.voice, "backupontheway", 1, "DISPATCH")
 			timer.Simple(timecheck, function()
 				if next(ents.FindByClass("npc_uv*")) ~= nil then
 					local units = ents.FindByClass("npc_uv*")
@@ -3209,7 +3218,7 @@ if SERVER then
 					timecheck = UVSoundChatter(self, self.voice, "backuponscene")
 				end
 			else
-				timecheck = UVSoundChatter(self, self.voice, "backuponscene", 1)
+				timecheck = UVSoundChatter(self, self.voice, "backuponscene", 1, "DISPATCH")
 			end
 			timer.Simple(timecheck, function()
 				if next(ents.FindByClass("npc_uv*")) ~= nil then
@@ -3305,7 +3314,7 @@ if SERVER then
 			end
 			timer.Simple(timecheck, function()
 				if IsValid(self) then
-					return UVSoundChatter(self, self.voice, "dispatchmultipleunitsdownacknowledge", 1)
+					return UVSoundChatter(self, self.voice, "dispatchmultipleunitsdownacknowledge", 1, "DISPATCH")
 				end
 			end)
 			return
@@ -3365,7 +3374,7 @@ if SERVER then
 				return
 			end
 			local timecheck = 5
-			timecheck = UVSoundChatter(self, self.voice, "requestsitrep", 1)
+			timecheck = UVSoundChatter(self, self.voice, "requestsitrep", 1, "DISPATCH")
 			timer.Simple(timecheck, function()
 				if IsValid(self) then
 					if UVEnemyEscaping then --During cooldown
@@ -3720,7 +3729,7 @@ if SERVER then
 	
 	function UVChatterDispatchCallVehicleDescription(self, make, model)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1)
+			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1, "DISPATCH")
 		end
 		if UVTargeting or not self or not make then return end
 		local color = UVColorName(make)
@@ -3737,7 +3746,7 @@ if SERVER then
 	
 	function UVChatterDispatchCallUnknownDescription(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1)
+			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1, "DISPATCH")
 		end
 		if UVTargeting then return end
 		local seconds = UVDelayChatter()
@@ -3759,7 +3768,7 @@ if SERVER then
 	
 	function UVChatterCallRequestDescription(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "callrequestdescription", 1)
+			return UVSoundChatter(self, self.voice, "callrequestdescription", 1, "DISPATCH")
 		end
 		if UVTargeting then return end
 		
