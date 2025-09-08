@@ -162,6 +162,8 @@ NETWORK_STRINGS = {
 	
 	-- Player unit respawn
 	"UVHUDRespawnInUV",
+	"UVCancelUnitRespawn",
+	"UVSpawnQueueUpdate",
 
 	-- Player unit select
 	"UVHUDRespawnInUVGetInfo",

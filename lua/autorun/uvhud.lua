@@ -32,6 +32,7 @@ local Colors = {
 
 UVMaterials = {
     ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
+    ["RESPAWN_BG"] = Material("unitvehicles/hud/RESPAWN_BG.png"),
     ["PT_BG"] = Material("unitvehicles/hud/PT_BG.png"),
     
     ["GLOW_ICON"] = Material("unitvehicles/icons/CIRCLE_GLOW_LIGHT.png"),
