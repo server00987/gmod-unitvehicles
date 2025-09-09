@@ -2671,7 +2671,7 @@ function UVVisualOnTarget(unit, target)
 		return
 	end
 	if unit.wrecked then return end
-	local tr = util.TraceLine({start = unit:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {unit, target, uvenemylocation}}).Fraction==1
+	local tr = util.TraceLine({start = unit:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {unit, target}}).Fraction==1
 	return tobool(tr)
 end
 
@@ -3010,4 +3010,60 @@ function UVGlideDetachWheels(vehicle)
 		
 	end)
 	
+end
+
+local function UVCFActivateNitrous(NPC, seconds)
+	NPC.usenitrous = true 
+	timer.Simple(seconds, function()
+		NPC.usenitrous = false
+	end)
+end
+
+function UVCFInitialize(NPC)
+	NPC.usenitrous = false
+	
+	--NPCs will decide when to use nitrous based on the amount
+	NPC.preferrednitroustable = {
+		0.25,
+		0.5,
+		0.75,
+		1
+	}
+	NPC.preferrednitrousamount = NPC.preferrednitroustable[ math.random( 1, #NPC.preferrednitroustable ) ]
+	
+	local car = NPC.v
+	local index = NPC:EntIndex()
+
+	if car.RacerVehicle then --Give racers some nice colors
+		local r = math.random(0, 255)
+		local g = math.random(0, 255)
+		local b = math.random(0, 255)
+
+		net.Start( "cfnitrouscolor" )
+    	    net.WriteEntity(car)
+    	    net.WriteInt(r, 9)
+    	    net.WriteInt(g, 9)
+    	    net.WriteInt(b, 9)
+			net.WriteBool(car.NitrousBurst)
+    	net.Broadcast()
+	end
+
+	timer.Create( "UVCFNitrous" .. index, 1, 0, function()
+		if not IsValid(NPC) or not IsValid(car) then
+			timer.Remove( "UVCFNitrous" .. index )
+			return
+		end
+
+		local amount = car:GetNWFloat( 'NitrousAmount' )
+		if amount >= NPC.preferrednitrousamount then
+			local seconds = math.random(1,5)
+			UVCFActivateNitrous(NPC, seconds)
+		end
+
+		local chance = math.random(1,60)
+		if chance == 1 then
+			NPC.preferrednitrousamount = NPC.preferrednitroustable[ math.random( 1, #NPC.preferrednitroustable ) ]
+		end
+	end)
+
 end

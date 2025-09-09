@@ -445,27 +445,13 @@ if SERVER then
 				end
 			end
 
-			--Set throttle
+			--Set throttle/steering
 			if self.v.IsScar then
 				if throttle > 0 then
 					self.v:GoForward(throttle)
 				else
 					self.v:GoBack(-throttle)
 				end
-			elseif self.v.IsSimfphyscar then
-				self.v:SetActive(true)
-				self.v:StartEngine()
-				self.v.PressedKeys = self.v.PressedKeys or {}
-				self.v.PressedKeys["Shift"] = false
-				self.v.PressedKeys["joystick_throttle"] = throttle
-				self.v.PressedKeys["joystick_brake"] = throttle * -1
-			elseif self.v.IsGlideVehicle then
-				self.v:TriggerInput("Throttle", throttle)
-				self.v:TriggerInput("Brake", throttle * -1)
-			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
-				self.v:SetThrottle(throttle)
-			end
-			if self.v.IsScar then
 				if steer > 0 then
 					self.v:TurnRight(steer)
 				elseif steer < 0 then
@@ -476,11 +462,18 @@ if SERVER then
 			elseif self.v.IsSimfphyscar then
 				self.v:SetActive(true)
 				self.v:StartEngine()
+				self.v.PressedKeys = self.v.PressedKeys or {}
+				self.v.PressedKeys["Shift"] = false
+				self.v.PressedKeys["joystick_throttle"] = throttle
+				self.v.PressedKeys["joystick_brake"] = throttle * -1
 				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif self.v.IsGlideVehicle then
+				self.v:TriggerInput("Throttle", throttle)
+				self.v:TriggerInput("Brake", throttle * -1)
 				steer = steer * 2 --Attempt to make steering more sensitive.
 				self.v:TriggerInput("Steer", steer)
-			elseif isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
+			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
+				self.v:SetThrottle(throttle)
 				self.v:SetSteering(steer, 0)
 			end
 
@@ -615,7 +608,6 @@ if SERVER then
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() then
 						v:SetLightsEnabled(true)
 					end
-					v:SetBulletProofTires(true)
 				end
 			elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
 				if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
@@ -658,7 +650,6 @@ if SERVER then
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
 								v:SetLightsEnabled(true)
 							end
-							v:SetBulletProofTires(true)
 						end
 					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
 						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
@@ -683,19 +674,9 @@ if SERVER then
 		end
 	
 		if not IsValid(self.v) or not IsValid(self.v:GetPhysicsObject()) then SafeRemoveEntity(self) return end --When there's no vehicle, remove Traffic Vehicle.
-		UVDeploys = UVDeploys + 1
 
 		if isfunction(self.v.UVVehicleInitialize) then --For vehicles that has a driver bodygroup
 			self.v:UVVehicleInitialize()
-		end
-		
-		local deletiontime = self.v.roadblocking and 10 or 1
-		if self.uvscripted then
-			timer.Simple(deletiontime, function()
-				if IsValid(self) then
-					self.uvmarkedfordeletion = true
-				end
-			end)
 		end
 
 		if not self.uvscripted then

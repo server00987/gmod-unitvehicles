@@ -174,7 +174,7 @@ if SERVER then
 		if not self.v or not self.e then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e, uvenemylocation}}).Fraction==1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, self.e}}).Fraction==1
 		return tobool(tr)
 	end
 	
@@ -551,26 +551,13 @@ if SERVER then
 				end
 			end --K turn
 			
-			--Set throttle
+			--Set throttle/steering
 			if self.v.IsScar then
 				if throttle > 0 then
 					self.v:GoForward(throttle)
 				else
 					self.v:GoBack(-throttle)
 				end
-			elseif self.v.IsSimfphyscar then
-				self.v.PressedKeys = self.v.PressedKeys or {}
-				self.v.PressedKeys["Shift"] = false
-				self.v.PressedKeys["joystick_throttle"] = throttle
-				self.v.PressedKeys["joystick_brake"] = throttle * -1
-			elseif self.v.IsGlideVehicle then
-				self.v:TriggerInput("Handbrake", 0)
-				self.v:TriggerInput("Throttle", throttle)
-				self.v:TriggerInput("Brake", throttle * -1)
-			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
-				self.v:SetThrottle(throttle)
-			end
-			if self.v.IsScar then
 				if steer > 0 then
 					self.v:TurnRight(steer)
 				elseif steer < 0 then
@@ -579,11 +566,22 @@ if SERVER then
 					self.v:NotTurning()
 				end
 			elseif self.v.IsSimfphyscar then
+				self.v.PressedKeys = self.v.PressedKeys or {}
+				self.v.PressedKeys["Shift"] = false
+				self.v.PressedKeys["joystick_throttle"] = throttle
+				self.v.PressedKeys["joystick_brake"] = throttle * -1
 				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif self.v.IsGlideVehicle then
+				if cffunctions then
+					CFtoggleNitrous( self.v, self.usenitrous )
+				end
+				self.v:TriggerInput("Handbrake", 0)
+				self.v:TriggerInput("Throttle", throttle)
+				self.v:TriggerInput("Brake", throttle * -1)
 				steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.
 				self.v:TriggerInput("Steer", steer)
-			elseif isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
+			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
+				self.v:SetThrottle(throttle)
 				self.v:SetSteering(steer, 0)
 			end
 			
@@ -890,13 +888,13 @@ if SERVER then
 				end)
 			end
 		end
-		
-		if not self.uvscripted then
-			if next(dvd.Waypoints) == nil then
-				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned!" )
-			else
-				PrintMessage( HUD_PRINTCENTER, #ents.FindByClass("npc_racervehicle").." Racer(s) spawned! (DV Waypoints detected!)" )
-			end
+
+		if isfunction(self.v.UVVehicleInitialize) then --For vehicles that has a driver bodygroup
+			self.v:UVVehicleInitialize()
+		end
+
+		if cffunctions then
+			UVCFInitialize(self)
 		end
 		
 		local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.

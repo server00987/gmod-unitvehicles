@@ -1639,10 +1639,6 @@ if SERVER then
 		-- 	end
 		-- end
 
-		if #ents.FindByClass("npc_uv*") == 0 and IsValid(uvenemylocation) and not UVTargeting then 
-			uvenemylocation:Remove() 
-		end
-
 		--Losing		
 		local ltimeout = (UVCooldownTimer+5)
 

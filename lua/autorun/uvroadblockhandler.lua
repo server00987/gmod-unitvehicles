@@ -111,11 +111,19 @@ if SERVER then
 				local Index = gib:EntIndex()
 				timer.Create("uvroadblockmarkedfordeletion"..Index, 1, 0, function() 
 					if IsValid(gib) then
-						local distance = math.huge
-						if IsValid(uvenemylocation) then
-							distance = gib:GetPos():DistToSqr(uvenemylocation:GetPos())
+						local closestsuspect
+						local closestdistancetosuspect
+						local suspects = UVWantedTableVehicle
+						local r = math.huge
+						local closestdistancetosuspect, closestsuspect = r^2
+						for i, w in pairs(suspects) do
+							local gibpos = gib:WorldSpaceCenter()
+							local distance = gibpos:DistToSqr(w:WorldSpaceCenter())
+							if distance < closestdistancetosuspect then
+								closestdistancetosuspect, closestsuspect = distance, w
+							end
 						end
-						if distance > 100000000 and IsValid(gib) or not UVTargeting then
+						if closestdistancetosuspect > 100000000 and IsValid(gib) or not UVTargeting then
 							gib:Remove()
 							timer.Remove("uvroadblockmarkedfordeletion"..Index)
 							UVRoadblocksDodged = UVRoadblocksDodged + 1

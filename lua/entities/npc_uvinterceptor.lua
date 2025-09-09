@@ -364,7 +364,7 @@ if SERVER then
 		if not self.v or not target then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target, uvenemylocation}}).Fraction==1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
 		return tobool(tr)
 	end
 	
@@ -372,7 +372,7 @@ if SERVER then
 		if not self.v or not target then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, self.v, target, uvenemylocation}}).Fraction==1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, self.v, target}}).Fraction==1
 		return tobool(tr)
 	end
 	
@@ -877,15 +877,6 @@ if SERVER then
 		-- if UVTargeting then return end
 		self:SetPos(self.v:GetPos() + (vector_up * 50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
-		if not IsValid(uvenemylocation) then
-			uvenemylocation = ents.Create("prop_physics") --Enemy location
-			uvenemylocation:SetModel("models/props_lab/huladoll.mdl")
-			uvenemylocation:SetPos(self.v:GetPos() + (vector_up * 50))
-			uvenemylocation:Spawn()
-			uvenemylocation:SetCollisionGroup(10)
-			uvenemylocation:SetNoDraw(true)
-			uvenemylocation:SetMoveType(MOVETYPE_NONE)
-		end
 		
 		if not self.spawned and not self.damaged then
 			if self.v.IsGlideVehicle then
@@ -1119,9 +1110,6 @@ if SERVER then
 			end
 			
 		else --It does.
-			
-			uvenemylocation:SetPos(self.e:GetPos() + (vector_up * 50))
-			uvenemylocation:SetAngles(self.e:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 			
 			self.chasing = true
 			
@@ -1361,8 +1349,13 @@ if SERVER then
 			--Roadblocking
 			if self.v.roadblocking then
 				self:UVHandbrakeOn()
-				if eeevectdot > 0 and self.v.roadblocking and self.v.disperse and self:StraightToTarget(self.e) then
-					self.v.roadblocking = nil
+				if not self.v.roadblockingmissed and eeevectdot > 0 and self.v.roadblocking and self:StraightToTarget(self.e) then
+					self.v.roadblockingmissed = true
+					
+					if self.v.disperse then
+						self.v.roadblocking = nil
+					end
+
 					if Chatter:GetBool() then
 						UVChatterRoadblockMissed(self)
 					end
@@ -1682,12 +1675,19 @@ if SERVER then
 				steer = 0
 			end
 			
-			--Set throttle.
+			--Set throttle/steering
 			if self.v.IsScar then
 				if throttle > 0 then
 					self.v:GoForward(throttle)
 				else
 					self.v:GoBack(-throttle)
+				end
+				if steer > 0 then
+					self.v:TurnRight(steer)
+				elseif steer < 0 then
+					self.v:TurnLeft(-steer)
+				else
+					self.v:NotTurning()
 				end
 			elseif self.v.IsSimfphyscar then
 				self.v:SetActive(true)
@@ -1696,39 +1696,18 @@ if SERVER then
 				self.v.PressedKeys["Shift"] = false
 				self.v.PressedKeys["joystick_throttle"] = throttle
 				self.v.PressedKeys["joystick_brake"] = throttle * -1
+				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
 			elseif isfunction(self.v.SetThrottle) and not self.v.IsGlideVehicle then
 				self.v:SetThrottle(throttle)
+				self.v:SetSteering(steer, 0)
 			elseif self.v.IsGlideVehicle then
+				if cffunctions then
+					CFtoggleNitrous( self.v, self.usenitrous )
+				end
 				self.v:TriggerInput("Throttle", throttle)
 				self.v:TriggerInput("Brake", throttle * -1)
-			end
-			
-			--Set steering parameter.
-			if ph:GetAngleVelocity().y > 120 then return end --If the vehicle is spinning, don't change.
-			--if math.abs(steer) < 0.25 and dist:Dot(forward) > 0 and dist:LengthSqr() < 6250000 and dist:Length2DSqr() > 250000 and vectdot > 0 and self.e:GetVelocity():LengthSqr() > 250000 then steer = 0 end --If direction is almost straight, set 0.		
-			if dist:Dot(forward) > 0 and dist:Dot(eforward) < 0 and vectdot > 0 and evectdot < 0 and dist:Length2DSqr() > 250000 and self.e:GetVelocity():LengthSqr() > 250000 then
-				--if eph:GetAngleVelocity().z < -45 then steer = -1 end
-				--if eph:GetAngleVelocity().z > 45 then steer = 1 end
-				if eph:GetAngleVelocity().z < -22.5 or eph:GetAngleVelocity().z > 22.5 then throttle = 0 end
-			end --Mimic enemy's cornering (head-on)
-			
-			if self.v.IsScar then
-				if steer > 0 then
-					self.v:TurnRight(steer)
-				elseif steer < 0 then
-					self.v:TurnLeft(-steer)
-				else
-					self.v:NotTurning()
-				end
-			elseif self.v.IsGlideVehicle then
 				steer = steer * 2 --Attempt to make steering more sensitive.
 				self.v:TriggerInput("Steer", steer)
-			elseif self.v.IsSimfphyscar then
-				self.v:SetActive(true)
-				self.v:StartEngine()
-				self.v:PlayerSteerVehicle(self, steer < 0 and -steer or 0, steer > 0 and steer or 0)
-			elseif isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
-				self.v:SetSteering(steer, 0)
 			end
 			
 			--Losing conditions
@@ -1929,12 +1908,22 @@ if SERVER then
 		if isfunction(self.v.UVVehicleInitialize) then --For vehicles that has a driver bodygroup
 			self.v:UVVehicleInitialize()
 		end
+
+		if cffunctions then
+			UVCFInitialize(self)
+		end
 		
 		local deletiontime = self.v.roadblocking and 10 or 1
+		local roadblockingtime = math.random(20,60)
 		if self.uvscripted then
 			timer.Simple(deletiontime, function()
 				if IsValid(self) then
 					self.uvmarkedfordeletion = true
+				end
+			end)
+			timer.Simple(roadblockingtime, function()
+				if IsValid(self.v) and self.v.roadblocking then
+					self.v.roadblocking = nil
 				end
 			end)
 		end
