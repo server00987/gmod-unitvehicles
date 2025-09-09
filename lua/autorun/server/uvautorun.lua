@@ -3013,6 +3013,7 @@ function UVGlideDetachWheels(vehicle)
 end
 
 local function UVCFActivateNitrous(NPC, seconds)
+	if not UseNitrous:GetBool() then return end
 	NPC.usenitrous = true 
 	timer.Simple(seconds, function()
 		NPC.usenitrous = false
