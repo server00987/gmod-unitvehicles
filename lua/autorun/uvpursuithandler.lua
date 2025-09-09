@@ -4388,6 +4388,15 @@ else -- CLIENT Settings | HUD/Options
 			panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_mutecheckpointsfx")
 			panel:ControlHelp("#uv.settings.audio.mutecp.desc")
 
+			local volume_chatter = panel:NumSlider("#uv.settings.audio.copchatter", "unitvehicle_chattervolume", 0, 5, 1)
+			panel:ControlHelp("#uv.settings.audio.copchatter.desc")
+
+			volume_chatter.OnValueChanged = function( self, value )
+				if uvchatterplaying then
+					uvchatterplaying:SetVolume( value )
+				end
+			end
+
 			panel:Help("#uv.settings.music")
 
 			local volume_theme = panel:NumSlider("#uv.settings.music.volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
@@ -4396,15 +4405,6 @@ else -- CLIENT Settings | HUD/Options
 			volume_theme.OnValueChanged = function( self, value )
 				if UVSoundLoop then
 					UVSoundLoop:SetVolume( value )
-				end
-			end
-
-			local volume_chatter = panel:NumSlider("#uv.settings.music.chatter", "unitvehicle_chattervolume", 0, 5, 1)
-			panel:ControlHelp("#uv.settings.music.chatter.desc")
-
-			volume_chatter.OnValueChanged = function( self, value )
-				if uvchatterplaying then
-					uvchatterplaying:SetVolume( value )
 				end
 			end
 
