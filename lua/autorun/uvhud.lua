@@ -122,6 +122,9 @@ UVMaterials = {
     ["RESULTS_PS_SP8"] = Material("unitvehicles/icons_prostreet/flixfx_sp8.png"),
     
 	-- World
+	["RACE_CDBG_LEFT_WORLD"] = Material("unitvehicles/hud_world/race_starter_bg_left.png"),
+	["RACE_CDBG_RIGHT_WORLD"] = Material("unitvehicles/hud_world/race_starter_bg_right.png"),
+	
 	["RACE_PLAYERMARKER_WORLD"] = Material("unitvehicles/hud_world/race_playerarrow.png"),
 	["RACE_DNFMARKER_WORLD"] = Material("unitvehicles/hud_world/race_playerdnf.png"),
 	["RACE_BUSTEDMARKER_WORLD"] = Material("unitvehicles/hud_world/race_playerbusted.png"),
@@ -407,6 +410,14 @@ if CLIENT then
     surface.CreateFont("UVWorldFont4", { -- Coloured Numbers/Values, Smaller
         font = "Reg-B-I",
         size = (math.Round(ScrH()*0.035)),
+        shadow = false,
+        weight = 1000,
+		extended = true,
+    })
+
+    surface.CreateFont("UVWorldFont5", { -- Coloured Numbers/Values, Much Larger
+        font = "Reg-B-I",
+        size = (math.Round(ScrH()*0.15)),
         shadow = false,
         weight = 1000,
 		extended = true,
@@ -10019,7 +10030,7 @@ end,
 		end
 		UV_UI.racing.world.events.CenterNotification({
 			text = UV_UI.racing.world.states.LapCompleteText,
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 		})
 	end,
@@ -10038,7 +10049,7 @@ end,
 
 		UV_UI.racing.world.events.CenterNotification({
 			text = disqtext,
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 			immediate = is_local_player and true or false,
 			timer = is_local_player and 3 or 1,
@@ -10055,27 +10066,132 @@ end,
 			[1] = "#uv.race.go"
 		}
 
-		local textToShow = countdownTexts[starttime]
-		if not textToShow then return end
+		-- local textToShow = countdownTexts[starttime]
+		-- if not textToShow then return end
+		
+		-- ensure the table exists
+		UV_RaceCountdown = UV_RaceCountdown or {}
 
-		-- Determine extra options for the "GO!" notification
-		local extraOpts = {}
-		if starttime == 1 then
-			extraOpts.textFlyRightNoFall = true
+		-- store the server-provided starttime
+		UV_RaceCountdown.starttime = starttime
+		UV_RaceCountdown.valueStartTime = CurTime() -- reset animation timing
+
+		-- resolve text (READY... if above 4, otherwise from table)
+		UV_RaceCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
+
+		-- === CONFIG / HELPERS ===
+		local DUR_FADE_IN     = 0.05
+		local DUR_BG_ANIM     = 0.15
+		local DUR_FADE_OUT    = 0.15
+		local DISPLAY_TOTAL   = 0.3    -- total time each value is visible
+
+		local READY_TEXT = "#uv.race.getready"
+		
+		if starttime > 4 then
+			UV_RaceCountdown.label = READY_TEXT
+		else
+			UV_RaceCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
+		end
+		
+		local function LerpColor(t, cFrom, cTo)
+			return Color(
+				math.Round(Lerp(t, cFrom.r, cTo.r)),
+				math.Round(Lerp(t, cFrom.g, cTo.g)),
+				math.Round(Lerp(t, cFrom.b, cTo.b)),
+				math.Round(Lerp(t, (cFrom.a or 255), (cTo.a or 255)))
+			)
 		end
 
-		-- Call the notification function once
-		UV_UI.racing.world.events.CenterNotification(
-			table.Merge({
-				text = textToShow,
-				color = Color( 203, 248, 250 ),
-				colorbg = Color(66, 194, 222, 50),
-				textFont = "UVFont5WeightShadow",
-				textFlyRight = true,
-				noIcon = true,
-				immediate = true
-			}, extraOpts)
-		)
+		-- === HOOK CREATION ===
+		hook.Add("HUDPaint", "UV_RaceCountdown_World", function()
+			if not UV_RaceCountdown or not UV_RaceCountdown.starttime then return end
+			local vs = UV_RaceCountdown
+
+			-- cleanup after finished
+			if vs.starttime == 0 then
+				if not vs.cleanupTime then
+					vs.cleanupTime = CurTime() + 1 -- wait 1s
+				elseif CurTime() >= vs.cleanupTime then
+					hook.Remove("HUDPaint", "UV_RaceCountdown_World")
+					UV_RaceCountdown = nil
+				end
+				return
+			end
+
+			if not vs.label then return end
+
+			-- === TIMING / ANIMATION ===
+			local t = CurTime() - (vs.valueStartTime or 0)
+			local currentAlpha, bgPad, bgColor
+
+			if vs.label == READY_TEXT then
+				-- READY... stays solid, no flicker
+				currentAlpha = 255
+				bgPad = 8
+				bgColor = Color(89, 176, 193, 50)
+			else
+				-- countdown values fade/animate
+				-- 1) fade-in
+				local inT = math.Clamp(t / DUR_FADE_IN, 0, 1)
+				currentAlpha = Lerp(inT, 0, 255)
+
+				-- 2) background animation
+				local bgStart = DUR_FADE_IN
+				local bgEnd   = DUR_FADE_IN + DUR_BG_ANIM
+				local bgT = 0
+				if t >= bgStart then bgT = math.Clamp((t - bgStart) / DUR_BG_ANIM, 0, 1) end
+
+				bgPad = Lerp(bgT, 12, 4)
+				local bgTarget = Color( 89, 176, 193, 50 )
+				bgColor = LerpColor(bgT, Color( 89, 176, 193, 255 ), bgTarget)
+
+				-- 3) fade-out at end
+				local fadeOutStart = DISPLAY_TOTAL - DUR_FADE_OUT
+				if t >= fadeOutStart then
+					local outT = math.Clamp((t - fadeOutStart) / DUR_FADE_OUT, 0, 1)
+					currentAlpha = Lerp(outT, 255, 0)
+					bgColor.a = math.max(0, math.floor(bgColor.a * (currentAlpha / 255)))
+				end
+			end
+
+			local textColor = Color(137, 242, 248, math.ceil(currentAlpha))
+
+			-- === DRAW SIDE BARS ===
+			local barW = ScrW() * 0.5
+			local barH = ScrH() * 0.2
+			local barY = (ScrH() - barH) * 0.5
+
+			-- fade bars out when GO fades out
+			local barAlpha = 255
+			if vs.starttime == 1 then
+				local barFadeStart = (vs.valueStartTime or 0) + (DISPLAY_TOTAL - DUR_FADE_OUT)
+				if CurTime() >= barFadeStart then
+					local barOutT = math.Clamp((CurTime() - barFadeStart) / DUR_FADE_OUT, 0, 1)
+					barAlpha = Lerp(barOutT, 255, 0)
+				end
+			end
+
+			surface.SetDrawColor(255, 255, 255, barAlpha)
+			-- left bar
+			surface.SetMaterial(UVMaterials['RACE_CDBG_LEFT_WORLD'])
+			surface.DrawTexturedRect(0, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
+
+			-- right bar
+			surface.SetMaterial(UVMaterials['RACE_CDBG_RIGHT_WORLD'])
+			surface.DrawTexturedRect(ScrW() - ScrW() * 0.5, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
+
+			-- === DRAW TEXT ===
+			draw.SimpleTextOutlined(
+				vs.label or "",
+				"UVWorldFont5",
+				ScrW() * 0.5, ScrH() * 0.5,
+				textColor,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+				math.floor(bgPad),
+				bgColor
+			)
+		end)
+
 	end,
 
 	onLapSplit = function(participant, checkpoint, is_local_player, numParticipants)
@@ -10112,7 +10228,7 @@ end,
 
 		UV_UI.racing.world.events.CenterNotification({
 			text = splittext,
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 		})
 	end,
@@ -10124,7 +10240,7 @@ UV_UI.pursuit.world.events = {
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.world.events.CenterNotification({
 			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo ),
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
 		})
@@ -10209,7 +10325,7 @@ UV_UI.pursuit.world.events = {
 
 		UV_UI.racing.world.events.CenterNotification({
 			text = cnt,
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 			immediate = lp and true or false,
 		})
@@ -10602,7 +10718,7 @@ end,
 	onPullOverRequest = function(...)
 		UV_UI.racing.world.events.CenterNotification({
 			text = language.GetPhrase("uv.hud.fine.pullover"),
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
 			timer = 3,
@@ -10611,7 +10727,7 @@ end,
 	onFined = function( finenr )
 		UV_UI.racing.world.events.CenterNotification({
 			text = string.format( language.GetPhrase("uv.hud.fine.fined"), finenr),
-			color = Color( 203, 248, 250 ),
+			color = Color( 137, 242, 248 ),
 			colorbg = Color(66, 194, 222, 50),
 			immediate = true,
 			timer = 5,
@@ -10655,10 +10771,10 @@ local function world_racing_main( ... )
 	local worldcols = {
 		reg = Color( 200, 200, 200 ),
 		regbg = Color( 0, 0, 0),
-		val = Color( 203, 248, 250 ),
+		val = Color( 137, 242, 248 ),
 		valbg = Color( 89, 176, 193, 50 ),
 
-		plr = Color( 203, 248, 250 ),
+		plr = Color( 225, 255, 255 ),
 		plrbg = Color( 66, 194, 222, 50 ),
 		
 		dnf = Color( 200, 200, 200, 150 ),
@@ -10796,11 +10912,11 @@ local function world_racing_main( ... )
         if is_local_player then
             color = worldcols.plr
             colorbg = worldcols.plrbg
-			bgs = 4
+			-- bgs = 4
         elseif entry[3] == "Disqualified" then
             color = worldcols.dnf
             colorbg = worldcols.dnfbg
-			bgs = 2
+			-- bgs = 2
         elseif entry[3] == "Busted" then
             color = worldcols.busted
             colorbg = worldcols.bustedbg
@@ -10862,7 +10978,7 @@ local function world_pursuit_main( ... )
 	local worldcols = {
 		reg = Color( 200, 200, 200 ),
 		regbg = Color( 0, 0, 0),
-		val = Color( 203, 248, 250 ),
+		val = Color( 137, 242, 248 ),
 		valbg = Color( 89, 176, 193, 50 ),
 				
 		busted = Color( 255, 240, 240, 255 ),
@@ -10991,6 +11107,15 @@ local function world_pursuit_main( ... )
     local B = math.Clamp((HeatProgress) * w * 0.075, 0, w * 0.075)
     surface.DrawRect(w * 0.885, h * 0.285, B, h * 0.0175)
 
+    draw.NoTexture()
+	surface.SetDrawColor(0, 0, 0, 200)
+	
+    -- surface.DrawRect(w * 0.8835, h * 0.285, w * 0.002, h * 0.0175) -- Left
+    surface.DrawRect(w * 0.903, h * 0.285, w * 0.002, h * 0.0175) -- Left Middle
+    surface.DrawRect(w * 0.922, h * 0.285, w * 0.002, h * 0.0175) -- Middle
+    surface.DrawRect(w * 0.941, h * 0.285, w * 0.002, h * 0.0175) -- Right Middle
+    -- surface.DrawRect(w * 0.96, h * 0.285, w * 0.002, h * 0.0175) -- Right
+
     -- [[ Commander Stuff ]]
     if UVOneCommanderActive then
         ResourceText = "⛊"
@@ -11050,6 +11175,16 @@ local function world_pursuit_main( ... )
             surface.SetDrawColor(Color(100, 220, 255))
             local T = math.Clamp((healthratio) * (w * 0.075), 0, w * 0.075)
             surface.DrawRect(w * 0.885, h * 0.3275, T, h * 0.0175)
+
+			draw.NoTexture()
+			surface.SetDrawColor(0, 0, 0, 200)
+
+			-- surface.DrawRect(w * 0.8835, h * 0.3275, w * 0.002, h * 0.0175) -- Left
+			surface.DrawRect(w * 0.903, h * 0.3275, w * 0.002, h * 0.0175) -- Left Middle
+			surface.DrawRect(w * 0.922, h * 0.3275, w * 0.002, h * 0.0175) -- Middle
+			surface.DrawRect(w * 0.941, h * 0.3275, w * 0.002, h * 0.0175) -- Right Middle
+			-- surface.DrawRect(w * 0.96, h * 0.3275, w * 0.002, h * 0.0175) -- Right
+
         end
     end
 
