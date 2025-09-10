@@ -1,0 +1,109 @@
+<------- ~June 22 ------->
+# New Features
+**Heat Level 7+**
+- Increased the maximum Heat Level to 10
+
+**Racing**
+- Added a Pre-Race Information screen; shows various information, such as course name, lap count, checkpoints, etc.
+- Added a DNF Timer option; once the first player crosses the line, the rest have a set time to do the same... or they DNF.
+
+**UI**
+- Added Race Result screens for all Racing UI styles; this can be displayed once all participants have crossed the finishing line [1]
+- Added a new Keyboard Bind for the aforementioned Race Result screen
+- Added new pop-up notifications; Takedowns, Lap Times, Totaled & Busted. All notifications have themed appearances.
+
+**Other**
+- Added support to play UVTrax music outside of Races and Pursuits
+- Added support for Photon 2 vehicles
+- Added full Czech and Russian translations
+- Added Brazilian Portuguese and Slovakian translations [2]
+
+# Changes
+**Pursuits**
+- When using Glide, you must turn off the engine to Hide during Cooldown
+
+**UI**
+- Updated the Name Tag boxes above vehicles; Including one for Commander Units. Now also shown during races
+- Changed "Race" and "Pursuit" UI options to "Main" and "Fall-Back" UI; Main applies to both Race and Pursuit, but if it does not have a Pursuit UI, switch to the Fall-Back one
+- The Takedown notification now only mentions the unit type (i.e. "Support Unit") if it's an AI; otherwise, it displays the driver's name
+- Altered some UI styles to be more faithful and accurate to their source
+- Fixed some smaller UI bugs and errors
+
+**Other**
+- Improved optimization across the board
+- Players should now experience less FPS drops with larger amount of AI-driven opponents and Units
+- Added higher quality Undercover Pursuit music
+
+And many, many undocumented bug fixes and improvements!
+```
+[1] Not possible while in a Pursuit
+[2] Only partial; many strings are still untranslated
+```
+
+<------- September 8 ------->
+# New Features
+**UV Traffic**
+- Added new AI Traffic entities. Uses the same mechanics as Units, but spawn randomly in the world. Follows DV Waypoints
+
+**Racing**
+- Added a proper Pre-Race Status screen when a race is initialized and not yet started. Also redid the Race Invite pop-up
+- Added UI Style-themed, animated countdown elements for some UI Styles (Most Wanted & Carbon) - the rest use the previous appearance
+- When racing against at least one opponent, "Split Times" will appear at 25, 50 and 75 percent intervals per lap. Has themed appearances for every HUD type
+- Added a Player List to the Pre-Race Information screen
+- (Circular Functions): When starting a race, Nitrous will be fully refilled, and settings will be properly kept
+
+**Cop Chatter**
+- Added a new customizable Cop Chatter system; Choose which Cop voice lines should play for which unit
+- Added new Cop Chatter lines recorded by various UV Devs and community members
+- Removed the previous Cop Chatter lines to save space[1]
+
+**Pursuits**
+- When spawning as a Unit, you can now select exactly which unit to spawn as.
+- Commanders are now, by default, restricted from using the Repair Shop. Their Pursuit Tech refills, but they do not get repaired.
+- Pursuit Breakers now appear on-screen and not only on GMinimap.
+- AI Units will now, by default, relocate themselves further ahead instead of fully respawning.
+- Added two new Helicopter Unit models: Hot Pursuit & Unbound.
+
+**UI**
+- Added a World themed HUD type (incomplete atm - uses Most Wanted assets for incomplete elements)
+
+**Other**
+- (Circular Functions): Repair Shops now refill Nitrous
+
+# Changes
+**Pursuits**
+- Removed Pursuit Themes to save space[1]
+
+**Racing**
+- The "Wrong Way" check is now less strict
+
+**UI**
+- Fixed some inconsistencies with various UI elements
+
+**Other**
+- Improved AI behaviour
+
+And many, many undocumented bug fixes and improvements!
+```
+[1] Available as separate addon.
+```
+
+<------- September 11? ------->
+# New Features
+**Pursuits**
+- Added a Notification when wanting to respawn as a Unit and it's on cooldown
+- Added the ability to Cancel respawning as a Unit if on cooldown when pressing your "Reset" button (Default: `M`)
+- Roadblock Units will now disperse and join the chase if left idle for too long
+- Added more Default Cop Chatter lines
+- Added the ability to tweak at which speed you need to travel to prevent being busted (defined in MPH)
+
+**Racing**
+- DNF Timer will now appear for all users, excluding Units
+
+**Other**
+- AI Racers and Units can now utilize Nitrous (requires Circular Functions); can be toggled on or off
+
+# Changes
+**Other**
+- Optimized some code
+- Updated localizations
