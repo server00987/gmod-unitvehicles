@@ -709,7 +709,8 @@ LOCAL_CONVARS = {
 	["unitvehicle_racerpursuittech"] = 'integer',
 	["unitvehicle_racerfriendlyfire"] = 'integer',
 	['unitvehicle_spawncooldown'] = 'integer',
-	["unitvehicle_usenitrous"] = 'integer'
+	["unitvehicle_usenitrousracer"] = 'integer',
+	["unitvehicle_usenitrousunit"] = 'integer'
 }
 
 HEAT_SETTINGS = {

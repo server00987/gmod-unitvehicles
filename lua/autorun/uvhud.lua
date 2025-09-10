@@ -10070,14 +10070,14 @@ end,
 		-- if not textToShow then return end
 		
 		-- ensure the table exists
-		UV_RaceCountdown = UV_RaceCountdown or {}
+		UVWorldCountdown = UVWorldCountdown or {}
 
 		-- store the server-provided starttime
-		UV_RaceCountdown.starttime = starttime
-		UV_RaceCountdown.valueStartTime = CurTime() -- reset animation timing
+		UVWorldCountdown.starttime = starttime
+		UVWorldCountdown.valueStartTime = CurTime() -- reset animation timing
 
 		-- resolve text (READY... if above 4, otherwise from table)
-		UV_RaceCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
+		UVWorldCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
 
 		-- === CONFIG / HELPERS ===
 		local DUR_FADE_IN     = 0.05
@@ -10088,9 +10088,9 @@ end,
 		local READY_TEXT = "#uv.race.getready"
 		
 		if starttime > 4 then
-			UV_RaceCountdown.label = READY_TEXT
+			UVWorldCountdown.label = READY_TEXT
 		else
-			UV_RaceCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
+			UVWorldCountdown.label = countdownTexts[starttime] and tostring(countdownTexts[starttime]) or nil
 		end
 		
 		local function LerpColor(t, cFrom, cTo)
@@ -10103,17 +10103,17 @@ end,
 		end
 
 		-- === HOOK CREATION ===
-		hook.Add("HUDPaint", "UV_RaceCountdown_World", function()
-			if not UV_RaceCountdown or not UV_RaceCountdown.starttime then return end
-			local vs = UV_RaceCountdown
+		hook.Add("HUDPaint", "UV_Countdown_World", function()
+			if not UVWorldCountdown or not UVWorldCountdown.starttime then return end
+			local vs = UVWorldCountdown
 
 			-- cleanup after finished
 			if vs.starttime == 0 then
 				if not vs.cleanupTime then
 					vs.cleanupTime = CurTime() + 1 -- wait 1s
 				elseif CurTime() >= vs.cleanupTime then
-					hook.Remove("HUDPaint", "UV_RaceCountdown_World")
-					UV_RaceCountdown = nil
+					hook.Remove("HUDPaint", "UV_Countdown_World")
+					UVWorldCountdown = nil
 				end
 				return
 			end

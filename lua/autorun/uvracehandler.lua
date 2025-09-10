@@ -1301,6 +1301,9 @@ else -- CLIENT stuff
 		UVHUDRaceFinishEndTime = nil
 
 		UVRaceStarting = false
+		
+		UVWorldCountdown = nil
+		hook.Remove("HUDPaint", "UV_Countdown_World")
 
 		net.Start("UVRace_StopEndCountdown")
 		net.SendToServer()
