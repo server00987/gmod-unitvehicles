@@ -718,6 +718,7 @@ HEAT_SETTINGS = {
 	'heatminimumbounty',
 	'maxunits',
 	'unitsavailable',
+	'bustspeed',
 	'backuptimer',
 	'cooldowntimer',
 	'roadblocks',
@@ -764,6 +765,14 @@ HEAT_DEFAULTS = {
 		['4'] = 120,
 		['5'] = 120,
 		['6'] = 120,
+	},
+	['bustspeed'] = {
+		['1'] = 10,
+		['2'] = 10,
+		['3'] = 15,
+		['4'] = 15,
+		['5'] = 20,
+		['6'] = 20,
 	},
 	['backuptimer'] = {
 		['1'] = 120,
@@ -869,10 +878,21 @@ if SERVER then
 
 	--UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
 	
-	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
+	local defaultvoicetable = {
+		"cop1, cop2", --Patrol
+		"cop1, cop2", --Support
+		"cop1, cop2", --Pursuit
+		"cop1, cop2", --Interceptor
+		"fed1", --Special
+		"fed1", --Commander
+		"cop1, cop2", --Rhino
+		"air", --Air
+	}
+
+	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 		local lowercaseUnit = string.lower( v )
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", "", {FCVAR_ARCHIVE})
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "", {FCVAR_ARCHIVE})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", defaultvoicetable[index], {FCVAR_ARCHIVE})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "default", {FCVAR_ARCHIVE})
 	end
 
 	for _, v in pairs( {'Misc', 'Dispatch'} ) do
@@ -1050,6 +1070,7 @@ if SERVER then
 	end
 
 	UVHeliCooldown = -math.huge
+	UVBustSpeed = 10
 	UVCooldownTimer = 20
 	UVCooldownTimerProgress = 0
 	UVCooldownProgressTimeout = CurTime()

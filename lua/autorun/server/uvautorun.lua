@@ -518,7 +518,7 @@ function ApplyHeatSettings(heatLevel)
 	UVCooldownTimer = GetConVar("unitvehicle_unit_cooldowntimer"..heatLevel):GetInt()
 	UVBackupTimerMax = GetConVar("unitvehicle_unit_backuptimer"..heatLevel):GetInt()
 	
-	UVBustSpeed = heatLevel >= 5 and 123904 or (heatLevel >= 3 and 69696 or 30976)
+	UVBustSpeed = (GetConVar("unitvehicle_unit_bustspeed"..heatLevel):GetInt()*17.6)^2 --MPH to in/s^2
 	
 	uvRoadblockDeployable = GetConVar("unitvehicle_unit_roadblocks"..heatLevel):GetInt() == 1
 	uvHelicopterDeployable = GetConVar("unitvehicle_unit_helicopters"..heatLevel):GetInt() == 1

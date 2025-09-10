@@ -20,6 +20,7 @@ local backuptimer = {}
 local cooldowntimer = {}
 local roadblocks = {}
 local helicopters = {}
+local bustspeed = {}
 
 -- For ConVars, append the heat to the end of the ConVar string
 local UnitSettings = {
@@ -54,6 +55,14 @@ local UnitSettings = {
 		ConVar = 'uvunitmanager_unitsavailable',
 		ToolText = '#tool.uvunitmanager.settings.heatlevel.avaunits',
 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.avaunits.desc'
+	},
+	['bustspeed'] = {
+		Class = 'DNumSlider',
+		MinMax = {1, 100},
+		Decimals = 0,
+		ConVar = 'uvunitmanager_bustspeed',
+		ToolText = '#tool.uvunitmanager.settings.heatlevel.bustspeed',
+		ToolTip = '#tool.uvunitmanager.settings.heatlevel.bustspeed.desc'
 	},
 	['backuptimer'] = {
 		Class = 'DNumSlider',
@@ -144,19 +153,29 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 -- 	TOOL.ClientConVar["unitsrhino" .. i] = " "
 -- end
 
+local defaultvoicetable = {
+	"cop1, cop2", --Patrol
+	"cop1, cop2", --Support
+	"cop1, cop2", --Pursuit
+	"cop1, cop2", --Interceptor
+	"fed1", --Special
+	"fed1", --Commander
+	"cop1, cop2", --Rhino
+	"air", --Air
+}
 
-for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
+for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 	local lowercaseUnit = string.lower( v )
 	local conVarKey = string.format( '%s_voice', lowercaseUnit )
 	local conVarKeyVoiceProfile = string.format( '%s_voiceprofile', lowercaseUnit )
-	TOOL.ClientConVar[conVarKey] = " "
-	TOOL.ClientConVar[conVarKeyVoiceProfile] = " "
+	TOOL.ClientConVar[conVarKey] = defaultvoicetable[index]
+	TOOL.ClientConVar[conVarKeyVoiceProfile] = "default"
 end
 
 for _, v in pairs( {'Misc', 'Dispatch'} ) do
 	local lowercaseType = string.lower( v )
 	local conVarKey = string.format( '%s_voiceprofile', lowercaseType )
-	TOOL.ClientConVar[conVarKey] = " "
+	TOOL.ClientConVar[conVarKey] = "default"
 end
 
 for i = 1, MAX_HEAT_LEVEL do
@@ -173,7 +192,7 @@ for i = 1, MAX_HEAT_LEVEL do
 		
 		-------------------------------------------
 		
-		TOOL.ClientConVar[conVarKey] = " "
+		TOOL.ClientConVar[conVarKey] = ""
 	end
 	
 	for _, conVar in pairs( HEAT_SETTINGS ) do
@@ -821,6 +840,7 @@ if CLIENT then
 				convar_table['unitvehicle_unit_heatminimumbounty' .. i] = GetConVar('uvunitmanager_heatminimumbounty' .. i):GetInt()
 				convar_table['unitvehicle_unit_maxunits' .. i] = GetConVar('uvunitmanager_maxunits' .. i):GetInt()
 				convar_table['unitvehicle_unit_unitsavailable' .. i] = GetConVar('uvunitmanager_unitsavailable' .. i):GetInt()
+				convar_table['unitvehicle_unit_bustspeed' .. i] = GetConVar('uvunitmanager_bustspeed' .. i):GetInt()
 				convar_table['unitvehicle_unit_backuptimer' .. i] = GetConVar('uvunitmanager_backuptimer' .. i):GetInt()
 				convar_table['unitvehicle_unit_cooldowntimer' .. i] = GetConVar('uvunitmanager_cooldowntimer' .. i):GetInt()
 				convar_table['unitvehicle_unit_roadblocks' .. i] = GetConVar('uvunitmanager_roadblocks' .. i):GetInt()
@@ -1365,9 +1385,7 @@ if CLIENT then
 		MaxHeat:SetValue(GetConVar("uvunitmanager_maxheat"))
 		MaxHeat:SetConVar("uvunitmanager_maxheat")
 		CPanel:AddItem(MaxHeat)
-		
-		local emptydefault = " "
-		
+				
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.assunits.title",
 		})
@@ -1425,7 +1443,7 @@ if CLIENT then
 			local textBox = vgui.Create( 'DTextEntry' )
 			UIElements[unitKey] = textBox
 			
-			textBox:SetPlaceholderText( " " )
+			textBox:SetPlaceholderText( "cop1, cop2, cop3, ..." )
 			textBox:SetText( conVar:GetString() )
 			textBox:SetConVar( conVarKey )
 			textBox:SetTooltip( "Voice profile for " .. v )
@@ -1480,7 +1498,6 @@ if CLIENT then
 				local text = self:GetText()
 				local unitConvarString = string.format( "uvunitmanager_units%s%s", undercaseName, GetConVar( 'uvunitmanager_selected_heat' ):GetInt() )
 				
-				if ( text == "" ) then self:SetText( emptydefault ) end
 				RunConsoleCommand( unitConvarString, text )
 			end
 			
