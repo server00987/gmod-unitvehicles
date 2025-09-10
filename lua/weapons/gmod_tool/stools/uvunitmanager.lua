@@ -2383,6 +2383,7 @@ function TOOL:LeftClick( trace )
 			Ent.NitrousStartBurstSound = ply.UVTOOLMemory.NitrousStartBurstSound
 			Ent.NitrousStartBurstAnnotationSound = ply.UVTOOLMemory.NitrousStartBurstAnnotationSound
 			Ent.CriticalDamageSound = ply.UVTOOLMemory.CriticalDamageSound
+			Ent.NitrousEnabled = ply.UVTOOLMemory.NitrousEnabled
 			
 			if Ent.NitrousColor then
 				local r = Ent.NitrousColor.r
@@ -2395,6 +2396,7 @@ function TOOL:LeftClick( trace )
     			    net.WriteInt(g, 9)
     			    net.WriteInt(b, 9)
 					net.WriteBool(Ent.NitrousBurst)
+					net.WriteBool(Ent.NitrousEnabled)
     			net.Broadcast()
 			end
 		end
@@ -2917,6 +2919,7 @@ function TOOL:GetVehicleData( ent, ply )
 			ply.UVTOOLMemory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
 			ply.UVTOOLMemory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
 			ply.UVTOOLMemory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
+			ply.UVTOOLMemory.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
 		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then

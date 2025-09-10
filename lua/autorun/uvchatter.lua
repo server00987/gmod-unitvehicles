@@ -2193,12 +2193,12 @@ if SERVER then
 				local random_entry = math.random(#airUnits)	
 				local unit = airUnits[random_entry]
 				if not (unit.crashing or unit.disengaging) then
-					UVSoundChatter(unit, unit.voice, "losingupdate")
+					UVSoundChatter(unit, unit.voice, "losingupdate", 1, "DISPATCH") -- !! MIGHT BE BETTER TO PUT THIS INSIDE THE UNITS FOLDER TOO !!
 				else
-					UVSoundChatter(self, self.voice, "losingupdate")
+					UVSoundChatter(self, self.voice, "losingupdate", 1, "DISPATCH") -- !! MIGHT BE BETTER TO PUT THIS INSIDE THE UNITS FOLDER TOO !!
 				end
 			else
-				UVSoundChatter(self, self.voice, "losingupdate")
+				UVSoundChatter(self, self.voice, "losingupdate", 1, "DISPATCH") -- !! MIGHT BE BETTER TO PUT THIS INSIDE THE UNITS FOLDER TOO !!
 			end
 			return
 		end
@@ -3777,7 +3777,7 @@ if SERVER then
 	
 	function UVChatterCallRequestDescription(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "callrequestdescription", 1, "DISPATCH")
+			return UVSoundChatter(self, self.voice, "callrequestdescription", 1)
 		end
 		if UVTargeting then return end
 		

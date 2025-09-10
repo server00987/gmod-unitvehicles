@@ -151,43 +151,43 @@ if SERVER then
         if UVTargeting then return end
         
         local timecheck = 5
+
         
         if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
             local units = ents.FindByClass("npc_uv*" )
             local random_entry = math.random(#units)	
             local unit = units[random_entry]
             timecheck = UVChatterCallRequestDescription(unit)
+            timer.Simple(timecheck, function()
+                if not IsValid(suspectvehicle) or UVTargeting then return end
+                local timecheck2 = 5
+                local mathdescription = math.random(1,2)
+                if mathdescription == 1 then --Known description
+                    if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
+                        local e = UVGetVehicleMakeAndModel(suspectvehicle)
+                        local units = ents.FindByClass("npc_uv*" )
+                        local random_entry = math.random(#units)	
+                        local unit = units[random_entry]
+                        timecheck2 = UVChatterDispatchCallVehicleDescription(unit, suspectvehicle, e)
+                    end
+                    timer.Simple(timecheck2, function()
+                        UVCallRespond(suspectvehicle)
+                        UVCallLocation = calllocation
+                    end)
+                else --Unknown description
+                    if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
+                        local units = ents.FindByClass("npc_uv*" )
+                        local random_entry = math.random(#units)	
+                        local unit = units[random_entry]
+                        timecheck2 = UVChatterDispatchCallUnknownDescription(unit)
+                    end
+                    timer.Simple(timecheck2, function()
+                        UVCallRespond(suspectvehicle)
+                        UVCallLocation = calllocation
+                    end)
+                end
+            end)
         end
-        
-        timer.Simple(timecheck, function()
-            if not IsValid(suspectvehicle) or UVTargeting then return end
-            local timecheck2 = 5
-            local mathdescription = math.random(1,2)
-            if mathdescription == 1 then --Known description
-                if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
-                    local e = UVGetVehicleMakeAndModel(suspectvehicle)
-                    local units = ents.FindByClass("npc_uv*" )
-                    local random_entry = math.random(#units)	
-                    local unit = units[random_entry]
-                    timecheck2 = UVChatterDispatchCallVehicleDescription(unit, suspectvehicle, e)
-                end
-                timer.Simple(timecheck2, function()
-                    UVCallRespond(suspectvehicle)
-                    UVCallLocation = calllocation
-                end)
-            else --Unknown description
-                if next(ents.FindByClass("npc_uv*" )) ~= nil and GetConVar("unitvehicle_chatter"):GetBool() then
-                    local units = ents.FindByClass("npc_uv*" )
-                    local random_entry = math.random(#units)	
-                    local unit = units[random_entry]
-                    timecheck2 = UVChatterDispatchCallUnknownDescription(unit)
-                end
-                timer.Simple(timecheck2, function()
-                    UVCallRespond(suspectvehicle)
-                    UVCallLocation = calllocation
-                end)
-            end
-        end)
         
     end
     

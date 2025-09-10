@@ -3012,8 +3012,12 @@ function UVGlideDetachWheels(vehicle)
 	
 end
 
+local function UVCFEligibleToUse(NPC)
+	local vehicle = NPC.v
+	return (vehicle.RacerVehicle and UseNitrousRacer:GetBool()) or (vehicle.UnitVehicle and UseNitrousUnit:GetBool())
+end
+
 local function UVCFActivateNitrous(NPC, seconds)
-	if not UseNitrous:GetBool() then return end
 	NPC.usenitrous = true 
 	timer.Simple(seconds, function()
 		NPC.usenitrous = false
@@ -3046,6 +3050,7 @@ function UVCFInitialize(NPC)
     	    net.WriteInt(g, 9)
     	    net.WriteInt(b, 9)
 			net.WriteBool(car.NitrousBurst)
+			net.WriteBool(car.NitrousEnabled)
     	net.Broadcast()
 	end
 
@@ -3056,7 +3061,7 @@ function UVCFInitialize(NPC)
 		end
 
 		local amount = car:GetNWFloat( 'NitrousAmount' )
-		if amount >= NPC.preferrednitrousamount then
+		if amount >= NPC.preferrednitrousamount and UVCFEligibleToUse(NPC) then
 			local seconds = math.random(1,5)
 			UVCFActivateNitrous(NPC, seconds)
 		end

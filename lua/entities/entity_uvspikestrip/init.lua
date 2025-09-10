@@ -205,7 +205,7 @@ function ENT:DoUpdate()
 
 						timer.Simple(1, function()
 							self.reported = false
-							if IsValid(self.Entity) and not array[1].UnitVehicle then
+							if IsValid(self.Entity) and not array[1].UnitVehicle and table.HasValue(UVWantedTableVehicle, array[1]) then
 								self.reported = false
 								self:UVSpikeStripHit()
 							end

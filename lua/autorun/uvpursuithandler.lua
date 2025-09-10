@@ -833,7 +833,8 @@ if SERVER then
 	ChatterText = CreateConVar("unitvehicle_chattertext", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units' radio chatter will be displayed in the chatbox instead.")
 	Headlights = CreateConVar("unitvehicle_enableheadlights", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units and Racer Vehicles will shine their headlights.")
 	Relentless = CreateConVar("unitvehicle_relentless", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will ram the target more frequently.")
-	UseNitrous = CreateConVar("unitvehicle_usenitrous", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, AI vehicles will use nitrous.")
+	UseNitrousRacer = CreateConVar("unitvehicle_usenitrousracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racer vehicles will use nitrous.")
+	UseNitrousUnit = CreateConVar("unitvehicle_usenitrousunit", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
 	SpawnMainUnits = CreateConVar("unitvehicle_spawnmainunits", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateConVar("unitvehicle_dvwaypointspriority", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	RepairCooldown = CreateConVar("unitvehicle_repaircooldown", 60, {FCVAR_ARCHIVE}, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
@@ -2333,7 +2334,8 @@ else -- CLIENT Settings | HUD/Options
 	ChatterText = CreateClientConVar("unitvehicle_chattertext", 0, true, false, "Unit Vehicles: If set to 1, Units' radio chatter will be displayed in the chatbox instead.")
 	Headlights = CreateClientConVar("unitvehicle_enableheadlights", 0, true, false, "Unit Vehicles: If set to 1, Units and Racer Vehicles will shine their headlights.")
 	Relentless = CreateClientConVar("unitvehicle_relentless", 0, true, false, "Unit Vehicles: If set to 1, Units will ram the target more frequently.")
-	UseNitrous = CreateClientConVar("unitvehicle_usenitrous", 0, true, false, "Unit Vehicles: If set to 1, AI vehicles will use nitrous.")
+	UseNitrousRacer = CreateClientConVar("unitvehicle_usenitrousracer", 0, true, false, "Unit Vehicles: If set to 1, Racer vehicles will use nitrous.")
+	UseNitrousUnit = CreateClientConVar("unitvehicle_usenitrousunit", 0, true, false, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
 	SpawnMainUnits = CreateClientConVar("unitvehicle_spawnmainunits", 1, true, false, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateClientConVar("unitvehicle_dvwaypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
@@ -4094,10 +4096,9 @@ else -- CLIENT Settings | HUD/Options
 
 		if lastCanSkip == false and IsValid(uvchatterplaying) then
 			local state = uvchatterplaying:GetState()
-			if state ~= GMOD_CHANNEL_STOPPED then print("no pley") return end
+			if state ~= GMOD_CHANNEL_STOPPED then return end
 		end
 
-		if not can_skip then print("CANNOT SKIP") end
 		lastCanSkip = can_skip
 
 		if IsValid(uvchatterplaying) then
@@ -4346,8 +4347,10 @@ else -- CLIENT Settings | HUD/Options
 			panel:ControlHelp("#uv.settings.ailogic.detectionrange.desc")
 			panel:CheckBox("#uv.settings.ailogic.headlights", "unitvehicle_enableheadlights")
 			panel:ControlHelp("#uv.settings.ailogic.headlights.desc")
-			panel:CheckBox("#uv.settings.ailogic.usenitrous", "unitvehicle_usenitrous")
-			panel:ControlHelp("#uv.settings.ailogic.usenitrous.desc")
+			panel:CheckBox("#uv.settings.ailogic.usenitrousracer", "unitvehicle_usenitrousracer")
+			panel:ControlHelp("#uv.settings.ailogic.usenitrousracer.desc")
+			panel:CheckBox("#uv.settings.ailogic.usenitrousunit", "unitvehicle_usenitrousunit")
+			panel:ControlHelp("#uv.settings.ailogic.usenitrousunit.desc")
 
 			panel:Help("#uv.settings.ainav")
 			panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
