@@ -143,6 +143,12 @@ And many, many undocumented bug fixes and improvements!
 [/list]
 
 [h1]Changes[/h1]
+[b]Pursuits[/b]
+[list]
+	[*]Fixed that chatter did not play properly
+	[*]Units will no longer report when Traffic hits spikes
+[/list]
+
 [b]Other[/b]
 [list]
 	[*]Optimized some code

@@ -104,6 +104,10 @@ And many, many undocumented bug fixes and improvements!
 - AI Racers and Units can now utilize Nitrous (requires Circular Functions); can be toggled on or off
 
 # Changes
+**Pursuits**
+- Fixed that chatter did not play properly
+- Units will no longer report when Traffic hits spikes
+
 **Other**
 - Optimized some code
 - Updated localizations
