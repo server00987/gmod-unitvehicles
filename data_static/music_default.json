@@ -1,7 +1,22 @@
 {
-    "sound/uvracemusic/default/race/all out war.mp3": {
+    "sound/uvracemusic/default/race/blank race.mp3": {
         "artist": "drehow315",
-        "title": "All Out War",
+        "title": "Blank Race",
+        "folder": "Default"
+    },
+    "sound/uvracemusic/default/race/every code 3.mp3": {
+        "artist": "drehow315",
+        "title": "Every Code 3",
+        "folder": "Default"
+    },
+    "sound/uvracemusic/default/race/hate is mutual.mp3": {
+        "artist": "drehow315",
+        "title": "Hate is Mutual",
+        "folder": "Default"
+    },
+    "sound/uvracemusic/default/race/masters of speed.mp3": {
+        "artist": "drehow315",
+        "title": "Masters of Speed",
         "folder": "Default"
     },
     "sound/uvracemusic/default/race/no racing zone.mp3": {
@@ -9,9 +24,14 @@
         "title": "No Racing Zone",
         "folder": "Default"
     },
-    "sound/uvracemusic/default/race/ramping tension.mp3": {
+    "sound/uvracemusic/default/race/raining hell.mp3": {
         "artist": "drehow315",
-        "title": "Ramping Tension",
+        "title": "Raining Hell",
+        "folder": "Default"
+    },
+    "sound/uvracemusic/default/race/tuners.mp3": {
+        "artist": "drehow315",
+        "title": "Tuners",
         "folder": "Default"
     }
 }
