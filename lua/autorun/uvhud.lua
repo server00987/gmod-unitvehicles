@@ -148,6 +148,28 @@ UVMaterials = {
 	["CHASEBAR_CAR_WORLD"] = Material("unitvehicles/hud_world/pursuitbar_escapecar.png"),
 	["CHASEBAR_COP_WORLD"] = Material("unitvehicles/hud_world/pursuitbar_copcar.png"),
 	["CHASEBAR_COOLDOWN_WORLD"] = Material("unitvehicles/hud_world/pursuitbar_cooldown.png"),
+	
+	["RESULTSBG_WORLD"] = Material("unitvehicles/hud_world/result/result_bg.png"),
+	
+	["LOADING_WORLD_L"] = Material("unitvehicles/hud_world/result/loading_left.png"),
+	["LOADING_WORLD_R"] = Material("unitvehicles/hud_world/result/loading_right.png"),
+	["LOADING_WORLD_SHINE1"] = Material("unitvehicles/hud_world/result/loading_shine1.png"),
+	["LOADING_WORLD_SHINE2"] = Material("unitvehicles/hud_world/result/loading_shine2.png"),
+	["LOADING_WORLD_SHINE3"] = Material("unitvehicles/hud_world/result/loading_shine3.png"),
+	
+	["RESULTS_1ST_WORLD"] = Material("unitvehicles/hud_world/result/result_1st.png"),
+	["RESULTS_2ND_WORLD"] = Material("unitvehicles/hud_world/result/result_2nd.png"),
+	["RESULTS_3RD_WORLD"] = Material("unitvehicles/hud_world/result/result_3rd.png"),
+	["RESULTS_4TH_WORLD"] = Material("unitvehicles/hud_world/result/result_4th.png"),
+	
+	["RESULTS_1ST_BANNER_WORLD"] = Material("unitvehicles/hud_world/result/result_banner_1st.png"),
+	["RESULTS_2ND_BANNER_WORLD"] = Material("unitvehicles/hud_world/result/result_banner_2nd.png"),
+	["RESULTS_3RD_BANNER_WORLD"] = Material("unitvehicles/hud_world/result/result_banner_3rd.png"),
+	["RESULTS_4TH_BANNER_WORLD"] = Material("unitvehicles/hud_world/result/result_banner_4th.png"),
+	
+	["RESULTS_NEXTBTN_WORLD"] = Material("unitvehicles/hud_world/result/nextbutton.png"),
+	["RESULTS_NEXTBTN_GLOW_WORLD"] = Material("unitvehicles/hud_world/result/nextbutton_glowing.png"),
+	["RESULTS_NEXTBTN_INACTIVE_WORLD"] = Material("unitvehicles/hud_world/result/nextbutton_inactive.png"),
 }
 
 UV_UI_Events = {
@@ -418,6 +440,22 @@ if CLIENT then
     surface.CreateFont("UVWorldFont5", { -- Coloured Numbers/Values, Much Larger
         font = "Reg-B-I",
         size = (math.Round(ScrH()*0.15)),
+        shadow = false,
+        weight = 1000,
+		extended = true,
+    })
+        	    
+    surface.CreateFont("UVWorldFont6", { -- Player Names
+        font = "Reg-B-I",
+        size = (math.Round(ScrH()*0.0225)),
+        shadow = false,
+        weight = 1000,
+		extended = true,
+    })
+        	    
+    surface.CreateFont("UVWorldFont7", { -- Player Results
+        font = "Reg-B-I",
+        size = (math.Round(ScrH()*0.0175)),
         shadow = false,
         weight = 1000,
 		extended = true,
@@ -9642,12 +9680,30 @@ UV_UI.racing.world.events = {
 		end)
 	end,
 
-    ShowResults = function(sortedRacers) -- Most Wanted
-        local debriefcolor = Color(255, 183, 61)
-        
+    ShowResults = function(sortedRacers) -- World
         local w = ScrW()
         local h = ScrH()
-        
+        			    
+		local worldcols = {
+			reg = Color( 200, 200, 200 ),
+			regbg = Color( 0, 0, 0 ),
+			
+			val = Color( 137, 242, 248 ),
+			valbg = Color( 89, 176, 193, 50 ),
+
+			plr = Color( 225, 255, 255 ),
+			plrbg = Color( 66, 194, 222, 50 ),
+			
+			dnf = Color( 200, 200, 200, 150 ),
+			dnfbg = Color( 0, 0, 0, 125 ),
+			
+			busted = Color( 255, 255, 255, 100 ),
+			bustedbg = Color( 222, 66, 66, 50 ),
+			
+			finished = Color( 255, 255, 255, 100 ),
+			finishedbg = Color( 66, 222, 66, 50 ),
+		}
+
         --------------------------------------
         
         local ResultPanel = vgui.Create("DFrame")
@@ -9661,7 +9717,7 @@ UV_UI.racing.world.events = {
         ResultPanel:SetTitle("")
         ResultPanel:SetDraggable(false)
         ResultPanel:SetKeyboardInputEnabled(false)
-		
+
         -- ResultPanel:MakePopup()
 		ResultPanel:SetVisible(true)
 		ResultPanel:MoveToFront()
@@ -9669,14 +9725,18 @@ UV_UI.racing.world.events = {
 		gui.EnableScreenClicker(true)
 
         OK:SetText("")
-        OK:SetPos(w*0.2, h*0.7725)
-        OK:SetSize(w*0.6, h*0.04)
+        OK:SetPos(w*0.55, h*0.7)
+        OK:SetSize(w*0.12, h*0.05)
+
+        OK:SetEnabled(true)
         OK.Paint = function() end
         
         local timestart = CurTime()
-        
-        local revealStartTime = CurTime()
         local displaySequence = {}
+		
+		local fakeLoadingDuration = math.Rand(0.5, 3.5) -- fake Loading durations
+		local loading = true
+		local loadingStart = CurTime()
         
         -- Data and labels
         local racersArray = {}
@@ -9696,13 +9756,7 @@ UV_UI.racing.world.events = {
             return tA < tB
         end)
         
-        local h1, h2 = h*0.2475, h*0.2875
-        local xLeft = w * 0.205
-        local xMiddle = w * 0.3
-        local xRight = w * 0.795
-        local revealInterval = 0.033
-        
-        local entriesToShow = 13
+        local entriesToShow = 9
         local scrollOffset = 0
         
         local i = 0
@@ -9710,40 +9764,40 @@ UV_UI.racing.world.events = {
             local info = dict.array or {}
             i = i + 1
             
-            local revealTime = revealStartTime + (i - 1) * revealInterval
-            
             -- Staggered vertical layout
             local visibleIndex = i -- 1 to entriesToShow
-            local yPos = (visibleIndex % 2 == 1) and h1 + math.floor(visibleIndex / 2) * h * 0.08
-            or h2 + math.floor((visibleIndex - 1) / 2) * h * 0.08
+            local rowHeight = h * 0.09
+            local yPos = h*0.08 + (i - 1) * rowHeight
+            local LP, LC, LC2 = false, worldcols.reg, worldcols.regbg
             
             local name = info["Name"] or "Unknown"
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             
+            if info["LocalPlayer"] then
+                LP = true
+                LC = worldcols.ply
+                -- LC2 = worldcols.regbg
+            end
+            
             local entry = {
                 y = yPos,
-                leftText = tostring(i),
-                middleText = name,
-                rightText = UV_FormatRaceEndTime(totalTime),
-                revealTime = revealTime
+                posText = tostring(i),
+                nameText = name,
+                timeText = UV_FormatRaceEndTime(totalTime),
+                color = LC,
+                colorbg = LC2,
+                localPlayer = LP,
+				vehName = info["VehicleName"]
             }
             
             table.insert(displaySequence, entry)
         end
         
-        local flashDuration = 0.2 -- total time for flash animation
-        local flashStartTime = nil
-        local allRevealed = false
-        
         local closing = false
         local closeStartTime = 0
-                                
-		if closing then gui.EnableScreenClicker(false) end
-		
-        local totalRevealTime = (revealInterval * entriesToShow) + flashDuration
-        
+
         function ResultPanel:OnMouseWheeled(delta)
             if delta > 0 then
                 scrollOffset = math.max(scrollOffset - 1, 0)
@@ -9755,232 +9809,186 @@ UV_UI.racing.world.events = {
             return true -- prevent further processing
         end
         
+        local playedfadeSound = false
+        
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
-            
-            -- Check if all rows revealed
-            local allEntriesRevealed = true
-            for i, entry in ipairs(displaySequence) do
-                if curTime < entry.revealTime then
-                    allEntriesRevealed = false
-                    break
-                end
-            end
-            
-            if allEntriesRevealed and not flashStartTime then
-                flashStartTime = curTime
-            end
-            
-            local flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
-            
-            local textAlpha = 0
-            local tabAlpha = 50
-            
-            if flashStartTime then
-                if not closing then
-                    textAlpha = Lerp(flashProgress, 0, 255)
-                    if flashProgress < 0.5 then
-                        tabAlpha = Lerp(flashProgress / 0.5, 0, 255)
-                    else
-                        tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 50)
-                    end
-                else
-                    -- Reverse flash alpha during closing
-                    textAlpha = Lerp(flashProgress, 255, 0)
-                    if flashProgress < 0.5 then
-                        tabAlpha = Lerp(flashProgress / 0.5, 50, 255)
-                    else
-                        tabAlpha = Lerp((flashProgress - 0.5) / 0.5, 255, 0)
-                    end
-                end
-            end
-            local blackBgAlpha = 0
-            
-            if not closing then
-                -- Opening: ramp up to 235 in 0.05s
-                local fadeInDuration = 0.05
-                local elapsedSinceStart = curTime - timestart
-                blackBgAlpha = Lerp(math.min(elapsedSinceStart / fadeInDuration, 1), 0, 235)
-            else
-                -- Closing: hold 235 until last 0.1s, then fade to 0
-                local fadeOutDuration = 0.1
-                local timeSinceCloseStart = curTime - closeStartTime
-                local timeLeft = totalRevealTime - timeSinceCloseStart
-                
-                if timeLeft <= fadeOutDuration then
-                    -- fade out from 235 to 0 in last 0.1 seconds
-                    blackBgAlpha = Lerp(timeLeft / fadeOutDuration, 0, 235)
-                else
-                    blackBgAlpha = 235
-                end
-            end
-            
-            -- Main black background
-            surface.SetDrawColor(0, 0, 0, blackBgAlpha)
-            surface.DrawRect(0, 0, w, h)
-            
-            -- Draw rows and alternating backgrounds fully visible when revealed
-            local xLeft = w * 0.2125
-            local xRight = w * 0.7875
-            local hStep = h * 0.04
-            local elapsed, revealProgress, flashProgress
-            local entriesCount = #displaySequence
-            
+            local fadeDuration = 0.125
+            local fadeAlpha = 1
+            local scaleY = 1
+			local elapsedLoading = curTime - loadingStart
+
+			if loading then
+				OK:SetEnabled(false)
+
+				surface.SetDrawColor(255, 255, 255)
+				surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
+				surface.DrawTexturedRect(w * 0.33, h * 0.25, w - ( w * 0.66 ), h - ( h * 0.5 ))
+
+				draw.SimpleTextOutlined( "#uv.results.race.raceresults", "UVWorldFont3", w * 0.335, h * 0.255, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg )
+
+				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6", w * 0.5, h * 0.525, worldcols.reg, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+				DrawIcon( UVMaterials["LOADING_WORLD_R"], w * 0.5, h * 0.5, 0.05, Color(255, 255, 255), { rotation = (-RealTime() * 360) % 360 } )
+				DrawIcon( UVMaterials["LOADING_WORLD_L"], w * 0.5, h * 0.5, 0.04, Color(255, 255, 255), { rotation = (RealTime() * 180) % 360 } )
+				
+				surface.SetDrawColor(255, 255, 255)
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
+				surface.DrawTexturedRect(w * 0.55, h * 0.7, w * 0.12, h * 0.05 )
+				
+				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue") .. " - " .. UVBindButton("+jump"), "UVWorldFont7",w * 0.61, h * 0.7125, worldcols.reg, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+				
+				if elapsedLoading >= fakeLoadingDuration then
+					loading = false
+					timestart = CurTime()
+					OK:SetEnabled(true)
+				else
+					return
+				end
+			end
+
             if closing then
-                elapsed = curTime - closeStartTime
-                revealProgress = math.Clamp(1 - (elapsed / totalRevealTime), 0, 1)
-                flashProgress = math.Clamp(revealProgress * (flashDuration / totalRevealTime), 0, 1)
+                OK:SetEnabled(false)
+				gui.EnableScreenClicker(false)
+                local elapsedFade = curTime - closeStartTime
+                local progress = math.Clamp(elapsedFade / fadeDuration, 0, 1)
                 
-                -- Limit entriesToShow to the scrolling window
-                entriesToShow = math.min(math.ceil(entriesCount * revealProgress), 13)
-            else
-                elapsed = curTime - revealStartTime
-                revealProgress = math.Clamp(elapsed / (totalRevealTime - flashDuration), 0, 1)
-                flashProgress = flashStartTime and math.min((curTime - flashStartTime) / flashDuration, 1) or 0
+                fadeAlpha = 1 - progress  -- fade out from 1 to 0
+                scaleY = 1 - progress * 1  -- shrink vertically
                 
-                -- Limit entriesToShow to the scrolling window
-                entriesToShow = math.min(math.floor(entriesCount * revealProgress), 13)
+                if not playedfadeSound and elapsedFade >= 0.05 then
+                    playedfadeSound = true
+                    surface.PlaySound( "uvui/world/close.wav" )
+                end
+                
+                if elapsedFade >= fadeDuration then
+                    hook.Remove("CreateMove", "JumpKeyCloseResults")
+                    if IsValid(ResultPanel) then
+                        ResultPanel:Close()
+                    end
+                    return -- early exit, avoid drawing anymore
+                end
             end
-            
+            -- Setup transformation matrix
+            local matrix = Matrix()
+			matrix:Translate(Vector(0, h * 0.5, 0))         -- move origin to vertical center
+			matrix:Scale(Vector(1, scaleY, 1))              -- scale vertically
+			matrix:Translate(Vector(0, -h * 0.5, 0))        -- move origin back
+
+            cam.PushModelMatrix(matrix)
+			
+           	surface.SetDrawColor(255, 255, 255)
+			surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.25, w - ( w * 0.66 ), h - ( h * 0.5 ))
+
+			draw.SimpleTextOutlined( "#uv.results.race.raceresults", "UVWorldFont3", w * 0.335, h * 0.255, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg )
+
+            -- Draw rows and alternating backgrounds fully visible when revealed
             local startIndex = scrollOffset + 1
             local endIndex = math.min(startIndex + entriesToShow - 1, #displaySequence)
-            
+			local bannerKeys = {
+				"RESULTS_1ST_BANNER_WORLD",
+				"RESULTS_2ND_BANNER_WORLD",
+				"RESULTS_3RD_BANNER_WORLD",
+			}
+
             for i = startIndex, endIndex do
                 local entry = displaySequence[i]
                 local localIndex = i - startIndex + 1
-                local yPos = (localIndex % 2 == 1)
-                and h1 + math.floor(localIndex / 2) * h * 0.08
-                or h2 + math.floor((localIndex - 1) / 2) * h * 0.08
-                
-                if localIndex % 2 == 0 then
-                    surface.SetDrawColor(0, 0, 0, 50)
-                else
-                    surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, 25)
+                local yPos = h * 0.31 + (localIndex - 1) * (h * 0.045)
+				local bannerKey = bannerKeys[i] or "RESULTS_4TH_BANNER_WORLD"
+				
+				surface.SetDrawColor(255, 255, 255)
+				surface.SetMaterial(UVMaterials[bannerKey])
+				surface.DrawTexturedRectRotated( w * 0.5,  yPos, w * 0.325,  h * 0.04,  0 )
+		
+                if entry.posText then
+                    draw.SimpleTextOutlined(entry.posText, "UVWorldFont6",w * 0.34, yPos - (h * 0.014), entry.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, entry.colorbg )
                 end
-                surface.DrawRect(w * 0.2, yPos, w * 0.6, hStep)
-                
-                if entry.leftText then
-                    draw.SimpleText(entry.leftText, "UVFont5UI", xLeft, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                if entry.nameText then
+                    draw.SimpleTextOutlined(entry.nameText, "UVWorldFont6",w * 0.355, yPos - (h * 0.0225), entry.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, entry.colorbg )
                 end
-                if entry.middleText then
-                    draw.SimpleText(entry.middleText, "UVFont5UI", xMiddle, yPos, Colors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                if entry.vehName then
+                    draw.SimpleTextOutlined(entry.vehName, "UVWorldFont7",w * 0.355, yPos, entry.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, entry.colorbg )
                 end
-                if entry.rightText then
-                    draw.SimpleText(entry.rightText, "UVFont5UI", xRight, yPos, Colors.MW_Racer, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+                if entry.timeText then
+                    draw.SimpleTextOutlined(entry.timeText, "UVWorldFont7",w * 0.66, yPos, entry.color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, entry.colorbg )
                 end
             end
             
-            if flashStartTime then
-                -- Top tab background flash
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.DrawRect(w * 0.2, h * 0.1225, w * 0.6, h * 0.075)
-                
-                -- Upper-middle background flash (same alpha as tabs)
-                surface.SetMaterial(UVMaterials['BACKGROUND_BIGGER'])
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.DrawTexturedRect(w * 0.2, h * 0.1975, w * 0.6, h * 0.05)
-                
-                -- Bottom tab background flash
-                surface.SetDrawColor(debriefcolor.r, debriefcolor.g, debriefcolor.b, tabAlpha)
-                surface.SetMaterial(Material("unitvehicles/hud/bg_anim"))
-                surface.DrawTexturedRect(w * 0.2, h * 0.7725, w * 0.6, h * 0.04)
-                
-                -- Icon and texts fade in (stay full alpha after flash)
-                DrawIcon(UVMaterials['RESULTRACE'], w * 0.225, h * 0.1575, .07, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha))
-                draw.DrawText("#uv.results.standings", "UVFont5", w * 0.25, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                
-                draw.DrawText("#uv.results.race.pos", "UVFont5UI", w * 0.205, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                draw.DrawText("#uv.results.race.name", "UVFont5UI", w * 0.3, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                draw.DrawText("#uv.results.race.time", "UVFont5UI", w * 0.795, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
-                
-                local blink = 255 * math.abs(math.sin(RealTime() * 8))
-                
-                if scrollOffset > 0 then
-                    draw.SimpleText("▲", "UVFont5UI", w * 0.5, h * 0.2175, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-                end
-                
-                if scrollOffset < #displaySequence - entriesToShow then
-                    draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
-                end
-                
-                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+            local blink = 255 * math.abs(math.sin(RealTime() * 8))
+            
+            if scrollOffset > 0 then
+                draw.SimpleText("▲", "UVWorldFont6", w * 0.5, h * 0.265, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
             end
             
-            -- Show/Hide OK button with fade
-            if flashStartTime then
-                if textAlpha > 0 then
-                    OK:SetEnabled(true)
-                end
-            else
-                OK:SetEnabled(false)
+            if scrollOffset < #displaySequence - entriesToShow then
+                draw.SimpleText("▼", "UVWorldFont6", w * 0.5, h * 0.6875, Color(255,255,255, math.floor(blink * fadeAlpha)), TEXT_ALIGN_CENTER)
             end
             
             -- Time since panel was created
-            local elapsed = CurTime() - timestart
-            
+			local elapsed = CurTime() - timestart
+			if elapsed < 0 then elapsed = 0 end -- prevent negatives
+
             -- Only start auto-close countdown after reveal + flash
-            local autoCloseStartDelay = totalRevealTime
             local autoCloseDuration = 30  -- 30 seconds countdown
             
             local autoCloseTimer = 0
             local autoCloseRemaining = autoCloseDuration
             
-            if elapsed > autoCloseStartDelay then
-                autoCloseTimer = elapsed - autoCloseStartDelay
-                autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-                
-                draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
-            
-				if autoCloseRemaining <= 0 then
-					hook.Remove("CreateMove", "JumpKeyCloseResults")
-					if not closing then
-						gui.EnableScreenClicker(false)
-						surface.PlaySound( "uvui/mw/closemenu.wav" )
-						closing = true
-						closeStartTime = CurTime()
-					end
-				end
-			else
-				-- Before auto-close timer starts, show the text but no countdown
-				draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
-			end
-		if closing then
-			local elapsed = curTime - closeStartTime
-			if elapsed >= totalRevealTime then
-				hook.Remove("CreateMove", "JumpKeyCloseResults")
-				if IsValid(ResultPanel) then
-					ResultPanel:Close()
-				end
-			end
-		end
-	end
+            autoCloseTimer = elapsed
+            autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
 
-	function OK:DoClick()
-		surface.PlaySound( "uvui/mw/closemenu.wav" )
-		if not closing then
-			gui.EnableScreenClicker(false)
+			local conttext = language.GetPhrase("uv.results.continue") .. " - " .. UVBindButton("+jump")
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
+
+			surface.SetDrawColor(255, 255, 255, 255 * math.abs(math.sin(RealTime() * 3)))
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+			surface.DrawTexturedRect(w * 0.55, h * 0.7, w * 0.12, h * 0.05 )
+
+			surface.SetDrawColor(255, 255, 255)
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+			surface.DrawTexturedRect(w * 0.55, h * 0.7, w * 0.12, h * 0.05 )
+	
+			draw.SimpleTextOutlined( conttext, "UVWorldFont7",w * 0.61, h * 0.7125, worldcols.reg, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	
+			draw.SimpleTextOutlined( autotext, "UVWorldFont7",w * 0.335, h * 0.725, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+
+            cam.PopModelMatrix()
+            
+            if autoCloseRemaining <= 0 then
+                hook.Remove("CreateMove", "JumpKeyCloseResults")
+                if not closing then
+                    -- surface.PlaySound( "uvui/world/close.wav" )
+                    closing = true
+                    closeStartTime = CurTime()
+                end
+            end
+        end
+        
+        function OK:DoClick()
+			if loading or closing then return end
+			-- surface.PlaySound( "uvui/world/close.wav" )
 			closing = true
 			closeStartTime = CurTime()
-		end
-	end
+        end
 
-	hook.Add("CreateMove", "JumpKeyCloseResults", function()
-		local ply = LocalPlayer()
-		if not IsValid(ply) then return end
+		hook.Add("CreateMove", "JumpKeyCloseResults", function()
+			if loading then return end
+			
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
 
-		if ply:KeyPressed(IN_JUMP) then
-			if IsValid(ResultPanel) and not closing then
-				gui.EnableScreenClicker(false)
-				hook.Remove("CreateMove", "JumpKeyCloseResults")
-					
-				surface.PlaySound( "uvui/mw/closemenu.wav" )
-				closing = true
-				closeStartTime = CurTime()
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("CreateMove", "JumpKeyCloseResults")
+					surface.PlaySound( "uvui/ps/closemenu.wav" )
+                    closing = true
+                    closeStartTime = CurTime()
+				end
 			end
-		end
-	end)
-end,
-
+		end)
+    end,
+    
 	onRaceEnd = function( sortedRacers, stringArray )
 		local triggerTime = CurTime()
 		local duration = 10
@@ -10771,6 +10779,7 @@ local function world_racing_main( ... )
 	local worldcols = {
 		reg = Color( 200, 200, 200 ),
 		regbg = Color( 0, 0, 0),
+		
 		val = Color( 137, 242, 248 ),
 		valbg = Color( 89, 176, 193, 50 ),
 
@@ -10787,6 +10796,56 @@ local function world_racing_main( ... )
 		finishedbg = Color( 66, 222, 66, 50 ),
 	}
 	
+    -- DEBUG - RACING RESULTS; DO NOT LEAVE
+	-- surface.SetDrawColor(255, 255, 255)
+	-- surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
+	-- surface.DrawTexturedRect(w * 0.33, h * 0.25, w - ( w * 0.66 ), h - ( h * 0.5 ))
+
+	-- draw.SimpleTextOutlined( "#uv.results.race.raceresults", "UVWorldFont3", w * 0.335, h * 0.255, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg )
+
+	-- draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6", w * 0.5, h * 0.525, worldcols.reg, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	-- DrawIcon( UVMaterials["LOADING_WORLD_R"], w * 0.5, h * 0.5, 0.05, Color(255, 255, 255), { rotation = (-RealTime() * 360) % 360 } )
+	-- DrawIcon( UVMaterials["LOADING_WORLD_L"], w * 0.5, h * 0.5, 0.04, Color(255, 255, 255), { rotation = (RealTime() * 180) % 360 } )
+
+	-- Banner lookup table
+	local bannerKeys = {
+		"RESULTS_1ST_BANNER_WORLD",
+		"RESULTS_2ND_BANNER_WORLD",
+		"RESULTS_3RD_BANNER_WORLD",
+	}
+
+	-- local raceramount = 9
+	-- local startY = h * 0.31       -- starting height for the first participant
+	-- local offsetY = h * 0.045     -- vertical spacing between each racer
+
+	-- for i = 1, math.min(raceramount, 9) do
+		-- local bannerKey = bannerKeys[i] or "RESULTS_4TH_BANNER_WORLD" -- fallback
+		
+		-- surface.SetDrawColor(255, 255, 255)
+		-- surface.SetMaterial(UVMaterials[bannerKey])
+		-- surface.DrawTexturedRectRotated( w * 0.5,  startY + (i - 1) * offsetY, w * 0.325,  h * 0.04,  0 )
+		
+		-- local usern = "{username}"
+		-- local vehn = "{vehicle}"
+
+		-- draw.SimpleTextOutlined( i, "UVWorldFont6",w * 0.34, startY - (h * 0.014) + (i - 1) * offsetY, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		-- draw.SimpleTextOutlined( usern, "UVWorldFont6",w * 0.355, startY - (h * 0.0225) + (i - 1) * offsetY, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		-- draw.SimpleTextOutlined( vehn, "UVWorldFont7",w * 0.355, startY + (i - 1) * offsetY, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		-- draw.SimpleTextOutlined( "0:00.00", "UVWorldFont7",w * 0.66, startY + (i - 1) * offsetY, worldcols.reg, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	-- end
+
+	-- surface.SetDrawColor(255, 255, 255, 255 * math.abs(math.sin(RealTime() * 3)))
+	-- surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+	-- surface.DrawTexturedRect(w * 0.55, h * 0.7, w * 0.12, h * 0.05 )
+
+	-- surface.SetDrawColor(255, 255, 255)
+	-- surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+	-- surface.DrawTexturedRect(w * 0.55, h * 0.7, w * 0.12, h * 0.05 )
+	
+	-- draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue") .. " - " .. UVBindButton("+jump"), "UVWorldFont7",w * 0.61, h * 0.7125, worldcols.reg, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	
+	-- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), 30 ), "UVWorldFont7",w * 0.335, h * 0.725, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+
     -- Timer
 	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1",w * 0.83,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
 	
