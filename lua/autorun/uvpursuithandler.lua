@@ -4133,152 +4133,171 @@ else -- CLIENT Settings | HUD/Options
         
 		local w = ScrW()
 		local h = ScrH()
-
+		
+		TotaledPanel = vgui.Create("DFrame")
 		local Yes = vgui.Create("DButton")
 		local No = vgui.Create("DButton")
 
-		TotaledPanel = vgui.Create("DPanel", vgui.GetWorldPanel())
 		TotaledPanel:Add(Yes)
 		TotaledPanel:Add(No)
 		TotaledPanel:SetSize(w, h)
-        TotaledPanel:SetMouseInputEnabled(true)
-        TotaledPanel:SetKeyboardInputEnabled(false)
-        TotaledPanel:SetZPos(32767)
+		TotaledPanel:SetBackgroundBlur(true)
+		TotaledPanel:ShowCloseButton(false)
+		TotaledPanel:Center()
+		TotaledPanel:SetTitle("")
+		TotaledPanel:SetDraggable(false)
+		TotaledPanel:SetKeyboardInputEnabled(false)
+		gui.EnableScreenClicker(true)
 
 		Yes:SetText("")
-		Yes:SetPos(w*0.3, h*0.6)
-		Yes:SetSize(w*0.4, h*0.07)
+		Yes:SetPos(w*0.33, h*0.475)
+		Yes:SetSize(w - (w * 0.66), h*0.05)
         Yes.Paint = function() end
 		
 		No:SetText("")
-		No:SetPos(w*0.3, h*0.7)
-		No:SetSize(w*0.4, h*0.07)
+		No:SetPos(w*0.33, h*0.525)
+		No:SetSize(w - (w * 0.66), h*0.05)
         No.Paint = function() end
-		
-		surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
-		surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
-
-        local targetY = 0
-        local overshootY = h * 0.1  -- drops 10% below target before bouncing back
-        local startY = -h           -- start fully above the screen
-        
-        TotaledPanel:SetPos(0, startY)
-        
-        local animTime = 0.33
-        local bounceTime = 0.1
-        local startTime = CurTime()
-        
-        hook.Add("Think", "TotaledPanelEntranceAnim", function()
-            local elapsed = CurTime() - startTime
-            
-            if elapsed < animTime then
-                if elapsed < animTime - bounceTime then
-                    local frac = elapsed / (animTime - bounceTime)
-                    local y = Lerp(frac, startY, overshootY)
-                    TotaledPanel:SetPos(0, y)
-                else
-                    local frac = (elapsed - (animTime - bounceTime)) / bounceTime
-                    local y = Lerp(frac, overshootY, targetY)
-                    TotaledPanel:SetPos(0, y)
-                end
-            else
-                TotaledPanel:SetPos(0, targetY)
-                hook.Remove("Think", "TotaledPanelEntranceAnim")
-            end
-        end)
-        
-        local function AnimateAndRemovePanel(panel)
-            if not IsValid(panel) then return end
-            
-            local startY = panel:GetY()
-            local endY = ScrH()  -- off-screen below
-            local animTime = 0.33
-            local startTime = CurTime()
-            
-            -- Play sounds ONCE at start
-            -- surface.PlaySound("uvui/carbon/openmenu.wav")
-            -- surface.PlaySound("uvui/carbon/exitmenu.wav")
-            
-            -- Disable interactivity
-            panel:SetMouseInputEnabled(false)
-            gui.EnableScreenClicker(false)
-			Yes:SetEnabled(false)
-			No:SetEnabled(false)
-            
-            hook.Add("Think", "ResultPanelExitAnim", function()
-                if not IsValid(panel) then
-                    hook.Remove("Think", "ResultPanelExitAnim")
-                    return
-                end
-                
-                local elapsed = CurTime() - startTime
-                if elapsed < animTime then
-                    local frac = elapsed / animTime
-                    local y = Lerp(frac, startY, endY)
-                    panel:SetPos(0, y)
-                else
-                    panel:Remove()
-                    hook.Remove("Think", "ResultPanelExitAnim")
-                end
-            end)
-        end
-        
-        gui.EnableScreenClicker(true)
 
         local timetotal = 10
-        local timestart = CurTime()
-        local exitStarted = false -- prevent repeated trigger
+		local timestart = CurTime()
+
+		local bgScale, bgAlpha, bgAnimStart = 0, 0, CurTime()
+		local contentAlpha, contentStart = 0, CurTime()
+
+		local closing = false
+		local closeStartTime = 0
+		local playedfadeSound = false
 
 		TotaledPanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local lang = language.GetPhrase
+			local curTime = CurTime()
+			local elapsedAnim = curTime - bgAnimStart
+			local effectiveAlpha = contentAlpha
+			local headerAlpha = 0
 
-            -- Upper Background and Icons
-            surface.SetDrawColor( 0, 0, 0, 200 )
-            surface.DrawRect( w*0.25, h*0.185, w*0.5, h*0.075)
+			-- Opening background animation
+			bgScale = math.Clamp(elapsedAnim / 0.2, 0, 1)
+			bgAlpha = math.Clamp((elapsedAnim - 0.1)/0.3, 0, 1)*255
 
-            DrawIcon( UVMaterials['UNITS_DISABLED'], w*0.275, h*0.22, 0.11, Color(255, 255, 255) ) -- Left Icon
-            DrawIcon( UVMaterials['UNITS_DISABLED'], w*0.725, h*0.22, 0.11, Color(255, 255, 255) ) -- Right Icon
-            draw.DrawText( "#uv.chase.wrecked", "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+			local shrinkFactor = 1
+			local baseHeight = h - h*0.75
+			local scaledHeight = baseHeight * bgScale * shrinkFactor
+			local yOffset = (baseHeight - scaledHeight) * 0.5
+
+			-- Closing two-phase logic
+			if closing then
+				gui.EnableScreenClicker(false)
+				Yes:SetEnabled(false)
+				No:SetEnabled(false)
+				
+				local elapsedFade = curTime - closeStartTime
+				local textFadeDuration, bgShrinkDuration = 0.125, 0.15
+
+				-- Phase 1: fade out texts/buttons
+				local textProgress = math.Clamp(elapsedFade / textFadeDuration, 0, 1)
+				effectiveAlpha = contentAlpha * (1 - textProgress)
+				headerAlpha = 255 * (1 - textProgress)
+
+				-- Phase 2: shrink background vertically
+				local bgProgress = math.Clamp((elapsedFade - textFadeDuration) / bgShrinkDuration, 0, 1)
+				shrinkFactor = 1 - bgProgress
+
+				scaledHeight = baseHeight * bgScale * shrinkFactor
+				yOffset = (baseHeight - scaledHeight) * 0.5
+
+				-- if not playedfadeSound and elapsedFade >= 0.05 then
+					-- playedfadeSound = true
+					-- surface.PlaySound("uvui/world/close.wav")
+				-- end
+
+				hook.Remove("CreateMove", "JumpKeyCloseTotaled")
+
+				if elapsedFade >= textFadeDuration + bgShrinkDuration then
+					if IsValid(TotaledPanel) then TotaledPanel:Close() end
+					return
+				end
+			end
 			
-			-- Main Background and Text
-			surface.SetDrawColor( 0, 0, 0, 235 )
-            surface.DrawRect( w*0.25, h*0.265, w*0.5, h*0.6)
-            			
-			draw.SimpleTextOutlined( "#uv.chase.wrecked.text1", "UVFont5", w * 0.5, h * 0.3, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( "#uv.chase.wrecked.text2", "UVFont5", w * 0.5, h * 0.375, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( "#uv.chase.wrecked.text3", "UVFont5", w * 0.5, h * 0.45, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-						
-            surface.SetDrawColor( 255, 255, 255 )
-			surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
-			surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
-			surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
+			if not closing then
+				Yes:SetEnabled(true)
+				No:SetEnabled(true)
+				local revealProgress = math.Clamp((curTime - contentStart) / 0.6, 0, 1)
+				contentAlpha = revealProgress * 255
+			end
 			
-			draw.SimpleTextOutlined( "[ " .. UVBindButton("+jump") .. " ] " .. lang("uv.chase.wrecked.rejoin"), "UVFont5", w * 0.5, h * 0.61, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			-- Draw background
+			surface.SetDrawColor( 255, 255, 255, bgAlpha)
+			surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
+			surface.DrawTexturedRect( w*0.33, h*0.35 + yOffset, w - w*0.66, scaledHeight )
 
-			draw.SimpleTextOutlined( "#uv.chase.wrecked.abandon", "UVFont5", w * 0.5, h * 0.71, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			-- Header
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_SHEEN_BUSTED"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.355, w - ( w * 0.66 ), h * 0.1)
 
-            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.78, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined( "#uv.chase.wrecked", "UVFont5", w * 0.5, h * 0.36, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0, effectiveAlpha) )
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.text1", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.4, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.text2", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.425, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
 
-            if not exitStarted and timeremaining < 1 then
+			-- Yes / Rejoin
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.475, w - ( w * 0.66 ), h * 0.05 )
+			
+			if IsValid(Yes) and Yes:IsHovered() then
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
+				
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
+			end
+
+			draw.SimpleTextOutlined( language.GetPhrase("uv.chase.wrecked.rejoin") .. " - " .. UVBindButton("+jump"), "UVMostWantedLeaderboardFont",w * 0.5, h * 0.486, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			
+			-- No / Abandon
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.525, w - ( w * 0.66 ), h * 0.05 )
+			
+			if IsValid(No) and No:IsHovered() then
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
+				
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
+			end
+
+			draw.SimpleTextOutlined( "#uv.chase.wrecked.abandon", "UVMostWantedLeaderboardFont",w * 0.5, h * 0.536, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+
+			-- Auto-Close Timer
+			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining))
+			
+			draw.SimpleTextOutlined( autotext, "UVMostWantedLeaderboardFont",w * 0.5, h * 0.5725, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+
+            if timeremaining < 1 and not closing then
                 exitStarted = true
-                hook.Remove("CreateMove", "JumpKeyCloseTotaled")
-                AnimateAndRemovePanel(TotaledPanel)
+                closing = true
+				closeStartTime = CurTime()
             end
             
 		end
 
 		function Yes:DoClick()
-			hook.Remove("CreateMove", "JumpKeyCloseTotaled")
-            AnimateAndRemovePanel(TotaledPanel)
+            closing = true
+			closeStartTime = CurTime()
 			
 			net.Start("UVHUDRespawnInUVGetInfo")
 			net.SendToServer()
 		end
 		
 		function No:DoClick()
-			hook.Remove("CreateMove", "JumpKeyCloseTotaled")
-            AnimateAndRemovePanel(TotaledPanel)
+            closing = true
+			closeStartTime = CurTime()
 		end
         
 		hook.Add("CreateMove", "JumpKeyCloseTotaled", function()
@@ -4287,15 +4306,14 @@ else -- CLIENT Settings | HUD/Options
 
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(TotaledPanel) then
-					hook.Remove("CreateMove", "JumpKeyCloseTotaled")
-					AnimateAndRemovePanel(TotaledPanel)
+					closing = true
+					closeStartTime = CurTime()
 
 					net.Start("UVHUDRespawnInUVGetInfo")
 					net.SendToServer()
 				end
 			end
 		end)
-
 	end)
 
 	hook.Add("PopulateToolMenu", "UVMenu", function()

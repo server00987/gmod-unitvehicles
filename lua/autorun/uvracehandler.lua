@@ -1108,154 +1108,172 @@ else -- CLIENT stuff
 	end)
 
 	net.Receive( "uvrace_invite", function()
+		if IsValid(InvitePanel) then InvitePanel:Remove() end
+        
 		local w = ScrW()
 		local h = ScrH()
 
-		-- local faded_black = Color(0, 0, 0, 225)
-
+		InvitePanel = vgui.Create("DFrame")
 		local Yes = vgui.Create("DButton")
 		local No = vgui.Create("DButton")
 
-		InvitePanel = vgui.Create("DPanel", vgui.GetWorldPanel())
 		InvitePanel:Add(Yes)
 		InvitePanel:Add(No)
 		InvitePanel:SetSize(w, h)
-        InvitePanel:SetMouseInputEnabled(true)
-        InvitePanel:SetKeyboardInputEnabled(false)
-        InvitePanel:SetZPos(32767)
+		InvitePanel:SetBackgroundBlur(true)
+		InvitePanel:ShowCloseButton(false)
+		InvitePanel:Center()
+		InvitePanel:SetTitle("")
+		InvitePanel:SetDraggable(false)
+		InvitePanel:SetKeyboardInputEnabled(false)
+		gui.EnableScreenClicker(true)
 
 		Yes:SetText("")
-		Yes:SetPos(w*0.3, h*0.575)
-		Yes:SetSize(w*0.4, h*0.07)
+		Yes:SetPos(w*0.33, h*0.475)
+		Yes:SetSize(w - (w * 0.66), h*0.05)
         Yes.Paint = function() end
 		
 		No:SetText("")
-		No:SetPos(w*0.3, h*0.65)
-		No:SetSize(w*0.4, h*0.07)
+		No:SetPos(w*0.33, h*0.525)
+		No:SetSize(w - (w * 0.66), h*0.05)
         No.Paint = function() end
 
-		surface.DrawTexturedRect( w*0.3, h*0.6, w * 0.4, h*0.07)
-		surface.DrawTexturedRect( w*0.3, h*0.7, w * 0.4, h*0.07)
-
-        local targetY = 0
-        local overshootY = h * 0.1  -- drops 10% below target before bouncing back
-        local startY = -h           -- start fully above the screen
-        
-        InvitePanel:SetPos(0, startY)
-        
-        local animTime = 0.33
-        local bounceTime = 0.1
-        local startTime = CurTime()
-        
-        hook.Add("Think", "InvitePanelEntranceAnim", function()
-            local elapsed = CurTime() - startTime
-            
-            if elapsed < animTime then
-                if elapsed < animTime - bounceTime then
-                    local frac = elapsed / (animTime - bounceTime)
-                    local y = Lerp(frac, startY, overshootY)
-                    InvitePanel:SetPos(0, y)
-                else
-                    local frac = (elapsed - (animTime - bounceTime)) / bounceTime
-                    local y = Lerp(frac, overshootY, targetY)
-                    InvitePanel:SetPos(0, y)
-                end
-            else
-                InvitePanel:SetPos(0, targetY)
-                hook.Remove("Think", "InvitePanelEntranceAnim")
-            end
-        end)
-        
-        local function AnimateAndRemovePanel(panel)
-            if not IsValid(panel) then return end
-            
-            local startY = panel:GetY()
-            local endY = ScrH()  -- off-screen below
-            local animTime = 0.33
-            local startTime = CurTime()
-            
-            -- Play sounds ONCE at start
-            -- surface.PlaySound("uvui/carbon/openmenu.wav")
-            -- surface.PlaySound("uvui/carbon/exitmenu.wav")
-            
-            -- Disable interactivity
-            panel:SetMouseInputEnabled(false)
-            gui.EnableScreenClicker(false)
-			Yes:SetEnabled(false)
-			No:SetEnabled(false)
-            
-            hook.Add("Think", "ResultPanelExitAnim", function()
-                if not IsValid(panel) then
-                    hook.Remove("Think", "ResultPanelExitAnim")
-                    return
-                end
-                
-                local elapsed = CurTime() - startTime
-                if elapsed < animTime then
-                    local frac = elapsed / animTime
-                    local y = Lerp(frac, startY, endY)
-                    panel:SetPos(0, y)
-                else
-                    panel:Remove()
-                    hook.Remove("Think", "ResultPanelExitAnim")
-                end
-            end)
-        end
-        
-        gui.EnableScreenClicker(true)
-
         local timetotal = 10
-        local timestart = CurTime()
-        local exitStarted = false -- prevent repeated trigger
+		local timestart = CurTime()
+
+		local bgScale, bgAlpha, bgAnimStart = 0, 0, CurTime()
+		local contentAlpha, contentStart = 0, CurTime()
+
+		local closing = false
+		local closeStartTime = 0
+		local playedfadeSound = false
 
 		InvitePanel.Paint = function(self, w, h)
 			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local lang = language.GetPhrase
+			local curTime = CurTime()
+			local elapsedAnim = curTime - bgAnimStart
+			local effectiveAlpha = contentAlpha
+			local headerAlpha = 0
 
-            -- Upper Background and Icons
-            surface.SetDrawColor( 0, 0, 0, 200 )
-            surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.05)
+			-- Opening background animation
+			bgScale = math.Clamp(elapsedAnim / 0.2, 0, 1)
+			bgAlpha = math.Clamp((elapsedAnim - 0.1)/0.3, 0, 1)*255
 
-            -- DrawIcon( UVMaterials['HIDECAR'], w*0.275, h*0.22, 0.11, Color(255, 255, 255) ) -- Left Icon
-            -- DrawIcon( UVMaterials['HIDECAR'], w*0.725, h*0.22, 0.11, Color(255, 255, 255) ) -- Right Icon
-            draw.DrawText( "#uv.race.invite", "UVFont5", w * 0.5, h * 0.3, Color(255, 255, 0), TEXT_ALIGN_CENTER)
+			local shrinkFactor = 1
+			local baseHeight = h - h*0.75
+			local scaledHeight = baseHeight * bgScale * shrinkFactor
+			local yOffset = (baseHeight - scaledHeight) * 0.5
+
+			-- Closing two-phase logic
+			if closing then
+				gui.EnableScreenClicker(false)
+				Yes:SetEnabled(false)
+				No:SetEnabled(false)
+				
+				local elapsedFade = curTime - closeStartTime
+				local textFadeDuration, bgShrinkDuration = 0.125, 0.15
+
+				-- Phase 1: fade out texts/buttons
+				local textProgress = math.Clamp(elapsedFade / textFadeDuration, 0, 1)
+				effectiveAlpha = contentAlpha * (1 - textProgress)
+				headerAlpha = 255 * (1 - textProgress)
+
+				-- Phase 2: shrink background vertically
+				local bgProgress = math.Clamp((elapsedFade - textFadeDuration) / bgShrinkDuration, 0, 1)
+				shrinkFactor = 1 - bgProgress
+
+				scaledHeight = baseHeight * bgScale * shrinkFactor
+				yOffset = (baseHeight - scaledHeight) * 0.5
+
+				-- if not playedfadeSound and elapsedFade >= 0.05 then
+					-- playedfadeSound = true
+					-- surface.PlaySound("uvui/world/close.wav")
+				-- end
+
+				if elapsedFade >= textFadeDuration + bgShrinkDuration then
+					if IsValid(InvitePanel) then InvitePanel:Close() end
+					return
+				end
+			end
 			
-			-- Main Background and Text
-			surface.SetDrawColor( 0, 0, 0, 235 )
-            surface.DrawRect( w*0.25, h*0.375, w*0.5, h*0.4)
-
-			draw.SimpleTextOutlined( "#uv.race.invite.desc", "UVFont5", w * 0.5, h * 0.38, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( "#uv.race.invite.desc2", "UVFont5", w * 0.5, h * 0.42, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			if not closing then
+				Yes:SetEnabled(true)
+				No:SetEnabled(true)
+				local revealProgress = math.Clamp((curTime - contentStart) / 0.6, 0, 1)
+				contentAlpha = revealProgress * 255
+			end
 			
-			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), "UVFont5UI", w * 0.5, h * 0.5, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5UI", w * 0.5, h * 0.535, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			-- Draw background
+			surface.SetDrawColor( 255, 255, 255, bgAlpha)
+			surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
+			surface.DrawTexturedRect( w*0.33, h*0.35 + yOffset, w - w*0.66, scaledHeight )
 
-            surface.SetDrawColor( 255, 255, 255 )
-			surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
-			surface.DrawTexturedRect( w*0.3, h*0.575, w * 0.4, h*0.07)
-			surface.DrawTexturedRect( w*0.3, h*0.65, w * 0.4, h*0.07)
+			-- Header
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_SHEEN_ESCAPED"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.355, w - ( w * 0.66 ), h * 0.1)
+
+			draw.SimpleTextOutlined( "#uv.race.invite", "UVFont5", w * 0.5, h * 0.36, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0, effectiveAlpha) )
+			draw.SimpleTextOutlined( "#uv.race.invite.desc", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.4, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
 			
-			draw.SimpleTextOutlined( "#uv.race.invite.accept", "UVFont5", w * 0.5, h * 0.585, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			
+			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.425, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
+			
+			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.45, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
 
-			draw.SimpleTextOutlined( "#uv.race.invite.decline", "UVFont5", w * 0.5, h * 0.66, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+			-- Yes / Rejoin
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.475, w - ( w * 0.66 ), h * 0.05 )
+			
+			if IsValid(Yes) and Yes:IsHovered() then
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
+				
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
+			end
 
-            -- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.invite.autoclose"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.78, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-            draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.autodecline"), math.max(0, timeremaining) ), "UVFont5", w*0.5, h*0.715, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined( "#uv.race.invite.accept", "UVMostWantedLeaderboardFont",w * 0.5, h * 0.486, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			
+			-- No / Abandon
+			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
+			surface.DrawTexturedRect(w * 0.33, h * 0.525, w - ( w * 0.66 ), h * 0.05 )
+			
+			if IsValid(No) and No:IsHovered() then
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
+				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
+				
+				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
+				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
+				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
+			end
 
-            if not exitStarted and timeremaining < 1 then
+			draw.SimpleTextOutlined( "#uv.race.invite.decline", "UVMostWantedLeaderboardFont",w * 0.5, h * 0.536, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+
+			-- Auto-Close Timer
+			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining))
+			
+			draw.SimpleTextOutlined( autotext, "UVMostWantedLeaderboardFont",w * 0.5, h * 0.5725, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+
+            if timeremaining < 1 and not closing then
 				net.Start("uvrace_invite")
 				net.WriteBool(false)
 				net.SendToServer()
 				
                 exitStarted = true
-                AnimateAndRemovePanel(InvitePanel)
+                closing = true
+				closeStartTime = CurTime()
             end
 		end
 
 		function Yes:DoClick()
-            AnimateAndRemovePanel(InvitePanel)
-			-- timer.Remove("RaceInvite")
-			-- surface.PlaySound( "ui/redeploy/redeploy" .. math.random(1, 4) .. ".wav" )
+            closing = true
+			closeStartTime = CurTime()
 
 			net.Start("uvrace_invite")
 			net.WriteBool(true)
@@ -1263,15 +1281,13 @@ else -- CLIENT stuff
 		end
 		
 		function No:DoClick()
-            AnimateAndRemovePanel(InvitePanel)
-			-- timer.Remove("RaceInvite")
+            closing = true
+			closeStartTime = CurTime()
 
 			net.Start("uvrace_invite")
 			net.WriteBool(false)
 			net.SendToServer()
 		end
-
-		-- timer.Create( "RaceInvite", 10, 1, function() ResultPanel:Close() end )
 	end)
 
 	local UVRaceStarting = false
