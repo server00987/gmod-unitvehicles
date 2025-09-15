@@ -402,6 +402,14 @@ if CLIENT then
         shadow = true,
 		extended = true,
     })
+        
+    surface.CreateFont("UVMostWantedLeaderboardFont2", {
+        font = "EurostileBold",
+        size = (math.Round(ScrH()*0.017)),
+        weight = 1000,
+        shadow = true,
+		extended = true,
+    })
     
     surface.CreateFont("UVFont5ShadowBig", {
         font = "EurostileBold",
@@ -10674,6 +10682,66 @@ local function world_racing_main( ... )
 		finished = Color( 255, 255, 255, 100 ),
 		finishedbg = Color( 66, 222, 66, 50 ),
 	}
+
+	-- Debugging
+	-- local alpha = 255
+
+	-- surface.SetDrawColor(0, 0, 0, alpha)
+	-- surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
+	-- surface.DrawTexturedRect(w - w * 0.3, h * 0.05, w * 0.3, h * (0.03 * 3))
+
+	-- draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5UI", w * 0.99, h * 0.065, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+	-- draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5Shadow", w * 0.99, h * 0.095, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+	
+	-- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+	-- local debuglineamount = 24
+	-- local cardW, cardH = w * 0.15, h * 0.0325
+	-- local cardsPerColumn = 12
+	-- local spacing = 2
+
+	-- for i = 1, math.Clamp(debuglineamount, 1, 36), 1 do
+		-- local statusstr = "#uv.race.invite.status.invited"
+		-- local clr = Color(200,200,200, alpha)
+		-- local racername = "Username"
+		-- local vehname = "#moka.glide.nfsw.car.ford.interceptor"
+		-- local status = "Declined"
+
+		-- vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+
+		-- if status == "Host" then 
+			-- clr = Color(255,255,0, alpha)
+			-- statusstr = "#uv.race.invite.status.host"
+		-- elseif status == "Accepted" then 
+			-- clr = Color(100,255,100, alpha)
+			-- statusstr = "#uv.race.invite.status.accepted"
+		-- elseif status == "Declined" or status == "Disqualified" then 
+			-- clr = Color(255,100,100, alpha)
+			-- statusstr = "#uv.race.invite.status.declined"
+		-- end
+		
+		-- local col = math.floor((i - 1) / cardsPerColumn)
+		-- local row = (i - 1) % cardsPerColumn
+
+		-- local x = w - (cardW + spacing) * (col + 1)
+		-- local y = h * 0.145 + (cardH + spacing) * row
+
+		-- surface.SetDrawColor(0, 0, 0, 200)
+		-- surface.DrawRect(x, y, cardW, cardH)
+		
+		-- if #racername > 20 then -- If standard racer name is too long, shorten it
+			-- racername = string.sub(racername, 1, 23 - 3) .. "..."
+		-- end
+
+		-- if #vehname > 35 then -- If vehicle name is too long, shorten it
+			-- vehname = string.sub(vehname, 1, 37 - 3) .. "..."
+		-- end
+			
+		-- draw.SimpleText(statusstr, "UVMostWantedLeaderboardFont2", x + (w * 0.145), y, clr, TEXT_ALIGN_RIGHT)
+		-- draw.SimpleText(racername, "UVMostWantedLeaderboardFont2", x + (w * 0.001), y, Color(255,255,255), TEXT_ALIGN_LEFT)
+		-- draw.SimpleText(vehname or "...", "UVMostWantedLeaderboardFont2", x + (w * 0.001), y + 15, Color(200,200,200), TEXT_ALIGN_LEFT)
+	-- end
 
     -- Timer
 	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1",w * 0.83,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )

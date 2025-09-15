@@ -90,7 +90,7 @@ if SERVER then
 
 		for id, data in pairs(UVRaceInvites) do
 			if IsValid(data.ent) and not seen[data.ent:EntIndex()] then
-				table.insert(list, { id = data.ent:EntIndex(), name = data.name, status = data.status, isAI = data.isAI })
+				table.insert(list, { id = data.ent:EntIndex(), name = data.name, status = data.status, isAI = data.isAI, vehiclename = data.vehiclename })
 				seen[data.ent:EntIndex()] = true
 			end
 		end
@@ -105,15 +105,19 @@ if SERVER then
 		local id = vehicle:EntIndex()
 		local entry = UVRaceInvites[id]
 		local isAI = not (IsValid(vehicle:GetDriver()) and vehicle:GetDriver():IsPlayer())
+		local vehname = vehicle.PrintName 
+		or vehicle.VehicleName 
+		or vehicle:GetClass()
 
 		if not entry then
-			UVRaceInvites[id] = { ent = vehicle, name = name or ("Racer "..id), status = status, isAI = isAI }
+			UVRaceInvites[id] = { ent = vehicle, name = name or ("Racer "..id), status = status, isAI = isAI, vehiclename = vehname }
 		else
 			-- Only update the status, never duplicate
 			entry.status = status
 			entry.name = name or entry.name
 			entry.ent = vehicle
 			entry.isAI = isAI
+			entry.vehiclename = vehname
 		end
 
 		UVBroadcastRacerList()
@@ -502,6 +506,7 @@ if SERVER then
 		if bool then
 			UVRaceAddParticipant( car, ply, true )
 			entry.status = "Accepted"
+			entry.vehiclename = car.PrintName or car.VehicleName or car:GetClass()
 		else
 			car.raceinvited = false;
 			timer.Remove( 'RaceInviteExpire'..car:EntIndex() )
@@ -2095,23 +2100,28 @@ else -- CLIENT stuff
 
 		surface.SetDrawColor(0, 0, 0, alpha)
 		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
-		surface.DrawTexturedRect(w - w * 0.3, h * 0.15, w * 0.3, h * (0.05 * 3))
-			
-		draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5", w * 0.99, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		surface.DrawTexturedRect(w - w * 0.3, h * 0.05, w * 0.3, h * (0.03 * 3))
 
-		draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5", w * 0.99, h * 0.225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5UI", w * 0.99, h * 0.065, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
+		draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5Shadow", w * 0.99, h * 0.095, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 		
-		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5", w * 0.99, h * 0.275, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 
-		local x, x2, y = w * 0.75, w * 0.75, h * 0.325
-		local lineHeight = 30
+		local debuglineamount = 24
+		local cardW, cardH = w * 0.15, h * 0.0325
+		local cardsPerColumn = 12
+		local spacing = 2
 		
 		if UVRace_RacerList and #UVRace_RacerList > 0 then
-			for _, racer in ipairs(UVRace_RacerList) do
+			for i, racer in ipairs(UVRace_RacerList) do
 				local statusstr = "#uv.race.invite.status.invited"
 				local clr = Color(200,200,200, alpha)
 				local racername = racer.name
-				
+				local vehname = racer.vehiclename or "NIL"
+
+				vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+
 				if racer.status == "Host" then 
 					clr = Color(255,255,0, alpha)
 					statusstr = "#uv.race.invite.status.host"
@@ -2122,19 +2132,31 @@ else -- CLIENT stuff
 					clr = Color(255,100,100, alpha)
 					statusstr = "#uv.race.invite.status.declined"
 				end
+				
+				local col = math.floor((i - 1) / cardsPerColumn)
+				local row = (i - 1) % cardsPerColumn
 
-				if #racername > 30 then -- If too long
-					racername = string.sub(racername, 1, 30 - 3) .. "..."
+				local x = w - (cardW + spacing) * (col + 1)
+				local y = h * 0.145 + (cardH + spacing) * row
+
+				surface.SetDrawColor(0, 0, 0, 200)
+				surface.DrawRect(x, y, cardW, cardH)
+				
+				if #racername > 20 then -- If standard racer name is too long, shorten it
+					racername = string.sub(racername, 1, 23 - 3) .. "..."
 				end
 
-				if racer.isAI then
-					racername = "AI | " .. racername
+				if racer.isAI then -- AI gets a tag regardless
+					racername = racername .. " (AI)"
 				end
 
-				draw.SimpleTextOutlined( " | " .. racername, "UVCarbonFont-Smaller", x2, y, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-				draw.SimpleTextOutlined( statusstr, "UVCarbonFont-Smaller", x, y, clr, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-
-				y = y + lineHeight
+				if #vehname > 35 then -- If vehicle name is too long, shorten it
+					vehname = string.sub(vehname, 1, 37 - 3) .. "..."
+				end
+					
+				draw.SimpleText(statusstr, "UVMostWantedLeaderboardFont2", x + (w * 0.145), y, clr, TEXT_ALIGN_RIGHT)
+				draw.SimpleText(racername, "UVMostWantedLeaderboardFont2", x + (w * 0.001), y, Color(255,255,255), TEXT_ALIGN_LEFT)
+				draw.SimpleText(vehname or "...", "UVMostWantedLeaderboardFont2", x + (w * 0.001), y + 15, Color(200,200,200), TEXT_ALIGN_LEFT)
 			end
 		end
 	end)
