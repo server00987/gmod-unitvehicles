@@ -616,7 +616,7 @@ if SERVER then
 					v:EnableEngine(true)
 					v:StartEngine(true)
 				end
-			elseif v.IsGlideVehicle then --Glide
+			elseif v.IsGlideVehicle and v.GetIsHonking then --Glide ( current way of checking if it is a valid vehicle is to check for ishonking netvar :^) )
 				if not IsValid(v:GetDriver()) then
 					self.v = v
 					v.TrafficVehicle = self
@@ -658,7 +658,7 @@ if SERVER then
 							v:EnableEngine(true)
 							v:StartEngine(true)
 						end
-					elseif v.IsGlideVehicle then --Glide
+					elseif v.IsGlideVehicle and v.GetIsHonking then --Glide
 						if not IsValid(v:GetDriver()) then
 							self.v = v
 							v.TrafficVehicle = self
