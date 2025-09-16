@@ -708,6 +708,7 @@ LOCAL_CONVARS = {
 	["unitvehicle_racertags"] = 'integer',
 	["unitvehicle_racerpursuittech"] = 'integer',
 	["unitvehicle_racerfriendlyfire"] = 'integer',
+	["unitvehicle_spikestriproadblockfriendlyfire"] = 'integer',
 	['unitvehicle_spawncooldown'] = 'integer',
 	["unitvehicle_usenitrousracer"] = 'integer',
 	["unitvehicle_usenitrousunit"] = 'integer'
@@ -961,7 +962,7 @@ if SERVER then
 	UVUnitPTESFDamage = CreateConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE})
 	UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE})
 	UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE})
-	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateConVar("unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire", 0, {FCVAR_ARCHIVE})
+	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Spike Strip Roadblock Friendly Fire")
 	UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE})
 
 	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
@@ -2410,7 +2411,7 @@ else -- CLIENT Settings | HUD/Options
 	UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
 	UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
 	UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
-	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire", 1, true, false)
+	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, true, false)
 
 	UVPBMax = CreateClientConVar("unitvehicle_pursuitbreaker_maxpb", 2, true, false)
 	UVPBCooldown = CreateClientConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, true, false)
@@ -4365,6 +4366,8 @@ else -- CLIENT Settings | HUD/Options
 			panel:ControlHelp("#uv.settings.ptech.racer.desc")
 			panel:CheckBox("#uv.settings.ptech.friendlyfire", "unitvehicle_racerfriendlyfire")
 			panel:ControlHelp("#uv.settings.ptech.friendlyfire.desc")
+			panel:CheckBox("#uv.settings.ptech.roadblockfriendlyfire", "unitvehicle_spikestriproadblockfriendlyfire")
+			panel:ControlHelp("#uv.settings.ptech.roadblockfriendlyfire.desc")
 
 			panel:Help("#uv.settings.ailogic")
 			panel:CheckBox("#uv.settings.ailogic.optimizerespawn", "unitvehicle_optimizerespawn")
