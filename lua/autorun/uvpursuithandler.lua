@@ -961,6 +961,7 @@ if SERVER then
 	UVUnitPTESFDamage = CreateConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE})
 	UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE})
 	UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE})
+	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateConVar("unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire", 0, {FCVAR_ARCHIVE})
 	UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE})
 
 	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
@@ -2409,7 +2410,7 @@ else -- CLIENT Settings | HUD/Options
 	UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
 	UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
 	UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
-	UVUnitPTKillSwitchDisableDuration = CreateClientConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, true, false)
+	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire", 1, true, false)
 
 	UVPBMax = CreateClientConVar("unitvehicle_pursuitbreaker_maxpb", 2, true, false)
 	UVPBCooldown = CreateClientConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, true, false)
@@ -3291,11 +3292,13 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 		elseif UVHUDDisplayPursuit and not PlayMusic:GetBool() and not RacingMusic:GetBool() then
-			UVStopSound()
-			if UVSoundLoop then
-				UVSoundLoop:Stop()
-				UVSoundLoop = nil
-			end
+			--if not RacingMusicPriority:GetBool() then
+				UVStopSound()
+				if UVSoundLoop then
+					UVSoundLoop:Stop()
+					UVSoundLoop = nil
+				end
+			--end
 		end
 
 		if vehicle == NULL then 
@@ -3345,16 +3348,24 @@ else -- CLIENT Settings | HUD/Options
 
 		if not UVBustedState then
 			if UVHUDDisplayPursuit then
-				if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
-					UVSoundHeat( UVHeatLevel )
-				elseif UVHUDDisplayCooldown then
-					UVSoundCooldown( UVHeatLevel )
-				elseif UVHUDDisplayBusting and (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode then
-					local UVBustTimer = BustedTimer:GetFloat()
-					local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+				if not PlayMusic:GetBool() then 
+					UVStopSound()
+					if UVSoundLoop then
+						UVSoundLoop:Stop()
+						UVSoundLoop = nil
+					end
+				else
+					if not UVHUDDisplayBusting and not UVHUDDisplayCooldown and not UVHUDDisplayNotification then
+						UVSoundHeat( UVHeatLevel )
+					elseif UVHUDDisplayCooldown then
+						UVSoundCooldown( UVHeatLevel )
+					elseif UVHUDDisplayBusting and (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode then
+						local UVBustTimer = BustedTimer:GetFloat()
+						local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
 
-					if timeLeft <= UVBustTimer * 0.7 then
-						UVSoundBusting( UVHeatLevel )
+						if timeLeft <= UVBustTimer * 0.7 then
+							UVSoundBusting( UVHeatLevel )
+						end
 					end
 				end
 			elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then

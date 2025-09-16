@@ -31,6 +31,7 @@ if CLIENT then
 	
 	net.Receive("UVTrafficManagerGetTrafficInfo", function( length )
 		UVTrafficTOOLMemory = net.ReadTable()
+		--PrintTable(UVTrafficTOOLMemory)
 	end)
 	
 	net.Receive("UVTrafficManagerAdjustTraffic", function()
@@ -926,7 +927,7 @@ function TOOL:LeftClick( trace )
 			Ent.NitrousStartBurstSound = ply.UVTrafficTOOLMemory.NitrousStartBurstSound
 			Ent.NitrousStartBurstAnnotationSound = ply.UVTrafficTOOLMemory.NitrousStartBurstAnnotationSound
 			Ent.CriticalDamageSound = ply.UVTrafficTOOLMemory.CriticalDamageSound
-			Ent:SetNWBool( 'NitrousEnabled', ply.UVTrafficTOOLMemory.NitrousEnabled )
+			Ent:SetNWBool( 'NitrousEnabled', ply.UVTrafficTOOLMemory.NitrousEnabled == nil and true or ply.UVTrafficTOOLMemory.NitrousEnabled )
 			
 			if Ent.NitrousColor then
 				local r = Ent.NitrousColor.r
@@ -1423,20 +1424,33 @@ function TOOL:GetVehicleData( ent, ply )
 		duplicator.SetLocalPos( pos )
 		
 		ply.UVTrafficTOOLMemory = duplicator.Copy( ent )
+
+		PrintTable(ply.UVTrafficTOOLMemory)
 		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
 		
 		if ( not ply.UVTrafficTOOLMemory ) then return false end
+
+		for _, v in pairs(ply.UVTrafficTOOLMemory.Constraints) do
+			if v.OnDieFunctions then
+				v.OnDieFunctions = nil
+			end
+		end
 		
 		local Key = "VehicleBase"
 		ply.UVTrafficTOOLMemory[Key] = ent.Base
 		local Key2 = "SpawnName"
 		ply.UVTrafficTOOLMemory[Key2] = ent:GetClass()
 		ply.UVTrafficTOOLMemory.Mins = Vector(ply.UVTrafficTOOLMemory.Mins.x,ply.UVTrafficTOOLMemory.Mins.y,0)
+
+		-- for _,v in pairs(ply.UVTrafficTOOLMemory.Entities) do
+		-- 	v.Angle = 0
+		-- 	v.PhysicsObjects[0].Angle = 0
+		-- end
 		
-		ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].Angle = Angle(0,180,0)
-		ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+		-- ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].Angle = Angle(0,180,0)
+		-- ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
 
 		local c = ent:GetColor()
 		ply.UVTrafficTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a

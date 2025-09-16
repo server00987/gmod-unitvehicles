@@ -162,6 +162,69 @@ local function GetAngleFromSpawnlist( model )
 	return output
 end
 
+function UVCreateConstraintsFromTable( Constraint, EntityList )
+
+	local Factory = duplicator.ConstraintType[ Constraint.Type ]
+	if not Factory then return end
+
+	local args = {}
+	for k, key in pairs( Factory.Args ) do
+
+		local val = Constraint[ key ]
+
+		for i = 1, 6 do
+
+			if ( Constraint.Entity[ i ] ) then
+
+				if ( key == "Ent" .. i ) then
+					val = EntityList[ Constraint.Entity[ i ].Index ]
+					if ( Constraint.Entity[ i ].World ) then
+						val = game.GetWorld()
+					end
+				end
+
+				if ( key == "Bone" .. i ) then val = Constraint.Entity[ i ].Bone or 0 end
+				if ( key == "LPos" .. i ) then val = Constraint.Entity[ i ].LPos end
+				if ( key == "WPos" .. i ) then val = Constraint.Entity[ i ].WPos end
+				if ( key == "Length" .. i ) then val = Constraint.Entity[ i ].Length or 0 end
+
+			end
+		end
+
+		-- -- A little hack to give the duped constraints the correct player object
+		-- if ( key:lower() == "pl" or key:lower() == "ply" or key:lower() == "player" ) then val = ply end
+
+		-- If there's a missing argument then unpack will stop sending at that argument
+		if ( val == nil ) then val = false end
+
+		table.insert( args, val )
+
+	end
+
+	-- Pulley, Hydraulic can return up to 4 ents
+	local const1, const2, const3, const4 = Factory.Func( unpack( args ) )
+
+	-- Hacky way to determine if the constraint is a rope one, since we have no better way
+	local function IsRopeConstraint( ent ) return ent and ent:GetClass() == "keyframe_rope" end
+	local isRope = IsRopeConstraint( const1 ) || IsRopeConstraint( const2 ) || IsRopeConstraint( const3 ) || IsRopeConstraint( const4 )
+	local constraintType = isRope and "ropeconstraints" or "constraints"
+
+	-- If in Sandbox, keep track of this.
+	-- if ( ply and ply.AddCleanup and IsValid( const1 ) ) then
+	-- 	ply:AddCount( constraintType, const1 )
+
+	-- 	-- Hack: special case for nocollide
+	-- 	if ( const1:GetClass() == "logic_collision_pair" ) then constraintType = "nocollide" end
+	-- 	ply:AddCleanup( constraintType, const1 )
+	-- 	ply:AddCleanup( constraintType, const2 )
+	-- 	ply:AddCleanup( constraintType, const3 )
+	-- 	ply:AddCleanup( constraintType, const4 )
+	-- end
+
+	return const1, const2, const3, const4
+
+end
+
 --(Player, boolean)
 function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderrespawn, posspecified, angles, disperse)
 	
@@ -394,7 +457,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		MEMORY = util.JSONToTable(JSONData, true)
 		
-		local pos = uvspawnpoint+Vector( 0, 0, 50 )
+		local pos = uvspawnpoint+Vector( 0, 0, 50 )+MEMORY.Pos
 		local ang = uvspawnpointangles
 		ang.yaw = UVTargeting and rhinoattack and not posspecified and ang.yaw or ang.yaw + 180 --Points the other way when spawning based on player
 		
@@ -411,6 +474,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		Ent:SetPos( pos )
 		Ent:SetAngles( ang )
+
+		Ent:GetPhysicsObject():EnableMotion(false)
 
 		Ent:Spawn()
 		Ent:Activate()
@@ -618,7 +683,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
-		Spawnang.yaw = UVTargeting and rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
+		SpawnAng.yaw = UVTargeting and rhinoattack and not posspecified and SpawnAng.yaw or SpawnAng.yaw + 180
 		SpawnAng.yaw = SpawnAng.yaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
@@ -1200,70 +1265,145 @@ function UVAutoSpawnTraffic()
 		
 		MEMORY = util.JSONToTable(JSONData, true)
 		
-		local pos = uvspawnpoint+Vector( 0, 0, 50 )
-		local ang = uvspawnpointangles
-		ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
+		-- local pos = uvspawnpoint+Vector( 0, 0, 50 )
+		-- local ang = uvspawnpointangles
+
+		--local pos, ang = LocalToWorld( MEMORY.Pos, MEMORY.Angle, uvspawnpoint+Vector( 0, 0, 50 ), uvspawnpointangles )
+		
+		--ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
 	
-		local entArray = MEMORY.Entities[next(MEMORY.Entities)]
+		--local entArray = MEMORY.Entities[next(MEMORY.Entities)]
 
-		local Ent = ents.Create( entArray.Class )
-		duplicator.DoGeneric( Ent, entArray )
-		
-		Ent:SetPos( pos )
-		Ent:SetAngles( ang )
+		local createdEntities = {}
 
-		Ent:Spawn()
-		Ent:Activate()
+		for id, v in pairs(MEMORY.Entities) do
+			local Ent = ents.Create( v.Class )
+			duplicator.DoGeneric( Ent, v )
 
-		table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
-		
-		if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availabletraffic.."' is missing!") return end
-		
-		if MEMORY.SubMaterials then
-			if istable( MEMORY.SubMaterials ) then
-				for i = 0, table.Count( MEMORY.SubMaterials ) do
-					Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+			local pos, ang = LocalToWorld( v.Pos, v.Angle, uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
+
+			Ent:SetPos( pos )
+			Ent:SetAngles( ang )
+			
+			Ent:Spawn()
+			Ent:Activate()
+
+			table.Merge( Ent:GetTable(), v )
+
+			if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availabletraffic.."' is missing!") continue end
+
+			createdEntities[id] = Ent
+
+			if MEMORY.SubMaterials then
+				if istable( MEMORY.SubMaterials ) then
+					for i = 0, table.Count( MEMORY.SubMaterials ) do
+						Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+					end
 				end
-			end
-			
-			local groups = string.Explode( ",", MEMORY.BodyGroups)
-			for i = 1, table.Count( groups ) do
-				Ent:SetBodygroup(i, tonumber(groups[i]) )
-			end
-			
-			Ent:SetSkin( MEMORY.Skin )
-			
-			local c = string.Explode( ",", MEMORY.Color )
-			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-			
-			local dot = Color.r * Color.g * Color.b * Color.a
-			Ent.OldColor = dot
-
-			if MEMORY.SaveColor then
-				Ent:SetColor( Color )
-			else
-				if isfunction(Ent.GetSpawnColor) then
-					Color = Ent:GetSpawnColor()
+				
+				local groups = string.Explode( ",", MEMORY.BodyGroups)
+				for i = 1, table.Count( groups ) do
+					Ent:SetBodygroup(i, tonumber(groups[i]) )
+				end
+				
+				Ent:SetSkin( MEMORY.Skin )
+				
+				local c = string.Explode( ",", MEMORY.Color )
+				local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+				
+				local dot = Color.r * Color.g * Color.b * Color.a
+				Ent.OldColor = dot
+	
+				if MEMORY.SaveColor then
 					Ent:SetColor( Color )
 				else
-					Color.r = math.random(0, 255)
-					Color.g = math.random(0, 255)
-					Color.b = math.random(0, 255)
-					Ent:SetColor( Color )
+					if isfunction(Ent.GetSpawnColor) then
+						Color = Ent:GetSpawnColor()
+						Ent:SetColor( Color )
+					else
+						Color.r = math.random(0, 255)
+						Color.g = math.random(0, 255)
+						Color.b = math.random(0, 255)
+						Ent:SetColor( Color )
+					end
 				end
+				
+				local data = {
+					Color = Color,
+					RenderMode = 0,
+					RenderFX = 0
+				}
+				duplicator.StoreEntityModifier( Ent, "colour", data )
 			end
-			
-			local data = {
-				Color = Color,
-				RenderMode = 0,
-				RenderFX = 0
-			}
-			duplicator.StoreEntityModifier( Ent, "colour", data )
+
+			Ent.uvclasstospawnon = uvnextclasstospawn
+
+			table.insert(UVVehicleInitializing, Ent)
 		end
+
+		for _, v in pairs(MEMORY.Constraints) do
+			local constraintEntity = UVCreateConstraintsFromTable( v, createdEntities )
+
+			print('entity', constraintEntity)
+		end
+		-- local Ent = ents.Create( entArray.Class )
+		-- duplicator.DoGeneric( Ent, entArray )
 		
-		Ent.uvclasstospawnon = uvnextclasstospawn
+		-- Ent:SetPos( pos )
+		-- Ent:SetAngles( ang )
+
+		-- Ent:Spawn()
+		-- Ent:Activate()
+
+		-- table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
 		
-		table.insert(UVVehicleInitializing, Ent)
+		-- if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availabletraffic.."' is missing!") return end
+		
+		-- if MEMORY.SubMaterials then
+		-- 	if istable( MEMORY.SubMaterials ) then
+		-- 		for i = 0, table.Count( MEMORY.SubMaterials ) do
+		-- 			Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+		-- 		end
+		-- 	end
+			
+		-- 	local groups = string.Explode( ",", MEMORY.BodyGroups)
+		-- 	for i = 1, table.Count( groups ) do
+		-- 		Ent:SetBodygroup(i, tonumber(groups[i]) )
+		-- 	end
+			
+		-- 	Ent:SetSkin( MEMORY.Skin )
+			
+		-- 	local c = string.Explode( ",", MEMORY.Color )
+		-- 	local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+			
+		-- 	local dot = Color.r * Color.g * Color.b * Color.a
+		-- 	Ent.OldColor = dot
+
+		-- 	if MEMORY.SaveColor then
+		-- 		Ent:SetColor( Color )
+		-- 	else
+		-- 		if isfunction(Ent.GetSpawnColor) then
+		-- 			Color = Ent:GetSpawnColor()
+		-- 			Ent:SetColor( Color )
+		-- 		else
+		-- 			Color.r = math.random(0, 255)
+		-- 			Color.g = math.random(0, 255)
+		-- 			Color.b = math.random(0, 255)
+		-- 			Ent:SetColor( Color )
+		-- 		end
+		-- 	end
+			
+		-- 	local data = {
+		-- 		Color = Color,
+		-- 		RenderMode = 0,
+		-- 		RenderFX = 0
+		-- 	}
+		-- 	duplicator.StoreEntityModifier( Ent, "colour", data )
+		-- end
+		
+		-- Ent.uvclasstospawnon = uvnextclasstospawn
+		
+		-- table.insert(UVVehicleInitializing, Ent)
 		
 	elseif vehiclebase == 2 then --simfphys
 		
@@ -2125,6 +2265,7 @@ local function GetVehicleData( ent )
 			Memory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
 			Memory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
 			Memory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
+			Memory.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
 		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
@@ -2862,6 +3003,8 @@ function UVMoveToGridSlot( vehicle, aienabled )
 			Ent.NitrousStartBurstSound = Memory.NitrousStartBurstSound
 			Ent.NitrousStartBurstAnnotationSound = Memory.NitrousStartBurstAnnotationSound
 			Ent.CriticalDamageSound = Memory.CriticalDamageSound
+			Ent.NitrousEnabled = Memory.NitrousEnabled
+			Ent:SetNWBool( 'NitrousEnabled', Memory.NitrousEnabled == nil and true or Memory.NitrousEnabled )
 			
 			if Ent.NitrousColor then
 				local r = Ent.NitrousColor.r
@@ -2874,6 +3017,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
     			    net.WriteInt(g, 9)
     			    net.WriteInt(b, 9)
 					net.WriteBool(Ent.NitrousBurst)
+					net.WriteBool(Ent.NitrousEnabled)
     			net.Broadcast()
 			end
 		end

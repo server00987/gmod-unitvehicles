@@ -275,7 +275,7 @@ function ENT:Think()
 		end
 	end
 
-	uvHeliCooldown = CurTime()
+	UVHeliCooldown = CurTime()
 	
 	if self.Downed then
 		if table.HasValue(UVUnitsChasing, self) then

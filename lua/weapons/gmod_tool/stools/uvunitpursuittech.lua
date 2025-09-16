@@ -16,7 +16,6 @@ TOOL.ClientConVar[ "pursuittech" ] = pttable[1]
 TOOL.ClientConVar[ "slot" ] = 1
 
 TOOL.ClientConVar["ptduration"] = 20
-
 --ammo
 TOOL.ClientConVar["maxammo_esf"] = 5
 TOOL.ClientConVar["maxammo_spikestrip"] = 5
@@ -33,8 +32,10 @@ TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
 TOOL.ClientConVar["esfdamage"] = 0.2
 TOOL.ClientConVar["spikestripduration"] = 60
+TOOL.ClientConVar["spikestriproadblockfriendlyfire"] = 0
 TOOL.ClientConVar["killswitchlockontime"] = 3
 TOOL.ClientConVar["killswitchdisableduration"] = 2.5
+
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -183,7 +184,7 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
-
+			convar_table['unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire'] = GetConVar("uvunitpursuittech_spikestriproadblockfriendlyfire"):GetInt()
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfpower", GetConVar("uvunitpursuittech_esfpower"):GetFloat())
@@ -324,6 +325,21 @@ if CLIENT then
 		spikestripammo:SetTooltip("#uv.ptech.ammo.desc")
 		spikestripammo:SetConVar("uvunitpursuittech_maxammo_spikestrip")
 		CPanel:AddItem(spikestripammo)
+
+		-- local spikestriproadblockfriendlyfire = vgui.Create("DCheckBox")
+		-- spikestriproadblockfriendlyfire:SetText("#uv.ptech.spikes.roadblockfriendlyfire")
+		-- spikestriproadblockfriendlyfire:SetTooltip("#uv.ptech.spikes.roadblockfriendlyfire.desc")
+		-- spikestriproadblockfriendlyfire:SetConVar("uvunitpursuittech_spikestriproadblockfriendlyfire")
+		-- CPanel:AddItem(spikestriproadblockfriendlyfire)
+		 
+		local spikestriproadblockfriendlyfire = CPanel:CheckBox("#uv.ptech.spikes.roadblockfriendlyfire", "uvunitpursuittech_spikestriproadblockfriendlyfire")
+		spikestriproadblockfriendlyfire:SetTooltip("#uv.ptech.spikes.roadblockfriendlyfire.desc")
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.spikes.roadblockfriendlyfire.desc",
+		})
+		--spikestriproadblockfriendlyfire:SetConVar("uvunitpursuittech_spikestriproadblockfriendlyfire")
+		--CPanel:AddItem(spikestriproadblockfriendlyfire)
 
 		CPanel:AddControl("Label", {
 			Text = "#uv.ptech.killswitch.title",

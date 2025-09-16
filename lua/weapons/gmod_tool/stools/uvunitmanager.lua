@@ -283,11 +283,24 @@ local DEFAULTS = {
 	['uvunitmanager_selected_heat'] = 1,
 	['uvunitmanager_minheat'] = 1,
 	['uvunitmanager_maxheat'] = 6,
+	['uvunitmanager_maxheat'] = 6,
+	['uvunitmanager_bustspeed1'] = 10,
+	['uvunitmanager_bustspeed2'] = 10,
+	['uvunitmanager_bustspeed3'] = 15,
+	['uvunitmanager_bustspeed4'] = 15,
+	['uvunitmanager_bustspeed5'] = 20,
+	['uvunitmanager_bustspeed6'] = 20,
+	['uvunitmanager_bustspeed7'] = 20,
+	['uvunitmanager_bustspeed8'] = 20,
+	['uvunitmanager_bustspeed9'] = 20,
+	['uvunitmanager_bustspeed10'] = 20,
 }
 
 local function _setConVar( cvar, value )
 	local valueType = type( value )
 	local cvarClass = GetConVar( cvar )
+
+	print(cvar)
 
 	if valueType == 'number' then
 		cvarClass:SetFloat( value )
@@ -885,30 +898,35 @@ if CLIENT then
 
 			for incomingCV, incomingValue in pairs(data) do
 				count1 = count1 + 1
-				local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
-				local number = string.sub( incomingCV, string.len(incomingCV) - 1, string.len(incomingCV) )
+				--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
 
-				if LEGACY_CONVARS[cvNoNumber] then
+				local cvNoNumber = nil
+				local number = nil
+
+				local _incomingCV = incomingCV
+
+				while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
+					number = _incomingCV:sub( -1 )
+					cvNoNumber = _incomingCV:sub( 1, -2 )
+					_incomingCV = cvNoNumber
+				end
+
+				local numberIterator = 0
+
+				if LEGACY_CONVARS[_incomingCV] then
 					if not warned then
 						warned = true
 						local warning = string.format( lang "tool.uvunitmanager.presets.legacy.warning", value )
 						notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
 					end
 
-					if LEGACY_CONVARS[cvNoNumber].HasNumber then
-						_setConVar( LEGACY_CONVARS[cvNoNumber].Replacement .. number, incomingValue  )
+					if LEGACY_CONVARS[_incomingCV].HasNumber then
+						--print(LEGACY_CONVARS[cvNoNumber].Replacement .. number)
+						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
 					else
-						_setConVar( LEGACY_CONVARS[cvNoNumber].Replacement, incomingValue )
+						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
 					end
-					
-					continue
-				end
-
-				if not PROTECTED_CONVARS[incomingCV] then
-					-- if incomingCV == "uvunitmanager_patrol_voiceprofile" then
-					-- 	print('I got here!', incomingCV, incomingValue)
-					-- end -- this is supposed to run
-					-- THANK YOU GARRY'S MOD !!!
+				elseif not PROTECTED_CONVARS[incomingCV] then
 					_setConVar( incomingCV, incomingValue )
 				end
 			end

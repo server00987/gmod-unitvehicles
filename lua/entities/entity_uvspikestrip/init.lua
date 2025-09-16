@@ -126,8 +126,17 @@ function ENT:DoUpdate()
 	
 	for _, array in pairs(found) do
 		if array[1].IsGlideVehicle then
-			if not (not self.racerdeployed and IsValid(array[1].UnitVehicle)) then
-				if not (self.racerdeployed and not array[1].UnitVehicle and not RacerFriendlyFire:GetBool()) then
+			if array[1].UnitVehicle then
+				if self.UVRoadblock then
+					if not UVUnitPTSpikeStripRoadblockFriendlyFire:GetBool() then continue end
+				else
+					if not self.racerdeployed then continue end
+				end
+			else
+				if self.racerdeployed and not RacerFriendlyFire:GetBool() then continue end
+			end
+			--if not (not self.racerdeployed and IsValid(array[1].UnitVehicle)) then
+				--if not (self.racerdeployed and not array[1].UnitVehicle and not RacerFriendlyFire:GetBool()) then
 					local hit = false
 					
 					for i, j in pairs(array[1].wheels) do
@@ -211,8 +220,8 @@ function ENT:DoUpdate()
 							end
 						end)
 					end
-				end
-			end
+				--end
+			--end
 		end
 	end
 end
@@ -293,14 +302,15 @@ function ENT:StartTouch( ent )
 			ent:EmitSound("weapons/357_fire2.wav")
 		end
 	end
-	if not IsValid(ent.UnitVehicle) then
+	local car = (isfunction(ent.GetBaseEnt) and ent:GetBaseEnt()) or ent
+	if not IsValid(car.UnitVehicle) or (IsValid(car.UnitVehicle) and (self.UVRoadblock and UVUnitPTSpikeStripRoadblockFriendlyFire:GetBool())) then
 		if ent.cnWheelHealth then
 			ent:EmitSound("spikestrip/tiredeflatesound.wav")
 			ent:EmitSound("weapons/357_fire2.wav")
 			self:UVSpikeStripHit()
 		elseif ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then
 			local car = ent:GetBaseEnt()
-			if ent:GetDamaged() or car.UnitVehicle then return end
+			if ent:GetDamaged() then return end
 			if car.UnitVehicle or (car.UVWanted and not AutoHealth:GetBool()) then
 				local MaxHealth = car:GetMaxHealth()
 				local damage = MaxHealth*0.1
