@@ -146,7 +146,7 @@ function ENT:Draw()
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
-			render.DrawSprite(portpos,128,128,Color(255,0,0,255-portdist/10000*255))
+			render.DrawSprite(portpos,64,64,Color(255,0,0,255-portdist/10000*255))
 		
 		mat:SetInt("$ignorez",1)
 	end
@@ -155,7 +155,7 @@ function ENT:Draw()
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
-			render.DrawSprite(starboardpos,128,128,Color(0,255,0,255-starboarddist/10000*255))
+			render.DrawSprite(starboardpos,64,64,Color(0,255,0,255-starboarddist/10000*255))
 		
 		mat:SetInt("$ignorez",1)
 	end
@@ -164,7 +164,7 @@ function ENT:Draw()
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
-			render.DrawSprite(sternpos,128,128,Color(255,255,255,255-sterndist/10000*255))
+			render.DrawSprite(sternpos,64,64,Color(255,255,255,255-sterndist/10000*255))
 		
 		mat:SetInt("$ignorez",1)
 	end
