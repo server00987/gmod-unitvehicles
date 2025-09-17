@@ -457,7 +457,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		MEMORY = util.JSONToTable(JSONData, true)
 		
-		local pos = uvspawnpoint+Vector( 0, 0, 50 )+MEMORY.Pos
+		local pos = uvspawnpoint+Vector( 0, 0, 50 )
 		local ang = uvspawnpointangles
 		ang.yaw = UVTargeting and rhinoattack and not posspecified and ang.yaw or ang.yaw + 180 --Points the other way when spawning based on player
 		
@@ -474,8 +474,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		Ent:SetPos( pos )
 		Ent:SetAngles( ang )
-
-		Ent:GetPhysicsObject():EnableMotion(false)
 
 		Ent:Spawn()
 		Ent:Activate()
