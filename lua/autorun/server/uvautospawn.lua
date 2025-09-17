@@ -1341,8 +1341,6 @@ function UVAutoSpawnTraffic()
 
 		for _, v in pairs(MEMORY.Constraints) do
 			local constraintEntity = UVCreateConstraintsFromTable( v, createdEntities )
-
-			print('entity', constraintEntity)
 		end
 		-- local Ent = ents.Create( entArray.Class )
 		-- duplicator.DoGeneric( Ent, entArray )
