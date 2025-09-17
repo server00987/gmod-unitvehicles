@@ -237,6 +237,12 @@ function UVSoundHeat(heatlevel)
 	-- 	end
 	-- end
 
+	-- timer.Create("UVPursuitThemeRandom", 600, 0, function()
+	-- 	if PursuitThemePlayRandomHeat:GetBool() then
+	-- 		UVSoundHeat(math.random(1, MAX_HEAT_LEVEL))
+	-- 	end
+	-- end)
+
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
 	end
@@ -301,7 +307,10 @@ function UVSoundHeat(heatlevel)
 			local heatTrack = heatArray[math.random(1, #heatArray)]
 
 			if heatTrack then
-				UVPlaySound(heatTrack, true)
+				if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+					UVHeatPlayTransition = true
+				end
+				UVPlaySound(heatTrack, true, false, ((PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes") and 600))
 				UVPlayingHeat = true
 			end
 		end
@@ -578,8 +587,42 @@ function UVSoundEscaped(heatlevel)
 	UVPlayingBusted = true
 	UVPlayingEscaped = true
 end
+ 
+function UVInitSound( src, loop, stoploop, timeout )
+	if not IsValid(src) then UVStopSound() return end
 
-function UVPlaySound( FileName, Loop, StopLoop )
+	if loop then
+		UVSoundLoop = src
+		src:SetVolume(PursuitVolume:GetFloat())
+	else
+		UVSoundSource = src
+	end
+
+	src:EnableLooping(loop)
+	src:Play()
+
+	local duration = src:GetLength()
+
+	if duration > 0 then
+		expectedEndTime = RealTime() + duration + (timeout or 0)
+	end
+
+	UVLoadedSounds = src
+
+	UVDelaySound()
+	hook.Remove("Think", "CheckSoundFinished")
+	
+	hook.Add("Think", "CheckSoundFinished", function()
+		if expectedEndTime then
+			if RealTime() >= expectedEndTime then
+				hook.Remove("Think", "CheckSoundFinished")
+				UVStopSound()
+			end
+		end
+	end)
+end
+
+function UVPlaySound( FileName, Loop, StopLoop, Timeout )
 	if UVLoadedSounds ~= FileName then
 		if Loop or StopLoop then
 			if UVSoundLoop then
@@ -595,59 +638,42 @@ function UVPlaySound( FileName, Loop, StopLoop )
 	end 
 
 	-- print(FileName)
-
-	local snd
 	local expectedEndTime
+
+	UVDelaySound()
 
 	if UVLoadedSounds ~= FileName or (not UVSoundLoop) then
 		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
-			if IsValid(source) then
-				if Loop then
-					UVSoundLoop = source
-					source:SetVolume(PursuitVolume:GetFloat())
-				else
-					UVSoundSource = source
-				end
-
-				source:EnableLooping(Loop)
-				source:Play()
-
-				local duration = source:GetLength()
-
-				if duration > 0 then
-					expectedEndTime = RealTime() + duration
-				end
-
-				snd = source
-			end
+			UVInitSound(source, Loop, StopLoop, Timeout)
 		end)
 	end
 
-	local source = (Loop and UVSoundLoop) or UVSoundSource
+	-- local source = (Loop and UVSoundLoop) or UVSoundSource
 
-	if source then
-		expectedEndTime = expectedEndTime or RealTime() + source:GetLength()
-	end
+	-- if source then
+	-- 	expectedEndTime = expectedEndTime or RealTime() + source:GetLength() + (Timeout or 0)
+	-- 	print(expectedEndTime)
+	-- end
 
-	UVLoadedSounds = FileName
+	-- UVLoadedSounds = FileName
 
-	UVDelaySound()
-	hook.Remove("Think", "CheckSoundFinished")
+	-- UVDelaySound()
+	-- hook.Remove("Think", "CheckSoundFinished")
 
-	hook.Add("Think", "CheckSoundFinished", function()
-		if expectedEndTime then
-			if RealTime() >= expectedEndTime then
-				hook.Remove("Think", "CheckSoundFinished")
+	-- hook.Add("Think", "CheckSoundFinished", function()
+	-- 	if expectedEndTime then
+	-- 		if RealTime() >= expectedEndTime then
+	-- 			hook.Remove("Think", "CheckSoundFinished")
 
-				-- if UVHUDDisplayBusting then
-				-- 	UVSoundBusting(UVHeatLevel)
-				-- 	return
-				-- end
+	-- 			-- if UVHUDDisplayBusting then
+	-- 			-- 	UVSoundBusting(UVHeatLevel)
+	-- 			-- 	return
+	-- 			-- end
 
-				UVStopSound()
-			end
-		end
-	end)
+	-- 			UVStopSound()
+	-- 		end
+	-- 	end
+	-- end)
 
 	-- timer.Create("UVPursuitThemeReplay", duration, 1, function()
 	-- 	if UVHUDDisplayBusting then
@@ -2316,6 +2342,9 @@ else -- CLIENT Settings | HUD/Options
 	HeatLevels = CreateClientConVar("unitvehicle_heatlevels", 1, true, false, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit.")
 	DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
+	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits every 10 minutes.")
+	PursuitThemePlayRandomHeatMinutes = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheatminutes", 10, true, false, "Unit Vehicles: If set to 'Every X minutes', all Heat Level songs will play during pursuits every X minutes.")
+	PursuitThemePlayRandomHeatType = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheattype", "Sequential", true, false, "Unit Vehicles: If set to 'Sequential', random Heat Level songs will play after another. If set to 'Every 10 minutes', all Heat Level songs will play during pursuits every 10 minutes.")
 	RacingMusic = CreateClientConVar("unitvehicle_racingmusic", 1, true, false, "Unit Vehicles: If set to 1, Racing music will play.")
 	RacingMusicPriority = CreateClientConVar("unitvehicle_racingmusicpriority", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits while racing.")
 	RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
@@ -2341,7 +2370,6 @@ else -- CLIENT Settings | HUD/Options
 	UseNitrousUnit = CreateClientConVar("unitvehicle_usenitrousunit", 0, true, false, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
 	SpawnMainUnits = CreateClientConVar("unitvehicle_spawnmainunits", 1, true, false, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateClientConVar("unitvehicle_dvwaypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
-	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits.")
 	RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateClientConVar("unitvehicle_repairrange", 100, true, false, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
 	RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
@@ -4494,7 +4522,17 @@ else -- CLIENT Settings | HUD/Options
 			panel:ControlHelp("#uv.settings.music.race.racingpriority.desc")
 			panel:CheckBox("#uv.settings.music.pursuittheme.random", "unitvehicle_pursuitthemeplayrandomheat")
 			panel:ControlHelp("#uv.settings.music.pursuittheme.random.desc")
+			local pursuitthemeplayrandomheattype, label = panel:ComboBox( "#uv.settings.music.pursuittheme.random.type", "unitvehicle_pursuitthemeplayrandomheattype" )
+			pursuitthemeplayrandomheattype:AddChoice( "Sequential", "sequential")
+			pursuitthemeplayrandomheattype:AddChoice( "Every X minutes", "everyminutes")
+			panel:ControlHelp("#uv.settings.music.pursuittheme.random.type.desc")
+			
+			local numslider = panel:NumSlider("#uv.settings.music.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)
 
+			function pursuitthemeplayrandomheattype:OnSelect(index, name, value)
+				print(value)
+				numslider:SetEnabled(value == "everyminutes")
+			end
 
 			panel:Help("#uv.settings.ptech.keybinds")
 

@@ -16,6 +16,14 @@ if SERVER then
 		ply:SelectWeapon( "gmod_tool" )
 	end)
 
+	local function ClearTraffic( ply, cmd, args )
+		if not ply:IsSuperAdmin() then return end
+		for _, v in pairs(ents.FindByClass("npc_trafficvehicle")) do
+			v:Remove()
+		end
+	end
+	concommand.Add("uv_cleartraffic", ClearTraffic)
+
 end
 
 if CLIENT then
@@ -432,6 +440,11 @@ if CLIENT then
 		
 		CPanel:AddControl("Label", {
 			Text = "#tool.settings.clickapply",
+		})
+
+		CPanel:AddControl("Button", {
+			Text = "#tool.uvtrafficmanager.clear",
+			Command = "uv_cleartraffic"
 		})
 		
 		CPanel:AddControl("Label", {

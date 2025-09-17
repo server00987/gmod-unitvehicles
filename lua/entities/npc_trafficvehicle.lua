@@ -90,7 +90,15 @@ if SERVER then
 				end
 			end
 
+			-- if self.v.GetIsHonking then
 			self:SetHorn(false)
+			-- end
+
+			for _, v in pairs(constraint.GetAllConstrainedEntities(self.v)) do
+				if IsValid(v) then
+					v:Remove()
+				end
+			end
 			
 			local e = EffectData()
 			e:SetEntity(self.v)
@@ -543,6 +551,8 @@ if SERVER then
 	end
 	
 	function ENT:Think()
+		--if not self.v.GetIsHonking then return end
+
 		self:SetPos(self.v:GetPos() + (vector_up * 50))
 		self:SetAngles(self.v:GetPhysicsObject():GetAngles()+Angle(0,180,0))
 
@@ -658,7 +668,7 @@ if SERVER then
 							v:EnableEngine(true)
 							v:StartEngine(true)
 						end
-					elseif v.IsGlideVehicle and v.GetIsHonking then --Glide
+					elseif v.IsGlideVehicle then --Glide
 						if not IsValid(v:GetDriver()) then
 							self.v = v
 							v.TrafficVehicle = self

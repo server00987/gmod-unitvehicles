@@ -1274,11 +1274,17 @@ function UVAutoSpawnTraffic()
 
 		local createdEntities = {}
 
+		local entCount = 0
+
+		for _, _ in pairs(MEMORY.Entities) do
+			entCount = entCount + 1
+		end
+
 		for id, v in pairs(MEMORY.Entities) do
 			local Ent = ents.Create( v.Class )
 			duplicator.DoGeneric( Ent, v )
 
-			local pos, ang = LocalToWorld( v.Pos, v.Angle, uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
+			local pos, ang = LocalToWorld( v.Pos, ( (entCount > 1 and v.Angle) or Angle(0,0,0) ), uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
 
 			Ent:SetPos( pos )
 			Ent:SetAngles( ang )
