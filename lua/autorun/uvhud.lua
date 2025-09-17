@@ -10989,6 +10989,14 @@ local function world_pursuit_main( ... )
     local ResourceText = UVResourcePoints
     local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
     
+	-- [ Debug Subtitles ] --
+	-- surface.SetMaterial(UVMaterials["PT_BG"])
+    -- surface.SetDrawColor(Color(0, 0, 0, 255))
+    -- surface.DrawTexturedRect(0, h * 0.7, w, h * 0.15)
+	
+	-- draw.SimpleTextOutlined( "#uv.unit.dispatch", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.75, Color( 255, 255, 0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0 ) )
+	-- draw.SimpleTextOutlined( "#uv.sub.default.dispatch.unitrequest.2", "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.775, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0 ) )
+
     -- [ Upper Right Info Box ] --
     -- Timer
 	draw.SimpleTextOutlined( "#uv.chase.time.world", "UVWorldFont1",w * 0.885,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
