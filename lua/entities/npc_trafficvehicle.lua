@@ -93,12 +93,6 @@ if SERVER then
 			-- if self.v.GetIsHonking then
 			self:SetHorn(false)
 			-- end
-
-			for _, v in pairs(constraint.GetAllConstrainedEntities(self.v)) do
-				if IsValid(v) then
-					v:Remove()
-				end
-			end
 			
 			local e = EffectData()
 			e:SetEntity(self.v)
@@ -141,6 +135,23 @@ if SERVER then
 					table.RemoveByValue(UVWreckedVehicles, self.v)
 				end
 			end)
+
+			for _, v in pairs(constraint.GetAllConstrainedEntities(self.v)) do
+				v.wrecked = true
+				v.wrecked = true
+				table.insert(UVWreckedVehicles, v)
+				v:CallOnRemove("UVWreckedVehicleRemoved", function()
+					if table.HasValue(UVWreckedVehicles, v) then
+						table.RemoveByValue(UVWreckedVehicles, v)
+					end
+				end)
+				timer.Simple(despawntime, function()
+					if IsValid(wreck) then
+						SafeRemoveEntity(wreck)
+					end
+				end)
+			end
+
 			if self.v.IsGlideVehicle then
 				local wreck = self.v
 				timer.Simple(despawntime, function()
@@ -635,6 +646,46 @@ if SERVER then
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
+
+					v.UVConstrainedEntities = {}
+
+					for _, entity in pairs(constraint.GetAllConstrainedEntities(v)) do
+						table.insert(v.UVConstrainedEntities, entity)
+
+						entity:CallOnRemove("UVConstrainedEntitiesRemoved", function()
+							if table.HasValue(v.UVConstrainedEntities, entity) then
+								table.RemoveByValue(v.UVConstrainedEntities, entity)
+							end
+						end)
+					end
+
+					v.OnSocketDisconnect = function( car, socket )
+						for _, entity in pairs(v.UVConstrainedEntities) do
+							entity.wrecked = true
+							table.insert(UVWreckedVehicles, entity)
+							entity:CallOnRemove("UVWreckedVehicleRemoved", function()
+								if table.HasValue(UVWreckedVehicles, entity) then
+									table.RemoveByValue(UVWreckedVehicles, entity)
+								end
+							end)
+
+							local despawntime = 60
+							if #UVWantedTableVehicle > 1 then
+								despawntime = 10
+							end
+
+							timer.Simple(despawntime, function()
+								if IsValid(wreck) then
+									SafeRemoveEntity(wreck)
+								end
+							end)
+						end
+
+						if IsValid(car.TrafficVehicle) then
+							car.wrecked = nil
+							car.TrafficVehicle:Wreck()
+						end
+					end
 				end
 			end
 		else
@@ -676,6 +727,46 @@ if SERVER then
 							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
+							end
+							
+							v.UVConstrainedEntities = {}
+
+							for _, entity in pairs(constraint.GetAllConstrainedEntities(v)) do
+								table.insert(v.UVConstrainedEntities, entity)
+							
+								entity:CallOnRemove("UVConstrainedEntitiesRemoved", function()
+									if table.HasValue(v.UVConstrainedEntities, entity) then
+										table.RemoveByValue(v.UVConstrainedEntities, entity)
+									end
+								end)
+							end
+						
+							v.OnSocketDisconnect = function( car, socket )
+								for _, entity in pairs(v.UVConstrainedEntities) do
+									entity.wrecked = true
+									table.insert(UVWreckedVehicles, entity)
+									entity:CallOnRemove("UVWreckedVehicleRemoved", function()
+										if table.HasValue(UVWreckedVehicles, entity) then
+											table.RemoveByValue(UVWreckedVehicles, entity)
+										end
+									end)
+
+									local despawntime = 60
+									if #UVWantedTableVehicle > 1 then
+										despawntime = 10
+									end
+
+									timer.Simple(despawntime, function()
+										if IsValid(wreck) then
+											SafeRemoveEntity(wreck)
+										end
+									end)
+								end
+							
+								if IsValid(car.TrafficVehicle) then
+									car.wrecked = nil
+									car.TrafficVehicle:Wreck()
+								end
 							end
 						end
 					end
