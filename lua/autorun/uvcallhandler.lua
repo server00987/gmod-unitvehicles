@@ -110,7 +110,6 @@ if SERVER then
         if type == 1 then --Speeding
             if GetConVar("unitvehicle_chatter"):GetBool() then
                 timecheck = UVChatterDispatchCallSpeeding(UVHeatLevel)
-                print( "timecheck", timecheck)
             end
         elseif type == 2 then --Damage To Property
             if GetConVar("unitvehicle_chatter"):GetBool() then

@@ -276,7 +276,7 @@ if SERVER then
 						SafeRemoveEntity(wreck)
 					end
 				end)
-				if wreck:GetVelocity():LengthSqr() > 250000 then
+				if wreck:GetVelocity():LengthSqr() > 250000 and WheelsDetaching:GetBool() then
 					for i = 1, #wreck.Wheels do
 						local wheelmathchance = math.random(1,2)
 						local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]

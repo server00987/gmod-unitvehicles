@@ -2942,7 +2942,7 @@ function UVPlayerWreck(vehicle)
 				SafeRemoveEntity(wreck)
 			end
 		end)
-		if vehicle:GetVelocity():LengthSqr() > 250000 then
+		if vehicle:GetVelocity():LengthSqr() > 250000 and WheelsDetaching:GetBool() then
 			for i = 1, #wreck.Wheels do
 				local wheelmathchance = math.random(1,2)
 				local Wheel = wreck.Wheels[math.random(1, #wreck.Wheels)]
@@ -3062,6 +3062,7 @@ function UVNavigateNavmesh(self, vectors)
 end
 
 function UVGlideDetachWheels(vehicle)
+	if not WheelsDetaching:GetBool() then return end
 	timer.Simple(0, function()
 		if not IsValid(vehicle) or not vehicle.wheels then return end
 		
