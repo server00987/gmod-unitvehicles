@@ -205,7 +205,11 @@ function UVSoundHeat(heatlevel)
 	heatlevel = heatlevel or 1
 
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+			heatlevel = UVSelectedHeatTrack
+		else
+			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		end
 	end
 
 	heatlevel = tostring(heatlevel)
@@ -245,6 +249,7 @@ function UVSoundHeat(heatlevel)
 
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
+		UVResetRandomHeatTrack()
 	end
 
 	if UVHeatLevelIncrease then
@@ -307,10 +312,10 @@ function UVSoundHeat(heatlevel)
 			local heatTrack = heatArray[math.random(1, #heatArray)]
 
 			if heatTrack then
-				if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
-					UVHeatPlayTransition = true
-				end
-				UVPlaySound(heatTrack, true, false, ((PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes") and 600))
+				-- if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+				-- 	UVHeatPlayTransition = true
+				-- end
+				UVPlaySound(heatTrack, true, false)
 				UVPlayingHeat = true
 			end
 		end
@@ -345,10 +350,15 @@ function UVSoundBusting(heatlevel)
 
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
+		UVResetRandomHeatTrack()
 	end
 
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+			heatlevel = UVSelectedHeatTrack
+		else
+			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		end
 	end
 
 	heatlevel = tostring(heatlevel)
@@ -410,10 +420,15 @@ function UVSoundCooldown(heatlevel)
 
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
+		UVResetRandomHeatTrack()
 	end
 
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+			heatlevel = UVSelectedHeatTrack
+		else
+			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		end
 	end
 
 	heatlevel = tostring(heatlevel)
@@ -484,13 +499,18 @@ function UVSoundBusted(heatlevel)
 	heatlevel = heatlevel or 1
 
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+			heatlevel = UVSelectedHeatTrack
+		else
+			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		end
 	end
 
 	heatlevel = tostring(heatlevel)
 
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
+		UVResetRandomHeatTrack()
 	end
 
 	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
@@ -549,13 +569,18 @@ function UVSoundEscaped(heatlevel)
 	heatlevel = heatlevel or 1
 
 	if PursuitThemePlayRandomHeat:GetBool() then
-		heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+			heatlevel = UVSelectedHeatTrack
+		else
+			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
+		end
 	end
 
 	heatlevel = tostring(heatlevel)
 
 	if not PursuitFilePathsTable[theme] then
 		PopulatePursuitFilePaths(theme)
+		UVResetRandomHeatTrack()
 	end
 
 	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
@@ -2454,6 +2479,9 @@ else -- CLIENT Settings | HUD/Options
 
 	UVUnitsColor = Color(255,255,255)
 
+	UVSelectedHeatTrack = 1
+	UVLastHeatChange = -math.huge
+
 	UVHUDWantedSuspects = {}
 
 	PursuitTable = {
@@ -3285,6 +3313,32 @@ else -- CLIENT Settings | HUD/Options
 
 	outofpursuit = 0
 
+	function UVGetRandomHeat()
+		local heatTable = PursuitFilePathsTable[PursuitTheme:GetString()].heat
+		local heatCount = 0
+		local isExcluded = false
+		
+		for i, v in pairs(heatTable) do
+			if i ~= 'default' then
+				heatCount = heatCount + 1
+			end
+		end
+
+		local newHeat = math.random(1, heatCount)
+		while newHeat == UVSelectedHeatTrack do
+			newHeat = math.random(1, heatCount)
+		end
+
+		UVHeatPlayTransition = true
+		UVSelectedHeatTrack = newHeat
+		UVStopSound()
+	end
+
+	function UVResetRandomHeatTrack()
+		UVLastHeatChange = CurTime()
+		UVGetRandomHeat()
+	end
+
 	hook.Add("Think", "UVThink", function()
 
 		local localPlayer = LocalPlayer()
@@ -3330,6 +3384,14 @@ else -- CLIENT Settings | HUD/Options
 					UVSoundLoop = nil
 				end
 			--end
+		end
+		
+		if UVHUDDisplayPursuit then
+			if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+				if CurTime() - UVLastHeatChange > PursuitThemePlayRandomHeatMinutes:GetInt() * 60 then
+					UVResetRandomHeatTrack()
+				end
+			end
 		end
 
 		if vehicle == NULL then 
@@ -4535,6 +4597,13 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 			pursuittheme:SetTooltip("#uv.settings.audio.pursuittheme.desc")
+			function pursuittheme:OnSelect(index, name, value)
+				if not PursuitFilePathsTable[value] then
+					PopulatePursuitFilePaths(value)
+				end
+
+				UVResetRandomHeatTrack()
+			end
 			
 			option = panel:CheckBox("#uv.settings.audio.pursuitpriority", "unitvehicle_racingmusicpriority")
 			option:SetTooltip("#uv.settings.audio.pursuitpriority.desc")
