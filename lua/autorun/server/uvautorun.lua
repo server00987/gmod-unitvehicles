@@ -2246,138 +2246,241 @@ function UVDelayRoadblock()
 	end)
 end
 
-function UVColorName(ent)
-	
-	if not IsValid(ent) then return end
-	
-	if ent:GetSkin() ~= 0 then
-		return "a custom"
+local COLORS = {
+	-- REDS
+	{ name = 'red', article = 'a', color = Color(255, 0, 0) },
+	{ name = 'red', article = 'a', color = Color(200, 0, 0) },
+	{ name = 'red', article = 'a', color = Color(220, 20, 60) },
+	{ name = 'red', article = 'a', color = Color(255, 69, 0) },
+
+	-- BEIGES
+	{ name = 'beige', article = 'a', color = Color(245, 245, 220) },
+	{ name = 'beige', article = 'a', color = Color(222, 184, 135) },
+	{ name = 'beige', article = 'a', color = Color(210, 180, 140) },
+
+	-- BLACKS
+	{ name = 'black', article = 'a', color = Color(0, 0, 0) },
+	{ name = 'black', article = 'a', color = Color(30, 30, 30) },
+	{ name = 'black', article = 'a', color = Color(50, 50, 50) },
+
+	-- BLUES
+	{ name = 'blue', article = 'a', color = Color(0, 0, 255) },
+	{ name = 'blue', article = 'a', color = Color(0, 0, 200) },
+	{ name = 'blue', article = 'a', color = Color(65, 105, 225) },
+	{ name = 'blue', article = 'a', color = Color(70, 130, 180) },
+	{ name = 'blue', article = 'a', color = Color(0, 191, 255) },
+
+	-- BROWNS
+	{ name = 'brown', article = 'a', color = Color(139, 69, 19) },
+	{ name = 'brown', article = 'a', color = Color(160, 82, 45) },
+	{ name = 'brown', article = 'a', color = Color(165, 42, 42) },
+	{ name = 'brown', article = 'a', color = Color(210, 105, 30) },
+
+	-- GOLDS
+	{ name = 'gold', article = 'a', color = Color(255, 215, 0) },
+	{ name = 'gold', article = 'a', color = Color(218, 165, 32) },
+	{ name = 'gold', article = 'a', color = Color(184, 134, 11) },
+
+	-- GREENS
+	{ name = 'green', article = 'a', color = Color(0, 255, 0) },
+	{ name = 'green', article = 'a', color = Color(0, 128, 0) },
+	{ name = 'green', article = 'a', color = Color(34, 139, 34) },
+	{ name = 'green', article = 'a', color = Color(50, 205, 50) },
+	{ name = 'green', article = 'a', color = Color(60, 179, 113) },
+
+	-- ORANGES
+	{ name = 'orange', article = 'an', color = Color(255, 165, 0) },
+	{ name = 'orange', article = 'an', color = Color(255, 140, 0) },
+	{ name = 'orange', article = 'an', color = Color(255, 120, 0) },
+
+	-- PINKS
+	{ name = 'pink', article = 'a', color = Color(255, 192, 203) },
+	{ name = 'pink', article = 'a', color = Color(255, 105, 180) },
+	{ name = 'pink', article = 'a', color = Color(255, 182, 193) },
+
+	-- PURPLES
+	{ name = 'purple', article = 'a', color = Color(128, 0, 128) },
+	{ name = 'purple', article = 'a', color = Color(148, 0, 211) },
+	{ name = 'purple', article = 'a', color = Color(186, 85, 211) },
+
+	-- SILVERS
+	{ name = 'silver', article = 'a', color = Color(192, 192, 192) },
+	{ name = 'silver', article = 'a', color = Color(169, 169, 169) },
+	{ name = 'silver', article = 'a', color = Color(211, 211, 211) },
+
+	-- WHITES
+	{ name = 'white', article = 'a', color = Color(255, 255, 255) },
+	{ name = 'white', article = 'a', color = Color(245, 245, 245) },
+	{ name = 'white', article = 'a', color = Color(250, 250, 250) },
+
+	-- YELLOWS
+	{ name = 'yellow', article = 'a', color = Color(255, 255, 0) },
+	{ name = 'yellow', article = 'a', color = Color(255, 255, 102) },
+	{ name = 'yellow', article = 'a', color = Color(255, 255, 153) },
+}
+
+local function UVGetColorMagnitude( c1, c2 )
+	local c1 = c1:ToTable()
+	local c2 = c2:ToTable()
+
+	local magnitude = 0
+
+	for i = 1, 3 do
+		magnitude = magnitude + ( c1[i] - c2[i] ) ^ 2
 	end
-	
-	local color = ent:GetColor()
-	local rgba = color:ToTable()
-	local alpha = table.remove(rgba)
-	
-	local rgbtable = {
-		{255, 0, 0},
-		{255, 0, 97},
-		{255, 0, 191},
-		{255, 0, 255},
-		{220, 0, 255},
-		{127, 0, 255},
-		{29, 0, 255},
-		{0, 63, 255},
-		{0, 161, 255},
-		{0, 255, 255},
-		{0, 255, 157},
-		{0, 255, 63},
-		{33, 255, 0},
-		{127, 255, 0},
-		{225, 255, 0},
-		{255, 255, 0},
-		{255, 191, 0},
-		{255, 170, 0},
-		{255, 93, 0},
-		{127, 0, 0},
-		{127, 0, 95},
-		{63, 0, 127},
-		{0, 31, 127},
-		{0, 127, 127},
-		{0, 127, 31},
-		{63, 127, 0},
-		{127, 95, 0},
-		{127, 63, 63},
-		{127, 63, 111},
-		{95, 63, 127},
-		{63, 79, 127},
-		{63, 127, 127},
-		{63, 127, 79},
-		{95, 127, 63},
-		{127, 111, 63},
-		{255, 127, 127},
-		{255, 127, 223},
-		{191, 127, 255},
-		{127, 159, 255},
-		{127, 255, 255},
-		{0, 255, 255},
-		{127, 255, 159},
-		{191, 255, 127},
-		{255, 223, 127},
-		{255, 255, 255},
-		{218, 218, 218},
-		{182, 182, 182},
-		{145, 145, 145},
-		{109, 109, 109},
-		{72, 72, 72},
-		{36, 36, 36},
-		{0, 0, 0},
-	}
-	
-	local colornametable = {
-		"a red",
-		"a razzmatazz",
-		"a hot magenta",
-		"a magenta",
-		"a psychedelic purple",
-		"an electric indigo",
-		"a blue",
-		"a blue",
-		"a deep sky blue",
-		"an aqua",
-		"a medium spring green",
-		"a free speech green",
-		"a harlequin",
-		"a chartreuse",
-		"a chartreuse yellow",
-		"a yellow",
-		"an amber",
-		"an orange",
-		"a safety orange",
-		"a maroon",
-		"an eggplant",
-		"an indigo",
-		"a navy",
-		"a teal",
-		"a green",
-		"a green",
-		"an olive",
-		"a stiletto",
-		"a cadillac",
-		"a gigas",
-		"a jacksons purple",
-		"a ming",
-		"an amazon",
-		"a dingley",
-		"a yellow metal",
-		"a vivid tangerine",
-		"a neon pink",
-		"a heliotrope",
-		"a maya blue",
-		"an electric blue",
-		"a cyan",
-		"a mint green",
-		"a mint green",
-		"a salomie",
-		"a white",
-		"a gainsboro",
-		"a silver",
-		"a suva gray",
-		"a dim gray",
-		"a charcoal",
-		"a nero",
-		"a black",
-	}
-	
-	local index = 0
-	
-	for k, v in pairs(rgbtable) do
-		index = index + 1
-		if rgba[1] == v[1] and rgba[2] == v[2] and rgba[3] == v[3] then
-			return colornametable[index]
+
+	return magnitude
+end
+
+function UVColor( ent )
+	local vehicleColor = ent:GetColor()
+	local shortestDistance = math.huge
+	local closestColor = nil
+
+	for _, cArray in pairs( COLORS ) do
+		local distance = UVGetColorMagnitude( vehicleColor, cArray.color )
+
+		if distance < shortestDistance then
+			shortestDistance = distance
+			closestColor = cArray
 		end
 	end
+
+	return closestColor
+end
+
+function UVColorName(ent)
 	
-	return "a"
+	-- if not IsValid(ent) then return end
+	
+	-- if ent:GetSkin() ~= 0 then
+	-- 	return "a custom"
+	-- end
+	
+	-- local color = ent:GetColor()
+	-- local rgba = color:ToTable()
+	-- local alpha = table.remove(rgba)
+	
+	-- local rgbtable = {
+	-- 	{255, 0, 0},
+	-- 	{255, 0, 97},
+	-- 	{255, 0, 191},
+	-- 	{255, 0, 255},
+	-- 	{220, 0, 255},
+	-- 	{127, 0, 255},
+	-- 	{29, 0, 255},
+	-- 	{0, 63, 255},
+	-- 	{0, 161, 255},
+	-- 	{0, 255, 255},
+	-- 	{0, 255, 157},
+	-- 	{0, 255, 63},
+	-- 	{33, 255, 0},
+	-- 	{127, 255, 0},
+	-- 	{225, 255, 0},
+	-- 	{255, 255, 0},
+	-- 	{255, 191, 0},
+	-- 	{255, 170, 0},
+	-- 	{255, 93, 0},
+	-- 	{127, 0, 0},
+	-- 	{127, 0, 95},
+	-- 	{63, 0, 127},
+	-- 	{0, 31, 127},
+	-- 	{0, 127, 127},
+	-- 	{0, 127, 31},
+	-- 	{63, 127, 0},
+	-- 	{127, 95, 0},
+	-- 	{127, 63, 63},
+	-- 	{127, 63, 111},
+	-- 	{95, 63, 127},
+	-- 	{63, 79, 127},
+	-- 	{63, 127, 127},
+	-- 	{63, 127, 79},
+	-- 	{95, 127, 63},
+	-- 	{127, 111, 63},
+	-- 	{255, 127, 127},
+	-- 	{255, 127, 223},
+	-- 	{191, 127, 255},
+	-- 	{127, 159, 255},
+	-- 	{127, 255, 255},
+	-- 	{0, 255, 255},
+	-- 	{127, 255, 159},
+	-- 	{191, 255, 127},
+	-- 	{255, 223, 127},
+	-- 	{255, 255, 255},
+	-- 	{218, 218, 218},
+	-- 	{182, 182, 182},
+	-- 	{145, 145, 145},
+	-- 	{109, 109, 109},
+	-- 	{72, 72, 72},
+	-- 	{36, 36, 36},
+	-- 	{0, 0, 0},
+	-- }
+	
+	-- local colornametable = {
+	-- 	"a red",
+	-- 	"a razzmatazz",
+	-- 	"a hot magenta",
+	-- 	"a magenta",
+	-- 	"a psychedelic purple",
+	-- 	"an electric indigo",
+	-- 	"a blue",
+	-- 	"a blue",
+	-- 	"a deep sky blue",
+	-- 	"an aqua",
+	-- 	"a medium spring green",
+	-- 	"a free speech green",
+	-- 	"a harlequin",
+	-- 	"a chartreuse",
+	-- 	"a chartreuse yellow",
+	-- 	"a yellow",
+	-- 	"an amber",
+	-- 	"an orange",
+	-- 	"a safety orange",
+	-- 	"a maroon",
+	-- 	"an eggplant",
+	-- 	"an indigo",
+	-- 	"a navy",
+	-- 	"a teal",
+	-- 	"a green",
+	-- 	"a green",
+	-- 	"an olive",
+	-- 	"a stiletto",
+	-- 	"a cadillac",
+	-- 	"a gigas",
+	-- 	"a jacksons purple",
+	-- 	"a ming",
+	-- 	"an amazon",
+	-- 	"a dingley",
+	-- 	"a yellow metal",
+	-- 	"a vivid tangerine",
+	-- 	"a neon pink",
+	-- 	"a heliotrope",
+	-- 	"a maya blue",
+	-- 	"an electric blue",
+	-- 	"a cyan",
+	-- 	"a mint green",
+	-- 	"a mint green",
+	-- 	"a salomie",
+	-- 	"a white",
+	-- 	"a gainsboro",
+	-- 	"a silver",
+	-- 	"a suva gray",
+	-- 	"a dim gray",
+	-- 	"a charcoal",
+	-- 	"a nero",
+	-- 	"a black",
+	-- }
+	
+	-- local index = 0
+	
+	-- for k, v in pairs(rgbtable) do
+	-- 	index = index + 1
+	-- 	if rgba[1] == v[1] and rgba[2] == v[2] and rgba[3] == v[3] then
+	-- 		return colornametable[index]
+	-- 	end
+	-- end
+	
+	-- return "a"
 	
 end
 

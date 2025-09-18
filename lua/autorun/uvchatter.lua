@@ -198,7 +198,7 @@ if SERVER then
 	
 	function UVSoundChatter(self, voice, chattertype, parameters, ...)
 		
-		if not self or not voice or not chattertype or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
+		if not self or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 5 
 		end
 		
@@ -253,6 +253,19 @@ if SERVER then
 			--UVRelayToClients(soundFile, parameters, false)
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 		end
+
+		-- 	--[[Parameters
+		-- 	1 = No voice restriction
+		-- 	2 = Bullhorn
+		-- 	3 = Static
+		-- 	4 = Emergency
+		-- 	5 = Identify
+		-- 	6 = Call
+		-- 	7 = Losing
+		-- 	8 = Emergency (No voice restriction)
+		--  9 = In person
+		--  10 = Vehicle Description
+		-- 	]]
 		
 		if parameters == 1 then
 			return HandleCallSounds(isDispatch, true)
@@ -652,6 +665,68 @@ if SERVER then
 			UVRelayToClients(soundFile, parameters, true, players)
 
 			return 0
+		elseif parameters == 10 then
+			if is_dispatch or isDispatch then
+				voice = "dispatch"
+				unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
+			end
+
+			local vehicle = select(2, ...)
+
+			local vehicleModel = UVGetVehicleMakeAndModel(vehicle)
+			local vehicleColor = UVColor(vehicle)
+
+			local _, vehicleBrands = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/*", "GAME")
+			if next(vehicleBrands) == nil then return 5 end
+
+			local brand = nil
+
+			for _, vehicleBrand in pairs( vehicleBrands ) do
+				local vehicleNameStrings = string.Explode( "[ -]", vehicleModel, true )
+				local found = false
+
+				for i = 1, #vehicleNameStrings do
+					if string.match( string.lower( vehicleBrand ), string.lower( vehicleNameStrings[i] ) ) then
+						brand = vehicleBrand
+						found = true
+						break
+					end
+				end
+
+				if found then break end
+			end
+
+			if not brand then brand = 'genericsportscar' end
+
+			local soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
+			if next(soundFiles) == nil then return 5 end
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/"..soundFiles[math.random(1, #soundFiles)]
+
+			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFile
+			if next(radioOnFiles) ~= nil then
+				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[math.random(1, #radioOnFiles)]
+			end
+			
+			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFile
+			if next(radioOffFiles) ~= nil then
+				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
+			end
+			
+			if radioOnFile then
+				UVRelayToClients(radioOnFile, parameters, true)
+			end
+			timer.Simple(SoundDuration(radioOnFile or ""), function()
+				UVRelayToClients(soundFile, parameters, true)
+				timer.Simple(SoundDuration(soundFile or ""), function()
+					if radioOffFile then
+						UVRelayToClients(radioOffFile, parameters, true)
+					end
+				end)
+			end)
+
+			return UVDelayChatter(SoundDuration(soundFile or "") + SoundDuration(radioOnFile or "") + SoundDuration(radioOffFile or "") + math.random(1, 2))
 		end
 		
 		return HandleCallSounds()
@@ -3736,12 +3811,14 @@ if SERVER then
 		return seconds
 	end
 	
-	function UVChatterDispatchCallVehicleDescription(self, make, model)
+	function UVChatterDispatchCallVehicleDescription(self, vehicle, model)
+	
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1, "DISPATCH")
+			return UVSoundChatter(self, self.voice, nil, 10, "DISPATCH", vehicle)
+			--return UVSoundChatter(self, self.voice, "dispatchcallunknowndescription", 1, "DISPATCH")
 		end
-		if UVTargeting or not self or not make then return end
-		local color = UVColorName(make)
+		if UVTargeting or not self or not vehicle then return end
+		local color = UVColorName(vehicle)
 		local seconds = UVDelayChatter()
 		if self.v.UVPatrol or self.v.UVSupport then
 			UVTextChatter(self, {['suspectmodel'] = model, ['suspectcolor'] = color}, 'DispatchCallVehicleDescription', 'UVPatrol_UVSupport')

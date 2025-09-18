@@ -369,6 +369,8 @@ function UVSoundBusting(heatlevel)
 		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
 
 		if bustingTrack then
+			UVHeatPlayIntro = false
+			UVHeatPlayTransition = false
 			UVPlaySound(bustingTrack, true)
 		else
 			UVSoundHeat( UVHeatLevel )
