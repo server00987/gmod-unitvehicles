@@ -1986,8 +1986,7 @@ else -- CLIENT stuff
 				local curblip = GMinimap:FindBlipByID("UVBlip" .. vehicle:EntIndex())
 				if not curblip then continue end
 
-				if UVHUDDisplayCooldown or 
-				   (UVHUDCopMode and 
+				if (UVHUDCopMode and not UVHUDDisplayCooldown and 
 					(tonumber(UVUnitsChasing) <= 0 or not vehicle.inunitview) and 
 					not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
 				then
