@@ -3668,7 +3668,7 @@ else -- CLIENT Settings | HUD/Options
 							local curblip = GMinimap:FindBlipByID("UVBlip" .. ent:EntIndex())
 							if not curblip then continue end
 
-							if (UVHUDCopMode and not UVHUDDisplayCooldown and 
+							if ((UVHUDCopMode and UVHUDDisplayCooldown) or 
 								(tonumber(UVUnitsChasing) <= 0 or not ent.inunitview) and 
 								not ((not GetConVar("unitvehicle_unit_onecommanderevading"):GetBool()) and UVOneCommanderActive)) 
 							then
