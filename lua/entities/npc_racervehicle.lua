@@ -426,6 +426,8 @@ if SERVER then
 			elseif isfunction(self.v.SetHandbrake) and not self.v.IsGlideVehicle then
 				self.v:SetHandbrake(false)
 			end
+
+			local selfvelocity = self.v:GetVelocity():LengthSqr()
 			
 			--Racing techniques
 			local WaypointPos = self.PatrolWaypoint["Target"]
@@ -463,7 +465,7 @@ if SERVER then
 			-- 		throttle = 1
 			-- 	end
 			
-			-- 	-- if math.abs(steer) > .9 and self.v:GetVelocity():LengthSqr() > 200000 then
+			-- 	-- if math.abs(steer) > .9 and selfvelocity > 200000 then
 			-- 	-- 	throttle = -1
 			-- 	-- end
 			-- 	-- if angle_diff > 25 then
@@ -474,10 +476,10 @@ if SERVER then
 			-- 	-- print("Angle Difference:",angle_diff)	
 			-- end
 			-- print(self.Speeding)
-			-- print(self.v:GetVelocity():LengthSqr(), self.Speeding*300)
-			if self.v:GetVelocity():LengthSqr() > self.Speeding*350 and self.v.uvraceparticipant then 
+			-- print(selfvelocity, self.Speeding*300)
+			if selfvelocity > self.Speeding*350 and self.v.uvraceparticipant then 
 				throttle = -1
-			elseif self.v:GetVelocity():LengthSqr() > self.Speeding*300 then
+			elseif selfvelocity > self.Speeding*300 then
 				throttle = 0
 			end
 			
@@ -491,14 +493,14 @@ if SERVER then
 			end --Slow down when free roaming
 			
 			-- -- slow it down for tight corners if we are going too fast
-			-- if (self.v:GetVelocity():LengthSqr() > 200000 and angle_diff >= 25 and distSqr < 250000) then
+			-- if (selfvelocity > 200000 and angle_diff >= 25 and distSqr < 250000) then
 			-- 	throttle = -1
 			-- end
 			
-			-- print("Velocity:",self.v:GetVelocity():LengthSqr())
+			-- print("Velocity:",selfvelocity)
 			
 			if self.v.IsSimfphyscar then
-				if self.v:GetVelocity():LengthSqr() > 10000 then
+				if selfvelocity > 10000 then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
 							local Wheel = self.v.Wheels[ i ]
@@ -519,7 +521,7 @@ if SERVER then
 			-- 	end
 			end
 			
-			-- if self.v:GetVelocity():LengthSqr() > 10000 then
+			-- if selfvelocity > 10000 then
 			-- 	if self.v.IsSimfphyscar then 
 			-- 		if istable(self.v.Wheels) then
 			-- 			for i = 1, table.Count( self.v.Wheels ) do
@@ -586,7 +588,7 @@ if SERVER then
 			end
 			
 			--Resetting
-			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
+			if not (selfvelocity < 10000 and (throttle > 0 or throttle < 0)) then 
 				self.moving = CurTime()
 			end
 			if self.stuck then 
