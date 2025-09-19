@@ -718,8 +718,8 @@ function UVRenderEnemySquare(ent)
 			end
 		end
 		
-		local enemycallsign = ent.racer or "Racer "..ent:EntIndex()
-		local enemydriver = UVGetDriver( ent )
+		local enemycallsign = UVGetDriverName(ent)
+		--local enemydriver = UVGetDriver( ent )
 		local enemypos = false
 		
 		if UVHUDRaceInfo then
@@ -745,10 +745,10 @@ function UVRenderEnemySquare(ent)
 			end
 
 			-- Prefer player name if valid
-			if IsValid(enemydriver) then
-				if localPlayer == enemydriver then return end
-				enemycallsign = enemydriver:GetName()
-			end
+			-- if IsValid(enemydriver) then
+			-- 	if localPlayer == enemydriver then return end
+			-- 	enemycallsign = enemydriver:GetName()
+			-- end
 
 			-- Fallback: use name from leaderboard data
 			if not UVHUDCopMode then

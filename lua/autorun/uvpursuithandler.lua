@@ -3316,6 +3316,9 @@ else -- CLIENT Settings | HUD/Options
 	outofpursuit = 0
 
 	function UVGetRandomHeat()
+		local pursuitTheme = PursuitTheme:GetString()
+		if not PursuitFilePathsTable[pursuitTheme] then return end
+
 		local heatTable = PursuitFilePathsTable[PursuitTheme:GetString()].heat
 		local heatCount = 0
 		local isExcluded = false
@@ -3615,7 +3618,7 @@ else -- CLIENT Settings | HUD/Options
 		end
 
 		-- if RacerTags:GetBool() and UVHUDWantedSuspects and UVHUDCopMode and not uvclientjammed then
-		if RacerTags:GetBool() and UVHUDWantedSuspects and not uvclientjammed and not UVHUDRace then
+		if RacerTags:GetBool() and vehicle and UVHUDWantedSuspects and not uvclientjammed and not UVHUDRace then
 			if next(UVHUDWantedSuspects) ~= nil then
 				local renderQueue = {}
 
