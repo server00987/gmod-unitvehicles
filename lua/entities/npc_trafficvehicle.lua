@@ -349,6 +349,8 @@ if SERVER then
 			end
 
 			self.waypointPos = self.PatrolWaypoint["Target"]+(vector_up * 50)
+
+			local selfvelocity = self.v:GetVelocity():LengthSqr()
 			
 			--Patrolling techniques
 			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
@@ -371,10 +373,10 @@ if SERVER then
 				end
 				throttle = throttle * -1
 			end --Getting unstuck
-			if not self.respondingtocall and (self.v:GetVelocity():LengthSqr() > self.Speeding or self.v:GetVelocity():LengthSqr() > 1115136) then
+			if not self.respondingtocall and (selfvelocity > self.Speeding or selfvelocity > 1115136) then
 				throttle = 0
 			end
-			if self.v:GetVelocity():LengthSqr() > 10000 then
+			if selfvelocity > 10000 then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
@@ -416,7 +418,7 @@ if SERVER then
 				end
 			end --K turn
 			
-			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (self.v:GetVelocity():LengthSqr()*2) and self.v:GetVelocity():LengthSqr() > 774400 then
+			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (selfvelocity*2) and selfvelocity > 774400 then
 				if self.v:GetClass() == "prop_vehicle_jeep" then
 					throttle = 0
 				else
@@ -497,12 +499,12 @@ if SERVER then
 			end
 
 			--Resetting
-			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
+			if not (selfvelocity < 10000 and (throttle > 0 or throttle < 0)) then 
 				self.moving = CurTime()
 			end
 			if self.stuck then 
 				self.moving = CurTime()
-				if self.v:GetVelocity():LengthSqr() > 100000 and vectdot > 0 and not UVEnemyEscaping then
+				if selfvelocity > 100000 and vectdot > 0 and not UVEnemyEscaping then
 					self.stuck = nil
 				end
 			end

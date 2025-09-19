@@ -645,6 +645,8 @@ if SERVER then
 					return
 				end
 			end
+
+			local selfvelocity = self.v:GetVelocity():LengthSqr()
 			
 			--Patrolling techniques
 			local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
@@ -667,10 +669,10 @@ if SERVER then
 				end
 				throttle = throttle * -1
 			end --Getting unstuck
-			if not self.respondingtocall and (self.v:GetVelocity():LengthSqr() > self.Speeding or self.v:GetVelocity():LengthSqr() > 1115136) then
+			if not self.respondingtocall and (selfvelocity > self.Speeding or selfvelocity > 1115136) then
 				throttle = 0
 			end
-			if self.v:GetVelocity():LengthSqr() > 10000 and not self.stuck then
+			if selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
@@ -711,7 +713,7 @@ if SERVER then
 					end
 				end
 			end --K turn
-			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (self.v:GetVelocity():LengthSqr()*2) and self.v:GetVelocity():LengthSqr() > 774400 then
+			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (selfvelocity*2) and selfvelocity > 774400 then
 				if self.v:GetClass() == "prop_vehicle_jeep" then
 					throttle = 0
 				else
@@ -806,12 +808,12 @@ if SERVER then
 			end
 			
 			--Resetting
-			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then 
+			if not (selfvelocity < 10000 and (throttle > 0 or throttle < 0)) then 
 				self.moving = CurTime()
 			end
 			if self.stuck then 
 				self.moving = CurTime()
-				if self.v:GetVelocity():LengthSqr() > 100000 and vectdot > 0 and not UVEnemyEscaping then
+				if selfvelocity > 100000 and vectdot > 0 and not UVEnemyEscaping then
 					self.stuck = nil
 				end
 			end
@@ -1133,6 +1135,9 @@ if SERVER then
 			end
 			
 			local eedist = self.e:WorldSpaceCenter() - self.v:WorldSpaceCenter() --Fixed distance between the vehicle and the enemy.
+
+			local selfvelocity = self.v:GetVelocity():LengthSqr()
+			local enemyvelocity = self.e:GetVelocity():LengthSqr()
 			
 			--Determine pursuit standards
 			if not UVEnemyEscaping and self:StraightToTarget(self.e) then
@@ -1140,7 +1145,7 @@ if SERVER then
 				if self.NavigateBlind then 
 					self.NavigateBlind = nil 
 				end
-				if (not self.formationpoint or self.e:GetVelocity():LengthSqr() <= UVBustSpeed or eedist:LengthSqr() >= 6250000) 
+				if (not self.formationpoint or enemyvelocity <= UVBustSpeed or eedist:LengthSqr() >= 6250000) 
 				or not self:StraightToTarget(self.e) or UVCalm or UVEnemyEscaping or 
 				self:ObstaclesNearbySide() then
 					if not self.driveinfront or self:ObstaclesNearbySide() then
@@ -1245,14 +1250,14 @@ if SERVER then
 				if UVEnemyEscaping then throttle = -1 else throttle = throttle * -1 end
 			else --Getting unstuck
 				if edist:Dot(forward) < 0 and (edist:Length2DSqr() > 100000 or self.formationpoint) and eevectdot < 0 then
-					if eeevectdot > 0 or self.e:GetVelocity():LengthSqr() < 100000 then
+					if eeevectdot > 0 or enemyvelocity < 100000 then
 						throttle = 0
 						if self.v.IsSimfphyscar or self.v.IsGlideVehicle then
 							self:UVHandbrakeOn()
 						end
 						if right.z < 0 then steer = -1 else steer = 1 end 
 					else 
-						if (self.e:GetVelocity():LengthSqr()/1.25) > self.v:GetVelocity():LengthSqr() then 
+						if (enemyvelocity/1.25) > selfvelocity then 
 							throttle = 1 
 						else
 							if self.v.IsSimfphyscar or self.v.IsGlideVehicle then
@@ -1267,25 +1272,25 @@ if SERVER then
 					end
 				end --U turn/rolling roadblock
 				if dist:Dot(forward) < 0 and dist:Length2DSqr() > 250000 and vectdot > 0 and not self.stuck then
-					if eeevectdot > 0 or self.e:GetVelocity():LengthSqr() < 100000 then
+					if eeevectdot > 0 or enemyvelocity < 100000 then
 						if right.z > 0 then steer = -1 else steer = 1 end
 					else
 						throttle = throttle * -1
 					end
 				end --K/J turn
-				if self.v:GetVelocity():LengthSqr() > self.e:GetVelocity():LengthSqr() and edist:Dot(forward) > 0 and edist:Dot(eforward) > 0 and eevectdot > 0 and eeevectdot > 0 and edist:Length2DSqr() < 100000 and self.e:GetVelocity():LengthSqr() > 250000 and not UVCalm then
+				if selfvelocity > enemyvelocity and edist:Dot(forward) > 0 and edist:Dot(eforward) > 0 and eevectdot > 0 and eeevectdot > 0 and edist:Length2DSqr() < 100000 and enemyvelocity > 250000 and not UVCalm then
 					if not self.aggressive and not self.formationpoint then throttle = 0 end
 				end --PIT technique/get infront
-				if self.e:GetVelocity():LengthSqr() < 100000 and dist:Length2DSqr() < self.v:GetVelocity():LengthSqr() then
+				if enemyvelocity < 100000 and dist:Length2DSqr() < selfvelocity then
 					if self.v.IsSimfphyscar or self.v.IsGlideVehicle then
 						throttle = throttle * -1
 					else
 						self:UVHandbrakeOn()
 					end
 				end --Slow down when enemy's stopped
-				if evectdot < 0 and self.e:GetVelocity():LengthSqr() > 100000 and dist:Dot(forward) > 0 and throttle > 0 and (self:StraightToTarget(self.e) or not self.aggressive) then
-					if not Relentless:GetBool() or (self.v:GetVelocity():LengthSqr()+self.e:GetVelocity():LengthSqr()) > eedist:Length2DSqr() then
-						if self.v:GetVelocity():LengthSqr() > 123904 then throttle = 0 end
+				if evectdot < 0 and enemyvelocity > 100000 and dist:Dot(forward) > 0 and throttle > 0 and (self:StraightToTarget(self.e) or not self.aggressive) then
+					if not Relentless:GetBool() or (selfvelocity+enemyvelocity) > eedist:Length2DSqr() then
+						if selfvelocity > 123904 then throttle = 0 end
 						if dist:Dot(eforward) < 0 then
 							if eright.z < 0 then steer = 1 else steer = -1 end
 						else
@@ -1296,7 +1301,7 @@ if SERVER then
 				elseif not self.ramming then
 					self:SetHorn(false)
 				end --Head-on slam
-				if dist:Dot(forward) < 0 and vectdot < 0 and evectdot < 0 and dist:Dot(eforward) < 0 and self.e:GetVelocity():LengthSqr() > 100000 then 
+				if dist:Dot(forward) < 0 and vectdot < 0 and evectdot < 0 and dist:Dot(eforward) < 0 and enemyvelocity > 100000 then 
 					steer = eright.z 
 					if dist:Length2DSqr() > 250000 and eright.z < 0.5 and eright.z > -0.5 then if right.z > 0.75 then steer = -1 elseif right.z < -0.75 then steer = 1 end end
 				end --Herding
@@ -1304,28 +1309,28 @@ if SERVER then
 					throttle = 0
 				end --No ramming
 				if self.v.IsSimfphyscar or self.v.IsGlideVehicle and not Relentless:GetBool() then
-					if not self.formationpoint and eedist:LengthSqr() < 6250000 and (self.v:GetVelocity():LengthSqr()/2) > self.e:GetVelocity():LengthSqr() and self.e:GetVelocity():LengthSqr() > 100000 then
+					if not self.formationpoint and eedist:LengthSqr() < 6250000 and (selfvelocity/2) > enemyvelocity and enemyvelocity > 100000 then
 						throttle = -1
 					end --Slow down when enemy slows down
 				end
 				
 				--If the vehicle is too close to the enemy...  
-				if (edist:Length2DSqr() < 100000 and eevectdot < 0 and self.e:GetVelocity():LengthSqr() > 100000 and eeevectdot < 0) and not self.formationpoint and not self:ObstaclesNearbySide() then 
+				if (edist:Length2DSqr() < 100000 and eevectdot < 0 and enemyvelocity > 100000 and eeevectdot < 0) and not self.formationpoint and not self:ObstaclesNearbySide() then 
 					if not self.driveinfront and not self.formationpoint then
-						if self.v:GetVelocity():LengthSqr() > self.e:GetVelocity():LengthSqr() then
+						if selfvelocity > enemyvelocity then
 							throttle = 0
 						else
 							throttle = 1
 						end
 					else
-						if self.v:GetVelocity():LengthSqr() < self.e:GetVelocity():LengthSqr() then 
+						if selfvelocity < enemyvelocity then 
 							throttle = 1 
 						else
 							throttle = 0
 						end
 					end
 				end --Herding technique
-				if self.e:GetVelocity():LengthSqr() < 30976 and dist:Length2DSqr() < 100000 and not (self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20)) and self:StraightToTarget(self.e) then
+				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and not (self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20)) and self:StraightToTarget(self.e) then
 					throttle = 0 
 					if vectdot < 0 or eright.z > -0.2 and eright.z < 0.2 or UVCalm then self:UVHandbrakeOn() end
 				end --Pinning/boxing in
@@ -1369,12 +1374,12 @@ if SERVER then
 							if fvectdot > 0 then
 								if UVCalm and fdist:LengthSqr() < 100000 then
 									throttle = 0
-								elseif fdist:LengthSqr() < 100000 and self.e:GetVelocity():LengthSqr() > 200000 and not self.formationpoint then
+								elseif fdist:LengthSqr() < 100000 and enemyvelocity > 200000 and not self.formationpoint then
 									throttle = 0
 								end
 							end
 						end -- Follow behind
-						if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and self.v:GetVelocity():LengthSqr() > fdist:LengthSqr() and self.e:GetVelocity():LengthSqr() < (UVBustSpeed*2) then
+						if fvectdot > 0 and f.v:GetVelocity():LengthSqr() < (UVBustSpeed*2) and dist:LengthSqr() < 2500000 and selfvelocity > fdist:LengthSqr() and enemyvelocity < (UVBustSpeed*2) then
 							if fright.z < 0.1 and fright.z > -0.9 then
 								steer = 1
 							end
@@ -1390,7 +1395,7 @@ if SERVER then
 			local btimeout = GetConVar("unitvehicle_bustedtimer"):GetFloat()
 
 			--Resetting
-			if not (self.v:GetVelocity():LengthSqr() < 10000 and (throttle > 0 or throttle < 0)) then --Reset conditions.
+			if not (selfvelocity < 10000 and (throttle > 0 or throttle < 0)) then --Reset conditions.
 				self.moving = CurTime()
 			end
 			if self.displaybusting then
@@ -1398,7 +1403,7 @@ if SERVER then
 			end
 			if self.stuck then 
 				self.moving = CurTime()
-				if self.v:GetVelocity():LengthSqr() > 100000 and vectdot > 0 and not UVEnemyEscaping then
+				if selfvelocity > 100000 and vectdot > 0 and not UVEnemyEscaping then
 					self.stuck = nil
 				end
 			end
@@ -1481,13 +1486,13 @@ if SERVER then
 					if MathSiren < 30 then
 						self:SetELSSiren(true)
 					end
-					if Chatter:GetBool() and IsValid(self.v) and self.e:GetVelocity():LengthSqr() > 100000 and self:StraightToTarget(self.e) and MathAggressive ~= 1 then
+					if Chatter:GetBool() and IsValid(self.v) and enemyvelocity > 100000 and self:StraightToTarget(self.e) and MathAggressive ~= 1 then
 						UVChatterCloseToEnemy(self) 
 					end
 				end
 			end
 			
-			if self.v:GetVelocity():LengthSqr() > 10000 and not self.stuck then
+			if selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
@@ -1499,7 +1504,7 @@ if SERVER then
 						end
 					end
 					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
-						if math.abs(steer) > 0.5 and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
+						if math.abs(steer) > 0.5 and selfvelocity > 100000 and enemyvelocity < selfvelocity then
 							if self.v:GetGear() >= 3 then
 								throttle = -1
 							else
@@ -1520,7 +1525,7 @@ if SERVER then
 						throttle = 1
 					end --Straighten out
 					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
-						if math.abs(steer) > 0.5 and self.v:GetVelocity():LengthSqr() > 100000 and self.e:GetVelocity():LengthSqr() < self.v:GetVelocity():LengthSqr() then
+						if math.abs(steer) > 0.5 and selfvelocity > 100000 and enemyvelocity < selfvelocity then
 							if self.v:GetGear() >= 1 then
 								throttle = -1
 							else
