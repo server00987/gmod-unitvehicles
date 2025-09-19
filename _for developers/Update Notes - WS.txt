@@ -23,12 +23,14 @@
 [list]
 	[*]Updated the appearance of the Pre-Race Invitation list
 	[*]Updated the appearance of the Race Invite pop-up
+	[*]Fixed that the "Split Time" was triggered every time you touched a split checkpoint
 [/list]
 
 [b]Pursuits[/b]
 [list]
 	[*]Updated the appearance of the "Totaled!" pop-up
 	[*]Changed the "Call Response" function to not be enabled by default
+	[*]Fixed that Minimap icons were not rendering during Races when in a Pursuit Cooldown
 [/list]
 
 [b]Other[/b]
