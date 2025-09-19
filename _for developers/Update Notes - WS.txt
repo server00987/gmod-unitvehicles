@@ -1,3 +1,44 @@
+<------- September 19 ------->
+[h1]New Features[/h1]
+[b]Racing[/b]
+[list]
+	[*]Updated the appearance of the Pre-Race Invitation list
+[/list]
+
+[b]Pursuit[/b]
+[list]
+	[*]Added the function for manufacturer and model-based chatter callouts - default chatter will be updated in the future to include these
+	[*]Added the option for Units to be affected by roadblock spike strips
+	[*]Added more default Copchatter lines (air, cop1, fed1)
+[/list]
+
+[b]Other[/b]
+[list]
+	[*]Added an option to disable wheels being detached when wrecked
+	[*]Added a "Clear Traffic" button in the Traffic Manager tool
+[/list]
+
+[h1]Changes[/h1]
+[b]Racing[/b]
+[list]
+	[*]Updated the appearance of the Pre-Race Invitation list
+	[*]Updated the appearance of the Race Invite pop-up
+[/list]
+
+[b]Pursuits[/b]
+[list]
+	[*]Updated the appearance of the "Totaled!" pop-up
+	[*]Changed the "Call Response" function to not be enabled by default
+[/list]
+
+[b]Other[/b]
+[list]
+	[*]Tweaked the appearance of the Unit Vehicles settings on the Spawnmenu - Descriptions are no longer present at all times and instead appear when hovering over the options
+	[*]Optimized AI behaviour
+[/list]
+
+And some various undocumented changes.
+
 <------- September 13 ------->
 [h1]New Features[/h1]
 [b]Racing[/b]
