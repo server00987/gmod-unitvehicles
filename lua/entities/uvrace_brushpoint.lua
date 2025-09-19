@@ -141,7 +141,7 @@ if SERVER then
 			end
 		end
 
-		if vehicle_array.SplitCheckpoints[checkp_id] then
+		if vehicle_array.SplitCheckpoints[checkp_id] and checkp_id == next_checkpoint then
 			local driver = vehicle:GetDriver()
 			local numParticipants = table.Count(UVRaceTable.Participants or {})
 			

@@ -16,10 +16,12 @@
 **Racing**
 - Updated the appearance of the Pre-Race Invitation list
 - Updated the appearance of the Race Invite pop-up
+- Fixed that the "Split Time" was triggered every time you touched a split checkpoint
 
 **Pursuits**
 - Updated the appearance of the "Totaled!" pop-up
 - Changed the "Call Response" function to not be enabled by default
+- Fixed that Minimap icons were not rendering during Races when in a Pursuit Cooldown
 
 **Other**
 - Tweaked the appearance of the Unit Vehicles settings on the Spawnmenu - Descriptions are no longer present at all times and instead appear when hovering over the options
