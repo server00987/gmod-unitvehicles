@@ -3618,13 +3618,13 @@ else -- CLIENT Settings | HUD/Options
 		end
 
 		-- if RacerTags:GetBool() and UVHUDWantedSuspects and UVHUDCopMode and not uvclientjammed then
-		if RacerTags:GetBool() and vehicle and UVHUDWantedSuspects and not uvclientjammed and not UVHUDRace then
+		if RacerTags:GetBool() and vehicle and UVHUDWantedSuspects and not uvclientjammed and (not UVHUDRace or UVHUDCopMode) then
 			if next(UVHUDWantedSuspects) ~= nil then
 				local renderQueue = {}
 
 				for _, ent in pairs(UVHUDWantedSuspects) do
 					if not IsValid(ent) then continue end
-					if ent:IsVehicle() and ent:GetDriver() == LocalPlayer() then continue end
+					if ent:IsVehicle() and UVGetDriver(ent) == LocalPlayer() then continue end
 					local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 					table.insert(renderQueue, { vehicle = ent, dist = dist })
 				end

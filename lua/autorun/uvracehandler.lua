@@ -1940,7 +1940,7 @@ else -- CLIENT stuff
 			local renderQueue = {}
 
 			for vehicle, info in pairs(UVHUDRaceInfo.Participants or {}) do
-				if not IsValid(vehicle) or vehicle == myVehicle then continue end
+				if not IsValid(vehicle) or UVGetDriver(vehicle) == LocalPlayer() then continue end
 				if info.Status == "Disqualified" or info.Status == "Busted" then continue end
 
 				local dist = localPlayer:GetPos():DistToSqr(vehicle:GetPos())
@@ -1965,7 +1965,7 @@ else -- CLIENT stuff
 		
 		-- Racer Map Icons
 		for vehicle, info in pairs(UVHUDRaceInfo.Participants or {}) do
-			if not IsValid(vehicle) or vehicle == myVehicle then continue end
+			if not IsValid(vehicle) or UVGetDriver(vehicle) == LocalPlayer() then continue end
 
 			if not GMinimap then continue end
 			if not vehicle.displayedonhud then
