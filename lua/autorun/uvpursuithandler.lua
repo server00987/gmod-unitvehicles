@@ -4603,12 +4603,14 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 			pursuittheme:SetTooltip("#uv.settings.audio.pursuittheme.desc")
-			function pursuittheme:OnSelect(index, name, value)
+			function pursuittheme:OnSelect(index, value)
 				if not PursuitFilePathsTable[value] then
 					PopulatePursuitFilePaths(value)
 				end
 
-				UVResetRandomHeatTrack()
+				if UVPlayingHeat and PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+					UVResetRandomHeatTrack()
+				end
 			end
 			
 			option = panel:CheckBox("#uv.settings.audio.pursuitpriority", "unitvehicle_racingmusicpriority")
