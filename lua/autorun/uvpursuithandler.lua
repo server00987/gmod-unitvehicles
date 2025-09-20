@@ -3508,6 +3508,15 @@ else -- CLIENT Settings | HUD/Options
 			if localPlayer.uvspawningunit then
 				net.Start("UVCancelUnitRespawn")
 				net.SendToServer()
+
+				localPlayer.uvunitselectdelayed = true
+				timer.Simple(1, function()
+					if localPlayer.uvunitselectdelayed then
+						localPlayer.uvunitselectdelayed = nil
+					end
+				end)
+			elseif not localPlayer.uvunitselectdelayed then
+				LocalPlayer():ConCommand('uvrace_resetposition')
 			end
 		end
 

@@ -377,6 +377,11 @@ if SERVER then
         local car = UVGetVehicle( ply )
         
         if car then
+            if car.UnitVehicle then
+                ply:ConCommand( "uv_spawn_as_unit" )
+                return
+            end
+            
             if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
             if not UVRaceInProgress then return end
             
