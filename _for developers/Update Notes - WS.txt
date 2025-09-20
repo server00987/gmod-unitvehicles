@@ -7,9 +7,10 @@
 
 [b]Pursuit[/b]
 [list]
-	[*]Added the function for manufacturer and model-based chatter callouts - default chatter will be updated in the future to include these
+	[*]Added the function for manufacturer and model-based chatter callouts - default chatter will be updated in the future to include more of these
 	[*]Added the option for Units to be affected by roadblock spike strips
 	[*]Added more default Copchatter lines (air, cop1, fed1)
+	[*]Added the option to bring up the "Choose a Unit" menu by pressing your "Reset" button (Default: `M`)
 [/list]
 
 [b]Other[/b]
