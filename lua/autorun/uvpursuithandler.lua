@@ -4603,6 +4603,7 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 			pursuittheme:SetTooltip("#uv.settings.audio.pursuittheme.desc")
+			local oldThemeSelect = pursuittheme.OnSelect
 			function pursuittheme:OnSelect(index, value)
 				if not PursuitFilePathsTable[value] then
 					PopulatePursuitFilePaths(value)
@@ -4611,6 +4612,8 @@ else -- CLIENT Settings | HUD/Options
 				if UVPlayingHeat and PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
 					UVResetRandomHeatTrack()
 				end
+
+				oldThemeSelect(self, index, value)
 			end
 			
 			option = panel:CheckBox("#uv.settings.audio.pursuitpriority", "unitvehicle_racingmusicpriority")
@@ -4625,9 +4628,10 @@ else -- CLIENT Settings | HUD/Options
 			pursuitthemeplayrandomheattype:SetTooltip("#uv.settings.audio.pursuittheme.random.type.desc")
 			
 			local numslider = panel:NumSlider("#uv.settings.audio.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)
-
+			local oldTypeChange = pursuitthemeplayrandomheattype.OnSelect
 			function pursuitthemeplayrandomheattype:OnSelect(index, name, value)
 				numslider:SetEnabled(value == "everyminutes")
+				oldTypeChange(self, index, name, value)
 			end
 
 			panel:Help("#uv.settings.keybinds")
