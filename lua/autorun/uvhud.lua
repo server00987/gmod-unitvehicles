@@ -68,6 +68,8 @@ UVMaterials = {
     ["UNITS_DISABLED_CARBON"] = Material("unitvehicles/icons_carbon/COPS_DESTROYED.png"),
     ["UNITS_CARBON"] = Material("unitvehicles/icons_carbon/COPS_INVOLVED.png"),
     ["HEAT_CARBON"] = Material("unitvehicles/icons_carbon/FLASHER_ICON_HEAT.png"),
+	
+    ["SPLITTIME_CARBON"] = Material("unitvehicles/icons_carbon/FLASHER_ICON_SPLITTIME.png"),
     
     ["ARROW_CARBON"] = Material("unitvehicles/hud_carbon/NFSC_ARROWRIGHT.png"),
     ["BACKGROUND_CARBON"] = Material("unitvehicles/hud_carbon/NFSC_GRADIENT.png"),
@@ -1391,6 +1393,7 @@ UV_UI.racing.carbon.events = {
 
 		local ptext = params.text or "ERROR: NO TEXT"
 		local piconMat = params.iconMaterial or UVMaterials["UNITS_DISABLED_CARBON"]
+		local piconSize = params.iconSize or 0.06
 		local pnoicon = params.noIcon
 
 		local pfontUpper = params.fontUpper or "UVCarbonFont"
@@ -1454,9 +1457,9 @@ UV_UI.racing.carbon.events = {
 				fadeAfterBlinkStart = nil,
 			},
 			icon = {
-			  scale = 0.06,
-			  baseScale = 0.06,
-			  overshootScale = 0.07,
+			  scale = piconSize,
+			  baseScale = piconSize,
+			  overshootScale = piconSize + 0.01,
 			  alpha = 255,
 			  ExpandDuration = 0.125,
 			},
@@ -2348,7 +2351,8 @@ UV_UI.racing.carbon.events = {
 
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = splittext,
-			iconMaterial = UVMaterials["CLOCK_BG"],
+			iconMaterial = UVMaterials["SPLITTIME_CARBON"],
+			iconSize = 0.0475,
 			colorLower = noticol,
 			ringColor = noticol,
 			flyUp = true,
@@ -2360,6 +2364,7 @@ UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
 		UV_UI.racing.carbon.events.CenterNotification({
 			text = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo ),
+			iconSize = 0.0475,
 			immediate = true,
 		})
 	end,
