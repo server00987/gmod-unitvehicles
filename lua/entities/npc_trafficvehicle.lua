@@ -655,7 +655,7 @@ if SERVER then
 						table.insert(v.UVConstrainedEntities, entity)
 
 						entity:CallOnRemove("UVConstrainedEntitiesRemoved", function()
-							if table.HasValue(v.UVConstrainedEntities, entity) then
+							if v.UVConstrainedEntities and table.HasValue(v.UVConstrainedEntities, entity) then
 								table.RemoveByValue(v.UVConstrainedEntities, entity)
 							end
 						end)
