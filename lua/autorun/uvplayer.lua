@@ -114,6 +114,161 @@ if SERVER then
         end
     end
 
+    function UVRepair(vehicle, forcerepair)
+		local cooldown = 5
+		local cooldown2 = RepairCooldown:GetInt()
+		
+		vehicle.uvrepairdelayed = true
+		timer.Simple(cooldown, function()
+			if IsValid(vehicle) then
+				vehicle.uvrepairdelayed = false
+			end
+		end)
+		
+		local function UVRepairCooldown()
+			local cooldowntimeleft = cooldown2 - (CurTime() - vehicle.uvrepaircooldown)
+			if UVGetDriver(vehicle) then
+				if UVGetDriver(vehicle):IsPlayer() then
+					net.Start("UVHUDRepairCooldown")
+					net.WriteInt(cooldowntimeleft, 32)
+					net.Send(UVGetDriver(vehicle))
+				end
+			end
+			return
+		end
+		
+		if vehicle.uvrepaircooldown and not forcerepair then
+			UVRepairCooldown()
+			return
+		end
+		
+		local ptrefilled = false
+		
+		if vehicle.PursuitTech then
+			for k, v in pairs(vehicle.PursuitTech) do
+				local max_ammo = GetConVar('unitvehicle_'..((vehicle.UnitVehicle and 'unitpursuittech') or 'pursuittech')..'_maxammo_'..string.lower(string.gsub(v.Tech, " ", ""))):GetInt()
+				if v.Ammo < max_ammo then
+					ptrefilled = true
+					v.Ammo = max_ammo
+				end
+			end
+		end
+		
+		if ptrefilled then
+			for i=1, 2 do
+				UVReplicatePT( vehicle, i )
+			end
+		end
+	
+		local repairnet = "UVHUDRepair"
+		local comcanrep = GetConVar("unitvehicle_unit_commanderrepair"):GetBool()
+		local canrepair = true
+	
+		if comcanrep then
+			if table.HasValue(UVCommanders, vehicle) then
+				if UVGetDriver(vehicle) and UVGetDriver(vehicle):IsPlayer() then
+					repairnet = "UVHUDRepairCommander"
+					canrepair = false
+				end
+			end
+		end
+	
+		if canrepair then
+			if vehicle:GetClass() == "prop_vehicle_jeep" then
+				if vcmod_main then
+					if not ptrefilled and vehicle:VC_getHealthMax() == vehicle:VC_getHealth() then return end
+				
+					vehicle:VC_repairFull_Admin()
+				else
+					if not ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
+				
+					local mass = vehicle:GetPhysicsObject():GetMass()
+					vehicle:SetMaxHealth(mass)
+					vehicle:SetHealth(mass)
+					vehicle:StopParticles()
+				end
+			end
+			if vehicle.IsSimfphyscar then	
+				local repaired_tires = false 
+				
+				if istable(vehicle.Wheels) then
+					for i = 1, table.Count( vehicle.Wheels ) do
+						local Wheel = vehicle.Wheels[ i ]
+						if IsValid(Wheel) and Wheel:GetDamaged() then
+							repaired_tires = true
+							Wheel:SetDamaged( false )
+						end
+					end
+				end
+				
+				if not ptrefilled and not repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
+				
+				--vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
+				vehicle:SetCurHealth((AutoHealth:GetBool() and math.huge) or (vehicle.simfphysoldhealth or vehicle:GetMaxHealth()))
+				vehicle:SetOnFire( false )
+				vehicle:SetOnSmoke( false )
+				
+				net.Start( "simfphys_lightsfixall" )
+				net.WriteEntity( vehicle )
+				net.Broadcast()
+				
+				net.Start( "uvrepairsimfphys" )
+				net.WriteEntity( vehicle )
+				net.Broadcast()
+				
+				vehicle:OnRepaired()
+			
+			end
+			if vehicle.IsGlideVehicle then
+				local repaired = false
+				
+				for _, v in pairs(vehicle.wheels) do
+					if IsValid(v) and v.bursted then
+						repaired = true
+						v:_restore()
+					end
+				end
+				
+				if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
+				vehicle:Repair()
+				
+				if cffunctions then
+					CFRefillNitrous(vehicle)
+				end
+			end
+		end
+	
+		if UVGetDriver(vehicle) then
+			if UVGetDriver(vehicle):IsPlayer() then
+				if UVGetDriver(vehicle):GetMaxHealth() == 100 then
+					UVGetDriver(vehicle):SetHealth(vehicle:GetPhysicsObject():GetMass())
+					UVGetDriver(vehicle):SetMaxHealth(vehicle:GetPhysicsObject():GetMass())
+				end
+				net.Start(repairnet)
+				net.Send(UVGetDriver(vehicle))
+				if ptrefilled then
+					net.Start("UVHUDRefilledPT")
+					net.Send(UVGetDriver(vehicle))
+				end
+			end
+		end
+		
+		vehicle.uvrepaircooldown = CurTime()
+		if cooldown2 > 0 then
+			timer.Simple(cooldown2, function()
+				if IsValid(vehicle) then
+					vehicle.uvrepaircooldown = nil
+					if UVGetDriver(vehicle) then
+						if UVGetDriver(vehicle):IsPlayer() then
+							net.Start("UVHUDRepairAvailable")
+							net.Send(UVGetDriver(vehicle))
+						end
+					end
+				end
+			end)
+		end
+	end
+
     function UVOptimizeRespawn( vehicle, rhino )
         if UVOptimizeRespawnDelayed then return end
 
@@ -236,22 +391,7 @@ if SERVER then
             local pos = uvspawnpoint+(vector_up * 50)
 		    local ang = uvspawnpointangles
 
-            if not vehicle.UVCommander then
-                local repaired = false
-                
-			    for _, v in pairs(vehicle.wheels) do
-			    	if IsValid(v) and v.bursted then
-			    		repaired = true
-			    		v:_restore()
-			    	end
-			    end
-            
-			    vehicle:Repair()
-            
-			    if cffunctions then
-			    	CFRefillNitrous(vehicle)
-			    end --Repair
-            end
+            UVRepair(vehicle, true)
 
             vehicle:SetPos( pos )
             vehicle:SetAngles( ang )
@@ -269,16 +409,7 @@ if SERVER then
             vehicle:SetAngles( ang )
             vehicle:SetVelocity(Vector(0,0,0))
 
-            if not vehicle.UVCommander then
-                if vcmod_main and isfunction(vehicle.VC_repairFull_Admin) then
-			    	vehicle:VC_repairFull_Admin()
-			    else
-			    	local mass = vehicle:GetPhysicsObject():GetMass()
-			    	vehicle:SetMaxHealth(mass)
-			    	vehicle:SetHealth(mass)
-			    	vehicle:StopParticles()
-			    end --Repair
-            end
+            UVRepair(vehicle, true)
             
             timer.Simple(.5, function()
                 physObj:EnableMotion(true)
