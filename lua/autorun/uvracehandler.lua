@@ -1846,7 +1846,9 @@ else -- CLIENT stuff
 		end
 
 		UVHUDDisplayRacing = true
-		UVSoundRacing( my_vehicle )
+		if not UVHUDDisplayPursuit then
+			UVSoundRacing( my_vehicle )
+		end
 
 		local var = UVKeybindResetPosition:GetInt()
 

@@ -3110,9 +3110,8 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive("UVHUDHeatLevelIncrease", function()
-		UVHeatLevelIncrease = true
-
-		if not UVPlayingRace then
+		if not UVPlayingRace and (UVHUDDisplayPursuit and not (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes")) then
+			UVHeatLevelIncrease = true
 			UVStopSound()
 		end
 
