@@ -26,6 +26,7 @@
 
 **Other**
 - Tweaked the appearance of the Unit Vehicles settings on the Spawnmenu - Descriptions are no longer present at all times and instead appear when hovering over the options
+- Fixed that trucks with trailers can now properly spawn using the Traffic Manager tool
 - Optimized AI behaviour
 
 And some various undocumented changes.

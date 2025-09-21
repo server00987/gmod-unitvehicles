@@ -715,7 +715,7 @@ function UVRenderEnemySquare(ent)
 
 		if UVHUDRaceInfo and UVHUDRaceInfo.Participants and UVHUDRaceInfo.Participants[ent] then
 			local pdata = UVHUDRaceInfo.Participants[ent]
-			if pdata.Finished or pdata.Disqualified or pdata.Busted then
+			if (not UVHUDCopMode) and pdata.Finished or pdata.Disqualified or pdata.Busted then
 				return
 			end
 		end
