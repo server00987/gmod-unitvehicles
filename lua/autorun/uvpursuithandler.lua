@@ -3450,7 +3450,7 @@ else -- CLIENT Settings | HUD/Options
 
 		if not UVBustedState then
 			if UVHUDDisplayPursuit then
-				if not PlayMusic:GetBool() then 
+				if not PlayMusic:GetBool() and not UVPlayingRace then 
 					UVStopSound()
 					if UVSoundLoop then
 						UVSoundLoop:Stop()
@@ -3508,7 +3508,7 @@ else -- CLIENT Settings | HUD/Options
 
 		if UVHUDCopMode and input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			local localPlayer = LocalPlayer()
-			
+
 			if localPlayer.uvspawningunit then
 				net.Start("UVCancelUnitRespawn")
 				net.SendToServer()
