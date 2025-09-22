@@ -475,13 +475,13 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		Ent:SetPos( pos )
 		Ent:SetAngles( ang )
 
+		-- NOTE: table merging must happen BEFORE spawning, DT (netvars) after spawning.
 		table.Merge( Ent:GetTable(), entArray )
 
 		Ent:Spawn()
 		Ent:Activate()
 
 		if ( Ent.RestoreNetworkVars ) then
-			PrintTable(entArray.DT)
 			Ent:RestoreNetworkVars( entArray.DT )
 		end
 
