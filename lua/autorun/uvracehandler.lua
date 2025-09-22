@@ -9,10 +9,10 @@ local UVRace_CurrentTrackName = UVRace_CurrentTrackName or nil
 local UVRace_CurrentTrackAuthor = UVRace_CurrentTrackAuthor or nil
 local UVRace_CurrentTrackHost = UVRace_CurrentTrackHost or nil
 
-local UVHUDRaceFinishCountdownStarted = false
-local UVHUDRaceFinishEndTime = nil
-local UVHUDRaceFinishStartTime = nil
-local UVHUDRaceAnimTriggered = false
+UVHUDRaceFinishCountdownStarted = false
+UVHUDRaceFinishEndTime = nil
+UVHUDRaceFinishStartTime = nil
+UVHUDRaceAnimTriggered = false
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )

@@ -4964,6 +4964,14 @@ local function mw_pursuit_main( ... )
     end
     
     -- [ Bottom Info Box ] --
+	local bottomyplus = 0
+
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+        bottomyplus = -(h * 0.075)
+    end
+
+    local bottomy = h * 0.8 + bottomyplus
+
     local middlergb = {
         r = 255,
         g = 255,
@@ -4973,18 +4981,18 @@ local function mw_pursuit_main( ... )
     
     if not UVHUDDisplayCooldown then
         -- General Icons
-        draw.DrawText( UVWrecks, "UVFont5UI", w * 0.64, h * 0.825, UVWrecksColor, TEXT_ALIGN_RIGHT)
-        DrawIcon(UVMaterials["UNITS_DISABLED"], w * 0.6525, h * 0.84, 0.06, UVWrecksColor)
+        draw.DrawText( UVWrecks, "UVFont5UI", w * 0.64, bottomy + h * 0.025, UVWrecksColor, TEXT_ALIGN_RIGHT)
+        DrawIcon(UVMaterials["UNITS_DISABLED"], w * 0.6525, bottomy + h * 0.04, 0.06, UVWrecksColor)
         
-        draw.DrawText(UVTags, "UVFont5UI", w * 0.3625, h * 0.825, UVTagsColor, TEXT_ALIGN_LEFT)
-        DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.35, h * 0.84, 0.06, UVTagsColor)
+        draw.DrawText(UVTags, "UVFont5UI", w * 0.3625, bottomy + h * 0.025, UVTagsColor, TEXT_ALIGN_LEFT)
+        DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.35, bottomy + h * 0.04, 0.06, UVTagsColor)
         
-        draw.DrawText(ResourceText,"UVFont5UI-BottomBar",w * 0.5,h * 0.825,UVUnitsColor,TEXT_ALIGN_CENTER)
-        DrawIcon(UVMaterials["UNITS"], w * 0.5, h * 0.8, .07, UVUnitsColor)
+        draw.DrawText(ResourceText,"UVFont5UI-BottomBar",w * 0.5,bottomy + h * 0.025,UVUnitsColor,TEXT_ALIGN_CENTER)
+        DrawIcon(UVMaterials["UNITS"], w * 0.5, bottomy + h * 0.0, .07, UVUnitsColor)
         
         -- Evade Box, All BG
         surface.SetDrawColor(200, 200, 200, 100)
-        surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
+        surface.DrawRect(w * 0.333, bottomy + h * 0.1, w * 0.34, h * 0.01)
         
         -- Evade Box, Busted Meter
         if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
@@ -5020,7 +5028,7 @@ local function mw_pursuit_main( ... )
             local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.1515), 0, w * 0.1515)
             T = math.floor(T)
             surface.SetDrawColor(255, 0, 0)
-            surface.DrawRect(w * 0.333 + (w * 0.1515 - T), h * 0.9, T, h * 0.01)
+            surface.DrawRect(w * 0.333 + (w * 0.1515 - T), bottomy + h * 0.1, T, h * 0.01)
             middlergb = {
                 r = 255,
                 g = 0,
@@ -5042,7 +5050,7 @@ local function mw_pursuit_main( ... )
             
             local T = math.Clamp((UVEvadingProgress) * (w * 0.16225), 0, w * 0.16225)
             surface.SetDrawColor(155, 207, 0)
-            surface.DrawRect(w * 0.51, h * 0.9, T, h * 0.01)
+            surface.DrawRect(w * 0.51, bottomy + h * 0.1, T, h * 0.01)
             middlergb = {
                 r = 155,
                 g = 207,
@@ -5057,23 +5065,23 @@ local function mw_pursuit_main( ... )
         
         -- Evade Box, Middle
         surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, middlergb.a)
-        surface.DrawRect(w * 0.49, h * 0.9, w * 0.021, h * 0.01)
+        surface.DrawRect(w * 0.49, bottomy + h * 0.1, w * 0.021, h * 0.01)
         
         -- Evade Box, Dividers
         surface.SetDrawColor(255, 255, 255, 255)
-        surface.DrawRect(w * 0.485, h * 0.9, w * 0.005, h * 0.01)
-        surface.DrawRect(w * 0.4, h * 0.9, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.485, bottomy + h * 0.1, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.4, bottomy + h * 0.1, w * 0.005, h * 0.01)
         
-        surface.DrawRect(w * 0.51, h * 0.9, w * 0.005, h * 0.01)
-        surface.DrawRect(w * 0.6, h * 0.9, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.51, bottomy + h * 0.1, w * 0.005, h * 0.01)
+        surface.DrawRect(w * 0.6, bottomy + h * 0.1, w * 0.005, h * 0.01)
         
         -- Upper Box
         surface.SetDrawColor(0, 0, 0, 255)
         surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
-        surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
+        surface.DrawTexturedRect(w * 0.303, bottomy + h * 0.04, w * 0.4015, h * 0.06)
         
-        draw.DrawText("#uv.chase.busted","UVFont5UI",w * 0.34,h * 0.8625,states.BustedColor,TEXT_ALIGN_LEFT)
-        draw.DrawText("#uv.chase.evade","UVFont5UI",w * 0.66,h * 0.8625,states.EvasionColor,TEXT_ALIGN_RIGHT)
+        draw.DrawText("#uv.chase.busted","UVFont5UI",w * 0.34,bottomy + h * 0.0625,states.BustedColor,TEXT_ALIGN_LEFT)
+        draw.DrawText("#uv.chase.evade","UVFont5UI",w * 0.66,bottomy + h * 0.0625,states.EvasionColor,TEXT_ALIGN_RIGHT)
         
         -- Lower Box
         local shade_theme_color =
@@ -5083,7 +5091,7 @@ local function mw_pursuit_main( ... )
         
         surface.SetDrawColor(theme_color:Unpack())
         surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-        surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+        surface.DrawTexturedRect(w * 0.302, bottomy + h * 0.1125, w * 0.4015, h * 0.06)
         
         local lbtext = "REPLACEME"
         local uloc, utype = "uv.chase.unit", UnitsChasing
@@ -5124,7 +5132,7 @@ local function mw_pursuit_main( ... )
             lbtext = string.format(lang("uv.chase.backupin"), UVBackupTimer)
         end
         
-        draw.DrawText(lbtext,"UVFont5UI", w * 0.5, h * 0.91 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
+        draw.DrawText(lbtext,"UVFont5UI", w * 0.5, bottomy + h * 0.11 * 1.001,UVBackupColor,TEXT_ALIGN_CENTER)
     else
         -- Lower Box
         -- Evade Box, All BG (Moved to inner if clauses)
@@ -5145,24 +5153,24 @@ local function mw_pursuit_main( ... )
                     
                     surface.SetDrawColor(0, 175, 0, 200)
                     surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR_ALT"])
-                    surface.DrawTexturedRect(w * 0.303, h * 0.84, w * 0.4015, h * 0.06)
+                    surface.DrawTexturedRect(w * 0.303, bottomy + h * 0.04, w * 0.4015, h * 0.06)
                     
-                    DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.835, .07, Color(blink, 255, blink))
-                    draw.DrawText( "#uv.chase.hiding", "UVFont5UI", w * 0.5, h * 0.8625, Color(255,255,255), TEXT_ALIGN_CENTER)
+                    DrawIcon(UVMaterials["HIDECAR"], w * 0.5, bottomy + h * 0.035, .07, Color(blink, 255, blink))
+                    draw.DrawText( "#uv.chase.hiding", "UVFont5UI", w * 0.5, bottomy + h * 0.0625, Color(255,255,255), TEXT_ALIGN_CENTER)
                 end
                 
                 surface.SetDrawColor(255, 255, 255, 50)
-                surface.DrawRect(w * 0.333, h * 0.9, w * 0.34, h * 0.01)
+                surface.DrawRect(w * 0.333, bottomy + h * 0.1, w * 0.34, h * 0.01)
                 
                 local T = math.Clamp((UVCooldownTimer) * (w * 0.34), 0, w * 0.34)
                 surface.SetDrawColor(75, 75, 255)
-                surface.DrawRect(w * 0.333, h * 0.9, T, h * 0.01)
+                surface.DrawRect(w * 0.333, bottomy + h * 0.1, T, h * 0.01)
                 
                 surface.SetDrawColor(0, 0, 0)
                 surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-                surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+                surface.DrawTexturedRect(w * 0.302, bottomy + h * 0.1125, w * 0.4015, h * 0.06)
                 
-                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, bottomy + h * 0.11, Color(255, 255, 255), TEXT_ALIGN_CENTER)
             else
                 local shade_theme_color = (UVHUDCopMode and table.Copy(Colors.MW_CopShade)) or table.Copy(Colors.MW_RacerShade)
                 local theme_color = (UVHUDCopMode and table.Copy(Colors.MW_Cop)) or table.Copy(Colors.MW_Racer)
@@ -5170,11 +5178,11 @@ local function mw_pursuit_main( ... )
                 
                 surface.SetDrawColor(theme_color:Unpack())
                 surface.SetMaterial(UVMaterials["PURSUIT_BG_BOTBAR"])
-                surface.DrawTexturedRect(w * 0.302, h * 0.9125, w * 0.4015, h * 0.06)
+                surface.DrawTexturedRect(w * 0.302, bottomy + h * 0.1125, w * 0.4015, h * 0.06)
                 
-                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, h * 0.91, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+                draw.DrawText("#uv.chase.cooldown", "UVFont5UI", w * 0.5, bottomy + h * 0.11, Color(255, 255, 255), TEXT_ALIGN_CENTER)
                 
-                DrawIcon(UVMaterials["HIDECAR"], w * 0.5, h * 0.875, .07, Colors.MW_Cop)
+                DrawIcon(UVMaterials["HIDECAR"], w * 0.5, bottomy + h * 0.075, .07, Colors.MW_Cop)
             end
         else
             CooldownProgress = 0
@@ -5199,6 +5207,8 @@ UV_UI.pursuit.undercover.states = {
     EvasionColor = Color(255, 255, 255, 50),
     
     TakedownText = nil,
+	BottomBarPos = 0.91,
+	BottomBarPosMove = 0,
 }
 
 UV_UI.racing.undercover.states = {
@@ -6584,8 +6594,14 @@ local function undercover_pursuit_main( ... )
     surface.DrawRect(w * 0.805, h * 0.2815, B, h * 0.035)
     
     -- [ Bottom Info Box ] --
-    local bottomy = h * 0.86
-    
+	local bottomyplus = 0
+
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+        bottomyplus = -(h * 0.05)
+    end
+
+    local bottomy = h * 0.91 + bottomyplus
+
     if not UVHUDDisplayCooldown then
         -- Evade Box, All BG
         draw.NoTexture()
@@ -7469,7 +7485,17 @@ local function original_pursuit_main( ... )
             end
         end
     end
-    
+		
+	local bottomyplus = 0
+
+	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+		bottomyplus = -(h * 0.1)
+	end
+
+		bottomyplus = -(h * 0.1) -- Debug
+
+	local bottomy = h * 0.9 + bottomyplus
+		
     if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
         outofpursuit = CurTime()
         
@@ -7485,16 +7511,7 @@ local function original_pursuit_main( ... )
         surface.SetDrawColor( 0, 0, 0, 200)
         draw.NoTexture()
         surface.DrawPoly( element1 )
-        local element2 = {
-            { x = w/3, y = h/1.1+28+12 },
-            { x = w/3+12+w/3, y = h/1.1+28+12 },
-            { x = w/3+12+w/3-25, y = h/1 },
-            { x = w/3+25, y = h/1 },
-        }
-        draw.NoTexture()
-        surface.DrawPoly( element2 )
-        surface.SetDrawColor( 0, 0, 0, 200)
-        
+
         -- DrawIcon(UVMaterials['CLOCK'], w/1.135, h*0.07, .05, Color(255,255,255))
         
         draw.DrawText( "⏰", "UVFont2",w/1.32, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
@@ -7639,6 +7656,16 @@ local function original_pursuit_main( ... )
             
             draw.DrawText( "⛊ " .. cname .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
         end
+
+        local element2 = {
+            { x = w/3, y = bottomy + (h * 0.01)+28+12 },
+            { x = w/3+12+w/3, y = bottomy + (h * 0.01)+28+12 },
+            { x = w/3+12+w/3-25, y = bottomy + (h * 0.1) },
+            { x = w/3+25, y = bottomy + (h * 0.1) },
+        }
+        draw.NoTexture()
+        surface.SetDrawColor( 0, 0, 0, 200)
+        surface.DrawPoly( element2 )
         
         local iconhigh = 0
 
@@ -7663,9 +7690,9 @@ local function original_pursuit_main( ... )
                             uloc = "uv.chase.suspects"
                         end
                         
-                        draw.DrawText( string.format( lang(uloc), utype ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+                        draw.DrawText( string.format( lang(uloc), utype ), "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVResourcePointsColor, TEXT_ALIGN_CENTER )
                     else
-                        draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont-Smaller",w/2,h/1.05, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+                        draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVResourcePointsColor, TEXT_ALIGN_CENTER )
                     end
                 else
                     if busttime >= 3 then
@@ -7681,7 +7708,7 @@ local function original_pursuit_main( ... )
                         busttext = "!!! " .. lang("uv.chase.busting") .. " !!!"
                         bustcol = Color( 255, blink3, blink3)
                     end
-                    draw.DrawText( busttext, "UVFont-Smaller",w/2,h/1.05, bustcol, TEXT_ALIGN_CENTER )
+                    draw.DrawText( busttext, "UVFont-Smaller",w/2,bottomy + (h * 0.05), bustcol, TEXT_ALIGN_CENTER )
                     iconhigh = h*0.035
                 end
                 --UVSoundHeat(UVHeatLevel)
@@ -7691,18 +7718,18 @@ local function original_pursuit_main( ... )
                     UVEvadingProgress = EvadingProgress
                 end
                 
-                draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,h/1.05, Color( 0, 255, 0), TEXT_ALIGN_CENTER )
+                draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,bottomy + (h * 0.05), Color( 0, 255, 0), TEXT_ALIGN_CENTER )
                 
                 surface.SetDrawColor( 0, 0, 0, 200)
-                surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
+                surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
                 surface.SetDrawColor(Color( 0, 255, 0))
-                surface.DrawRect(w/3,h/1.1,12,40)
-                surface.DrawRect(w*2/3,h/1.1,12,40)
-                surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-                surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
+                surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+                surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+                surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+                surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
                 surface.SetDrawColor(Color( 0, 255, 0))
                 local T = math.Clamp((UVEvadingProgress)*(w/3-20),0,w/3-20)
-                surface.DrawRect(w/3+16,h/1.1+16,T,8)
+                surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)
                 --UVSoundHeat(UVHeatLevel)
                 iconhigh = h*0.035
             else
@@ -7715,22 +7742,22 @@ local function original_pursuit_main( ... )
                 end
                 
                 local text = (UVHUDCopMode and "/// "..lang("uv.chase.cooldown").." ///") or lang("uv.chase.cooldown")
-                draw.DrawText( text, "UVFont-Smaller",w/2,h/1.05, color, TEXT_ALIGN_CENTER )
+                draw.DrawText( text, "UVFont-Smaller",w/2,bottomy + (h * 0.05), color, TEXT_ALIGN_CENTER )
                 iconhigh = h*0.035
             end
         else
             EvadingProgress = 0
-            draw.DrawText( UVNotification, "UVFont-Smaller",w/2,h/1.05, UVNotificationColor, TEXT_ALIGN_CENTER )
+            draw.DrawText( UVNotification, "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVNotificationColor, TEXT_ALIGN_CENTER )
         end
 
         -- DrawIcon(UVMaterials['UNITS_DISABLED'], w * 0.68, h * 0.975, 0.06, UVWrecksColor)
-        draw.DrawText( "☠ " .. UVWrecks, "UVFont3", w * 0.67, h * 0.955, UVWrecksColor, TEXT_ALIGN_LEFT )
+        draw.DrawText( "☠ " .. UVWrecks, "UVFont3", w * 0.67, bottomy + (h * 0.05), UVWrecksColor, TEXT_ALIGN_LEFT )
         
         -- DrawIcon(UVMaterials['UNITS_DAMAGED'], w * 0.3275, h * 0.975, 0.06, UVTagsColor)
-        draw.DrawText( UVTags .. " ☄", "UVFont3", w * 0.335, h * 0.955, UVTagsColor, TEXT_ALIGN_RIGHT )
+        draw.DrawText( UVTags .. " ☄", "UVFont3", w * 0.335, bottomy + (h * 0.05), UVTagsColor, TEXT_ALIGN_RIGHT )
         
         -- DrawIcon(UVMaterials['UNITS'], w / 2, h * 0.885 - iconhigh, .06, UVUnitsColor)
-        draw.DrawText( ResourceText, "UVFont3", w/2, h * 0.85 - iconhigh, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+        draw.DrawText( ResourceText, "UVFont3", w/2, bottomy - (h * 0.05) - iconhigh, UVResourcePointsColor, TEXT_ALIGN_CENTER )
     end
     
     if vehicle == NULL then 
@@ -7743,16 +7770,16 @@ local function original_pursuit_main( ... )
             BustingProgress = CurTime()
         end
         surface.SetDrawColor( 0, 0, 0, 200)
-        surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
+        surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
         surface.SetDrawColor(Color(255,0,0))
-        surface.DrawRect(w/3,h/1.1,12,40)
-        surface.DrawRect(w*2/3,h/1.1,12,40)
-        surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-        surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
+        surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+        surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+        surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+        surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
         surface.SetDrawColor(Color(255,0,0))
         
         local T = math.Clamp((UVBustingProgress/UVBustTimer)*(w/3-20),0,w/3-20)
-        surface.DrawRect(w/3+16,h/1.1+16,T,8)   
+        surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)   
     else
         BustingProgress = 0
     end
@@ -7766,15 +7793,15 @@ local function original_pursuit_main( ... )
         
         if not UVHUDCopMode then
             surface.SetDrawColor( 0, 0, 0, 200)
-            surface.DrawRect( w/3,h/1.1,w/3+12, 40 )
+            surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
             surface.SetDrawColor(Color(0,0,255))
-            surface.DrawRect(w/3,h/1.1,12,40)
-            surface.DrawRect(w*2/3,h/1.1,12,40)
-            surface.DrawRect(w/3+12,h/1.1,w/3-12,12)
-            surface.DrawRect(w/3+12,h/1.1+28,w/3-12,12)
+            surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+            surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+            surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+            surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
             surface.SetDrawColor(Color(0,0,255))
             local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
-            surface.DrawRect(w/3+16,h/1.1+16,T,8)
+            surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)
         end
         
         EvadingProgress = 0
@@ -11158,7 +11185,13 @@ local function world_pursuit_main( ... )
     end
 
     -- [ Bottom Info Box ] --
-    local bottomy = h * 0.89
+	local bottomyplus = 0
+
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+        bottomyplus = -(h * 0.065)
+    end
+
+    local bottomy = h * 0.89 + bottomyplus
 
 	-- Evade Box, Icons
 	DrawIcon(UVMaterials["CHASEBAR_CAR_WORLD"], w * 0.38, bottomy, .035, Color( 255, 255, 255 )) -- Racer Icon
