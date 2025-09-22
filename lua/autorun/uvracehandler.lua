@@ -662,6 +662,8 @@ else -- CLIENT stuff
 			if (not UVHUDRace) then return end 
 		end
 
+		if UVHUDDisplayRacing and not RacingMusic:GetBool() then return end
+
 		if UVPlayingRace or UVSoundDelayed then return end
 
 		if timer.Exists("UVRaceMusicTransition") then
@@ -1846,7 +1848,7 @@ else -- CLIENT stuff
 		end
 
 		UVHUDDisplayRacing = true
-		if not UVHUDDisplayPursuit then
+		if not UVHUDDisplayPursuit or (UVHUDDisplayPursuit and not RacingMusicPriority:GetBool()) then
 			UVSoundRacing( my_vehicle )
 		end
 
