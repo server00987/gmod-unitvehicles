@@ -300,8 +300,6 @@ local function _setConVar( cvar, value )
 	local valueType = type( value )
 	local cvarClass = GetConVar( cvar )
 
-	print(cvar)
-
 	if valueType == 'number' then
 		cvarClass:SetFloat( value )
 	else
