@@ -657,7 +657,6 @@ else -- CLIENT stuff
 	end
 
 	function UVSoundRacing(my_vehicle)
-		print("WORK YOU FUCKING PIECE OF SHIT")
 		if not UVTraxFreeroam:GetBool() and not RacingThemeOutsideRace:GetBool() then
 			if not RacingMusic:GetBool() or (RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
 			if (not UVHUDRace) then return end 
