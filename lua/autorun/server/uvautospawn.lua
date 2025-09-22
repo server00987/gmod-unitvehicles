@@ -1292,17 +1292,16 @@ function UVAutoSpawnTraffic()
 			duplicator.DoGeneric( Ent, v )
 
 			local pos, ang = LocalToWorld( v.Pos, ( (entCount > 1 and v.Angle) or Angle(0,0,0) ), uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
-			
-			table.Merge( Ent:GetTable(), v )
 
 			Ent:SetPos( pos )
 			Ent:SetAngles( ang )
+
+			table.Merge( Ent:GetTable(), v )
 			
 			Ent:Spawn()
 			Ent:Activate()
 
 			if ( Ent.RestoreNetworkVars ) then
-				PrintTable(v.DT)
 				Ent:RestoreNetworkVars( v.DT )
 			end
 
