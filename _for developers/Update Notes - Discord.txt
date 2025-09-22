@@ -1,3 +1,26 @@
+<------- September 19, Hotfix ------->
+# Changes
+**Racing**
+- Fixed that Racing Music was not playing properly when in a Race and Pursuit at the same time
+
+**Pursuit**
+- Fixed that default Dispatch "Roadblock Missed" was using old voice lines
+
+**UI**
+- When the Race DNF Timer, or the Unit Respawn Timers are on-screen, the bottom Pursuit UI elements (Most Wanted, Undercover, World, Original) get moved up to be on-top of those timers as to not obscure them
+
+**Other**
+- Tweaked vehicle spawns
+
+<------- September 19, Hotfix ------->
+# Changes
+**Racing**
+- Fixed that the Name Tags did not render as a Unit for racers who had finished a race with the race still ongoing
+
+**Other**
+- Fixed that Random Heat Level Theme reset after the heat changed in "Every X Minutes" mode
+- Fixed that the Race and Pursuit Themes sometimes played at the same time during races
+
 <------- September 19 ------->
 # New Features
 **Racing**
