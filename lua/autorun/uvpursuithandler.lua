@@ -3339,6 +3339,7 @@ else -- CLIENT Settings | HUD/Options
 	end
 
 	function UVResetRandomHeatTrack()
+		if UVPlayingRace then return end
 		UVLastHeatChange = CurTime()
 		UVGetRandomHeat()
 	end
