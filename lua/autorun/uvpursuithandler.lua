@@ -3507,7 +3507,7 @@ else -- CLIENT Settings | HUD/Options
 		
 		local var = UVKeybindResetPosition:GetInt()
 
-		if UVHUDCopMode and input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+		if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			local localPlayer = LocalPlayer()
 
 			if localPlayer.uvspawningunit then
