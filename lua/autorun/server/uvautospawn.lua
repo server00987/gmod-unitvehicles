@@ -475,10 +475,17 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		Ent:SetPos( pos )
 		Ent:SetAngles( ang )
 
+		table.Merge( Ent:GetTable(), entArray )
+
 		Ent:Spawn()
 		Ent:Activate()
 
-		table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
+		if ( Ent.RestoreNetworkVars ) then
+			PrintTable(entArray.DT)
+			Ent:RestoreNetworkVars( entArray.DT )
+		end
+
+		--table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
 		
 		-- duplicator.SetLocalPos( vector_origin )
 		-- duplicator.SetLocalAng( angle_zero )
@@ -1285,12 +1292,19 @@ function UVAutoSpawnTraffic()
 			duplicator.DoGeneric( Ent, v )
 
 			local pos, ang = LocalToWorld( v.Pos, ( (entCount > 1 and v.Angle) or Angle(0,0,0) ), uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
+			
+			table.Merge( Ent:GetTable(), v )
 
 			Ent:SetPos( pos )
 			Ent:SetAngles( ang )
 			
 			Ent:Spawn()
 			Ent:Activate()
+
+			if ( Ent.RestoreNetworkVars ) then
+				PrintTable(v.DT)
+				Ent:RestoreNetworkVars( v.DT )
+			end
 
 			table.Merge( Ent:GetTable(), v )
 
