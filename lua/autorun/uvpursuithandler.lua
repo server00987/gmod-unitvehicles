@@ -3547,6 +3547,7 @@ else -- CLIENT Settings | HUD/Options
 
 				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
 				
+				draw.SimpleTextOutlined( "MISSING LOC:", font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			else
 				local lines = {}
