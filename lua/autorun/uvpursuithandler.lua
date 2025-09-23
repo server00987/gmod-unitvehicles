@@ -1454,7 +1454,7 @@ if SERVER then
 				if not table.HasValue(UVUnitVehicles, car) and car.UnitVehicle then
 					table.insert(UVUnitVehicles, car)
 				end
-
+				
 				if IsValid(car) and not car.wrecked and
 					(car:Health() <= 0 and car:GetClass() == "prop_vehicle_jeep" or --No health 
 						car.uvclasstospawnon ~= "npc_uvcommander" and CanWreck:GetBool() and car:GetPhysicsObject():GetAngles().z > 90 and car:GetPhysicsObject():GetAngles().z < 270 and car.rammed --[[or car:GetVelocity():LengthSqr() < 10000)]] or --Flipped
