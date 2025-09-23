@@ -4335,6 +4335,7 @@ else -- CLIENT Settings | HUD/Options
 					".misc.radiooff",
 					".misc.emergency",
 					".dispatch.idletalk",
+					".bullhorn.",
 				}
 
 				local shouldUpdate = true
