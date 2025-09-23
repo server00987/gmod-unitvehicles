@@ -1231,7 +1231,7 @@ if SERVER then
 		end
 
 		local botimeout = 10
-		if UVBountyTimerProgress >= botimeout then
+		if not UVEnemyEscaping and UVBountyTimerProgress >= botimeout then
 			UVBounty = UVBounty+UVBountyTime
 			UVBountyTimer = CurTime()
 			if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
