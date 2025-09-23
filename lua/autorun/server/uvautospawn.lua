@@ -516,9 +516,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			duplicator.ApplyEntityModifiers( NULL, v )
 			duplicator.ApplyBoneModifiers( NULL, v )
 
-			if ( v.PostEntityPaste ) then
-				v:PostEntityPaste( NULL, nil, Ent, createdEntities )
-			end
+			-- if ( v.PostEntityPaste ) then
+			-- 	v:PostEntityPaste( NULL, nil, Ent, createdEntities )
+			-- end
 		end
 
 		local createdConstraints = {}

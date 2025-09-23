@@ -216,6 +216,9 @@ function UVSoundHeat(heatlevel)
 	end
 
 	heatlevel = tostring(heatlevel)
+	if not lastHeatlevel then
+		lastHeatlevel = heatlevel
+	end
 
 	local theme = PursuitTheme:GetString()
 
@@ -260,8 +263,28 @@ function UVSoundHeat(heatlevel)
 		UVHeatPlayTransition = true
 		UVHeatPlayIntro = true
 	end
+	
+	if UVHeatPlayTransition then
+		UVHeatPlayTransition = false
+		UVHeatPlayMusic = true
 
-	if UVHeatPlayIntro then
+	--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[lastHeatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
+
+		if transitionArray and #transitionArray > 0 then
+			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
+
+			if transitionTrack then
+				UVPlaySound(transitionTrack, true)
+				UVPlayingHeat = true
+			end
+		end
+	-- local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
+	-- if transitionTrack then
+	-- 	UVPlaySound(transitionTrack, true)
+	-- 	UVPlayingHeat = true
+	-- end
+	elseif UVHeatPlayIntro then
 		UVHeatPlayIntro = false
 		UVHeatPlayMusic = true
 
@@ -280,25 +303,6 @@ function UVSoundHeat(heatlevel)
 		-- local introTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/intro/" .. heatlevel )
 		-- if introTrack then
 		-- 	UVPlaySound(introTrack, true)
-		-- 	UVPlayingHeat = true
-		-- end
-	elseif UVHeatPlayTransition then
-		UVHeatPlayTransition = false
-
-		--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
-		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[heatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
-
-		if transitionArray and #transitionArray > 0 then
-			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
-
-			if transitionTrack then
-				UVPlaySound(transitionTrack, true)
-				UVPlayingHeat = true
-			end
-		end
-		-- local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
-		-- if transitionTrack then
-		-- 	UVPlaySound(transitionTrack, true)
 		-- 	UVPlayingHeat = true
 		-- end
 	elseif UVHeatPlayMusic then
