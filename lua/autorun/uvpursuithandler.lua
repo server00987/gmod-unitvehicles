@@ -279,6 +279,10 @@ function UVSoundHeat(heatlevel)
 				UVPlayingHeat = true
 			end
 		end
+
+		if heatlevel ~= lastHeatlevel then
+			lastHeatlevel = heatlevel
+		end
 	-- local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
 	-- if transitionTrack then
 	-- 	UVPlaySound(transitionTrack, true)
@@ -3118,6 +3122,11 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive("UVHUDHeatLevelIncrease", function()
+
+		if not lastHeatlevel then
+			lastHeatlevel = UVHeatLevel
+		end
+
 		if not UVPlayingRace and (UVHUDDisplayPursuit and not (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes")) then
 			UVHeatLevelIncrease = true
 			UVStopSound()
