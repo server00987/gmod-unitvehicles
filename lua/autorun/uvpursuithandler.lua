@@ -25,6 +25,9 @@ local showhud = GetConVar("cl_drawhud")
 
 local SpawnCooldownTable = {}
 
+UV_CurrentSubtitle = ""
+UV_SubtitleEnd = 0
+
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot.right",
 	[2] = "#uv.ptech.slot.left"
@@ -2407,6 +2410,7 @@ else -- CLIENT Settings | HUD/Options
 	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
 	UVTraxFreeroam = CreateClientConVar("unitvehicle_uvtraxinfreeroam", 0, true, false, "Unit Vehicles: If set to 1, UV TRAX™ will play in Freeroam whenever you're in a vehicle.")
 	OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
+	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
 
 	-- unit convars
 	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -3507,6 +3511,79 @@ else -- CLIENT Settings | HUD/Options
 		
 		local var = UVKeybindResetPosition:GetInt()
 
+		-- if UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
+			-- draw.SimpleTextOutlined( language.GetPhrase(UV_CurrentSubtitle), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+		-- end
+
+		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
+			local text = lang(UV_CurrentSubtitle)
+			local font = "UVMostWantedLeaderboardFont"
+			local maxWidth = w * 0.4  -- maximum width of the subtitle block
+			local bgPadding = 8
+			local outlineAlpha = 150
+
+			surface.SetFont(font)
+			if text == "" or text == UV_CurrentSubtitle then -- invalid or missing localization; Active for debugging purposes
+				local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
+				local totalHeight = 1 * lineHeight
+
+				local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
+				local bgY = h * 0.755 - bgPadding
+				local bgW = maxWidth + bgPadding * 2
+				local bgH = totalHeight + bgPadding * 2
+
+				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
+				
+				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+			else
+				local lines = {}
+				local currentLine = ""
+				for word in text:gmatch("%S+") do
+					local testLine = (currentLine == "" and "" or currentLine .. " ") .. word
+					local textWidth, _ = surface.GetTextSize(testLine)
+					if textWidth > maxWidth then
+						if currentLine ~= "" then
+							table.insert(lines, currentLine)
+						end
+						currentLine = word
+					else
+						currentLine = testLine
+					end
+				end
+				if currentLine ~= "" then
+					table.insert(lines, currentLine)
+				end
+
+				-- Calculate total height
+				local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
+				local totalHeight = #lines * lineHeight
+
+				-- Background box
+				local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
+				local bgY = h * 0.755 - bgPadding
+				local bgW = maxWidth + bgPadding * 2
+				local bgH = totalHeight + bgPadding * 2
+
+				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
+
+				-- Draw each line of text
+				for i, line in ipairs(lines) do
+					draw.SimpleTextOutlined(
+						line,
+						font,
+						w * 0.5,
+						h * 0.755 + (i - 1) * lineHeight,
+						pcol,
+						TEXT_ALIGN_CENTER,
+						TEXT_ALIGN_TOP,
+						1.25,
+						Color(0, 0, 0, outlineAlpha)
+					)
+				end
+			end
+		end
+
+		-- if UVHUDCopMode and input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 		if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			local localPlayer = LocalPlayer()
 
@@ -4217,6 +4294,12 @@ else -- CLIENT Settings | HUD/Options
 		local audio_file = "sound/"..net.ReadString()
 		local can_skip = net.ReadBool()
 
+		-- build subtitle key
+		local rel = string.gsub(audio_file, "^sound/chatter2/", "")
+		rel = string.gsub(rel, "%.mp3$", "")
+		rel = string.gsub(rel, "/", ".")
+		local key = "uvsub."..string.lower(rel)
+
 		if lastCanSkip == false and IsValid(uvchatterplaying) then
 			local state = uvchatterplaying:GetState()
 			if state ~= GMOD_CHANNEL_STOPPED then return end
@@ -4233,6 +4316,26 @@ else -- CLIENT Settings | HUD/Options
 				uvchatterplaying = source
 				source:Play()
 				source:SetVolume(ChatterVolume:GetFloat())
+				
+				local excludeSubstrings = {
+					".misc.radioon",
+					".misc.radiooff",
+					".misc.emergency",
+					".dispatch.idletalk",
+				}
+
+				local shouldUpdate = true
+				for _, substr in ipairs(excludeSubstrings) do
+					if string.find(key, substr, 1, true) then
+						shouldUpdate = false
+						break
+					end
+				end
+
+				if shouldUpdate then
+					UV_CurrentSubtitle = key
+					UV_SubtitleEnd = CurTime() + source:GetLength()
+				end
 			end
 		end)
 	end)
@@ -4561,6 +4664,9 @@ else -- CLIENT Settings | HUD/Options
 
 			option = panel:CheckBox("#uv.settings.ui.preracepopup", "unitvehicle_preraceinfo")
 			option:SetTooltip("#uv.settings.ui.preracepopup.desc")
+
+			option = panel:CheckBox("#uv.settings.ui.subtitles", "unitvehicle_subtitles")
+			option:SetTooltip("#uv.settings.ui.subtitles.desc")
 
 			panel:Help("#uv.settings.audio.title")
 

@@ -1848,8 +1848,9 @@ if SERVER then
 				timecheck = UVSoundChatter(self, self.voice, "pursuitstartranaway", 4)
 			end
 			timer.Simple(timecheck, function()
-				if IsValid(self) then
-					UVChatterPursuitStartAcknowledge(self)
+				if IsValid(self) and IsValid(self.e) then
+					local e = UVGetVehicleMakeAndModel(self.e)
+					UVChatterVehicleDescription(self, self.e, e)
 				end
 			end)
 			return
@@ -4149,8 +4150,9 @@ if SERVER then
 			local timecheck = 5
 			timecheck = UVSoundChatter(self, self.voice, "pursuitstartwanted", 4)
 			timer.Simple(timecheck, function()
-				if IsValid(self) then
-					UVChatterPursuitStartAcknowledge(self)
+				if IsValid(self) and IsValid(self.e) then
+					local e = UVGetVehicleMakeAndModel(self.e)
+					UVChatterVehicleDescription(self, self.e, e)
 				end
 			end)
 			return
@@ -4204,6 +4206,34 @@ if SERVER then
 		UVDelayChatter()
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "stuntspin")
+		end
+	end
+
+	function UVChatterVehicleDescription(self, vehicle)
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			local timecheck = UVSoundChatter(self, self.voice, nil, 10, "", vehicle)
+			timer.Simple(timecheck, function()
+				if IsValid(self) then
+					UVChatterPursuitStartAcknowledge(self)
+				end
+			end)
+			return
+		end
+	end
+
+	function UVChatterHitTrafficSemi(self)
+		if UVChatterDelayed then return end
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			local airrandomno = math.random(1,2)
+			local airUnits = ents.FindByClass("uvair")
+			if next(airUnits) ~= nil then
+				local random_entry = math.random(#airUnits)	
+				local unit = airUnits[random_entry]
+				if not (unit.crashing or unit.disengaging) and airrandomno == 1 then
+					return UVSoundChatter(unit, unit.voice, "hittrafficsemi")
+				end
+			end
+			return UVSoundChatter(self, self.voice, "hittrafficsemi")
 		end
 	end
 	

@@ -939,8 +939,12 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
-								if IsValid(unit.e) then 
-									UVChatterHitTraffic(unit) 
+								if IsValid(unit.e) then
+									if object.Sockets and next(object.Sockets) ~= nil then
+										UVChatterHitTrafficSemi(unit)
+									else
+										UVChatterHitTraffic(unit)
+									end
 								end
 							end
 						end

@@ -292,7 +292,6 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_shockwavedamage'] = GetConVar("uvpursuittech_shockwavedamage"):GetFloat()
 			convar_table['unitvehicle_pursuittech_shockwavecommanderdamage'] = GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat()
 			convar_table['unitvehicle_pursuittech_spikestripduration'] = GetConVar("uvpursuittech_spikestripduration"):GetFloat()
-			convar_table['unitvehicle_pursuittech_spikestriproadblockfriendlyfire'] = GetConVar("uvpursuittech_spikestriproadblockfriendlyfire"):GetInt()
 			convar_table['unitvehicle_pursuittech_stunminepower'] = GetConVar("uvpursuittech_stunminepower"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminedamage'] = GetConVar("uvpursuittech_stunminedamage"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
