@@ -477,6 +477,39 @@ if CLIENT then
 		extended = true,
     })
 
+    local orbitYaw = 0
+
+    hook.Add("CalcView", "UVCalcView", function(ply, origin, angles, fov, znear, zfar)
+        
+        UVLastVehicleDriven = IsValid(UVGetVehicle(ply)) and UVGetVehicle(ply) or UVLastVehicleDriven
+
+        -- Dead
+        if not ply:Alive() and IsValid(UVLastVehicleDriven) then
+            local orbitDistance = 200
+
+            local orbitSpeed = 45 
+
+            orbitYaw = orbitYaw + (FrameTime() * orbitSpeed)
+            
+            local targetPos = UVLastVehicleDriven:GetPos()
+
+            local camAngles = Angle(0, orbitYaw, 0)
+            
+            local camPos = targetPos + camAngles:Forward() * - orbitDistance
+
+            camPos = camPos + (vector_up * 100)
+            
+            local view = {}
+            view.origin = camPos
+            view.angles = (targetPos - camPos):Angle()
+            view.fov = 90
+            view.drawviewer = false
+            
+            return view
+        end
+
+    end)
+
 end
 
 function Carbon_FormatRaceTime(curTime)
