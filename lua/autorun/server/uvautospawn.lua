@@ -1429,9 +1429,9 @@ function UVAutoSpawnTraffic()
 			duplicator.ApplyEntityModifiers( NULL, v )
 			duplicator.ApplyBoneModifiers( NULL, v )
 
-			if ( v.PostEntityPaste ) then
-				v:PostEntityPaste( NULL, nil, Ent, createdEntities )
-			end
+			--if ( v.PostEntityPaste ) then
+			--	v:PostEntityPaste( NULL, nil, Ent, createdEntities )
+			--end
 		end
 		-- local Ent = ents.Create( entArray.Class )
 		-- duplicator.DoGeneric( Ent, entArray )
