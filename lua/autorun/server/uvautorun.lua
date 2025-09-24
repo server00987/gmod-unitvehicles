@@ -744,7 +744,7 @@ function UVreconstruct_path( cameFrom, current )
 	local total_path = { current }
 	
 	current = current:GetID()
-	local maxPathLength = 1000 -- Prevent infinite loops
+	local maxPathLength = 1000
 	local pathLength = 0
 	
 	while ( cameFrom[ current ] and pathLength < maxPathLength ) do
@@ -755,7 +755,6 @@ function UVreconstruct_path( cameFrom, current )
 	
 	-- If we hit the max length, something went wrong
 	if pathLength >= maxPathLength then
-		print("UVreconstruct_path: Path too long, possible infinite loop detected")
 		return false
 	end
 
