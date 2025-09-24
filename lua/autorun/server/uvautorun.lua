@@ -654,51 +654,85 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 	if ( not IsValid( start ) or not IsValid( goal ) ) then return nil end
 	if ( start == goal ) then return true end
 	
-	start:ClearSearchLists()
+	local directDistance = start:GetCenter():Distance( goal:GetCenter() )
+	if directDistance > 10000 then
+		return false
+	end
 	
+	start:ClearSearchLists()
 	start:AddToOpenList()
 	
 	local cameFrom = {}
+	local heuristicCache = {}
 	
 	start:SetCostSoFar( 0 )
+
+	local initialHeuristic = UVheuristic_cost_estimate(start, goal)
+	heuristicCache[start:GetID() .. "_" .. goal:GetID()] = initialHeuristic
 	
-	start:SetTotalCost( UVheuristic_cost_estimate( start, goal ) )
+	start:SetTotalCost( initialHeuristic )
 	start:UpdateOnOpenList()
+
+	local i = 0
+	local maxIterations = math.min(1000, math.max(100, directDistance / 10))
+	local startTime = SysTime()
+	local maxTime = 0.016
 	
-	while ( not start:IsOpenListEmpty() ) do
+	while ( not start:IsOpenListEmpty() and i < maxIterations ) do
+		if SysTime() - startTime > maxTime then
+			return false
+		end
+		
+		i = i + 1
 		local current = start:PopOpenList()
+		
 		if ( current == goal ) then
 			return UVreconstruct_path( cameFrom, current )
 		end
 		
 		current:AddToClosedList()
 		
+		if current:GetCostSoFar() > directDistance * 3 then
+			return false
+		end
+		
 		for k, neighbor in pairs( current:GetAdjacentAreas() ) do
-			local newCostSoFar = current:GetCostSoFar() + UVheuristic_cost_estimate( current, neighbor )
-			
+			--print(current:ComputeAdjacentConnectionHeightChange(neighbor), neighbor:IsUnderwater())
 			if ( neighbor:IsUnderwater() or 
 			current:ComputeAdjacentConnectionHeightChange(neighbor) > 1 ) then
-			elseif ( ( neighbor:IsOpen() or neighbor:IsClosed() ) and neighbor:GetCostSoFar() <= newCostSoFar ) then
-			else
-				neighbor:SetCostSoFar( newCostSoFar );
-				neighbor:SetTotalCost( newCostSoFar + UVheuristic_cost_estimate( neighbor, goal ) )
-				
-				if ( neighbor:IsClosed() ) then
-					
-					neighbor:RemoveFromClosedList()
-				end
-				
-				if ( neighbor:IsOpen() ) then
-					neighbor:UpdateOnOpenList()
-				else
-					neighbor:AddToOpenList()
-				end
-				
-				cameFrom[neighbor:GetID()] = current:GetID()
+				continue
 			end
+			
+			local cacheKey = neighbor:GetID() .. "_" .. goal:GetID()
+			local neighborHeuristic = heuristicCache[cacheKey]
+			if not neighborHeuristic then
+				neighborHeuristic = UVheuristic_cost_estimate( neighbor, goal )
+				heuristicCache[cacheKey] = neighborHeuristic
+			end
+			
+			local newCostSoFar = current:GetCostSoFar() + UVheuristic_cost_estimate( current, neighbor )
+			
+			if ( ( neighbor:IsOpen() or neighbor:IsClosed() ) ) then
+				continue
+			end
+			
+			neighbor:SetCostSoFar( newCostSoFar )
+			neighbor:SetTotalCost( newCostSoFar + neighborHeuristic )
+			
+			if ( neighbor:IsClosed() ) then
+				neighbor:RemoveFromClosedList()
+			end
+			
+			if ( neighbor:IsOpen() ) then
+				neighbor:UpdateOnOpenList()
+			else
+				neighbor:AddToOpenList()
+			end
+			
+			cameFrom[neighbor:GetID()] = current:GetID()
 		end
 	end
-	
+
 	return false
 end
 
@@ -710,11 +744,22 @@ function UVreconstruct_path( cameFrom, current )
 	local total_path = { current }
 	
 	current = current:GetID()
+	local maxPathLength = 1000 -- Prevent infinite loops
+	local pathLength = 0
 	
-	while ( cameFrom[ current ] ) do
+	while ( cameFrom[ current ] and pathLength < maxPathLength ) do
+		pathLength = pathLength + 1
 		current = cameFrom[ current ]
 		table.insert( total_path, navmesh.GetNavAreaByID( current ) )
 	end
+	
+	-- If we hit the max length, something went wrong
+	if pathLength >= maxPathLength then
+		print("UVreconstruct_path: Path too long, possible infinite loop detected")
+		return false
+	end
+
+	--print(#total_path)
 	
 	return total_path
 end
@@ -3050,7 +3095,12 @@ function UVNavigateDVWaypoint(self, vectors)
 end
 
 function UVNavigateNavmesh(self, vectors)
+	-- THIS IS THE CAUSE OF THE FUCKING LAG PROBLEMS WHEN CAR TAKES OFF!!!
+	print("UVNavigateNavmesh")
 	local CNavAreaFromSelfToEnemy = UVRequestVectorsnavmesh(self.v:WorldSpaceCenter(), vectors, self.v.width)
+	print(type(CNavAreaFromSelfToEnemy), (type(CNavAreaFromSelfToEnemy) == "table" and #CNavAreaFromSelfToEnemy))
+	-- WHEN YOU ARE MID AIR, IT CAN TAKE TOO LONG TO GET THE ROUTE AND IT WILL LAG THE GAME!!! THEN IT RETURNS FALSE!!!
+	-- KILL IT!!
 	
 	if istable(CNavAreaFromSelfToEnemy) then --Get the route
 		local closestpoint = self.v:WorldSpaceCenter()
