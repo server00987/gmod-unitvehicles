@@ -3547,7 +3547,7 @@ else -- CLIENT Settings | HUD/Options
 
 				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
 				
-				draw.SimpleTextOutlined( "MISSING LOC:", font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( "MISSING LOC: UNITNAME", font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			else
 				local lines = {}
@@ -3570,11 +3570,11 @@ else -- CLIENT Settings | HUD/Options
 
 				-- Calculate total height
 				local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
-				local totalHeight = #lines * lineHeight
+				local totalHeight = #lines * lineHeight + (h * 0.02)
 
 				-- Background box
 				local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
-				local bgY = h * 0.755 - bgPadding
+				local bgY = h * 0.7275 - bgPadding
 				local bgW = maxWidth + bgPadding * 2
 				local bgH = totalHeight + bgPadding * 2
 
@@ -3582,6 +3582,8 @@ else -- CLIENT Settings | HUD/Options
 
 				-- Draw each line of text
 				for i, line in ipairs(lines) do
+									
+					draw.SimpleTextOutlined( "UNITNAME", font, w * 0.5, h * 0.725, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 					draw.SimpleTextOutlined(
 						line,
 						font,
