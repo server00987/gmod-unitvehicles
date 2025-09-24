@@ -122,7 +122,7 @@ if SERVER then
 	
 	--Spam check--
 	
-	function UVRelayToClients( sound_name, param, can_skip, players )
+	function UVRelayToClients( sound_name, param, can_skip, players, callsign )
 		if players and type(players) == "table" then
 			if #players == 0 then return end
 		end
@@ -131,7 +131,10 @@ if SERVER then
 		
 		net.WriteString(sound_name)
 		net.WriteBool(can_skip)
-		
+		if callsign then
+			net.WriteString(callsign)
+		end
+
 		if players and type(players) == "table" then
 			net.Send( players )
 		else
@@ -239,7 +242,7 @@ if SERVER then
 			end
 
 			local function _init()
-				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"))
+				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"), nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 				timer.Simple(SoundDuration(soundFile or ""), function()
 					if radioOffFile then
 						UVRelayToClients(radioOffFile, parameters, true)
@@ -343,7 +346,7 @@ if SERVER then
 			timer.Simple(SoundDuration(radioOnFile or ""), function()
 				UVRelayToClients(staticFile, parameters, true)
 				timer.Simple(SoundDuration(staticFile or ""), function()
-					UVRelayToClients(soundFile, parameters, true)
+					UVRelayToClients(soundFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							UVRelayToClients(radioOffFile, parameters, true)
@@ -400,7 +403,7 @@ if SERVER then
 					end
 				end
 				timer.Simple(SoundDuration(radioOnFile or ""), function()
-					UVRelayToClients(soundFile, parameters, true)
+					UVRelayToClients(soundFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							UVRelayToClients(radioOffFile, parameters, true)
@@ -480,9 +483,9 @@ if SERVER then
 				end
 			end
 			timer.Simple(SoundDuration(radioOnFile or ""), function()
-				UVRelayToClients(identifyFile, parameters, true)
+				UVRelayToClients(identifyFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 				timer.Simple(SoundDuration(identifyFile or ""), function()
-					UVRelayToClients(soundFile, parameters, true)
+					UVRelayToClients(soundFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							UVRelayToClients(radioOffFile, parameters, true)
@@ -582,10 +585,10 @@ if SERVER then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
 			-- end
 
-			UVRelayToClients(emergencyFile, parameters, true)
+			UVRelayToClients(emergencyFile, parameters, false)
 			timer.Simple(soundDuration_emergencyFile, function()
 				if radioOnFile then
-					UVRelayToClients(radioOnFile, parameters, true)
+					UVRelayToClients(radioOnFile, parameters, false)
 				else
 					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 					local chirpGenericFile
@@ -598,16 +601,16 @@ if SERVER then
 					end
 				end
 				timer.Simple(soundDuration_radioOnFile, function()
-					UVRelayToClients(addressFile or "", parameters, true)
+					UVRelayToClients(addressFile or "", parameters, false, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					timer.Simple(soundDuration_addressFile, function()
-						UVRelayToClients(soundFile or "", parameters, true)
+						UVRelayToClients(soundFile or "", parameters, false, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 						timer.Simple(soundDuration_soundFile, function()
-							UVRelayToClients(locationFile or "", parameters, true)
+							UVRelayToClients(locationFile or "", parameters, false, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 							timer.Simple(soundDuration_locationFile, function()
-								UVRelayToClients(requestFile or "", parameters, true)
+								UVRelayToClients(requestFile or "", parameters, false, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 								timer.Simple(soundDuration_requestFile, function()
 									if radioOffFile then
-										UVRelayToClients(radioOffFile or "", parameters, true)
+										UVRelayToClients(radioOffFile or "", parameters, false)
 									end
 								end)
 							end)
@@ -716,17 +719,17 @@ if SERVER then
 				timer.Simple(SoundDuration(radioOnFile or ""), function()
 					if not UVEnemyEscaping then return end
 					if breakawayFile then
-						UVRelayToClients(breakawayFile, parameters, true)
+						UVRelayToClients(breakawayFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					end
 					timer.Simple(SoundDuration(breakawayFile or ""), function()
 						if not UVEnemyEscaping then return end
 						if locationFile then
-							UVRelayToClients(locationFile, parameters, true)
+							UVRelayToClients(locationFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 						end
 						timer.Simple(SoundDuration(locationFile or ""), function()
 							if not UVEnemyEscaping then return end
 							if quadrantFile then
-								UVRelayToClients(quadrantFile, parameters, true)
+								UVRelayToClients(quadrantFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 							end
 							timer.Simple(SoundDuration(quadrantFile or ""), function()
 								if radioOffFile then
@@ -820,7 +823,7 @@ if SERVER then
 					end
 				end
 				timer.Simple(SoundDuration(radioOnFile or ""), function()
-					UVRelayToClients(soundFile, parameters, true)
+					UVRelayToClients(soundFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							UVRelayToClients(radioOffFile, parameters, true)
@@ -922,7 +925,7 @@ if SERVER then
 				end
 			end
 			timer.Simple(SoundDuration(radioOnFile or ""), function()
-				UVRelayToClients(soundFile, parameters, true)
+				UVRelayToClients(soundFile, parameters, true, nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
 				timer.Simple(SoundDuration(soundFile or ""), function()
 					if radioOffFile then
 						UVRelayToClients(radioOffFile, parameters, true)

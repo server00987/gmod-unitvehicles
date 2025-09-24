@@ -3082,9 +3082,9 @@ end
 
 function UVNavigateNavmesh(self, vectors)
 	-- THIS IS THE CAUSE OF THE FUCKING LAG PROBLEMS WHEN CAR TAKES OFF!!!
-	print("UVNavigateNavmesh")
+	--print("UVNavigateNavmesh")
 	local CNavAreaFromSelfToEnemy = UVRequestVectorsnavmesh(self.v:WorldSpaceCenter(), vectors, self.v.width)
-	print(type(CNavAreaFromSelfToEnemy), (type(CNavAreaFromSelfToEnemy) == "table" and #CNavAreaFromSelfToEnemy))
+	--print(type(CNavAreaFromSelfToEnemy), (type(CNavAreaFromSelfToEnemy) == "table" and #CNavAreaFromSelfToEnemy))
 	-- WHEN YOU ARE MID AIR, IT CAN TAKE TOO LONG TO GET THE ROUTE AND IT WILL LAG THE GAME!!! THEN IT RETURNS FALSE!!!
 	-- KILL IT!!
 	
