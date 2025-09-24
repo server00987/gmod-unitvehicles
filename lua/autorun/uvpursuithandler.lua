@@ -4309,6 +4309,7 @@ else -- CLIENT Settings | HUD/Options
 	net.Receive('UV_Chatter', function()
 		local audio_file = "sound/"..net.ReadString()
 		local can_skip = net.ReadBool()
+		local callsign = net.ReadString()
 
 		-- build subtitle key
 		local rel = string.gsub(audio_file, "^sound/chatter2/", "")
