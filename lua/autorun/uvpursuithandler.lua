@@ -27,6 +27,7 @@ local SpawnCooldownTable = {}
 
 UV_CurrentSubtitle = ""
 UV_SubtitleEnd = 0
+UV_CurrentSubtitleCallsign = ""
 
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot.right",
@@ -3544,6 +3545,7 @@ else -- CLIENT Settings | HUD/Options
 
 		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
 			local text = lang(UV_CurrentSubtitle)
+			local textcs = lang(UV_CurrentSubtitleCallsign)
 			local font = "UVMostWantedLeaderboardFont"
 			local maxWidth = w * 0.4  -- maximum width of the subtitle block
 			local bgPadding = 8
@@ -3561,7 +3563,7 @@ else -- CLIENT Settings | HUD/Options
 
 				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
 				
-				draw.SimpleTextOutlined( "MISSING LOC: UNITNAME", font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			else
 				local lines = {}
@@ -3597,18 +3599,8 @@ else -- CLIENT Settings | HUD/Options
 				-- Draw each line of text
 				for i, line in ipairs(lines) do
 									
-					draw.SimpleTextOutlined( "UNITNAME", font, w * 0.5, h * 0.725, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-					draw.SimpleTextOutlined(
-						line,
-						font,
-						w * 0.5,
-						h * 0.755 + (i - 1) * lineHeight,
-						pcol,
-						TEXT_ALIGN_CENTER,
-						TEXT_ALIGN_TOP,
-						1.25,
-						Color(0, 0, 0, outlineAlpha)
-					)
+					draw.SimpleTextOutlined( textcs, font, w * 0.5, h * 0.725, Color(255, 255, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+					draw.SimpleTextOutlined( line, font, w * 0.5, h * 0.755 + (i - 1) * lineHeight, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				end
 			end
 		end
@@ -4367,6 +4359,7 @@ else -- CLIENT Settings | HUD/Options
 				if shouldUpdate then
 					UV_CurrentSubtitle = key
 					UV_SubtitleEnd = CurTime() + source:GetLength()
+					UV_CurrentSubtitleCallsign = callsign
 				end
 			end
 		end)
