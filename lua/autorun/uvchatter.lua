@@ -131,7 +131,8 @@ if SERVER then
 		
 		net.WriteString(sound_name)
 		net.WriteBool(can_skip)
-		if callsign then
+		net.WriteBool(callsign ~= nil)
+		if callsign ~= nil then
 			net.WriteString(callsign)
 		end
 
@@ -242,7 +243,7 @@ if SERVER then
 			end
 
 			local function _init()
-				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"), nil, (self and self.callsign) or (voice == "dispatch" and "uv.unit.dispatch"))
+				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"), nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 				timer.Simple(SoundDuration(soundFile or ""), function()
 					if radioOffFile then
 						UVRelayToClients(radioOffFile, parameters, true)
@@ -497,6 +498,8 @@ if SERVER then
 			return UVDelayChatter(SoundDuration(soundFile) + SoundDuration(identifyFile) + math.random(1, 2))
 			
 		elseif parameters == 6 then
+
+			voice = "dispatch"
 			
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
@@ -665,6 +668,8 @@ if SERVER then
 			
 			-- local quadrantFiles = file.Find("sound/chatter/!call/"..basedirectory.."/quadrant/*", "GAME")
 			-- local quadrantFile = "chatter/!call/"..basedirectory.."/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
+
+			voice = "dispatch"
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
 			local breakawayFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/dispbreakaway/*", "GAME")
