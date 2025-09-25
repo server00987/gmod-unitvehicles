@@ -88,7 +88,7 @@ function ENT:Initialize()
 	end
 	
 	self.bountytimer = CurTime()
-	self.callsign = "Air "..self:EntIndex()
+	self.callsign = "#uv.unit.helicopter"
 	self.type = "air"
 
 
@@ -400,11 +400,6 @@ function ENT:PhysicsUpdate()
 						UVChatterPassive(self) 
 					end
 				end
-			end
-			if isfunction(self:GetTarget().GetDriver) and IsValid(self:GetTarget():GetDriver()) and self:GetTarget():GetDriver():IsPlayer() then 
-				self:GetTarget()driver = self:GetTarget():GetDriver()
-				else
-				self:GetTarget()driver = nil
 			end
 			if IsValid(self:GetTarget()) and Chatter:GetBool() and not (self.crashing or self.disengaging) and self:GetTarget():GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive ~= 1 then
 				UVChatterCloseToEnemy(self)
@@ -733,10 +728,11 @@ function ENT:StartCrush()
 		end
 		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)
-		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
-			-- self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..UVComboBounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", '', bountyplus, UVComboBounty)
-		end end
+		if self:GetTarget():IsVehicle() then 
+			if UVGetDriver(self:GetTarget()) and UVGetDriver(self:GetTarget()):IsPlayer() then 
+				UVNotifyCenter({UVGetDriver(self:GetTarget())}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", 'Helicopter', bountyplus, UVComboBounty, UVGetDriver(self:GetTarget()):IsPlayer())
+			end 
+		end
 		UVWrecks = UVWrecks + 1
 		self.crashing = true
 		self:EmitSound( "npc/attack_helicopter/aheli_damaged_alarm1.wav" )
@@ -810,10 +806,11 @@ function ENT:Explode()
 		end
 		local bountyplus = (UVUBountyAir:GetInt())*(UVComboBounty)
 		local bounty = string.Comma(bountyplus)
-		if self:GetTarget():IsVehicle() then if self:GetTarget():GetDriver():IsPlayer() then 
-			--self:GetTarget():GetDriver():PrintMessage( HUD_PRINTCENTER, "Air Support Helicopter ☠ Combo Bounty x"..UVComboBounty..": "..bounty)
-			UVNotifyCenter({self:GetTarget():GetDriver()}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", ' ', bountyplus, UVComboBounty)
-		end end
+		if self:GetTarget():IsVehicle() then 
+			if UVGetDriver(self:GetTarget()) and UVGetDriver(self:GetTarget()):IsPlayer() then 
+				UVNotifyCenter({UVGetDriver(self:GetTarget())}, "uv.hud.combo", "UNITS_DISABLED", "uv.unit.helicopter", 'Helicopter', bountyplus, UVComboBounty, UVGetDriver(self:GetTarget()):IsPlayer())
+			end 
+		end
 		UVWrecks = UVWrecks + 1
 		self.crashing = true
 		UVBounty = (UVBounty+bountyplus)
