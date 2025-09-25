@@ -4334,12 +4334,11 @@ else -- CLIENT Settings | HUD/Options
 
 		lastCanSkip = can_skip
 
-		if IsValid(uvchatterplaying) then
-			uvchatterplaying:Stop()
-		end
-
 		sound.PlayFile(audio_file, "", function(source, err, errname)
 			if IsValid(source) then
+				if IsValid(uvchatterplaying) then
+					uvchatterplaying:Stop()
+				end
 				uvchatterplaying = source
 				source:Play()
 				source:SetVolume(ChatterVolume:GetFloat())

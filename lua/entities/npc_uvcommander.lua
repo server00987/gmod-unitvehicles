@@ -236,7 +236,7 @@ if SERVER then
 			self.wrecked = true
 			self.v.wrecked = true
 			local despawntime = 60
-			if not UVTargeting and IsValid(self.e) then
+			if not UVTargeting and IsValid(self.e) and #UVWantedTableVehicle > 0 then
 				UVTargeting = true
 			end
 			table.insert(UVWreckedVehicles, self.v)
@@ -336,7 +336,7 @@ if SERVER then
 				UVBounty = (UVBounty+bountyplus)
 			end
 			if Chatter:GetBool() and IsValid(self.v) then
-				UVChatterWreck(self) 
+				UVChatterWreck(self)
 			end
 			SafeRemoveEntity(self)
 			UVComboBounty = UVComboBounty + 1

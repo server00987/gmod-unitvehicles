@@ -221,6 +221,7 @@ if SERVER then
 		end
 
 		local function HandleCallSounds(is_dispatch, is_priority)
+			local callsign = self and self.callsign
 			if is_dispatch or isDispatch then
 				voice = "dispatch"
 				unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
@@ -243,7 +244,7 @@ if SERVER then
 			end
 
 			local function _init()
-				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"), nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
+				UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"), nil, (voice == "dispatch" and "uv.unit.dispatch") or (callsign))
 				timer.Simple(SoundDuration(soundFile or ""), function()
 					if radioOffFile then
 						UVRelayToClients(radioOffFile, parameters, true)
@@ -306,6 +307,8 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 			
 		elseif parameters == 3 then
+			local callsign = self and self.callsign
+
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
@@ -344,10 +347,11 @@ if SERVER then
 					UVRelayToClients(chirpGenericFile, parameters, true)
 				end
 			end
+			print(self, self.callsign)
 			timer.Simple(SoundDuration(radioOnFile or ""), function()
 				UVRelayToClients(staticFile, parameters, true)
 				timer.Simple(SoundDuration(staticFile or ""), function()
-					UVRelayToClients(soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
+					UVRelayToClients(soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (callsign))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							UVRelayToClients(radioOffFile, parameters, true)
@@ -856,7 +860,7 @@ if SERVER then
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
-			UVRelayToClients(soundFile, parameters, true, players)
+			UVRelayToClients(soundFile, parameters, true, players, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 
 			return 0
 		elseif parameters == 10 then
