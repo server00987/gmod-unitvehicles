@@ -1252,7 +1252,7 @@ UV_UI.general.events = {
 
 			local barHeight = h * 0.1
 			local barX = (w - currentWidth) / 2
-			local barY = h * (subconvar and 0.665 or 0.7275)
+			local barY = h * (subconvar and 0.645 or 0.7275)
 
 			-- Color Fade Logic
 			local colorVal = 0
@@ -1296,7 +1296,7 @@ UV_UI.general.events = {
 					outlineAlpha = outlineAlpha * fade
 				end
 				
-				mw_noti_draw(showhud and ptext, "UVFont5UI", w * 0.5, h * (subconvar and 0.7125 or 0.775), pcol, pcolbg)
+				mw_noti_draw(showhud and ptext, "UVFont5UI", w * 0.5, h * (subconvar and 0.6925 or 0.775), pcol, pcolbg)
 				
 				-- draw.SimpleTextOutlined( showhud and ptext or "", "UVFont5UI", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
