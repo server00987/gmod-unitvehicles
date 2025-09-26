@@ -951,7 +951,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				car.uvesfhit = true
 				UVDeactivateESF(car)
 				if car.UnitVehicle then
-					UVChatterKillswitchHit(car.UnitVehicle)
+					UVChatterESFHit(car.UnitVehicle)
 				end
 
 			end
@@ -1284,7 +1284,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		UVDeactivateESF(car)
 
 		if car.UnitVehicle then
-			UVChatterKillswitchHit(car.UnitVehicle)
+			UVChatterESFHit(car.UnitVehicle)
 		end
 	end
 	if car.UVWanted then --SUSPECT
@@ -1591,7 +1591,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			car.uvesfhit = true
 			UVDeactivateESF(car)
 			if car.UnitVehicle then
-				UVChatterKillswitchHit(car.UnitVehicle)
+				UVChatterESFHit(car.UnitVehicle)
 			end
 		end
 

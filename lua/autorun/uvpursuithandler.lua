@@ -3360,9 +3360,14 @@ else -- CLIENT Settings | HUD/Options
 			end
 		end
 
-		local newHeat = math.random(1, heatCount)
-		while newHeat == UVSelectedHeatTrack do
-			newHeat = math.random(1, heatCount)
+		local newHeat = nil
+		if heatCount > 0 then
+			newHeat = math.random( 1, heatCount )
+			while newHeat == UVSelectedHeatTrack and heatCount ~= 1 do
+				newHeat = math.random( 1, heatCount )
+			end
+		else
+			newHeat = 'default'
 		end
 
 		UVHeatPlayTransition = true

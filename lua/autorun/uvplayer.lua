@@ -824,7 +824,11 @@ if SERVER then
         elseif pursuit_tech.Tech == "Spikestrip" then --SPIKESTRIP
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
-            
+
+            if car.UnitVehicle then
+                UVChatterSpikeStripDeployed(car)
+            end
+
             UVDeploySpikeStrip(car, not car.UnitVehicle)
 
             timer.Simple( .5, function()
@@ -845,6 +849,10 @@ if SERVER then
         elseif pursuit_tech.Tech == 'Repair Kit' then
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+
+            if car.UnitVehicle then
+                UVChatterRepairKitDeployed(car)
+            end
             
             local repaired = UVDeployRepairKit(car)
 
@@ -873,6 +881,8 @@ if SERVER then
         if used then
             UVReplicatePT( car, slot )
         end
+
+        return used
     end
     
     --SPIKESTRIP

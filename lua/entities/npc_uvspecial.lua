@@ -1988,7 +1988,7 @@ if SERVER then
 		
 		
 		if self.v.rhino then
-			self.callsign = "Rhino "..self:EntIndex()
+			self.callsign = "uv.unit.rhino"
 
 			local selectedVoice = GetConVar("unitvehicle_unit_rhino_voice"):GetString()
 			local splittedText = string.Explode( ",", selectedVoice )
