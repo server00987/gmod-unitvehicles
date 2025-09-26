@@ -1,4 +1,30 @@
-<------- September 19, Hotfix ------->
+<------- September 26 ------->
+# New Features
+**Pursuit**
+- Added a Subtitles option for Cop Chatter - currently only in English, and only has entries for Default voice lines
+- Added more voice lines for default Dispatch and Cop1
+
+**Other**
+- Added a rotating camera effect when either busted as a Racer or totalled as a Unit
+
+# Changes
+**Pursuit**
+- Fixed that random heat level themes did not play properly
+- Units will now replenish Pursuit Tech when relocating when "Optimize Respawn" is enabled
+- Spike Strips will now have a short cooldown period before they activate
+
+**UI**
+- Fixed that the Helicopter did not have a takedown message
+- Renamed "Helicopter" to "Air Unit"
+
+**Other**
+- Fixed that Glide vehicles had improper settings applied to them when spawning as Units
+- Improved AI performance
+- Updated localizations
+
+And various other undocumented tweaks
+
+<------- September 22 II ------->
 # Changes
 **Racing**
 - Fixed that Racing Music was not playing properly when in a Race and Pursuit at the same time
@@ -12,7 +38,7 @@
 **Other**
 - Tweaked vehicle spawns
 
-<------- September 19, Hotfix ------->
+<------- September 22 ------->
 # Changes
 **Racing**
 - Fixed that the Name Tags did not render as a Unit for racers who had finished a race with the race still ongoing

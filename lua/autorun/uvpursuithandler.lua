@@ -3550,7 +3550,7 @@ else -- CLIENT Settings | HUD/Options
 
 		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
 			local text = lang(UV_CurrentSubtitle)
-			local textcs = lang(UV_CurrentSubtitleCallsign or "MIA Unit")
+			local textcs = lang(UV_CurrentSubtitleCallsign or " ")
 			local font = "UVMostWantedLeaderboardFont"
 			local maxWidth = w * 0.4  -- maximum width of the subtitle block
 			local bgPadding = 8
