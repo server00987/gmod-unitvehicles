@@ -191,10 +191,10 @@ if SERVER then
     end
     
     function UVCallRespond(suspectvehicle)
+
+        uvcallexists = nil
         
         if UVTargeting then return end
-        
-        uvcallexists = nil
         
         if next(ents.FindByClass("npc_uv*" )) == nil then return end
         

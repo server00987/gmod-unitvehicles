@@ -58,11 +58,16 @@ function ENT:Initialize()
 		end
 	end
 	
-	hook.Add("Think", "UVSpikeStripThink"..self:EntIndex(), function()
+	-- fuck you all
+	timer.Simple(0.5, function()
 		if IsValid(self) then
-			self:DoUpdate()
-		else
-			hook.Remove("Think", "UVSpikeStripThink"..self:EntIndex())
+			hook.Add("Think", "UVSpikeStripThink"..self:EntIndex(), function()
+				if IsValid(self) then
+					self:DoUpdate()
+				else
+					hook.Remove("Think", "UVSpikeStripThink"..self:EntIndex())
+				end
+			end)
 		end
 	end)
 end
