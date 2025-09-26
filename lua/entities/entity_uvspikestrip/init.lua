@@ -59,7 +59,7 @@ function ENT:Initialize()
 	end
 	
 	-- fuck you all
-	timer.Simple(0.5, function()
+	timer.Simple(1, function()
 		if IsValid(self) then
 			hook.Add("Think", "UVSpikeStripThink"..self:EntIndex(), function()
 				if IsValid(self) then
