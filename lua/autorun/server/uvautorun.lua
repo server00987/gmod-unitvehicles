@@ -550,12 +550,12 @@ function HandleVehicleSpawning()
 		if not SpawnMainUnits:GetBool() then return end
 		UVAutoSpawn(nil, nil, nil, nil, UVCommanderRespawning) --COMMANDER RESPAWN
 		
-	elseif specialChance == 1 and not UVEnemyEscaping then
+	elseif specialChance >= 1 and specialChance <= 2 and not UVEnemyEscaping then
 		
 		if not SpawnMainUnits:GetBool() then return end
 		UVAutoSpawn(nil, true) --RHINO
 		
-	elseif specialChance >= 2 and specialChance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvRoadblockDeployable then
+	elseif specialChance >= 3 and specialChance <= 5 and next(ents.FindByClass("npc_uv*")) ~= nil and uvRoadblockDeployable then
 		
 		local units = ents.FindByClass("npc_uv*")
 		local unit = units[math.random(#units)]
