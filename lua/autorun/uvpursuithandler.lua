@@ -3544,7 +3544,7 @@ else -- CLIENT Settings | HUD/Options
 		
 		local var = UVKeybindResetPosition:GetInt()
 
-		if (not UVHUDDisplayPursuit and UVHUDDisplayBusting) or (UVHUDRace and UVHUDDisplayBusting) then -- Being fined/busted in a race
+		if not UVHUDCopMode and (not UVHUDDisplayPursuit and UVHUDDisplayBusting) or (UVHUDRace and UVHUDDisplayBusting) then -- Being fined/busted in a race
 			local UVBustTimer = BustedTimer:GetFloat()
 			local finetext = "uv.chase.fining"
 

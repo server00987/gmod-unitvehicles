@@ -5000,7 +5000,7 @@ local function mw_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.075)
     end
 
@@ -6630,7 +6630,7 @@ local function undercover_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.05)
     end
 
@@ -7522,7 +7522,7 @@ local function original_pursuit_main( ... )
 		
 	local bottomyplus = 0
 
-	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
 		bottomyplus = -(h * 0.1)
 	end
 
@@ -11219,7 +11219,7 @@ local function world_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.065)
     end
 
