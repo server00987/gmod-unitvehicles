@@ -169,7 +169,7 @@ if SERVER then
                         local unit = units[random_entry]
                         timecheck2 = UVChatterDispatchCallVehicleDescription(unit, suspectvehicle, e)
                     end
-                    timer.Simple(timecheck2, function()
+                    timer.Simple(timecheck2 or 5, function()
                         UVCallRespond(suspectvehicle)
                         UVCallLocation = calllocation
                     end)
@@ -180,7 +180,7 @@ if SERVER then
                         local unit = units[random_entry]
                         timecheck2 = UVChatterDispatchCallUnknownDescription(unit)
                     end
-                    timer.Simple(timecheck2, function()
+                    timer.Simple(timecheck2 or 5, function()
                         UVCallRespond(suspectvehicle)
                         UVCallLocation = calllocation
                     end)
