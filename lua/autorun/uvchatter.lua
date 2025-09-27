@@ -955,7 +955,7 @@ if SERVER then
 			if not brand then brand = 'genericsportscar' end
 
 			local soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
-			if next(soundFiles) == nil then UVChatterDispatchCallVehicleDescription(self, vehicle, vehicleModel) return end
+			if next(soundFiles) == nil then UVChatterDispatchCallUnknownDescription(self, vehicle, vehicleModel) return end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/"..soundFiles[math.random(1, #soundFiles)]
 
 			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
