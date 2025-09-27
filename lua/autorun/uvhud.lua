@@ -3519,7 +3519,7 @@ UV_UI.racing.mostwanted.events = {
 				alpha = Lerp(t, 255, 0)
 			end
 
-			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
+			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha), Color(0, 0, 0, alpha))
 			
 			if not pnoIcon then
 				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
@@ -5000,7 +5000,7 @@ local function mw_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.075)
     end
 
@@ -6630,7 +6630,7 @@ local function undercover_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.05)
     end
 
@@ -7522,7 +7522,7 @@ local function original_pursuit_main( ... )
 		
 	local bottomyplus = 0
 
-	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
 		bottomyplus = -(h * 0.1)
 	end
 
@@ -11219,7 +11219,7 @@ local function world_pursuit_main( ... )
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
 
-    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or UVHUDRaceFinishCountdownStarted then
+    if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
         bottomyplus = -(h * 0.065)
     end
 
