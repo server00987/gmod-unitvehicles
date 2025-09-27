@@ -3544,9 +3544,35 @@ else -- CLIENT Settings | HUD/Options
 		
 		local var = UVKeybindResetPosition:GetInt()
 
-		-- if UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
-			-- draw.SimpleTextOutlined( language.GetPhrase(UV_CurrentSubtitle), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-		-- end
+		if (not UVHUDDisplayPursuit and UVHUDDisplayBusting) or (UVHUDRace and UVHUDDisplayBusting) then -- Being fined/busted in a race
+			local UVBustTimer = BustedTimer:GetFloat()
+			local finetext = "uv.chase.fining"
+
+			if UVHUDDisplayPursuit then
+				finetext = "uv.chase.busting.other"
+			end
+
+			local bottomy = h * 0.89
+
+			if not BustingProgress or BustingProgress == 0 then
+				BustingProgress = CurTime()
+			end
+			
+			local blink = 255 * math.abs(math.sin(RealTime() * 4))
+
+			local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+
+			draw.SimpleTextOutlined( "#" .. finetext, "UVMostWantedLeaderboardFont", w * 0.5, bottomy - h * 0.025, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, 255) )
+
+			surface.SetDrawColor(200, 200, 200, 125)
+			surface.DrawRect(w * 0.4, bottomy, w * 0.2, h * 0.015)
+			
+			local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.2), 0, w * 0.2)
+			surface.SetDrawColor(255, 100, 100)
+			surface.DrawRect(w * 0.4, bottomy, T, h * 0.015)
+		else
+			BustingProgress = 0
+		end
 
 		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
 			local text = lang(UV_CurrentSubtitle)

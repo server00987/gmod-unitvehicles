@@ -3519,7 +3519,7 @@ UV_UI.racing.mostwanted.events = {
 				alpha = Lerp(t, 255, 0)
 			end
 
-			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
+			mw_noti_draw(ptext, ptextfont, pos.x, pos.y, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha), Color(0, 0, 0, alpha))
 			
 			if not pnoIcon then
 				local baseAlphaFactor = alpha / 255  -- alpha is between 0 and 255, normalize to 0-1
