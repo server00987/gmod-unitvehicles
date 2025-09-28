@@ -424,9 +424,7 @@ function ENT:PhysicsUpdate()
 
 		local targetpos = vector_origin
 		if IsValid(self:GetTarget()) then
-			if self.engaging then
-				targetpos = (self:GetTargetPos()+(self:GetTarget():GetVelocity()/2))
-			elseif self.aggressive then
+			if self.aggressive and not self.engaging then
 				targetpos = (self:GetTargetPos()+self:GetTarget():GetVelocity())
 			else
 				targetpos = self:GetTargetPos()
