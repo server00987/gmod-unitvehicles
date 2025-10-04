@@ -4810,8 +4810,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.audio.pursuittheme.random.desc")
 
 			local pursuitthemeplayrandomheattype, label = panel:ComboBox( "#uv.settings.audio.pursuittheme.random.type", "unitvehicle_pursuitthemeplayrandomheattype" )
-			pursuitthemeplayrandomheattype:AddChoice( "Sequential", "sequential")
-			pursuitthemeplayrandomheattype:AddChoice( "Every X minutes", "everyminutes")
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.type.sequential", "sequential")
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.minutes", "everyminutes")
 			pursuitthemeplayrandomheattype:SetTooltip("#uv.settings.audio.pursuittheme.random.type.desc")
 			
 			local numslider = panel:NumSlider("#uv.settings.audio.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)

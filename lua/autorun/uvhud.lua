@@ -1,6 +1,12 @@
 local _last_backup_pulse_second = 0
 
 local Colors = {
+    -- Original HUD
+    ["Original_LocalPlayer"] = Color(255, 217, 0),
+    ["Original_Others"] = Color(255, 255, 255),
+    ["Original_Disqualified"] = Color(255, 50, 50, 133),
+	
+	-- Most Wanted HUD
     ["MW_LocalPlayer"] = Color(223, 184, 127), --Color(255, 187, 0),
     ["MW_Accent"] = Color(223, 184, 127),
     ["MW_Others"] = Color(255, 255, 255),
@@ -9,7 +15,8 @@ local Colors = {
     ["MW_CopShade"] = Color(41, 149, 212, 107),
     ["MW_Racer"] = Color(255, 221, 142, 107),
     ["MW_RacerShade"] = Color(166, 142, 85, 107),
-    --
+	
+    -- Carbon HUD
     ["Carbon_Accent"] = Color(86, 214, 205),
     ["Carbon_AccentTransparent"] = Color(86, 214, 205, 50),
     ["Carbon_AccentDarker"] = Color(62, 153, 145),
@@ -20,11 +27,8 @@ local Colors = {
     ["Carbon_Others"] = Color(255, 255, 255),
     ["Carbon_OthersDark"] = Color(255, 255, 255, 121),
     ["Carbon_Disqualified"] = Color(255, 50, 50, 133),
-    --
-    ["Original_LocalPlayer"] = Color(255, 217, 0),
-    ["Original_Others"] = Color(255, 255, 255),
-    ["Original_Disqualified"] = Color(255, 50, 50, 133),
-    --
+	
+    -- Undercover HUD
     ["Undercover_Accent1"] = Color(255, 255, 255),
     ["Undercover_Accent2"] = Color(187, 226, 220),
     ["Undercover_Accent2Transparent"] = Color(187, 226, 220, 150)
@@ -232,251 +236,55 @@ function UVBindButtonName(var)
 end
 
 if CLIENT then
-    surface.CreateFont("UVFont", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0462962963)),
-        weight = 500,
-        italic = true,
-		extended = true,
-    })
+	-- Original HUD & General
+    surface.CreateFont("UVFont", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, italic = true, extended = true, })
+    surface.CreateFont("UVFont-Shadow", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, italic = true, shadow = true, extended = true, })
+    surface.CreateFont("UVFont-Smaller", { font = "Arial", size = (math.Round(ScrH()*0.0425)), weight = 500, italic = true, extended = true, })
+    surface.CreateFont("UVFont-Bolder", { font = "Arial", size = (math.Round(ScrH()*0.0425)), weight = 1000, italic = false, shadow = true, extended = true, })
+    surface.CreateFont("UVFont2", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont2-Smaller", { font = "Arial", size = (math.Round(ScrH()*0.0375)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont3", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, shadow = true, extended = true, })
+    surface.CreateFont("UVFont3Big", { font = "Arial", size = (math.Round(ScrH()*0.085)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont3Bigger", { font = "Arial", size = (math.Round(ScrH()*0.12)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont4", { font = "Arial", size = (math.Round(ScrH()*0.02314814815)), weight = 1100, shadow = true, extended = true, })
     
-    surface.CreateFont("UVFont-Shadow", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0462962963)),
-        weight = 500,
-        italic = true,
-        shadow = true,
-		extended = true,
-    })
+	-- Carbon Fonts
+    surface.CreateFont("UVCarbonFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.043)), shadow = true, weight = 1000, extended = true, })
+    surface.CreateFont("UVCarbonFont-Smaller", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.035)), shadow = true, weight = 1000, extended = true, })
     
-    surface.CreateFont("UVFont-Smaller", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0425)),
-        weight = 500,
-        italic = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont-Bolder", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0425)),
-        weight = 1000,
-        italic = false,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont2", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0462962963)),
-        weight = 500,
-		extended = true,
-    })
-        
-    surface.CreateFont("UVFont2-Smaller", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0375)),
-        weight = 500,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont3", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.0462962963)),
-        weight = 500,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont3Big", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.085)),
-        weight = 500,
-        -- italic = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont3Bigger", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.12)),
-        weight = 500,
-        -- italic = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont4", {
-        font = "Arial",
-        size = (math.Round(ScrH()*0.02314814815)),
-        weight = 1100,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVCarbonFont", {
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.043)),
-        shadow = true,
-        weight = 1000,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVCarbonFont-Smaller", {
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.035)),
-        shadow = true,
-        weight = 1000,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVUndercoverAccentFont", {
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.033)),
-        shadow = true,
-        weight = 1000,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVUndercoverLeaderboardFont", {
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.03)),
-        shadow = true,
-        weight = 1000,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVUndercoverWhiteFont", {
-        font = "Aquarius Six",
-        size = (math.Round(ScrH()*0.047)),
-        shadow = true,
-        weight = 1,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVCarbonLeaderboardFont", {
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.02314814815)),
-        shadow = true,
-        weight = 1000,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.043)),
-        weight = 500,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5UI", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.035)),
-        weight = 500,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5UI-BottomBar", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.041)),
-        weight = 500,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5WeightShadow", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.043)),
-        weight = 500,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5Shadow", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.03)),
-        weight = 350,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVMostWantedLeaderboardFont", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.02314814815)),
-        weight = 1000,
-        shadow = true,
-		extended = true,
-    })
-        
-    surface.CreateFont("UVMostWantedLeaderboardFont2", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.017)),
-        weight = 1000,
-        shadow = true,
-		extended = true,
-    })
-    
-    surface.CreateFont("UVFont5ShadowBig", {
-        font = "EurostileBold",
-        size = (math.Round(ScrH()*0.1)),
-        weight = 500,
-        shadow = true,
-		extended = true,
-    })
-	    
-    surface.CreateFont("UVWorldFont1", { -- Main Text
-        font = "HelveticaNeue LT 57 Cn",
-        size = (math.Round(ScrH()*0.015)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
-    	    
-    surface.CreateFont("UVWorldFont2", { -- Coloured Numbers/Values
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.04)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
-        	    
-    surface.CreateFont("UVWorldFont3", { -- Millisecond Value
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.025)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
+	-- Undercover Fonts
+    surface.CreateFont("UVUndercoverAccentFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.033)), shadow = true, weight = 1000, extended = true, })
+    surface.CreateFont("UVUndercoverLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.03)), shadow = true, weight = 1000, extended = true, })
+    surface.CreateFont("UVUndercoverWhiteFont", { font = "Aquarius Six", size = (math.Round(ScrH()*0.047)), shadow = true, weight = 1, extended = true, })
+    surface.CreateFont("UVCarbonLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.02314814815)), shadow = true, weight = 1000, extended = true, })
+	
+    -- Most Wanted Fonts
+    surface.CreateFont("UVFont5", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont5UI", { font = "EurostileBold", size = (math.Round(ScrH()*0.035)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont5UI-BottomBar", { font = "EurostileBold", size = (math.Round(ScrH()*0.041)), weight = 500, extended = true, })
+    surface.CreateFont("UVFont5WeightShadow", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, shadow = true, extended = true, })
+    surface.CreateFont("UVFont5Shadow", { font = "EurostileBold", size = (math.Round(ScrH()*0.03)), weight = 350, shadow = true, extended = true, })
+    surface.CreateFont("UVFont5ShadowBig", { font = "EurostileBold", size = (math.Round(ScrH()*0.1)), weight = 500, shadow = true, extended = true, })
+    surface.CreateFont("UVMostWantedLeaderboardFont", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, })
+    surface.CreateFont("UVMostWantedLeaderboardFont2", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, })
 
-    surface.CreateFont("UVWorldFont4", { -- Coloured Numbers/Values, Smaller
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.035)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
+	-- World Fonts
+    surface.CreateFont("UVWorldFont1", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.015)), shadow = false, weight = 1000, extended = true, }) -- Main
+    surface.CreateFont("UVWorldFont2", { font = "Reg-B-I", size = (math.Round(ScrH()*0.04)), shadow = false, weight = 1000, extended = true, }) -- Col. Numbers
+    surface.CreateFont("UVWorldFont3", { font = "Reg-B-I", size = (math.Round(ScrH()*0.025)), shadow = false, weight = 1000, extended = true, }) -- Millisecond Value
+    surface.CreateFont("UVWorldFont4", { font = "Reg-B-I", size = (math.Round(ScrH()*0.035)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Smaller
+    surface.CreateFont("UVWorldFont5", { font = "Reg-B-I", size = (math.Round(ScrH()*0.15)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Much Larger
+    surface.CreateFont("UVWorldFont6", { font = "Reg-B-I", size = (math.Round(ScrH()*0.0225)), shadow = false, weight = 1000, extended = true, }) -- Player Names
+    surface.CreateFont("UVWorldFont7", { font = "Reg-B-I", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, extended = true, }) -- Player Results
 
-    surface.CreateFont("UVWorldFont5", { -- Coloured Numbers/Values, Much Larger
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.15)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
-        	    
-    surface.CreateFont("UVWorldFont6", { -- Player Names
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.0225)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
-        	    
-    surface.CreateFont("UVWorldFont7", { -- Player Results
-        font = "Reg-B-I",
-        size = (math.Round(ScrH()*0.0175)),
-        shadow = false,
-        weight = 1000,
-		extended = true,
-    })
-
+	-- World Fonts Backup (for specific languages)
+    surface.CreateFont("UVWorldFont2-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.0375)), shadow = false, weight = 1000, extended = true, }) -- Col. Numbers
+    surface.CreateFont("UVWorldFont3-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.024)), shadow = false, weight = 1000, extended = true, }) -- Millisecond Value
+    surface.CreateFont("UVWorldFont4-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.035)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Smaller
+    surface.CreateFont("UVWorldFont5-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.14)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Much Larger
+    surface.CreateFont("UVWorldFont6-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.022)), shadow = false, weight = 1000, extended = true, }) -- Player Names
+    surface.CreateFont("UVWorldFont7-Alt", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, extended = true, }) -- Player Results
+	
     local orbitYaw = 0
 
     hook.Add("CalcView", "UVCalcView", function(ply, origin, angles, fov, znear, zfar)
@@ -9575,6 +9383,19 @@ UV_UI.racing.underground2.main = underground2_racing_main
 
 ----------# World
 
+local altFontLanguages = {
+	["cs"] = true, -- Czech
+	["el"] = true, -- Greek
+}
+
+local function GetFontSuffixForLanguage()
+	local lang = GetConVar("gmod_language"):GetString()
+	if altFontLanguages[lang] then
+		return "-Alt"
+	end
+	return ""
+end
+
 UV_UI.racing.world = {}
 UV_UI.pursuit.world = {}
 
@@ -9753,7 +9574,7 @@ UV_UI.racing.world.events = {
 					outlineAlpha = outlineAlpha * fade
 				end
 
-				mw_noti_draw(showhud and ptext, "UVWorldFont2", w * 0.5, h * 0.285, pcol, pcolbg)
+				mw_noti_draw(showhud and ptext, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.5, h * 0.285, pcol, pcolbg)
 			end
 		end)
 	end,
@@ -9918,18 +9739,18 @@ UV_UI.racing.world.events = {
 				headerDrawAlpha = 255
 			end
 			
-			draw.SimpleTextOutlined( "#uv.results.race.raceresults", "UVWorldFont3", w*0.335, h*0.255, Color( 137, 242, 248, headerDrawAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ))
+			draw.SimpleTextOutlined( "#uv.results.race.raceresults", "UVWorldFont3" .. GetFontSuffixForLanguage(), w*0.335, h*0.255, Color( 137, 242, 248, headerDrawAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ))
 
 			-- Loading elements
 			if loading then
 				OK:SetEnabled(false)
-				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6", w*0.5, h*0.525, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6" .. GetFontSuffixForLanguage(), w*0.5, h*0.525, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
 				DrawIcon( UVMaterials["LOADING_WORLD_R"], w*0.5, h*0.5, 0.05, Color( 255, 255, 255, headerAlpha ), { rotation = ( -RealTime() * 360 ) % 360 } )
 				DrawIcon( UVMaterials["LOADING_WORLD_L"], w*0.5, h*0.5, 0.04, Color( 255, 255, 255, headerAlpha ), { rotation = ( RealTime() * 180 ) % 360 } )
 				surface.SetDrawColor( 255, 255, 255, headerAlpha )
 				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
 				surface.DrawTexturedRect( w*0.55, h*0.7, w*0.12, h*0.05 )
-				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7", w*0.61, h*0.7125, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.61, h*0.7125, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
 
 				if curTime - loadingStart >= fakeLoadingDuration then
 					loading = false
@@ -9960,16 +9781,16 @@ UV_UI.racing.world.events = {
 				local entrycol, entrycolbg = Color( entry.color.r, entry.color.g, entry.color.b, effectiveAlpha ), Color( entry.colorbg.r, entry.colorbg.g, entry.colorbg.b, effectiveAlpha )
 
 				if entry.posText then 
-					draw.SimpleTextOutlined( entry.posText, "UVWorldFont6", w*0.34, yPos - (h*0.014), entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
+					draw.SimpleTextOutlined( entry.posText, "UVWorldFont6" .. GetFontSuffixForLanguage(), w*0.34, yPos - (h*0.014), entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
 				end
 				if entry.nameText then 
-					draw.SimpleTextOutlined( entry.nameText, "UVWorldFont6", w*0.355, yPos - (h*0.0225), entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
+					draw.SimpleTextOutlined( entry.nameText, "UVWorldFont6" .. GetFontSuffixForLanguage(), w*0.355, yPos - (h*0.0225), entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
 				end
 				if entry.vehName then 
-					draw.SimpleTextOutlined( entry.vehName, "UVWorldFont7", w*0.355, yPos, entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
+					draw.SimpleTextOutlined( entry.vehName, "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.355, yPos, entrycol, TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP, 1, entrycolbg )
 				end
 				if entry.timeText then 
-					draw.SimpleTextOutlined( entry.timeText, "UVWorldFont7", w*0.66, yPos, entrycol, TEXT_ALIGN_RIGHT,TEXT_ALIGN_TOP, 1, entrycolbg )
+					draw.SimpleTextOutlined( entry.timeText, "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.66, yPos, entrycol, TEXT_ALIGN_RIGHT,TEXT_ALIGN_TOP, 1, entrycolbg )
 				end
 			end
 
@@ -9995,8 +9816,8 @@ UV_UI.racing.world.events = {
 			surface.SetDrawColor(255,255,255,effectiveAlpha)
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
 			surface.DrawTexturedRect(w*0.55,h*0.7,w*0.12,h*0.05)
-			draw.SimpleTextOutlined(conttext,"UVWorldFont7",w*0.61,h*0.7125, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
-			draw.SimpleTextOutlined(autotext,"UVWorldFont7",w*0.335,h*0.725, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+			draw.SimpleTextOutlined(conttext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.61,h*0.7125, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+			draw.SimpleTextOutlined(autotext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.335,h*0.725, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
 
 			if autoCloseRemaining <= 0 and not closing then
 				hook.Remove("CreateMove", "JumpKeyCloseResults")
@@ -10223,15 +10044,7 @@ UV_UI.racing.world.events = {
 			surface.DrawTexturedRect(ScrW() - ScrW() * 0.5, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
 
 			-- === DRAW TEXT ===
-			draw.SimpleTextOutlined(
-				vs.label or "",
-				"UVWorldFont5",
-				ScrW() * 0.5, ScrH() * 0.5,
-				textColor,
-				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
-				math.floor(bgPad),
-				bgColor
-			)
+			draw.SimpleTextOutlined( vs.label or "", "UVWorldFont5" .. GetFontSuffixForLanguage(), ScrW() * 0.5, ScrH() * 0.5, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, math.floor(bgPad), bgColor )
 		end)
 
 	end,
@@ -10510,18 +10323,18 @@ UV_UI.pursuit.world.events = {
 				headerDrawAlpha = 255
 			end
 			
-			draw.SimpleTextOutlined( "#uv.results.pursuit.carbon", "UVWorldFont3", w*0.335, h*0.305, Color( 137, 242, 248, headerDrawAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ))
+			draw.SimpleTextOutlined( "#uv.results.pursuit.carbon", "UVWorldFont3" .. GetFontSuffixForLanguage(), w*0.335, h*0.305, Color( 137, 242, 248, headerDrawAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ))
 
 			-- Loading elements
 			if loading then
 				OK:SetEnabled(false)
-				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6", w*0.5, h*0.525, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6" .. GetFontSuffixForLanguage(), w*0.5, h*0.525, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
 				DrawIcon( UVMaterials["LOADING_WORLD_R"], w*0.5, h*0.5, 0.05, Color( 255, 255, 255, headerAlpha ), { rotation = ( -RealTime() * 360 ) % 360 } )
 				DrawIcon( UVMaterials["LOADING_WORLD_L"], w*0.5, h*0.5, 0.04, Color( 255, 255, 255, headerAlpha ), { rotation = ( RealTime() * 180 ) % 360 } )
 				surface.SetDrawColor( 255, 255, 255, headerAlpha )
 				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
 				surface.DrawTexturedRect( w*0.55, h*0.65, w*0.12, h*0.05 )
-				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7", w*0.61, h*0.6625, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.61, h*0.6625, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
 
 				if curTime - loadingStart >= fakeLoadingDuration then
 					loading = false
@@ -10537,25 +10350,25 @@ UV_UI.pursuit.world.events = {
 			surface.SetMaterial(UVMaterials[debvriefbustedbg and "RESULTS_SHEEN_BUSTED" or "RESULTS_SHEEN_ESCAPED"])
 			surface.DrawTexturedRect(w * 0.33, h * 0.305, w - ( w * 0.66 ), h * 0.1)
 
-			draw.SimpleTextOutlined( debrieftitletext, "UVWorldFont2", w * 0.5, h * 0.33, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
-			draw.SimpleTextOutlined( debrieftitlevar, "UVWorldFont3", w * 0.5, h * 0.375, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( debrieftitletext, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.5, h * 0.33, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
+			draw.SimpleTextOutlined( debrieftitlevar, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.5, h * 0.375, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
 
             -- Text
-			draw.SimpleTextOutlined( "#uv.results.chase.bounty", "UVWorldFont3",w * 0.34, h * 0.46, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.time", "UVWorldFont3",w * 0.34, h * 0.485, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.units.deployed", "UVWorldFont3",w * 0.34, h * 0.51, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.units.damaged", "UVWorldFont3",w * 0.34, h * 0.535, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.units.destroyed", "UVWorldFont3",w * 0.34, h * 0.56, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.dodged.blocks", "UVWorldFont3",w * 0.34, h * 0.585, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( "#uv.results.chase.dodged.spikes", "UVWorldFont3",w * 0.34, h * 0.61, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.bounty", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.46, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.time", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.485, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.units.deployed", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.51, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.units.damaged", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.535, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.units.destroyed", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.56, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.dodged.blocks", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.585, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "#uv.results.chase.dodged.spikes", "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.34, h * 0.61, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
             		
-			draw.SimpleTextOutlined( "$" .. bounty, "UVWorldFont3",w * 0.66, h * 0.46, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( time, "UVWorldFont3",w * 0.66, h * 0.485, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( deploys, "UVWorldFont3",w * 0.66, h * 0.51, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( tags, "UVWorldFont3",w * 0.66, h * 0.535, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( wrecks, "UVWorldFont3",w * 0.66, h * 0.56, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( roadblocksdodged, "UVWorldFont3",w * 0.66, h * 0.585, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			draw.SimpleTextOutlined( spikestripsdodged, "UVWorldFont3",w * 0.66, h * 0.61, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( "$" .. bounty, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.46, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( time, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.485, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( deploys, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.51, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( tags, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.535, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( wrecks, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.56, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( roadblocksdodged, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.585, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
+			draw.SimpleTextOutlined( spikestripsdodged, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.66, h * 0.61, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
 
 			-- Next button and auto-close
 			local elapsed = math.max(0, curTime - timestart)
@@ -10570,11 +10383,11 @@ UV_UI.pursuit.world.events = {
 			surface.SetDrawColor(255,255,255,effectiveAlpha)
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
 			surface.DrawTexturedRect(w*0.55,h*0.65,w*0.12,h*0.05)
-			draw.SimpleTextOutlined(conttext,"UVWorldFont7",w*0.61,h*0.6625, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
-			draw.SimpleTextOutlined(autotext,"UVWorldFont7",w*0.335,h*0.675, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+			draw.SimpleTextOutlined(conttext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.61,h*0.6625, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+			draw.SimpleTextOutlined(autotext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.335,h*0.675, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
 	
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-				draw.SimpleTextOutlined( uwstext, "UVWorldFont7", w*0.335, h*0.655, Color( 200, 200, 200, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, effectiveAlpha) )
+				draw.SimpleTextOutlined( uwstext, "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.335, h*0.655, Color( 200, 200, 200, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, effectiveAlpha) )
 			end
 			
 			if autoCloseRemaining <= 0 and not closing then
@@ -10808,7 +10621,7 @@ local function world_racing_main( ... )
 	-- end
 
     -- Timer
-	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1",w * 0.83,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1", w * 0.83,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
 	
     local current_time = "--:--.--"
     
@@ -10826,17 +10639,17 @@ local function world_racing_main( ... )
 	end
 
 	-- Draw main part
-	draw.SimpleTextOutlined( mainTime, "UVWorldFont2", w * 0.8225, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.8225, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
 	-- MS Code
 	surface.SetFont("UVWorldFont2")
 	local mainW = surface.GetTextSize(mainTime)
-	draw.SimpleTextOutlined( msTime, "UVWorldFont3", w * 0.8225 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
     -- Lap & Checkpoint Counter
     if UVHUDRaceInfo.Info.Laps > 1 then
 		draw.SimpleTextOutlined( "#uv.race.hud.lap", "UVWorldFont1",w * 0.93,h * 0.1725, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-		draw.SimpleTextOutlined( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVWorldFont4",w * 0.925,h * 0.1825, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+		draw.SimpleTextOutlined( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.925,h * 0.1825, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 	
 		-- Best Lap Timer
 		draw.SimpleTextOutlined( "#uv.race.hud.besttime.world", "UVWorldFont1",w * 0.83,h * 0.1675,worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
@@ -10853,18 +10666,18 @@ local function world_racing_main( ... )
 			end
 
 			-- Draw main part
-			draw.SimpleTextOutlined( mainBestTime, "UVWorldFont2", w * 0.8225, h * 0.175, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( mainBestTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.8225, h * 0.175, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
 			-- MS Code
-			surface.SetFont("UVWorldFont2")
+			surface.SetFont("UVWorldFont2" .. GetFontSuffixForLanguage())
 			local bestW = surface.GetTextSize(mainBestTime)
-			draw.SimpleTextOutlined( msBestTime, "UVWorldFont3", w * 0.8225 + bestW, h * 0.187, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( msBestTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225 + bestW, h * 0.187, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 		else
-			draw.SimpleTextOutlined( btt, "UVWorldFont2", w * 0.85, h * 0.175, worldcols.val, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( btt, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.85, h * 0.175, worldcols.val, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 		end
     else -- Single Lap / Sprint
 		draw.SimpleTextOutlined( "#uv.race.hud.complete", "UVWorldFont1",w * 0.83,h * 0.1675, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2",w * 0.8225,h * 0.175, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2" .. GetFontSuffixForLanguage(),w * 0.8225,h * 0.175, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     end
 
     local racer_count = #string_array
@@ -10872,7 +10685,7 @@ local function world_racing_main( ... )
     -- Position Counter
     if racer_count > 1 then
         draw.SimpleTextOutlined("#uv.results.race.pos.caps", "UVWorldFont1",w * 0.93,h * 0.1225, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-        draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,"UVWorldFont4",w * 0.925,h * 0.1325, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+        draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.925,h * 0.1325, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     end
     
     -- Racer List
@@ -10966,8 +10779,8 @@ local function world_racing_main( ... )
 			DrawIcon(UVMaterials["RACE_BUSTEDMARKER_WORLD"], w * 0.815, (h * 0.2075) + racercount, 0.03, Color(255, 255, 255) )
         end
 
-        draw.SimpleTextOutlined( i, "UVWorldFont3", w * 0.8225, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
-        draw.SimpleTextOutlined( racer_name, "UVWorldFont3", w * 0.8425, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
+        draw.SimpleTextOutlined( i, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
+        draw.SimpleTextOutlined( racer_name, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8425, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
     end
 end
 
@@ -11072,32 +10885,32 @@ local function world_pursuit_main( ... )
 		msTime = ""
 	end
 
-	surface.SetFont("UVWorldFont2")
+	surface.SetFont("UVWorldFont2" .. GetFontSuffixForLanguage())
 	local mainW = surface.GetTextSize(mainTime)
-	draw.SimpleTextOutlined( mainTime, "UVWorldFont2", w * 0.88, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
-	draw.SimpleTextOutlined( msTime, "UVWorldFont3", w * 0.88 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.88, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.88 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     
 	-- General Icons
 	DrawIcon(UVMaterials["UNIT_WORLD"], w * 0.89, h * 0.19, 0.06, Color(255, 255, 255) ) -- Damaged
 	DrawIcon(UVMaterials["UNIT_DMG_WORLD"], w * 0.899, h * 0.1775, 0.03, Color(255, 255, 255) ) -- Damage Marker
-	draw.SimpleTextOutlined( UVTags, "UVWorldFont3", w * 0.9025, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( UVTags, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.9025, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 	
 	DrawIcon(UVMaterials["UNIT_WORLD"], w * 0.94, h * 0.19, 0.06, Color(255, 255, 255) ) -- Wrecks
 	DrawIcon(UVMaterials["UNIT_CROSS_WORLD"], w * 0.94, h * 0.19, 0.03, Color(255, 255, 255) ) -- Wrecked Cross
-	draw.SimpleTextOutlined( UVWrecks, "UVWorldFont3", w * 0.9525, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( UVWrecks, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.9525, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
     -- Cost to State
 	draw.SimpleTextOutlined( "#uv.chase.cts.world", "UVWorldFont1",w * 0.885,h * 0.21, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
 	
     DrawIcon(UVMaterials["CTS_WORLD"], w * 0.8825, h * 0.2425, .06, Color(255, 255, 255)) -- Icon
-	draw.SimpleTextOutlined( "$" .. UVBounty,"UVWorldFont4",w * 0.8915,h * 0.223, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( "$" .. UVBounty,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.8915,h * 0.223, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     
     -- Heat Level
     local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
     local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
     
 	draw.SimpleTextOutlined( "#uv.chase.heatlevel", "UVWorldFont1",w * 0.885,h * 0.265, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
-	draw.SimpleTextOutlined( UVHeatLevel, "UVWorldFont3",w * 0.9625,h * 0.279, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg ) -- Bounty Text
+	draw.SimpleTextOutlined( UVHeatLevel, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.9625,h * 0.279, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg ) -- Bounty Text
 
     UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
     UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
@@ -11314,12 +11127,12 @@ local function world_pursuit_main( ... )
 				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink3 ))
 			end
 
-			draw.SimpleTextOutlined( UVBackupTimer, "UVWorldFont4",w * 0.4675, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+			draw.SimpleTextOutlined( UVBackupTimer, "UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.4675, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
 			btrm = w * 0.0525
 		end
 		
 		DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], w * 0.495 + btrm, bottomy + (h * 0.05), .035, Color( 255, 255, 255 )) -- Racer Icon
-		draw.SimpleTextOutlined( ResourceText, "UVWorldFont4",w * 0.505 + btrm, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+		draw.SimpleTextOutlined( ResourceText, "UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.505 + btrm, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
 
     else
         -- Cooldown Meter
