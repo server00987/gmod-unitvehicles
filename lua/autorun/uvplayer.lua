@@ -1431,18 +1431,50 @@ if SERVER then
 
     --POWER PLAY
     function UVPowerPlay(car)
-        if next(UVLoadedPursuitBreakers) == nil then --No PB
-            if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-		        if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
-		        	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
-		        	car.uvNextNoPBTime = CurTime() + 3
-		        end
+        local pos = car:WorldSpaceCenter()
+
+        local function WreckClosestUnit(car)
+            local closest_unit
+            local shortest_distanceunit = math.huge
+            
+            for _, ent in ents.Iterator() do
+                if IsValid(ent) then
+                    if ent.UnitVehicle then
+                        local distunit = pos:Distance(ent:GetPos())
+                    
+                        if distunit < shortest_distanceunit then
+                            shortest_distanceunit = distunit
+                            closest_unit = ent
+                        end
+                    end
+                end
             end
 
-            return false
+            if IsValid(closest_unit) then
+                if closest_unit.UnitVehicle then
+                    if closest_unit.UnitVehicle:IsNPC() then
+                        closest_unit.UnitVehicle:Wreck()
+                    else
+                        UVPlayerWreck(closest_unit)
+                    end
+                    return closest_unit
+                end
+            else
+                if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+		            if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
+		            	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
+		            	car.uvNextNoPBTime = CurTime() + 3
+		            end
+                end
+
+                return false
+            end
         end
 
-        local pos = car:WorldSpaceCenter()
+        if next(UVLoadedPursuitBreakers) == nil then --No PB
+            return WreckClosestUnit(car)
+        end
+
         local closest_ent
         local shortest_distance = math.huge
 
@@ -1459,17 +1491,10 @@ if SERVER then
             end
         end
         
-        if closest_ent then
+        if IsValid(closest_ent) then
             return UVTriggerPursuitBreaker(closest_ent, car)
         else --It can happen :3
-            if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
-		        if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
-		        	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
-		        	car.uvNextNoPBTime = CurTime() + 3
-		        end
-            end
-
-            return false
+            return WreckClosestUnit(car)
         end
     end
     
