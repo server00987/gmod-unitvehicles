@@ -1028,6 +1028,7 @@ if SERVER then
 	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 	UVPTRepairKitMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
+	UVPTPowerPlayMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_powerplay", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 
 	UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
@@ -1035,6 +1036,7 @@ if SERVER then
 	UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTRepairKitCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
+	UVPTPowerPlayCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_powerplay", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 
 	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE})
 	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE})

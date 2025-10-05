@@ -253,6 +253,22 @@ UV_PT.RepairKit = {
         })
     end
 }
+UV_PT.PowerPlay = {
+    NoPB = function(...)
+        local userString = "#uv.ptech.powerplay.nopb"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end,
+    Use = function(...)
+        local userString = "#uv.ptech.powerplay.activated"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end
+}
 
 --
 

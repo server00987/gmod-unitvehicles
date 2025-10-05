@@ -876,6 +876,21 @@ if SERVER then
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
             end
+        elseif pursuit_tech.Tech == 'Power Play' then
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            
+            local result = UVPowerPlay(car)
+            
+            if result then
+                used = true
+                pursuit_tech.LastUsed = CurTime()
+                pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+
+                if IsValid(driver) then
+                    UVPTEvent({driver}, 'PowerPlay', 'Use')
+                end
+            end
         end
 
         if used then
@@ -1336,7 +1351,8 @@ if SERVER then
             ReportPTEvent( car, affectedTargets, 'Shockwave', 'Hit' )
         end
     end
-    
+
+    --JAMMER
     function UVDeployJammer(car)
         if UVJammerDeployed then return end
         
@@ -1410,6 +1426,50 @@ if SERVER then
         
         if UVTargeting then
             UVSoundChatter(car, 1, "dispatchjammerend", 8)
+        end
+    end
+
+    --POWER PLAY
+    function UVPowerPlay(car)
+        if next(UVLoadedPursuitBreakers) == nil then --No PB
+            if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+		        if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
+		        	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
+		        	car.uvNextNoPBTime = CurTime() + 3
+		        end
+            end
+
+            return false
+        end
+
+        local pos = car:WorldSpaceCenter()
+        local closest_ent
+        local shortest_distance = math.huge
+
+        for _, ent in ents.Iterator() do
+            if IsValid(ent) then
+                if ent.PursuitBreaker then
+                    local dist = pos:Distance(ent:GetPos())
+                
+                    if dist < shortest_distance then
+                        shortest_distance = dist
+                        closest_ent = ent
+                    end
+                end
+            end
+        end
+        
+        if closest_ent then
+            return UVTriggerPursuitBreaker(closest_ent, car)
+        else --It can happen :3
+            if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+		        if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
+		        	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
+		        	car.uvNextNoPBTime = CurTime() + 3
+		        end
+            end
+
+            return false
         end
     end
     
