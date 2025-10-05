@@ -968,8 +968,7 @@ UV_UI.general.events = {
 		local immediate = params.immediate or nil
 		local iscritical = params.critical or nil
 		local notitimer = params.timer or 1
-		
-		
+
 		local StartClosing
 		local closing = false
 		local closeStartTime = nil
