@@ -1131,6 +1131,7 @@ if SERVER then
 		UVLoadedPursuitBreakersLoc = {}
 		UVLoadedRoadblocks = {}
 		UVLoadedRoadblocksLoc = {}
+		UVWreckedVehicles = {}
 		net.Start( "UVHUDStopCopMode" )
 		net.Broadcast()
 	end)
@@ -1710,8 +1711,6 @@ if SERVER then
 						if distance:LengthSqr() > 100000000 then
 							car:Remove()
 						end
-					else
-						break
 					end
 				else
 					table.RemoveByValue(UVWreckedVehicles, car)
