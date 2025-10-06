@@ -193,6 +193,8 @@ UVMaterials = {
     ["HUD_CTU_GRADIENT_DOWN"] = Material("unitvehicles/hud_ctu/PauseGradientBottom.png"),
     ["HUD_CTU_BAR"] = Material("unitvehicles/hud_ctu/OrangeTickerBar.png"),
     ["HUD_CTU_ENDBOX"] = Material("unitvehicles/hud_ctu/Endbox.png"),
+    ["HUD_CTU_FOCUSBAR"] = Material("unitvehicles/hud_ctu/FocusBar.png"),
+    ["HUD_CTU_FOCUSBARBLACK"] = Material("unitvehicles/hud_ctu/FocusBarBlack.png"),
 }
 
 UV_UI_Events = {
@@ -11260,6 +11262,23 @@ local function ctu_racing_main( ... )
 		-- draw.SimpleTextOutlined( "--:--.--", "UVFont4BiggerItalic", x + (w * 0.465), y + h * 0.004, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 	-- end
 
+    -- surface.SetDrawColor(255, 255, 255)
+	-- surface.SetMaterial(UVMaterials["HUD_CTU_FOCUSBARBLACK"])
+    -- surface.DrawTexturedRect(w * 0.4, h * 0.8, w * 0.2, h * 0.035)
+            
+	-- local blink = 255 * math.abs(math.sin(RealTime() * 2))
+            
+    -- surface.SetDrawColor(255, 255, 255, blink)
+	-- surface.SetMaterial(UVMaterials["HUD_CTU_FOCUSBAR"])
+    -- surface.DrawTexturedRect(w * 0.4, h * 0.8, w * 0.2, h * 0.035)
+
+	-- local conttext = UVBindButton("+jump") .. "    " .. language.GetPhrase("uv.results.continue")
+	-- local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(30) )
+			    	
+	-- draw.SimpleTextOutlined(conttext, "UVFont4BiggerItalic2", w * 0.4025, h * 0.8, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0 ) )
+
+	-- draw.SimpleTextOutlined(autotext, "UVFont4BiggerItalic2", w * 0.5, h * 0.835, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0 ) )
+	
     -- Right Side Info
 	-- Background
     surface.SetDrawColor(255, 255, 255)
@@ -11427,8 +11446,8 @@ UV_UI.racing.ctu.events = {
 		gui.EnableScreenClicker(true)
 
         OK:SetText("")
-        OK:SetPos(w*0.2565, h*0.9)
-        OK:SetSize(w*0.3, h*0.035)
+        OK:SetPos(w*0.4, h*0.8)
+        OK:SetSize(w*0.2, h*0.035)
 
         OK:SetEnabled(true)
         OK.Paint = function() end
@@ -11505,9 +11524,7 @@ UV_UI.racing.ctu.events = {
             
             return true -- prevent further processing
         end
-        
-        local playedfadeSound = false
-        
+
         ResultPanel.Paint = function(self, w, h)
             local curTime = CurTime()
             local fadeDuration = 0.125
@@ -11522,12 +11539,7 @@ UV_UI.racing.ctu.events = {
                 
                 fadeAlpha = 1 - progress  -- fade out from 1 to 0
                 scaleX = 1 + progress * 1  -- scale horizontally from 1 to 2 times
-                
-                if not playedfadeSound and elapsedFade >= 0.05 then
-                    playedfadeSound = true
-                    surface.PlaySound( "uvui/ps/closemenu2.wav" )
-                end
-                
+
                 if elapsedFade >= fadeDuration then
                     hook.Remove("CreateMove", "JumpKeyCloseResults")
                     if IsValid(ResultPanel) then
@@ -11536,7 +11548,6 @@ UV_UI.racing.ctu.events = {
                     return -- early exit, avoid drawing anymore
                 end
             end
-            -- Draw rows and alternating backgrounds fully visible when revealed
 
             -- Background Elements
 			surface.SetDrawColor(0, 0, 0, 225 * fadeAlpha)
@@ -11616,29 +11627,28 @@ UV_UI.racing.ctu.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
 
-			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
+			surface.SetDrawColor(255, 255, 255, 255 * fadeAlpha)
+			surface.SetMaterial(UVMaterials["HUD_CTU_FOCUSBARBLACK"])
+			surface.DrawTexturedRect(w * 0.4, h * 0.8, w * 0.2, h * 0.035)
+
+			if IsValid(OK) and OK:IsHovered() then
+				local blink2 = 255 * math.abs(math.sin(RealTime() * 2))
+
+				surface.SetDrawColor(255, 255, 255, blink2 * fadeAlpha)
+				surface.SetMaterial(UVMaterials["HUD_CTU_FOCUSBAR"])
+				surface.DrawTexturedRect(w * 0.4, h * 0.8, w * 0.2, h * 0.035)
+			end
+
+			local conttext = UVBindButton("+jump") .. "    " .. language.GetPhrase("uv.results.continue")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
-			
-			surface.SetFont("UVCarbonLeaderboardFont")
-			local conttextw = surface.GetTextSize(conttext)
-			local autotextw = surface.GetTextSize(autotext)
-			local wdist = w * 0.000565
 
-			surface.SetDrawColor( 100, 100, 100, 200 )
-			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
-			surface.DrawRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
-
-			surface.SetDrawColor( 0, 0, 0, 255 )
-			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
-			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
-
-			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			draw.SimpleTextOutlined(conttext, "UVFont4BiggerItalic2", w * 0.4025, h * 0.8, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 255 * fadeAlpha ) )
+			draw.SimpleTextOutlined(autotext, "UVFont4BiggerItalic2", w * 0.5, h * 0.835, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 255 * fadeAlpha ) )
 
             if autoCloseRemaining <= 0 then
                 hook.Remove("CreateMove", "JumpKeyCloseResults")
                 if not closing then
-                    surface.PlaySound( "uvui/ps/closemenu.wav" )
+                    surface.PlaySound( "uvui/ctu/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
                 end
@@ -11647,7 +11657,7 @@ UV_UI.racing.ctu.events = {
         
         function OK:DoClick()
             if not closing then
-                surface.PlaySound( "uvui/ps/closemenu.wav" )
+                surface.PlaySound( "uvui/ctu/closemenu.wav" )
                 closing = true
                 closeStartTime = CurTime()
             end
@@ -11660,7 +11670,7 @@ UV_UI.racing.ctu.events = {
 			if ply:KeyPressed(IN_JUMP) then
 				if IsValid(ResultPanel) then
 					hook.Remove("CreateMove", "JumpKeyCloseResults")
-					surface.PlaySound( "uvui/ps/closemenu.wav" )
+					surface.PlaySound( "uvui/ctu/closemenu.wav" )
                     closing = true
                     closeStartTime = CurTime()
 				end

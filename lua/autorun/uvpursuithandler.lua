@@ -3582,7 +3582,9 @@ else -- CLIENT Settings | HUD/Options
 				BustingProgress = 0
 			end
 		end
-
+		
+		local devMode = GetConVar("developer"):GetBool()
+		
 		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
 			local text = lang(UV_CurrentSubtitle)
 			local textcs = lang(UV_CurrentSubtitleCallsign or " ")
@@ -3593,18 +3595,20 @@ else -- CLIENT Settings | HUD/Options
 
 			surface.SetFont(font)
 			if text == "" or text == UV_CurrentSubtitle then -- invalid or missing localization; Active for debugging purposes
-				local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
-				local totalHeight = 1 * lineHeight
+				-- if devMode then
+					-- local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
+					-- local totalHeight = 1 * lineHeight
 
-				local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
-				local bgY = h * 0.755 - bgPadding
-				local bgW = maxWidth + bgPadding * 2
-				local bgH = totalHeight + bgPadding * 2
+					-- local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
+					-- local bgY = h * 0.755 - bgPadding
+					-- local bgW = maxWidth + bgPadding * 2
+					-- local bgH = totalHeight + bgPadding * 2
 
-				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
-				
-				draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+					-- draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
+					
+					-- draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+					-- draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				-- end
 			else
 				local lines = {}
 				local currentLine = ""
