@@ -269,6 +269,45 @@ if SERVER then
 		end
 	end
 
+    function UVGetRaceLeader()
+        if not UVRaceTable or not UVRaceTable['Participants'] then return end
+
+        local Participants = UVRaceTable['Participants']
+        local TotalCheckpoints = GetGlobalInt("uvrace_checkpoints", 0)
+        local LeadersCurrentCheckpoint = 0
+        local Time = math.huge
+        local Leaders = {}
+        local Leader
+
+        --Look for any racer(s) with most checkpoints passed
+        for entity, racer in pairs(Participants) do
+            local CheckpointsPassed = #racer['Checkpoints'] + (TotalCheckpoints * (racer['Lap'] - 1))
+
+            if CheckpointsPassed > LeadersCurrentCheckpoint then
+                LeadersCurrentCheckpoint = CheckpointsPassed
+            end
+        end
+
+        --If there are at least 2 racers who did the above, look for the one with the least amount of time
+        for entity, racer in pairs(Participants) do
+            local CheckpointsPassed = #racer['Checkpoints'] + (TotalCheckpoints * (racer['Lap'] - 1))
+
+            if CheckpointsPassed == LeadersCurrentCheckpoint then
+                table.insert( Leaders, racer )
+            end
+        end
+
+        for entity, racer in pairs(Leaders) do
+            local CurrentTime = next(racer['Checkpoints']) ~= nil and racer['Checkpoints'][#racer['Checkpoints']] or racer['LastLapCurTime'] or racer['Position']
+            if CurrentTime < Time then
+                Time = racer['Checkpoints'][#racer['Checkpoints']] or racer['Position']
+                Leader = racer.Vehicle
+            end
+        end
+
+        return IsValid(Leader) and Leader
+    end
+
     function UVOptimizeRespawn( vehicle, rhino )
         if UVOptimizeRespawnDelayed then return end
 
@@ -311,7 +350,7 @@ if SERVER then
 	    if next(UVWantedTableVehicle) ~= nil then
 	    	local suspects = UVWantedTableVehicle
 	    	local random_entry = math.random(#suspects)
-	    	suspect = suspects[random_entry]
+	    	suspect = UVGetRaceLeader() or suspects[random_entry]
         
 	    	enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 	    	suspectvelocity = suspect:GetVelocity()
