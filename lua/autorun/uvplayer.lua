@@ -462,7 +462,7 @@ if SERVER then
         --PrintMessage( HUD_PRINTTALK, "Resetting position..." )
         
         local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
-        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_OPAQUE, filter = {checkpoint}})
+        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_NPCWORLDSTATIC, filter = {checkpoint}})
         
         local next_pos = nil
         local next_dir = nil
