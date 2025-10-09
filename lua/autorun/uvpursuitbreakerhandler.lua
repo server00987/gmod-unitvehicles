@@ -312,13 +312,14 @@ if SERVER then
         
         local hitentphys = hitent:GetPhysicsObject()
         local phys = object:GetPhysicsObject()
-        if IsValid(phys) and IsValid(hitentphys) then
+        if objectvelocity and IsValid(phys) and IsValid(hitentphys) then
             hitentphys:SetVelocity(objectvelocity)
             phys:SetVelocity(objectvelocity)
         end
         
-        if not IsValid(closestbreakableent) then return end
-        closestbreakableent:Fire("Break")
+        if IsValid(closestbreakableent) then 
+            closestbreakableent:Fire("Break") 
+        end
         
         local Chatter = GetConVar("unitvehicle_chatter")
         local ChatterText = GetConVar("unitvehicle_chattertext")
@@ -334,13 +335,16 @@ if SERVER then
                     
                     table.Add( units, airUnits )
                     
-                    if next(units) == nil then return end
+                    if next(units) ~= nil then 
+                        local randomunit = units[math.random(#units)]
+                        UVSoundChatter(randomunit, randomunit.voice, "pursuitbreaker", 4) 
+                    end
                     
-                    local randomunit = units[math.random(#units)]
-                    UVSoundChatter(randomunit, randomunit.voice, "pursuitbreaker", 4)
                 end
             end
         end
+
+        return hitent
         
     end
     

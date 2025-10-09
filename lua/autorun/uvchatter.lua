@@ -541,12 +541,37 @@ if SERVER then
 			ChatterLastPlay = initTime
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
-			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
-			local addressFile
-			if addressFiles then
-				addressFile = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
-			end
 			
+			-- local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
+			-- local addressFile
+			-- if addressFiles then
+				-- addressFile = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"..addressFiles[math.random(1, #addressFiles)]
+			-- end
+			
+			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..game.GetMap().."/*", "GAME")
+			local chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..game.GetMap().."/"
+
+			if not addressFiles or #addressFiles == 0 then
+				local mapName = game.GetMap()
+				if mapName:find("_") then
+					mapName = mapName:gsub("^[^_]+_", ""):gsub("(_.+)$", "")
+					print("Found no " .. game.GetMap() .. " files - switching to " .. mapName)
+					addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/*", "GAME")
+					chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/"
+				end
+			end
+
+			if not addressFiles or #addressFiles == 0 then
+				print("Found no alternative files - switching to default")
+				addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
+				chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"
+			end
+
+			local addressFile
+			if addressFiles and #addressFiles > 0 then
+				addressFile = chosenPath..addressFiles[math.random(#addressFiles)]
+			end
+
 			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
 			local locationFile
 			if locationFiles then

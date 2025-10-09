@@ -1028,6 +1028,7 @@ if SERVER then
 	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 	UVPTRepairKitMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
+	UVPTPowerPlayMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_powerplay", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
 
 	UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
@@ -1035,6 +1036,7 @@ if SERVER then
 	UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 	UVPTRepairKitCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
+	UVPTPowerPlayCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_powerplay", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
 
 	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE})
 	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE})
@@ -1129,6 +1131,7 @@ if SERVER then
 		UVLoadedPursuitBreakersLoc = {}
 		UVLoadedRoadblocks = {}
 		UVLoadedRoadblocksLoc = {}
+		UVWreckedVehicles = {}
 		net.Start( "UVHUDStopCopMode" )
 		net.Broadcast()
 	end)
@@ -1708,8 +1711,6 @@ if SERVER then
 						if distance:LengthSqr() > 100000000 then
 							car:Remove()
 						end
-					else
-						break
 					end
 				else
 					table.RemoveByValue(UVWreckedVehicles, car)
@@ -3534,8 +3535,14 @@ else -- CLIENT Settings | HUD/Options
 			hudHandler = UV_UI.pursuit[backup] and UV_UI.pursuit[backup].main
 		end
 
+		local displayingracingandpursuit
+
 		if hudHandler then
 			hudHandler()
+
+			if UV_UI.pursuit.original and UV_UI.pursuit.original.main and hudHandler == UV_UI.pursuit.original.main then -- Displays both racing and pursuit
+				displayingracingandpursuit = true
+			end
 		end
 
 		if UV_UI.general then
@@ -3544,36 +3551,40 @@ else -- CLIENT Settings | HUD/Options
 		
 		local var = UVKeybindResetPosition:GetInt()
 
-		if not UVHUDCopMode and (not UVHUDDisplayPursuit and UVHUDDisplayBusting) or (UVHUDRace and UVHUDDisplayBusting) then -- Being fined/busted in a race
-			local UVBustTimer = BustedTimer:GetFloat()
-			local finetext = "uv.chase.fining"
+		if not displayingracingandpursuit then
+			if not UVHUDCopMode and (not UVHUDDisplayPursuit and UVHUDDisplayBusting) or (UVHUDRace and UVHUDDisplayBusting) then -- Being fined/busted in a race
+				local UVBustTimer = BustedTimer:GetFloat()
+				local finetext = "uv.chase.fining"
 
-			if UVHUDDisplayPursuit then
-				finetext = "uv.chase.busting.other"
+				if UVHUDDisplayPursuit then
+					finetext = "uv.chase.busting.other"
+				end
+
+				local bottomy = h * 0.89
+
+				if not BustingProgress or BustingProgress == 0 then
+					BustingProgress = CurTime()
+				end
+
+				local blink = 255 * math.abs(math.sin(RealTime() * 4))
+
+				local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
+
+				draw.SimpleTextOutlined( "#" .. finetext, "UVMostWantedLeaderboardFont", w * 0.5, bottomy - h * 0.025, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, 255) )
+
+				surface.SetDrawColor(200, 200, 200, 125)
+				surface.DrawRect(w * 0.4, bottomy, w * 0.2, h * 0.015)
+
+				local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.2), 0, w * 0.2)
+				surface.SetDrawColor(255, 100, 100)
+				surface.DrawRect(w * 0.4, bottomy, T, h * 0.015)
+			else
+				BustingProgress = 0
 			end
-
-			local bottomy = h * 0.89
-
-			if not BustingProgress or BustingProgress == 0 then
-				BustingProgress = CurTime()
-			end
-			
-			local blink = 255 * math.abs(math.sin(RealTime() * 4))
-
-			local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
-
-			draw.SimpleTextOutlined( "#" .. finetext, "UVMostWantedLeaderboardFont", w * 0.5, bottomy - h * 0.025, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, 255) )
-
-			surface.SetDrawColor(200, 200, 200, 125)
-			surface.DrawRect(w * 0.4, bottomy, w * 0.2, h * 0.015)
-			
-			local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.2), 0, w * 0.2)
-			surface.SetDrawColor(255, 100, 100)
-			surface.DrawRect(w * 0.4, bottomy, T, h * 0.015)
-		else
-			BustingProgress = 0
 		end
-
+		
+		local devMode = GetConVar("developer"):GetBool()
+		
 		if UVSubtitles:GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0) then
 			local text = lang(UV_CurrentSubtitle)
 			local textcs = lang(UV_CurrentSubtitleCallsign or " ")
@@ -3584,18 +3595,20 @@ else -- CLIENT Settings | HUD/Options
 
 			surface.SetFont(font)
 			if text == "" or text == UV_CurrentSubtitle then -- invalid or missing localization; Active for debugging purposes
-				local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
-				local totalHeight = 1 * lineHeight
+				-- if devMode then
+					-- local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
+					-- local totalHeight = 1 * lineHeight
 
-				local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
-				local bgY = h * 0.755 - bgPadding
-				local bgW = maxWidth + bgPadding * 2
-				local bgH = totalHeight + bgPadding * 2
+					-- local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
+					-- local bgY = h * 0.755 - bgPadding
+					-- local bgW = maxWidth + bgPadding * 2
+					-- local bgH = totalHeight + bgPadding * 2
 
-				draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
-				
-				draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-				draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+					-- draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
+					
+					-- draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+					-- draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				-- end
 			else
 				local lines = {}
 				local currentLine = ""
@@ -4697,23 +4710,24 @@ else -- CLIENT Settings | HUD/Options
 			panel:Help("#uv.settings.uistyle.title")
 
 			local uistylemain, label = panel:ComboBox( "#uv.settings.uistyle.main", "unitvehicle_hudtype_main" )
-			uistylemain:AddChoice( "Most Wanted", "mostwanted")
-			uistylemain:AddChoice( "Carbon", "carbon")
-			uistylemain:AddChoice( "Underground", "underground")
-			uistylemain:AddChoice( "Underground 2", "underground2")
-			uistylemain:AddChoice( "Undercover", "undercover")
-			uistylemain:AddChoice( "ProStreet", "prostreet")
-			uistylemain:AddChoice( "World", "world")
+			uistylemain:AddChoice( "Crash Time - Undercover", "ctu")
+			uistylemain:AddChoice( "NFS Most Wanted", "mostwanted")
+			uistylemain:AddChoice( "NFS Carbon", "carbon")
+			uistylemain:AddChoice( "NFS Underground", "underground")
+			uistylemain:AddChoice( "NFS Underground 2", "underground2")
+			uistylemain:AddChoice( "NFS Undercover", "undercover")
+			uistylemain:AddChoice( "NFS ProStreet", "prostreet")
+			uistylemain:AddChoice( "NFS World", "world")
 			uistylemain:AddChoice( "#uv.uistyle.original", "original")
 			uistylemain:AddChoice( "#uv.uistyle.none", "")
 			
 			uistylemain:SetTooltip( "#uv.settings.uistyle.main.desc" )
 
 			local uistylebackup, label = panel:ComboBox( "#uv.settings.uistyle.backup", "unitvehicle_hudtype_backup" )
-			uistylebackup:AddChoice( "Most Wanted", "mostwanted")
-			uistylebackup:AddChoice( "Carbon", "carbon")
-			uistylebackup:AddChoice( "Undercover", "undercover")
-			uistylebackup:AddChoice( "World", "world")
+			uistylebackup:AddChoice( "NFS Most Wanted", "mostwanted")
+			uistylebackup:AddChoice( "NFS Carbon", "carbon")
+			uistylebackup:AddChoice( "NFS Undercover", "undercover")
+			uistylebackup:AddChoice( "NFS World", "world")
 			uistylebackup:AddChoice( "#uv.uistyle.original", "original")
 			
 			uistylebackup:SetTooltip( "#uv.settings.uistyle.backup.desc" )
@@ -4802,8 +4816,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.audio.pursuittheme.random.desc")
 
 			local pursuitthemeplayrandomheattype, label = panel:ComboBox( "#uv.settings.audio.pursuittheme.random.type", "unitvehicle_pursuitthemeplayrandomheattype" )
-			pursuitthemeplayrandomheattype:AddChoice( "Sequential", "sequential")
-			pursuitthemeplayrandomheattype:AddChoice( "Every X minutes", "everyminutes")
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.type.sequential", "sequential")
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.minutes", "everyminutes")
 			pursuitthemeplayrandomheattype:SetTooltip("#uv.settings.audio.pursuittheme.random.type.desc")
 			
 			local numslider = panel:NumSlider("#uv.settings.audio.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)

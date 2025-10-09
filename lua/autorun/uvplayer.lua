@@ -269,6 +269,45 @@ if SERVER then
 		end
 	end
 
+    function UVGetRaceLeader()
+        if not UVRaceTable or not UVRaceTable['Participants'] then return end
+
+        local Participants = UVRaceTable['Participants']
+        local TotalCheckpoints = GetGlobalInt("uvrace_checkpoints", 0)
+        local LeadersCurrentCheckpoint = 0
+        local Time = math.huge
+        local Leaders = {}
+        local Leader
+
+        --Look for any racer(s) with most checkpoints passed
+        for entity, racer in pairs(Participants) do
+            local CheckpointsPassed = #racer['Checkpoints'] + (TotalCheckpoints * (racer['Lap'] - 1))
+
+            if CheckpointsPassed > LeadersCurrentCheckpoint then
+                LeadersCurrentCheckpoint = CheckpointsPassed
+            end
+        end
+
+        --If there are at least 2 racers who did the above, look for the one with the least amount of time
+        for entity, racer in pairs(Participants) do
+            local CheckpointsPassed = #racer['Checkpoints'] + (TotalCheckpoints * (racer['Lap'] - 1))
+
+            if CheckpointsPassed == LeadersCurrentCheckpoint then
+                table.insert( Leaders, racer )
+            end
+        end
+
+        for entity, racer in pairs(Leaders) do
+            local CurrentTime = next(racer['Checkpoints']) ~= nil and racer['Checkpoints'][#racer['Checkpoints']] or racer['LastLapCurTime'] or racer['Position']
+            if CurrentTime < Time then
+                Time = racer['Checkpoints'][#racer['Checkpoints']] or racer['Position']
+                Leader = racer.Vehicle
+            end
+        end
+
+        return IsValid(Leader) and Leader
+    end
+
     function UVOptimizeRespawn( vehicle, rhino )
         if UVOptimizeRespawnDelayed then return end
 
@@ -311,7 +350,7 @@ if SERVER then
 	    if next(UVWantedTableVehicle) ~= nil then
 	    	local suspects = UVWantedTableVehicle
 	    	local random_entry = math.random(#suspects)
-	    	suspect = suspects[random_entry]
+	    	suspect = UVGetRaceLeader() or suspects[random_entry]
         
 	    	enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 	    	suspectvelocity = suspect:GetVelocity()
@@ -462,7 +501,7 @@ if SERVER then
         --PrintMessage( HUD_PRINTTALK, "Resetting position..." )
         
         local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
-        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_OPAQUE, filter = {checkpoint}})
+        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_NPCWORLDSTATIC, filter = {checkpoint}})
         
         local next_pos = nil
         local next_dir = nil
@@ -875,6 +914,21 @@ if SERVER then
                 used = true
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            end
+        elseif pursuit_tech.Tech == 'Power Play' then
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            
+            local result = UVPowerPlay(car)
+            
+            if result then
+                used = true
+                pursuit_tech.LastUsed = CurTime()
+                pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+
+                if IsValid(driver) then
+                    UVPTEvent({driver}, 'PowerPlay', 'Use')
+                end
             end
         end
 
@@ -1336,7 +1390,8 @@ if SERVER then
             ReportPTEvent( car, affectedTargets, 'Shockwave', 'Hit' )
         end
     end
-    
+
+    --JAMMER
     function UVDeployJammer(car)
         if UVJammerDeployed then return end
         
@@ -1410,6 +1465,75 @@ if SERVER then
         
         if UVTargeting then
             UVSoundChatter(car, 1, "dispatchjammerend", 8)
+        end
+    end
+
+    --POWER PLAY
+    function UVPowerPlay(car)
+        local pos = car:WorldSpaceCenter()
+
+        local function WreckClosestUnit(car)
+            local closest_unit
+            local shortest_distanceunit = math.huge
+            
+            for _, ent in ents.Iterator() do
+                if IsValid(ent) then
+                    if ent.UnitVehicle then
+                        local distunit = pos:Distance(ent:GetPos())
+                    
+                        if distunit < shortest_distanceunit then
+                            shortest_distanceunit = distunit
+                            closest_unit = ent
+                        end
+                    end
+                end
+            end
+
+            if IsValid(closest_unit) then
+                if closest_unit.UnitVehicle then
+                    if closest_unit.UnitVehicle:IsNPC() then
+                        closest_unit.UnitVehicle:Wreck()
+                    else
+                        UVPlayerWreck(closest_unit)
+                    end
+                    return closest_unit
+                end
+            else
+                if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+		            if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
+		            	UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
+		            	car.uvNextNoPBTime = CurTime() + 3
+		            end
+                end
+
+                return false
+            end
+        end
+
+        if next(UVLoadedPursuitBreakers) == nil then --No PB
+            return WreckClosestUnit(car)
+        end
+
+        local closest_ent
+        local shortest_distance = math.huge
+
+        for _, ent in ents.Iterator() do
+            if IsValid(ent) then
+                if ent.PursuitBreaker then
+                    local dist = pos:Distance(ent:GetPos())
+                
+                    if dist < shortest_distance then
+                        shortest_distance = dist
+                        closest_ent = ent
+                    end
+                end
+            end
+        end
+        
+        if IsValid(closest_ent) then
+            return UVTriggerPursuitBreaker(closest_ent, car)
+        else --It can happen :3
+            return WreckClosestUnit(car)
         end
     end
     

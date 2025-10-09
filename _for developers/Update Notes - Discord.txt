@@ -1,3 +1,38 @@
+<------- October 10 ------->
+# New Features
+**Pursuit Tech**
+- Added a new Pursuit Tech: ***Power Play***! Triggers the closest Pursuit Breaker to the user, or wrecks the closest Unit to the user if no Pursuit Breaker is present
+
+**Pursuit**
+- Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
+
+**Chatter Profiles**
+- Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocityt, flatgrass, goldencity, southbeach, southside, gm\_palm\_city, gm\_tri\_polis & gm\_wangan
+- Replaced "cop3" with a new voice - Welcome aux!
+- Added "cop5"
+
+**UI**
+- Added a new Racing UI Style: Crash Time - Undercover
+
+# Changes
+**Pursuit**
+- Fixed that the bottom Pursuit UI elements were moved up when the DNF Timer was active while the player was a Unit
+
+**UI**
+- Fixed some elements from the Original UI
+- When using the World UI in select languages, the font will be changed due to character errors
+
+**Chatter Profiles**
+- Default "fed1" has been changed to "cop4"
+
+**Other**
+- Fixed that, at certain times, you would respawn underneath glass surfaces
+- If a race is in progress, all Units, Roadblocks and Helicopters will spawn close to the race leader
+- Tweaked Helicopter logic
+- Updated localizations
+
+And various other undocumented tweaks
+
 <------- September 26 ------->
 # New Features
 **Pursuit**

@@ -242,7 +242,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	-- if next(UVWantedTableVehicle) ~= nil then
 	-- 	local suspects = UVWantedTableVehicle
 	-- 	local random_entry = math.random(#suspects)	
-	-- 	suspect = suspects[random_entry]
+	-- 	suspect = UVGetRaceLeader() or suspects[random_entry]
 	-- 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	-- else
 	-- 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
@@ -260,7 +260,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
 		local random_entry = math.random(#suspects)
-		suspect = suspects[random_entry]
+		suspect = UVGetRaceLeader() or suspects[random_entry]
 		
 		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 		suspectvelocity = suspect:GetVelocity()

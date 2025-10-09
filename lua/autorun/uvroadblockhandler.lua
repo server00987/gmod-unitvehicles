@@ -268,7 +268,7 @@ if SERVER then
 				-- if next(UVWantedTableVehicle) ~= nil then
 				-- 	local suspects = UVWantedTableVehicle
 				-- 	local random_entry = math.random(#suspects)	
-				-- 	suspect = suspects[random_entry]
+				-- 	suspect = UVGetRaceLeader() or suspects[random_entry]
 				-- 	enemylocation = (suspect:GetPos()+(vector_up * 50))
 				-- else
 				-- 	enemylocation = (suspect:GetPos()+(vector_up * 50))
@@ -277,7 +277,7 @@ if SERVER then
 
 				local suspects = UVWantedTableVehicle
 				local random_entry = math.random(#suspects)
-				local suspect = suspects[random_entry]
+				local suspect = UVGetRaceLeader() or suspects[random_entry]
 
 				if not IsValid(suspect) then return end
 

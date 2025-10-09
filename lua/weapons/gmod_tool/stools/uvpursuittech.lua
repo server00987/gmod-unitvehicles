@@ -11,6 +11,7 @@ local pttable = {
 	"Shockwave",
 	"Spikestrip",
 	"Stunmine",
+	"Power Play"
 }
 
 -- local pursuit_tech_list = {
@@ -36,6 +37,7 @@ TOOL.ClientConVar['maxammo_shockwave'] = 5
 TOOL.ClientConVar['maxammo_spikestrip'] = 5
 TOOL.ClientConVar['maxammo_stunmine'] = 5
 TOOL.ClientConVar['maxammo_repairkit'] = 5
+TOOL.ClientConVar['maxammo_powerplay'] = 5
 
 -- cooldowns
 TOOL.ClientConVar['cooldown_esf'] = 30
@@ -44,6 +46,7 @@ TOOL.ClientConVar['cooldown_shockwave'] = 30
 TOOL.ClientConVar['cooldown_spikestrip'] = 30
 TOOL.ClientConVar['cooldown_stunmine'] = 30
 TOOL.ClientConVar['cooldown_repairkit'] = 30
+TOOL.ClientConVar['cooldown_powerplay'] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
@@ -93,6 +96,7 @@ if CLIENT then
 			['Spikestrip'] = '#uv.ptech.spikes',
 			['Repair Kit'] = '#uv.ptech.repairkit',
 			['Killswitch'] = '#uv.ptech.killswitch',
+			['Power Play'] = '#uv.ptech.powerplay',
 		}
 
 		-- Check if it's a valid vehicle and within range
@@ -632,6 +636,32 @@ if CLIENT then
 		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
 		repairkitammo:SetConVar("uvpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.powerplay.title",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.powerplay.desc",
+		})
+
+		local powerplaycooldown = vgui.Create("DNumSlider")
+		powerplaycooldown:SetMin(0)
+		powerplaycooldown:SetMax(120)
+		powerplaycooldown:SetDecimals(0)
+		powerplaycooldown:SetText("#uv.ptech.cooldown")
+		powerplaycooldown:SetTooltip("#uv.ptech.cooldown.desc")
+		powerplaycooldown:SetConVar("uvpursuittech_cooldown_powerplay")
+		CPanel:AddItem(powerplaycooldown)
+
+		local powerplayammo = vgui.Create("DNumSlider")
+		powerplayammo:SetMin(0)
+		powerplayammo:SetMax(120)
+		powerplayammo:SetDecimals(0)
+		powerplayammo:SetText("#uv.ptech.ammo")
+		powerplayammo:SetTooltip("#uv.ptech.ammo.desc")
+		powerplayammo:SetConVar("uvpursuittech_maxammo_powerplay")
+		CPanel:AddItem(powerplayammo)
 	end
 	
 	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )
@@ -646,7 +676,8 @@ if CLIENT then
 			['Shockwave'] = '#uv.ptech.shockwave',
 			['Stunmine'] = '#uv.ptech.stunmine',
 			['Spikestrip'] = '#uv.ptech.spikes',
-			['Repair Kit'] = '#uv.ptech.repairkit'
+			['Repair Kit'] = '#uv.ptech.repairkit',
+			['Power Play'] = '#uv.ptech.powerplay'
 		}
 
 		surface.SetDrawColor( Color( 0, 0, 0) )
