@@ -1516,13 +1516,14 @@ if SERVER then
 
         local closest_ent
         local shortest_distance = math.huge
+        local maximum_distance = 75000000
 
         for _, ent in ents.Iterator() do
             if IsValid(ent) then
                 if ent.PursuitBreaker then
-                    local dist = pos:Distance(ent:GetPos())
-                
-                    if dist < shortest_distance then
+                    local dist = pos:DistToSqr(ent:GetPos())
+
+                    if dist < shortest_distance and dist <= maximum_distance then
                         shortest_distance = dist
                         closest_ent = ent
                     end
@@ -1532,8 +1533,17 @@ if SERVER then
         
         if IsValid(closest_ent) then
             return UVTriggerPursuitBreaker(closest_ent, car)
-        else --It can happen :3
-            return WreckClosestUnit(car)
+        -- else --It can happen :3
+        --     return WreckClosestUnit(car)
+        else
+            if isfunction(car.GetDriver) and IsValid(UVGetDriver(car)) and UVGetDriver(car):IsPlayer() then 
+                if not car.uvNextNoPBTime or car.uvNextNoPBTime < CurTime() then
+                    UVPTEvent({UVGetDriver(car)}, 'PowerPlay', 'NoPB')
+                    car.uvNextNoPBTime = CurTime() + 3
+                end
+            end
+
+            return false
         end
     end
     
