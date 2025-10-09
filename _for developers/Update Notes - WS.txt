@@ -2,7 +2,8 @@
 [h1]New Features[/h1]
 [b]Pursuit Tech[/b]
 [list]
-	[*]Added a new Pursuit Tech: Power Play! Triggers the closest Pursuit Breaker to the user, or wrecks the closest Unit to the user if no Pursuit Breaker is present
+	[*]Added a new Pursuit Tech: Power Play! Triggers the closest Pursuit Breaker to the user, if one is present
+	[*]Added a new Pursuit Tech: EMP! Lock-on to Units or Racers in front of you, and if successful, causes damage to the target, knocks their vehicle around and restricts use of Pursuit Tech for a short duration
 [/list]
 
 [b]Pursuit[/b]
