@@ -2761,7 +2761,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		
 		if not vehicle then return false end
 		
-		local SpawnPos = pos + (vector_up * 25) + (vehicle.SpawnOffset or vector_origin)
+		local SpawnPos = pos + (vector_up * (InfMap and 2 or 25)) + (vehicle.SpawnOffset or vector_origin)
 		
 		local SpawnAng = ang
 		SpawnAng.pitch = 0
@@ -3008,7 +3008,7 @@ function UVMoveToGridSlot( vehicle, aienabled )
 		end)
 		
 	elseif Memory.VehicleBase == "base_glide_car" or Memory.VehicleBase == "base_glide_motorcycle" or Memory.VehicleBase == "base_glide_boat" or Memory.VehicleBase == "base_glide_aircraft" or Memory.VehicleBase == "base_glide_heli" or Memory.VehicleBase == "base_glide_plane" then
-		local SpawnCenter = pos + (vector_up * 25)
+		local SpawnCenter = pos + (vector_up * (InfMap and 2 or 25))
 		SpawnCenter.z = SpawnCenter.z - Memory.Mins.z
 		
 		duplicator.SetLocalPos( SpawnCenter )
@@ -3108,6 +3108,10 @@ function UVMoveToGridSlot( vehicle, aienabled )
     			net.Broadcast()
 			end
 		end
+
+		-- function Ent:UpdateTransmitState()
+		-- 	return TRANSMIT_ALWAYS
+		-- end
 		
 		
 	elseif Memory.VehicleBase == "prop_vehicle_jeep" then
@@ -3205,6 +3209,12 @@ function UVMoveToGridSlot( vehicle, aienabled )
 	end)
 	
 	UVRaceAddParticipant( Ent )
+
+	if InfMap then
+		timer.Simple(0, function()
+			Ent:GetPhysicsObject():EnableMotion( false )
+		end)
+	end
 	
 	timer.Simple( 1, function()
 		if IsValid(Ent) then

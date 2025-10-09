@@ -479,12 +479,21 @@ if CLIENT then
 
     local orbitYaw = 0
 
+    gameevent.Listen( "player_spawn" ); hook.Add( "player_spawn", "UVOnLocalPlayerSpawn", function( data ) 
+	    local id = data.userid
+
+        if LocalPlayer():UserID() == id then
+            UVLastVehicleDriven = nil
+        end
+    end )
+
     hook.Add("CalcView", "UVCalcView", function(ply, origin, angles, fov, znear, zfar)
         
         UVLastVehicleDriven = IsValid(UVGetVehicle(ply)) and UVGetVehicle(ply) or UVLastVehicleDriven
+        local isVehicleValid = IsValid(UVLastVehicleDriven)
 
         -- Dead
-        if not ply:Alive() and IsValid(UVLastVehicleDriven) then
+        if not ply:Alive() and isVehicleValid then
             local orbitDistance = 200
 
             local orbitSpeed = 45 
@@ -509,6 +518,10 @@ if CLIENT then
         end
 
     end)
+
+    if not isVehicleValid then
+        UVLastVehicleDriven = nil
+    end
 
 end
 

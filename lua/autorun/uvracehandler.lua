@@ -54,16 +54,22 @@ if SERVER then
 		UVRaceRemoveCheckpoints() --Remove old checkpoints
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
-			local pos = ent:GetPos()
-			local mpos = ent:GetMaxPos()
+			local pos = (InfMap and ent:GetLocalPos()) or ent:GetPos()
+			local mpos = (InfMap and ent:GetLocalMaxPos()) or ent:GetMaxPos()
+			local chunk = (InfMap and ent:GetChunk()) or nil
+			local maxChunk = (InfMap and ent:GetChunkMax()) or nil
 
 			local check = ents.Create("uvrace_brushpoint")
+
 			check:SetPos(pos)
 			check:SetPos1(pos)
 			check:SetPos2(mpos)
+			check:SetChunk(chunk)
+			check:SetChunkMax(maxChunk)
 			check:SetID(ent:GetID())
 			check:SetSpeedLimit(ent:GetSpeedLimit())
 			check:SetFinishLine(ent:GetFinishLine())
+
 			check:Spawn()
 		end
 

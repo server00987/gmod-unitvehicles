@@ -254,11 +254,24 @@ if SERVER then
 					local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
 					local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
 
+					--print(posx, posy, posz, mx, my, mz)
+
+					local localposx, localposy, localposz = tonumber(params[9]), tonumber(params[10]), tonumber(params[11])
+					local localmx, localmy, localmz = tonumber(params[12]), tonumber(params[13]), tonumber(params[14])
+					local chunkx, chunky, chunkz = tonumber(params[15]), tonumber(params[16]), tonumber(params[17])
+					local chunkmx, chunkmy, chunkmz = tonumber(params[18]), tonumber(params[19]), tonumber(params[20])
+
 					local pos = Vector(posx, posy, posz)
 					check:SetPos(pos)
 					check:SetMaxPos(Vector(mx, my, mz))
 					check:SetID(cid)
 					check:SetSpeedLimit(speedlimit)
+					if InfMap then
+						check:SetLocalPos(Vector(localposx, localposy, localposz))
+						check:SetLocalMaxPos(Vector(localmx, localmy, localmz))
+						check:SetChunk(Vector(chunkx, chunky, chunkz))
+						check:SetChunkMax(Vector(chunkmx, chunkmy, chunkmz))
+					end
 					check:Spawn()
 
 					undo.AddEntity(check)
@@ -325,7 +338,7 @@ if SERVER then
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			ent.DoNotDuplicate = true
-			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .."\n"
+			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .. " " .. tostring(ent:GetLocalPos()) .. " " .. tostring(ent:GetLocalMaxPos()) .. " " .. tostring(ent:GetChunk()) .. " " .. tostring(ent:GetChunkMax()) .. "\n"
 		end
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
@@ -439,17 +452,23 @@ elseif CLIENT then
 	local function UpdatePos()
 		local ispos2 = net.ReadBool()
 		local pos = net.ReadVector()
+		local chunk = net.ReadBool()
+		if chunk then
+			chunk = net.ReadVector()
+		end
 		
 		if ispos2 then
 			table.insert(checkpointTable, {pos1 = pos1, pos2 = pos, id = #checkpointTable})
 			pos1 = nil
 		else
+			--print(pos)
 			pos1 = pos
 		end
 	end
 	net.Receive("UVRace_UpdatePos", UpdatePos)
 	
 	local function SelectID()
+		print("si")
 		local ent = net.ReadEntity()
 		
 		selectedCP = ent
@@ -529,51 +548,150 @@ end
 
 function TOOL:LeftClick(trace)
 	if not trace.Hit then return end
+	if CLIENT then return end
 	local ply = self:GetOwner()
 	if not ply:IsSuperAdmin() then return end
-	
-	local pos
-	
+
+	local trHit = trace.HitPos
+
+	local unlocalizedPos, chunk
+
+	if InfMap then
+		unlocalizedPos, chunk = InfMap.localize_vector( trace.HitPos )
+	end
+
+	local pos = unlocalizedPos or trace.HitPos
+	chunk = chunk or Vector()
+
+	local keyPos = secondClick and "Pos1" or "Pos0"
+	local keyChunk = secondClick and "Chunk1" or "Chunk0"
+
+	self[keyPos] = pos
+	self[keyChunk] = chunk
+
 	if secondClick then
-		pos = trace.HitPos
-		
-		if ply:KeyDown(IN_USE) then
-			pos.z = pos.z + (GetConVar("unitvehicle_cpheight"):GetInt() or 64)
+		if ply:KeyDown( IN_USE ) then
+			self.Pos1.z = self.Pos1.z + (GetConVar("unitvehicle_cpheight"):GetInt() or 64)
 		end
-		
-		if game.SinglePlayer() or SERVER then
-			local cPoint = ents.Create("uvrace_checkpoint")
-			cPoint:SetPos(pos1)
-			cPoint:SetMaxPos(pos)
-			cPoint:SetSpeedLimit(GetConVar('uvracemanager_speedlimit'):GetInt())
-			cPoint:Spawn()
+
+		local cPoint = ents.Create("uvrace_checkpoint")
+
+		local svPos = ( InfMap and InfMap.unlocalize_vector( self.Pos0, self.Chunk0 ) ) or self.Pos0
+		local svMaxPos = ( InfMap and InfMap.unlocalize_vector( self.Pos1, self.Chunk1 ) ) or self.Pos1
+
+		cPoint:SetPos(svPos)
+		cPoint:SetMaxPos(svMaxPos)
+
+		cPoint:SetLocalPos(self.Pos0)
+		cPoint:SetLocalMaxPos(self.Pos1)
+
+		cPoint:SetChunk(self.Chunk0)
+		cPoint:SetChunkMax(self.Chunk1)
+
+		cPoint:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
+
+		cPoint:Spawn()
+
+		undo.Create("UVRaceEnt")
+		undo.AddEntity(cPoint)
+		undo.SetPlayer(ply)
+		undo.Finish()
 			
-			undo.Create("UVRaceEnt")
-				undo.AddEntity(cPoint)
-				undo.SetPlayer(ply)
-			undo.Finish()
-			
-			ply:AddCleanup("uvrace_ents", cPoint)
-		end
-		
-		-- Reset
-		pos1 = nil
-		self:SetStage(0)
-	else
-		pos1 = trace.HitPos
-		pos = pos1
-		self:SetStage(1)
+		ply:AddCleanup("uvrace_ents", cPoint)
 	end
-	
-	if game.SinglePlayer() then
-		net.Start("UVRace_UpdatePos")
-		net.WriteBool(secondClick)
-		net.WriteVector(pos)
-		net.Send(ply)
+
+	if secondClick then
+		self.Pos0 = nil
+		self.Chunk0 = nil
+		self.Pos1 = nil
+		self.Chunk1 = nil
 	end
-	
-	pos = nil
+
+	self:SetStage( secondClick and 0 or 1 )
+	net.Start("UVRace_UpdatePos")
+
+	net.WriteBool(secondClick)
+	net.WriteVector(pos)
+
+	net.WriteBool(chunk ~= nil)
+	net.WriteVector(chunk)
+
+	net.Send(ply)
+
 	secondClick = not secondClick
+	
+	-- if secondClick then
+	-- 	local pos2 = trace.HitPos
+	-- 	print('2', trace.HitPos)
+		
+	-- 	if ply:KeyDown(IN_USE) then
+	-- 		pos2.z = pos2.z + (GetConVar("unitvehicle_cpheight"):GetInt() or 64)
+	-- 	end
+
+	-- 	local localPos2, localChunk2 = nil, nil
+
+	-- 	if InfMap then
+	-- 		local localPos2, localChunk2 = InfMap.localize_vector( pos2 )
+	-- 	end
+		
+	-- 	if game.SinglePlayer() or SERVER then
+	-- 		local cPoint = ents.Create("uvrace_checkpoint")
+	-- 		cPoint:SetPos(pos1)
+	-- 		cPoint:SetMaxPos(pos2)
+
+	-- 		if InfMap then
+	-- 			cPoint:SetChunk0(localChunk1)
+	-- 			cPoint:SetChunk1(localChunk2)
+
+	-- 			cPoint:SetLocalPos(localPos1)
+	-- 			cPoint:SetLocalMaxPos(localPos2)
+	-- 		end
+
+	-- 		cPoint:SetSpeedLimit(GetConVar('uvracemanager_speedlimit'):GetInt())
+	-- 		cPoint:Spawn()
+			
+	-- 		undo.Create("UVRaceEnt")
+	-- 			undo.AddEntity(cPoint)
+	-- 			undo.SetPlayer(ply)
+	-- 		undo.Finish()
+			
+	-- 		ply:AddCleanup("uvrace_ents", cPoint)
+	-- 	end
+		
+	-- 	-- Reset
+	-- 	pos1 = nil
+	-- 	self:SetStage(0)
+	-- else
+	-- 	--print('1', trace.HitPos, InfMap.localize_vector(trace.HitPos))
+
+	-- 	if InfMap then
+	-- 		pos, chunk = InfMap.localize_vector( trace.HitPos )
+	-- 	else
+	-- 		pos = trace.HitPos
+	-- 	end
+
+	-- 	localChunk1 = chunk
+	-- 	localPos1 = pos
+	-- 	pos1 = trace.HitPos
+	-- 	--pos = pos1
+	-- 	self:SetStage(1)
+	-- end
+
+	-- -- print(pos)
+	
+	-- if game.SinglePlayer() then
+	-- 	net.Start("UVRace_UpdatePos")
+	-- 	net.WriteBool(secondClick)
+	-- 	net.WriteVector(pos or Vector())
+	-- 	net.WriteBool(chunk ~= nil)
+	-- 	if chunk then
+	-- 		net.WriteVector(chunk)
+	-- 	end
+	-- 	net.Send(ply)
+	-- end
+	
+	-- pos = nil
+	-- secondClick = not secondClick
 	
 	return true
 end
@@ -590,19 +708,24 @@ function TOOL:RightClick()
 	})
 	
 	local ent = tr.Entity
+	print(ent:GetClass())
 	if ent:GetClass() ~= "uvrace_checkpoint" then return end
 	
 	selectedCP = ent
 	
-	if game.SinglePlayer() then
-		net.Start("UVRace_SelectID")
-		net.WriteEntity(ent)
-		net.Send(self:GetOwner())
-	elseif CLIENT then
-		Derma_StringRequest("#tool.uvracemanager.checkpoint.setid", "#tool.uvracemanager.checkpoint.setid.desc", ent:GetID(), function(text)
-			ent:SetID(tonumber(text))
-		end, nil, "Set", "Cancel")
-	end
+	-- if game.SinglePlayer() then
+	-- 	net.Start("UVRace_SelectID")
+	-- 	net.WriteEntity(ent)
+	-- 	net.Send(self:GetOwner())
+	-- elseif CLIENT then
+	-- 	print('what2')
+	-- 	Derma_StringRequest("#tool.uvracemanager.checkpoint.setid", "#tool.uvracemanager.checkpoint.setid.desc", ent:GetID(), function(text)
+	-- 		ent:SetID(tonumber(text))
+	-- 	end, nil, "Set", "Cancel")
+	-- end
+	net.Start("UVRace_SelectID")
+	net.WriteEntity(ent)
+	net.Send(self:GetOwner())
 	
 	return true
 end

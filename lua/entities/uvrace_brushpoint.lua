@@ -4,6 +4,8 @@ ENT.Type = "brush"
 AccessorFunc( ENT, "pos1", "Pos1")
 AccessorFunc( ENT, "pos2", "Pos2")
 AccessorFunc( ENT, "speedlimit", "SpeedLimit")
+AccessorFunc( ENT, "chunk", "Chunk")
+AccessorFunc( ENT, "chunkmax", "ChunkMax")
 
 if SERVER then
 	function ENT:SetupDataTables()
@@ -14,6 +16,8 @@ if SERVER then
 	function ENT:Initialize()
 		self:SetSolid(SOLID_BBOX)
 		self:SetCollisionBoundsWS(self:GetPos1(), self:GetPos2())
+
+		--print(self:GetPos1(), self:GetPos2())
 		
 		local pos1 = self:GetPos1()
 		local pos2 = self:GetPos2()
@@ -43,8 +47,12 @@ if SERVER then
 	end
 
 	function ENT:StartTouch(vehicle)
+		--print("StartTouch")
 		if not vehicle.uvraceparticipant then return end
 		if vehicle.uvbusted then return end
+		if InfMap then
+			if vehicle.CHUNK_OFFSET ~= self:GetChunk() and vehicle.CHUNK_OFFSET ~= self:GetChunkMax() then return end
+		end
 
 		local driver = vehicle:GetDriver()//vehicle.racedriver
 	

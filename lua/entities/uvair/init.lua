@@ -381,7 +381,7 @@ function ENT:PhysicsUpdate()
 		--Bounty
 		local botimeout = 10
 		if CurTime() > self.bountytimer + botimeout and IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
-			UVBounty = UVBounty+UVBountyTime
+			UVBounty = UVBounty+(UVBountyTime or 0)
 			self.bountytimer = CurTime()
 			local MathAggressive = math.random(1,10) 
 			if MathAggressive == 1 then

@@ -8,6 +8,10 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Vector", 0, "MaxPos")
 	self:NetworkVar("Int", 0, "ID", {KeyName = "UVRace_CheckpointID", Edit = {type = "Generic", order = 1}})
 	self:NetworkVar("Int", 1, "SpeedLimit", {KeyName = "UVRace_SpeedLimit", Edit = {type = "Generic", order = 2}})
+	self:NetworkVar("Vector", 0, "LocalPos")
+	self:NetworkVar("Vector", 1, "LocalMaxPos")
+	self:NetworkVar("Vector", 2, "Chunk")
+	self:NetworkVar("Vector", 3, "ChunkMax")
 	self:NetworkVar("Bool", 0, "FinishLine")
 end
 
@@ -33,6 +37,11 @@ function ENT:Initialize()
                 lockIconAng = true
             } )
 		end
+		local index = self:EntIndex()
+		hook.Add("PostDrawOpaqueRenderables", "DrawCheckpoint_" .. index, function()
+			if not IsValid(self) then hook.Remove("PostDrawOpaqueRenderables", "DrawCheckpoint_" .. index) return end
+			self:Draw()
+		end)
 	end
 
 	if SERVER then
@@ -45,10 +54,12 @@ function ENT:Initialize()
 		-- end
 
 		-- self:SetCollisionBounds(vec0, maxPos - basePos)
-
-		hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
-			AddOriginToPVS(self:GetPos())
-		end)
+		-- hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
+		-- 	AddOriginToPVS(self:GetLocalPos())
+		-- end)
+		-- function ENT:UpdateTransmitState()
+		-- 	return TRANSMIT_ALWAYS
+		-- end
 		UVRaceCheckFinishLine()
 	end
 
@@ -75,35 +86,80 @@ if CLIENT then
 			cam.Start3D()
 
 			render.SetColorMaterial()
+			if InfMap then render.OverrideDepthEnable(true, true) end
+			--print(InfMap.unlocalize_vector(self:InfMap_GetPos()), self.CHUNK_OFFSET)
+			--print(self:GetPos(), self.CHUNK_OFFSET)
 
-			local max = self:GetMaxPos() - pos
+			--print("pos", pos, "max", self:GetMaxPos())
 
+			--print(InfMap.localize_vector( self:GetMaxPos() ))
+
+			--local max, chunk_offset = (InfMap and InfMap.localize_vector( self:GetMaxPos() )) - pos
+
+			--local sMax = InfMap.localize_vector( self:GetMaxPos() )
+			-- print(sMax)
+			-- 5725.752441 -5108.517090 -12799.968750	5880.725586 -5046.941406 -12395.643555
+
+			--print(self:GetMaxPos(), pos)
+
+			local pos = (InfMap and self:GetLocalPos()) or self:GetPos()
+			local max = (InfMap and self:GetLocalMaxPos()) or self:GetMaxPos()
+
+			local chunk = (InfMap and self:GetChunk()) or nil
+			local maxChunk = (InfMap and self:GetChunkMax()) or nil
+
+			--print(pos, max, chunk, maxChunk)
+
+			local max = max - pos
+
+			if InfMap then
+				local lpChunk = LocalPlayer().CHUNK_OFFSET
+				if lpChunk ~= chunk and lpChunk ~= maxChunk then
+					if InfMap then render.OverrideDepthEnable(false, false) end
+					cam.End3D()
+					return
+				end
+			end
 			if id == 0 then
+				--print(max, pos)
 				render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 255))
-				render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 255, 100))
+				if not InfMap then
+					render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 255, 100))
+				end
 			elseif id == 1 then
 				if self:GetFinishLine() then
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 0, 0))
-					render.DrawBox(pos, ang0, vec0, max, Color(255, 0, 0, 100))
+					if not InfMap then
+						render.DrawBox(pos, ang0, vec0, max, Color(255, 0, 0, 100))
+					end
 				else
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(0, 255, 0))
-					render.DrawBox(pos, ang0, vec0, max, Color(0, 255, 0, 100))
+					if not InfMap then
+						render.DrawBox(pos, ang0, vec0, max, Color(0, 255, 0, 100))
+					end
 				end
 			else
 				if self:GetFinishLine() then
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 0, 0))
-					render.DrawBox(pos, ang0, vec0, max, Color(255, 0, 0, 100))
+					if not InfMap then
+						render.DrawBox(pos, ang0, vec0, max, Color(255, 0, 0, 100))
+					end
 				else
 					render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 0))
-					render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 0, 100))
+					if not InfMap then
+						render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 0, 100))
+					end
 				end
 			end
 
+			if InfMap then render.OverrideDepthEnable(false, false) end
 			cam.End3D()
 
 			cam.Start2D()
+			if InfMap then render.OverrideDepthEnable(true, true) end
 
-				local point = pos + self:OBBCenter()
+				--local point = pos + self:OBBCenter()
+				local point = (InfMap and ((self:GetLocalPos() + self:GetLocalMaxPos()) / 2)) or (pos + self:OBBCenter())
 				local data2D = point:ToScreen()
 
 				if id == 0 then
@@ -128,6 +184,7 @@ if CLIENT then
 					end
 				end
 
+			if InfMap then render.OverrideDepthEnable(false, false) end
 			cam.End2D()
 
 		elseif UVHUDRace then
@@ -143,12 +200,23 @@ if CLIENT then
 			end
 
 			if (id ~= currentcheckpoint and id ~= nextcheckpoint) or id == 0 then return end//or id == 0 then return end
+
+			local pos = (InfMap and self:GetLocalPos()) or self:GetPos()
+			local max = (InfMap and self:GetLocalMaxPos()) or self:GetMaxPos()
+
+			local chunk = (InfMap and self:GetChunk()) or nil
+			local maxChunk = (InfMap and self:GetChunkMax()) or nil
+
+			if InfMap then
+				local lpChunk = LocalPlayer().CHUNK_OFFSET
+				if lpChunk ~= chunk then return end
+			end
 			
 			cam.Start3D()
-
+			if InfMap then render.OverrideDepthEnable(true, true) end
 			render.SetColorMaterial()
 
-			local max = self:GetMaxPos() - pos
+			local max = max - pos
 
 			if id == currentcheckpoint then
 				if id == GetGlobalInt("uvrace_checkpoints") then --Finish line
@@ -164,6 +232,7 @@ if CLIENT then
 				end
 			end
 
+			if InfMap then render.OverrideDepthEnable(false, false) end
 			cam.End3D()
 			
 		end
@@ -181,6 +250,9 @@ if CLIENT then
 end
 
 if SERVER then
+	-- function ENT:StartTouch(vehicle)
+	-- 	print("StartTouch")
+	-- end
 	function ENT:OnRemove()
 		hook.Remove("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex())
 		UVRaceCheckFinishLine()
