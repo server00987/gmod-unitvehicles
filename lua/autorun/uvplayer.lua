@@ -1110,6 +1110,10 @@ if SERVER then
                         'Missed'
                     )
 
+                    if car.UnitVehicle then
+                        UVChatterEMPMissed(car)
+                    end
+
                     return false
                 end
 
@@ -1166,6 +1170,10 @@ if SERVER then
                         targetCreationID
                     }
                 )
+
+                if car.UnitVehicle then
+                    UVChatterEMPHit(car)
+                end
             end
         end )
 
@@ -1183,6 +1191,10 @@ if SERVER then
                 targetCreationID
             }
         )
+
+        if car.UnitVehicle then
+            UVChatterEMPDeployed(car)
+        end
 
         return true
     end
@@ -1303,6 +1315,10 @@ if SERVER then
         net.Start("UVWeaponESFEnable")
         net.WriteEntity(car)
         net.Broadcast()
+
+        if car.UnitVehicle then
+            UVChatterESFDeployed(car)
+        end
     end
     
     function UVDeactivateESF(car)
@@ -1330,6 +1346,10 @@ if SERVER then
             end
 
             car.uvesfhit = nil
+            
+            if car.UnitVehicle then
+                UVChatterESFMissed(car)
+            end
         end
     end
     

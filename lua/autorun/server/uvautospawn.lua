@@ -594,6 +594,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_ESF:GetBool() then
 					table.insert(pool, "ESF")
 				end
+				if UVUPursuitTech_EMP:GetBool() then
+					table.insert(pool, "EMP")
+				end
 				if UVUPursuitTech_Spikestrip:GetBool() then
 					table.insert(pool, "Spikestrip")
 				end
@@ -932,6 +935,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_ESF:GetBool() then
 					table.insert(pool, "ESF")
 				end
+				if UVUPursuitTech_EMP:GetBool() then
+					table.insert(pool, "EMP")
+				end
 				if UVUPursuitTech_Spikestrip:GetBool() then
 					table.insert(pool, "Spikestrip")
 				end
@@ -1145,6 +1151,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				
 				if UVUPursuitTech_ESF:GetBool() then
 					table.insert(pool, "ESF")
+				end
+				if UVUPursuitTech_EMP:GetBool() then
+					table.insert(pool, "EMP")
 				end
 				if UVUPursuitTech_Spikestrip:GetBool() then
 					table.insert(pool, "Spikestrip")

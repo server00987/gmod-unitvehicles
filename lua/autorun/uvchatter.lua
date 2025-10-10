@@ -2118,7 +2118,6 @@ if SERVER then
 	end
 	
 	function UVChatterKillswitchStart(self)
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptkillswitchstart")
 		end
@@ -2139,7 +2138,6 @@ if SERVER then
 	end
 	
 	function UVChatterKillswitchMissed(self)
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptkillswitchmissed")
 		end
@@ -2159,8 +2157,13 @@ if SERVER then
 		end
 	end
 
+	function UVChatterESFDeployed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptesfdeployed")
+		end
+	end
+
 	function UVChatterESFHit( self )
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptesfhit")
 		end
@@ -2180,8 +2183,31 @@ if SERVER then
 		end
 	end
 
+	function UVChatterESFMissed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptesfmissed")
+		end
+	end
+
+	function UVChatterEMPDeployed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptempdeployed")
+		end
+	end
+
+	function UVChatterEMPHit( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptemphit")
+		end
+	end
+
+	function UVChatterEMPMissed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptempmissed")
+		end
+	end
+
 	function UVChatterRepairKitDeployed(self)
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptrepairkitdeployed")
 		end
@@ -2202,7 +2228,6 @@ if SERVER then
 	end
 	
 	function UVChatterKillswitchHit(self)
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptkillswitchhit")
 		end
@@ -2223,7 +2248,6 @@ if SERVER then
 	end
 	
 	function UVChatterSpikeStripDeployed(self)
-		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptspikestripdeployed")
 		end

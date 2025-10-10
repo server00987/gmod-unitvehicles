@@ -1447,6 +1447,24 @@ if SERVER then
 							UVDeployWeapon(self.v, i)
 							self.esf = CurTime()
 						end
+					elseif v.Tech == 'EMP' then
+						local kstimeout = 0.5
+						if self.e.IsSimfphyscar then
+							if not (eedist:LengthSqr() < 1000000 and self.e:EngineActive()) then
+								self.emp = CurTime()
+							end
+						elseif self.e:GetClass() == "prop_vehicle_jeep" then
+							if not (eedist:LengthSqr() < 1000000 and self.e:IsEngineStarted(false)) then
+								self.emp = CurTime()
+							end
+						end
+						if UVCalm or enemyvelocity < 100000 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+							self.emp = CurTime() 
+						end
+						if self.emp ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+							UVDeployWeapon(self.v, i)
+							self.emp = CurTime()
+						end
 					elseif v.Tech == 'Killswitch' then
 						local kstimeout = 0.5
 						if self.e.IsSimfphyscar then

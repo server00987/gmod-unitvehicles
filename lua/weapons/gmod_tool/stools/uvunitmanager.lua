@@ -802,6 +802,7 @@ if CLIENT then
 			
 			convar_table['unitvehicle_unit_pursuittech'] = GetConVar('uvunitmanager_pursuittech'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_esf'] = GetConVar('uvunitmanager_pursuittech_esf'):GetInt()
+			convar_table['unitvehicle_unit_pursuittech_emp'] = GetConVar('uvunitmanager_pursuittech_emp'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_spikestrip'] = GetConVar('uvunitmanager_pursuittech_spikestrip'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_killswitch'] = GetConVar('uvunitmanager_pursuittech_killswitch'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_repairkit'] = GetConVar('uvunitmanager_pursuittech_repairkit'):GetInt()
@@ -1146,6 +1147,13 @@ if CLIENT then
 		pursuittech_esf:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_esf:SetValue(GetConVar("uvunitmanager_pursuittech_esf"):GetInt())
 		CPanel:AddItem(pursuittech_esf)
+
+		local pursuittech_emp = vgui.Create("DCheckBoxLabel")
+		pursuittech_emp:SetText("#uv.ptech.emp")
+		pursuittech_emp:SetConVar("uvunitmanager_pursuittech_emp")
+		pursuittech_emp:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
+		pursuittech_emp:SetValue(GetConVar("uvunitmanager_pursuittech_emp"):GetInt())
+		CPanel:AddItem(pursuittech_emp)
 		
 		local pursuittech_spikes = vgui.Create("DCheckBoxLabel")
 		pursuittech_spikes:SetText("#uv.ptech.spikes")
