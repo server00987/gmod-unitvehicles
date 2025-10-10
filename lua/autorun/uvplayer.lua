@@ -1047,14 +1047,14 @@ if SERVER then
 
         local target, targetDriver, targetCreationID, targetEntityIndex = nil
 
-        table.Add( vehiclePool, UVPotentialSuspects )
-        if not isUnit then table.Add( vehiclePool, UVPotentialSuspects ) end
+        if isUnit or RacerFriendlyFire:GetBool() then table.Add( vehiclePool, UVPotentialSuspects ) end
+        if not isUnit then table.Add( vehiclePool, UVUnitVehicles ) end
 
         local shortestTargetDistance = math.huge
 
         for _, v in pairs( vehiclePool ) do
             local vehicleDistance = v:WorldSpaceCenter():DistToSqr(carPos)
-            if UVIsVehicleInCone( car, v, 90, 1000000 ) and vehicleDistance < shortestTargetDistance and not v.LockedOnBy then
+            if UVIsVehicleInCone( car, v, 90, 1000000 ) and vehicleDistance < shortestTargetDistance and not v.LockedOnBy and not v.wrecked then
                 target = v
                 shortestTargetDistance = vehicleDistance
                 break
