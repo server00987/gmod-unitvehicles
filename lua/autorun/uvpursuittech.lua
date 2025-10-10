@@ -269,6 +269,69 @@ UV_PT.PowerPlay = {
         })
     end
 }
+UV_PT.EMP = {
+    Hit = function( tbl )
+        local entIndex = tbl[1]
+        local creationID = tbl[2]
+
+        local target = Entity( entIndex )
+        if not IsValid( target ) then return end
+
+        local targetCreationID = target:GetCreationID()
+        if targetCreationID ~= creationID then return end
+
+        UVEMPLockingStart = nil
+        UVEMPLockingTarget = nil
+        UVEMPLockingSource = nil
+
+        local userString = "hit"
+
+        target:EmitSound( "gadgets/emp/fire.wav", 75, 100, 1, CHAN_STATIC )
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end,
+    Missed = function( tbl )
+        local userString = "#uv.ptech.emp.missed"
+
+        UVEMPLockingStart = nil
+        UVEMPLockingTarget = nil
+        UVEMPLockingSource = nil
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end,
+    Locking = function( tbl )
+        local entIndex = tbl[1]
+        local creationID = tbl[2]
+
+        local target = Entity( entIndex )
+        if not IsValid( target ) then return end
+
+        local targetCreationID = target:GetCreationID()
+        if targetCreationID ~= creationID then return end
+
+        UVEMPLockingStart = CurTime()
+        UVEMPLockingSource = UVGetVehicle( LocalPlayer() )
+        UVEMPLockingTarget = target
+
+        --print('Locking', target)
+        local userString = "#uv.ptech.emp.lockingon"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end,
+    NoTarget = function( tbl )
+        local userString = "#uv.ptech.emp.notarget"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end
+}
 
 --
 

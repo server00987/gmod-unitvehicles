@@ -97,6 +97,20 @@ hook.Add( "PlayerButtonDown", "PlayerButtonDownHandler", function( ply, button )
     end
 end)
 
+function UVIsVehicleInCone( source, target, radius, distance )
+    local posSource = source:GetPos()
+    local posTarget = target:GetPos()
+
+    local dirSource = source:GetForward()
+
+    local dirNormal = ( posTarget - posSource ):GetNormalized()
+    local dot = dirSource:Dot( dirNormal )
+
+    local checkAngle = math.cos( math.rad( radius / 2 ) )
+
+    return dot >= checkAngle and posSource:DistToSqr( posTarget ) <= distance
+end
+
 if SERVER then
     function UVNotifyCenter( ply_array, frmt, icon_name, ... )
         for _, v in pairs( ply_array ) do
@@ -110,6 +124,39 @@ if SERVER then
             net.WriteBool( select( 5, ... ) ) -- Player
             
             net.Send( v )
+            
+        end
+    end
+
+    function UVGetHeadlight(vehicle)
+        if vehicle.IsGlideVehicle then
+            return vehicle:GetHeadlightState()
+        elseif vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
+            return vehicle:VC_getRunningLights()
+        end
+    end
+
+    function UVSetHeadlight(vehicle, state)
+        if vehicle.IsGlideVehicle then
+            vehicle:SetHeadlightState( state )
+        elseif vcmod_main and vehicle:GetClass() == "prop_vehicle_jeep" then
+            vehicle:VC_setRunningLights( state >= 1 )
+        end
+    end
+
+    function UVDamage(vehicle, damage)
+        if vehicle.IsSimfphyscar then
+
+            local MaxHealth = vehicle:GetMaxHealth()
+            local damage = MaxHealth*damage
+            vehicle:ApplyDamage( damage, DMG_GENERIC )
+
+        elseif vehicle.IsGlideVehicle then
+
+            vehicle:SetEngineHealth( vehicle:GetEngineHealth() - damage )
+            vehicle:UpdateHealthOutputs()
+            
+        elseif vehicle:GetClass() == "prop_vehicle_jeep" then
             
         end
     end
@@ -930,6 +977,17 @@ if SERVER then
                     UVPTEvent({driver}, 'PowerPlay', 'Use')
                 end
             end
+        elseif pursuit_tech.Tech == 'EMP' then
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            
+            local result = UVDeployEMP(car)
+            
+            if result then
+                used = true
+                pursuit_tech.LastUsed = CurTime()
+                pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            end
         end
 
         if used then
@@ -971,6 +1029,162 @@ if SERVER then
                 spikes:Remove()
             end
         end)
+    end
+
+    -- EMP
+    function UVDeployEMP(car)
+        if car.empTarget then return false end
+        
+        local vehiclePool = {}
+        local isUnit = car.UnitVehicle
+        local carCreationID = car:GetCreationID()
+        local carEntityIndex = car:EntIndex()
+        local carPos = car:WorldSpaceCenter()
+        local carDriver = UVGetDriver( car )
+        local hookIdentifier = "UVEMP_"..carEntityIndex
+
+        local useCooldown = 5
+
+        local target, targetDriver, targetCreationID, targetEntityIndex = nil
+
+        table.Add( vehiclePool, UVPotentialSuspects )
+        if not isUnit then table.Add( vehiclePool, UVPotentialSuspects ) end
+
+        local shortestTargetDistance = math.huge
+
+        for _, v in pairs( vehiclePool ) do
+            local vehicleDistance = v:WorldSpaceCenter():DistToSqr(carPos)
+            if UVIsVehicleInCone( car, v, 90, 1000000 ) and vehicleDistance < shortestTargetDistance and not v.LockedOnBy then
+                target = v
+                shortestTargetDistance = vehicleDistance
+                break
+            end
+        end
+
+        local lastUse = car.lastEMPUse or 0
+
+        if not target then
+            if CurTime() - lastUse >= useCooldown then 
+                car.lastEMPUse = CurTime()
+
+                UVPTEvent(
+                    {carDriver}, 
+                    'EMP', 
+                    'NoTarget'
+                )
+            end
+
+            return false
+        end
+
+        targetDriver = UVGetDriver( target )
+        targetCreationID = target:GetCreationID()
+        targetEntityIndex = target:EntIndex()
+
+        car.empTarget = target
+        car.startLock = CurTime()
+
+        target.LockedOnBy = car
+        
+        local function cleanup()
+            car.empTarget = nil
+            car.startLock = nil
+            target.LockedOnBy = nil
+
+            hook.Remove( "Think", hookIdentifier )
+        end
+
+        hook.Add( "Think", hookIdentifier, function()
+            if not IsValid( car ) or not IsValid( target ) then return cleanup() end
+
+            if CurTime() - car.startLock >= 5 then
+                cleanup()
+
+                if not UVIsVehicleInCone( car, target, 90, 1000000 ) then 
+                    UVPTEvent( 
+                        {
+                            carDriver,
+                            targetDriver
+                        }, 
+                        'EMP', 
+                        'Missed'
+                    )
+
+                    return false
+                end
+
+                local effData = EffectData()
+                effData:SetEntity(target)
+                util.Effect( "entity_remove", effData )
+
+                local damage = ( isUnit and UVUnitPTEMPDamage:GetFloat() ) or UVPTEMPDamage:GetFloat()
+                local force = ( isUnit and UVUnitPTEMPForce:GetInt() ) or UVPTEMPForce:GetInt()
+                local lastHeadlightState = UVGetHeadlight( target )
+                
+                UVDamage( 
+                    target, 
+                    damage
+                )
+
+                hook.Add( "Think", hookIdentifier .. "headlight", function() 
+                    UVSetHeadlight( 
+                        target, 
+                        math.random( 0, 2 ) 
+                    ) 
+                end)
+
+                timer.Simple( 1, function()
+                    hook.Remove( "Think", hookIdentifier .. "headlight" )
+                    UVSetHeadlight( 
+                        target, 
+                        lastHeadlightState 
+                    )
+                end)
+
+                local targetPhysObj = target:GetPhysicsObject()
+                local targetForward = target:GetForward()
+                local targetRight = target:GetRight()
+
+                local targetPos = target:WorldSpaceCenter()
+
+                targetPhysObj:ApplyForceOffset( 
+                    ( math.Rand( -1, 1 ) * targetRight ) * ( targetPhysObj:GetMass() * force ), -- ( force / 100 )
+                    targetPos - ( targetForward * 100 )
+                )
+
+                --
+
+                UVPTEvent( 
+                    {
+                        carDriver,
+                        targetDriver
+                    }, 
+                    'EMP', 
+                    'Hit',
+                    {
+                        targetEntityIndex, 
+                        targetCreationID
+                    }
+                )
+            end
+        end )
+
+        car:CallOnRemove("UVEMP_"..carEntityIndex, function() cleanup() end)
+
+        UVPTEvent( 
+            {
+                carDriver, 
+                targetDriver
+            }, 
+            'EMP', 
+            'Locking',
+            {
+                targetEntityIndex, 
+                targetCreationID
+            }
+        )
+
+        return true
     end
     
     --REPAIR KIT
@@ -1286,11 +1500,6 @@ if SERVER then
             UVChatterKillswitchMissed(car.UnitVehicle)
         end
 
-    end
-    
-    --EMP
-    function UVDeployEMP(car)
-        
     end
     
     --SHOCKWAVE

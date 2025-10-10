@@ -109,6 +109,7 @@ TOOL.ClientConVar["helicopterbusting"] = 1
 
 TOOL.ClientConVar["pursuittech"] = 1
 TOOL.ClientConVar["pursuittech_esf"] = 1
+TOOL.ClientConVar["pursuittech_emp"] = 1
 TOOL.ClientConVar["pursuittech_spikestrip"] = 1
 TOOL.ClientConVar["pursuittech_killswitch"] = 1
 TOOL.ClientConVar["pursuittech_repairkit"] = 1

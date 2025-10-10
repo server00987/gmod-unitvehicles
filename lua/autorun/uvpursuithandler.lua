@@ -893,6 +893,64 @@ NETWORK_STRINGS = {
 	"UV_SendPursuitTech"
 }
 
+UVPTPTDuration = CreateConVar("unitvehicle_pursuittech_ptduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTESFDuration = CreateConVar("unitvehicle_pursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTESFPower = CreateConVar("unitvehicle_pursuittech_esfpower", 1000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTESFDamage = CreateConVar("unitvehicle_pursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTESFCommanderDamage = CreateConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTJammerDuration = CreateConVar("unitvehicle_pursuittech_jammerduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTShockwavePower = CreateConVar("unitvehicle_pursuittech_shockwavepower", 1000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTShockwaveDamage = CreateConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTShockwaveCommanderDamage = CreateConVar("unitvehicle_pursuittech_shockwavecommanderdamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTSpikeStripDuration = CreateConVar("unitvehicle_pursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTStunMinePower = CreateConVar("unitvehicle_pursuittech_stunminepower", 1000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTStunMineCommanderDamage = CreateConVar("unitvehicle_pursuittech_stunminecommanderdamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTStunMineDamage = CreateConVar("unitvehicle_pursuittech_stunminedamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTEMPDamage = CreateConVar("unitvehicle_pursuittech_empdamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVPTEMPForce = CreateConVar("unitvehicle_pursuittech_empforce", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+UVPTESFMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTJammerMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_jammer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTShockwaveMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_shockwave", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTRepairKitMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTPowerPlayMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_powerplay", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+UVPTEMPMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_emp", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
+
+UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTShockwaveCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_shockwave", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTRepairKitCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTPowerPlayCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_powerplay", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTEMPCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_emp", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+
+UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTESFPower = CreateConVar("unitvehicle_unitpursuittech_esfpower", 1000000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTESFDamage = CreateConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTSpikeStripRoadblockFriendlyFire = CreateConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Spike Strip Roadblock Friendly Fire")
+UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPDamage = CreateConVar("unitvehicle_unitpursuittech_empdamage", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPForce = CreateConVar("unitvehicle_unitpursuittech_empforce", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+UVUnitPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+UVUnitPTKillSwitchMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_killswitch", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+UVUnitPTRepairKitMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+UVUnitPTempMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_emp", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+UVUnitPTEMPMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_emp", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Max Ammo")
+
+UVUnitPTESFCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+UVUnitPTSpikeStripCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+UVUnitPTRepairKitCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+UVUnitPTKillSwitchCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_killswitch", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+UVUnitPTempCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_emp", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Pursuit Tech Cooldown")
+
 if SERVER then
 
 	--convars--
@@ -1006,56 +1064,6 @@ if SERVER then
 	end
 
 	UVUTimeTillNextHeatEnabled = GetConVar('unitvehicle_unit_timetillnextheatenabled')
-
-	UVPTPTDuration = CreateConVar("unitvehicle_pursuittech_ptduration", 60, {FCVAR_ARCHIVE})
-	UVPTESFDuration = CreateConVar("unitvehicle_pursuittech_esfduration", 10, {FCVAR_ARCHIVE})
-	UVPTESFPower = CreateConVar("unitvehicle_pursuittech_esfpower", 1000000, {FCVAR_ARCHIVE})
-	UVPTESFDamage = CreateConVar("unitvehicle_pursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE})
-	UVPTESFCommanderDamage = CreateConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.1, {FCVAR_ARCHIVE})
-	UVPTJammerDuration = CreateConVar("unitvehicle_pursuittech_jammerduration", 10, {FCVAR_ARCHIVE})
-	UVPTShockwavePower = CreateConVar("unitvehicle_pursuittech_shockwavepower", 1000000, {FCVAR_ARCHIVE})
-	UVPTShockwaveDamage = CreateConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, {FCVAR_ARCHIVE})
-	UVPTShockwaveCommanderDamage = CreateConVar("unitvehicle_pursuittech_shockwavecommanderdamage", 0.1, {FCVAR_ARCHIVE})
-	UVPTSpikeStripDuration = CreateConVar("unitvehicle_pursuittech_spikestripduration", 60, {FCVAR_ARCHIVE})
-	UVPTStunMinePower = CreateConVar("unitvehicle_pursuittech_stunminepower", 1000000, {FCVAR_ARCHIVE})
-	UVPTStunMineCommanderDamage = CreateConVar("unitvehicle_pursuittech_stunminecommanderdamage", 0.1, {FCVAR_ARCHIVE})
-	UVPTStunMineDamage = CreateConVar("unitvehicle_pursuittech_stunminedamage", 0.1, {FCVAR_ARCHIVE})
-
-
-	UVPTESFMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTJammerMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_jammer", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTShockwaveMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_shockwave", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTStunMineMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_stunmine", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTRepairKitMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-	UVPTPowerPlayMaxAmmo = CreateConVar("unitvehicle_pursuittech_maxammo_powerplay", 5, {FCVAR_ARCHIVE}, "Pursuit Tech Max Ammo")
-
-	UVPTESFCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTJammerCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_jammer", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTShockwaveCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_shockwave", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTSpikeStripCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTStunMineCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_stunmine", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTRepairKitCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-	UVPTPowerPlayCooldown = CreateConVar("unitvehicle_pursuittech_cooldown_powerplay", 30, {FCVAR_ARCHIVE}, "Pursuit Tech Cooldown")
-
-	UVUnitPTDuration = CreateConVar("unitvehicle_unitpursuittech_ptduration", 20, {FCVAR_ARCHIVE})
-	UVUnitPTESFDuration = CreateConVar("unitvehicle_unitpursuittech_esfduration", 10, {FCVAR_ARCHIVE})
-	UVUnitPTESFPower = CreateConVar("unitvehicle_unitpursuittech_esfpower", 1000000, {FCVAR_ARCHIVE})
-	UVUnitPTESFDamage = CreateConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, {FCVAR_ARCHIVE})
-	UVUnitPTSpikeStripDuration = CreateConVar("unitvehicle_unitpursuittech_spikestripduration", 60, {FCVAR_ARCHIVE})
-	UVUnitPTKillSwitchLockOnTime = CreateConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, {FCVAR_ARCHIVE})
-	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Spike Strip Roadblock Friendly Fire")
-	UVUnitPTKillSwitchDisableDuration = CreateConVar("unitvehicle_unitpursuittech_killswitchdisableduration", 2.5, {FCVAR_ARCHIVE})
-
-	UVUnitPTESFMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_esf", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
-	UVUnitPTSpikeStripMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_spikestrip", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
-	UVUnitPTKillSwitchMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_killswitch", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
-	UVUnitPTRepairKitMaxAmmo = CreateConVar("unitvehicle_unitpursuittech_maxammo_repairkit", 5, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Max Ammo")
-
-	UVUnitPTESFCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_esf", 30, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Cooldown")
-	UVUnitPTSpikeStripCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_spikestrip", 30, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Cooldown")
-	UVUnitPTRepairKitCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_repairkit", 30, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Cooldown")
-	UVUnitPTKillSwitchCooldown = CreateConVar("unitvehicle_unitpursuittech_cooldown_killswitch", 30, {FCVAR_ARCHIVE}, "Unit Pursuit Tech Cooldown")
 
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE})
 	UVPBCooldown = CreateConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, {FCVAR_ARCHIVE})
@@ -2475,28 +2483,28 @@ else -- CLIENT Settings | HUD/Options
 
 	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
 
-	UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
-	UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
-	UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 1000000, true, false)
-	UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
-	UVPTESFCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.2, true, false)
+	-- UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
+	-- UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
+	-- UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 1000000, true, false)
+	-- UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
+	-- UVPTESFCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.2, true, false)
 
-	UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
-	UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 1000000, true, false)
-	UVPTShockwaveDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, true, false)
-	UVPTShockwaveCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavecommanderdamage", 0.1, true, false)
-	UVPTSpikeStripDuration = CreateClientConVar("unitvehicle_pursuittech_spikestripduration", 60, true, false)
-	UVPTStunMinePower = CreateClientConVar("unitvehicle_pursuittech_stunminepower", 1000000, true, false)
-	UVPTStunMineDamage = CreateClientConVar("unitvehicle_pursuittech_stunminedamage", 0.1, true, false)
-	UVPTStunMineCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_stunminecommanderdamage", 0.1, true, false)
+	-- UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
+	-- UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 1000000, true, false)
+	-- UVPTShockwaveDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, true, false)
+	-- UVPTShockwaveCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavecommanderdamage", 0.1, true, false)
+	-- UVPTSpikeStripDuration = CreateClientConVar("unitvehicle_pursuittech_spikestripduration", 60, true, false)
+	-- UVPTStunMinePower = CreateClientConVar("unitvehicle_pursuittech_stunminepower", 1000000, true, false)
+	-- UVPTStunMineDamage = CreateClientConVar("unitvehicle_pursuittech_stunminedamage", 0.1, true, false)
+	-- UVPTStunMineCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_stunminecommanderdamage", 0.1, true, false)
 
-	UVUnitPTDuration = CreateClientConVar("unitvehicle_unitpursuittech_ptduration", 20, true, false)
-	UVUnitPTESFDuration = CreateClientConVar("unitvehicle_unitpursuittech_esfduration", 10, true, false)
-	UVUnitPTESFPower = CreateClientConVar("unitvehicle_unitpursuittech_esfpower", 1000000, true, false)
-	UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
-	UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
-	UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
-	UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, true, false)
+	-- UVUnitPTDuration = CreateClientConVar("unitvehicle_unitpursuittech_ptduration", 20, true, false)
+	-- UVUnitPTESFDuration = CreateClientConVar("unitvehicle_unitpursuittech_esfduration", 10, true, false)
+	-- UVUnitPTESFPower = CreateClientConVar("unitvehicle_unitpursuittech_esfpower", 1000000, true, false)
+	-- UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
+	-- UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
+	-- UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
+	-- UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, true, false)
 
 	UVPBMax = CreateClientConVar("unitvehicle_pursuitbreaker_maxpb", 2, true, false)
 	UVPBCooldown = CreateClientConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, true, false)
@@ -3937,6 +3945,53 @@ else -- CLIENT Settings | HUD/Options
 			surface.SetDrawColor( 0, 0, 0, 200)
 			drawCircle( w/2, h/10, 30, 50 )
 			drawCircle( w/2, h/10, 14, 50 )
+		end
+
+		if UVEMPLockingTarget then
+			local diff = CurTime() - (UVEMPLockingStart or 0)
+
+			if diff > 5 then 
+				UVEMPLockingStart = nil
+				UVEMPLockingTarget = nil
+				UVEMPLockingSource = nil
+
+				return
+			end
+
+			if not vehicle then return end
+			if not IsValid(UVEMPLockingTarget) or not IsValid(UVEMPLockingSource) then return end
+
+			local vector = UVEMPLockingTarget:WorldSpaceCenter()
+			local screenPos = vector:ToScreen()
+
+			local timeStamps = {
+				5 * 0.2, 
+				5 * 0.4, 
+				5 * 0.6,
+				5 * 1.0
+			}
+
+			local selectedTimeStamp = nil
+
+			for _, timeStamp in pairs(timeStamps) do
+				if diff <= timeStamp then
+					selectedTimeStamp = timeStamp
+					break
+				end
+			end
+
+			local blink = math.sin(CurTime() * (selectedTimeStamp + 5)) * 10
+			local spaceCount = #timeStamps - selectedTimeStamp
+			local spaceString = string.rep(" ", spaceCount)
+			local selectedColor = nil
+
+			if UVIsVehicleInCone(UVEMPLockingSource, UVEMPLockingTarget, 90, 2000000) then
+				selectedColor = Color(255, 255 * blink, 255 * blink)
+			else
+				selectedColor = Color(255, 255, 255, 100)
+			end
+
+			draw.DrawText("[" .. spaceString .. " <> " .. spaceString .. "]", "UVFont4", screenPos.x, screenPos.y, selectedColor, TEXT_ALIGN_CENTER)
 		end
 
 	end)

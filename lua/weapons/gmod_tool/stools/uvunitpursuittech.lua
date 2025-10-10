@@ -5,6 +5,7 @@ TOOL.ConfigName		=	""
 
 local pttable = {
 	"ESF",
+	"EMP",
 	"Spikestrip",
 	"Killswitch",
 	"Repair Kit"
@@ -21,12 +22,14 @@ TOOL.ClientConVar["maxammo_esf"] = 5
 TOOL.ClientConVar["maxammo_spikestrip"] = 5
 TOOL.ClientConVar["maxammo_killswitch"] = 5
 TOOL.ClientConVar["maxammo_repairkit"] = 5
+TOOL.ClientConVar["maxammo_emp"] = 5
 
 --cooldowns
 TOOL.ClientConVar["cooldown_esf"] = 30
 TOOL.ClientConVar["cooldown_spikestrip"] = 30
 TOOL.ClientConVar["cooldown_killswitch"] = 30
 TOOL.ClientConVar["cooldown_repairkit"] = 30
+TOOL.ClientConVar["cooldown_emp"] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
@@ -35,6 +38,8 @@ TOOL.ClientConVar["spikestripduration"] = 60
 --TOOL.ClientConVar["spikestriproadblockfriendlyfire"] = 0
 TOOL.ClientConVar["killswitchlockontime"] = 3
 TOOL.ClientConVar["killswitchdisableduration"] = 2.5
+TOOL.ClientConVar["empdamage"] = 0.1
+TOOL.ClientConVar["empforce"] = 100
 
 
 local conVarsDefault = TOOL:BuildConVarList()
@@ -181,6 +186,8 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_esfduration'] = GetConVar("uvunitpursuittech_esfduration"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_esfpower'] = GetConVar("uvunitpursuittech_esfpower"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_esfdamage'] = GetConVar("uvunitpursuittech_esfdamage"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_empdamage'] = GetConVar("uvunitpursuittech_empdamage"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_empforce'] = GetConVar("uvunitpursuittech_empforce"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
@@ -227,6 +234,50 @@ if CLIENT then
 		CPanel:AddControl("Label", {
 			Text = "#uv.ptech.emp.desc",
 		})]]
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.emp.title",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.emp.desc",
+		})
+
+		local empdamage = vgui.Create("DNumSlider")
+		empdamage:SetMin(0)
+		empdamage:SetMax(1)
+		empdamage:SetDecimals(1)
+		empdamage:SetText("#uv.ptech.damage")
+		empdamage:SetTooltip("#uv.ptech.damage.desc")
+		empdamage:SetConVar("uvunitpursuittech_empdamage")
+		CPanel:AddItem(empdamage)
+
+		local empforce = vgui.Create("DNumSlider")
+		empforce:SetMin(0)
+		empforce:SetMax(1000)
+		empforce:SetDecimals(0)
+		empforce:SetText("#uv.ptech.force")
+		empforce:SetTooltip("#uv.ptech.force.desc")
+		empforce:SetConVar("uvunitpursuittech_empforce")
+		CPanel:AddItem(empforce)
+
+		local empcooldown = vgui.Create("DNumSlider")
+		empcooldown:SetMin(0)
+		empcooldown:SetMax(120)
+		empcooldown:SetDecimals(0)
+		empcooldown:SetText("#uv.ptech.cooldown")
+		empcooldown:SetTooltip("#uv.ptech.cooldown.desc")
+		empcooldown:SetConVar("uvunitpursuittech_cooldown_emp")
+		CPanel:AddItem(empcooldown)
+
+		local empammo = vgui.Create("DNumSlider")
+		empammo:SetMin(0)
+		empammo:SetMax(120)
+		empammo:SetDecimals(0)
+		empammo:SetText("#uv.ptech.ammo")
+		empammo:SetTooltip("#uv.ptech.ammo.desc")
+		empammo:SetConVar("uvunitpursuittech_maxammo_emp")
+		CPanel:AddItem(empammo)
 
 		CPanel:AddControl("Label", {
 			Text = "#uv.ptech.esf.title",
