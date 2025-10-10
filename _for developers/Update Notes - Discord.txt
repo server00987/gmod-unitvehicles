@@ -1,7 +1,8 @@
 <------- October 10 ------->
 # New Features
 **Pursuit Tech**
-- Added a new Pursuit Tech: ***Power Play***! Triggers the closest Pursuit Breaker to the user, or wrecks the closest Unit to the user if no Pursuit Breaker is present
+- Added a new Pursuit Tech: ***Power Play***! Triggers the closest Pursuit Breaker to the user, if one is present
+- Added a new Pursuit Tech: ***EMP***! Lock onto Units or Racers in front of you, and if successful, causes damage to the target, knocks their vehicle around and restricts use of Pursuit Tech for a short duration
 
 **Pursuit**
 - Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
