@@ -349,6 +349,8 @@ if CLIENT then
     if not isVehicleValid then
         UVLastVehicleDriven = nil
     end
+	
+	local HUDCountdownTick = nil
 
 end
 
@@ -1980,6 +1982,13 @@ UV_UI.racing.carbon.events = {
 
 	onRaceStartTimer = function(data)
 		local starttime = data.starttime
+		
+		HUDCountdownTick = {
+			value = starttime,           -- 4, 3, 2, 1, or "GO"
+			startTime = CurTime(),       -- for animation timing
+			duration = starttime <= 1 and 3 or 1.25
+		}
+
 		if starttime ~= 5 then return end  -- trigger only once
 
 		-- Include carbon_noti_animState locally
@@ -2107,7 +2116,14 @@ UV_UI.racing.carbon.events = {
 
 		-- Draw hook
 		hook.Add("HUDPaint", "UV_RaceCountdown_Circle", function()
-			if not UVRaceCountdown then return end
+			if not HUDCountdownTick then return end
+
+			local t = CurTime() - HUDCountdownTick.startTime
+			if t > HUDCountdownTick.duration then
+				HUDCountdownTick = nil  -- auto cleanup after tick ends
+				return
+			end
+
 			local now = CurTime()
 
 			-- Draw rings
@@ -9953,6 +9969,8 @@ UV_UI.racing.world.events = {
 
 	onRaceStartTimer = function(data)
 		local starttime = data.starttime
+		local noready = data.noReadyText
+		local nobg = data.noBG
 
 		local countdownTexts = {
 			[4] = 3,
@@ -9980,7 +9998,7 @@ UV_UI.racing.world.events = {
 		local DUR_FADE_OUT    = 0.15
 		local DISPLAY_TOTAL   = 0.3    -- total time each value is visible
 
-		local READY_TEXT = "#uv.race.getready"
+		local READY_TEXT = noready and " " or "#uv.race.getready"
 		
 		if starttime > 4 then
 			UVWorldCountdown.label = READY_TEXT
@@ -10065,16 +10083,17 @@ UV_UI.racing.world.events = {
 					barAlpha = Lerp(barOutT, 255, 0)
 				end
 			end
+			if not nobg then
+				surface.SetDrawColor(255, 255, 255, barAlpha)
+				-- left bar
+				surface.SetMaterial(UVMaterials['RACE_CDBG_LEFT_WORLD'])
+				surface.DrawTexturedRect(0, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
 
-			surface.SetDrawColor(255, 255, 255, barAlpha)
-			-- left bar
-			surface.SetMaterial(UVMaterials['RACE_CDBG_LEFT_WORLD'])
-			surface.DrawTexturedRect(0, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
-
-			-- right bar
-			surface.SetMaterial(UVMaterials['RACE_CDBG_RIGHT_WORLD'])
-			surface.DrawTexturedRect(ScrW() - ScrW() * 0.5, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
-
+				-- right bar
+				surface.SetMaterial(UVMaterials['RACE_CDBG_RIGHT_WORLD'])
+				surface.DrawTexturedRect(ScrW() - ScrW() * 0.5, (ScrH() - ScrH() * 0.2) * 0.5, ScrW() * 0.5, ScrH() * 0.2)
+			end
+			
 			-- === DRAW TEXT ===
 			draw.SimpleTextOutlined( vs.label or "", "UVWorldFont5" .. GetFontSuffixForLanguage(), ScrW() * 0.5, ScrH() * 0.5, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, math.floor(bgPad), bgColor )
 		end)

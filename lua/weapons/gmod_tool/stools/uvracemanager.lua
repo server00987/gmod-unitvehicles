@@ -42,6 +42,8 @@ if SERVER then
 	local function StopRace(ply, cmd, args)
 		if not ply:IsSuperAdmin() then return end
 		UVRaceEnd()
+		UVCounterActive = false
+		
 		net.Start( "uvrace_end" )
 		net.Broadcast()
 		
@@ -66,6 +68,13 @@ if SERVER then
 		if not ply:IsSuperAdmin() then return end
 		-- if not IsValid( UVMoveToGridSlot( ply ) ) then return end
 		if UVRaceInEffect then return end
+
+		if UVCounterActive then
+			net.Start("uvrace_decline")
+			net.WriteString("uv.race.start.error.startingpursuit")
+			net.Send(ply)
+			return
+		end
 		
 		if UVTargeting then
 			net.Start("uvrace_decline")
@@ -73,7 +82,7 @@ if SERVER then
 			net.Send(ply)
 			return
 		end
-		
+
 		//RunConsoleCommand("uv_stoppursuit")
 		RunConsoleCommand("uv_despawnvehicles")
 		

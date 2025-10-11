@@ -112,6 +112,8 @@ NETWORK_STRINGS = {
 	"UVHUDBackuptimer",
 	"UVHUDStopBackupTimer",
 	"UVHUDStopPursuit",
+	"UVHUDStartPursuitCountdown",
+	"UVHUDStartPursuitNotification",
 	
 	-- Busted / Busting
 	"UVBusted",
@@ -339,11 +341,31 @@ end)
 
 concommand.Add("uv_startpursuit", function(ply)
 	if not ply:IsSuperAdmin() then return end
-	if UVTargeting then return end
-	PrintMessage( HUD_PRINTTALK, "Starting a pursuit ... get ready!" )
 	
+	if UVTargeting then 
+		net.Start("uvrace_decline")
+		net.WriteString("uv.chase.start.error.activechase")
+		net.Send(ply)
+	return end
+	
+	if UVCounterActive then
+		net.Start("uvrace_decline")
+		if timer.Exists("uvrace_start") then
+			net.WriteString("uv.chase.start.error.startingrace")
+		else
+			net.WriteString("uv.chase.start.error.startingchase")
+		end
+		net.Send(ply)
+		return
+	end
+	
+	net.Start("UVHUDStartPursuitNotification")
+	net.WriteString("uv.hud.chase.starting")
+	net.Broadcast()
+
 	UVApplyHeatLevel()
 	UVRestoreResourcePoints()
+	UVCounterActive = true
 	
 	ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_start.wav", 0, 100, 0.5, CHAN_STATIC)
 	
@@ -353,39 +375,51 @@ concommand.Add("uv_startpursuit", function(ply)
 		uvIdleSpawning = CurTime()
 		UVPresenceMode = true
 	end
-	
-	for i=1, 4 do
-		local increment = i + 1
-		local countdown = 4 - i
-		
-		timer.Simple( increment, function()
-			if countdown == 0 then
-				PrintMessage( HUD_PRINTTALK, "GO!" )
+	local countdownStart = 6
+	for _, plyTarget in ipairs(player.GetAll()) do
+		net.Start("UVHUDStartPursuitCountdown")
+		net.WriteInt(countdownStart, 11)
+		net.Send(plyTarget)
+	end
+
+	timer.Create("uv_pursuit_start", 1, countdownStart, function()
+		local time = timer.RepsLeft("uv_pursuit_start")
+		for _, plyTarget in ipairs(player.GetAll()) do
+			net.Start("UVHUDStartPursuitCountdown")
+			net.WriteInt(time, 11)
+			net.Send(plyTarget)
+		end
+
+		if IsValid(ply) then
+			if time > 1 then
+				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
+			else
 				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
-				
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)	
-					local unit = units[random_entry]
-					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 1)
-				end
-				
+
+				-- Activate pursuit state
 				RunConsoleCommand("ai_ignoreplayers", "0")
-				
 				UVLosing = CurTime()
 				UVTargeting = true
 				UVBounty = 100
-			else
-				PrintMessage( HUD_PRINTTALK, 'Starting pursuit in ' .. countdown )
-				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. countdown .. ".wav")
+
+				-- Random police unit announcement
+				local units = ents.FindByClass("npc_uv*")
+				if #units > 0 then
+					local unit = units[math.random(#units)]
+					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 1)
+				end
+
+				-- Unlock the countdown for other systems
+				UVCounterActive = false
 			end
-		end)
-	end
+		end
+	end)
 end)
 
 concommand.Add("uv_stoppursuit", function(ply)
 	if not ply:IsSuperAdmin() then return end
 	UVCooldownTimerProgress = 1
+	UVCounterActive = false
 end)
 
 concommand.Add("uv_racershordestart", function(ply)

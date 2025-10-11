@@ -29,6 +29,8 @@ UV_CurrentSubtitle = ""
 UV_SubtitleEnd = 0
 UV_CurrentSubtitleCallsign = ""
 
+UVCounterActive = false -- Is the Race or Pursuit countdown active?
+
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot.right",
 	[2] = "#uv.ptech.slot.left"
@@ -2636,6 +2638,39 @@ else -- CLIENT Settings | HUD/Options
 		return true
 		--EntityQueue[entIndex] = nil
 	end
+
+	net.Receive("UVHUDStartPursuitNotification", function()
+		UV_UI.general.events.CenterNotification({
+            text = language.GetPhrase( net.ReadString() ),
+		})
+	end)
+
+	net.Receive("UVHUDStartPursuitCountdown", function()
+		local starttime = net.ReadInt(11)
+		local hudtype = GetConVar("unitvehicle_hudtype_main"):GetString()
+		
+		if UV_UI.racing[hudtype].events.onRaceStartTimer then
+			hook.Run("UIEventHook", "racing", "onRaceStartTimer", { 
+				starttime = starttime,
+				noBG = true,
+				noReadyText = true,
+			})
+		else
+			local countdownTexts = {
+				[4] = 3,
+				[3] = 2,
+				[2] = 1,
+				[1] = "#uv.race.go"
+			}
+
+			local textToShow = countdownTexts[starttime]
+			if not textToShow then return end
+
+			UV_UI.general.events.CenterNotification({
+				text = textToShow,
+			})
+		end
+	end)
 
 	net.Receive('UVGetNewKeybind', function()
 		--if IsSettingKeybind then return end

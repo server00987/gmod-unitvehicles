@@ -260,6 +260,8 @@ if SERVER then
 
 		table.Empty(UVRaceTable)
 
+		UVCounterActive = true
+
 		UVRaceTable['Participants'] = {}
 		UVRaceTable['Info'] = {
 			['Started'] = false,
@@ -314,6 +316,7 @@ if SERVER then
 			end
 			if time == 1 then
 				UVRaceBegin()
+				UVCounterActive = false
 			end
 		end)
 
@@ -1017,7 +1020,12 @@ else -- CLIENT stuff
 	net.Receive( "uvrace_decline", function() 
 		local lang = language.GetPhrase
 
-		chat.AddText(Color(255, 126, 126),lang( net.ReadString() ))
+		-- chat.AddText(Color(255, 126, 126),lang( net.ReadString() ))
+		
+		UV_UI.general.events.CenterNotification({
+            text = lang( net.ReadString() ),
+			color = Color(255, 126, 126),
+		})
 	end)
 
 	net.Receive( "uvrace_announcebestlaptime", function()
@@ -1330,7 +1338,7 @@ else -- CLIENT stuff
 		UVHUDRaceFinishEndTime = nil
 
 		UVRaceStarting = false
-		
+
 		UVWorldCountdown = nil
 		hook.Remove("HUDPaint", "UV_Countdown_World")
 
@@ -2058,6 +2066,7 @@ else -- CLIENT stuff
 		if UVRaceStarting then return end -- Race is starting; hide it
 
 		local function ShouldShowRacerHUD()
+			if UVHUDDisplayPursuit then return false end
 			if not UVRace_RacerList or not istable(UVRace_RacerList) then return false end
 
 			local ply = LocalPlayer()
@@ -2225,7 +2234,7 @@ else -- CLIENT stuff
 		-- Starting position
 		table.insert(squareTexts, string.format(
 			language.GetPhrase("uv.prerace.startpos"),
-			language.GetPhrase("uv.race.pos.num." .. UVHUDRaceCurrentPos)
+			language.GetPhrase("uv.race.pos.num." .. (UVHUDRaceCurrentPos or 1))
 		))
 		
 		-- Participant List (NOT WORKING)
