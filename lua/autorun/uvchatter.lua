@@ -2665,7 +2665,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = 5
 			-- timecheck = UVSoundChatter(self, self.voice, "lost", 1, "DISPATCH") -- MIGHT BE BETTER TO PUT THIS INSIDE THE UNITS FOLDER TOO
-			timecheck = UVSoundChatter(self, self.voice, "lost", 1)
+			timecheck = UVSoundChatter(self, self.voice, "lost")
 			timer.Simple(timecheck, function()
 				UVSoundChatter(Entity(0), 1, "lostacknowledge", 1, "DISPATCH")
 			end)
