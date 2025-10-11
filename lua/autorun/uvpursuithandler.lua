@@ -2647,10 +2647,18 @@ else -- CLIENT Settings | HUD/Options
 
 	net.Receive("UVHUDStartPursuitCountdown", function()
 		local starttime = net.ReadInt(11)
-		local hudtype = GetConVar("unitvehicle_hudtype_main"):GetString()
+
+		local main = UVHUDTypeMain:GetString()
+		local backup = UVHUDTypeBackup:GetString()
+
+		local hudHandler = UV_UI.racing[main] and UV_UI.racing[main].events.onRaceStartTimer
 		
-		if UV_UI.racing[hudtype].events.onRaceStartTimer then
-			hook.Run("UIEventHook", "racing", "onRaceStartTimer", { 
+		if not hudHandler then
+			hudHandler = UV_UI.racing[backup] and UV_UI.racing[backup].events.onRaceStartTimer
+		end
+
+		if hudHandler then
+			hudHandler({
 				starttime = starttime,
 				noBG = true,
 				noReadyText = true,
@@ -2666,9 +2674,29 @@ else -- CLIENT Settings | HUD/Options
 			local textToShow = countdownTexts[starttime]
 			if not textToShow then return end
 
-			UV_UI.general.events.CenterNotification({
-				text = textToShow,
-			})
+			local startTime = CurTime()
+			local duration = 1
+			local hookName = "UV_PURSUITSTARTTIME"
+
+			-- Replace existing hook cleanly
+			hook.Remove("HUDPaint", hookName)
+			hook.Add("HUDPaint", hookName, function()
+				local elapsed = CurTime() - startTime
+				if elapsed > duration then
+					hook.Remove("HUDPaint", hookName)
+					return
+				end
+
+				local x, y = ScrW() * 0.5, ScrH() * 0.45
+				draw.SimpleTextOutlined(
+					textToShow,
+					"UVFont5",
+					x, y,
+					Color(255, 255, 255),
+					TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
+					3, Color(0, 0, 0, 255)
+				)
+			end)
 		end
 	end)
 

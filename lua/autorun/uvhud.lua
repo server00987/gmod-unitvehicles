@@ -1092,9 +1092,9 @@ UV_UI.general.events = {
 				currentWidth = Lerp(barProgress, 0, w)
 			end
 
-			local barHeight = h * 0.1
+			local barHeight = h * 0.175
 			local barX = (w - currentWidth) / 2
-			local barY = h * (subconvar and 0.645 or 0.7275)
+			local barY = h * (subconvar and 0.575 or 0.675)
 
 			-- Color Fade Logic
 			local colorVal = 0
@@ -1112,21 +1112,18 @@ UV_UI.general.events = {
 				local fade = 1 - math.Clamp(closeAnimTime / expandDuration, 0, 1)
 				colorVal = colorVal * fade
 			end
+			
+			
+			if not showhud then return end
 
 			-- Draw bar
-			-- surface.SetMaterial(UVMaterials["PT_BG"])
-			-- surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
+			surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
+			surface.SetDrawColor(Color(0, 0, 0))
+			surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
 			
-			if showhud then 
-				surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
-				surface.SetDrawColor(Color(0, 0, 0))
-				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
-				
-				surface.SetMaterial(UVMaterials["PT_BG"])
-				surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
-				surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
-			end
-			-- if showhud then surface.DrawTexturedRect(barX, barY, currentWidth, barHeight) end
+			surface.SetMaterial(UVMaterials["PT_BG"])
+			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 150))
+			surface.DrawTexturedRect(barX, barY, currentWidth, barHeight)
 
 			-- Text
 			if animTime >= whiteStart then
@@ -1138,9 +1135,7 @@ UV_UI.general.events = {
 					outlineAlpha = outlineAlpha * fade
 				end
 				
-				mw_noti_draw(showhud and ptext, "UVFont5UI", w * 0.5, h * (subconvar and 0.6925 or 0.775), pcol, pcolbg)
-				
-				-- draw.SimpleTextOutlined( showhud and ptext or "", "UVFont5UI", w * 0.5, h * 0.755, pcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				mw_noti_draw(showhud and ptext, "UVFont5Shadow", w * 0.5, h * (subconvar and 0.66 or 0.76), pcol, pcolbg) -- Subconvar > barY + 0.095
 			end
 		end)
 	end,
