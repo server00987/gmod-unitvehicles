@@ -1,0 +1,11 @@
+VertexLitGeneric
+{
+	$basetexture			"models\unitvehiclescars\shared\doorline.vtf"
+
+	$nodecal			1
+	$translucent		1
+
+	$color2				"[.1 .1 .1]"
+	$bumpmap				"models\unitvehiclescars\shared\doorline_normal.vtf"
+
+}
