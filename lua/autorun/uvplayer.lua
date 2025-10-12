@@ -1166,8 +1166,8 @@ if SERVER then
                     'EMP', 
                     'Hit',
                     {
-                        targetEntityIndex, 
-                        targetCreationID
+                        {carEntityIndex, carCreationID, UVGetDriverName( car )},
+                        {targetEntityIndex, targetCreationID, UVGetDriverName( target )}
                     }
                 )
 
@@ -1187,8 +1187,8 @@ if SERVER then
             'EMP', 
             'Locking',
             {
-                targetEntityIndex, 
-                targetCreationID
+                {carEntityIndex, carCreationID, UVGetDriverName( car )},
+                {targetEntityIndex, targetCreationID, UVGetDriverName( target )}
             }
         )
 

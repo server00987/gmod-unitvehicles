@@ -271,25 +271,44 @@ UV_PT.PowerPlay = {
 }
 UV_PT.EMP = {
     Hit = function( tbl )
-        local entIndex = tbl[1]
-        local creationID = tbl[2]
+        local user = tbl[1]
+        local target = tbl[2]
 
-        local target = Entity( entIndex )
+        local carEntIndex = user[1]
+        local carCreationID = user[2]
+        local carCallsign = user[3]
+
+        local targetEntIndex = target[1]
+        local targetCreationID = target[2]
+        local targetCallsign = target[3]
+
+        print(targetCallsign, carCallsign)
+
+        local target = Entity( targetEntIndex )
         if not IsValid( target ) then return end
 
         local targetCreationID = target:GetCreationID()
-        if targetCreationID ~= creationID then return end
+        if targetCreationID ~= targetCreationID then return end
 
         UVEMPLockingStart = nil
         UVEMPLockingTarget = nil
         UVEMPLockingSource = nil
 
-        local userString = "hit"
+        local userString = "#uv.ptech.emp.hit"
+        local isTargetLocal = targetCallsign == LocalPlayer():Nick()
+
+        if isTargetLocal then
+            userString = userString .. ".you"
+        end
 
         target:EmitSound( "gadgets/emp/fire.wav", 75, 100, 1, CHAN_STATIC )
 
+        userString = language.GetPhrase( userString )
         UV_UI.general.events.CenterNotification({
-            text = userString,
+            text = string.format(
+                userString, 
+                ( isTargetLocal and language.GetPhrase( carCallsign ) ) or language.GetPhrase( targetCallsign ) 
+            ),
         })
     end,
     Missed = function( tbl )
@@ -304,17 +323,31 @@ UV_PT.EMP = {
         })
     end,
     Locking = function( tbl )
-        local entIndex = tbl[1]
-        local creationID = tbl[2]
+        local user = tbl[1]
+        local target = tbl[2]
 
-        local target = Entity( entIndex )
+        local carEntIndex = user[1]
+        local carCreationID = user[2]
+        local carCallsign = user[3]
+
+        local targetEntIndex = target[1]
+        local targetCreationID = target[2]
+        local targetCallsign = target[3]
+
+        local target = Entity( targetEntIndex )
         if not IsValid( target ) then return end
 
         local targetCreationID = target:GetCreationID()
-        if targetCreationID ~= creationID then return end
+        if targetCreationID ~= targetCreationID then return end
+
+        local user = Entity( carEntIndex )
+        if not IsValid( user ) then return end
+
+        local userCreationID = user:GetCreationID()
+        if userCreationID ~= carCreationID then return end
 
         UVEMPLockingStart = CurTime()
-        UVEMPLockingSource = UVGetVehicle( LocalPlayer() )
+        UVEMPLockingSource = user
         UVEMPLockingTarget = target
 
         --print('Locking', target)
