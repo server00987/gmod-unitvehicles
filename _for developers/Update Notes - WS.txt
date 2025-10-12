@@ -1,4 +1,4 @@
-<------- October 10 ------->
+<------- October 15 ------->
 [h1]New Features[/h1]
 [b]Pursuit Tech[/b]
 [list]
@@ -8,6 +8,7 @@
 
 [b]Pursuit[/b]
 [list]
+	[*]Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
 	[*]Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
 [/list]
 
@@ -33,6 +34,7 @@
 [list]
 	[*]Fixed some elements from the Original UI
 	[*]When using the World UI in select languages, the font will be changed due to character errors
+	[*]Tweaked the size, position and BG opacity on the general Center Notification
 [/list]
 
 [b]Chatter Profiles[/b]
@@ -42,6 +44,7 @@
 
 [b]Other[/b]
 [list]
+	[*]If a race is starting, you are unable to force-start a pursuit until that countdown has concluded, and vice-versa
 	[*]Fixed that, at certain times, you would respawn underneath glass surfaces
 	[*]If a race is in progress, all Units, Roadblocks and Helicopters will spawn close to the race leader
 	[*]Tweaked Helicopter logic

@@ -1,10 +1,11 @@
-<------- October 10 ------->
+<------- October 15 ------->
 # New Features
 **Pursuit Tech**
 - Added a new Pursuit Tech: ***Power Play***! Triggers the closest Pursuit Breaker to the user, if one is present
 - Added a new Pursuit Tech: ***EMP***! Lock onto Units or Racers in front of you, and if successful, causes damage to the target, knocks their vehicle around and restricts use of Pursuit Tech for a short duration
 
 **Pursuit**
+- Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
 - Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
 
 **Chatter Profiles**
@@ -22,11 +23,13 @@
 **UI**
 - Fixed some elements from the Original UI
 - When using the World UI in select languages, the font will be changed due to character errors
+- Tweaked the size, position and BG opacity on the general Center Notification
 
 **Chatter Profiles**
 - Default "fed1" has been changed to "cop4"
 
 **Other**
+- If a race is starting, you are unable to force-start a pursuit until that countdown has concluded, and vice-versa
 - Fixed that, at certain times, you would respawn underneath glass surfaces
 - If a race is in progress, all Units, Roadblocks and Helicopters will spawn close to the race leader
 - Tweaked Helicopter logic
