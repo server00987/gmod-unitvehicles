@@ -555,14 +555,14 @@ if SERVER then
 				local mapName = game.GetMap()
 				if mapName:find("_") then
 					mapName = mapName:gsub("^[^_]+_", ""):gsub("(_.+)$", "")
-					print("Found no " .. game.GetMap() .. " files - switching to " .. mapName)
+					-- print("Found no " .. game.GetMap() .. " files - switching to " .. mapName)
 					addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/*", "GAME")
 					chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/"
 				end
 			end
 
 			if not addressFiles or #addressFiles == 0 then
-				print("Found no alternative files - switching to default")
+				-- print("Found no alternative files - switching to default")
 				addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
 				chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"
 			end
