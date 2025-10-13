@@ -365,6 +365,52 @@ UV_PT.EMP = {
         })
     end
 }
+UV_PT.ShockRam = {
+    Hit = function(tbl)
+        local displayMe = false
+        if tbl.User == LocalPlayer():Nick() then
+            displayMe = true
+        end
+		
+		local userString = language.GetPhrase("uv.ptech.shockram.hit")
+		local targetString = language.GetPhrase("uv.ptech.shockram.hit.you")
+
+        local display = nil
+
+        if displayMe then
+            local targets = tbl.Target or {}
+		    local firstName = targets[1] or "UNKNOWN"
+		    local extraCount = #targets - 1
+
+		-- Build name string: "Name" or "Name (+X)"
+		    display = language.GetPhrase( firstName )
+		    if extraCount > 0 then
+			    display = string.format("%s (+%d)", language.GetPhrase( firstName ), extraCount)
+		    end
+        else
+            display = language.GetPhrase( tbl.User )
+        end
+
+		-- Format text with nameDisplay
+		local formattedText = string.format(
+			(displayMe and userString) or targetString,
+			display
+		)
+
+		-- Trigger notification
+		UV_UI.general.events.CenterNotification({
+			text = formattedText,
+		})
+
+    end,
+    Use = function(...)
+        local userString = "#uv.ptech.shockram.activated"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end
+}
 
 --
 

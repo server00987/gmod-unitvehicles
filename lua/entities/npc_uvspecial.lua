@@ -48,6 +48,7 @@ if SERVER then
 		if IsValid(self.v) and self.v:IsVehicle() then
 			self.v.UVSpecial = nil
 			self.v.UnitVehicle = nil
+			local steerinput = (math.random(-100, 100)) / 100
 			if self.v.IsScar then --If the vehicle is SCAR.
 				self.v.HasDriver = self.v.BaseClass.HasDriver --Restore some functions.
 				self.v.SpecialThink = self.v.BaseClass.SpecialThink
@@ -73,15 +74,18 @@ if SERVER then
 					elseif randomno == 3 then
 						self.v:SetActive(false)
 					end
+					self.v:PlayerSteerVehicle(self, steerinput < 0 and -steerinput or 0, steerinput > 0 and steerinput or 0)
 				end
 			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
 			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
 			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
 				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
 				--self.v:StartEngine(false) --Reset states.
-				--self.v:SetHandbrake(true)
+				--self:UVHandbrakeOn()
 				self.v:SetThrottle(0)
-				--self.v:SetSteering(0, 0)
+				if self.v.wrecked then
+					self.v:SetSteering(steerinput, 0)
+				end
 			elseif self.v.IsGlideVehicle then
 				self.v:TurnOff()
 				self.v:TriggerInput("Throttle", 0)
@@ -100,6 +104,7 @@ if SERVER then
 						self.v:TriggerInput("Handbrake", 1)
 						self.v:TriggerInput("Brake", 1)
 					end
+					self.v:TriggerInput("Steer", steerinput)
 				else
 					self.v:TriggerInput("Handbrake", 1)
 					self.v:TriggerInput("Brake", 0)
@@ -1303,7 +1308,7 @@ if SERVER then
 					end
 				end --K/J turn
 				if eeeright.z > -0.2 and eeeright.z < 0.2 and eeevectdot < 0 and eedist:Dot(forward) < 0 and eedist:Length2DSqr() < 250000 and self.aggressive then
-					self:UVHandbrakeOn() 
+					throttle = -1
 				end --Brake checking
 				if selfvelocity > enemyvelocity and edist:Dot(forward) > 0 and edist:Dot(eforward) > 0 and eevectdot > 0 and eeevectdot > 0 and edist:Length2DSqr() < 250000 and enemyvelocity > 250000 and not UVCalm then
 					if self.aggressive and not self.formationpoint and eright.z > -0.5 and eright.z < 0.5 then throttle = 2 end
@@ -1576,6 +1581,28 @@ if SERVER then
 							if self.v:VC_getHealth() and self.v:VC_getHealthMax() and self.v:VC_getHealth() <= (self.v:VC_getHealthMax() / 3) then
 								UVDeployWeapon(self.v, k)
 							end
+						end
+					elseif v.Tech == 'Shock Ram' then
+						if not self.shrampreferredrange then
+							self.shrampreferredrange = math.random(10000, 1000000) --Each Unit has their own preferred range :)
+						end
+
+						local kstimeout = 0.5
+						if self.e.IsSimfphyscar then
+							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange ) and self.e:EngineActive()) then
+								self.shram = CurTime()
+							end
+						elseif self.e:GetClass() == "prop_vehicle_jeep" then
+							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange ) and self.e:IsEngineStarted(false)) then
+								self.shram = CurTime()
+							end
+						end
+						if UVCalm or enemyvelocity < 100000 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+							self.shram = CurTime() 
+						end
+						if self.shram ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+							UVDeployWeapon(self.v, i)
+							self.shram = CurTime()
 						end
 					end
 				end

@@ -988,6 +988,19 @@ if SERVER then
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
             end
+        elseif pursuit_tech.Tech == "Shock Ram" then --SHOCKWAVE
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            
+            if IsValid(driver) then
+                UVPTEvent({driver}, 'ShockRam', 'Use', {['Test'] = 'Hello world!'})
+            end
+            
+            UVDeployShockRam(car)
+            
+            used = true
+            pursuit_tech.LastUsed = CurTime()
+            pursuit_tech.Ammo = pursuit_tech.Ammo - 1
         end
 
         if used then
@@ -1773,6 +1786,114 @@ if SERVER then
             end
 
             return false
+        end
+    end
+
+    --SHOCKRAM
+    function UVDeployShockRam(car)
+        local carchildren = car:GetChildren()
+        local carconstraints = constraint.GetAllConstrainedEntities(car)
+        local carPos = car:WorldSpaceCenter()
+        local objects = ents.FindInSphere(carPos, 1000)
+
+        -- local attacker = UVGetDriver(car)
+        -- local attackerName = UVGetDriverName(car)
+
+        -- local playersToSendTo = {}
+        -- local args = {
+        --     ['User'] = attackerName,
+        --     ['Hit'] = {}
+        -- }
+
+        -- if attacker then
+        --     table.insert( playersToSendTo, attacker )
+        -- end
+
+        local affectedTargets = {}
+
+        for k, object in pairs(objects) do
+            if not object.UnitVehicle and not car.UnitVehicle and not RacerFriendlyFire:GetBool() and not UVIsVehicleInCone( car, object, 90, 1000000 )  then
+			elseif object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
+
+                local objectphys = object:GetPhysicsObject()
+                local vectorDifference = object:WorldSpaceCenter() - carPos
+
+                local angle = vectorDifference:Angle()
+                local power = UVUnitPTShockRamPower:GetFloat()
+                local damage = UVUnitPTShockRamDamage:GetFloat()
+                local force = power * (1 - (vectorDifference:Length()/1000))
+
+                objectphys:ApplyForceCenter(angle:Forward()*force)
+                object.rammed = true
+
+                timer.Simple(3, function()
+                    if IsValid(object) then
+                        object.rammed = nil
+                    end
+                end)
+
+                --local victim = UVGetDriver(object)
+                --local victimName = UVGetDriverName(object)
+
+                --table.insert( args.Hit, victimName )
+
+                -- if victim then
+                --     table.insert( playersToSendTo, victim )
+                -- end
+                
+                local attachVictim = false
+                --if object.UnitVehicle then
+                    local phmass = math.Round(objectphys:GetMass())
+                    UVBounty = UVBounty+phmass
+                    if object.IsSimfphyscar then
+                        if object.UnitVehicle or object.UVWanted and not GetConVar("unitvehicle_autohealth"):GetBool() then
+                            local MaxHealth = object:GetMaxHealth()
+                            local damage = MaxHealth*damage
+                            object:ApplyDamage( damage, DMG_GENERIC )
+                        end
+                        --local victim = UVGetDriver(object)
+                        attachVictim = true
+                    elseif object.IsGlideVehicle then
+                        if object.UnitVehicle or (object.UVWanted and not GetConVar("unitvehicle_autohealth"):GetBool()) or not (object.UnitVehicle and object.UVWanted) then
+                            object:SetEngineHealth( object:GetEngineHealth() - damage )
+                            object:UpdateHealthOutputs()
+                        end
+                        
+                        attachVictim = true
+                    elseif object:GetClass() == "prop_vehicle_jeep" then
+                        attachVictim = true
+                    end
+                --end
+
+                if attachVictim then
+                    -- local victimName = UVGetDriverName(object)
+                    -- table.insert( args.Hit, victimName )
+                    table.insert( affectedTargets, object )
+                end
+            end
+        end
+
+        local MathSound = math.random(1,4)
+        car:EmitSound( "gadgets/shockwave/"..MathSound..".wav" ) --Placeholder
+
+        local effect = EffectData()
+        effect:SetEntity(car)
+        util.Effect("entity_remove", effect)
+        util.ScreenShake( carPos, 5, 5, 1, 1000 )
+
+        if car.UnitVehicle then
+            UVChatterShockRamDeployed(car.UnitVehicle)
+        end
+
+        if #affectedTargets > 0 then
+            ReportPTEvent( car, affectedTargets, 'ShockRam', 'Hit' )
+            if car.UnitVehicle then
+                UVChatterShockRamHit(car.UnitVehicle)
+            end
+        else
+            if car.UnitVehicle then
+                UVChatterShockRamMissed(car.UnitVehicle)
+            end
         end
     end
     

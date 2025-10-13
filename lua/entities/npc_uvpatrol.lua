@@ -48,6 +48,7 @@ if SERVER then
 		if IsValid(self.v) and self.v:IsVehicle() then
 			self.v.UVPatrol = nil
 			self.v.UnitVehicle = nil
+			local steerinput = (math.random(-100, 100)) / 100
 			if self.v.IsScar then --If the vehicle is SCAR.
 				self.v.HasDriver = self.v.BaseClass.HasDriver --Restore some functions.
 				self.v.SpecialThink = self.v.BaseClass.SpecialThink
@@ -73,15 +74,18 @@ if SERVER then
 					elseif randomno == 3 then
 						self.v:SetActive(false)
 					end
+					self.v:PlayerSteerVehicle(self, steerinput < 0 and -steerinput or 0, steerinput > 0 and steerinput or 0)
 				end
 			elseif not IsValid(self.v:GetDriver()) and --The vehicle is normal vehicle.
-				isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
-				isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
+			isfunction(self.v.StartEngine) and isfunction(self.v.SetHandbrake) and 
+			isfunction(self.v.SetThrottle) and isfunction(self.v.SetSteering) and not self.v.IsGlideVehicle then
 				self.v.GetDriver = self.v.OldGetDriver or self.v.GetDriver
 				--self.v:StartEngine(false) --Reset states.
 				--self:UVHandbrakeOn()
 				self.v:SetThrottle(0)
-				--self.v:SetSteering(0, 0)
+				if self.v.wrecked then
+					self.v:SetSteering(steerinput, 0)
+				end
 			elseif self.v.IsGlideVehicle then
 				self.v:TurnOff()
 				self.v:TriggerInput("Throttle", 0)
@@ -100,6 +104,7 @@ if SERVER then
 						self.v:TriggerInput("Handbrake", 1)
 						self.v:TriggerInput("Brake", 1)
 					end
+					self.v:TriggerInput("Steer", steerinput)
 				else
 					self.v:TriggerInput("Handbrake", 1)
 					self.v:TriggerInput("Brake", 0)
@@ -1276,6 +1281,9 @@ if SERVER then
 						throttle = throttle * -1
 					end
 				end --K/J turn
+				if eeeright.z > -0.2 and eeeright.z < 0.2 and eeevectdot < 0 and eedist:Dot(forward) < 0 and eedist:Length2DSqr() < 250000 and self.aggressive then
+					throttle = -1
+				end --Brake checking
 				if selfvelocity > enemyvelocity and edist:Dot(forward) > 0 and edist:Dot(eforward) > 0 and eevectdot > 0 and eeevectdot > 0 and edist:Length2DSqr() < 100000 and enemyvelocity > 250000 and not UVCalm then
 					if not self.aggressive and not self.formationpoint then throttle = 0 end
 				end --PIT technique/get infront

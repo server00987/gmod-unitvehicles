@@ -606,6 +606,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_RepairKit:GetBool() then
 					table.insert(pool, "Repair Kit")
 				end
+				if UVUPursuitTech_ShockRam:GetBool() then
+					table.insert(pool, "Shock Ram")
+				end
 				
 				for i=1,2,1 do
 					if #pool > 0 then
@@ -947,6 +950,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_RepairKit:GetBool() then
 					table.insert(pool, "Repair Kit")
 				end
+				if UVUPursuitTech_ShockRam:GetBool() then
+					table.insert(pool, "Shock Ram")
+				end
 				
 				for i=1,2,1 do
 					if #pool > 0 then
@@ -1163,6 +1169,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				end
 				if UVUPursuitTech_RepairKit:GetBool() then
 					table.insert(pool, "Repair Kit")
+				end
+				if UVUPursuitTech_ShockRam:GetBool() then
+					table.insert(pool, "Shock Ram")
 				end
 				
 				for i=1,2,1 do

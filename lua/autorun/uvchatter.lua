@@ -2207,6 +2207,24 @@ if SERVER then
 		end
 	end
 
+	function UVChatterShockRamDeployed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptshockramdeployed")
+		end
+	end
+
+	function UVChatterShockRamHit( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptshockramhit")
+		end
+	end
+
+	function UVChatterShockRamMissed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptshockrammissed")
+		end
+	end
+
 	function UVChatterRepairKitDeployed(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptrepairkitdeployed")

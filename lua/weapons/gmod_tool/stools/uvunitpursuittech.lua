@@ -8,7 +8,8 @@ local pttable = {
 	"EMP",
 	"Spikestrip",
 	"Killswitch",
-	"Repair Kit"
+	"Repair Kit",
+	"Shock Ram"
 }
 
 local slots = 2
@@ -23,6 +24,7 @@ TOOL.ClientConVar["maxammo_spikestrip"] = 5
 TOOL.ClientConVar["maxammo_killswitch"] = 5
 TOOL.ClientConVar["maxammo_repairkit"] = 5
 TOOL.ClientConVar["maxammo_emp"] = 5
+TOOL.ClientConVar["maxammo_shockram"] = 5
 
 --cooldowns
 TOOL.ClientConVar["cooldown_esf"] = 30
@@ -30,6 +32,7 @@ TOOL.ClientConVar["cooldown_spikestrip"] = 30
 TOOL.ClientConVar["cooldown_killswitch"] = 30
 TOOL.ClientConVar["cooldown_repairkit"] = 30
 TOOL.ClientConVar["cooldown_emp"] = 30
+TOOL.ClientConVar["cooldown_shockram"] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
@@ -40,7 +43,8 @@ TOOL.ClientConVar["killswitchlockontime"] = 3
 TOOL.ClientConVar["killswitchdisableduration"] = 2.5
 TOOL.ClientConVar["empdamage"] = 0.1
 TOOL.ClientConVar["empforce"] = 100
-
+TOOL.ClientConVar["shockrampower"] = 1000000
+TOOL.ClientConVar["shockramdamage"] = 0.1
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -191,6 +195,8 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_spikestripduration'] = GetConVar("uvunitpursuittech_spikestripduration"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchlockontime'] = GetConVar("uvunitpursuittech_killswitchlockontime"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_shockrampower'] = GetConVar("uvunitpursuittech_shockrampower"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_shockramdamage'] = GetConVar("uvunitpursuittech_shockramdamage"):GetFloat()
 			--convar_table['unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire'] = GetConVar("uvunitpursuittech_spikestriproadblockfriendlyfire"):GetInt()
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
@@ -471,6 +477,50 @@ if CLIENT then
 		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
 		repairkitammo:SetConVar("uvunitpursuittech_maxammo_repairkit")
 		CPanel:AddItem(repairkitammo)
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.shockram.title",
+		})
+		
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.shockram.desc",
+		})
+
+		local shockrampower = vgui.Create("DNumSlider")
+		shockrampower:SetMin(100000)
+		shockrampower:SetMax(10000000)
+		shockrampower:SetDecimals(0)
+		shockrampower:SetText("#uv.ptech.power")
+		shockrampower:SetTooltip("#uv.ptech.power.desc")
+		shockrampower:SetConVar("uvunitpursuittech_shockrampower")
+		CPanel:AddItem(shockrampower)
+
+		local shockramdamage = vgui.Create("DNumSlider")
+		shockramdamage:SetMin(0)
+		shockramdamage:SetMax(1)
+		shockramdamage:SetDecimals(1)
+		shockramdamage:SetText("#uv.ptech.damage")
+		shockramdamage:SetTooltip("#uv.ptech.damage.desc")
+		shockramdamage:SetConVar("uvunitpursuittech_shockramdamage")
+		CPanel:AddItem(shockramdamage)
+
+		local shockramcooldown = vgui.Create("DNumSlider")
+		shockramcooldown:SetMin(0)
+		shockramcooldown:SetMax(120)
+		shockramcooldown:SetDecimals(0)
+		shockramcooldown:SetText("#uv.ptech.cooldown")
+		shockramcooldown:SetText("#uv.ptech.cooldown")
+		shockramcooldown:SetConVar("uvunitpursuittech_cooldown_shockram")
+		CPanel:AddItem(shockramcooldown)
+
+		local shockramammo = vgui.Create("DNumSlider")
+		shockramammo:SetMin(0)
+		shockramammo:SetMax(120)
+		shockramammo:SetDecimals(0)
+		shockramammo:SetText("#uv.ptech.ammo")
+		shockramammo:SetTooltip("#uv.ptech.ammo.desc")
+		shockramammo:SetConVar("uvunitpursuittech_maxammo_shockram")
+		CPanel:AddItem(shockramammo)
 	end
 	
 	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", "ignorez" )
@@ -483,7 +533,9 @@ if CLIENT then
 			['ESF'] = '#uv.ptech.esf.short',
 			['Killswitch'] = '#uv.ptech.killswitch',
 			['Spikestrip'] = '#uv.ptech.spikes',
-			['Repair Kit'] = '#uv.ptech.repairkit'
+			['Repair Kit'] = '#uv.ptech.repairkit',
+			['EMP'] = '#uv.ptech.emp.short',
+			['Shock Ram'] = '#uv.ptech.shockram'
 		}
 
 		surface.SetDrawColor( Color( 0, 0, 0) )

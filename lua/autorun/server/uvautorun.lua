@@ -3191,7 +3191,7 @@ end
 
 local function UVCFEligibleToUse(NPC)
 	local vehicle = NPC.v
-	return (vehicle.RacerVehicle and UseNitrousRacer:GetBool()) or (vehicle.UnitVehicle and UseNitrousUnit:GetBool())
+	return (vehicle.RacerVehicle and UseNitrousRacer:GetBool()) or (vehicle.UnitVehicle and not vehicle.roadblocking and UseNitrousUnit:GetBool())
 end
 
 local function UVCFActivateNitrous(NPC, seconds)
