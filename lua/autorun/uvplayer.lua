@@ -1805,7 +1805,7 @@ if SERVER then
         end
 
         for k, object in pairs(objects) do
-            if UVIsVehicleInCone( car, object, 90, 1000000 ) and object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
+            if UVIsVehicleInCone( car, object, 90, 1000000 ) and object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
 
                 local objectphys = object:GetPhysicsObject()
                 local vectorDifference = object:WorldSpaceCenter() - carPos
