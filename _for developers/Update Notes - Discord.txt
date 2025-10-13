@@ -1,8 +1,10 @@
 <------- October 15 ------->
 # New Features
 **Pursuit Tech**
-- Added a new Pursuit Tech: ***Power Play***! Triggers the closest Pursuit Breaker to the user, if one is present
-- Added a new Pursuit Tech: ***EMP***! Lock onto Units or Racers in front of you, and if successful, causes damage to the target, knocks their vehicle around and restricts use of Pursuit Tech for a short duration
+Added three new Pursuit Techs:
+- *Racers - Power Play*: Activating Powerplay triggers the nearest Pursuit Breaker to the driver, forcing it to collapse
+- *Racers & Units - EMP*: The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems
+- *Units - Shock Ram*: The Shock Ram creates a sonic shock-wave blast from the front of the vehicle that pushes away and damages any cars caught by it
 
 **Pursuit**
 - Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
