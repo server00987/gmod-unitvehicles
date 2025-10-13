@@ -1796,24 +1796,16 @@ if SERVER then
         local carPos = car:WorldSpaceCenter()
         local objects = ents.FindInSphere(carPos, 1000)
 
-        -- local attacker = UVGetDriver(car)
-        -- local attackerName = UVGetDriverName(car)
-
-        -- local playersToSendTo = {}
-        -- local args = {
-        --     ['User'] = attackerName,
-        --     ['Hit'] = {}
-        -- }
-
-        -- if attacker then
-        --     table.insert( playersToSendTo, attacker )
-        -- end
-
         local affectedTargets = {}
 
         for k, object in pairs(objects) do
-            if not object.UnitVehicle and not car.UnitVehicle and not RacerFriendlyFire:GetBool() and not UVIsVehicleInCone( car, object, 90, 1000000 )  then
-			elseif object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
+            if object.UnitVehicle then
+                table.RemoveByValue(objects, object) --No friendly fire
+            end
+        end
+
+        for k, object in pairs(objects) do
+            if UVIsVehicleInCone( car, object, 90, 1000000 ) and object ~= car and (not table.HasValue(carchildren, object) and not table.HasValue(carconstraints, object) and IsValid(object:GetPhysicsObject()) or object.UnitVehicle or object.UVWanted or object:GetClass() == "entity_uv*" or object.uvdeployed) then
 
                 local objectphys = object:GetPhysicsObject()
                 local vectorDifference = object:WorldSpaceCenter() - carPos
