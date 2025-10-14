@@ -609,6 +609,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_ShockRam:GetBool() then
 					table.insert(pool, "Shock Ram")
 				end
+				if UVUPursuitTech_GPSDart:GetBool() then
+					table.insert(pool, "GPS Dart")
+				end
 				
 				for i=1,2,1 do
 					if #pool > 0 then
@@ -953,6 +956,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_ShockRam:GetBool() then
 					table.insert(pool, "Shock Ram")
 				end
+				if UVUPursuitTech_GPSDart:GetBool() then
+					table.insert(pool, "GPS Dart")
+				end
 				
 				for i=1,2,1 do
 					if #pool > 0 then
@@ -1172,6 +1178,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				end
 				if UVUPursuitTech_ShockRam:GetBool() then
 					table.insert(pool, "Shock Ram")
+				end
+				if UVUPursuitTech_GPSDart:GetBool() then
+					table.insert(pool, "GPS Dart")
 				end
 				
 				for i=1,2,1 do

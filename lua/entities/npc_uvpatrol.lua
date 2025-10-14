@@ -1336,7 +1336,7 @@ if SERVER then
 						end
 					end
 				end --Herding technique
-				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and not (self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20)) and self:StraightToTarget(self.e) then
+				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and self:StraightToTarget(self.e) then
 					throttle = 0 
 					if vectdot < 0 or eright.z > -0.2 and eright.z < 0.2 or UVCalm then self:UVHandbrakeOn() end
 				end --Pinning/boxing in

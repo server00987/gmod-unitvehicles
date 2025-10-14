@@ -988,7 +988,7 @@ if SERVER then
                 pursuit_tech.LastUsed = CurTime()
                 pursuit_tech.Ammo = pursuit_tech.Ammo - 1
             end
-        elseif pursuit_tech.Tech == "Shock Ram" then --SHOCKWAVE
+        elseif pursuit_tech.Tech == "Shock Ram" then
             local Cooldown = pursuit_tech.Cooldown
             if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
             
@@ -997,6 +997,19 @@ if SERVER then
             end
             
             UVDeployShockRam(car)
+            
+            used = true
+            pursuit_tech.LastUsed = CurTime()
+            pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+        elseif pursuit_tech.Tech == "GPS Dart" then
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            
+            if IsValid(driver) then
+                UVPTEvent({driver}, 'GPSDart', 'Use', {['Test'] = 'Hello world!'})
+            end
+            
+            UVDeployGPSDart(car)
             
             used = true
             pursuit_tech.LastUsed = CurTime()
@@ -1678,18 +1691,6 @@ if SERVER then
             end
         end
         
-        for k, weapon in pairs(ents.FindByClass("entity_uv*")) do
-            if weapon:GetClass() ~= "entity_uvrepairshop" and weapon:GetClass() ~= "entity_uvbombstrip" then
-                local f = EffectData()
-                f:SetEntity(weapon)
-                util.Effect("entity_remove", f)
-                weapon:Remove()
-            end
-            if weapon:GetClass() == "entity_uvbombstrip" then
-                weapon:BombExplode()
-            end
-        end
-        
         UVSoundChatter(car, 1, "", 3)
         
     end
@@ -1789,7 +1790,7 @@ if SERVER then
         end
     end
 
-    --SHOCKRAM
+    --SHOCK RAM
     function UVDeployShockRam(car)
         local carchildren = car:GetChildren()
         local carconstraints = constraint.GetAllConstrainedEntities(car)
@@ -1887,6 +1888,33 @@ if SERVER then
                 UVChatterShockRamMissed(car.UnitVehicle)
             end
         end
+    end
+
+    --GPS DART
+    function UVDeployGPSDart(car)
+        local ph = car:GetPhysicsObject()
+        local launchSpeed = 5000
+        local angle = ph:GetAngles()
+        angle.x = angle.z - 1
+        local force = launchSpeed + (ph:GetVelocity():Length() * 5)
+
+        local gpsdart = ents.Create("entity_uvgpsdart")
+        gpsdart.uvdeployed = car
+
+        gpsdart:SetPos(car:WorldSpaceCenter())
+
+        if car:GetClass() == "prop_vehicle_jeep" then
+            gpsdart:SetAngles(ph:GetAngles())
+        else
+            gpsdart:SetAngles(ph:GetAngles()+Angle(0,90,0))
+        end
+
+        gpsdart:Spawn()
+        gpsdart.PhysgunDisabled = false
+
+        local phgpsdart = gpsdart:GetPhysicsObject()
+        phgpsdart:EnableMotion(true)
+        phgpsdart:ApplyForceCenter(angle:Forward()*force)
     end
     
 else

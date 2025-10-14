@@ -114,6 +114,7 @@ TOOL.ClientConVar["pursuittech_spikestrip"] = 1
 TOOL.ClientConVar["pursuittech_killswitch"] = 1
 TOOL.ClientConVar["pursuittech_repairkit"] = 1
 TOOL.ClientConVar["pursuittech_shockram"] = 1
+TOOL.ClientConVar["pursuittech_gpsdart"] = 1
 
 TOOL.ClientConVar["minheat"] = 1
 TOOL.ClientConVar["maxheat"] = 6
@@ -808,6 +809,7 @@ if CLIENT then
 			convar_table['unitvehicle_unit_pursuittech_killswitch'] = GetConVar('uvunitmanager_pursuittech_killswitch'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_repairkit'] = GetConVar('uvunitmanager_pursuittech_repairkit'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_shockram'] = GetConVar('uvunitmanager_pursuittech_shockram'):GetInt()
+			convar_table['unitvehicle_unit_pursuittech_gpsdart'] = GetConVar('uvunitmanager_pursuittech_gpsdart'):GetInt()
 			
 			convar_table['unitvehicle_minheatlevel'] = GetConVar('uvunitmanager_minheat'):GetInt()
 			convar_table['unitvehicle_maxheatlevel'] = GetConVar('uvunitmanager_maxheat'):GetInt()
@@ -1184,6 +1186,13 @@ if CLIENT then
 		pursuittech_shockram:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_shockram:SetValue(GetConVar("uvunitmanager_pursuittech_shockram"):GetInt())
 		CPanel:AddItem(pursuittech_shockram)
+
+		local pursuittech_gpsdart = vgui.Create("DCheckBoxLabel")
+		pursuittech_gpsdart:SetText("#uv.ptech.gpsdart")
+		pursuittech_gpsdart:SetConVar("uvunitmanager_pursuittech_gpsdart")
+		pursuittech_gpsdart:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
+		pursuittech_gpsdart:SetValue(GetConVar("uvunitmanager_pursuittech_gpsdart"):GetInt())
+		CPanel:AddItem(pursuittech_gpsdart)
 		
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.commander",

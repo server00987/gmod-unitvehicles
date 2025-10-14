@@ -9,7 +9,8 @@ local pttable = {
 	"Spikestrip",
 	"Killswitch",
 	"Repair Kit",
-	"Shock Ram"
+	"Shock Ram",
+	"GPS Dart"
 }
 
 local slots = 2
@@ -25,6 +26,7 @@ TOOL.ClientConVar["maxammo_killswitch"] = 5
 TOOL.ClientConVar["maxammo_repairkit"] = 5
 TOOL.ClientConVar["maxammo_emp"] = 5
 TOOL.ClientConVar["maxammo_shockram"] = 5
+TOOL.ClientConVar["maxammo_gpsdart"] = 5
 
 --cooldowns
 TOOL.ClientConVar["cooldown_esf"] = 30
@@ -33,6 +35,7 @@ TOOL.ClientConVar["cooldown_killswitch"] = 30
 TOOL.ClientConVar["cooldown_repairkit"] = 30
 TOOL.ClientConVar["cooldown_emp"] = 30
 TOOL.ClientConVar["cooldown_shockram"] = 30
+TOOL.ClientConVar["cooldown_gpsdart"] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
@@ -45,6 +48,7 @@ TOOL.ClientConVar["empdamage"] = 0.1
 TOOL.ClientConVar["empforce"] = 100
 TOOL.ClientConVar["shockrampower"] = 1000000
 TOOL.ClientConVar["shockramdamage"] = 0.1
+TOOL.ClientConVar["gpsdartduration"] = 300
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -197,6 +201,7 @@ if CLIENT then
 			convar_table['unitvehicle_unitpursuittech_killswitchdisableduration'] = GetConVar("uvunitpursuittech_killswitchdisableduration"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_shockrampower'] = GetConVar("uvunitpursuittech_shockrampower"):GetFloat()
 			convar_table['unitvehicle_unitpursuittech_shockramdamage'] = GetConVar("uvunitpursuittech_shockramdamage"):GetFloat()
+			convar_table['unitvehicle_unitpursuittech_gpsdartduration'] = GetConVar("uvunitpursuittech_gpsdartduration"):GetFloat()
 			--convar_table['unitvehicle_unitpursuittech_spikestriproadblockfriendlyfire'] = GetConVar("uvunitpursuittech_spikestriproadblockfriendlyfire"):GetInt()
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_ptduration", GetConVar("uvunitpursuittech_ptduration"):GetFloat())
 			-- RunConsoleCommand("unitvehicle_unitpursuittech_esfduration", GetConVar("uvunitpursuittech_esfduration"):GetFloat())
@@ -521,6 +526,41 @@ if CLIENT then
 		shockramammo:SetTooltip("#uv.ptech.ammo.desc")
 		shockramammo:SetConVar("uvunitpursuittech_maxammo_shockram")
 		CPanel:AddItem(shockramammo)
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.gpsdart.title",
+		})
+		
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.gpsdart.desc",
+		})
+
+		local gpsdartduration = vgui.Create("DNumSlider")
+		gpsdartduration:SetMin(100000)
+		gpsdartduration:SetMax(10000000)
+		gpsdartduration:SetDecimals(0)
+		gpsdartduration:SetText("#uv.ptech.duration")
+		gpsdartduration:SetTooltip("#uv.ptech.duration.desc")
+		gpsdartduration:SetConVar("uvunitpursuittech_gpsdartduration")
+		CPanel:AddItem(gpsdartduration)
+
+		local gpsdartcooldown = vgui.Create("DNumSlider")
+		gpsdartcooldown:SetMin(0)
+		gpsdartcooldown:SetMax(120)
+		gpsdartcooldown:SetDecimals(0)
+		gpsdartcooldown:SetText("#uv.ptech.cooldown")
+		gpsdartcooldown:SetText("#uv.ptech.cooldown")
+		gpsdartcooldown:SetConVar("uvunitpursuittech_cooldown_gpsdart")
+		CPanel:AddItem(gpsdartcooldown)
+
+		local gpsdartammo = vgui.Create("DNumSlider")
+		gpsdartammo:SetMin(0)
+		gpsdartammo:SetMax(120)
+		gpsdartammo:SetDecimals(0)
+		gpsdartammo:SetText("#uv.ptech.ammo")
+		gpsdartammo:SetTooltip("#uv.ptech.ammo.desc")
+		gpsdartammo:SetConVar("uvunitpursuittech_maxammo_gpsdart")
+		CPanel:AddItem(gpsdartammo)
 	end
 	
 	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", "ignorez" )

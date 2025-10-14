@@ -411,6 +411,15 @@ UV_PT.ShockRam = {
         })
     end
 }
+UV_PT.GPSDart = {
+    Use = function(...)
+        local userString = "#uv.ptech.gpsdart.activated"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end
+}
 
 --
 

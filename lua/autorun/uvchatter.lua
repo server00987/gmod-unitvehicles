@@ -2225,6 +2225,24 @@ if SERVER then
 		end
 	end
 
+	function UVChatterGPSDartDeployed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptgpsdartdeployed")
+		end
+	end
+
+	function UVChatterGPSDartHit( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptgpsdarthit")
+		end
+	end
+
+	function UVChatterGPSDartMissed( self )
+		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			return UVSoundChatter(self, self.voice, "ptgpsdartmissed")
+		end
+	end
+
 	function UVChatterRepairKitDeployed(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "ptrepairkitdeployed")

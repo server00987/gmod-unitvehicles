@@ -1344,7 +1344,7 @@ if SERVER then
 						end
 					end
 				end --Herding technique
-				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and not (self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20)) and self:StraightToTarget(self.e) then
+				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and self:StraightToTarget(self.e) then
 					throttle = 0 
 					if vectdot < 0 or eright.z > -0.2 and eright.z < 0.2 or UVCalm then self:UVHandbrakeOn() end
 				end --Pinning/boxing in
@@ -1407,6 +1407,7 @@ if SERVER then
 				end
 			end
 
+			-- PURSUIT TECH
 			if self.v.PursuitTech then
 				for i, v in pairs(self.v.PursuitTech) do
 					if v.Tech == 'Spikestrip' then
@@ -1419,10 +1420,6 @@ if SERVER then
 						if not (eeevectdot < 0 and eedist:Length2DSqr() < 25000000 and eedist:Length2DSqr() > 100000) then
 							self.deploying = CurTime()
 						end
-						if enemyvelocity < 100000 then self.deploying = CurTime() end
-						if self.v:GetNoDraw(true) and self.v:GetCollisionGroup(20) and eedist:Length2DSqr() < 25000000 then
-							self.deploying = CurTime()
-						end
 						local stimeout = 0.5
 						if stimeout and stimeout > 0 then
 							if CurTime() > self.deploying + stimeout and self.aggressive and PursuitTech:GetBool() and not self.v.roadblocking then
@@ -1431,56 +1428,56 @@ if SERVER then
 							end
 						end
 					elseif v.Tech == 'ESF' then
-						local kstimeout = 0.5
+						local pttimeout = 0.5
 						if self.e.IsSimfphyscar then
-							if not (eedist:LengthSqr() < 6250000 and self.e:EngineActive()) then
+							if not (eedist:LengthSqr() < 6250000) then
 								self.esf = CurTime()
 							end
 						elseif self.e:GetClass() == "prop_vehicle_jeep" then
-							if not (eedist:LengthSqr() < 6250000 and self.e:IsEngineStarted(false)) then
+							if not (eedist:LengthSqr() < 6250000) then
 								self.esf = CurTime()
 							end
 						end
-						if UVCalm or enemyvelocity < 100000 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
 							self.esf = CurTime() 
 						end
-						if self.esf ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+						if self.esf ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
 							UVDeployWeapon(self.v, i)
 							self.esf = CurTime()
 						end
 					elseif v.Tech == 'EMP' then
-						local kstimeout = 0.5
+						local pttimeout = 0.5
 						if self.e.IsSimfphyscar then
-							if not (eedist:LengthSqr() < 1000000 and self.e:EngineActive()) then
+							if not (eedist:LengthSqr() < 1000000) then
 								self.emp = CurTime()
 							end
 						elseif self.e:GetClass() == "prop_vehicle_jeep" then
-							if not (eedist:LengthSqr() < 1000000 and self.e:IsEngineStarted(false)) then
+							if not (eedist:LengthSqr() < 1000000) then
 								self.emp = CurTime()
 							end
 						end
-						if UVCalm or enemyvelocity < 100000 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
 							self.emp = CurTime() 
 						end
-						if self.emp ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+						if self.emp ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
 							UVDeployWeapon(self.v, i)
 							self.emp = CurTime()
 						end
 					elseif v.Tech == 'Killswitch' then
-						local kstimeout = 0.5
+						local pttimeout = 0.5
 						if self.e.IsSimfphyscar then
-							if not (eedist:LengthSqr() < 250000 and self.e:EngineActive()) then
+							if not (eedist:LengthSqr() < 250000) then
 								self.ks = CurTime()
 							end
 						elseif self.e:GetClass() == "prop_vehicle_jeep" then
-							if not (eedist:LengthSqr() < 250000 and self.e:IsEngineStarted(false)) then
+							if not (eedist:LengthSqr() < 250000) then
 								self.ks = CurTime()
 							end
 						end
-						if UVCalm or enemyvelocity < 123904 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
 							self.ks = CurTime() 
 						end
-						if self.ks ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+						if self.ks ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
 							UVDeployWeapon(self.v, i)
 							self.ks = CurTime()
 						end
@@ -1532,22 +1529,44 @@ if SERVER then
 							self.shrampreferredrange = math.random(10000, 1000000) --Each Unit has their own preferred range :)
 						end
 
-						local kstimeout = 0.5
+						local pttimeout = 0.5
 						if self.e.IsSimfphyscar then
-							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange ) and self.e:EngineActive()) then
+							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange )) then
 								self.shram = CurTime()
 							end
 						elseif self.e:GetClass() == "prop_vehicle_jeep" then
-							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange ) and self.e:IsEngineStarted(false)) then
+							if not (UVIsVehicleInCone( self.v, self.e, 90, self.shrampreferredrange )) then
 								self.shram = CurTime()
 							end
 						end
-						if UVCalm or enemyvelocity < 100000 or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
 							self.shram = CurTime() 
 						end
-						if self.shram ~= CurTime() and kstimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+						if self.shram ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
 							UVDeployWeapon(self.v, i)
 							self.shram = CurTime()
+						end
+					elseif v.Tech == 'GPS Dart' then
+						if not self.gpspreferredrange then
+							self.gpspreferredrange = math.random(10000, 1000000) --Each Unit has their own preferred range :)
+						end
+						
+						local pttimeout = 0.5
+						if self.e.IsSimfphyscar then
+							if not (UVIsVehicleInCone( self.v, self.e, 10, self.gpspreferredrange )) then
+								self.gps = CurTime()
+							end
+						elseif self.e:GetClass() == "prop_vehicle_jeep" then
+							if not (UVIsVehicleInCone( self.v, self.e, 10, self.gpspreferredrange )) then
+								self.gps = CurTime()
+							end
+						end
+						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
+							self.gps = CurTime() 
+						end
+						if self.gps ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+							UVDeployWeapon(self.v, i)
+							self.gps = CurTime()
 						end
 					end
 				end
