@@ -3,6 +3,7 @@
 **Pursuit Tech**
 Added three new Pursuit Techs:
 - *Racers - Power Play*: Activating Powerplay triggers the nearest Pursuit Breaker to the driver, forcing it to collapse
+- *Racers - Juggernaut*: Juggernaut massively increases the ramming power of your vehicle, making it easier to smash through props and blocking vehicles
 - *Racers & Units - EMP*: The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems
 - *Units - Shock Ram*: The Shock Ram creates a sonic shock-wave blast from the front of the vehicle that pushes away and damages any cars caught by it
 
