@@ -3,16 +3,17 @@ TOOL.Name			=	"#tool.uvpursuittech.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
+--Sort this in alphabetical order for convenience :)
 local pttable = {
-	--"EMP",
-	"Repair Kit",
+	"EMP",
 	"ESF",
 	"Jammer",
+	"Juggernaut",
+	"Power Play",
+	"Repair Kit",
 	"Shockwave",
 	"Spikestrip",
-	"Stunmine",
-	"Power Play",
-	"EMP"
+	"Stunmine"
 }
 
 -- local pursuit_tech_list = {
@@ -40,6 +41,7 @@ TOOL.ClientConVar['maxammo_stunmine'] = 5
 TOOL.ClientConVar['maxammo_repairkit'] = 5
 TOOL.ClientConVar['maxammo_powerplay'] = 5
 TOOL.ClientConVar['maxammo_emp'] = 5
+TOOL.ClientConVar['maxammo_juggernaut'] = 5
 
 -- cooldowns
 TOOL.ClientConVar['cooldown_esf'] = 30
@@ -50,6 +52,7 @@ TOOL.ClientConVar['cooldown_stunmine'] = 30
 TOOL.ClientConVar['cooldown_repairkit'] = 30
 TOOL.ClientConVar['cooldown_powerplay'] = 30
 TOOL.ClientConVar['cooldown_emp'] = 30
+TOOL.ClientConVar['cooldown_juggernaut'] = 30
 
 TOOL.ClientConVar["esfduration"] = 10
 TOOL.ClientConVar["esfpower"] = 1000000
@@ -66,6 +69,7 @@ TOOL.ClientConVar["stunminedamage"] = 0.1
 TOOL.ClientConVar["stunminecommanderdamage"] = 0.1
 TOOL.ClientConVar["empdamage"] = 0.1
 TOOL.ClientConVar["empforce"] = 100
+TOOL.ClientConVar["juggernautduration"] = 10
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -101,9 +105,9 @@ if CLIENT then
 			['Stunmine'] = '#uv.ptech.stunmine',
 			['Spikestrip'] = '#uv.ptech.spikes',
 			['Repair Kit'] = '#uv.ptech.repairkit',
-			['Killswitch'] = '#uv.ptech.killswitch',
 			['Power Play'] = '#uv.ptech.powerplay',
-			['EMP'] = '#uv.ptech.emp',
+			['EMP'] = '#uv.ptech.emp.short',
+			['Juggernaut'] = '#uv.ptech.juggernaut'
 		}
 
 		-- Check if it's a valid vehicle and within range
@@ -308,6 +312,7 @@ if CLIENT then
 			convar_table['unitvehicle_pursuittech_stunminepower'] = GetConVar("uvpursuittech_stunminepower"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminedamage'] = GetConVar("uvpursuittech_stunminedamage"):GetFloat()
 			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
+			convar_table['unitvehicle_pursuittech_juggernautduration'] = GetConVar("uvpursuittech_juggernautduration"):GetFloat()
 
 
 			-- RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
@@ -709,6 +714,41 @@ if CLIENT then
 		powerplayammo:SetTooltip("#uv.ptech.ammo.desc")
 		powerplayammo:SetConVar("uvpursuittech_maxammo_powerplay")
 		CPanel:AddItem(powerplayammo)
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.juggernaut.title",
+		})
+
+		CPanel:AddControl("Label", {
+			Text = "#uv.ptech.juggernaut.desc",
+		})
+
+		local juggernautduration = vgui.Create("DNumSlider")
+		juggernautduration:SetMin(1)
+		juggernautduration:SetMax(30)
+		juggernautduration:SetDecimals(0)
+		juggernautduration:SetText("#uv.ptech.duration")
+		juggernautduration:SetTooltip("#uv.ptech.duration.desc")
+		juggernautduration:SetConVar("uvpursuittech_juggernautduration")
+		CPanel:AddItem(juggernautduration)
+
+		local juggernautcooldown = vgui.Create("DNumSlider")
+		juggernautcooldown:SetMin(0)
+		juggernautcooldown:SetMax(120)
+		juggernautcooldown:SetDecimals(0)
+		juggernautcooldown:SetText("#uv.ptech.cooldown")
+		juggernautcooldown:SetTooltip("#uv.ptech.cooldown.desc")
+		juggernautcooldown:SetConVar("uvpursuittech_cooldown_juggernaut")
+		CPanel:AddItem(juggernautcooldown)
+
+		local juggernautammo = vgui.Create("DNumSlider")
+		juggernautammo:SetMin(0)
+		juggernautammo:SetMax(120)
+		juggernautammo:SetDecimals(0)
+		juggernautammo:SetText("#uv.ptech.ammo")
+		juggernautammo:SetTooltip("#uv.ptech.ammo.desc")
+		juggernautammo:SetConVar("uvpursuittech_maxammo_juggernaut")
+		CPanel:AddItem(juggernautammo)
 	end
 	
 	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )
@@ -724,7 +764,9 @@ if CLIENT then
 			['Stunmine'] = '#uv.ptech.stunmine',
 			['Spikestrip'] = '#uv.ptech.spikes',
 			['Repair Kit'] = '#uv.ptech.repairkit',
-			['Power Play'] = '#uv.ptech.powerplay'
+			['Power Play'] = '#uv.ptech.powerplay',
+			['EMP'] = '#uv.ptech.emp.short',
+			['Juggernaut'] = '#uv.ptech.juggernaut'
 		}
 
 		surface.SetDrawColor( Color( 0, 0, 0) )

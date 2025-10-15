@@ -3,14 +3,15 @@ TOOL.Name			=	"#tool.uvunitpursuittech.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
+--Sort this in alphabetical order for convenience :)
 local pttable = {
-	"ESF",
 	"EMP",
-	"Spikestrip",
+	"ESF",
+	"GPS Dart",
 	"Killswitch",
 	"Repair Kit",
 	"Shock Ram",
-	"GPS Dart"
+	"Spikestrip"
 }
 
 local slots = 2
@@ -536,8 +537,8 @@ if CLIENT then
 		})
 
 		local gpsdartduration = vgui.Create("DNumSlider")
-		gpsdartduration:SetMin(100000)
-		gpsdartduration:SetMax(10000000)
+		gpsdartduration:SetMin(1)
+		gpsdartduration:SetMax(600)
 		gpsdartduration:SetDecimals(0)
 		gpsdartduration:SetText("#uv.ptech.duration")
 		gpsdartduration:SetTooltip("#uv.ptech.duration.desc")

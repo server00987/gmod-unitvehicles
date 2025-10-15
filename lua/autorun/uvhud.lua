@@ -893,7 +893,8 @@ local function uv_general( ... )
             ['Repair Kit'] = '#uv.ptech.repairkit.short',
             ['Power Play'] = '#uv.ptech.powerplay.short',
             ['Shock Ram'] = '#uv.ptech.shockram.short',
-            ['GPS Dart'] = '#uv.ptech.gpsdart.short'
+            ['GPS Dart'] = '#uv.ptech.gpsdart.short',
+            ['Juggernaut'] = '#uv.ptech.juggernaut.short',
         }
 
 		if not uvclientjammed then

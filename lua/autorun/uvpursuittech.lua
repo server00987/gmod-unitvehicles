@@ -420,6 +420,15 @@ UV_PT.GPSDart = {
         })
     end
 }
+UV_PT.Juggernaut = {
+    Use = function(...)
+        local userString = "#uv.ptech.juggernaut.activated"
+
+        UV_UI.general.events.CenterNotification({
+            text = userString,
+        })
+    end
+}
 
 --
 

@@ -1014,6 +1014,31 @@ if SERVER then
             used = true
             pursuit_tech.LastUsed = CurTime()
             pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+        elseif pursuit_tech.Tech == "Juggernaut" then --Juggernaut
+            local Cooldown = pursuit_tech.Cooldown
+            if CurTime() - pursuit_tech.LastUsed < Cooldown then return end
+            car:RemoveCallOnRemove("uvjuggernaut"..car:EntIndex())
+            
+            UVDeployJuggernaut(car)
+            
+            pursuit_tech.LastUsed = CurTime()
+            pursuit_tech.Ammo = pursuit_tech.Ammo - 1
+            used = true
+
+            if IsValid(driver) then
+                UVPTEvent({driver}, 'Juggernaut', 'Use')
+            end
+            
+            car:EmitSound("gadgets/juggernaut/juggernauton.wav")
+            car:EmitSound("gadgets/juggernaut/idle.wav")
+            
+            timer.Simple(UVPTJuggernautDuration:GetInt(), function()
+                UVDeactivateJuggernaut(car)
+            end)
+            
+            car:CallOnRemove("uvjuggernaut"..car:EntIndex(), function()
+                UVDeactivateJuggernaut(car)
+            end)
         end
 
         if used then
@@ -1894,7 +1919,7 @@ if SERVER then
     function UVDeployGPSDart(car)
         local ph = car:GetPhysicsObject()
         local launchSpeed = 5000
-        local angle = ph:GetAngles()
+        local angle = car:GetClass() == "prop_vehicle_jeep" and ph:GetAngles()+Angle(0,90,0) or ph:GetAngles()
         angle.x = angle.z - 1
         local force = launchSpeed + (ph:GetVelocity():Length() * 5)
 
@@ -1904,9 +1929,9 @@ if SERVER then
         gpsdart:SetPos(car:WorldSpaceCenter())
 
         if car:GetClass() == "prop_vehicle_jeep" then
-            gpsdart:SetAngles(ph:GetAngles())
-        else
             gpsdart:SetAngles(ph:GetAngles()+Angle(0,90,0))
+        else
+            gpsdart:SetAngles(ph:GetAngles())
         end
 
         gpsdart:Spawn()
@@ -1916,10 +1941,53 @@ if SERVER then
         phgpsdart:EnableMotion(true)
         phgpsdart:ApplyForceCenter(angle:Forward()*force)
     end
+
+    --JUGGERNAUT
+    function UVDeployJuggernaut(car)
+        local driver = UVGetDriver(car)
+
+        car.juggernauton = true
+        local e = EffectData()
+        e:SetEntity(car)
+        util.Effect("entity_remove", e)
+        net.Start("UVWeaponJuggernautEnable")
+        net.WriteEntity(car)
+        net.Broadcast()
+
+        if car.UnitVehicle then
+            UVChatterJuggernautDeployed(car)
+        end
+    end
+    
+    function UVDeactivateJuggernaut(car)
+        if not car.juggernauton then return end
+
+        if IsValid(car) then
+            car.juggernauton = nil
+
+            net.Start("UVWeaponJuggernautDisable")
+            net.WriteEntity(car)
+            net.Broadcast()
+
+            car:StopSound("gadgets/juggernaut/idle.wav")
+
+            local e = EffectData()
+            e:SetEntity(car)
+            util.Effect("entity_remove", e)
+            car:EmitSound("gadgets/juggernaut/juggernautoff.wav")
+
+            car.uvjuggernauthit = nil
+            
+            if car.UnitVehicle then
+                UVChatterJuggernautMissed(car)
+            end
+        end
+    end
     
 else
 
     UVWithESF = {}
+    UVWithJuggernaut = {}
     
     net.Receive("UVUnitTakedown", function()
 		if UVHUDCopMode then return end
@@ -1985,6 +2053,9 @@ else
         if not UVWithESF then
             UVWithESF = {}
         end
+        if not UVWithJuggernaut then
+            UVWithJuggernaut = {}
+        end
     end)
     
     net.Receive("UVWeaponESFEnable", function()
@@ -2000,6 +2071,21 @@ else
     hook.Add("PreDrawHalos", "UVWeaponESFShow", function()
         if next(UVWithESF) == nil then return end
         halo.Add( UVWithESF, Color(255,255,255), 10, 10, 1 )
+    end)
+
+    net.Receive("UVWeaponJuggernautEnable", function()
+        local unit = net.ReadEntity()
+        table.insert(UVWithJuggernaut, unit)
+    end)
+    
+    net.Receive("UVWeaponJuggernautDisable", function()
+        local unit = net.ReadEntity()
+        table.RemoveByValue(UVWithJuggernaut, unit)
+    end)
+    
+    hook.Add("PreDrawHalos", "UVWeaponJuggernautShow", function()
+        if next(UVWithJuggernaut) == nil then return end
+        halo.Add( UVWithJuggernaut, Color(255,93,0), 10, 10, 1 )
     end)
     
     -- hook.Add( "HUDPaint", "UVNotifications", function()

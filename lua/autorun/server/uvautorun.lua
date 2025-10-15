@@ -79,6 +79,9 @@ NETWORK_STRINGS = {
 	
 	"UVWeaponESFEnable",
 	"UVWeaponESFDisable",
+
+	"UVWeaponJuggernautEnable",
+	"UVWeaponJuggernautDisable",
 	
 	"UVWeaponJammerEnable",
 	"UVWeaponJammerDisable",
@@ -881,6 +884,46 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 
 			local object = coldata.HitEntity
 
+			if car.juggernauton and not object:IsWorld() then --Juggernaut
+				local ourOldVel = coldata.OurOldVelocity
+				local ourOldAngVel = coldata.OurOldAngularVelocity
+				local objectPhys = object:GetPhysicsObject()
+				local Phys = car:GetPhysicsObject()
+				local force = car:GetVelocity():LengthSqr()
+
+				local carPos = car:WorldSpaceCenter()
+				local vectorDifference = object:WorldSpaceCenter() - carPos
+				local angle = vectorDifference:Angle()
+
+				objectPhys:ApplyForceCenter(angle:Forward()*force)
+
+				--Preserve momentum
+        		Phys:SetVelocity(ourOldVel)
+				Phys:SetAngleVelocityInstantaneous(ourOldAngVel)
+
+				local sounds = {
+					"gadgets/juggernaut/impact_hard1.wav",
+					"gadgets/juggernaut/impact_hard2.wav",
+					"gadgets/juggernaut/impact_hard3.wav",
+					"gadgets/juggernaut/impact_medium1.wav",
+					"gadgets/juggernaut/impact_medium2.wav",
+					"gadgets/juggernaut/impact_medium3.wav",
+					"gadgets/juggernaut/impact_soft1.wav",
+					"gadgets/juggernaut/impact_soft2.wav",
+					"gadgets/juggernaut/impact_soft3.wav",
+				}
+				
+				if not car.juggernauthit then
+					car.juggernauthit = true
+					car:EmitSound(sounds[math.random(1, #sounds)])
+					timer.Simple(1, function()
+						if IsValid(car) then
+							car.juggernauthit = nil
+						end
+					end)
+				end
+			end
+
 			if car.esfon and object:IsVehicle() and not (object.UnitVehicle and car.UnitVehicle) then --ESF
 
 				if not object.UnitVehicle and not car.UnitVehicle then
@@ -1220,6 +1263,46 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 
 	local object = coldata.HitEntity
 
+	if car.juggernauton and not object:IsWorld() then --Juggernaut
+		local ourOldVel = coldata.OurOldVelocity
+		local ourOldAngVel = coldata.OurOldAngularVelocity
+		local objectPhys = object:GetPhysicsObject()
+		local Phys = car:GetPhysicsObject()
+		local force = car:GetVelocity():LengthSqr()
+
+		local carPos = car:WorldSpaceCenter()
+		local vectorDifference = object:WorldSpaceCenter() - carPos
+		local angle = vectorDifference:Angle()
+
+		objectPhys:ApplyForceCenter(angle:Forward()*force)
+
+		--Preserve momentum
+    	Phys:SetVelocity(ourOldVel)
+		Phys:SetAngleVelocityInstantaneous(ourOldAngVel)
+
+		local sounds = {
+			"gadgets/juggernaut/impact_hard1.wav",
+			"gadgets/juggernaut/impact_hard2.wav",
+			"gadgets/juggernaut/impact_hard3.wav",
+			"gadgets/juggernaut/impact_medium1.wav",
+			"gadgets/juggernaut/impact_medium2.wav",
+			"gadgets/juggernaut/impact_medium3.wav",
+			"gadgets/juggernaut/impact_soft1.wav",
+			"gadgets/juggernaut/impact_soft2.wav",
+			"gadgets/juggernaut/impact_soft3.wav",
+		}
+		
+		if not car.juggernauthit then
+			car.juggernauthit = true
+			car:EmitSound(sounds[math.random(1, #sounds)])
+			timer.Simple(1, function()
+				if IsValid(car) then
+					car.juggernauthit = nil
+				end
+			end)
+		end
+	end
+
 	if car.esfon and object:IsVehicle() and not (object.UnitVehicle and car.UnitVehicle) then --ESF
 		if not object.UnitVehicle and not car.UnitVehicle then
 			if not RacerFriendlyFire:GetBool() then return end
@@ -1535,6 +1618,45 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 						ParticleEffectAttach("smoke_burning_engine_01", PATT+ACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
 					end
 				end
+			end
+		end
+
+		if car.juggernauton and not object:IsWorld() then --Juggernaut
+			local ourOldAngVel = coldata.OurOldAngularVelocity
+			local objectPhys = object:GetPhysicsObject()
+			local Phys = car:GetPhysicsObject()
+			local force = car:GetVelocity():LengthSqr()
+
+			local carPos = car:WorldSpaceCenter()
+			local vectorDifference = object:WorldSpaceCenter() - carPos
+			local angle = vectorDifference:Angle()
+
+			objectPhys:ApplyForceCenter(angle:Forward()*force)
+
+			--Preserve momentum
+    		Phys:SetVelocity(ourOldVel)
+			Phys:SetAngleVelocityInstantaneous(ourOldAngVel)
+
+			local sounds = {
+				"gadgets/juggernaut/impact_hard1.wav",
+				"gadgets/juggernaut/impact_hard2.wav",
+				"gadgets/juggernaut/impact_hard3.wav",
+				"gadgets/juggernaut/impact_medium1.wav",
+				"gadgets/juggernaut/impact_medium2.wav",
+				"gadgets/juggernaut/impact_medium3.wav",
+				"gadgets/juggernaut/impact_soft1.wav",
+				"gadgets/juggernaut/impact_soft2.wav",
+				"gadgets/juggernaut/impact_soft3.wav",
+			}
+			
+			if not car.juggernauthit then
+				car.juggernauthit = true
+				car:EmitSound(sounds[math.random(1, #sounds)])
+				timer.Simple(1, function()
+					if IsValid(car) then
+						car.juggernauthit = nil
+					end
+				end)
 			end
 		end
 

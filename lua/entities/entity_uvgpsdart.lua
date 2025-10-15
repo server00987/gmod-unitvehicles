@@ -12,7 +12,7 @@ ENT.PhysgunPickup = false
 
 if SERVER then
 	function ENT:Initialize()
-		self:SetModel("models/hunter/plates/plate025.mdl") --Placeholder
+		self:SetModel("models/unitvehiclesprops/gpsdart/gpsdart.mdl")
 		self:PhysicsInit(SOLID_VPHYSICS)
     	self:SetMoveType(MOVETYPE_VPHYSICS)
     	self:SetSolid(SOLID_VPHYSICS)
@@ -31,6 +31,7 @@ if SERVER then
 					end
 				end
 			end
+			UVChatterGPSDartDeployed(self.uvdeployed)
 		end
 
 		local MathSound = math.random(1,3)
@@ -69,7 +70,7 @@ if SERVER then
 			self:DestroyDart()
 		end
 
-		if self.tagged and IsValid(self.taggedobject) then
+		if self.tagged and IsValid(self.taggedobject) and self.taggedobject.UVWanted then
 			UVLosing = CurTime()
 		end
 	end
@@ -80,11 +81,6 @@ if SERVER then
 		if self.tagged and object ~= self.taggedobject then --Destroy tagged dart if collided with something else
 			self:DestroyDart()
 			return 
-		end
-		
-		if not object.UVWanted then
-			self:DestroyDart()
-			return
 		end
 
 		self.tagged = true
@@ -108,6 +104,12 @@ if SERVER then
 				dart:UntagDart(dart.taggedobject)
 			end
 		end)
+
+		if self.taggedobject.UVWanted then
+			UVChatterGPSDartHit(self.uvdeployed)
+		else
+			UVChatterGPSDartMissed(self.uvdeployed)
+		end
 	end
 
 	function ENT:OnTakeDamage(obj_DamageInfo) -- Remove when damaged

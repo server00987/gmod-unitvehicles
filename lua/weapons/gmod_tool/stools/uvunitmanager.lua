@@ -3004,14 +3004,18 @@ function TOOL:GetVehicleData( ent, ply )
 	
 	if not IsValid( ply ) then return end
 
-	for _, v in pairs(ply.UVTOOLMemory.Entities) do
-		v.OnDieFunctions = nil
-		v.AutomaticFrameAdvance = nil
-		v.BaseClass = nil
+	if ply.UVTOOLMemory.Entities then
+		for _, v in pairs(ply.UVTOOLMemory.Entities) do
+			v.OnDieFunctions = nil
+			v.AutomaticFrameAdvance = nil
+			v.BaseClass = nil
+		end
 	end
 
-	for _, v in pairs(ply.UVTOOLMemory.Constraints) do
-		v.OnDieFunctions = nil
+	if ply.UVTOOLMemory.Constraints then
+		for _, v in pairs(ply.UVTOOLMemory.Constraints) do
+			v.OnDieFunctions = nil
+		end
 	end
 	
 	net.Start("UVUnitManagerGetUnitInfo")
