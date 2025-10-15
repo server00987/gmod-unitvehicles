@@ -1136,6 +1136,9 @@ if SERVER then
         car.startLock = CurTime()
 
         target.LockedOnBy = car
+
+        car:EmitSound("gadgets/emp/lockfromloop.wav")
+        target:EmitSound("gadgets/emp/lockonloop.wav")
         
         local function cleanup()
             car.empTarget = nil
@@ -1164,6 +1167,9 @@ if SERVER then
                     if car.UnitVehicle then
                         UVChatterEMPMissed(car)
                     end
+
+                    car:StopSound("gadgets/emp/lockfromloop.wav")
+                    target:StopSound("gadgets/emp/lockonloop.wav")
 
                     return false
                 end
@@ -1221,6 +1227,9 @@ if SERVER then
                         {targetEntityIndex, targetCreationID, UVGetDriverName( target )}
                     }
                 )
+
+                car:StopSound("gadgets/emp/lockfromloop.wav")
+                target:StopSound("gadgets/emp/lockonloop.wav")
 
                 if car.UnitVehicle then
                     UVChatterEMPHit(car)
