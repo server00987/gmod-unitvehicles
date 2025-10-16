@@ -1,784 +1,600 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
-TOOL.Name			=	"#tool.uvpursuittech.name"
-TOOL.Command		=	nil
-TOOL.ConfigName		=	""
+-- UNLOCALIZED NOTE: some notification strings below are unlocalized placeholders for easy localization later.
+TOOL.Category      = "uv.settings.unitvehicles"
+TOOL.Name          = "#tool.uvpursuittech.name"
+TOOL.Command       = nil
+TOOL.ConfigName    = ""
 
---Sort this in alphabetical order for convenience :)
-local pttable = {
-	"EMP",
-	"ESF",
-	"Jammer",
-	"Juggernaut",
-	"Power Play",
-	"Repair Kit",
-	"Shockwave",
-	"Spikestrip",
-	"Stunmine"
+-- ===================== Pursuit Tech Definitions ===============================
+-- Display key should be used (may contain spaces). shortname used for convar keys.
+local PursuitTechDefs = {
+    ["EMP"] = {
+        name = "#uv.ptech.emp",
+        sname = "#uv.ptech.emp.short",
+        shortname = "emp",
+        description = "#uv.ptech.emp.desc",
+        racer = true, unit = true,
+        convars = {
+            damage   = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            force    = { default = 100, min = 0, max = 1000, decimals = 0 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["ESF"] = {
+        name = "#uv.ptech.esf",
+        sname = "#uv.ptech.esf.short",
+        description = "#uv.ptech.esf.desc",
+        shortname = "esf",
+        racer = true, unit = true,
+        convars = {
+            duration = { default = 10, min = 1, max = 30, decimals = 0 },
+            power    = { default = 1000000, min = 100000, max = 10000000, decimals = 0 },
+            damage   = { default = 0.2, min = 0, max = 1, decimals = 1 },
+            damagecommander = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Power Play"] = {
+        name = "#uv.ptech.powerplay",
+        sname = "#uv.ptech.powerplay.short",
+        description = "#uv.ptech.powerplay.desc",
+        shortname = "powerplay",
+        racer = true, unit = false,
+        convars = {
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Killswitch"] = {
+        name = "#uv.ptech.killswitch",
+        sname = "#uv.ptech.killswitch.short",
+        description = "#uv.ptech.killswitch.desc",
+        shortname = "killswitch",
+        racer = false, unit = true,
+        convars = {
+            lockontime      = { default = 3, min = 1, max = 10, decimals = 1 },
+            disableduration = { default = 2.5, min = 1, max = 10, decimals = 1 },
+            cooldown        = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo            = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Repair Kit"] = {
+        name = "#uv.ptech.repairkit",
+        sname = "#uv.ptech.repairkit.short",
+        description = "#uv.ptech.repairkit.desc",
+        shortname = "repairkit",
+        racer = true, unit = true,
+        convars = {
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Shock Ram"] = {
+        name = "#uv.ptech.shockram",
+        sname = "#uv.ptech.shockram.short",
+        description = "#uv.ptech.shockram.desc",
+        shortname = "shockram",
+        racer = false, unit = true,
+        convars = {
+            power    = { default = 1000000, min = 100000, max = 10000000, decimals = 0 },
+            damage   = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Spikestrip"] = {
+        name = "#uv.ptech.spikes",
+        sname = "#uv.ptech.spikes.short",
+        description = "#uv.ptech.spikes.desc",
+        shortname = "spikestrip",
+        racer = true, unit = true,
+        convars = {
+            duration = { default = 60, min = 5, max = 120, decimals = 0 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["GPS Dart"] = {
+        name = "#uv.ptech.gpsdart",
+        sname = "#uv.ptech.gpsdart.short",
+        description = "#uv.ptech.gpsdart.desc",
+        shortname = "gpsdart",
+        racer = false, unit = true,
+        convars = {
+            duration = { default = 300, min = 1, max = 600, decimals = 0 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Juggernaut"] = {
+        name = "#uv.ptech.juggernaut",
+        sname = "#uv.ptech.juggernaut.short",
+        description = "#uv.ptech.juggernaut.desc",
+        shortname = "juggernaut",
+        racer = true, unit = false,
+        convars = {
+            duration = { default = 10, min = 1, max = 30, decimals = 0 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+	
+    ["Jammer"] = {
+        name = "#uv.ptech.jammer",
+        sname = "#uv.ptech.jammer.short",
+        description = "#uv.ptech.jammer.desc",
+        shortname = "jammer",
+        racer = true, unit = false,
+        convars = {
+            duration = { default = 10, min = 1, max = 30, decimals = 0 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5,  min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Shockwave"] = {
+        name = "#uv.ptech.shockwave",
+        sname = "#uv.ptech.shockwave.short",
+        description = "#uv.ptech.shockwave.desc",
+        shortname = "shockwave",
+        racer = true, unit = false,
+        convars = {
+            power    = { default = 1000000, min = 100000, max = 10000000, decimals = 0 },
+            damage   = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            damagecommander = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
+    ["Stunmine"] = {
+        name = "#uv.ptech.stunmine",
+        sname = "#uv.ptech.stunmine.short",
+        description = "#uv.ptech.stunmine.desc",
+        shortname = "stunmine",
+        racer = true, unit = false,
+        convars = {
+            power    = { default = 1000000, min = 100000, max = 10000000, decimals = 0 },
+            damage   = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            damagecommander = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+        }
+    },
+
 }
 
--- local pursuit_tech_list = {
--- 	["ESF"] = "Electromagnetic Field",
--- 	["Repair Kit"] = "Electromagnetic Field",
--- 	["Jammer"] = "Jammer",
--- 	["Shockwave"] = "Shockwave",
--- 	["Spikestrip"] = "Spike Strip",
--- 	["Stunmine"] = "Stun Mine",
--- }
+-- ===================== Build lookup lists ===============================
+local pttable_racer, pttable_unit, all_pt_displaylist = {}, {}, {}
+for displayName, info in pairs(PursuitTechDefs) do
+    if info.racer then table.insert(pttable_racer, displayName) end
+    if info.unit then table.insert(pttable_unit, displayName) end
+    table.insert(all_pt_displaylist, displayName)
+end
+table.sort(pttable_racer)
+table.sort(pttable_unit)
+table.sort(all_pt_displaylist)
 
-local slots = 2
+-- ===================== Client ConVars ===============================
+TOOL.ClientConVar = TOOL.ClientConVar or {}
+-- slot defaults
+TOOL.ClientConVar["racer_slot1"] = "EMP"
+TOOL.ClientConVar["racer_slot2"] = "ESF"
+TOOL.ClientConVar["unit_slot1"]  = "EMP"
+TOOL.ClientConVar["unit_slot2"]  = "ESF"
 
-TOOL.ClientConVar[ "pursuittech" ] = pttable[1]
-TOOL.ClientConVar[ "slot" ] = 1
-
-TOOL.ClientConVar["ptduration"] = 60
-
--- ammo
-TOOL.ClientConVar['maxammo_esf'] = 5
-TOOL.ClientConVar['maxammo_jammer'] = 5
-TOOL.ClientConVar['maxammo_shockwave'] = 5
-TOOL.ClientConVar['maxammo_spikestrip'] = 5
-TOOL.ClientConVar['maxammo_stunmine'] = 5
-TOOL.ClientConVar['maxammo_repairkit'] = 5
-TOOL.ClientConVar['maxammo_powerplay'] = 5
-TOOL.ClientConVar['maxammo_emp'] = 5
-TOOL.ClientConVar['maxammo_juggernaut'] = 5
-
--- cooldowns
-TOOL.ClientConVar['cooldown_esf'] = 30
-TOOL.ClientConVar['cooldown_jammer'] = 30
-TOOL.ClientConVar['cooldown_shockwave'] = 30
-TOOL.ClientConVar['cooldown_spikestrip'] = 30
-TOOL.ClientConVar['cooldown_stunmine'] = 30
-TOOL.ClientConVar['cooldown_repairkit'] = 30
-TOOL.ClientConVar['cooldown_powerplay'] = 30
-TOOL.ClientConVar['cooldown_emp'] = 30
-TOOL.ClientConVar['cooldown_juggernaut'] = 30
-
-TOOL.ClientConVar["esfduration"] = 10
-TOOL.ClientConVar["esfpower"] = 1000000
-TOOL.ClientConVar["esfdamage"] = 0.2
-
-TOOL.ClientConVar["esfcommanderdamage"] = 0.1
-TOOL.ClientConVar["jammerduration"] = 10
-TOOL.ClientConVar["shockwavepower"] = 1000000
-TOOL.ClientConVar["shockwavedamage"] = 0.1
-TOOL.ClientConVar["shockwavecommanderdamage"] = 0.1
-TOOL.ClientConVar["spikestripduration"] = 60
-TOOL.ClientConVar["stunminepower"] = 1000000
-TOOL.ClientConVar["stunminedamage"] = 0.1
-TOOL.ClientConVar["stunminecommanderdamage"] = 0.1
-TOOL.ClientConVar["empdamage"] = 0.1
-TOOL.ClientConVar["empforce"] = 100
-TOOL.ClientConVar["juggernautduration"] = 10
+-- generate per-PT convars
+for displayName, info in pairs(PursuitTechDefs) do
+    local short = info.shortname
+    for param, dat in pairs(info.convars) do
+        if info.racer then
+            local key = short.."_"..param
+            TOOL.ClientConVar[key] = TOOL.ClientConVar[key] or dat.default
+        end
+        if info.unit then
+            local key = short.."_"..param.."_unit"
+            TOOL.ClientConVar[key] = TOOL.ClientConVar[key] or dat.default
+        end
+    end
+end
 
 local conVarsDefault = TOOL:BuildConVarList()
 
-if CLIENT then
+-- ===================== Helpers ===============================
+local function SanitizeForConvar(s)
+    if not s then return "" end
+    return string.lower(string.gsub(s, " ", ""))
+end
 
+local function IsSupportedVehicle(ent)
+    if not IsValid(ent) then return false end
+    return (ent.IsGlideVehicle or ent.IsSimfphyscar or ent:GetClass() == "prop_vehicle_jeep")
+end
+
+-- ===================== Client: Visuals & CPanel ===============================
+if CLIENT then
 	TOOL.Information = {
-		{ name = "info"},
 		{ name = "left" },
-		{ name = "right" },
-		{ name = "reload" }
 	}
-	hook.Add("PostDrawTranslucentRenderables", "UVPursuitTech_DrawVehicleText", function()
-		local ply = LocalPlayer()
-
-		-- Ensure player is holding the toolgun
-		local wep = ply:GetActiveWeapon()
-		local tool = ply:GetTool()
-		local tr = ply:GetEyeTrace()
-		local ent = tr.Entity
-
-		if not IsValid(wep) or wep:GetClass() ~= "gmod_tool" then return end
-		local allowedTools = {
-			["uvpursuittech"] = true,
-			["uvunitpursuittech"] = true,
-		}
-		
-		if not tool or not allowedTools[tool.Mode] then return end
-
-		local PT_Replacement_Strings = {
-			['ESF'] = '#uv.ptech.esf.short',
-			['Jammer'] = '#uv.ptech.jammer',
-			['Shockwave'] = '#uv.ptech.shockwave',
-			['Stunmine'] = '#uv.ptech.stunmine',
-			['Spikestrip'] = '#uv.ptech.spikes',
-			['Repair Kit'] = '#uv.ptech.repairkit',
-			['Power Play'] = '#uv.ptech.powerplay',
-			['EMP'] = '#uv.ptech.emp.short',
-			['Juggernaut'] = '#uv.ptech.juggernaut'
-		}
-
-		-- Check if it's a valid vehicle and within range
-		if IsValid(ent) and ent:IsVehicle() and tr.HitPos:DistToSqr(ply:GetPos()) < 50000 then
-			local pos = ent:GetPos() + Vector(0, 0, 80)
-			local ang = Angle(0, EyeAngles().y - 90, 90)
-
-			-- Get pursuit tech data safely
-			local tech1 = " "
-			local tech2 = " "
-
-			if ent.PursuitTech then
-				if ent.PursuitTech[1] and ent.PursuitTech[1].Tech then
-					tech1 = PT_Replacement_Strings[ent.PursuitTech[1].Tech] or ent.PursuitTech[1].Tech
-				end
-				if ent.PursuitTech[2] and ent.PursuitTech[2].Tech then
-					tech2 = PT_Replacement_Strings[ent.PursuitTech[2].Tech] or ent.PursuitTech[2].Tech
-				end
-			end
-
-			-- Draw 3D2D label above the vehicle
-			cam.Start3D2D(pos, ang, 0.2)
-				draw.SimpleTextOutlined(
-					"#uv.ptech",
-					"DermaLarge",
-					0, 20,
-					Color(255, 255, 255),
-					TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
-					1, Color(0, 0, 0)
-				)
-				draw.SimpleTextOutlined(
-					tech1,
-					"DermaLarge",
-					-27.5, 50,
-					Color(255, 255, 255),
-					TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER,
-					1, Color(0, 0, 0)
-				)
-				draw.SimpleTextOutlined(
-					"< | >",
-					"DermaLarge",
-					0, 50,
-					Color(255, 255, 255),
-					TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,
-					1, Color(0, 0, 0)
-				)
-				draw.SimpleTextOutlined(
-					tech2,
-					"DermaLarge",
-					30, 50,
-					Color(255, 255, 255),
-					TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER,
-					1, Color(0, 0, 0)
-				)
-			cam.End3D2D()
-		end
-	end)
-end
-
-function TOOL:LeftClick( trace )
-	local car = trace.Entity
-
-	if not car.UnitVehicle and (car.IsGlideVehicle or car.IsSimfphyscar or car:GetClass() == "prop_vehicle_jeep") then
-
-		if ( not CLIENT ) then
-			local ptselected = self:GetClientInfo("pursuittech")
-			local sanitized_pt = string.lower(string.gsub(ptselected, " ", ""))
-			local slot = self:GetClientNumber("slot") or 1
-			
-			if not car.PursuitTech then
-				car.PursuitTech = {}
-			end
-
-			local sel_k, sel_v
-
-			for k,v in pairs(car.PursuitTech) do
-				if v.Tech == ptselected then
-					sel_k, sel_v = k, v
-					car.PursuitTech[k] = nil
-					break
-				end
-			end
-
-			local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
-			ammo_count = ammo_count > 0 and ammo_count or math.huge
-
-			car.PursuitTech[slot] = {
-				Tech = ptselected,
-				Ammo = ammo_count,
-				Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
-				LastUsed = -math.huge,
-				Upgraded = false
-			}
-
-			local effect = EffectData()
-			effect:SetEntity(car)
-			util.Effect("phys_freeze", effect)
-
-			table.insert(UVRVWithPursuitTech, car)
-
-			car:CallOnRemove("UVRVWithPursuitTechRemoved", function(car)
-				if table.HasValue(UVRVWithPursuitTech, car) then
-					table.RemoveByValue(UVRVWithPursuitTech, car)
-				end
-
-				-- Clear PursuitTech on clients too
-				-- net.Start("UV_SendPursuitTech")
-				-- 	net.WriteEntity(car)
-				-- 	net.WriteTable({})
-				-- net.Broadcast()
-			end)
-
-            -- Network the PursuitTech to all clients
-            -- net.Start("UV_SendPursuitTech")
-            --     net.WriteEntity(car)
-            --     net.WriteTable(car.PursuitTech)
-            -- net.Broadcast()
-			-- In case one pt is replaced
-			for i=1,2 do
-				UVReplicatePT( car, i )
-			end
-
-			return true
-		end
-
-		return false
-
-	end
-
-	return false
-
-end
-
-function TOOL:RightClick(trace)
-	if CLIENT then return false end
-
-	local ptselected = self:GetClientInfo("pursuittech")
 	
-	if ptselected == pttable[#pttable] then
-		-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[1])
-		self:GetOwner():ConCommand("uvpursuittech_pursuittech "..pttable[1])
-	else
-		for k,v in pairs(pttable) do
-			if v == ptselected then
-				-- self:GetOwner():ChatPrint("Pursuit Tech changed to "..pttable[k+1])
-				self:GetOwner():ConCommand("uvpursuittech_pursuittech "..pttable[k+1])
-			end
-		end
-	end
+    -- 3D2D draw above vehicle
+    hook.Add("PostDrawTranslucentRenderables", "UVPursuitTech_DrawVehicleText", function()
+        local ply = LocalPlayer()
+        if not IsValid(ply) then return end
+        local wep = ply:GetActiveWeapon()
+        local tool = ply:GetTool()
+        local tr = ply:GetEyeTrace()
+        local ent = tr.Entity
 
-	return false
-end
+        if not IsValid(wep) or wep:GetClass() ~= "gmod_tool" then return end
+        if not tool or tool.Mode ~= "uvpursuittech" then return end
 
-function TOOL:Reload()
-	if CLIENT then return end
-	
-	local old_slot = self:GetClientNumber("slot")
-	local new_slot = old_slot + 1
-	if new_slot > slots then new_slot = 1 end
+        local PT_Replacement_Strings = {}
+        for displayName, info in pairs(PursuitTechDefs) do
+            PT_Replacement_Strings[displayName] = info.name or displayName
+        end
 
-	self:GetOwner():ConCommand("uvpursuittech_slot "..new_slot)
-	-- self:GetOwner():ChatPrint("Slot ".. new_slot .. " selected.")
-end
+        if IsValid(ent) and ent:IsVehicle() and tr.HitPos:DistToSqr(ply:GetPos()) < 50000 then
+            local pos = ent:GetPos() + Vector(0,0,80)
+            local ang = Angle(0, EyeAngles().y - 90, 90)
+            local tech1, tech2 = " ", " "
+            if ent.PursuitTech then
+                if ent.PursuitTech[1] and ent.PursuitTech[1].Tech then tech1 = PT_Replacement_Strings[ent.PursuitTech[1].Tech] or ent.PursuitTech[1].Tech end
+                if ent.PursuitTech[2] and ent.PursuitTech[2].Tech then tech2 = PT_Replacement_Strings[ent.PursuitTech[2].Tech] or ent.PursuitTech[2].Tech end
+            end
+            cam.Start3D2D(pos, ang, 0.2)
+                draw.SimpleTextOutlined("#uv.ptech", "DermaLarge", 0, 20, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0,0,0))
+                draw.SimpleTextOutlined(tech1, "DermaLarge", -27.5, 50, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0,0,0))
+                draw.SimpleTextOutlined("< | >", "DermaLarge", 0, 50, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0,0,0))
+                draw.SimpleTextOutlined(tech2, "DermaLarge", 30, 50, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0,0,0))
+            cam.End3D2D()
+        end
+    end)
 
-if CLIENT then
+    local toolicon_racer = Material("unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez")
+    local toolicon_unit  = Material("unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", "ignorez")
 
-	-- net.Receive("UV_SendPursuitTech", function()
-	-- 	local car = net.ReadEntity()
-	-- 	local data = net.ReadTable()
+    function TOOL:DrawToolScreen(width, height)
+        local racer_s1 = self:GetClientInfo("racer_slot1")
+        local racer_s2 = self:GetClientInfo("racer_slot2")
+        local unit_s1  = self:GetClientInfo("unit_slot1")
+        local unit_s2  = self:GetClientInfo("unit_slot2")
 
-	-- 	if IsValid(car) then
-	-- 		car.PursuitTech = data
-	-- 	end
-	-- end)
+        surface.SetDrawColor(Color(0,0,0))
+        surface.DrawRect(0,0,width,height)
 
+        -- Racer top
+        surface.SetDrawColor(255,132,0,25)
+        surface.SetMaterial(toolicon_racer)
+        surface.DrawTexturedRect(width*0.3,height*0.1,width*0.4,height*0.4)
+        draw.SimpleText("#uv.uvpursuittech.tg.racer", "UVFont4BiggerItalic2", width*0.5, height*0.175, Color(255,132,0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("|", "UVFont4", width*0.5, height*0.3, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[racer_s1] and PursuitTechDefs[racer_s1].sname or racer_s1), "UVFont4", width*0.475, height*0.3, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[racer_s2] and PursuitTechDefs[racer_s2].sname or racer_s2), "UVFont4", width*0.525, height*0.3, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+        -- Unit bottom
+        surface.SetDrawColor(125,125,255,50)
+        surface.SetMaterial(toolicon_unit)
+        surface.DrawTexturedRect(width*0.3,height*0.6,width*0.4,height*0.4)
+        draw.SimpleText("#uv.uvpursuittech.tg.unit", "UVFont4BiggerItalic2", width*0.5, height*0.625, Color(125,125,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("|", "UVFont4", width*0.5, height*0.75, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[unit_s1] and PursuitTechDefs[unit_s1].sname or unit_s1), "UVFont4", width*0.475, height*0.75, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[unit_s2] and PursuitTechDefs[unit_s2].sname or unit_s2), "UVFont4", width*0.525, height*0.75, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
+
+    -- BuildCPanel
 	function TOOL.BuildCPanel(CPanel)
+		CPanel:ClearControls()
+		CPanel:AddControl("Label", {Text="#uv.uvpursuittech.desc"})
 
+		-- ===== Racer slots =====
+		CPanel:AddControl("Label",{Text=" "})
+		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.racer"})
+
+		local slotCombos = {}
+
+		local function CreateSlotCombo(varname, list)
+			local combo = vgui.Create("DComboBox")
+			combo:SetTextColor(Color(0,0,0))
+			local convarName = "uvpursuittech_"..varname
+			local currentValue = ConVarExists(convarName) and GetConVar(convarName):GetString() or ""
+
+			combo:AddChoice("", "") -- empty fallback
+			for _,v in ipairs(list) do
+				local info = PursuitTechDefs[v]
+				if info then
+					combo:AddChoice(info.name, v) -- localized display
+				else
+					combo:AddChoice(v, v)
+				end
+			end
+
+			-- Map current convar to its localized display name
+			local displayValue = currentValue
+			if PursuitTechDefs[currentValue] then
+				displayValue = PursuitTechDefs[currentValue].name
+			end
+			combo:SetValue(displayValue) -- display localized string
+
+			-- Tooltip for currently applied PT
+			if currentValue ~= "" and PursuitTechDefs[currentValue] then
+				combo:SetToolTip(PursuitTechDefs[currentValue].description or "")
+			end
+
+			combo.OnSelect = function(pnl, idx, val, data)
+				if data ~= "" then
+					RunConsoleCommand(convarName, data)
+					if PursuitTechDefs[data] then
+						combo:SetToolTip(PursuitTechDefs[data].description or "")
+					else
+						combo:SetToolTip("")
+					end
+				end
+			end
+
+			CPanel:AddItem(combo)
+			slotCombos[varname] = combo
+			return combo
+		end
+
+		local racerSlot1Combo = CreateSlotCombo("racer_slot1", pttable_racer)
+		local racerSlot2Combo = CreateSlotCombo("racer_slot2", pttable_racer)
+
+		-- ===== Unit slots =====
+		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.unit"})
+		local unitSlot1Combo = CreateSlotCombo("unit_slot1", pttable_unit)
+		local unitSlot2Combo = CreateSlotCombo("unit_slot2", pttable_unit)
+
+		-- ===== Settings PT picker =====
+		CPanel:AddControl("Label",{Text=" "})
+		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.settings"})
+
+		local settingsLabel = vgui.Create("DLabel")
+		settingsLabel:SetText("#uv.uvpursuittech.settings.desc")
+		settingsLabel:SetTextColor(Color(0,0,0))
+		settingsLabel:SetAutoStretchVertical(true)
+		CPanel:AddItem(settingsLabel)
+
+		-- ===== Preset =====
+		CPanel:AddControl("ComboBox", {
+			MenuButton = 1,
+			Folder = "pursuittech",
+			Options = { ["#preset.default"] = conVarsDefault },
+			CVars = table.GetKeys(conVarsDefault)
+		})
+
+		CPanel:AddControl("Label",{Text=" "})
+		
+		local ptPicker = vgui.Create("DComboBox")
+		ptPicker:SetText("#uv.uvpursuittech.select")
+		ptPicker:SetTextColor(Color(0,0,0))
+
+		local selectedPT = nil
+		for _, displayName in ipairs(all_pt_displaylist) do
+			local info = PursuitTechDefs[displayName]
+			local displayText = (info and info.name) or displayName
+			ptPicker:AddChoice(displayText, displayName) -- localized display
+		end
+		CPanel:AddItem(ptPicker)
+
+		-- ===== Parameter sliders panel =====
+		local paramsPanel = vgui.Create("DPanel")
+		paramsPanel.Paint = function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(0,0,0,255))
+		end
+		CPanel:AddItem(paramsPanel)
+
+		local sliders = {}
+		local function ClearSliders()
+			for _,s in ipairs(sliders) do if IsValid(s) then s:Remove() end end
+			sliders = {}
+		end
+
+		local function BuildSlidersForPT(displayName)
+			ClearSliders()
+			paramsPanel:Clear()
+			local info = PursuitTechDefs[displayName]
+			if not info then return end
+			selectedPT = displayName
+
+			local y = 0
+			local function AddSlider(param, dat, isUnit)
+				local cvKey = "uvpursuittech_" .. info.shortname.."_"..param .. (isUnit and "_unit" or "")
+				if not ConVarExists(cvKey) then
+					CreateClientConVar(cvKey, tostring(dat.default), true, false)
+				end
+				local slider = vgui.Create("DNumSlider", paramsPanel)
+				slider:SetPos(4, y)
+				slider:SetSize(paramsPanel:GetWide() - 8, 30)
+				slider:SetMin(dat.min)
+				slider:SetMax(dat.max)
+				slider:SetDecimals(dat.decimals)
+				slider:SetConVar(cvKey)
+				local cv = GetConVar(cvKey)
+				slider:SetValue(cv and cv:GetFloat() or dat.default)
+				slider:SetText("#uv.ptech." .. param)
+				slider:SetToolTip("#uv.ptech." .. param .. ".desc")
+				slider:SetFGColor(Color(0,0,0))
+				y = y + 34
+				table.insert(sliders, slider)
+			end
+
+			-- Racer sliders
+			if info.racer then
+				local lab = vgui.Create("DLabel", paramsPanel)
+				lab:SetText("#uv.uvpursuittech.slot.racer")
+				lab:SetPos(4,y); lab:SizeToContents(); y=y+20
+				lab:SetTextColor(Color(255,132,0))
+				table.insert(sliders, lab)
+				for param, dat in pairs(info.convars) do
+					AddSlider(param, dat, false)
+				end
+			end
+
+			-- Unit sliders
+			if info.unit then
+				if info.racer then
+					local sep = vgui.Create("DLabel", paramsPanel)
+					sep:SetText(" "); sep:SetPos(4,y); sep:SizeToContents(); y=y+18
+					sep:SetTextColor(Color(0,0,0))
+					table.insert(sliders, sep)
+				end
+				local lab2 = vgui.Create("DLabel", paramsPanel)
+				lab2:SetText("#uv.uvpursuittech.slot.unit"); lab2:SetPos(4,y); lab2:SizeToContents(); y=y+20
+				lab2:SetTextColor(Color(125,125,255))
+				table.insert(sliders, lab2)
+				for param, dat in pairs(info.convars) do
+					AddSlider(param, dat, true)
+				end
+			end
+
+			paramsPanel:SetTall(y + 4)
+		end
+
+		ptPicker.OnSelect = function(pnl,index,value,data)
+			BuildSlidersForPT(data)
+		end
+
+		-- ===== Refresh slot combos =====
+		local function RefreshSlots()
+			for varname, combo in pairs(slotCombos) do
+				local convar = "uvpursuittech_"..varname
+				if ConVarExists(convar) then
+					combo:SetValue(GetConVar(convar):GetString())
+				else
+					combo:SetValue("")
+				end
+			end
+		end
+
+		-- ===== Apply Settings button =====
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
+				notification.AddLegacy("#tool.uvpursuitbreaker.needsuperadmin", NOTIFY_ERROR, 5)
+				surface.PlaySound("buttons/button10.wav")
 				return
 			end
 
 			local convar_table = {}
+			for displayName, info in pairs(PursuitTechDefs) do
+				for param, dat in pairs(info.convars) do
+					local racerKey = "uvpursuittech_" .. info.shortname .. "_" .. param
+					if not ConVarExists(racerKey) then
+						CreateClientConVar(racerKey, tostring(dat.default), true, false)
+					end
+					if info.racer then
+						convar_table[racerKey] = GetConVar(racerKey):GetFloat()
+					end
 
-			convar_table['unitvehicle_pursuittech_ptduration'] = GetConVar("uvpursuittech_ptduration"):GetFloat()
-			convar_table['unitvehicle_pursuittech_esfduration'] = GetConVar("uvpursuittech_esfduration"):GetFloat()
-			convar_table['unitvehicle_pursuittech_esfpower'] = GetConVar("uvpursuittech_esfpower"):GetFloat()
-			convar_table['unitvehicle_pursuittech_esfdamage'] = GetConVar("uvpursuittech_esfdamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_esfcommanderdamage'] = GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_empdamage'] = GetConVar("uvpursuittech_empdamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_empforce'] = GetConVar("uvpursuittech_empforce"):GetFloat()
-
-			convar_table['unitvehicle_pursuittech_jammerduration'] = GetConVar("uvpursuittech_jammerduration"):GetFloat()
-			convar_table['unitvehicle_pursuittech_shockwavepower'] = GetConVar("uvpursuittech_shockwavepower"):GetFloat()
-			convar_table['unitvehicle_pursuittech_shockwavedamage'] = GetConVar("uvpursuittech_shockwavedamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_shockwavecommanderdamage'] = GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_spikestripduration'] = GetConVar("uvpursuittech_spikestripduration"):GetFloat()
-			convar_table['unitvehicle_pursuittech_stunminepower'] = GetConVar("uvpursuittech_stunminepower"):GetFloat()
-			convar_table['unitvehicle_pursuittech_stunminedamage'] = GetConVar("uvpursuittech_stunminedamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_stunminecommanderdamage'] = GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat()
-			convar_table['unitvehicle_pursuittech_juggernautduration'] = GetConVar("uvpursuittech_juggernautduration"):GetFloat()
-
-
-			-- RunConsoleCommand("unitvehicle_pursuittech_ptduration", GetConVar("uvpursuittech_ptduration"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_esfduration", GetConVar("uvpursuittech_esfduration"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_esfpower", GetConVar("uvpursuittech_esfpower"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_esfdamage", GetConVar("uvpursuittech_esfdamage"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_esfcommanderdamage", GetConVar("uvpursuittech_esfcommanderdamage"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_jammerduration", GetConVar("uvpursuittech_jammerduration"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavepower", GetConVar("uvpursuittech_shockwavepower"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavedamage", GetConVar("uvpursuittech_shockwavedamage"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_shockwavecommanderdamage", GetConVar("uvpursuittech_shockwavecommanderdamage"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_spikestripduration", GetConVar("uvpursuittech_spikestripduration"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_stunminepower", GetConVar("uvpursuittech_stunminepower"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_stunminedamage", GetConVar("uvpursuittech_stunminedamage"):GetFloat())
-			-- RunConsoleCommand("unitvehicle_pursuittech_stunminecommanderdamage", GetConVar("uvpursuittech_stunminecommanderdamage"):GetFloat())
-
-			
-
-			for _, v in pairs(pttable) do
-				local sanitized_pt = string.lower(string.gsub(v, " ", ""))
-				convar_table['unitvehicle_pursuittech_maxammo_'..sanitized_pt] = GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt()
-				convar_table['unitvehicle_pursuittech_cooldown_'..sanitized_pt] = GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt()
-				-- RunConsoleCommand("unitvehicle_pursuittech_maxammo_"..sanitized_pt, GetConVar("uvpursuittech_maxammo_"..sanitized_pt):GetInt())
-				-- RunConsoleCommand("unitvehicle_pursuittech_cooldown_"..sanitized_pt, GetConVar("uvpursuittech_cooldown_"..sanitized_pt):GetInt())
+					if info.unit then
+						local unitKey = racerKey .. "_unit"
+						if not ConVarExists(unitKey) then
+							CreateClientConVar(unitKey, tostring(dat.default), true, false)
+						end
+						convar_table[unitKey] = GetConVar(unitKey):GetFloat()
+					end
+				end
 			end
+
+			RefreshSlots()
 
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
-
-			notification.AddLegacy( "#tool.uvpursuittech.applied", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "#tool.uvpursuittech.applied" )
+			notification.AddLegacy("#tool.uvpursuittech.applied", NOTIFY_UNDO,5)
+			surface.PlaySound("buttons/button15.wav")
+			Msg("#tool.uvpursuittech.applied")
 		end
 		CPanel:AddItem(applysettings)
-	
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "pursuittech",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.emp.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.emp.desc",
-		})
-
-		local empdamage = vgui.Create("DNumSlider")
-		empdamage:SetMin(0)
-		empdamage:SetMax(1)
-		empdamage:SetDecimals(1)
-		empdamage:SetText("#uv.ptech.damage")
-		empdamage:SetTooltip("#uv.ptech.damage.desc")
-		empdamage:SetConVar("uvpursuittech_empdamage")
-		CPanel:AddItem(empdamage)
-
-		local empforce = vgui.Create("DNumSlider")
-		empforce:SetMin(0)
-		empforce:SetMax(1000)
-		empforce:SetDecimals(0)
-		empforce:SetText("#uv.ptech.force")
-		empforce:SetTooltip("#uv.ptech.force.desc")
-		empforce:SetConVar("uvpursuittech_empforce")
-		CPanel:AddItem(empforce)
-
-		local empcooldown = vgui.Create("DNumSlider")
-
-		empcooldown:SetMin(0)
-		empcooldown:SetMax(120)
-		empcooldown:SetDecimals(0)
-		empcooldown:SetText("#uv.ptech.cooldown")
-		empcooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		empcooldown:SetConVar("uvpursuittech_cooldown_emp")
-		CPanel:AddItem(empcooldown)
-
-		local empammo = vgui.Create("DNumSlider")
-
-		empammo:SetMin(0)
-		empammo:SetMax(120)
-		empammo:SetDecimals(0)
-		empammo:SetText("#uv.ptech.ammo")
-		empammo:SetTooltip("#uv.ptech.ammo.desc")
-		empammo:SetConVar("uvpursuittech_maxammo_emp")
-		CPanel:AddItem(empammo)
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.esf.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.esf.desc",
-		})
-
-		local esfduration = vgui.Create("DNumSlider")
-		esfduration:SetMin(1)
-		esfduration:SetMax(30)
-		esfduration:SetDecimals(0)
-		esfduration:SetText("#uv.ptech.duration")
-		esfduration:SetTooltip("#uv.ptech.duration.desc")
-		esfduration:SetConVar("uvpursuittech_esfduration")
-		CPanel:AddItem(esfduration)
-
-		local esfpower = vgui.Create("DNumSlider")
-		esfpower:SetMin(100000)
-		esfpower:SetMax(10000000)
-		esfpower:SetDecimals(0)
-		esfpower:SetText("#uv.ptech.power")
-		esfpower:SetTooltip("#uv.ptech.power.desc")
-		esfpower:SetConVar("uvpursuittech_esfpower")
-		CPanel:AddItem(esfpower)
-
-		local esfdamage = vgui.Create("DNumSlider")
-		esfdamage:SetMin(0)
-		esfdamage:SetMax(1)
-		esfdamage:SetDecimals(1)
-		esfdamage:SetText("#uv.ptech.damage")
-		esfdamage:SetTooltip("#uv.ptech.damage.desc")
-		esfdamage:SetConVar("uvpursuittech_esfdamage")
-		CPanel:AddItem(esfdamage)
-
-		local esfcommanderdamage = vgui.Create("DNumSlider")
-		esfcommanderdamage:SetMin(0)
-		esfcommanderdamage:SetMax(1)
-		esfcommanderdamage:SetDecimals(1)
-		esfcommanderdamage:SetText("#uv.ptech.damagecommander")
-		esfcommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
-		esfcommanderdamage:SetConVar("uvpursuittech_esfcommanderdamage")
-		CPanel:AddItem(esfcommanderdamage)
-
-		local esfcooldown = vgui.Create("DNumSlider")
-		esfcooldown:SetMin(0)
-		esfcooldown:SetMax(120)
-		esfcooldown:SetDecimals(0)
-		esfcooldown:SetText("#uv.ptech.cooldown")
-		esfcooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		esfcooldown:SetConVar("uvpursuittech_cooldown_esf")
-		CPanel:AddItem(esfcooldown)
-
-		local esfammo = vgui.Create("DNumSlider")
-		esfammo:SetMin(0)
-		esfammo:SetMax(120)
-		esfammo:SetDecimals(0)
-		esfammo:SetText("#uv.ptech.ammo")
-		esfammo:SetTooltip("#uv.ptech.ammo.desc")
-		esfammo:SetConVar("uvpursuittech_maxammo_esf")
-		CPanel:AddItem(esfammo)
-
-		esfduration.OnValueChanged = function(self, value)
-			local cooldown_value = GetConVar("uvpursuittech_cooldown_esf"):GetInt()
-
-			if value > cooldown_value then
-				esfcooldown:SetValue(value)
-			end
-
-			esfcooldown:SetMin(value)
-		end
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.jammer.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.jammer.desc",
-		})
-
-		local jammerduration = vgui.Create("DNumSlider")
-		jammerduration:SetMin(1)
-		jammerduration:SetMax(30)
-		jammerduration:SetDecimals(0)
-		jammerduration:SetText("#uv.ptech.duration")
-		jammerduration:SetTooltip("#uv.ptech.duration.desc")
-		jammerduration:SetConVar("uvpursuittech_jammerduration")
-		CPanel:AddItem(jammerduration)
-
-		local jammercooldown = vgui.Create("DNumSlider")
-		jammercooldown:SetMin(0)
-		jammercooldown:SetMax(120)
-		jammercooldown:SetDecimals(0)
-		jammercooldown:SetText("#uv.ptech.cooldown")
-		jammercooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		jammercooldown:SetConVar("uvpursuittech_cooldown_jammer")
-		CPanel:AddItem(jammercooldown)
-
-		local jammerammo = vgui.Create("DNumSlider")
-		jammerammo:SetMin(0)
-		jammerammo:SetMax(120)
-		jammerammo:SetDecimals(0)
-		jammerammo:SetText("#uv.ptech.ammo")
-		jammerammo:SetTooltip("#uv.ptech.ammo.desc")
-		jammerammo:SetConVar("uvpursuittech_maxammo_jammer")
-		CPanel:AddItem(jammerammo)
-
-		jammerduration.OnValueChanged = function(self, value)
-			local cooldown_value = GetConVar("uvpursuittech_cooldown_jammer"):GetInt()
-
-			if value > cooldown_value then
-				jammercooldown:SetValue(value)
-			end
-
-			jammercooldown:SetMin(value)
-		end
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.shockwave.title",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.shockwave.desc",
-		})
-
-		local shockwavepower = vgui.Create("DNumSlider")
-		shockwavepower:SetMin(100000)
-		shockwavepower:SetMax(10000000)
-		shockwavepower:SetDecimals(0)
-		shockwavepower:SetText("#uv.ptech.power")
-		shockwavepower:SetTooltip("#uv.ptech.power.desc")
-		shockwavepower:SetConVar("uvpursuittech_shockwavepower")
-		CPanel:AddItem(shockwavepower)
-
-		local shockwavedamage = vgui.Create("DNumSlider")
-		shockwavedamage:SetMin(0)
-		shockwavedamage:SetMax(1)
-		shockwavedamage:SetDecimals(1)
-		shockwavedamage:SetText("#uv.ptech.damage")
-		shockwavedamage:SetTooltip("#uv.ptech.damage.desc")
-		shockwavedamage:SetConVar("uvpursuittech_shockwavedamage")
-		CPanel:AddItem(shockwavedamage)
-
-		local shockwavecommanderdamage = vgui.Create("DNumSlider")
-		shockwavecommanderdamage:SetMin(0)
-		shockwavecommanderdamage:SetMax(1)
-		shockwavecommanderdamage:SetDecimals(1)
-		shockwavecommanderdamage:SetText("#uv.ptech.damagecommander")
-		shockwavecommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
-		shockwavecommanderdamage:SetConVar("uvpursuittech_shockwavecommanderdamage")
-		CPanel:AddItem(shockwavecommanderdamage)
-
-		local shockwavecooldown = vgui.Create("DNumSlider")
-		shockwavecooldown:SetMin(0)
-		shockwavecooldown:SetMax(120)
-		shockwavecooldown:SetDecimals(0)
-		shockwavecooldown:SetText("#uv.ptech.cooldown")
-		shockwavecooldown:SetText("#uv.ptech.cooldown")
-		shockwavecooldown:SetConVar("uvpursuittech_cooldown_shockwave")
-		CPanel:AddItem(shockwavecooldown)
-
-		local shockwaveammo = vgui.Create("DNumSlider")
-		shockwaveammo:SetMin(0)
-		shockwaveammo:SetMax(120)
-		shockwaveammo:SetDecimals(0)
-		shockwaveammo:SetText("#uv.ptech.ammo")
-		shockwaveammo:SetTooltip("#uv.ptech.ammo.desc")
-		shockwaveammo:SetConVar("uvpursuittech_maxammo_shockwave")
-		CPanel:AddItem(shockwaveammo)
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.spikes.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.spikes.desc",
-		})
-
-		local spikestripduration = vgui.Create("DNumSlider")
-		spikestripduration:SetMin(5)
-		spikestripduration:SetMax(120)
-		spikestripduration:SetDecimals(0)
-		spikestripduration:SetText("#uv.ptech.duration")
-		spikestripduration:SetTooltip("#uv.ptech.duration.desc")
-		spikestripduration:SetConVar("uvpursuittech_spikestripduration")
-		CPanel:AddItem(spikestripduration)
-
-		local spikestripcooldown = vgui.Create("DNumSlider")
-		spikestripcooldown:SetMin(0)
-		spikestripcooldown:SetMax(120)
-		spikestripcooldown:SetDecimals(0)
-		spikestripcooldown:SetText("#uv.ptech.cooldown")
-		spikestripcooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		spikestripcooldown:SetConVar("uvpursuittech_cooldown_spikestrip")
-		CPanel:AddItem(spikestripcooldown)
-
-		local spikestripammo = vgui.Create("DNumSlider")
-		spikestripammo:SetMin(0)
-		spikestripammo:SetMax(120)
-		spikestripammo:SetDecimals(0)
-		spikestripammo:SetText("#uv.ptech.ammo")
-		spikestripammo:SetTooltip("#uv.ptech.ammo.desc")
-		spikestripammo:SetConVar("uvpursuittech_maxammo_spikestrip")
-		CPanel:AddItem(spikestripammo)
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.stunmine.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.stunmine.desc",
-		})
-
-		local stunminepower = vgui.Create("DNumSlider")
-		stunminepower:SetMin(100000)
-		stunminepower:SetMax(10000000)
-		stunminepower:SetDecimals(0)
-		stunminepower:SetText("#uv.ptech.power")
-		stunminepower:SetTooltip("#uv.ptech.power.desc")
-		stunminepower:SetConVar("uvpursuittech_stunminepower")
-		CPanel:AddItem(stunminepower)
-
-		local stunminedamage = vgui.Create("DNumSlider")
-		stunminedamage:SetMin(0)
-		stunminedamage:SetMax(1)
-		stunminedamage:SetDecimals(1)
-		stunminedamage:SetText("#uv.ptech.damage")
-		stunminedamage:SetTooltip("#uv.ptech.damage.desc")
-		stunminedamage:SetConVar("uvpursuittech_stunminedamage")
-		CPanel:AddItem(stunminedamage)
-
-		local stunminecommanderdamage = vgui.Create("DNumSlider")
-		stunminecommanderdamage:SetMin(0)
-		stunminecommanderdamage:SetMax(1)
-		stunminecommanderdamage:SetDecimals(1)
-		stunminecommanderdamage:SetText("#uv.ptech.damagecommander")
-		stunminecommanderdamage:SetTooltip("#uv.ptech.damagecommander.desc")
-		stunminecommanderdamage:SetConVar("uvpursuittech_stunminecommanderdamage")
-		CPanel:AddItem(stunminecommanderdamage)
-
-		local stunminecooldown = vgui.Create("DNumSlider")
-		stunminecooldown:SetMin(0)
-		stunminecooldown:SetMax(120)
-		stunminecooldown:SetDecimals(0)
-		stunminecooldown:SetText("#uv.ptech.cooldown")
-		stunminecooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		stunminecooldown:SetConVar("uvpursuittech_cooldown_stunmine")
-		CPanel:AddItem(stunminecooldown)
-
-		local stunmineammo = vgui.Create("DNumSlider")
-		stunmineammo:SetMin(0)
-		stunmineammo:SetMax(120)
-		stunmineammo:SetDecimals(0)
-		stunmineammo:SetText("#uv.ptech.ammo")
-		stunmineammo:SetTooltip("#uv.ptech.ammo.desc")
-		stunmineammo:SetConVar("uvpursuittech_maxammo_stunmine")
-		CPanel:AddItem(stunmineammo)
-		
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.repairkit.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.repairkit.desc",
-		})
-
-		local repairkitcooldown = vgui.Create("DNumSlider")
-		repairkitcooldown:SetMin(0)
-		repairkitcooldown:SetMax(120)
-		repairkitcooldown:SetDecimals(0)
-		repairkitcooldown:SetText("#uv.ptech.cooldown")
-		repairkitcooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		repairkitcooldown:SetConVar("uvpursuittech_cooldown_repairkit")
-		CPanel:AddItem(repairkitcooldown)
-
-		local repairkitammo = vgui.Create("DNumSlider")
-		repairkitammo:SetMin(0)
-		repairkitammo:SetMax(120)
-		repairkitammo:SetDecimals(0)
-		repairkitammo:SetText("#uv.ptech.ammo")
-		repairkitammo:SetTooltip("#uv.ptech.ammo.desc")
-		repairkitammo:SetConVar("uvpursuittech_maxammo_repairkit")
-		CPanel:AddItem(repairkitammo)
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.powerplay.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.powerplay.desc",
-		})
-
-		local powerplaycooldown = vgui.Create("DNumSlider")
-		powerplaycooldown:SetMin(0)
-		powerplaycooldown:SetMax(120)
-		powerplaycooldown:SetDecimals(0)
-		powerplaycooldown:SetText("#uv.ptech.cooldown")
-		powerplaycooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		powerplaycooldown:SetConVar("uvpursuittech_cooldown_powerplay")
-		CPanel:AddItem(powerplaycooldown)
-
-		local powerplayammo = vgui.Create("DNumSlider")
-		powerplayammo:SetMin(0)
-		powerplayammo:SetMax(120)
-		powerplayammo:SetDecimals(0)
-		powerplayammo:SetText("#uv.ptech.ammo")
-		powerplayammo:SetTooltip("#uv.ptech.ammo.desc")
-		powerplayammo:SetConVar("uvpursuittech_maxammo_powerplay")
-		CPanel:AddItem(powerplayammo)
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.juggernaut.title",
-		})
-
-		CPanel:AddControl("Label", {
-			Text = "#uv.ptech.juggernaut.desc",
-		})
-
-		local juggernautduration = vgui.Create("DNumSlider")
-		juggernautduration:SetMin(1)
-		juggernautduration:SetMax(30)
-		juggernautduration:SetDecimals(0)
-		juggernautduration:SetText("#uv.ptech.duration")
-		juggernautduration:SetTooltip("#uv.ptech.duration.desc")
-		juggernautduration:SetConVar("uvpursuittech_juggernautduration")
-		CPanel:AddItem(juggernautduration)
-
-		local juggernautcooldown = vgui.Create("DNumSlider")
-		juggernautcooldown:SetMin(0)
-		juggernautcooldown:SetMax(120)
-		juggernautcooldown:SetDecimals(0)
-		juggernautcooldown:SetText("#uv.ptech.cooldown")
-		juggernautcooldown:SetTooltip("#uv.ptech.cooldown.desc")
-		juggernautcooldown:SetConVar("uvpursuittech_cooldown_juggernaut")
-		CPanel:AddItem(juggernautcooldown)
-
-		local juggernautammo = vgui.Create("DNumSlider")
-		juggernautammo:SetMin(0)
-		juggernautammo:SetMax(120)
-		juggernautammo:SetDecimals(0)
-		juggernautammo:SetText("#uv.ptech.ammo")
-		juggernautammo:SetTooltip("#uv.ptech.ammo.desc")
-		juggernautammo:SetConVar("uvpursuittech_maxammo_juggernaut")
-		CPanel:AddItem(juggernautammo)
 	end
-	
-	local toolicon = Material( "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", "ignorez" )
+end -- CLIENT
 
-	function TOOL:DrawToolScreen(width, height)
+-- ===================== Shared: LeftClick / RightClick ===============================
+function TOOL:LeftClick(trace)
+    local car = trace.Entity
+    if not IsValid(car) then return false end
+    if not IsSupportedVehicle(car) then return false end
+    if CLIENT then return false end
 
-		local ptselected = self:GetClientInfo("pursuittech")
-		local slot = self:GetClientNumber("slot")
-		local PT_Replacement_Strings = {
-			['ESF'] = '#uv.ptech.esf.short',
-			['Jammer'] = '#uv.ptech.jammer',
-			['Shockwave'] = '#uv.ptech.shockwave',
-			['Stunmine'] = '#uv.ptech.stunmine',
-			['Spikestrip'] = '#uv.ptech.spikes',
-			['Repair Kit'] = '#uv.ptech.repairkit',
-			['Power Play'] = '#uv.ptech.powerplay',
-			['EMP'] = '#uv.ptech.emp.short',
-			['Juggernaut'] = '#uv.ptech.juggernaut'
-		}
+    local isUnit = car.UnitVehicle == true
+    local slotNum = self:GetClientNumber("slot") or 1
 
-		surface.SetDrawColor( Color( 0, 0, 0) )
-		surface.DrawRect( 0, 0, width, height )
-	
-		surface.SetDrawColor( 255, 132, 0, 25)
-		surface.SetMaterial( toolicon )
-		surface.DrawTexturedRect( 0, 0, width, height )
-		
-		draw.SimpleText((PT_Replacement_Strings[ptselected] or ptselected), "DermaLarge", width / 2, height / 2, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( slot == 1 and "#uv.ptech.slot.left" or "#uv.ptech.slot.right", "DermaLarge", width / 2, height / 4, Color( 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	
-	end
+    -- Choose correct slot convar based on vehicle type
+    local ptSlot1, ptSlot2
+    if car.UnitVehicle then
+        ptSlot1 = self:GetClientInfo("unit_slot1") or ""
+        ptSlot2 = self:GetClientInfo("unit_slot2") or ""
+    else
+        ptSlot1 = self:GetClientInfo("racer_slot1") or ""
+        ptSlot2 = self:GetClientInfo("racer_slot2") or ""
+    end
 
+    -- If both slots empty or invalid, remove PursuitTech entirely
+    -- if (ptSlot1 == "" or not PursuitTechDefs[ptSlot1]) and (ptSlot2 == "" or not PursuitTechDefs[ptSlot2]) then
+        -- car.PursuitTech = nil
+        -- UVReplicatePT(car, 1)
+        -- UVReplicatePT(car, 2)
+        -- return true
+    -- end
+
+    if not car.PursuitTech then car.PursuitTech = {} end
+
+    for slot = 1, 2 do
+        local ptselected = slot == 1 and ptSlot1 or ptSlot2
+
+        if ptselected == "" or not PursuitTechDefs[ptselected] then
+            car.PursuitTech[slot] = nil
+        else
+            local sanitized = string.lower(ptselected:gsub(" ", ""))
+            local ammo_cv = (car.UnitVehicle and "uvpursuittech_"..sanitized.."_maxammo_unit" or "uvpursuittech_"..sanitized.."_maxammo")
+            local cooldown_cv = (car.UnitVehicle and "uvpursuittech_"..sanitized.."_cooldown_unit" or "uvpursuittech_"..sanitized.."_cooldown")
+
+            car.PursuitTech[slot] = {
+                Tech     = ptselected,
+                Ammo     = ConVarExists and ConVarExists(ammo_cv) and GetConVar(ammo_cv):GetInt() or math.huge,
+                Cooldown = ConVarExists and ConVarExists(cooldown_cv) and GetConVar(cooldown_cv):GetInt() or 30,
+                LastUsed = -math.huge,
+                Upgraded = false
+            }
+        end
+    end
+
+    -- freeze effect
+    local eff = EffectData()
+    eff:SetEntity(car)
+    util.Effect("phys_freeze", eff)
+
+    if not table.HasValue(UVRVWithPursuitTech, car) then
+        table.insert(UVRVWithPursuitTech, car)
+        car:CallOnRemove("UVRVWithPursuitTechRemoved", function(ent)
+            if table.HasValue(UVRVWithPursuitTech, ent) then table.RemoveByValue(UVRVWithPursuitTech, ent) end
+        end)
+    end
+
+    -- replicate both slots
+    UVReplicatePT(car, 1)
+    UVReplicatePT(car, 2)
+
+    return true
+end
+
+-- RightClick removal (double-click 1s)
+
+function TOOL:RightClick(trace)
+    return false
+end
+
+function TOOL:Reload(trace)
+    return false
 end

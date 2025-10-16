@@ -193,7 +193,9 @@ if SERVER then
 		
 		if vehicle.PursuitTech then
 			for k, v in pairs(vehicle.PursuitTech) do
-				local max_ammo = GetConVar('unitvehicle_'..((vehicle.UnitVehicle and 'unitpursuittech') or 'pursuittech')..'_maxammo_'..string.lower(string.gsub(v.Tech, " ", ""))):GetInt()
+				-- local max_ammo = GetConVar('unitvehicle_'..((vehicle.UnitVehicle and 'unitpursuittech') or 'pursuittech')..'_maxammo_'..string.lower(string.gsub(v.Tech, " ", ""))):GetInt()
+				local techShort = string.lower(string.gsub(v.Tech, " ", ""))
+				local max_ammo = GetConVar("uvpursuittech_" .. techShort .. "_maxammo" .. (vehicle.UnitVehicle and "_unit" or "")):GetInt()
 				if v.Ammo < max_ammo then
 					ptrefilled = true
 					v.Ammo = max_ammo
