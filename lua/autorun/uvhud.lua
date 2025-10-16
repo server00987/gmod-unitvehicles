@@ -908,11 +908,11 @@ local function uv_general()
             local y = h * 0.6
             local bw, bh = w * 0.06, h * 0.06
             local x = w * xOffset
-            local keyX = w * (0.84 + ((i - 1) * 0.0675))
-            local textX = w * (0.84 + ((i - 1) * 0.0675))
+            local keyX = w * (0.8425 + ((i - 1) * 0.0625))
+            local textX = w * (0.8425 + ((i - 1) * 0.0625))
             local keyY = h * 0.58
 
-            local bgColor = Color(0, 0, 0, 175)
+            local bgColor = Color(0, 0, 0, 225)
             local fillOverlayColor = nil
             local fillFrac = 0
             local showFillOverlay = false
@@ -962,7 +962,7 @@ local function uv_general()
 				else
 					surface.SetMaterial(UVMaterials["PT_RIGHT_BG"])
 				end
-				surface.SetDrawColor(Color(255,255,255))
+				surface.SetDrawColor(Color(0,0,0,125))
                 surface.DrawTexturedRect(x, y, bw, bh)
 
 				if i == 1 then
@@ -979,7 +979,8 @@ local function uv_general()
 					if i == 1 then
 						surface.SetMaterial(UVMaterials["PT_LEFT"])
 						local T = math.Clamp(fillFrac * bw, 0, bw)
-						surface.DrawTexturedRectUV( x + (bw - T), y, T, bh, 1 - (T / bw), 0, 1, 1 )
+						-- surface.DrawTexturedRectUV( x + (bw - T), y, T, bh, 1 - (T / bw), 0, 1, 1 )
+						surface.DrawTexturedRectUV( x, y, T, bh, 0, 0, T / bw, 1 )
 					else
 						surface.SetMaterial(UVMaterials["PT_RIGHT"])
 						local T = math.Clamp(fillFrac * bw, 0, bw)

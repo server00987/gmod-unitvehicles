@@ -1,12 +1,20 @@
 <------- October 15 ------->
 [h1]New Features[/h1]
 [b]Pursuit Tech[/b]
+Revamped the Pursuit Tech tool from scratch:
+[list]
+	[*]Merged both "Racer" and "Unit" tools into one
+	[*]Remade the utility of the tool more simple - choose the PTs in the Sandbox menu, then left-click your vehicle of choice
+	[*]Settings only appear for admins; drop-down menus only display settings for the chosen PT, not all at once
+[/list]
+
 Added three new Pursuit Techs:
 [list]
 	[*][b]Racers - Powerplay[/b]: Activating Powerplay triggers the nearest Pursuit Breaker to the driver, forcing it to collapse
 	[*][b]Racers - Juggernaut[/b]: Juggernaut massively increases the ramming power of your vehicle, making it easier to smash through props and blocking vehicles
 	[*][b]Racers & Units - EMP[/b]: The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems
 	[*][b]Units - Shock Ram[/b]: The Shock Ram creates a sonic shock-wave blast from the front of the vehicle that pushes away and damages any cars caught by it
+	[*][b]Units - GPS Dart[/b]: The GPS Dart is a vehicle tagging system launched from the front of the vehicle that tags, tracks, and locates a fleeing vehicle
 [/list]
 
 [b]Pursuit[/b]
@@ -17,7 +25,7 @@ Added three new Pursuit Techs:
 
 [b]Chatter Profiles[/b]
 [list]
-	[*]Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocityt, flatgrass, goldencity, southbeach, southside, gm_palm_city, gm_tri_polis & gm_wangan
+	[*]Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocity, flatgrass, goldencity, southbeach, southside, gm_palm_city, gm_tri_polis & gm_wangan
 	[*]Replaced "cop3" with a new voice - Welcome aux!
 	[*]Added "cop5"
 [/list]
@@ -35,6 +43,7 @@ Added three new Pursuit Techs:
 
 [b]UI[/b]
 [list]
+	[*]Updated the appearance of the Pursuit Tech UI
 	[*]Fixed some elements from the Original UI
 	[*]When using the World UI in select languages, the font will be changed due to character errors
 	[*]Tweaked the size, position and BG opacity on the general Center Notification

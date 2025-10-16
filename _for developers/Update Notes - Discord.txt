@@ -1,18 +1,24 @@
 <------- October 15 ------->
 # New Features
 **Pursuit Tech**
+Revamped the Pursuit Tech tool from scratch:
+- Merged both "Racer" and "Unit" tools into one
+- Remade the utility of the tool more simple - choose the PTs in the Sandbox menu, then left-click your vehicle of choice
+- Settings only appear for admins; drop-down menus only display settings for the chosen PT, not all at once
+
 Added three new Pursuit Techs:
 - *Racers - Power Play*: Activating Powerplay triggers the nearest Pursuit Breaker to the driver, forcing it to collapse
 - *Racers - Juggernaut*: Juggernaut massively increases the ramming power of your vehicle, making it easier to smash through props and blocking vehicles
 - *Racers & Units - EMP*: The Electromagnetic Pulse (EMP) targets and locks onto cars in front before delivering a huge electrostatic pulse that temporarily shuts down their electrical systems
 - *Units - Shock Ram*: The Shock Ram creates a sonic shock-wave blast from the front of the vehicle that pushes away and damages any cars caught by it
+- *Units - GPS Dart*: The GPS Dart is a vehicle tagging system launched from the front of the vehicle that tags, tracks, and locates a fleeing vehicle
 
 **Pursuit**
 - Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
 - Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
 
 **Chatter Profiles**
-- Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocityt, flatgrass, goldencity, southbeach, southside, gm\_palm\_city, gm\_tri\_polis & gm\_wangan
+- Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocity, flatgrass, goldencity, southbeach, southside, gm\_palm\_city, gm\_tri\_polis & gm\_wangan
 - Replaced "cop3" with a new voice - Welcome aux!
 - Added "cop5"
 
@@ -24,6 +30,7 @@ Added three new Pursuit Techs:
 - Fixed that the bottom Pursuit UI elements were moved up when the DNF Timer was active while the player was a Unit
 
 **UI**
+- Updated the appearance of the Pursuit Tech UI
 - Fixed some elements from the Original UI
 - When using the World UI in select languages, the font will be changed due to character errors
 - Tweaked the size, position and BG opacity on the general Center Notification

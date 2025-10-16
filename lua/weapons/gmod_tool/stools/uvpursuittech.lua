@@ -307,10 +307,10 @@ if CLIENT then
         surface.SetDrawColor(125,125,255,50)
         surface.SetMaterial(toolicon_unit)
         surface.DrawTexturedRect(width*0.3,height*0.6,width*0.4,height*0.4)
-        draw.SimpleText("#uv.uvpursuittech.tg.unit", "UVFont4BiggerItalic2", width*0.5, height*0.625, Color(125,125,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        draw.SimpleText("|", "UVFont4", width*0.5, height*0.75, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        draw.SimpleText((PursuitTechDefs[unit_s1] and PursuitTechDefs[unit_s1].sname or unit_s1), "UVFont4", width*0.475, height*0.75, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-        draw.SimpleText((PursuitTechDefs[unit_s2] and PursuitTechDefs[unit_s2].sname or unit_s2), "UVFont4", width*0.525, height*0.75, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText("#uv.uvpursuittech.tg.unit", "UVFont4BiggerItalic2", width*0.5, height*0.675, Color(125,125,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("|", "UVFont4", width*0.5, height*0.8, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[unit_s1] and PursuitTechDefs[unit_s1].sname or unit_s1), "UVFont4", width*0.475, height*0.8, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+        draw.SimpleText((PursuitTechDefs[unit_s2] and PursuitTechDefs[unit_s2].sname or unit_s2), "UVFont4", width*0.525, height*0.8, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 
     -- BuildCPanel
