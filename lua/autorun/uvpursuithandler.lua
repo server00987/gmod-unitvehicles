@@ -1081,6 +1081,7 @@ if SERVER then
 	UVUTimeTillNextHeatEnabled = GetConVar('unitvehicle_unit_timetillnextheatenabled')
 
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE})
+	UVPBSpawnCondition = CreateConVar("unitvehicle_pursuitbreaker_spawncondition", 2, {FCVAR_ARCHIVE}, "\n1) Never \n2) When driving \n3) Always")
 	UVPBCooldown = CreateConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, {FCVAR_ARCHIVE})
 
 	UVRBMax = CreateConVar("unitvehicle_roadblock_maxrb", 1, {FCVAR_ARCHIVE})
@@ -1275,9 +1276,6 @@ if SERVER then
 		if not UVEnemyEscaping and UVBountyTimerProgress >= botimeout then
 			UVBounty = UVBounty+UVBountyTime
 			UVBountyTimer = CurTime()
-			if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
-				UVAutoLoadPursuitBreaker()
-			end
 		end
 
 		local ltimeout = (UVCooldownTimer+5)

@@ -4,6 +4,7 @@ TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
 TOOL.ClientConVar["maxpb"] = 2
+TOOL.ClientConVar["spawncondition"] = 2
 TOOL.ClientConVar["pbcooldown"] = 60
 
 local conVarsDefault = TOOL:BuildConVarList()
@@ -211,6 +212,7 @@ if CLIENT then
 			local convar_table = {}
 
 			convar_table['unitvehicle_pursuitbreaker_maxpb'] = GetConVar("uvpursuitbreaker_maxpb"):GetInt()
+			convar_table['unitvehicle_pursuitbreaker_spawncondition'] = GetConVar("uvpursuitbreaker_spawncondition"):GetInt()
 			convar_table['unitvehicle_pursuitbreaker_pbcooldown'] = GetConVar("uvpursuitbreaker_pbcooldown"):GetInt()
 			-- RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
 			-- RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
@@ -328,6 +330,15 @@ if CLIENT then
 		MaxPB:SetDecimals( 0 )
 		MaxPB:SetConVar( "uvpursuitbreaker_maxpb" )
 		CPanel:AddItem(MaxPB)
+
+		local spawncondition = vgui.Create("DNumSlider")
+		spawncondition:SetText("#tool.uvpursuitbreaker.settings.spawncondition")
+		spawncondition:SetTooltip("#tool.uvpursuitbreaker.settings.spawncondition.desc")
+		spawncondition:SetMinMax(1, 3)
+		spawncondition:SetDecimals(0)
+		spawncondition:SetValue(GetConVar("uvpursuitbreaker_spawncondition"))
+		spawncondition:SetConVar("uvpursuitbreaker_spawncondition")
+		CPanel:AddItem(spawncondition)
 
 		local PBCooldown = vgui.Create( "DNumSlider", CPanel )
 		PBCooldown:SetText( "#tool.uvpursuitbreaker.settings.cooldown" )

@@ -42,6 +42,14 @@ if SERVER then
                 end
             end
 
+            if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
+				if UVPBSpawnCondition:GetInt() == 3 then
+                    UVAutoLoadPursuitBreaker()
+                elseif UVPBSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
+                    UVAutoLoadPursuitBreaker()
+                end
+			end
+
             UVCheckForSpeeders()
             UVTimeToCheckForPotentialSuspects = CurTime()
         end
