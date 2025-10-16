@@ -327,39 +327,52 @@ if CLIENT then
 		local function CreateSlotCombo(varname, list)
 			local combo = vgui.Create("DComboBox")
 			combo:SetTextColor(Color(0,0,0))
-			local convarName = "uvpursuittech_"..varname
+
+			local convarName = "uvpursuittech_" .. varname
 			local currentValue = ConVarExists(convarName) and GetConVar(convarName):GetString() or ""
 
-			combo:AddChoice("", "") -- empty fallback
-			for _,v in ipairs(list) do
+			-- Visible "None" option, true blank data, no tooltip
+			local noneLabel = "#uv.none"
+			combo:AddChoice(noneLabel, "")
+
+			-- Add all Pursuit Tech options
+			for _, v in ipairs(list) do
 				local info = PursuitTechDefs[v]
 				if info then
-					combo:AddChoice(info.name, v) -- localized display
+					combo:AddChoice(info.name, v)
 				else
 					combo:AddChoice(v, v)
 				end
 			end
 
-			-- Map current convar to its localized display name
-			local displayValue = currentValue
-			if PursuitTechDefs[currentValue] then
+			-- Map current convar to display value
+			local displayValue = noneLabel
+			if currentValue ~= "" and PursuitTechDefs[currentValue] then
 				displayValue = PursuitTechDefs[currentValue].name
 			end
-			combo:SetValue(displayValue) -- display localized string
+			combo:SetValue(displayValue)
 
-			-- Tooltip for currently applied PT
+			-- Tooltip for current value (skip for None)
 			if currentValue ~= "" and PursuitTechDefs[currentValue] then
 				combo:SetToolTip(PursuitTechDefs[currentValue].description or "")
+			else
+				combo:SetToolTip("")
 			end
 
+			-- Handle selection
 			combo.OnSelect = function(pnl, idx, val, data)
-				if data ~= "" then
+				if data and data ~= "" then
 					RunConsoleCommand(convarName, data)
 					if PursuitTechDefs[data] then
 						combo:SetToolTip(PursuitTechDefs[data].description or "")
 					else
 						combo:SetToolTip("")
 					end
+				else
+					-- None selected
+					RunConsoleCommand(convarName, "")
+					combo:SetToolTip("")       -- no tooltip
+					combo:SetValue(noneLabel)  -- display label
 				end
 			end
 
@@ -564,10 +577,19 @@ function TOOL:LeftClick(trace)
 	for slot = 1, 2 do
 		local ptselected = slot == 1 and ptSlot1 or ptSlot2
 
+		-- Skip if blank or invalid
 		if ptselected == "" or not PursuitTechDefs[ptselected] then
 			car.PursuitTech[slot] = nil
 			UVReplicatePT(car, slot)
 		else
+			-- Skip second slot if same as first
+			if slot == 2 and ptselected == ptSlot1 then
+				car.PursuitTech[slot] = nil
+				UVReplicatePT(car, slot)
+				continue  -- skip the rest of the loop for slot 2
+			end
+
+			-- Apply PT normally
 			local info = PursuitTechDefs[ptselected]
 			local short = (info and info.shortname) or string.lower(ptselected:gsub(" ", ""))
 
