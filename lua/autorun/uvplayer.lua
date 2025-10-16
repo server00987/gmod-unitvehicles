@@ -1172,6 +1172,7 @@ if SERVER then
 
                     car:StopSound("gadgets/emp/lockfromloop.wav")
                     target:StopSound("gadgets/emp/lockonloop.wav")
+                    target:EmitSound("gadgets/emp/miss.wav")
 
                     return false
                 end

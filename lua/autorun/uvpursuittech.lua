@@ -318,8 +318,6 @@ UV_PT.EMP = {
         UVEMPLockingTarget = nil
         UVEMPLockingSource = nil
 
-        target:EmitSound( "gadgets/emp/miss.wav", 75, 100, 1, CHAN_STATIC )
-
         UV_UI.general.events.CenterNotification({
             text = userString,
         })
