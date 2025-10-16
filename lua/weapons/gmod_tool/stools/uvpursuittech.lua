@@ -187,10 +187,10 @@ table.sort(all_pt_displaylist)
 -- ===================== Client ConVars ===============================
 TOOL.ClientConVar = TOOL.ClientConVar or {}
 -- slot defaults
-TOOL.ClientConVar["racer_slot1"] = "EMP"
-TOOL.ClientConVar["racer_slot2"] = "ESF"
-TOOL.ClientConVar["unit_slot1"]  = "EMP"
-TOOL.ClientConVar["unit_slot2"]  = "ESF"
+TOOL.ClientConVar["racer_slot1"] = ""
+TOOL.ClientConVar["racer_slot2"] = ""
+TOOL.ClientConVar["unit_slot1"]  = ""
+TOOL.ClientConVar["unit_slot2"]  = ""
 
 -- generate per-PT convars
 for displayName, info in pairs(PursuitTechDefs) do

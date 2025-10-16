@@ -879,13 +879,13 @@ if SERVER then
 						end
 					end
 					
-					local ammo_count = GetConVar("unitvehicle_pursuittech_maxammo_"..sanitized_pt):GetInt()
+					local ammo_count = GetConVar("uvpursuittech_" .. sanitized_pt .. "_maxammo"):GetInt()
 					ammo_count = ammo_count > 0 and ammo_count or math.huge
 					
 					self.v.PursuitTech[i] = {
 						Tech = selected_pt,
 						Ammo = ammo_count,
-						Cooldown = GetConVar("unitvehicle_pursuittech_cooldown_"..sanitized_pt):GetInt(),
+						Cooldown = GetConVar("uvpursuittech_" .. sanitized_pt .. "_cooldown"):GetInt(),
 						LastUsed = -math.huge,
 						Upgraded = false
 					}
