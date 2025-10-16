@@ -1,0 +1,19 @@
+VertexLitGeneric
+{
+	$basetexture		"models\thecrewheli\HeliBody.vtf"
+
+	
+	$envmap				env_cubemap
+	$envmapsaturation	0.4
+	$envmaptint 		"[.4 .4 .4]"
+   "$color2"    "[1 1 1]"
+
+    Proxies
+    {
+        Equals
+        {
+            srcVar1                $color2
+            resultVar            $color
+        }
+    }
+}

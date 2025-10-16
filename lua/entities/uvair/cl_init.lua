@@ -57,6 +57,13 @@ function ENT:Initialize()
 		self.PortPos = Vector(-102.39,76.75,50.76)
 		self.StarboardPos = Vector(-102.39,-76.75,50.76)
 		self.SternPos = Vector(-472.19,0,50.45)
+	elseif self.Model == "models/thecrewheli/thecrewheli.mdl" then
+		self.SpotlightPos = Vector(126.11,-0.04,16.96)
+		self.StrobePos = Vector(85.3,-39.01,47.7)
+		self.StrobePos2 = Vector(85.3,39.01,47.7)
+		self.PortPos = Vector(-284.61,-62.39,99.24)
+		self.StarboardPos = Vector(-404.87,-0.01,170.23)
+		self.SternPos = Vector(-284.61,62.39,99.24)
 	end
 
 	self.RotorSoundPatch = "<chopper/mwheli.wav"
