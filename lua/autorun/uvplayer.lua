@@ -695,47 +695,42 @@ if SERVER then
         
     end)
 
-    function UVReplicatePT( car, slot )
-        if not car.PursuitTech then return end
+	function UVReplicatePT(car, slot)
+		-- If the car or slot is invalid, stop
+		if not IsValid(car) then return end
 
-        local ptSlot = car.PursuitTech[slot]
+		-- If the entire PursuitTech table is gone, tell clients to clear everything
+		if not car.PursuitTech then
+			net.Start("UV_SendPursuitTech")
+				net.WriteEntity(car)
+				net.WriteUInt(slot or 0, 2)  -- slot is still sent but unused on clear
+				net.WriteBool(false)          -- false = not active
+			net.Broadcast()
+			return
+		end
 
-        if ptSlot then
-            local isPtActive = false 
+		local ptSlot = car.PursuitTech[slot]
 
-            if ptSlot.Tech then
-                isPtActive = true
-            end
-
-            net.Start( "UV_SendPursuitTech" )
-
-            net.WriteEntity( car )
-            net.WriteUInt( slot, 2 )
-            net.WriteBool( isPtActive )
-
-            if isPtActive then
-                net.WriteString( ptSlot.Tech )
-                net.WriteUInt( ptSlot.Ammo, 8 )
-                net.WriteUInt( ptSlot.Cooldown, 16 )
-                net.WriteFloat( ptSlot.LastUsed )
-                net.WriteBool( ptSlot.Upgraded )
-            end
-
-            net.Broadcast()
-            -- net.Start("UV_SendPursuitTech")
-            --     net.WriteEntity(car)
-            --     net.WriteTable(car.PursuitTech)
-            -- net.Broadcast()
-        else
-            net.Start( "UV_SendPursuitTech" )
-            
-            net.WriteEntity( car )
-            net.WriteUInt( slot, 2 )
-            net.WriteBool( false )
-
-            net.Broadcast()
-        end
-    end
+		if ptSlot and ptSlot.Tech then
+			net.Start("UV_SendPursuitTech")
+				net.WriteEntity(car)
+				net.WriteUInt(slot, 2)
+				net.WriteBool(true)
+				net.WriteString(ptSlot.Tech)
+				net.WriteUInt(ptSlot.Ammo or 0, 8)
+				net.WriteUInt(ptSlot.Cooldown or 0, 16)
+				net.WriteFloat(ptSlot.LastUsed or 0)
+				net.WriteBool(ptSlot.Upgraded or false)
+			net.Broadcast()
+		else
+			-- Clear this slot on clients
+			net.Start("UV_SendPursuitTech")
+				net.WriteEntity(car)
+				net.WriteUInt(slot, 2)
+				net.WriteBool(false)
+			net.Broadcast()
+		end
+	end
 
     --[[
         EXPECTED DATA:

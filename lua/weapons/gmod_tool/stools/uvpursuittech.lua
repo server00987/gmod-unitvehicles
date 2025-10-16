@@ -220,10 +220,32 @@ local function IsSupportedVehicle(ent)
     return (ent.IsGlideVehicle or ent.IsSimfphyscar or ent:GetClass() == "prop_vehicle_jeep")
 end
 
+local function PlayerCanModifyPT(ply, ent)
+    if not IsValid(ply) or not IsValid(ent) then return false end
+
+    -- Super Admins always allowed
+    if ply:IsSuperAdmin() then return true end
+
+    -- Check for ownership via prop protection or GMod's CPPI if available
+    if ent.CPPIGetOwner then
+        local owner = ent:CPPIGetOwner()
+        if owner == ply then return true end
+    end
+
+    -- Fallback: try GMod's built-in .Owner or .OwnerEnt (depending on how you spawn vehicles)
+    if ent.Owner == ply or ent:GetNWEntity("Owner") == ply then
+        return true
+    end
+
+    return false
+end
+
 -- ===================== Client: Visuals & CPanel ===============================
 if CLIENT then
 	TOOL.Information = {
+		{ name = "info" },
 		{ name = "left" },
+		{ name = "right" },
 	}
 	
     -- 3D2D draw above vehicle
@@ -522,6 +544,7 @@ function TOOL:LeftClick(trace)
     if not IsValid(car) then return false end
     if not IsSupportedVehicle(car) then return false end
     if CLIENT then return false end
+	if not PlayerCanModifyPT(self:GetOwner(), car) then return false end
 
     local isUnit = car.UnitVehicle == true
     local slotNum = self:GetClientNumber("slot") or 1
@@ -536,35 +559,42 @@ function TOOL:LeftClick(trace)
         ptSlot2 = self:GetClientInfo("racer_slot2") or ""
     end
 
-    -- If both slots empty or invalid, remove PursuitTech entirely
-    -- if (ptSlot1 == "" or not PursuitTechDefs[ptSlot1]) and (ptSlot2 == "" or not PursuitTechDefs[ptSlot2]) then
-        -- car.PursuitTech = nil
-        -- UVReplicatePT(car, 1)
-        -- UVReplicatePT(car, 2)
-        -- return true
-    -- end
-
     if not car.PursuitTech then car.PursuitTech = {} end
 
-    for slot = 1, 2 do
-        local ptselected = slot == 1 and ptSlot1 or ptSlot2
+	for slot = 1, 2 do
+		local ptselected = slot == 1 and ptSlot1 or ptSlot2
 
-        if ptselected == "" or not PursuitTechDefs[ptselected] then
-            car.PursuitTech[slot] = nil
-        else
-            local sanitized = string.lower(ptselected:gsub(" ", ""))
-            local ammo_cv = (car.UnitVehicle and "uvpursuittech_"..sanitized.."_maxammo_unit" or "uvpursuittech_"..sanitized.."_maxammo")
-            local cooldown_cv = (car.UnitVehicle and "uvpursuittech_"..sanitized.."_cooldown_unit" or "uvpursuittech_"..sanitized.."_cooldown")
+		if ptselected == "" or not PursuitTechDefs[ptselected] then
+			car.PursuitTech[slot] = nil
+			UVReplicatePT(car, slot)
+		else
+			local info = PursuitTechDefs[ptselected]
+			local short = (info and info.shortname) or string.lower(ptselected:gsub(" ", ""))
 
-            car.PursuitTech[slot] = {
-                Tech     = ptselected,
-                Ammo     = ConVarExists and ConVarExists(ammo_cv) and GetConVar(ammo_cv):GetInt() or math.huge,
-                Cooldown = ConVarExists and ConVarExists(cooldown_cv) and GetConVar(cooldown_cv):GetInt() or 30,
-                LastUsed = -math.huge,
-                Upgraded = false
-            }
-        end
-    end
+			local ammo_cv = (car.UnitVehicle and "uvpursuittech_"..short.."_maxammo_unit" or "uvpursuittech_"..short.."_maxammo")
+			local cooldown_cv = (car.UnitVehicle and "uvpursuittech_"..short.."_cooldown_unit" or "uvpursuittech_"..short.."_cooldown")
+
+			local ammo_val, cd_val = math.huge, 30
+			if ConVarExists(ammo_cv) then
+				local cv = GetConVar(ammo_cv)
+				if cv then ammo_val = cv:GetInt() end
+			end
+			if ConVarExists(cooldown_cv) then
+				local cv2 = GetConVar(cooldown_cv)
+				if cv2 then cd_val = cv2:GetInt() end
+			end
+
+			car.PursuitTech[slot] = {
+				Tech     = ptselected,
+				Ammo     = ammo_val,
+				Cooldown = cd_val,
+				LastUsed = -math.huge,
+				Upgraded = false
+			}
+
+			UVReplicatePT(car, slot)
+		end
+	end
 
     -- freeze effect
     local eff = EffectData()
@@ -585,10 +615,37 @@ function TOOL:LeftClick(trace)
     return true
 end
 
--- RightClick removal (double-click 1s)
-
+-- RightClick removal
 function TOOL:RightClick(trace)
-    return false
+    local car = trace.Entity
+    if not IsValid(car) then return false end
+    if not IsSupportedVehicle(car) then return false end
+    if CLIENT then return false end
+	if not PlayerCanModifyPT(self:GetOwner(), car) then return false end
+
+    -- Completely remove Pursuit Tech from this vehicle
+    if car.PursuitTech then
+        car.PursuitTech = nil
+    end
+
+    -- Remove from active PursuitTech tracking list
+    if table.HasValue(UVRVWithPursuitTech, car) then
+        table.RemoveByValue(UVRVWithPursuitTech, car)
+    end
+
+    -- Replicate cleared state to all clients
+    UVReplicatePT(car, 1)
+    UVReplicatePT(car, 2)
+
+    -- Optional: visual feedback
+    local eff = EffectData()
+    eff:SetEntity(car)
+    util.Effect("phys_unfreeze", eff)
+
+    -- Optional: notification or sound for admins
+    sound.Play("buttons/button10.wav", car:GetPos())
+
+    return true
 end
 
 function TOOL:Reload(trace)

@@ -2779,24 +2779,31 @@ else -- CLIENT Settings | HUD/Options
 
 	net.Receive("UV_SendPursuitTech", function()
 		local car = net.ReadEntity()
-		local slot = net.ReadUInt( 2 )
+		local slot = net.ReadUInt(2)
 		local active = net.ReadBool()
-
 		if not IsValid(car) then return end
 
-		if active then
+		-- Entire table cleared
+		if not active and slot == 0 then
+			car.PursuitTech = nil
+			return
+		end
 
+		if active then
 			if not car.PursuitTech then car.PursuitTech = {} end
 			if not car.PursuitTech[slot] then car.PursuitTech[slot] = {} end
 
 			car.PursuitTech[slot].Tech = net.ReadString()
-			car.PursuitTech[slot].Ammo = net.ReadUInt( 8 )
-			car.PursuitTech[slot].Cooldown = net.ReadUInt( 16 )
+			car.PursuitTech[slot].Ammo = net.ReadUInt(8)
+			car.PursuitTech[slot].Cooldown = net.ReadUInt(16)
 			car.PursuitTech[slot].LastUsed = net.ReadFloat()
 			car.PursuitTech[slot].Upgraded = net.ReadBool()
-
 		elseif car.PursuitTech then
 			car.PursuitTech[slot] = nil
+			-- If both slots are now nil, clear the table completely for cleanliness
+			if not car.PursuitTech[1] and not car.PursuitTech[2] then
+				car.PursuitTech = nil
+			end
 		end
 	end)
 
