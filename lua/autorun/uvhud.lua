@@ -38,6 +38,11 @@ UVMaterials = {
     ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
     ["RESPAWN_BG"] = Material("unitvehicles/hud/RESPAWN_BG.png"),
     ["PT_BG"] = Material("unitvehicles/hud/PT_BG.png"),
+	
+    ["PT_LEFT"] = Material("unitvehicles/hud/PTLeft.png"),
+    ["PT_RIGHT"] = Material("unitvehicles/hud/PTRight.png"),
+    ["PT_LEFT_BG"] = Material("unitvehicles/hud/PTLeftBG.png"),
+    ["PT_RIGHT_BG"] = Material("unitvehicles/hud/PTRightBG.png"),
     
     ["GLOW_ICON"] = Material("unitvehicles/icons/CIRCLE_GLOW_LIGHT.png"),
     ["UNITS_DAMAGED"] = Material("unitvehicles/icons/COPS_DAMAGED_ICON.png"),
@@ -863,111 +868,137 @@ end
 
 UV_UI.general = {}
 
-local function uv_general( ... )
-	local hudyes = GetConVar("cl_drawhud"):GetBool()
+local function uv_general()
+    local hudyes = GetConVar("cl_drawhud"):GetBool()
+    if not hudyes then return end
 
-    local w = ScrW()
-    local h = ScrH()
+    local w, h = ScrW(), ScrH()
     local vehicle = LocalPlayer():GetVehicle()
-    local localPlayer = LocalPlayer()
-    local lang = language.GetPhrase
-    
-    if not KeyBindButtons then
-        KeyBindButtons = {}
-    end
-    
-    if vehicle == NULL then
+    if not IsValid(vehicle) then
         UVHUDPursuitTech = nil
-    else
-        UVHUDPursuitTech = vehicle.PursuitTech or (IsValid(vehicle:GetParent()) and vehicle:GetParent().PursuitTech) or nil
+        return
     end
-    
-    if UVHUDPursuitTech then
-        local PT_Replacement_Strings = {
-            ['ESF'] = '#uv.ptech.esf.short',
-            ['Killswitch'] = '#uv.ptech.killswitch.short',
-            ['Jammer'] = '#uv.ptech.jammer.short',
-            ['Shockwave'] = '#uv.ptech.shockwave.short',
-            ['Stunmine'] = '#uv.ptech.stunmine.short',
-            ['Spikestrip'] = '#uv.ptech.spikes.short',
-            ['Repair Kit'] = '#uv.ptech.repairkit.short',
-            ['Power Play'] = '#uv.ptech.powerplay.short',
-            ['Shock Ram'] = '#uv.ptech.shockram.short',
-            ['GPS Dart'] = '#uv.ptech.gpsdart.short',
-            ['Juggernaut'] = '#uv.ptech.juggernaut.short',
-        }
 
-		if not uvclientjammed then
-			for i = 1, 2 do
-				local keyCode = GetConVar("unitvehicle_pursuittech_keybindslot_" .. i):GetInt()
-				local tech = UVHUDPursuitTech[i]
+    UVHUDPursuitTech = vehicle.PursuitTech or (IsValid(vehicle:GetParent()) and vehicle:GetParent().PursuitTech) or nil
+    if not UVHUDPursuitTech then return end
 
-				local xOffset = 0.8575 + ((i - 1) * 0.05)
-				local x = w * xOffset
-				local y = h * 0.6
-				local bw = w * 0.0475
-				local bh = h * 0.05
-				local keyX = w * (0.88 + ((i - 1) * 0.05))
-				local keyY = h * 0.575
+    local PT_Replacement_Strings = {
+        ['ESF'] = '#uv.ptech.esf.short',
+        ['Killswitch'] = '#uv.ptech.killswitch.short',
+        ['Jammer'] = '#uv.ptech.jammer.short',
+        ['Shockwave'] = '#uv.ptech.shockwave.short',
+        ['Stunmine'] = '#uv.ptech.stunmine.short',
+        ['Spikestrip'] = '#uv.ptech.spikes.short',
+        ['Repair Kit'] = '#uv.ptech.repairkit.short',
+        ['Power Play'] = '#uv.ptech.powerplay.short',
+        ['Shock Ram'] = '#uv.ptech.shockram.short',
+        ['GPS Dart'] = '#uv.ptech.gpsdart.short',
+        ['Juggernaut'] = '#uv.ptech.juggernaut.short',
+    }
 
-				local bgColor = Color(0, 0, 0, 200)
-				local fillOverlayColor = nil
-				local fillFrac = 0
-				local showFillOverlay = false
-				local textColor = Color(255, 255, 255, 125)
-				local ammoText = " - "
-				local techText = " - "
-				local keyText = UVBindButtonName(keyCode)
+	-- local debugjam = true
 
-				if tech then
-					if input.IsKeyDown(keyCode) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
-						net.Start("UVPTUse")
-						net.WriteInt(i, 16)
-						net.SendToServer()
-					end
+    -- if not debugjam then
+    if not uvclientjammed then
+        for i = 1, 2 do
+            local keyCode = GetConVar("unitvehicle_pursuittech_keybindslot_" .. i):GetInt()
+            local tech = UVHUDPursuitTech[i]
 
-					local timeSinceUsed = CurTime() - tech.LastUsed
-					local isCoolingDown = tech.Ammo > 0 and timeSinceUsed <= tech.Cooldown
-					local techName = PT_Replacement_Strings[tech.Tech] or tech.Tech
+            local xOffset = 0.815 + ((i - 1) * 0.0595)
+            local y = h * 0.6
+            local bw, bh = w * 0.06, h * 0.06
+            local x = w * xOffset
+            local keyX = w * (0.84 + ((i - 1) * 0.0675))
+            local textX = w * (0.84 + ((i - 1) * 0.0675))
+            local keyY = h * 0.58
 
-					if isCoolingDown then
-						local blink = 255 * math.abs(math.sin(RealTime() * 3))
-						bgColor = Color(0, 0, 0, 200)
-						fillOverlayColor = Color(blink, blink, 0, 100)
-						fillFrac = math.Clamp(timeSinceUsed / tech.Cooldown, 0, 1)
-						showFillOverlay = true
+            local bgColor = Color(0, 0, 0, 175)
+            local fillOverlayColor = nil
+            local fillFrac = 0
+            local showFillOverlay = false
+            local textColor = Color(255, 255, 255, 125)
+            local ammoText, techText = " - ", " - "
+            local keyText = UVBindButtonName(keyCode)
+
+            if tech then
+                -- Handle key press as before
+                if input.IsKeyDown(keyCode) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
+                    net.Start("UVPTUse")
+                    net.WriteInt(i, 16)
+                    net.SendToServer()
+                end
+
+                -- Duration-aware cooldown
+                local timeSinceUsed = CurTime() - tech.LastUsed
+                local duration = tech.Duration or 0
+                local inDuration = duration > 0 and timeSinceUsed <= duration
+                local inCooldown = tech.Ammo > 0 and timeSinceUsed <= (duration > 0 and duration + tech.Cooldown or tech.Cooldown)
+
+                if inDuration then
+                    fillFrac = math.Clamp(timeSinceUsed / duration, 0, 1)
+                    showFillOverlay = true
+                elseif inCooldown then
+                    fillFrac = math.Clamp((timeSinceUsed - duration) / tech.Cooldown, 0, 1)
+                    showFillOverlay = true
+                end
+
+                -- Choose overlay color
+                if showFillOverlay then
+                    local blink = 255 * math.abs(math.sin(RealTime() * 3))
+                    fillOverlayColor = Color(blink, blink, 0, 175)
+                else
+                    bgColor = tech.Ammo > 0 and Color(100, 255, 100, 175) or Color(200, 0, 0, 175)
+                    textColor = tech.Ammo > 0 and Color(255, 255, 255) or Color(255, 75, 75)
+                    keyColor = tech.Ammo > 0 and Color(255, 255, 255) or Color(255, 75, 75)
+                end
+
+                ammoText = tech.Ammo > 0 and tech.Ammo or " - "
+                techText = PT_Replacement_Strings[tech.Tech] or tech.Tech
+            end
+
+            if hudyes then
+				if i == 1 then
+					surface.SetMaterial(UVMaterials["PT_LEFT_BG"])
+				else
+					surface.SetMaterial(UVMaterials["PT_RIGHT_BG"])
+				end
+				surface.SetDrawColor(Color(255,255,255))
+                surface.DrawTexturedRect(x, y, bw, bh)
+
+				if i == 1 then
+					surface.SetMaterial(UVMaterials["PT_LEFT"])
+				else
+					surface.SetMaterial(UVMaterials["PT_RIGHT"])
+				end
+                surface.SetDrawColor(bgColor)
+                surface.DrawTexturedRect(x, y, bw, bh)
+
+				if showFillOverlay and fillOverlayColor then
+					surface.SetDrawColor(fillOverlayColor)
+
+					if i == 1 then
+						surface.SetMaterial(UVMaterials["PT_LEFT"])
+						local T = math.Clamp(fillFrac * bw, 0, bw)
+						surface.DrawTexturedRectUV( x + (bw - T), y, T, bh, 1 - (T / bw), 0, 1, 1 )
 					else
-						if tech.Ammo > 0 then
-							bgColor = Color(0, 200, 0, 200)
-							textColor = Color(255, 255, 255)
-						else
-							bgColor = Color(200, 0, 0, 100)
-							textColor = Color(255, 75, 75)
-						end
+						surface.SetMaterial(UVMaterials["PT_RIGHT"])
+						local T = math.Clamp(fillFrac * bw, 0, bw)
+						surface.DrawTexturedRectUV( x, y, T, bh, 0, 0, T / bw, 1 )
 					end
-
-					ammoText = tech.Ammo > 0 and tech.Ammo or " - "
-					techText = techName
 				end
 
-				if hudyes then
-					-- Draw background
-					surface.SetDrawColor(bgColor)
-					surface.DrawRect(x, y, bw, bh)
+				draw.SimpleTextOutlined( techText, "UVMostWantedLeaderboardFont", textX, y + (h * 0.0075), textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
+				draw.SimpleTextOutlined( ammoText, "UVMostWantedLeaderboardFont", textX, y + (h * 0.0275), textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
+                draw.SimpleTextOutlined(keyText, "UVMostWantedLeaderboardFont", keyX, keyY, keyColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
+            end
+        end
+	else
+		local y = h * 0.6
+		local textX = w * 0.87375
+		local blink = 255 * math.abs(math.sin(RealTime() * 6))
 
-					-- Cooldown fill overlay
-					if showFillOverlay and fillOverlayColor then
-						surface.SetDrawColor(fillOverlayColor)
-						surface.DrawRect(x, y, bw * fillFrac, bh)
-					end
-
-					-- Draw key and tech text
-					draw.DrawText(keyText, "UVFont4", keyX, keyY, textColor, TEXT_ALIGN_CENTER)
-					draw.DrawText(techText .. "\n" .. ammoText, "UVFont4", keyX, y, textColor, TEXT_ALIGN_CENTER)
-				end
-			end
-		end
-	end
+		draw.SimpleTextOutlined( "#uv.ptech.jammer.hit.you", "UVMostWantedLeaderboardFont", textX, y + (h * 0.0175), Color(255, 0, 0, blink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0,blink))
+    end
 end
 
 UV_UI.general.main = uv_general
