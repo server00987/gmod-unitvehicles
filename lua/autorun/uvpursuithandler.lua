@@ -224,18 +224,23 @@ function UVSoundHeat(heatlevel)
 
 	heatlevel = heatlevel or 1
 
+	local _lastheatlevel = lastHeatlevel
+
 	if PursuitThemePlayRandomHeat:GetBool() then
 		if PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
 			heatlevel = UVSelectedHeatTrack
+			_lastheatlevel = UVLastHeatLevel or 1
 		else
 			heatlevel = math.random( 1, MAX_HEAT_LEVEL )
 		end
 	end
 
-	heatlevel = tostring(heatlevel)
 	if not lastHeatlevel then
-		lastHeatlevel = heatlevel
+		_lastheatlevel = heatlevel
 	end
+
+	heatlevel = tostring(heatlevel)
+	_lastheatlevel = tostring(_lastheatlevel)
 
 	local theme = PursuitTheme:GetString()
 
@@ -284,12 +289,14 @@ function UVSoundHeat(heatlevel)
 	if UVHeatPlayTransition then
 		UVHeatPlayTransition = false
 		UVHeatPlayMusic = true
-
+		print("ok", lastHeatlevel)
 	--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
-		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[lastHeatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
+		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[_lastheatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
 			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
+
+			print("ok")
 
 			if transitionTrack then
 				UVPlaySound(transitionTrack, true)
@@ -297,8 +304,8 @@ function UVSoundHeat(heatlevel)
 			end
 		end
 
-		if heatlevel ~= lastHeatlevel then
-			lastHeatlevel = heatlevel
+		if heatlevel ~= _lastheatlevel then
+			lastHeatlevel = tonumber( heatlevel )
 		end
 	-- local transitionTrack = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/transition/" .. heatlevel )
 	-- if transitionTrack then
@@ -3261,7 +3268,11 @@ else -- CLIENT Settings | HUD/Options
 	net.Receive("UVHUDHeatLevelIncrease", function()
 
 		if not lastHeatlevel then
-			lastHeatlevel = UVHeatLevel
+			lastHeatlevel = tonumber( UVHeatLevel )
+		end
+
+		if lastHeatlevel <= UVHeatLevel then
+			return
 		end
 
 		if not UVPlayingRace and (UVHUDDisplayPursuit and not (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes")) then
@@ -3492,9 +3503,13 @@ else -- CLIENT Settings | HUD/Options
 			newHeat = 'default'
 		end
 
-		UVHeatPlayTransition = true
+		if not UVHeatPlayIntro then
+			UVStopSound()
+			UVHeatPlayTransition = true
+		end
+
+		UVLastHeatLevel = UVSelectedHeatTrack
 		UVSelectedHeatTrack = newHeat
-		UVStopSound()
 	end
 
 	function UVResetRandomHeatTrack()
@@ -3549,11 +3564,6 @@ else -- CLIENT Settings | HUD/Options
 				end
 			--end
 		end
-
-		-- if HUDDisplayRacing and RacingMusic:GetBool() then
-		-- 	print("ok")
-		-- 	UVSoundRacing()
-		-- end
 		
 		if UVHUDDisplayPursuit then
 			if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
@@ -3589,6 +3599,7 @@ else -- CLIENT Settings | HUD/Options
 		else
 			UVHeatPlayIntro = true 
 			UVHeatLevelIncrease = false
+			UVLastHeatChange = CurTime()
 			-- UVHeatPlayTransition = false 
 			-- UVHeatPlayMusic = false
 		end
@@ -3597,7 +3608,7 @@ else -- CLIENT Settings | HUD/Options
 
 		UVHUDDisplayPursuit = PursuitTable.InPursuit
 		--UVHUDDisplayCooldown = PursuitTable.InCooldown
-		UVHeatLevel = PursuitTable.Heat
+		UVHeatLevel = tonumber( PursuitTable.Heat )
 		UVUnitsChasing = PursuitTable.UnitsChasing
 		UVResourcePoints = PursuitTable.ResourcePoints
 		UVDeploys = PursuitTable.Deploys

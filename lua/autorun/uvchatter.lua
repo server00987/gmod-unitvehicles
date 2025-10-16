@@ -533,6 +533,7 @@ if SERVER then
 		elseif parameters == 6 then
 
 			voice = "dispatch"
+			unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
@@ -736,6 +737,7 @@ if SERVER then
 			-- local quadrantFile = "chatter/!call/"..basedirectory.."/quadrant/"..quadrantFiles[math.random(1, #quadrantFiles)]
 
 			voice = "dispatch"
+			unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
 			local breakawayFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/dispbreakaway/*", "GAME")
