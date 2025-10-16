@@ -1135,7 +1135,7 @@ if CLIENT then
 		})
 		
 		local pursuittech = vgui.Create("DCheckBoxLabel")
-		pursuittech:SetText("#tool.uvunitpursuittech.name")
+		pursuittech:SetText("#tool.uvpursuittech.name")
 		pursuittech:SetConVar("uvunitmanager_pursuittech")
 		pursuittech:SetTooltip("#tool.uvunitmanager.settings.ptech.enable.desc")
 		pursuittech:SetValue(GetConVar("uvunitmanager_pursuittech"):GetInt())
@@ -1253,7 +1253,7 @@ if CLIENT then
 		CPanel:AddItem(helicopterbustracer)
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitpursuittech.name",
+			Text = "#tool.uvpursuittech.name",
 		})
 		
 		CPanel:AddControl("Label", {

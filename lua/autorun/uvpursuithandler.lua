@@ -289,14 +289,11 @@ function UVSoundHeat(heatlevel)
 	if UVHeatPlayTransition then
 		UVHeatPlayTransition = false
 		UVHeatPlayMusic = true
-		print("ok", lastHeatlevel)
 	--local transitionArray = (PursuitFilePathsTable[theme].transition and PursuitFilePathsTable[theme].transition[heatlevel]) or {}
 		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[_lastheatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
 			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
-
-			print("ok")
 
 			if transitionTrack then
 				UVPlaySound(transitionTrack, true)
@@ -3606,6 +3603,7 @@ else -- CLIENT Settings | HUD/Options
 		else
 			UVHeatPlayIntro = true 
 			UVHeatLevelIncrease = false
+			UVHeatPlayTransition = false
 			UVLastHeatChange = CurTime()
 			-- UVHeatPlayTransition = false 
 			-- UVHeatPlayMusic = false
