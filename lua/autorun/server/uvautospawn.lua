@@ -965,13 +965,13 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 						local selected_pt = pool[math.random(1, #pool)]
 						local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
 						
-						local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+						local ammo_count = GetConVar("uvpursuittech_" .. sanitized_pt .. "_maxammo_unit"):GetInt()
 						ammo_count = ammo_count > 0 and ammo_count or math.huge
 						
 						Ent.PursuitTech[i] = {
 							Tech = selected_pt,
 							Ammo = ammo_count,
-							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
+							Cooldown = GetConVar("uvpursuittech_" .. sanitized_pt .. "_cooldown_unit"):GetInt(),
 							LastUsed = -math.huge,
 							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
 						}
@@ -1188,13 +1188,13 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 						local selected_pt = pool[math.random(1, #pool)]
 						local sanitized_pt = string.lower(string.gsub(selected_pt, " ", ""))
 						
-						local ammo_count = GetConVar("unitvehicle_unitpursuittech_maxammo_"..sanitized_pt):GetInt()
+						local ammo_count = GetConVar("uvpursuittech_" .. sanitized_pt .. "_maxammo_unit"):GetInt()
 						ammo_count = ammo_count > 0 and ammo_count or math.huge
 						
 						Ent.PursuitTech[i] = {
 							Tech = selected_pt,
 							Ammo = ammo_count,
-							Cooldown = GetConVar("unitvehicle_unitpursuittech_cooldown_"..sanitized_pt):GetInt(),
+							Cooldown = GetConVar("uvpursuittech_" .. sanitized_pt .. "_cooldown_unit"):GetInt(),
 							LastUsed = -math.huge,
 							Upgraded = (Ent.uvclasstospawnon == "npc_uvspecial" or Ent.uvclasstospawnon == "npc_uvcommander")
 						}

@@ -979,8 +979,9 @@ UVUnitPTKillSwitchCooldown = CreateConVar("uvpursuittech_killswitch_cooldown_uni
 
 -- EMP
 UVUnitPTEMPDamage = CreateConVar("uvpursuittech_emp_damage_unit", 0.1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-UVUnitPTempMaxAmmo = CreateConVar("uvpursuittech_emp_maxammo_unit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-UVUnitPTempCooldown = CreateConVar("uvpursuittech_emp_cooldown_unit", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPForce = CreateConVar("uvpursuittech_emp_force_unit", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPMaxAmmo = CreateConVar("uvpursuittech_emp_maxammo_unit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPCooldown = CreateConVar("uvpursuittech_emp_cooldown_unit", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 -- RepairKit
 UVUnitPTRepairKitMaxAmmo = CreateConVar("uvpursuittech_repairkit_maxammo_unit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")

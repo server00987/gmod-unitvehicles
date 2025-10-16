@@ -294,10 +294,10 @@ if CLIENT then
     -- BuildCPanel
 	function TOOL.BuildCPanel(CPanel)
 		CPanel:ClearControls()
+		-- CPanel:AddControl("Label", {Text=" "})
 		CPanel:AddControl("Label", {Text="#uv.uvpursuittech.desc"})
 
 		-- ===== Racer slots =====
-		CPanel:AddControl("Label",{Text=" "})
 		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.racer"})
 
 		local slotCombos = {}
@@ -350,6 +350,7 @@ if CLIENT then
 		local racerSlot2Combo = CreateSlotCombo("racer_slot2", pttable_racer)
 
 		-- ===== Unit slots =====
+		CPanel:AddControl("Label", {Text=" "})
 		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.unit"})
 		local unitSlot1Combo = CreateSlotCombo("unit_slot1", pttable_unit)
 		local unitSlot2Combo = CreateSlotCombo("unit_slot2", pttable_unit)
@@ -357,12 +358,7 @@ if CLIENT then
 		-- ===== Settings PT picker =====
 		CPanel:AddControl("Label",{Text=" "})
 		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.settings"})
-
-		local settingsLabel = vgui.Create("DLabel")
-		settingsLabel:SetText("#uv.uvpursuittech.settings.desc")
-		settingsLabel:SetTextColor(Color(0,0,0))
-		settingsLabel:SetAutoStretchVertical(true)
-		CPanel:AddItem(settingsLabel)
+		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.settings.desc"})
 
 		-- ===== Preset =====
 		CPanel:AddControl("ComboBox", {
