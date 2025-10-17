@@ -1,0 +1,1063 @@
+UV_UI.racing.original = UV_UI.racing.original or {}
+UV_UI.pursuit.original = UV_UI.pursuit.original or {}
+
+UV_UI.pursuit.original.states = {
+    TagsColor = Color(255,255,255,255),
+    WrecksColor = Color(255,255,255,255),
+    UnitsColor = Color(255,255,255,255),
+    BustedColor = Color(255, 255, 255, 50),
+    EvasionColor = Color(255, 255, 255, 50),
+    
+    TakedownText = nil,
+}
+
+UV_UI.racing.original.states = {
+    FrozenTime = false,
+    FrozenTimeValue = 0
+}
+
+UV_UI.racing.original.events = {
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+        local laptimeprefixcolor = Color(255, 255, 255)
+        local laptimeprefix = string.format(language.GetPhrase("uv.race.laptime.original"), old_lap, name)
+        local laptimecolor = Color(255, 255, 0)
+        local laptime = UVDisplayTimeRace( lap_time )
+
+		if is_global_best then
+			laptimeprefix = string.format(language.GetPhrase("uv.race.fastest.laptime.original"), old_lap, name)
+            laptimecolor = Color(0, 255, 255)
+		end
+
+        chat.AddText(laptimeprefixcolor, laptimeprefix, laptimecolor, laptime)
+
+        if participant:GetDriver() ~= LocalPlayer() then return end
+        
+        UV_UI.racing.original.states.FrozenTime = true
+        UV_UI.racing.original.states.FrozenTimeValue = lap_time
+        
+        if timer.Exists( "_OG_TIME_FROZEN_DELAY" ) then timer.Remove( "_OG_TIME_FROZEN_DELAY" ) end
+        timer.Create("_OG_TIME_FROZEN_DELAY", 3, 1, function()
+            UV_UI.racing.original.states.FrozenTime = false
+        end)
+
+    end,
+
+    onParticipantDisqualified = function(data)
+		local participant = data.Participant
+		local is_local_player = data.is_local_player
+		
+		local info = UVHUDRaceInfo.Participants[participant]
+		local name = info and info.Name or "Unknown"
+
+		if not info then return end
+
+		local disqtext = string.format(language.GetPhrase("uv.race.wrecked.original"))
+		if is_local_player then 
+            disqtext = string.format(language.GetPhrase("uv.chase.wrecked"))
+            chat.AddText(Color(255, 0, 0), disqtext)
+        else
+            chat.AddText(Color(255, 0, 0), name, Color(255, 255, 255), disqtext)
+        end
+
+	end,
+
+    onRaceEnd = function( sortedRacers, stringArray )
+        if not istable(sortedRacers) or #sortedRacers == 0 then
+            chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.statserror")))
+            return
+        end
+
+        PrintTable(sortedRacers)
+        chat.AddText(Color(255, 255, 255), string.format(language.GetPhrase("uv.race.finished.viewstats.original")))
+        
+    end
+}
+
+UV_UI.pursuit.original.events = {
+    -- _onUpdate = function( data_name, ...)
+    --     if data_name == 'Wrecks' then
+    --         UV_UI.pursuit.mostwanted.callbacks.onUnitWreck( ... )
+    --     elseif data_name == 'Tags' then
+    --         UV_UI.pursuit.mostwanted.callbacks.onUnitTag( ... )
+    --     elseif data_name == 'ChasingUnits' then
+    --         UV_UI.pursuit.mostwanted.callbacks.onChasingUnitsChange( ... )
+    --     end
+    -- end,
+    onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		local text = string.format( language.GetPhrase( "uv.hud.original.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
+        LocalPlayer():PrintMessage(HUD_PRINTCENTER, text)
+	end,
+    onUnitWreck = function(...)
+        
+        hook.Remove("Think", "MW_WRECKS_COLOR_PULSE")
+        
+        if timer.Exists("MW_WRECKS_COLOR_PULSE_DELAY") then timer.Remove("MW_WRECKS_COLOR_PULSE_DELAY") end
+        UV_UI.pursuit.mostwanted.states.WrecksColor = Color(255,255,0, 150)
+        
+        timer.Create("MW_WRECKS_COLOR_PULSE_DELAY", 1, 1, function()
+            hook.Add("Think", "MW_WRECKS_COLOR_PULSE", function()
+                UV_UI.pursuit.mostwanted.states.WrecksColor.b = UV_UI.pursuit.mostwanted.states.WrecksColor.b + 600 * RealFrameTime()
+                if UV_UI.pursuit.mostwanted.states.WrecksColor.b >= 255 then hook.Remove("Think", "MW_WRECKS_COLOR_PULSE") end
+            end)
+        end)
+        
+    end,
+    onUnitTag = function(...)
+        
+        hook.Remove("Think", "MW_TAGS_COLOR_PULSE")
+        if timer.Exists("MW_TAGS_COLOR_PULSE_DELAY") then timer.Remove("MW_TAGS_COLOR_PULSE_DELAY") end
+        
+        UV_UI.pursuit.mostwanted.states.TagsColor = Color(255,255,0, 150)
+        
+        timer.Create("MW_TAGS_COLOR_PULSE_DELAY", 1, 1, function()
+            
+            hook.Add("Think", "MW_TAGS_COLOR_PULSE", function()
+                UV_UI.pursuit.mostwanted.states.TagsColor.b = UV_UI.pursuit.mostwanted.states.TagsColor.b + 600 * RealFrameTime()
+                if UV_UI.pursuit.mostwanted.states.TagsColor.b >= 255 then hook.Remove("Think", "MW_TAGS_COLOR_PULSE") end
+            end)
+            
+        end)
+        
+    end,
+    onResourceChange = function(...)
+        
+        local new_data = select( 1, ... )
+        local old_data = select( 2, ... )
+        
+        hook.Remove("Think", "MW_RP_COLOR_PULSE")
+        UV_UI.pursuit.mostwanted.states.UnitsColor = (new_data < (old_data or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
+        --UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
+        
+        local clrs = {}
+        
+        for _, v in pairs( { 'r', 'g', 'b' } ) do
+            if UV_UI.pursuit.mostwanted.states.UnitsColor[v] ~= 255 then table.insert(clrs, v) end
+        end 
+        
+        -- if timer.Exists("UVWrecksColor") then
+        -- 	timer.Remove("UVWrecksColor")
+        -- end
+        local val = 50
+        
+        hook.Add("Think", "MW_RP_COLOR_PULSE", function()
+            val = val + 200 * RealFrameTime()
+            -- UVResourcePointsColor.b = val
+            -- UVResourcePointsColor.g = val
+            for _, v in pairs( clrs ) do
+                UV_UI.pursuit.mostwanted.states.UnitsColor[v] = val
+            end
+            
+            if val >= 255 then hook.Remove("Think", "MW_RP_COLOR_PULSE") end
+        end)
+        
+    end,
+    onChasingUnitsChange = function(...)
+        
+    end,
+    onHeatLevelUpdate = function(...)
+        
+    end,
+    onRacerBusted = function( racer, cop, lp )
+		local cnt = string.format(language.GetPhrase("uv.hud.racer.arrested.original"), racer, language.GetPhrase(cop))
+
+		chat.AddText(Color(255, 0, 0), cnt)
+	end,
+    onCopBustedDebrief = function(...)
+        local w = ScrW()
+        local h = ScrH()
+        
+        local bustedtable = select( 1, ... )
+        
+        --------------------------------------
+        
+        local time = UVDisplayTime(UVTimerProgress)
+        local deploys = bustedtable["Deploys"]
+        local roadblocksdodged = bustedtable["Roadblocks"]
+        local spikestripsdodged = bustedtable["Spikestrips"]
+        local bounty = UVBounty
+        local tags = UVTags
+        local wrecks = UVWrecks
+        local suspects = UVHUDWantedSuspectsNumber
+        
+        local ResultPanel = vgui.Create("DFrame")
+        local OK = vgui.Create("DButton")
+        
+        ResultPanel:Add(OK)
+        ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.5555555556))
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        
+        OK:SetText("#addons.confirm")
+        OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
+        OK:Dock(BOTTOM)
+        
+        local timetotal = 30
+        local timestart = CurTime()
+        
+        ResultPanel.Paint = function(self, w, h)
+            local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            draw.RoundedBox(2, 0, 0, w, h, Color(0,0,0,225))
+            draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", w*0.5, h*0.01, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText(string.format( lang("uv.results.suspects.busted"), unit ), "UVFont2", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.bounty", "UVFont2", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.time", "UVFont2", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont2", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont2", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont2", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont2", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont2", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            
+            draw.SimpleText( bounty, "UVFont2", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( time, "UVFont2", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( deploys, "UVFont2", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( tags, "UVFont2", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( wrecks, "UVFont2", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( roadblocksdodged, "UVFont2", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( spikestripsdodged, "UVFont2", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            
+            -- Time remaining and closing
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            
+            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+            if timeremaining < 1 then
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+                self:Close()
+            end
+            
+        end
+        
+        function OK:DoClick() 
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+            ResultPanel:Close()
+        end
+
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
+    end,
+    onCopEscapedDebrief = function(...)
+        
+        local w = ScrW()
+        local h = ScrH()
+        
+        local escapedtable = select( 1, ... )
+        
+        --------------------------------------
+        
+        local time = UVDisplayTime(UVTimerProgress)
+        local deploys = escapedtable["Deploys"]
+        local roadblocksdodged = escapedtable["Roadblocks"]
+        local spikestripsdodged = escapedtable["Spikestrips"]
+        local bounty = UVBounty
+        local tags = UVTags
+        local wrecks = UVWrecks
+        local suspects = UVHUDWantedSuspectsNumber
+        
+        local ResultPanel = vgui.Create("DFrame")
+        local OK = vgui.Create("DButton")
+        
+        ResultPanel:Add(OK)
+        ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.5555555556))
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        
+        OK:SetText("#addons.confirm")
+        OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
+        OK:Dock(BOTTOM)
+        
+        local timetotal = 30
+        local timestart = CurTime()
+        
+        ResultPanel.Paint = function(self, w, h)
+            local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            draw.RoundedBox(2, 0, 0, w, h, Color(0,0,0,225))
+            draw.SimpleText("--- " .. lang("uv.chase.evade") .. " ---", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( string.format( lang("uv.results.suspects.escaped.num"), UVHUDWantedSuspectsNumber), "UVFont2", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.bounty", "UVFont2", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.time", "UVFont2", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont2", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont2", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont2", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont2", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont2", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            
+            draw.SimpleText( bounty, "UVFont2", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( time, "UVFont2", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( deploys, "UVFont2", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( tags, "UVFont2", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( wrecks, "UVFont2", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( roadblocksdodged, "UVFont2", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( spikestripsdodged, "UVFont2", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            
+            -- Time remaining and closing
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            
+            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+            if timeremaining < 1 then
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+                self:Close()
+            end
+            
+        end
+        
+        function OK:DoClick() 
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+            ResultPanel:Close()
+        end
+        
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
+    end,
+    onRacerEscapedDebrief = function(...)
+        if UVHUDDisplayRacing then return end
+        
+        local w = ScrW()
+        local h = ScrH()
+        
+        local escapedtable = select( 1, ... )
+        
+        --------------------------------------
+        
+        local time = UVDisplayTime(UVTimerProgress)
+        local deploys = escapedtable["Deploys"]
+        local roadblocksdodged = escapedtable["Roadblocks"]
+        local spikestripsdodged = escapedtable["Spikestrips"]
+        local bounty = UVBounty
+        local tags = UVTags
+        local wrecks = UVWrecks
+        
+        local ResultPanel = vgui.Create("DFrame")
+        local OK = vgui.Create("DButton")
+        
+        ResultPanel:Add(OK)
+        ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.5555555556))
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        
+        OK:SetText("#addons.confirm")
+        OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
+        OK:Dock(BOTTOM)
+        
+        local timetotal = 30
+        local timestart = CurTime()
+        
+        ResultPanel.Paint = function(self, w, h)
+            local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            draw.RoundedBox(2, 0, 0, w, h, Color(0,0,0,225))
+            draw.SimpleText("--- " .. lang("uv.chase.evade") .. " ---", "UVFont", w*0.5, h*0.01, Color(0, 255, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( lang("uv.results.escapedfrom"), "UVFont2", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.bounty", "UVFont2", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.time", "UVFont2", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont2", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont2", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont2", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont2", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont2", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            
+            draw.SimpleText( bounty, "UVFont2", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( time, "UVFont2", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( deploys, "UVFont2", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( tags, "UVFont2", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( wrecks, "UVFont2", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( roadblocksdodged, "UVFont2", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( spikestripsdodged, "UVFont2", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            
+            -- Time remaining and closing
+            
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2", w*0.01, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2", w*0.99, h*0.85, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
+            if timeremaining < 1 then
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+                self:Close()
+            end
+            
+        end
+        
+        function OK:DoClick() 
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+            ResultPanel:Close()
+        end
+        
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
+    end,
+    onRacerBustedDebrief = function(...)
+        local w = ScrW()
+        local h = ScrH()
+        
+        local bustedtable = select( 1, ... )
+        
+        --------------------------------------
+        
+        local time = UVDisplayTime(UVTimerProgress)
+        local unit = language.GetPhrase(bustedtable["Unit"]) or "Unknown"
+        local deploys = bustedtable["Deploys"]
+        local roadblocksdodged = bustedtable["Roadblocks"]
+        local spikestripsdodged = bustedtable["Spikestrips"]
+        local bounty = UVBounty
+        local tags = UVTags
+        local wrecks = UVWrecks
+        
+        local ResultPanel = vgui.Create("DFrame")
+        local OK = vgui.Create("DButton")
+        
+        ResultPanel:Add(OK)
+        ResultPanel:SetSize(math.Round(w*0.5208333333), math.Round(h*0.5555555556))
+        ResultPanel:SetBackgroundBlur(true)
+        ResultPanel:ShowCloseButton(false)
+        ResultPanel:Center()
+        ResultPanel:SetTitle("")
+        ResultPanel:SetDraggable(false)
+        ResultPanel:MakePopup()
+        ResultPanel:SetKeyboardInputEnabled(false)
+        
+        OK:SetText("#addons.confirm")
+        OK:SetSize(ResultPanel:GetWide() * 5 / 16, 22)
+        OK:Dock(BOTTOM)
+        
+        local timetotal = 30
+        local timestart = CurTime()
+        
+        ResultPanel.Paint = function(self, w, h)
+            local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
+            local lang = language.GetPhrase
+            
+            draw.RoundedBox(2, 0, 0, w, h, Color(0,0,0,225))
+            draw.SimpleText("/// " .. lang("uv.chase.busted") .. " ///", "UVFont", w*0.5, h*0.01, Color(255, 0, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText(string.format( lang("uv.results.bustedby"), unit ), "UVFont2", w*0.5, h*0.075, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.bounty", "UVFont2", w*0.01, h*0.15, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.time", "UVFont2", w*0.01, h*0.25, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.deployed", "UVFont2", w*0.01, h*0.35, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.damaged", "UVFont2", w*0.01, h*0.45, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.units.destroyed", "UVFont2", w*0.01, h*0.55, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.blocks", "UVFont2", w*0.01, h*0.65, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText( "#uv.results.chase.dodged.spikes", "UVFont2", w*0.01, h*0.75, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            
+            draw.SimpleText( bounty, "UVFont2", w*0.99, h*0.15, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( time, "UVFont2", w*0.99, h*0.25, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( deploys, "UVFont2", w*0.99, h*0.35, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( tags, "UVFont2", w*0.99, h*0.45, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( wrecks, "UVFont2", w*0.99, h*0.55, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( roadblocksdodged, "UVFont2", w*0.99, h*0.65, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            draw.SimpleText( spikestripsdodged, "UVFont2", w*0.99, h*0.75, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            
+            -- Time remaining and closing
+            draw.DrawText( "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont2-Smaller", w*0.01, h*0.825, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+            draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2-Smaller", w*0.99, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
+			
+			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+				draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont2-Smaller", w*0.01, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+			end
+
+            if timeremaining < 1 then
+                hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+                self:Close()
+            end
+            
+        end
+        
+        function OK:DoClick() 
+            hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+            ResultPanel:Close()
+        end
+
+		hook.Add("CreateMove", "JumpKeyCloseDebrief", function()
+			local ply = LocalPlayer()
+			if not IsValid(ply) then return end
+
+			if ply:KeyPressed(IN_JUMP) then
+				if IsValid(ResultPanel) then
+					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
+					ResultPanel:Close()
+				end
+			end
+		end)
+
+		if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
+			hook.Add("CreateMove", "ReloadKeyCloseDebrief", function()
+				local ply = LocalPlayer()
+				if not IsValid(ply) then return end
+
+				if ply:KeyPressed(IN_RELOAD) then
+					if IsValid(ResultPanel) then
+						hook.Remove("CreateMove", "JumpKeyCloseDebrief")
+						hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
+						ResultPanel:Close()
+
+						net.Start("UVHUDRespawnInUVGetInfo")
+						net.SendToServer()
+					end
+				end
+			end)
+		end
+    end,
+}
+
+local function original_racing_main( ... )
+    local w = ScrW()
+    local h = ScrH()
+    
+    local my_vehicle = select(1, ...)
+    local my_array = select(2, ...)
+    local string_array = select(3, ...)
+    
+    local racer_count = #string_array
+    local lang = language.GetPhrase
+    
+    local checkpoint_count = #my_array["Checkpoints"]
+    
+    ------------------------------------
+    
+    local element1 = {}
+    if UVHUDRaceInfo.Info.Laps > 1 then
+        element1 = {
+            {x = 0, y = h / 7},
+            {x = w * 0.35, y = h / 7},
+            {x = w * 0.25, y = h / 3},
+            {x = 0, y = h / 3}
+        }
+    else
+        element1 = {
+            {x = 0, y = h / 7},
+            {x = w * 0.35, y = h / 7},
+            {x = w * 0.25, y = h / 3.5},
+            {x = 0, y = h / 3.5}
+        }
+    end
+    -- HUD Background
+    surface.SetDrawColor(0, 0, 0, 200)
+    draw.NoTexture()
+    surface.DrawPoly(element1)
+    
+    -- All HUD Text (I mean, it *works*...)
+    draw.DrawText(lang("uv.race.orig.time") ..UVDisplayTimeRace((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0) .."\n"
+    ..lang("uv.race.orig.check") ..checkpoint_count .."/"
+    ..GetGlobalInt("uvrace_checkpoints") .."\n" 
+    ..(UVHUDRaceInfo.Info.Laps > 1 and lang("uv.race.orig.lap") 
+    ..my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps .. "\n" or "") 
+    ..lang("uv.race.orig.pos") 
+    .. UVHUDRaceCurrentPos 
+    .. "/" 
+    .. UVHUDRaceCurrentParticipants, "UVFont", 10, h / 7, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+
+    local current_time = nil 
+
+    if UV_UI.racing.original.states.FrozenTime then
+        current_time = UVDisplayTimeRace( UV_UI.racing.original.states.FrozenTimeValue )
+    elseif not my_array.LastLapTime then
+        current_time = UVDisplayTimeRace( (UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0 )
+    else
+        current_time = UVDisplayTimeRace( CurTime() - my_array.LastLapCurTime )
+    end
+
+    -- Timer
+    draw.DrawText(
+    string.format(language.GetPhrase("uv.race.hud.time.ug")).." "..(current_time or UVDisplayTimeRace( 0 )).." \n"
+    ..string.format(language.GetPhrase("uv.race.hud.best.ug")).." "..(UVDisplayTimeRace(my_array.BestLapTime or 0)).." ",
+    "UVFont4",
+    w,
+    h / 7,
+    Color(255, 255, 255),
+    TEXT_ALIGN_RIGHT)
+    
+    -- Racer List
+    for i = 1, racer_count, 1 do
+        local entry = string_array[i]
+        
+        local racer_name = entry[1]
+        local is_local_player = entry[2]
+        local mode = entry[3]
+        local diff = entry[4]
+        -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
+        local racerpos = 3.75
+
+        local Strings = {
+            ["Time"] = "%s",
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
+        }
+        
+        local status_text = ""
+        
+		if entry[3] then
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+") or "-") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+") or "-") .. string.format("%.2f", math.abs(num))
+					end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and " (" .. status_string .. ")" or " (" .. string.format(status_string, unpack(args)) .. ")"
+			end
+		end
+        
+        if UVHUDRaceInfo.Info.Laps > 1 then
+            racerpos = 3.25
+        end
+        
+        local color = nil
+        
+        if is_local_player then
+            color = UVColors.Original_LocalPlayer
+        elseif entry[3] == "Disqualified" or entry[3] == "Busted" then
+            color = UVColors.Original_Disqualified
+        else
+            color = UVColors.Original_Others
+        end
+        
+        local text = (i .. ". " .. racer_name .. status_text)
+        
+        draw.DrawText(text,"UVFont4",10,(h / racerpos) + i * ((racer_count > 10 and 20) or 28),color,TEXT_ALIGN_LEFT)
+    end
+end
+
+local function original_pursuit_main( ... )
+    local hudyes = GetConVar("cl_drawhud"):GetBool()
+    
+    if not hudyes then return end
+    if not UVHUDDisplayPursuit then return end
+    -- if UVHUDDisplayRacing then return end
+    
+    
+    local vehicle = LocalPlayer():GetVehicle()
+    
+    local w = ScrW()
+    local h = ScrH()
+    local lang = language.GetPhrase
+    
+    local UnitsChasing = tonumber(UVUnitsChasing)
+    local UVBustTimer = BustedTimer:GetFloat()
+    
+    local states = UV_UI.pursuit.original.states
+    
+    local UVWrecksColor = states.WrecksColor
+    local UVTagsColor = states.TagsColor
+    local UVUnitsColor = states.UnitsColor
+    
+    if vehicle == NULL then return end
+    
+    if UVHUDCopMode and not UVHUDDisplayNotification then
+        UVHUDDisplayBusting = false
+    end
+    
+    if UVHUDCopMode and next(UVHUDWantedSuspects) ~= nil then
+        local ply = LocalPlayer()
+        
+        UVClosestSuspect = nil
+        UVHUDDisplayBusting = false
+        
+        local closestDistance = math.huge
+        
+        for _, suspect in pairs(UVHUDWantedSuspects) do
+            if IsValid(suspect) then
+                local dist = ply:GetPos():DistToSqr(suspect:GetPos())
+                
+                if (#UVHUDWantedSuspects == 1 or dist < 250000) and dist < closestDistance then
+                    closestDistance = dist
+                    UVClosestSuspect = suspect
+                end 
+            end
+        end
+        
+        if UVClosestSuspect then
+            if UVClosestSuspect.beingbusted then
+                UVHUDDisplayBusting = true
+                UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
+                
+                local blink = math.floor(RealTime()*8)==math.Round(RealTime()*8) and 255 or 0
+                states.BustedColor = Color(255, blink, blink)
+            end
+        end
+    end
+		
+	local bottomyplus = 0
+
+	if (LocalPlayer().uvspawningunit and LocalPlayer().uvspawningunit.vehicle) or (not UVHUDCopMode and UVHUDRaceFinishCountdownStarted) then
+		bottomyplus = -(h * 0.1)
+	end
+
+	local bottomy = h * 0.9 + bottomyplus
+		
+    if UVHUDDisplayPursuit and hudyes and vehicle ~= NULL then
+        outofpursuit = CurTime()
+        
+        local UVHeatBountyMin
+        local UVHeatBountyMax
+        local element1 = {
+            { x = w/1.35, y = h/20 },
+            { x = w/1.155, y = 0 },
+            { x = w, y = 0 },
+            { x = w, y = h/7 },
+            { x = w/1.35, y = h/7 },
+        }
+        surface.SetDrawColor( 0, 0, 0, 200)
+        draw.NoTexture()
+        surface.DrawPoly( element1 )
+
+        -- DrawIcon(UVMaterials['CLOCK'], w/1.135, h*0.07, .05, Color(255,255,255))
+        
+        draw.DrawText( "⏰", "UVFont2",w/1.32, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+        
+        draw.DrawText( UVTimer, "UVFont2",w/1.005, h/20, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+        surface.SetFont( "UVFont2" )
+        surface.SetTextColor(255,255,255)
+        surface.SetTextPos( w/1.35, h/10 ) 
+        surface.DrawText( "#uv.hud.bounty" )
+        draw.DrawText( UVBounty, "UVFont2",w/1.005, h/10, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+        
+        -- if UVHeatLevel == 1 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty1:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty2:GetInt()
+        -- elseif UVHeatLevel == 2 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty2:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty3:GetInt()
+        -- elseif UVHeatLevel == 3 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty3:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty4:GetInt()
+        -- elseif UVHeatLevel == 4 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty4:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty5:GetInt()
+        -- elseif UVHeatLevel == 5 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty5:GetInt()
+        --     UVHeatBountyMax = UVUHeatMinimumBounty6:GetInt()
+        -- elseif UVHeatLevel == 6 then
+        --     UVHeatBountyMin = UVUHeatMinimumBounty6:GetInt()
+        --     UVHeatBountyMax = math.huge
+        -- end
+        
+        local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
+        local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
+        
+        UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
+        UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
+        
+        draw.DrawText( "♨ " .. UVHeatLevel, "UVFont2", w/1.105, h/120, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
+        
+        -- local hl10 = 0
+        -- if UVHeatLevel > 9 then hl10 = w * 0.01 end
+        -- DrawIcon(UVMaterials['HEAT'], w/1.135 - hl10, h*0.027, .05, Color(255,255,255))
+        
+        surface.SetDrawColor(Color(109,109,109,200))
+        surface.DrawRect(w/1.099,h/120,w/20+60,39)
+        surface.SetDrawColor(Color(255,255,255))
+        local HeatProgress = 0
+        if MaxHeatLevel:GetInt() ~= UVHeatLevel then
+            if UVUTimeTillNextHeatEnabled:GetInt() == 1 and UVTimeTillNextHeat then --Time till next heat level
+                local timedHeatConVar = GetConVar( 'unitvehicle_unit_timetillnextheat' .. UVHeatLevel )
+                
+                local maxtime = timedHeatConVar and timedHeatConVar:GetInt() or 0
+                HeatProgress = (maxtime - UVTimeTillNextHeat) / maxtime
+            else
+                HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
+            end
+        end
+        local B = math.Clamp((HeatProgress)*(w/20+60),0,w/20+60)
+        local blinkhalf = math.floor(RealTime()*2)==math.Round(RealTime()*2) and 255 or 0
+        local blink = math.floor(RealTime()*4)==math.Round(RealTime()*4) and 255 or 0
+        local blink2 = math.floor(RealTime()*6)==math.Round(RealTime()*6) and 255 or 0
+        local blink3 = math.floor(RealTime()*8)==math.Round(RealTime()*8) and 255 or 0
+        
+        if HeatProgress >= 0.75 and HeatProgress < 1 then
+            surface.SetDrawColor(Color(255,blinkhalf,blinkhalf))
+        elseif HeatProgress >= 1 then
+            surface.SetDrawColor(Color(255,0,0))
+        end
+
+        local num = UVBackupTimerSeconds or 0
+        if num > 10 then
+			UVResourcePointsColor = Color( 255, 255, 255)
+		elseif math.floor(num)==math.Round(num) then
+			UVResourcePointsColor = Color( 255, 255, 255)
+		else
+			UVResourcePointsColor = Color( 255, 255, 0)
+		end
+        
+        surface.DrawRect(w/1.099,h/120,B,39)
+        local ResourceText = "⛉\n"..UVResourcePoints
+        if UVOneCommanderActive then
+            if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
+                UVHUDCommanderLastHealth = 0
+                UVHUDCommanderLastMaxHealth = 0
+            end
+            if IsValid(UVHUDCommander) then
+                if UVHUDCommander.IsSimfphyscar then
+                    UVHUDCommanderLastHealth = UVHUDCommander:GetCurHealth()
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()-(UVHUDCommander:GetMaxHealth()*0.3)
+                elseif UVHUDCommander.IsGlideVehicle then
+                    local enginehealth = UVHUDCommander:GetEngineHealth()
+                    UVHUDCommanderLastHealth = UVHUDCommander:GetChassisHealth()*enginehealth
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                elseif vcmod_main then
+                    UVHUDCommanderLastHealth = UVUOneCommanderHealth:GetInt()*(UVHUDCommander:VC_getHealth()/100) --vcmod returns % health clientside
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                else
+                    UVHUDCommanderLastHealth = UVHUDCommander:Health()
+                    UVHUDCommanderLastMaxHealth = UVUOneCommanderHealth:GetInt()
+                end
+                UVRenderCommander(UVHUDCommander)
+            end
+            local healthratio = UVHUDCommanderLastHealth/UVHUDCommanderLastMaxHealth
+            local healthcolor
+            local blink = math.floor(RealTime()*4)==math.Round(RealTime()*4) and 255 or 0
+            local blink2 = math.floor(RealTime()*6)==math.Round(RealTime()*6) and 255 or 0
+            local blink3 = math.floor(RealTime()*8)==math.Round(RealTime()*8) and 255 or 0
+            
+            if healthratio >= 0.5 then
+                healthcolor = Color(255, 255, 255, 200)
+            elseif healthratio >= 0.25 then
+                healthcolor = Color(255, blink, blink, 200)
+            else
+                healthcolor = Color(255, blink2, blink2, 200)
+            end
+            
+            ResourceText = "⛊\n∞"
+            local element3 = {
+                { x = w/3, y = 0 },
+                { x = w/3+12+w/3, y = 0 },
+                { x = w/3+12+w/3-25, y = h/20 },
+                { x = w/3+25, y = h/20 },
+            }
+            surface.SetDrawColor( 0, 0, 0, 200)
+            draw.NoTexture()
+            surface.DrawPoly( element3 )
+            if healthratio > 0 then
+                surface.SetDrawColor(Color(109,109,109,200))
+                surface.DrawRect(w/3+25,h/20,w/3-38,8)
+                surface.SetDrawColor(healthcolor)
+                local T = math.Clamp((healthratio)*(w/3-38),0,w/3-38)
+                surface.DrawRect(w/3+25,h/20,T,8)
+            end
+            
+            local cname = lang("uv.unit.commander")
+            if IsValid(UVHUDCommander) then
+                local driver = UVHUDCommander:GetDriver()
+                if IsValid(driver) and driver:IsPlayer() then
+                    cname = driver:Nick()
+                end
+            end
+            
+            draw.DrawText( "⛊ " .. cname .. " ⛊", "UVFont2",w/2,0, Color(0, 161, 255), TEXT_ALIGN_CENTER )
+        end
+
+        local element2 = {
+            { x = w/3, y = bottomy + (h * 0.01)+28+12 },
+            { x = w/3+12+w/3, y = bottomy + (h * 0.01)+28+12 },
+            { x = w/3+12+w/3-25, y = bottomy + (h * 0.1) },
+            { x = w/3+25, y = bottomy + (h * 0.1) },
+        }
+        draw.NoTexture()
+        surface.SetDrawColor( 0, 0, 0, 200)
+        surface.DrawPoly( element2 )
+        
+        local iconhigh = 0
+
+        if UVHUDDisplayBusting or UVHUDDisplayCooldown then
+            iconhigh = h*0.035
+        end
+        
+        if not UVHUDDisplayNotification then
+            if (UnitsChasing > 0 or NeverEvade:GetBool()) and not UVHUDDisplayCooldown then
+                EvadingProgress = 0
+                local busttime = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
+                
+                if BustingProgress == 0 then
+                    if not UVHUDDisplayBackupTimer then
+                        local uloc, utype = "uv.chase.unit", UnitsChasing
+                        if not UVHUDCopMode then
+                            if UnitsChasing ~= 1 then 
+                                uloc = "uv.chase.units"
+                            end
+                        else
+                            utype = UVHUDWantedSuspectsNumber
+                            uloc = "uv.chase.suspects"
+                        end
+                        
+                        draw.DrawText( string.format( lang(uloc), utype ), "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVResourcePointsColor, TEXT_ALIGN_CENTER )
+                    else
+                        draw.DrawText( string.format( lang("uv.chase.backupin"), UVBackupTimer ), "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVResourcePointsColor, TEXT_ALIGN_CENTER )
+                    end
+                else
+                    if busttime >= 3 then
+                        busttext = lang("uv.chase.busting")
+                        bustcol = Color( 255, 0, 0)
+                    elseif busttime >= 2 then
+                        busttext = "! " .. lang("uv.chase.busting") .. " !"
+                        bustcol = Color( 255, blink, blink)
+                    elseif busttime >= 1 then
+                        busttext = "!! " .. lang("uv.chase.busting") .. " !!"
+                        bustcol = Color( 255, blink2, blink2)
+                    elseif busttime >= 0 then
+                        busttext = "!!! " .. lang("uv.chase.busting") .. " !!!"
+                        bustcol = Color( 255, blink3, blink3)
+                    end
+                    draw.DrawText( busttext, "UVFont-Smaller",w/2,bottomy + (h * 0.05), bustcol, TEXT_ALIGN_CENTER )
+                    iconhigh = h*0.035
+                end
+                --UVSoundHeat(UVHeatLevel)
+            elseif not UVHUDDisplayCooldown then
+                if not EvadingProgress or EvadingProgress == 0 then
+                    EvadingProgress = CurTime()
+                    UVEvadingProgress = EvadingProgress
+                end
+                
+                draw.DrawText( lang("uv.chase.evading"), "UVFont-Smaller",w/2,bottomy + (h * 0.05), Color( 0, 255, 0), TEXT_ALIGN_CENTER )
+                
+                surface.SetDrawColor( 0, 0, 0, 200)
+                surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
+                surface.SetDrawColor(Color( 0, 255, 0))
+                surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+                surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+                surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+                surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
+                surface.SetDrawColor(Color( 0, 255, 0))
+                local T = math.Clamp((UVEvadingProgress)*(w/3-20),0,w/3-20)
+                surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)
+                --UVSoundHeat(UVHeatLevel)
+                iconhigh = h*0.035
+            else
+                EvadingProgress = 0
+                local color = Color(0,0,255)
+                
+                if UVHUDCopMode then
+                    local blink = math.floor(RealTime()*2)==math.Round(RealTime()*2) and 255 or 0
+                    color = Color( blink, blink, 255)
+                end
+                
+                local text = (UVHUDCopMode and "/// "..lang("uv.chase.cooldown").." ///") or lang("uv.chase.cooldown")
+                draw.DrawText( text, "UVFont-Smaller",w/2,bottomy + (h * 0.05), color, TEXT_ALIGN_CENTER )
+                iconhigh = h*0.035
+            end
+        else
+            EvadingProgress = 0
+            draw.DrawText( UVNotification, "UVFont-Smaller",w/2,bottomy + (h * 0.05), UVNotificationColor, TEXT_ALIGN_CENTER )
+        end
+
+        -- DrawIcon(UVMaterials['UNITS_DISABLED'], w * 0.68, h * 0.975, 0.06, UVWrecksColor)
+        draw.DrawText( "☠ " .. UVWrecks, "UVFont3", w * 0.67, bottomy + (h * 0.05), UVWrecksColor, TEXT_ALIGN_LEFT )
+        
+        -- DrawIcon(UVMaterials['UNITS_DAMAGED'], w * 0.3275, h * 0.975, 0.06, UVTagsColor)
+        draw.DrawText( UVTags .. " ☄", "UVFont3", w * 0.335, bottomy + (h * 0.05), UVTagsColor, TEXT_ALIGN_RIGHT )
+        
+        -- DrawIcon(UVMaterials['UNITS'], w / 2, h * 0.885 - iconhigh, .06, UVUnitsColor)
+        draw.DrawText( ResourceText, "UVFont3", w/2, bottomy - (h * 0.05) - iconhigh, UVResourcePointsColor, TEXT_ALIGN_CENTER )
+    end
+    
+    if vehicle == NULL then 
+        UVHUDPursuitTech = nil
+        return 
+    end
+    
+    if UVHUDDisplayBusting and not UVHUDDisplayCooldown and hudyes then
+        if not BustingProgress or BustingProgress == 0 then
+            BustingProgress = CurTime()
+        end
+        surface.SetDrawColor( 0, 0, 0, 200)
+        surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
+        surface.SetDrawColor(Color(255,0,0))
+        surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+        surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+        surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+        surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
+        surface.SetDrawColor(Color(255,0,0))
+        
+        local T = math.Clamp((UVBustingProgress/UVBustTimer)*(w/3-20),0,w/3-20)
+        surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)   
+    else
+        BustingProgress = 0
+    end
+    
+    if UVHUDDisplayCooldown and hudyes then
+        if not CooldownProgress or CooldownProgress == 0 then
+            CooldownProgress = CurTime()
+        end
+        
+        --UVSoundCooldown(UVHeatLevel)
+        
+        if not UVHUDCopMode then
+            surface.SetDrawColor( 0, 0, 0, 200)
+            surface.DrawRect( w/3,bottomy + (h * 0.01),w/3+12, 40 )
+            surface.SetDrawColor(Color(0,0,255))
+            surface.DrawRect(w/3,bottomy + (h * 0.01),12,40)
+            surface.DrawRect(w*2/3,bottomy + (h * 0.01),12,40)
+            surface.DrawRect(w/3+12,bottomy + (h * 0.01),w/3-12,12)
+            surface.DrawRect(w/3+12,bottomy + (h * 0.01)+28,w/3-12,12)
+            surface.SetDrawColor(Color(0,0,255))
+            local T = math.Clamp((UVCooldownTimer)*(w/3-20),0,w/3-20)
+            surface.DrawRect(w/3+16,bottomy + (h * 0.01)+16,T,8)
+        end
+        
+        EvadingProgress = 0
+    else
+        CooldownProgress = 0
+    end
+end
+
+UV_UI.racing.original.main = original_racing_main
+UV_UI.pursuit.original.main = original_pursuit_main
