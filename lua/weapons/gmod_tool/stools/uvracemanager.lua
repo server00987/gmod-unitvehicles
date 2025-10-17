@@ -375,6 +375,10 @@ if SERVER then
 		
 		ent:SetID(id)
 		ent:SetSpeedLimit(speedlimit)
+		if id == 65535 then
+			ent:Remove()
+			return
+		end
 		UVRaceCheckFinishLine()
 	end
 	net.Receive("UVRace_SetID", SetID)
@@ -477,7 +481,6 @@ elseif CLIENT then
 	net.Receive("UVRace_UpdatePos", UpdatePos)
 	
 	local function SelectID()
-		print("si")
 		local ent = net.ReadEntity()
 		
 		selectedCP = ent
