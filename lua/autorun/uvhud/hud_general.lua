@@ -49,6 +49,7 @@ local function uv_general()
             local fillFrac = 0
             local showFillOverlay = false
             local textColor = Color(255, 255, 255, 125)
+            local keyColor = Color(255, 255, 255, 125)
             local ammoText, techText = " - ", " - "
             local keyText = UVBindButtonName(keyCode)
 
