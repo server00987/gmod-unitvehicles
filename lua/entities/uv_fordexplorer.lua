@@ -316,6 +316,185 @@ if SERVER then
             } )
 
     end
+
+    function ENT:OnPostThink( dt, selfTbl ) --Changing submaterials/bodygroups for the entire vehicle
+        BaseClass.OnPostThink( self, dt, selfTbl )
+
+        --Hood detachment when driving at high speeds
+        if self:GetVelocity():LengthSqr() > 4000000 and self:GetBodygroup( 2 ) == 2 then
+            local gibmodels = {
+                "models/unitvehiclescars/uv_fordexplorer/hood.mdl",
+            }
+            timer.Simple(0, function()
+                self:DetachGibs(gibmodels, true)
+            end)
+            self:SetBodygroup( 2, 3 )
+        end
+    end
+
+    function ENT:Repair()
+        BaseClass.Repair(self) --Overrides the repair function
+
+        self:SetIsEngineOnFire( false )
+        self:SetChassisHealth( self.MaxChassisHealth )
+        self:SetEngineHealth( 1.0 )
+        self:UpdateHealthOutputs()
+
+        --reset bodygroups/submaterials
+        self:SetSubMaterial(12, "models/unitvehiclescars/shared/headlightglass")
+        self:SetBodygroup( 1, 0 )
+        self:SetBodygroup( 2, 0 )
+        self:SetBodygroup( 3, 0 )
+        self:SetBodygroup( 4, 0 )
+        self:SetBodygroup( 5, 0 )
+        self:SetBodygroup( 6, 0 )
+        self:SetBodygroup( 7, 0 )
+        self:SetBodygroup( 8, 0 )
+
+        self.frontdamaged = 0
+        self.reardamaged = 0
+        self.leftdamaged = 0
+        self.rightdamaged = 0
+
+    end
+
+    function ENT:DetachGibs(gibtable, ishood)
+        for i = 1, #gibtable do
+            local gib = ents.Create("prop_physics")
+            gib:SetModel(gibtable[i])
+            gib:SetPos(self:GetPos())
+            gib:SetAngles(self:GetAngles())
+            gib:SetColor(self:GetColor())
+            gib:SetCollisionGroup(COLLISION_GROUP_WORLD)
+            gib:Spawn()
+            if IsValid(gib:GetPhysicsObject()) then
+                if ishood then
+                    gib:GetPhysicsObject():SetVelocity((self:GetVelocity()*0.75) + self:GetUp() * 500)
+                    gib:GetPhysicsObject():SetAngleVelocity(VectorRand() * 500)
+                else
+                    gib:GetPhysicsObject():SetVelocity(self:GetVelocity())
+                end
+            end
+            local giblifetime = GetConVar("glide_bodygroupdamage_giblifetime"):GetInt() or 15
+            timer.Simple(giblifetime, function() --Adjust the convar "glide_bodygroupdamage_giblifetime"
+                if IsValid(gib) then
+                    gib:Remove()
+                end
+            end)
+        end
+    end
+
+    function ENT:UVPhysicsCollide(data)
+
+        local velocityChange = data.OurNewVelocity - data.OurOldVelocity
+        local surfaceNormal = data.HitNormal
+
+        local speed = velocityChange:Length()
+
+        if speed < 500 then return end --Minimum speed to trigger, you can adjust the speed here
+
+        local hitpos = data.HitPos
+        local forward = self:GetForward()
+        local dist = data.HitPos - self:WorldSpaceCenter()
+        local vect = dist:GetNormalized()
+        local right = (vect:Cross(forward)).z
+        local forwarddot = dist:Dot(forward)
+
+        local fronthit = forwarddot > 0 and right > -0.5 and right < 0.5
+        local rearhit = forwarddot < 0 and right > -0.5 and right < 0.5
+        local lefthit = right < -0.5
+        local righthit = right > 0.5
+        
+        self.frontdamaged = self.frontdamaged or 0
+        self.reardamaged = self.reardamaged or 0
+        self.leftdamaged = self.leftdamaged or 0
+        self.rightdamaged = self.rightdamaged or 0
+
+        --Tip: You can adjust the speed to make the damage more or less sensitive
+        --If you wanna add more damage levels, just add more elseif statements
+
+        if fronthit then --FRONT
+            if speed < 3000 and self.frontdamaged < 1 then
+                self:SetBodygroup( 1, 1 )
+                self:SetBodygroup( 2, 1 )
+                self.frontdamaged = 1
+            elseif self.frontdamaged < 2 then
+                self:SetBodygroup( 1, 2 )
+                self:SetBodygroup( 2, 2 )
+                self.frontdamaged = 2
+            elseif self.frontdamaged < 3 then
+                self:SetBodygroup( 1, 3 )
+                local gibmodels = {
+                    "models/unitvehiclescars/uv_fordexplorer/frbumper.mdl",
+                }
+                timer.Simple(0, function()
+                    self:DetachGibs(gibmodels)
+                end)
+                self.frontdamaged = 3
+            elseif self.frontdamaged < 4 then
+                self:SetBodygroup( 1, 3 )
+                self.frontdamaged = 4
+            end
+        end
+
+        if rearhit then --REAR
+            if self.reardamaged < 1 then
+                self:SetBodygroup( 7, 1 )
+                self:SetBodygroup( 8, 1 )
+                self.reardamaged = 1
+            elseif self.reardamaged < 2 then
+                self:SetBodygroup( 7, 2 )
+                self:SetBodygroup( 8, 2 )
+                self.reardamaged = 2
+            elseif self.reardamaged < 3 then
+                self:SetBodygroup( 7, 2 )
+                self:SetBodygroup( 8, 3 )
+                local gibmodels = {
+                    "models/unitvehiclescars/uv_fordexplorer/rebumper.mdl",
+                }
+                timer.Simple(0, function()
+                    self:DetachGibs(gibmodels)
+                end)
+                self.reardamaged = 3
+            elseif self.reardamaged < 4 then
+                self:SetBodygroup( 7, 3 )
+                self:SetBodygroup( 8, 3 )
+                local gibmodels = {
+                    "models/unitvehiclescars/uv_fordexplorer/trunk.mdl",
+                }
+                timer.Simple(0, function()
+                    self:DetachGibs(gibmodels)
+                end)
+                self.reardamaged = 4
+            end
+        end
+
+        if lefthit then --LEFT
+            if speed < 600 and self.leftdamaged < 1 then
+                self:SetBodygroup( 3, 1 )
+                self:SetBodygroup( 4, 1 )
+                self.leftdamaged = 1
+            elseif self.leftdamaged < 2 then
+                self:SetBodygroup( 3, 1 )
+                self:SetBodygroup( 4, 1 )
+                self.leftdamaged = 2
+            end
+        end
+
+        if righthit then --RIGHT
+            if speed < 600 and self.rightdamaged < 1 then
+                self:SetBodygroup( 5, 1 )
+                self:SetBodygroup( 6, 1 )
+                self.rightdamaged = 1
+            elseif self.rightdamaged < 2 then
+                self:SetBodygroup( 5, 1 )
+                self:SetBodygroup( 6, 1 )
+                self.rightdamaged = 2
+            end
+        end
+
+
+    end
 end
 
 function ENT:GetSpawnColor()
