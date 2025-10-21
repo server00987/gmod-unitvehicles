@@ -19,8 +19,8 @@ if SERVER then
 
 		--print(self:GetPos1(), self:GetPos2())
 		
-		local pos1 = self:GetPos1()
-		local pos2 = self:GetPos2()
+		local pos1 = (InfMap and InfMap.unlocalize_vector(self:GetPos1(), self:GetChunk())) or self:GetPos1()
+		local pos2 = (InfMap and InfMap.unlocalize_vector(self:GetPos2(), self:GetChunkMax())) or self:GetPos2()
 
 		local lowest_y = math.min(pos1.y, pos2.y)
 

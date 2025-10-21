@@ -311,7 +311,17 @@ if SERVER then
 				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
 				--local target = selected_point.target_point
 				local target = selected_point
-				local target_pos = ClosestPointOnLineSegment(self.v:WorldSpaceCenter(), target:GetPos1(), target:GetPos2(), 200)--GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
+				local pos1, pos2 = nil, nil
+
+				pos1 = (InfMap and InfMap.unlocalize_vector( target:GetPos1(), target:GetChunk() )) or target:GetPos1()
+				pos2 = (InfMap and InfMap.unlocalize_vector( target:GetPos2(), target:GetChunkMax() )) or target:GetPos2()
+
+				local target_pos = ClosestPointOnLineSegment(
+					self.v:WorldSpaceCenter(), 
+					pos1, 
+					pos2, 
+					200
+				)--GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
 				--local cansee = self:CanSeeGoal(target_pos)
 				
 				--local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
@@ -334,15 +344,26 @@ if SERVER then
 						--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
 						--if self:CanSeeGoal(next_point.target_point) then
 						target = next_point
-						target_pos = ClosestPointOnLineSegment(self.v:WorldSpaceCenter(), target:GetPos1(), target:GetPos2(), 200)--GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+
+						pos1 = (InfMap and InfMap.unlocalize_vector( target:GetPos1(), target:GetChunk() )) or target:GetPos1()
+						pos2 = (InfMap and InfMap.unlocalize_vector( target:GetPos2(), target:GetChunkMax() )) or target:GetPos2()
+
+						target_pos = ClosestPointOnLineSegment(
+							self.v:WorldSpaceCenter(), 
+							pos1, 
+							pos2, 
+							200
+						)--GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
 						--end
 					end
 				end
+
+				pos1 = (InfMap and InfMap.unlocalize_vector( target:GetPos1(), target:GetChunk() )) or target:GetPos1()
+				pos2 = (InfMap and InfMap.unlocalize_vector( target:GetPos2(), target:GetChunkMax() )) or target:GetPos2()
 				
-				local target1 = target:GetPos1()
-				local target2 = target:GetPos2()
-				
-				local size = (target2 - target1):LengthSqr()
+				local size = (pos2 - pos1):LengthSqr()
+
+				print(pos1, pos2)
 				
 				--print('Vehicle velocity', velocity:LengthSqr())
 				
@@ -362,6 +383,8 @@ if SERVER then
 					['Target'] = target_pos,
 					['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
 				}
+
+				PrintTable(self.PatrolWaypoint)
 				-- if cansee then
 				-- 	self.PatrolWaypoint = {
 				-- 		['Target'] = target_pos,
@@ -500,6 +523,7 @@ if SERVER then
 
 			if self:ObstaclesNearby() and not self.v.uvraceparticipant and not (self.v.UVWanted and UVTargeting) then
 				throttle = throttle * -1
+				print("no")
 			end --Slow down when free roaming
 			
 			-- -- slow it down for tight corners if we are going too fast
