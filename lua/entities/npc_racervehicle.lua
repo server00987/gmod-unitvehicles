@@ -932,6 +932,26 @@ if SERVER then
 		if cffunctions then
 			UVCFInitialize(self)
 		end
+
+		local function BodygroupDamageScript()
+			return self.v.frontdamaged or self.v.reardamaged or self.v.leftdamaged or self.v.rightdamaged
+		end
+
+		if CustomizeRacer:GetBool() then
+			local color = Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
+
+			self.v:SetColor(color)
+			self.v:SetSkin( math.random( 0, self.v:SkinCount() - 1 ) )
+
+			if not BodygroupDamageScript() then
+				for i = 0, self.v:GetNumBodyGroups() - 1 do
+    			    local bodygroupCount = self.v:GetBodygroupCount( i )
+    			    if bodygroupCount > 0 then
+    			        self.v:SetBodygroup( i, math.random( 0, bodygroupCount - 1 ) )
+    			    end
+    			end
+			end
+		end
 		
 		local min, max = self.v:GetHitBoxBounds(0, 0) --NPCs aim at the top of the vehicle referred by hit box.
 		if not isvector(max) then min, max = self.v:GetModelBounds() end --If getting hit box bounds is failed, get model bounds instead.

@@ -796,7 +796,8 @@ LOCAL_CONVARS = {
 	["unitvehicle_spikestriproadblockfriendlyfire"] = 'integer',
 	['unitvehicle_spawncooldown'] = 'integer',
 	["unitvehicle_usenitrousracer"] = 'integer',
-	["unitvehicle_usenitrousunit"] = 'integer'
+	["unitvehicle_usenitrousunit"] = 'integer',
+	["unitvehicle_customizeracer"] = 'integer'
 }
 
 HEAT_SETTINGS = {
@@ -1026,6 +1027,7 @@ if SERVER then
 	Relentless = CreateConVar("unitvehicle_relentless", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will ram the target more frequently.")
 	UseNitrousRacer = CreateConVar("unitvehicle_usenitrousracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racer vehicles will use nitrous.")
 	UseNitrousUnit = CreateConVar("unitvehicle_usenitrousunit", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
+	CustomizeRacer = CreateConVar("unitvehicle_customizeracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: Randomizes color/skin/bodygroups when spawning AI Racers")
 	SpawnMainUnits = CreateConVar("unitvehicle_spawnmainunits", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateConVar("unitvehicle_dvwaypointspriority", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	RepairCooldown = CreateConVar("unitvehicle_repaircooldown", 60, {FCVAR_ARCHIVE}, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
@@ -2488,6 +2490,7 @@ else -- CLIENT Settings | HUD/Options
 	Relentless = CreateClientConVar("unitvehicle_relentless", 0, true, false, "Unit Vehicles: If set to 1, Units will ram the target more frequently.")
 	UseNitrousRacer = CreateClientConVar("unitvehicle_usenitrousracer", 0, true, false, "Unit Vehicles: If set to 1, Racer vehicles will use nitrous.")
 	UseNitrousUnit = CreateClientConVar("unitvehicle_usenitrousunit", 0, true, false, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
+	CustomizeRacer = CreateClientConVar("unitvehicle_customizeracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: Randomizes color/skin/bodygroups when spawning AI Racers")
 	SpawnMainUnits = CreateClientConVar("unitvehicle_spawnmainunits", 1, true, false, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
 	DVWaypointsPriority = CreateClientConVar("unitvehicle_dvwaypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
@@ -4857,6 +4860,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.ailogic.usenitrousracer.desc")
 			option = panel:CheckBox("#uv.settings.ailogic.usenitrousunit", "unitvehicle_usenitrousunit")
 			option:SetTooltip("#uv.settings.ailogic.usenitrousunit.desc")
+			option = panel:CheckBox("#uv.settings.ailogic.customizeracer", "unitvehicle_customizeracer")
+			option:SetTooltip("#uv.settings.ailogic.customizeracer.desc")
 
 			panel:Help("#uv.settings.ainav")
 			option = panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
