@@ -362,8 +362,6 @@ if SERVER then
 				pos2 = (InfMap and InfMap.unlocalize_vector( target:GetPos2(), target:GetChunkMax() )) or target:GetPos2()
 				
 				local size = (pos2 - pos1):LengthSqr()
-
-				print(pos1, pos2)
 				
 				--print('Vehicle velocity', velocity:LengthSqr())
 				
@@ -383,8 +381,6 @@ if SERVER then
 					['Target'] = target_pos,
 					['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
 				}
-
-				PrintTable(self.PatrolWaypoint)
 				-- if cansee then
 				-- 	self.PatrolWaypoint = {
 				-- 		['Target'] = target_pos,
