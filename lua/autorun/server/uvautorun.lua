@@ -1051,7 +1051,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
-								if IsValid(unit.e) then 
+								if IsValid(unit.e) and car == unit.e then
 									UVChatterEnemyCrashed(unit) 
 								end
 							end
@@ -1060,7 +1060,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
-								if IsValid(unit.e) then
+								if IsValid(unit.e) and car == unit.e then
 									if object.Sockets and next(object.Sockets) ~= nil then
 										UVChatterHitTrafficSemi(unit)
 									else
@@ -1077,7 +1077,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						local units = ents.FindByClass("npc_uv*")
 						local random_entry = math.random(#units)	
 						local unit = units[random_entry]
-						if IsValid(unit.e) then 
+						if IsValid(unit.e) and car == unit.e then
 							UVChatterRoadblockHit(unit) 
 						end
 					end
@@ -1447,7 +1447,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
-				if IsValid(unit.e) then 
+				if IsValid(unit.e) and car == unit.e then
 					UVChatterRoadblockHit(unit) 
 				end
 			end
@@ -1779,7 +1779,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
-					if IsValid(unit.e) then 
+					if IsValid(unit.e) and car == unit.e then
 						UVChatterRoadblockHit(unit) 
 					end
 				end
@@ -2894,7 +2894,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntJump(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntJump(unit)
+					else
+						UVChatterStuntJump(closestunit)
+					end
 				else
 					UVChatterStuntJump(closestunit)
 				end
@@ -2913,7 +2917,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntRoll(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntRoll(unit)
+					else
+						UVChatterStuntRoll(closestunit)
+					end
 				else
 					UVChatterStuntRoll(closestunit)
 				end
@@ -2932,7 +2940,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntSpin(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntSpin(unit)
+					else
+						UVChatterStuntSpin(closestunit)
+					end
 				else
 					UVChatterStuntSpin(closestunit)
 				end

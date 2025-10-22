@@ -929,10 +929,10 @@ local function original_pursuit_main( ... )
                 
                 if BustingProgress == 0 then
                     if not UVHUDDisplayBackupTimer then
-                        local uloc, utype = "uv.chase.unit", UnitsChasing
+                        local uloc, utype = "uv.hud.original.chase.unit", UnitsChasing
                         if not UVHUDCopMode then
                             if UnitsChasing ~= 1 then 
-                                uloc = "uv.chase.units"
+                                uloc = "uv.hud.original.chase.units"
                             end
                         else
                             utype = UVHUDWantedSuspectsNumber
