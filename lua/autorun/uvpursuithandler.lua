@@ -836,23 +836,23 @@ HEAT_DEFAULTS = {
 		['2'] = 120,
 		['3'] = 180,
 		['4'] = 180,
-		['5'] = 600
+		['5'] = 240
 	},
 	['heatminimumbounty'] = {
-		['1'] = 120,
-		['2'] = 120,
-		['3'] = 120,
-		['4'] = 120,
-		['5'] = 120,
-		['6'] = 120,
+		['1'] = 1000,
+		['2'] = 10000,
+		['3'] = 50000,
+		['4'] = 250000,
+		['5'] = 1000000,
+		['6'] = 5000000,
 	},
 	['unitsavailable'] = {
-		['1'] = 120,
-		['2'] = 120,
-		['3'] = 120,
-		['4'] = 120,
-		['5'] = 120,
-		['6'] = 120,
+		['1'] = 10,
+		['2'] = 20,
+		['3'] = 30,
+		['4'] = 40,
+		['5'] = 50,
+		['6'] = 60,
 	},
 	['bustspeed'] = {
 		['1'] = 10,
@@ -865,17 +865,17 @@ HEAT_DEFAULTS = {
 	['backuptimer'] = {
 		['1'] = 120,
 		['2'] = 120,
-		['3'] = 120,
-		['4'] = 120,
-		['5'] = 120,
-		['6'] = 120,
+		['3'] = 90,
+		['4'] = 90,
+		['5'] = 60,
+		['6'] = 60,
 	},
 	['cooldowntimer'] = {
-		['1'] = 120,
-		['2'] = 120,
-		['3'] = 120,
-		['4'] = 120,
-		['5'] = 120,
+		['1'] = 20,
+		['2'] = 40,
+		['3'] = 60,
+		['4'] = 80,
+		['5'] = 100,
 		['6'] = 120,
 	},
 	['roadblocks'] = {
@@ -1768,15 +1768,21 @@ if SERVER then
 		--Wrecked vehicles
 		if next(UVWreckedVehicles) ~= nil then
 			for k, car in pairs(UVWreckedVehicles) do
-				if IsValid(car) then
-					if #UVWantedTableVehicle == 1 and not UVRacerPresenceMode then
-						local carPos = car:GetPos()
-						local suspect = UVWantedTableVehicle[1]
-						local enemylocation = (suspect:GetPos()+(vector_up * 50))
-						local distance = enemylocation - carPos
-						if distance:LengthSqr() > 100000000 then
-							car:Remove()
+				if IsValid(car) and #UVWantedTableVehicle > 0 then
+					local closestsuspect
+					local closestdistancetosuspect
+					local suspects = UVWantedTableVehicle
+					local r = math.huge
+					local closestdistancetosuspect, closestsuspect = r^2
+					for i, w in pairs(suspects) do
+						local carpos = car:WorldSpaceCenter()
+						local distance = carpos:DistToSqr(w:WorldSpaceCenter())
+						if distance < closestdistancetosuspect then
+							closestdistancetosuspect, closestsuspect = distance, w
 						end
+					end
+					if closestdistancetosuspect > 100000000 then
+						car:Remove()
 					end
 				else
 					table.RemoveByValue(UVWreckedVehicles, car)

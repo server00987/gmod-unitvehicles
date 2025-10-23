@@ -261,10 +261,8 @@ NETWORK_STRINGS = {
 	"UVRace_StopEndCountdown",
 }
 
-if SERVER then
-	for _, v in pairs( NETWORK_STRINGS ) do
-		util.AddNetworkString( v )
-	end
+for _, v in pairs( NETWORK_STRINGS ) do
+	util.AddNetworkString( v )
 end
 
 file.AsyncRead('unitvehicles/names/Names.json', 'DATA', function( _, _, status, data )
@@ -273,12 +271,51 @@ end, true)
 
 timer.Simple(5, function()
 	if not DecentVehicleDestination then
-		PrintMessage( HUD_PRINTTALK, "/// Unit Vehicles requires Decent Vehicles to be installed! /// https://steamcommunity.com/sharedfiles/filedetails/?id=1587455087")
+		PrintMessage( HUD_PRINTTALK, "#uv.system.dvnotinstalled")
 	end
 	if not Glide then
-		PrintMessage( HUD_PRINTTALK, "/// Unit Vehicles recommends Glide! Attempting to spawn a Glide vehicle from the Unit Manager may cause errors! /// https://steamcommunity.com/sharedfiles/filedetails/?id=3389728250")
+		PrintMessage( HUD_PRINTTALK, "#uv.system.glidenotinstalled")
 	end
 end)
+
+--DEFAULT PRESETS
+local datafiles, datafolders = file.Find("data_static/uvdefaultdata/*", "GAME")
+
+for _, folder in ipairs(datafolders) do
+    local path = "unitvehicles/" .. folder
+    if not file.IsDir(path, "DATA") then
+        file.CreateDir(path)
+    end
+
+    local datafiles2, datafolders2 = file.Find("data_static/uvdefaultdata/"..folder.."/*", "GAME")
+    if datafiles2 then
+        for _, filename in ipairs(datafiles2) do
+            local source = "data_static/uvdefaultdata/" .. folder .. "/" .. filename
+            local destination = "unitvehicles/" .. folder .. "/" .. filename
+            if file.Exists(source, "GAME") then
+                file.Write(destination, file.Read(source, "GAME"))
+            end
+        end
+    end
+
+    for _, folder2 in ipairs(datafolders2) do
+        local subpath = path .. "/" .. folder2
+        if not file.IsDir(subpath, "DATA") then
+            file.CreateDir(subpath)
+        end
+        local datafiles3, datafolders3 = file.Find("data_static/uvdefaultdata/"..folder.."/"..folder2.."/*", "GAME")
+        if datafiles3 then
+            for _, filename in ipairs(datafiles3) do
+                local source = "data_static/uvdefaultdata/" .. folder .. "/" .. folder2 .. "/" .. filename
+                local destination = "unitvehicles/" .. folder .. "/" .. folder2 .. "/" .. filename
+                if file.Exists(source, "GAME") then
+                    file.Write(destination, file.Read(source, "GAME"))
+                end
+            end
+        end
+    end
+
+end
 
 concommand.Add("uv_spawnvehicles", function(ply)
 	if not ply:IsSuperAdmin() then return end
@@ -1051,7 +1088,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
-								if IsValid(unit.e) then 
+								if IsValid(unit.e) and car == unit.e then
 									UVChatterEnemyCrashed(unit) 
 								end
 							end
@@ -1060,7 +1097,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
-								if IsValid(unit.e) then
+								if IsValid(unit.e) and car == unit.e then
 									if object.Sockets and next(object.Sockets) ~= nil then
 										UVChatterHitTrafficSemi(unit)
 									else
@@ -1077,7 +1114,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						local units = ents.FindByClass("npc_uv*")
 						local random_entry = math.random(#units)	
 						local unit = units[random_entry]
-						if IsValid(unit.e) then 
+						if IsValid(unit.e) and car == unit.e then
 							UVChatterRoadblockHit(unit) 
 						end
 					end
@@ -1447,7 +1484,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
-				if IsValid(unit.e) then 
+				if IsValid(unit.e) and car == unit.e then
 					UVChatterRoadblockHit(unit) 
 				end
 			end
@@ -1779,7 +1816,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
-					if IsValid(unit.e) then 
+					if IsValid(unit.e) and car == unit.e then
 						UVChatterRoadblockHit(unit) 
 					end
 				end
@@ -2894,7 +2931,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntJump(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntJump(unit)
+					else
+						UVChatterStuntJump(closestunit)
+					end
 				else
 					UVChatterStuntJump(closestunit)
 				end
@@ -2913,7 +2954,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntRoll(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntRoll(unit)
+					else
+						UVChatterStuntRoll(closestunit)
+					end
 				else
 					UVChatterStuntRoll(closestunit)
 				end
@@ -2932,7 +2977,11 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
-					UVChatterStuntSpin(unit)
+					if unit:GetTarget() == enemy then
+						UVChatterStuntSpin(unit)
+					else
+						UVChatterStuntSpin(closestunit)
+					end
 				else
 					UVChatterStuntSpin(closestunit)
 				end
