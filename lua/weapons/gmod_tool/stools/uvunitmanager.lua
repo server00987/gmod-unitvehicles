@@ -98,7 +98,7 @@ local UIElements = {}
 
 TOOL.ClientConVar["selected_heat"] = 1
 
-TOOL.ClientConVar["vehiclebase"] = 1
+TOOL.ClientConVar["vehiclebase"] = 3
 TOOL.ClientConVar["onecommander"] = 1
 TOOL.ClientConVar["onecommanderevading"] = 0
 TOOL.ClientConVar["onecommanderhealth"] = 5000
@@ -157,13 +157,13 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 -- end
 
 local defaultvoicetable = {
-	"cop1, cop2, cop3", --Patrol
-	"cop1, cop2, cop3", --Support
-	"cop1, cop2, cop3", --Pursuit
-	"cop1, cop2, cop3", --Interceptor
-	"fed1", --Special
-	"fed1", --Commander
-	"cop1, cop2, cop3", --Rhino
+	"cop1, cop2, cop3, cop4, cop5", --Patrol
+	"cop1, cop2, cop3, cop4, cop5", --Support
+	"cop1, cop2, cop3, cop4, cop5", --Pursuit
+	"cop1, cop2, cop3, cop4, cop5", --Interceptor
+	"cop1, cop2, cop3, cop4, cop5", --Special
+	"cop1, cop2, cop3, cop4, cop5", --Commander
+	"cop1", --Rhino
 	"air", --Air
 }
 
@@ -181,6 +181,66 @@ for _, v in pairs( {'Misc', 'Dispatch'} ) do
 	TOOL.ClientConVar[conVarKey] = "default"
 end
 
+local unitsheat1 = {
+	"default_crownvic.json", --Patrol
+	"", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
+local unitsheat2 = {
+	"default_crownvic.json", --Patrol
+	"default_explorer.json", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
+local unitsheat3 = {
+	"default_crownvic.json", --Patrol
+	"default_explorer.json", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
+local unitsheat4 = {
+	"default_crownvic.json", --Patrol
+	"default_explorer.json", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
+local unitsheat5 = {
+	"default_crownvic.json", --Patrol
+	"default_explorer.json", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
+local unitsheat6 = {
+	"default_crownvic.json", --Patrol
+	"default_explorer.json", --Support
+	"", --Pursuit
+	"", --Interceptor
+	"", --Special
+	"", --Commander
+	"" --Rhino
+}
+
 for i = 1, MAX_HEAT_LEVEL do
 	local prevIterator = i - 1
 	
@@ -189,13 +249,26 @@ for i = 1, MAX_HEAT_LEVEL do
 	-- TOOL.ClientConVar['bountytime' .. i] = HeatDefaults['bountytime'][tostring( i )] or 0
 	-- TOOL.ClientConVar['timetillnextheat' .. timeTillNextHeatId] = HeatDefaults['timetillnextheat'][tostring( timeTillNextHeatId )] or 0
 	
-	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 		local lowercaseUnit = string.lower( v )
 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 		
 		-------------------------------------------
-		
-		TOOL.ClientConVar[conVarKey] = ""
+		if i == 1 then
+			TOOL.ClientConVar[conVarKey] = unitsheat1[index]
+		elseif i == 2 then
+			TOOL.ClientConVar[conVarKey] = unitsheat2[index]
+		elseif i == 3 then
+			TOOL.ClientConVar[conVarKey] = unitsheat3[index]
+		elseif i == 4 then
+			TOOL.ClientConVar[conVarKey] = unitsheat4[index]
+		elseif i == 5 then
+			TOOL.ClientConVar[conVarKey] = unitsheat5[index]
+		elseif i == 6 then
+			TOOL.ClientConVar[conVarKey] = unitsheat6[index]
+		else
+			TOOL.ClientConVar[conVarKey] = ""
+		end
 	end
 	
 	for _, conVar in pairs( HEAT_SETTINGS ) do
@@ -285,18 +358,7 @@ local PROTECTED_CONVARS = {
 local DEFAULTS = {
 	['uvunitmanager_selected_heat'] = 1,
 	['uvunitmanager_minheat'] = 1,
-	['uvunitmanager_maxheat'] = 6,
-	['uvunitmanager_maxheat'] = 6,
-	['uvunitmanager_bustspeed1'] = 10,
-	['uvunitmanager_bustspeed2'] = 10,
-	['uvunitmanager_bustspeed3'] = 15,
-	['uvunitmanager_bustspeed4'] = 15,
-	['uvunitmanager_bustspeed5'] = 20,
-	['uvunitmanager_bustspeed6'] = 20,
-	['uvunitmanager_bustspeed7'] = 20,
-	['uvunitmanager_bustspeed8'] = 20,
-	['uvunitmanager_bustspeed9'] = 20,
-	['uvunitmanager_bustspeed10'] = 20,
+	['uvunitmanager_maxheat'] = 6
 }
 
 local function _setConVar( cvar, value )
