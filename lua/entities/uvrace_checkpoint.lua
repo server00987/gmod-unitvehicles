@@ -53,10 +53,10 @@ function ENT:Initialize()
 			-- self:SetMaxPos(maxPos)
 		-- end
 
-		-- self:SetCollisionBounds(vec0, maxPos - basePos)
-		-- hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
-		-- 	AddOriginToPVS(self:GetLocalPos())
-		-- end)
+		--self:SetCollisionBounds(vec0, maxPos - basePos)
+		hook.Add("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex(), function()
+			AddOriginToPVS(self:GetLocalPos())
+		end)
 		-- function ENT:UpdateTransmitState()
 		-- 	return TRANSMIT_ALWAYS
 		-- end
