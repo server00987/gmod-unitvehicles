@@ -1,5 +1,10 @@
 <------- October 15 ------->
 # New Features
+**Vehicles**
+Added two preset Unit Vehicles:
+- *Ford Crown Victoria Police Cruiser*
+- *Ford Police Interceptor Utility 2011 Police Cruiser*
+
 **Pursuit Tech**
 Revamped the Pursuit Tech tool from scratch:
 - Merged both "Racer" and "Unit" tools into one
@@ -16,6 +21,9 @@ Added three new Pursuit Techs:
 **Pursuit**
 - Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
 - Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
+
+**Racing**
+- Added an option to randomly assign bodygroups, skins and color for AI vehicles
 
 **Chatter Profiles**
 - Added map-specific address calls for Dispatch; bigcity, construct, dunwood, eastcoast, echocity, flatgrass, goldencity, southbeach, southside, gm\_palm\_city, gm\_tri\_polis & gm\_wangan

@@ -1,5 +1,12 @@
 <------- October 15 ------->
 [h1]New Features[/h1]
+[b]Vehicles[/b]
+Added two preset Unit Vehicles:
+[list]
+	[*]Ford Crown Victoria Police Cruiser
+	[*]Ford Police Interceptor Utility 2011 Police Cruiser
+[/list]
+
 [b]Pursuit Tech[/b]
 Revamped the Pursuit Tech tool from scratch:
 [list]
@@ -21,6 +28,11 @@ Added three new Pursuit Techs:
 [list]
 	[*]Force-starting a pursuit now uses the on-screen racing countdown from your main/backup HUD type, or uses a generic fallback one
 	[*]Added a "Being Fined..." meter when being fined by an AI Unit, and a "Busting" meter when being busted while in a race and pursuit
+[/list]
+
+[b]Racing[/b]
+[list]
+	[*]Added an option to randomly assign bodygroups, skins and color for AI vehicles
 [/list]
 
 [b]Chatter Profiles[/b]
