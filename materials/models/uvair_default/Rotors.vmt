@@ -1,0 +1,18 @@
+VertexLitGeneric
+{
+	$basetexture				"models\uvair_default\Rotors.vtf"
+
+	$translucent		1
+
+	$color2						"[1 1 1]"
+
+	"Proxies"
+	{
+		"Animatedtexture"
+			{
+			"Animatedtexturevar" "$Basetexture"
+			"Animatedtextureframenumvar" "$frame"
+			"Animatedtextureframerate" "60"
+			}
+	}
+}
