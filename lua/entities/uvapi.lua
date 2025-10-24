@@ -537,7 +537,11 @@ end
 
 function ENT:SetELSSiren(on)
 	if on == self:GetELSSiren() then return end
-	if self.v.IsSimfphyscar then
+	if self.v.IsGlideVehicle then
+		if cffunctions then
+			CFswitchSiren( self.v, true )
+		end
+	elseif self.v.IsSimfphyscar then
 		if self.v.ems then self.v.ems:Stop() end
 
 		local v_list = list.Get( "simfphys_lights" )[self.v.LightsTable]

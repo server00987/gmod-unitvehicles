@@ -17,12 +17,19 @@ ENT.NitrousRegenDelay = 0.6
 
 DEFINE_BASECLASS( "base_glide_car" )
 
+ENT.SirenTable = {
+    ")uvcars/federal sig omega 90/emv_wail.wav",
+    ")uvcars/federal sig omega 90/emv_yelp.wav",
+    ")uvcars/federal sig omega 90/emv_hilo.wav",
+    ")uvcars/federal sig omega 90/emv_sweep.wav"
+}
+
 if CLIENT then
 
     ENT.SirenVolume = 1
 
     ENT.SirenLoopSound = ")uvcars/federal sig omega 90/emv_wail.wav"
-    ENT.SirenLoopAltSound = ")uvcars/federal sig omega 90/emv_yelp.wav"
+    ENT.SirenLoopAltSound = ")uvcars/federal sig omega 90/emv_horn.wav"
     ENT.HornSound = ")uvcars/federal sig omega 90/emv_horn.wav"
 
     ENT.CameraOffset = Vector( -250, 0, 65 )
