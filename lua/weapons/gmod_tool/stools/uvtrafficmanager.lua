@@ -856,7 +856,16 @@ function TOOL:LeftClick( trace )
 		duplicator.SetLocalAng( Angle( 0, ply:EyeAngles().yaw, 0 ) )
 		
 		local Ents = duplicator.Paste( self:GetOwner(), ply.UVTrafficTOOLMemory.Entities, ply.UVTrafficTOOLMemory.Constraints )
-		local Ent = Ents[next(Ents)]
+		
+		local Ent = nil
+		if next(Ents) ~= nil then
+			for _, v in pairs(Ents) do
+				if v.IsGlideVehicle and v.GetIsHonking then
+					Ent = v
+					break
+				end
+			end
+		end
 		
 		if not IsValid( Ent ) then 
 			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVTrafficTOOLMemory.SpawnName .." dosen't seem to be installed!" )
@@ -1462,7 +1471,9 @@ function TOOL:GetVehicleData( ent, ply )
 		-- 	v.PhysicsObjects[0].Angle = 0
 		-- end
 		
-		-- ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].Angle = Angle(0,180,0)
+		if not ent.Sockets or next(ent.Sockets) == nil then --Not a semi
+			ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].Angle = Angle(0,180,0)
+		end
 		-- ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
 
 		local c = ent:GetColor()
@@ -1531,6 +1542,20 @@ function TOOL:GetVehicleData( ent, ply )
 	end
 	
 	if not IsValid( ply ) then return end
+
+	if ply.UVTrafficTOOLMemory.Entities then
+		for _, v in pairs(ply.UVTrafficTOOLMemory.Entities) do
+			v.OnDieFunctions = nil
+			v.AutomaticFrameAdvance = nil
+			v.BaseClass = nil
+		end
+	end
+
+	if ply.UVTrafficTOOLMemory.Constraints then
+		for _, v in pairs(ply.UVTrafficTOOLMemory.Constraints) do
+			v.OnDieFunctions = nil
+		end
+	end
 	
 	net.Start("UVTrafficManagerGetTrafficInfo")
 	net.WriteTable( ply.UVTrafficTOOLMemory )
