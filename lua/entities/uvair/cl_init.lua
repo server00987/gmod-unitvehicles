@@ -8,7 +8,21 @@ function ENT:Initialize()
 
 	self.Model = self:GetModel()
 
-	if self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
+	if self.Model == "models/uvair_default.mdl" then
+		self.SpotlightPos = Vector(159.89,0,11.88)
+		self.StrobePos = Vector(-391.33,0,141.96)
+		self.StrobePos2 = Vector(34.67,0,23.31)
+		self.PortPos = Vector(-256.3,57.13,62.06)
+		self.StarboardPos = Vector(-256.3,-57.13,62.06)
+		self.SternPos = Vector(-380.99,0,67.72)
+	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
+		self.SpotlightPos = Vector(77.65,0,-60.62)
+		self.StrobePos = Vector(-71.47,0,25.84)
+		self.StrobePos2 = Vector(-7.27,0,-68.58)
+		self.PortPos = Vector(-247.8,39.53,60.79)
+		self.StarboardPos = Vector(-247.8,-49.77,60.79)
+		self.SternPos = Vector(-234.44,-5.02,-5.88)
+	elseif self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
 		self.SpotlightPos = Vector(85,0,25)
 		self.StrobePos = Vector(-295,0,140)
 		self.StrobePos2 = Vector(-28.07,0,17.35)
@@ -43,13 +57,6 @@ function ENT:Initialize()
 		self.PortPos = Vector(-95.66,77.16,71.55)
 		self.StarboardPos = Vector(-95.66,-77.16,71.55)
 		self.SternPos = Vector(-462.08,-0.74,72.05)
-	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
-		self.SpotlightPos = Vector(77.65,0,-60.62)
-		self.StrobePos = Vector(-71.47,0,25.84)
-		self.StrobePos2 = Vector(-7.27,0,-68.58)
-		self.PortPos = Vector(-247.8,39.53,60.79)
-		self.StarboardPos = Vector(-247.8,-49.77,60.79)
-		self.SternPos = Vector(-234.44,-5.02,-5.88)
 	elseif self.Model == "models/unboundheli/unboundheli.mdl" then
 		self.SpotlightPos = Vector(28.63,0,-0.05)
 		self.StrobePos = Vector(-465.71,0,200.94)

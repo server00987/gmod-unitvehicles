@@ -102,7 +102,7 @@ TOOL.ClientConVar["vehiclebase"] = 3
 TOOL.ClientConVar["onecommander"] = 1
 TOOL.ClientConVar["onecommanderevading"] = 0
 TOOL.ClientConVar["onecommanderhealth"] = 5000
-TOOL.ClientConVar["helicoptermodel"] = 1
+TOOL.ClientConVar["helicoptermodel"] = "Default"
 TOOL.ClientConVar["helicopterbarrels"] = 1
 TOOL.ClientConVar["helicopterspikestrip"] = 1
 TOOL.ClientConVar["helicopterbusting"] = 1
@@ -1298,14 +1298,24 @@ if CLIENT then
 			Text = "#tool.uvunitmanager.settings.heli",
 		})
 		
-		local helicoptermodel = vgui.Create("DNumSlider")
-		helicoptermodel:SetText("#tool.uvunitmanager.settings.heli.model")
-		helicoptermodel:SetTooltip("#tool.uvunitmanager.settings.heli.model.desc")
-		helicoptermodel:SetMinMax(1, 8)
-		helicoptermodel:SetDecimals(0)
-		helicoptermodel:SetValue(GetConVar("uvunitmanager_helicoptermodel"))
-		helicoptermodel:SetConVar("uvunitmanager_helicoptermodel")
-		CPanel:AddItem(helicoptermodel)
+		local helicoptermodeltable = {
+			"Default",
+			"NFS Hot Pursuit 2",
+			"NFS Most Wanted",
+			"NFS Undercover",
+			"NFS Hot Pursuit 2010",
+			"NFS No Limits",
+			"NFS Rivals, Payback & Heat",
+			"NFS Unbound",
+			"The Crew"
+		}
+
+		local helicoptermodel = CPanel:ComboBox( "#tool.uvunitmanager.settings.heli.model", "uvunitmanager_helicoptermodel" )
+		for _, v in pairs( helicoptermodeltable ) do
+			helicoptermodel:AddChoice( v )
+		end
+		helicoptermodel:SetValue( GetConVar("uvunitmanager_helicoptermodel"):GetString() )
+		helicoptermodel:SetConVar( "uvunitmanager_helicoptermodel" )
 		
 		local helicopterbustracer = vgui.Create("DCheckBoxLabel")
 		helicopterbustracer:SetText("#tool.uvunitmanager.settings.heli.canbust")

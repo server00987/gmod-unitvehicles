@@ -48,17 +48,18 @@ end
 function ENT:Initialize()
 
 	local modeltable = {
-		"models/nfs_mwpolhel/nfs_mwpolhel.mdl",
-		"models/nfs_ucpolhel/nfs_ucpolhel.mdl",
-		"models/nfs_hppolhel/nfs_hppolhel.mdl",
-		"models/nfs_nlpolhel/nfs_nlpolhel.mdl",
-		"models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
-		"models/hp2heliai/hp2heliai.mdl",
-		"models/unboundheli/unboundheli.mdl",
-		"models/thecrewheli/thecrewheli.mdl"
+		["Default"] = "models/uvair_default.mdl",
+		["NFS Hot Pursuit 2"] = "models/hp2heliai/hp2heliai.mdl",
+		["NFS Most Wanted"] = "models/nfs_mwpolhel/nfs_mwpolhel.mdl",
+		["NFS Undercover"] = "models/nfs_ucpolhel/nfs_ucpolhel.mdl",
+		["NFS Hot Pursuit 2010"] = "models/nfs_hppolhel/nfs_hppolhel.mdl",
+		["NFS No Limits"] = "models/nfs_nlpolhel/nfs_nlpolhel.mdl",
+		["NFS Rivals, Payback & Heat"] = "models/nfs_paybackpolhel/nfs_paybackpolhel.mdl",
+		["NFS Unbound"] = "models/unboundheli/unboundheli.mdl",
+		["The Crew"] = "models/thecrewheli/thecrewheli.mdl"
 	}
 
-	self.Model = modeltable[UVUHelicopterModel:GetInt()] or modeltable[1]
+	self.Model = modeltable[UVUHelicopterModel:GetString()] or "models/uvair_default.mdl"
 
 	self:SetModel(self.Model)
 	self:SetSkin(math.random(0,self:SkinCount()-1))
@@ -71,8 +72,12 @@ function ENT:Initialize()
 	self.phys:SetMass(5000)
 	self.phys:Wake()
 
-	--Compensation for the model's volume
-	if self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
+	--Compensation for the model's volume (volume * 2)
+	if self.Model == "models/uvair_default.mdl" then
+		self.phys:SetMass(32764)
+	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
+		self.phys:SetMass(30830)
+	elseif self.Model == "models/nfs_mwpolhel/nfs_mwpolhel.mdl" then
 		self.phys:SetMass(5026)
 	elseif self.Model == "models/nfs_ucpolhel/nfs_ucpolhel.mdl" then
 		self.phys:SetMass(45556)
@@ -82,8 +87,6 @@ function ENT:Initialize()
 		self.phys:SetMass(42382)
 	elseif self.Model == "models/nfs_paybackpolhel/nfs_paybackpolhel.mdl" then
 		self.phys:SetMass(85322)
-	elseif self.Model == "models/hp2heliai/hp2heliai.mdl" then
-		self.phys:SetMass(30830)
 	elseif self.Model == "models/unboundheli/unboundheli.mdl" then
 		self.phys:SetMass(123078)
 	elseif self.Model == "models/thecrewheli/thecrewheli.mdl" then
