@@ -1,7 +1,7 @@
 <------- October 15 ------->
 [h1]New Features[/h1]
 [b]Vehicles[/b]
-Added two preset Unit Vehicles:
+Added two Glide Unit Vehicles, courtesy of TalonSolid:
 [list]
 	[*]Ford Crown Victoria Police Cruiser
 	[*]Ford Police Interceptor Utility 2011 Police Cruiser
