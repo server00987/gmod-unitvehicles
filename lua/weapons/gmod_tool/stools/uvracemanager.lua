@@ -575,13 +575,13 @@ function TOOL:LeftClick(trace)
 	local pos = unlocalizedPos or trace.HitPos
 	chunk = chunk or Vector()
 
-	local keyPos = secondClick and "Pos1" or "Pos0"
-	local keyChunk = secondClick and "Chunk1" or "Chunk0"
+	local keyPos = self.secondClick and "Pos1" or "Pos0"
+	local keyChunk = self.secondClick and "Chunk1" or "Chunk0"
 
 	self[keyPos] = pos
 	self[keyChunk] = chunk
 
-	if secondClick then
+	if self.secondClick then
 		if ply:KeyDown( IN_USE ) then
 			self.Pos1.z = self.Pos1.z + (GetConVar("unitvehicle_cpheight"):GetInt() or 64)
 		end
@@ -600,7 +600,9 @@ function TOOL:LeftClick(trace)
 		cPoint:SetChunk(self.Chunk0)
 		cPoint:SetChunkMax(self.Chunk1)
 
-		cPoint:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
+		if game.SinglePlayer() then
+			cPoint:SetSpeedLimit(GetConVar("uvracemanager_speedlimit"):GetInt())
+		end
 
 		cPoint:Spawn()
 
@@ -612,17 +614,17 @@ function TOOL:LeftClick(trace)
 		ply:AddCleanup("uvrace_ents", cPoint)
 	end
 
-	if secondClick then
+	if self.secondClick then
 		self.Pos0 = nil
 		self.Chunk0 = nil
 		self.Pos1 = nil
 		self.Chunk1 = nil
 	end
 
-	self:SetStage( secondClick and 0 or 1 )
+	self:SetStage( self.secondClick and 0 or 1 )
 	net.Start("UVRace_UpdatePos")
 
-	net.WriteBool(secondClick)
+	net.WriteBool(self.secondClick)
 	net.WriteVector(pos)
 
 	net.WriteBool(chunk ~= nil)
@@ -630,7 +632,7 @@ function TOOL:LeftClick(trace)
 
 	net.Send(ply)
 
-	secondClick = not secondClick
+	self.secondClick = not self.secondClick
 	
 	-- if secondClick then
 	-- 	local pos2 = trace.HitPos

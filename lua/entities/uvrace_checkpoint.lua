@@ -87,28 +87,12 @@ if CLIENT then
 
 			render.SetColorMaterial()
 			if InfMap then render.OverrideDepthEnable(true, true) end
-			--print(InfMap.unlocalize_vector(self:InfMap_GetPos()), self.CHUNK_OFFSET)
-			--print(self:GetPos(), self.CHUNK_OFFSET)
-
-			--print("pos", pos, "max", self:GetMaxPos())
-
-			--print(InfMap.localize_vector( self:GetMaxPos() ))
-
-			--local max, chunk_offset = (InfMap and InfMap.localize_vector( self:GetMaxPos() )) - pos
-
-			--local sMax = InfMap.localize_vector( self:GetMaxPos() )
-			-- print(sMax)
-			-- 5725.752441 -5108.517090 -12799.968750	5880.725586 -5046.941406 -12395.643555
-
-			--print(self:GetMaxPos(), pos)
 
 			local pos = (InfMap and self:GetLocalPos()) or self:GetPos()
 			local max = (InfMap and self:GetLocalMaxPos()) or self:GetMaxPos()
 
 			local chunk = (InfMap and self:GetChunk()) or nil
 			local maxChunk = (InfMap and self:GetChunkMax()) or nil
-
-			--print(pos, max, chunk, maxChunk)
 
 			local max = max - pos
 
@@ -121,7 +105,6 @@ if CLIENT then
 				end
 			end
 			if id == 0 then
-				--print(max, pos)
 				render.DrawWireframeBox(pos, ang0, vec0, max, Color(255, 255, 255))
 				if not InfMap then
 					render.DrawBox(pos, ang0, vec0, max, Color(255, 255, 255, 100))
@@ -250,9 +233,6 @@ if CLIENT then
 end
 
 if SERVER then
-	-- function ENT:StartTouch(vehicle)
-	-- 	print("StartTouch")
-	-- end
 	function ENT:OnRemove()
 		hook.Remove("SetupPlayerVisibility", "UVRace_Checkpoint" .. self:EntIndex())
 		UVRaceCheckFinishLine()

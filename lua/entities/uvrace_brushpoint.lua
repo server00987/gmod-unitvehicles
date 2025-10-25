@@ -16,8 +16,6 @@ if SERVER then
 	function ENT:Initialize()
 		self:SetSolid(SOLID_BBOX)
 		self:SetCollisionBoundsWS(self:GetPos1(), self:GetPos2())
-
-		--print(self:GetPos1(), self:GetPos2())
 		
 		local pos1 = (InfMap and InfMap.unlocalize_vector(self:GetPos1(), self:GetChunk())) or self:GetPos1()
 		local pos2 = (InfMap and InfMap.unlocalize_vector(self:GetPos2(), self:GetChunkMax())) or self:GetPos2()
@@ -47,7 +45,6 @@ if SERVER then
 	end
 
 	function ENT:StartTouch(vehicle)
-		--print("StartTouch")
 		if not vehicle.uvraceparticipant then return end
 		if vehicle.uvbusted then return end
 		if InfMap then
