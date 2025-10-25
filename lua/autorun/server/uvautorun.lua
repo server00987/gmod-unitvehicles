@@ -1177,7 +1177,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 								if NPC.ramming then
 									NPC.ramming = nil
 									NPC:SetHorn(false)
-									NPC:SetELSSiren(true)
+									NPC:ChangeELSSiren()
 								end
 							end
 						end)
@@ -1550,7 +1550,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 					if NPC.ramming and not NPC:IsPlayer() then
 						NPC.ramming = nil
 						NPC:SetHorn(false)
-						NPC:SetELSSiren(true)
+						NPC:ChangeELSSiren()
 					end
 				end)
 			end
@@ -1865,7 +1865,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 						if NPC.ramming then
 							NPC.ramming = nil
 							NPC:SetHorn(false)
-							NPC:SetELSSiren(true)
+							NPC:ChangeELSSiren()
 						end
 					end)
 				end

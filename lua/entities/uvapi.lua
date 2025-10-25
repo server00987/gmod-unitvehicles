@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 local dvd = DecentVehicleDestination
-local TurnOnLights = (dvd and dvd.CVars.TurnOnLights)
+local TurnOnLights = dvd.CVars.TurnOnLights
 local LIGHTLEVEL = {
 	NONE = 0,
 	RUNNING = 1,
@@ -176,16 +176,6 @@ function ENT:GetELSSound(v)
 	and isfunction(vehicle.VC_getStates) then
 		local states = vehicle:VC_getStates()
 		return vehicle:VC_getELSSoundOn() or istable(states) and states.ELS_ManualOn
-	end
-end
-
-function ENT:GetELSSiren(v)
-	local vehicle = v or self.v
-	if not (IsValid(vehicle) and vehicle:IsVehicle()) then return end
-	if Photon
-	and isfunction(self.v.ELS_SirenOption) 
-	and isfunction(self.v.ELS_SirenSet) then
-		return self.v:ELS_SirenOption() and self.v:ELS_SirenSet()
 	end
 end
 
@@ -535,12 +525,9 @@ function ENT:SetELSSound(on)
 	end
 end
 
-function ENT:SetELSSiren(on)
-	if on == self:GetELSSiren() then return end
-	if self.v.IsGlideVehicle then
-		if cffunctions then
-			CFswitchSiren( self.v, true )
-		end
+function ENT:ChangeELSSiren()
+	if self.v.IsGlideVehicle and isfunction(CFswitchSiren) then
+		CFswitchSiren( self.v, true )
 	elseif self.v.IsSimfphyscar then
 		if self.v.ems then self.v.ems:Stop() end
 
@@ -570,11 +557,7 @@ function ENT:SetELSSiren(on)
         end
 	elseif Photon
 	and isfunction(self.v.ELS_SirenToggle) then
-		if on then
-			self.v:ELS_SirenToggle(math.random(1,4))
-		else
-			self.v:ELS_SirenToggle(math.random(1,4))
-		end
+		self.v:ELS_SirenToggle(math.random(1,4))
 	end
 end
 
