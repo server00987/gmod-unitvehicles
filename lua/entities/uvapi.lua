@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 local dvd = DecentVehicleDestination
-local TurnOnLights = dvd.CVars.TurnOnLights
+local TurnOnLights = (dvd and dvd.CVars.TurnOnLights)
 local LIGHTLEVEL = {
 	NONE = 0,
 	RUNNING = 1,
