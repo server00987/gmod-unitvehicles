@@ -221,20 +221,24 @@ local function IsSupportedVehicle(ent)
     return (ent.IsGlideVehicle or ent.IsSimfphyscar or ent:GetClass() == "prop_vehicle_jeep")
 end
 
+local function VehicleIsOccupied(ent)
+    if not IsValid(ent) then return false end
+    if ent:IsVehicle() then
+        return ent:GetDriver() ~= nil and IsValid(ent:GetDriver())
+    end
+    return false
+end
+
 local function PlayerCanModifyPT(ply, ent)
-    if not IsValid(ply) or not IsValid(ent) then return false end
+    if not IsValid(ent) then return false end
 
-    -- Super Admins always allowed
-    if ply:IsSuperAdmin() then return true end
-
-    -- Check for ownership via prop protection or GMod's CPPI if available
-    if ent.CPPIGetOwner then
-        local owner = ent:CPPIGetOwner()
-        if owner == ply then return true end
+    -- If vehicle is unoccupied, allow anyone to modify
+    if not VehicleIsOccupied(ent) then
+        return true
     end
 
-    -- Fallback: try GMod's built-in .Owner or .OwnerEnt (depending on how you spawn vehicles)
-    if ent.Owner == ply or ent:GetNWEntity("Owner") == ply then
+    -- Optional: still allow superadmins to override
+    if ply:IsSuperAdmin() then
         return true
     end
 
@@ -557,8 +561,12 @@ function TOOL:LeftClick(trace)
     local car = trace.Entity
     if not IsValid(car) then return false end
     if not IsSupportedVehicle(car) then return false end
+	if not PlayerCanModifyPT(self:GetOwner(), car) then
+		-- print("[UVPursuitTech] Vehicle is occupied, cannot apply PT for", self:GetOwner())
+		return false
+	end
+
     if CLIENT then return false end
-	if not PlayerCanModifyPT(self:GetOwner(), car) then return false end
 
     local isUnit = car.UnitVehicle == true
     local slotNum = self:GetClientNumber("slot") or 1
