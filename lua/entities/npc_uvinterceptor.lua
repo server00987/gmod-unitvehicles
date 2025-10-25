@@ -636,7 +636,7 @@ if SERVER then
 					self:PathFindToEnemy(uvcalllocation)
 					self:SetELS(true)
 					self:SetELSSound(true)
-					self:SetELSSiren(true)
+					self:ChangeELSSiren()
 					return
 				end
 			else
@@ -1054,7 +1054,7 @@ if SERVER then
 							if Photon and isfunction(self.v.ELS_ManualSiren) then
 								self.v:ELS_ManualSiren(false)
 							end
-							self:SetELSSiren(true)
+							self:ChangeELSSiren()
 						end
 					end)
 					self.toofar = nil
@@ -1617,7 +1617,7 @@ if SERVER then
 					timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
 					self.invincible = true
 					self.toofar = nil
-					self:SetELSSiren(true)
+					self:ChangeELSSiren()
 					if evectdot > 0 then 
 						--ph:SetVelocity(eph:GetVelocity()) 
 					else
@@ -1678,7 +1678,7 @@ if SERVER then
 					end
 					local MathSiren = math.random(1,100)
 					if MathSiren < 30 then
-						self:SetELSSiren(true)
+						self:ChangeELSSiren()
 					end
 					if Chatter:GetBool() and IsValid(self.v) and enemyvelocity > 100000 and self:StraightToTarget(self.e) and MathAggressive ~= 1 then
 						UVChatterCloseToEnemy(self) 
