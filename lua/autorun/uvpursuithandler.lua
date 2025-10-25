@@ -943,6 +943,7 @@ UVPTEMPDamage = CreateConVar("uvpursuittech_emp_damage", 0.1, {FCVAR_ARCHIVE, FC
 UVPTEMPForce = CreateConVar("uvpursuittech_emp_force", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 UVPTEMPMaxAmmo = CreateConVar("uvpursuittech_emp_maxammo", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
 UVPTEMPCooldown = CreateConVar("uvpursuittech_emp_cooldown", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Cooldown")
+UVPTEMPMaxDistance = CreateConVar("uvpursuittech_emp_maxdistance", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Distance")
 
 -- Juggernaut
 UVPTJuggernautDuration = CreateConVar("uvpursuittech_juggernaut_duration", 10, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -987,6 +988,7 @@ UVUnitPTEMPDamage = CreateConVar("uvpursuittech_emp_damage_unit", 0.1, {FCVAR_AR
 UVUnitPTEMPForce = CreateConVar("uvpursuittech_emp_force_unit", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 UVUnitPTEMPMaxAmmo = CreateConVar("uvpursuittech_emp_maxammo_unit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 UVUnitPTEMPCooldown = CreateConVar("uvpursuittech_emp_cooldown_unit", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUnitPTEMPMaxDistance = CreateConVar("uvpursuittech_emp_maxdistance_unit", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 -- RepairKit
 UVUnitPTRepairKitMaxAmmo = CreateConVar("uvpursuittech_repairkit_maxammo_unit", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Pursuit Tech Max Ammo")
@@ -4088,6 +4090,9 @@ else -- CLIENT Settings | HUD/Options
 		if UVEMPLockingTarget then
 			local diff = CurTime() - (UVEMPLockingStart or 0)
 
+			local isUnit = table.HasValue( UnitTable, UVEMPLockingTarget )
+			local maxDistance = math.pow( ( isUnit and UVUnitPTEMPMaxDistance:GetInt() ) or UVPTEMPMaxDistance:GetInt(), 2 )
+
 			if diff > 5 then 
 				UVEMPLockingStart = nil
 				UVEMPLockingTarget = nil
@@ -4123,7 +4128,7 @@ else -- CLIENT Settings | HUD/Options
 			local spaceString = string.rep(" ", spaceCount)
 			local selectedColor = nil
 
-			if UVIsVehicleInCone(UVEMPLockingSource, UVEMPLockingTarget, 90, 2000000) then
+			if UVIsVehicleInCone(UVEMPLockingSource, UVEMPLockingTarget, 90, maxDistance) then
 				selectedColor = Color(255, 255 * blink, 255 * blink)
 			else
 				selectedColor = Color(255, 255, 255, 100)

@@ -17,7 +17,8 @@ local PursuitTechDefs = {
             damage   = { default = 0.1, min = 0, max = 1, decimals = 1 },
             force    = { default = 100, min = 0, max = 1000, decimals = 0 },
             cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
-            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
+            maxammo     = { default = 5, min = 0, max = 120, decimals = 0 },
+            maxdistance = { default = 1000, min = 0, max = 5000, decimals = 0 }
         }
     },
 

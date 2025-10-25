@@ -1099,10 +1099,11 @@ if SERVER then
         if not isUnit then table.Add( vehiclePool, UVUnitVehicles ) end
 
         local shortestTargetDistance = math.huge
+        local maxDistance = math.pow( ( isUnit and UVUnitPTEMPMaxDistance:GetInt() ) or UVPTEMPMaxDistance:GetInt(), 2 )
 
         for _, v in pairs( vehiclePool ) do
             local vehicleDistance = v:WorldSpaceCenter():DistToSqr(carPos)
-            if UVIsVehicleInCone( car, v, 90, 1000000 ) and vehicleDistance < shortestTargetDistance and not v.LockedOnBy and not v.wrecked then
+            if UVIsVehicleInCone( car, v, 90, maxDistance ) and vehicleDistance < shortestTargetDistance and not v.LockedOnBy and not v.wrecked then
                 target = v
                 shortestTargetDistance = vehicleDistance
                 break
@@ -1151,7 +1152,7 @@ if SERVER then
             if CurTime() - car.startLock >= 5 then
                 cleanup()
 
-                if not UVIsVehicleInCone( car, target, 90, 1000000 ) then 
+                if not UVIsVehicleInCone( car, target, 90, maxDistance ) then 
                     UVPTEvent( 
                         {
                             carDriver,
