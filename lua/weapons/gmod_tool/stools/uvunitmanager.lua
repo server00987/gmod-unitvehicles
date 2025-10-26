@@ -24,6 +24,14 @@ local bustspeed = {}
 
 -- For ConVars, append the heat to the end of the ConVar string
 local UnitSettings = {
+	['bountytime'] = {
+		Class = 'DNumSlider',
+		MinMax = {1, 10000000},
+		Decimals = 0,
+		ConVar = 'uvunitmanager_bountytime',
+		ToolText = '#tool.uvunitmanager.settings.bounty.10s',
+		ToolTip = '#tool.uvunitmanager.settings.bounty.10s.desc'
+	},
 	['heatminimumbounty'] = {
 		Class = 'DNumSlider',
 		MinMax = {1, 10000000},
@@ -128,34 +136,6 @@ TOOL.ClientConVar["bountyspecial"] = 25000
 TOOL.ClientConVar["bountycommander"] = 100000
 TOOL.ClientConVar["bountyrhino"] = 50000
 
--- TOOL.ClientConVar["bountytime1"] = 1000
--- TOOL.ClientConVar["bountytime2"] = 5000
--- TOOL.ClientConVar["bountytime3"] = 10000
--- TOOL.ClientConVar["bountytime4"] = 50000
--- TOOL.ClientConVar["bountytime5"] = 100000
--- TOOL.ClientConVar["bountytime6"] = 500000
-
--- TOOL.ClientConVar["timetillnextheatenabled"] = 0
--- TOOL.ClientConVar["timetillnextheat1"] = 120
--- TOOL.ClientConVar["timetillnextheat2"] = 120
--- TOOL.ClientConVar["timetillnextheat3"] = 180
--- TOOL.ClientConVar["timetillnextheat4"] = 180
--- TOOL.ClientConVar["timetillnextheat5"] = 600
--- TOOL.ClientConVar["timetillnextheat6"] = 600
--- TOOL.ClientConVar["timetillnextheat7"] = 600
--- TOOL.ClientConVar["timetillnextheat8"] = 600
--- TOOL.ClientConVar["timetillnextheat9"] = 600
-
--- for i = 1, 6 do
--- 	TOOL.ClientConVar["unitspatrol" .. i] = " "
--- 	TOOL.ClientConVar["unitssupport" .. i] = " "
--- 	TOOL.ClientConVar["unitspursuit" .. i] = " "
--- 	TOOL.ClientConVar["unitsinterceptor" .. i] = " "
--- 	TOOL.ClientConVar["unitsspecial" .. i] = " "
--- 	TOOL.ClientConVar["unitscommander" .. i] = " "
--- 	TOOL.ClientConVar["unitsrhino" .. i] = " "
--- end
-
 local defaultvoicetable = {
 	"cop1, cop2, cop3, cop4, cop5", --Patrol
 	"cop1, cop2, cop3, cop4, cop5", --Support
@@ -245,10 +225,7 @@ for i = 1, MAX_HEAT_LEVEL do
 	local prevIterator = i - 1
 	
 	local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
-	
-	-- TOOL.ClientConVar['bountytime' .. i] = HeatDefaults['bountytime'][tostring( i )] or 0
-	-- TOOL.ClientConVar['timetillnextheat' .. timeTillNextHeatId] = HeatDefaults['timetillnextheat'][tostring( timeTillNextHeatId )] or 0
-	
+
 	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 		local lowercaseUnit = string.lower( v )
 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
@@ -278,67 +255,6 @@ for i = 1, MAX_HEAT_LEVEL do
 		TOOL.ClientConVar[conVarKey] = HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
 	end
 end
-
--- for key, array in pairs( HeatDefaultSettings ) do
-
--- 	for heat_i, heat_value in pairs( value ) do
-
--- 	end
--- end
-
--- --Heat Level 1
--- TOOL.ClientConVar["heatminimumbounty1"] = 1000
--- TOOL.ClientConVar["maxunits1"] = 2
--- TOOL.ClientConVar["unitsavailable1"] = 10
--- TOOL.ClientConVar["backuptimer1"] = 180
--- TOOL.ClientConVar["cooldowntimer1"] = 20
--- TOOL.ClientConVar["roadblocks1"] = 0
--- TOOL.ClientConVar["helicopters1"] = 0
-
--- --Heat Level 2
--- TOOL.ClientConVar["heatminimumbounty2"] = 10000
--- TOOL.ClientConVar["maxunits2"] = 4
--- TOOL.ClientConVar["unitsavailable2"] = 20
--- TOOL.ClientConVar["backuptimer2"] = 120
--- TOOL.ClientConVar["cooldowntimer2"] = 45
--- TOOL.ClientConVar["roadblocks2"] = 1
--- TOOL.ClientConVar["helicopters2"] = 0
-
--- --Heat Level 3
--- TOOL.ClientConVar["heatminimumbounty3"] = 100000
--- TOOL.ClientConVar["maxunits3"] = 6
--- TOOL.ClientConVar["unitsavailable3"] = 30
--- TOOL.ClientConVar["backuptimer3"] = 120
--- TOOL.ClientConVar["cooldowntimer3"] = 75
--- TOOL.ClientConVar["roadblocks3"] = 1
--- TOOL.ClientConVar["helicopters3"] = 0
-
--- --Heat Level 4
--- TOOL.ClientConVar["heatminimumbounty4"] = 500000
--- TOOL.ClientConVar["maxunits4"] = 8
--- TOOL.ClientConVar["unitsavailable4"] = 40
--- TOOL.ClientConVar["backuptimer4"] = 120
--- TOOL.ClientConVar["cooldowntimer4"] = 90
--- TOOL.ClientConVar["roadblocks4"] = 1
--- TOOL.ClientConVar["helicopters4"] = 1
-
--- --Heat Level 5
--- TOOL.ClientConVar["heatminimumbounty5"] = 1000000
--- TOOL.ClientConVar["maxunits5"] = 10
--- TOOL.ClientConVar["unitsavailable5"] = 50
--- TOOL.ClientConVar["backuptimer5"] = 90
--- TOOL.ClientConVar["cooldowntimer5"] = 120
--- TOOL.ClientConVar["roadblocks5"] = 1
--- TOOL.ClientConVar["helicopters5"] = 1
-
--- --Heat Level 6
--- TOOL.ClientConVar["heatminimumbounty6"] = 5000000
--- TOOL.ClientConVar["maxunits6"] = 12
--- TOOL.ClientConVar["unitsavailable6"] = 60
--- TOOL.ClientConVar["backuptimer6"] = 90
--- TOOL.ClientConVar["cooldowntimer6"] = 120
--- TOOL.ClientConVar["roadblocks6"] = 1
--- TOOL.ClientConVar["helicopters6"] = 1
 
 local conVarsDefault = TOOL:BuildConVarList()
 
@@ -388,13 +304,7 @@ if CLIENT then
 		{ name = "left" },
 		{ name = "right" },
 	}
-	
-	-- language.Add("tool.uvunitmanager.name", "Unit Manager")
-	-- language.Add("tool.uvunitmanager.desc", "Create and manage your own Unit Vehicles!")
-	-- language.Add("tool.uvunitmanager.0", "Looking for more options? Find it under the options tab" )
-	-- language.Add("tool.uvunitmanager.left", "Spawns the currently selected Unit, incase if you wanna make adjustments" )
-	-- language.Add("tool.uvunitmanager.right", "Select the vehicle you would like to be added to the Unit" )
-	
+
 	local selecteditem	= nil
 	local UVTOOLMemory	= {}
 	
@@ -847,8 +757,62 @@ if CLIENT then
 			file.CreateDir( "unitvehicles/prop_vehicle_jeep/units" )
 			print("Created a Default Vehicle Base data file for the Unit Vehicles!")
 		end
-		
-		local applysettings = vgui.Create("DButton")
+
+		local presetComboBox = CPanel:AddControl("ComboBox", { -- Preset List
+			MenuButton = 1,
+			Folder = "units",
+			Options = {
+				["#preset.default"] = conVarsDefault
+			},
+			CVars = conVarList
+		})
+
+		function presetComboBox:OnSelect(index, value, data)
+			--print(#data)
+			local warned = false
+			local count = 0
+			local count1 = 0
+
+			for _, newCV in pairs(conVarList) do
+				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
+			end
+
+			for incomingCV, incomingValue in pairs(data) do
+				count1 = count1 + 1
+				--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
+
+				local cvNoNumber = nil
+				local number = nil
+
+				local _incomingCV = incomingCV
+
+				while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
+					number = _incomingCV:sub( -1 )
+					cvNoNumber = _incomingCV:sub( 1, -2 )
+					_incomingCV = cvNoNumber
+				end
+
+				local numberIterator = 0
+
+				if LEGACY_CONVARS[_incomingCV] then
+					if not warned then
+						warned = true
+						local warning = string.format( lang "tool.uvunitmanager.presets.legacy.warning", value )
+						notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
+					end
+
+					if LEGACY_CONVARS[_incomingCV].HasNumber then
+						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
+					else
+						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
+					end
+				elseif not PROTECTED_CONVARS[incomingCV] then
+					_setConVar( incomingCV, incomingValue )
+				end
+			end
+		end
+
+		local applysettings = vgui.Create("DButton") -- Apply Button
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
@@ -936,282 +900,597 @@ if CLIENT then
 			
 		end
 		CPanel:AddItem(applysettings)
-		
-		local presetComboBox = CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "units",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = conVarList
+
+		CPanel:AddControl("Label", {
+			Text = "#tool.uvunitmanager.settings.desc",
 		})
+		
+		-- Unified Vehicle Base UI
+		local vehicleBases = {
+			{ id = 1, name = "HL2 Jeep", func = UVUnitManagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/units/", type = "txt" },
+			{ id = 2, name = "Simfphys", func = UVUnitManagerGetSaves, path = "unitvehicles/simfphys/units/", type = "txt" },
+			{ id = 3, name = "Glide", func = UVUnitManagerGetSavesGlide, path = "unitvehicles/glide/units/", type = "json" }
+		}
 
-		--PrintTable(conVarList)
+		local vehicleBaseCombo = vgui.Create("DComboBox")
+		vehicleBaseCombo:SetSize(280, 20)
+		vehicleBaseCombo:SetTooltip("#tool.uvunitmanager.settings.base.desc")
+		local currentBaseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
+		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
+		for _, base in ipairs(vehicleBases) do
+			vehicleBaseCombo:AddChoice(base.name, base.id)
+		end
+		
+		-- Scroll Panel
+		local FrameListPanel = vgui.Create("DFrame")
+		FrameListPanel:SetSize(280, 320)
+		FrameListPanel:SetTitle("")
+		FrameListPanel:SetVisible(true)
+		FrameListPanel:ShowCloseButton(false)
+		FrameListPanel:SetDraggable(false)
+		FrameListPanel.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+		CPanel:AddItem(FrameListPanel)
 
-		function presetComboBox:OnSelect(index, value, data)
-			--print(#data)
-			local warned = false
-			local count = 0
-			local count1 = 0
+		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
+		-- ScrollPanel:SetSize(280, 320)
+		-- ScrollPanel:SetPos(0, 0)
+		ScrollPanel:DockMargin(0, -25, 0, 0)
+		ScrollPanel:Dock(FILL)
 
-			-- for _, newCV in pairs(data) do
-			-- 	count = count + 1
-			-- end
-			
-			for _, newCV in pairs(conVarList) do
-				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
-			end
+		-- Populate the scroll panel
+		local function PopulateVehicleList(baseId)
+			ScrollPanel:Clear()
+			selecteditem = nil
 
-			for incomingCV, incomingValue in pairs(data) do
-				count1 = count1 + 1
-				--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
+					local index, highlight, offset = 0, false, 22
 
-				local cvNoNumber = nil
-				local number = nil
-
-				local _incomingCV = incomingCV
-
-				while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
-					number = _incomingCV:sub( -1 )
-					cvNoNumber = _incomingCV:sub( 1, -2 )
-					_incomingCV = cvNoNumber
-				end
-
-				local numberIterator = 0
-
-				if LEGACY_CONVARS[_incomingCV] then
-					if not warned then
-						warned = true
-						local warning = string.format( lang "tool.uvunitmanager.presets.legacy.warning", value )
-						notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
+					-- Handle empty lists
+					if #savedVehicles == 0 then
+						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
+						emptyLabel:SetText("#tool.uvunitmanager.settings.novehicle")
+						emptyLabel:SetTextColor(Color(200, 200, 200))
+						emptyLabel:SetFont("DermaDefaultBold")
+						emptyLabel:SetContentAlignment(5) -- center
+						emptyLabel:Dock(TOP)
+						emptyLabel:SetTall(offset)
+						return
 					end
 
-					if LEGACY_CONVARS[_incomingCV].HasNumber then
-						--print(LEGACY_CONVARS[cvNoNumber].Replacement .. number)
-						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
-					else
-						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
+					for _, v in ipairs(savedVehicles) do
+						local printname = v
+						if not selecteditem then selecteditem = v end
+
+						local Button = vgui.Create("DButton", ScrollPanel)
+						Button:SetText(printname)
+						Button:SetTextColor(Color(255, 255, 255))
+						Button:Dock(TOP)
+						Button:SetTall(offset)
+						Button:DockMargin(0, 0, 0, 2)
+
+						Button.highlight = highlight
+						Button.printname = v
+
+						Button.Paint = function(self, w, h)
+							local c_selected = Color(128, 185, 128, 255)
+							local c_normal = self.highlight and Color(108, 111, 114, 200) or Color(77, 80, 82, 200)
+							local c_hovered = Color(41, 128, 185, 255)
+							local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
+							draw.RoundedBox(5, 1, 1, w - 2, h - 1, c_)
+						end
+
+						Button.DoClick = function(self)
+							selecteditem = self.printname
+							SetClipboardText(selecteditem)
+
+							if base.type == "json" then
+								UVTOOLMemory = util.JSONToTable(file.Read(base.path .. selecteditem, "DATA"), true)
+							else
+								local DataString = file.Read(base.path .. selecteditem, "DATA")
+								local words, decoded = string.Explode("", DataString), {}
+								for k, v in pairs(words) do decoded[k] = string.char(string.byte(v) - 20) end
+								local Data = string.Explode("#", string.Implode("", decoded))
+								table.Empty(UVTOOLMemory)
+								for _, v in pairs(Data) do
+									local Var = string.Explode("=", v)
+									local name, variable = Var[1], Var[2]
+									if name and variable then
+										if name == "SubMaterials" then
+											UVTOOLMemory[name] = {}
+											local submats = string.Explode(",", variable)
+											for i = 0, (table.Count(submats) - 1) do
+												UVTOOLMemory[name][i] = submats[i + 1]
+											end
+										else
+											UVTOOLMemory[name] = variable
+										end
+									end
+								end
+							end
+
+							net.Start("UVUnitManagerGetUnitInfo")
+							net.WriteTable(UVTOOLMemory)
+							net.SendToServer()
+						end
+
+						index = index + 1
+						highlight = not highlight
 					end
-				elseif not PROTECTED_CONVARS[incomingCV] then
-					_setConVar( incomingCV, incomingValue )
+					break
+				end
+			end
+		end
+
+		-- Initialize
+		PopulateVehicleList(currentBaseId)
+		
+		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
+		
+		-- Refresh Button
+		local RefreshBtn = vgui.Create("DButton")
+		RefreshBtn:SetText("#refresh")
+		RefreshBtn:SetSize(280, 20)
+		RefreshBtn.DoClick = function()
+			PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
+			notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
+			surface.PlaySound("buttons/button15.wav")
+		end
+		CPanel:AddItem(RefreshBtn)
+
+		-- Delete Button
+		local DeleteBtn = vgui.Create("DButton")
+		DeleteBtn:SetText("#spawnmenu.menu.delete")
+		DeleteBtn:SetSize(280, 20)
+		DeleteBtn.DoClick = function()
+			local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
+			local basePath, baseType
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					basePath, baseType = base.path, base.type
+					break
+				end
+			end
+			if isstring(selecteditem) and basePath then
+				if file.Delete(basePath .. selecteditem) then
+					notification.AddLegacy(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem), NOTIFY_UNDO, 5)
+					surface.PlaySound("buttons/button15.wav")
+					Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
+				end
+			end
+			PopulateVehicleList(baseId)
+		end
+		CPanel:AddItem(DeleteBtn)
+		
+		-- Dropdown for vehicle base selection
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.base.title" })
+		CPanel:AddItem(vehicleBaseCombo)
+
+		CPanel:AddControl("Label", { Text = "" }) -- General Heat Settings
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.heatlvlgeneral.title" })
+
+		local TimeTillNextHeatEnabled = vgui.Create("DCheckBoxLabel") -- Timed Heat
+		TimeTillNextHeatEnabled:SetText("#tool.uvunitmanager.settings.heatlvl.timed")
+		TimeTillNextHeatEnabled:SetConVar("uvunitmanager_timetillnextheatenabled")
+		TimeTillNextHeatEnabled:SetTooltip("#tool.uvunitmanager.settings.heatlvl.timed.desc")
+		TimeTillNextHeatEnabled:SetValue(GetConVar("uvunitmanager_timetillnextheatenabled"):GetInt())
+		TimeTillNextHeatEnabled:SetTextColor(Color(0,0,0))
+		CPanel:AddItem(TimeTillNextHeatEnabled)
+
+		local MinHeat = vgui.Create("DNumSlider") -- Min. Heat
+		MinHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.min")
+		MinHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.min.desc")
+		MinHeat:SetMinMax(1, MAX_HEAT_LEVEL)
+		MinHeat:SetDecimals(0)
+		MinHeat:SetValue(GetConVar("uvunitmanager_minheat"))
+		MinHeat:SetConVar("uvunitmanager_minheat")
+		CPanel:AddItem(MinHeat)
+
+		local MaxHeat = vgui.Create("DNumSlider") -- Max Heat
+		MaxHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.max")
+		MaxHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.max.desc")
+		MaxHeat:SetMinMax(1, MAX_HEAT_LEVEL)
+		MaxHeat:SetDecimals(0)
+		MaxHeat:SetValue(GetConVar("uvunitmanager_maxheat"))
+		MaxHeat:SetConVar("uvunitmanager_maxheat")
+		CPanel:AddItem(MaxHeat)
+
+		CPanel:AddControl("Label", { Text = "" }) -- General Heat Settings
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.heatlvl.title" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.heatlvl.desc" })
+
+		-- Heat Selection Row
+		local heatCombo = CPanel:ComboBox("#tool.uvunitmanager.settings.heatlvl")
+		heatCombo:SetValue(language.GetPhrase("#tool.uvunitmanager.settings.heatlvl.select"))
+		for i = 1, MAX_HEAT_LEVEL do
+			heatCombo:AddChoice(i, i)
+		end
+
+		-- Settings panel
+		local settingsPanel = {}
+		for _, setting_name in pairs(HEAT_SETTINGS) do
+			local array = UnitSettings[setting_name]
+			if not array then continue end
+
+			local element = vgui.Create(array.Class)
+			if array.MinMax then element:SetMinMax(array.MinMax[1], array.MinMax[2]) end
+			if array.Decimals then element:SetDecimals(array.Decimals) end
+			if array.ToolText then element:SetText(array.ToolText) end
+			if array.ToolTip then element:SetTooltip(array.ToolTip) end
+			if array.ConVar then element.ConVar = array.ConVar end
+
+			element:SetVisible(false)
+			settingsPanel[setting_name] = element
+			CPanel:AddItem(element)
+		end
+
+		-- Unit Dropdown
+		-- local unitLabel = vgui.Create("DLabel", CPanel)
+		-- unitLabel:SetText(language.GetPhrase("#tool.uvunitmanager.settings.assunits.title"))
+		-- unitLabel:SetTextColor(Color(0,0,0))
+		-- unitLabel:SetVisible(false)
+		-- CPanel:AddItem(unitLabel)
+
+		local unitDesc = vgui.Create("DLabel", CPanel)
+		unitDesc:SetText(language.GetPhrase("#tool.uvunitmanager.settings.assunits.desc"))
+		unitDesc:SetTextColor(Color(0,0,0))
+		unitDesc:SetVisible(false)
+		CPanel:AddItem(unitDesc)
+
+		local unitCombo = vgui.Create("DComboBox")
+		unitCombo:SetWide(280)
+		unitCombo:SetValue(language.GetPhrase("#tool.uvunitmanager.settings.voiceunit.select"))
+		unitCombo:SetVisible(false)
+		CPanel:AddItem(unitCombo)
+
+		local unitTypes = { "Patrol", "Support", "Pursuit", "Interceptor", "Special", "Commander", "Rhino" }
+		for _, v in ipairs(unitTypes) do
+			local loc = "#uv.unit." .. string.lower(v)
+			unitCombo:AddChoice(language.GetPhrase(loc), v)
+		end
+
+		-- Vehicle Multi-Choice Panel for Heat/Unit
+		local vehiclePanelHeat = vgui.Create("DScrollPanel", CPanel)
+		vehiclePanelHeat:SetVisible(false)
+		vehiclePanelHeat.Paint = function(self, w, h)
+			draw.RoundedBox(5,0,0,w,h,Color(115,115,115,255))
+			draw.RoundedBox(5,1,1,w-2,h-2,Color(0,0,0))
+		end
+		CPanel:AddItem(vehiclePanelHeat)
+
+		-- local buffer = vgui.Create("DPanel", vehiclePanelHeat)
+		-- buffer:SetTall(25)
+		-- buffer:Dock(BOTTOM)
+
+		-- Populate multi-choice list for selected heat/unit
+		local function PopulateVehicleListHeatLvl(baseId, unitName, heatLevel)
+			vehiclePanelHeat:Clear()
+			-- vehiclePanelHeat:AddItem(buffer)
+			if not unitName or not heatLevel then
+				vehiclePanelHeat:SetVisible(false)
+				return
+			end
+			vehiclePanelHeat:SetVisible(true)
+
+			local base = vehicleBases[baseId]
+			if not base then return end
+			local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
+			if not savedVehicles or #savedVehicles == 0 then
+				local lbl = vgui.Create("DLabel", vehiclePanelHeat)
+				lbl:SetText("#tool.uvunitmanager.settings.novehicle")
+				lbl:SetTextColor(Color(200,200,200))
+				lbl:Dock(TOP)
+				lbl:DockMargin(5,5,5,5)
+				return
+			end
+
+			local selectedConVar = GetConVar(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel))
+			local selectedStr = selectedConVar:GetString() or ""
+			local selected = {}
+			for entry in string.gmatch(selectedStr, "([^%s]+)") do
+				selected[entry] = true
+			end
+
+			local entryHeight = 25
+			local maxVisible = 12
+			vehiclePanelHeat:SetTall(math.min(#savedVehicles, maxVisible) * entryHeight + 5)
+
+			for _, v in ipairs(savedVehicles) do
+				local btn = vgui.Create("DButton", vehiclePanelHeat)
+				btn:SetText(v)
+				btn:SetTextColor(Color(255,255,255))
+				btn:SetTall(22)
+				btn:Dock(TOP)
+				btn:DockMargin(5,3,5,0)
+
+				btn.isActive = selected[v] or false
+				btn.Paint = function(self,w,h)
+					local col = self.isActive and Color(0,150,0) or self:IsHovered() and Color(41,128,185) or Color(60,60,60)
+					draw.RoundedBox(4,0,0,w,h,col)
+				end
+
+				btn.DoClick = function(self)
+					self.isActive = not self.isActive
+					selected[v] = self.isActive
+
+					local newList = {}
+					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
+					RunConsoleCommand(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel), table.concat(newList," "))
+				end
+			end
+		end
+
+		-- Heat selection callback
+		local selectedHeat
+		heatCombo.OnSelect = function(_, _, display, value)
+			selectedHeat = tonumber(value)
+			if not selectedHeat then return end
+
+			-- show settings sliders
+			for _, el in pairs(settingsPanel) do
+				el:SetVisible(true)
+				if el.ConVar then
+					local conVarName = el.ConVar .. selectedHeat
+					el:SetConVar(conVarName)
+					local conVar = GetConVar(conVarName)
+					if conVar then el:SetValue(conVar:GetFloat()) end
 				end
 			end
 
-			--print(count, count1)
+			-- show unit selection
+			-- unitLabel:SetVisible(true)
+			unitDesc:SetVisible(true)
+			unitCombo:SetVisible(true)
+
+			-- read the current selected unit from the combo box if not set
+			if not selectedUnit then
+				selectedUnit = unitCombo:GetOptionData(unitCombo:GetSelectedID())
+			end
+
+			-- refresh vehicle list if unit is selected
+			if selectedUnit then
+				local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
+				PopulateVehicleListHeatLvl(baseId, selectedUnit, selectedHeat)
+			end
 		end
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.settings.clickapply",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.note",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.global.simphys",
-		})
-		
-		local Frame = vgui.Create( "DFrame" )
-		Frame:SetSize( 280, 320 )
-		Frame:SetTitle( "" )
-		Frame:SetVisible( true )
-		Frame:ShowCloseButton( false )
-		Frame:SetDraggable( false )
-		Frame.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
+
+		-- Unit selection callback
+		local selectedUnit
+		unitCombo.OnSelect = function(_, _, display, value)
+			selectedUnit = value
+			if not selectedUnit or not selectedHeat then
+				vehiclePanelHeat:SetVisible(false)
+				return
+			end
+
+			local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
+			PopulateVehicleListHeatLvl(baseId, selectedUnit, selectedHeat)
 		end
-		CPanel:AddItem(Frame)
-		
-		UVUnitManagerScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVUnitManagerScrollPanel:SetSize( 280, 320 )
-		UVUnitManagerScrollPanel:SetPos( 0, 0 )
-		
-		UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-		
-		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "#refresh" )
-		Refresh:SetSize( 280, 20 )
-		Refresh.DoClick = function( self )
-			UVUnitManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
+
+		-- Sync dropdown and slider
+		vehicleBaseCombo.OnSelect = function(self, index, value, data)
+			local baseId = tonumber(data)
+			if not baseId then return end
+			RunConsoleCommand("uvunitmanager_vehiclebase", baseId)
+			PopulateVehicleList(baseId)
+			PopulateVehicleListHeatLvl(baseId, selectedUnit, selectedHeat)
 		end
-		CPanel:AddItem(Refresh)
-		
-		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "#spawnmenu.menu.delete" )
-		Delete:SetSize( 280, 20 )
-		Delete.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/simfphys/units/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
+
+		CPanel:AddControl("Label", { Text = "" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.voiceprofile.title" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.voiceprofile.desc" })
+
+		-- collect all available voice profiles
+		local availableVoiceProfiles = {}
+		local _, folders = file.Find("sound/chatter2/*", "GAME")
+		if folders then
+			for _, v in ipairs(folders) do
+				table.insert(availableVoiceProfiles, v)
+			end
+		end
+
+		-- all valid units
+		local unitTypes = { "Patrol", "Support", "Pursuit", "Interceptor", "Special", "Commander", "Rhino", "Air" }
+
+		-- UI refs
+		local selectedUnit
+		local selectedProfile
+		local profileCombo
+		local subfolderPanel
+
+		-- unit dropdown
+		local unitCombo = CPanel:ComboBox("#tool.uvunitmanager.settings.voiceunit")
+		unitCombo:SetWide(280)
+		unitCombo:SetValue(language.GetPhrase("#tool.uvunitmanager.settings.voiceunit.select"))
+		for _, v in ipairs(unitTypes) do
+			local localized
+			if v == "Air" then
+				localized = "#uv.unit.helicopter"
+			else
+				localized = "#uv.unit." .. string.lower(v)
+			end
+			unitCombo:AddChoice(language.GetPhrase(localized), v)
+		end
+
+		-- profile dropdown (initially hidden)
+		profileCombo = CPanel:ComboBox("#tool.uvunitmanager.settings.voiceprofile", "uvunitmanager_voice_profileselector")
+		profileCombo:SetVisible(false)
+
+		-- container for subfolder buttons (initially hidden)
+		subfolderPanel = vgui.Create("DScrollPanel", CPanel)
+		subfolderPanel:SetVisible(false)
+		subfolderPanel.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+		CPanel:AddItem(subfolderPanel)
+
+		-- rebuild subfolder buttons dynamically
+		local function RefreshVoiceSubfolders(unit, profile)
+			subfolderPanel:Clear()
+			if not unit or not profile then
+				subfolderPanel:SetVisible(false)
+				return
+			end
+
+			local voiceCVar = GetConVar("uvunitmanager_" .. string.lower(unit) .. "_voice")
+			if not voiceCVar then
+				subfolderPanel:SetVisible(false)
+				return
+			end
+
+			-- parse comma-separated convar into table
+			local current = voiceCVar:GetString() or ""
+			local selected = {}
+			for entry in string.gmatch(current, "([^,]+)") do
+				selected[string.Trim(entry)] = true
+			end
+
+			-- find subfolders inside chatter2/<profile>/
+			local _, subfolders = file.Find("sound/chatter2/" .. profile .. "/*", "GAME")
+			if not subfolders then subfolders = {} end
+
+			-- filter out excluded folders
+			local displayFolders = {}
+			for _, folder in ipairs(subfolders) do
+				if folder ~= "dispatch" and folder ~= "misc" then
+					table.insert(displayFolders, folder)
 				end
 			end
-			
-			UVUnitManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-		end
-		CPanel:AddItem(Delete)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.global.glide",
-		})
-		
-		local FrameGlide = vgui.Create( "DFrame" )
-		FrameGlide:SetSize( 280, 320 )
-		FrameGlide:SetTitle( "" )
-		FrameGlide:SetVisible( true )
-		FrameGlide:ShowCloseButton( false )
-		FrameGlide:SetDraggable( false )
-		FrameGlide.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameGlide)
-		
-		UVUnitManagerScrollPanelGlide = vgui.Create( "DScrollPanel", FrameGlide )
-		UVUnitManagerScrollPanelGlide:SetSize( 280, 320 )
-		UVUnitManagerScrollPanelGlide:SetPos( 0, 0 )
-		
-		UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
-		
-		local RefreshGlide = vgui.Create( "DButton", CPanel )
-		RefreshGlide:SetText( "#refresh" )
-		RefreshGlide:SetSize( 280, 20 )
-		RefreshGlide.DoClick = function( self )
-			UVUnitManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
-			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshGlide)
-		
-		local DeleteGlide = vgui.Create( "DButton", CPanel )
-		DeleteGlide:SetText( "#spawnmenu.menu.delete" )
-		DeleteGlide:SetSize( 280, 20 )
-		DeleteGlide.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/glide/units/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
+
+			-- no subfolders
+			if #displayFolders == 0 then
+				subfolderPanel:SetVisible(false)
+				return
+			end
+
+			-- show the panel
+			subfolderPanel:SetVisible(true)
+
+			-- dynamic height: one button = 24px + margin
+			local entryHeight = 25
+			local maxVisible = 6
+			local panelHeight = math.min(#displayFolders, maxVisible) * entryHeight + 5
+			subfolderPanel:SetTall(panelHeight)
+
+			for _, folder in ipairs(displayFolders) do
+				local btn = vgui.Create("DButton", subfolderPanel)
+				btn:SetText(folder)
+				btn:SetTextColor(Color(255, 255, 255))
+				btn:SetTall(22)
+				btn:Dock(TOP)
+				btn:DockMargin(5, 3, 5, 0)
+
+				local active = selected[folder] or false
+				btn.isActive = active
+
+				btn.Paint = function(self, w, h)
+					local col = self.isActive and Color(128, 185, 128) or self:IsHovered() and Color(41, 128, 185, 255) or Color(77, 80, 82, 200)
+					draw.RoundedBox(4, 0, 0, w, h, col)
+					-- draw.SimpleText(self:GetText(), "DermaDefault", w / 2, h / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+
+				btn.DoClick = function(self)
+					self.isActive = not self.isActive
+					selected[folder] = self.isActive
+
+					local newList = {}
+					for k, v in pairs(selected) do
+						if v then table.insert(newList, k) end
+					end
+
+					RunConsoleCommand("uvunitmanager_" .. string.lower(unit) .. "_voice", table.concat(newList, ","))
 				end
 			end
-			
-			UVUnitManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
 		end
-		CPanel:AddItem(DeleteGlide)
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.global.hl2",
-		})
-		
-		local FrameJeep = vgui.Create( "DFrame" )
-		FrameJeep:SetSize( 280, 320 )
-		FrameJeep:SetTitle( "" )
-		FrameJeep:SetVisible( true )
-		FrameJeep:ShowCloseButton( false )
-		FrameJeep:SetDraggable( false )
-		FrameJeep.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameJeep)
-		
-		UVUnitManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
-		UVUnitManagerScrollPanelJeep:SetSize( 280, 320 )
-		UVUnitManagerScrollPanelJeep:SetPos( 0, 0 )
-		
-		UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
-		
-		local RefreshJeep = vgui.Create( "DButton", CPanel )
-		RefreshJeep:SetText( "#refresh" )
-		RefreshJeep:SetSize( 280, 20 )
-		RefreshJeep.DoClick = function( self )
-			UVUnitManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
-			notification.AddLegacy( "#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshJeep)
-		
-		local DeleteJeep = vgui.Create( "DButton", CPanel )
-		DeleteJeep:SetText( "#spawnmenu.menu.delete" )
-		DeleteJeep:SetSize( 280, 20 )
-		DeleteJeep.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/prop_vehicle_jeep/units/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvunitmanager.deleted"), selecteditem ) )
+		for _, unit in ipairs(unitTypes) do
+			local profileCVar = GetConVar("uvunitmanager_" .. string.lower(unit) .. "_voiceprofile")
+			if profileCVar then
+				local currentProfile = profileCVar:GetString() or ""
+				if currentProfile ~= "" then
+					profileCombo:AddChoice(currentProfile)
 				end
 			end
-			
-			UVUnitManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
 		end
-		CPanel:AddItem(DeleteJeep)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.base.title",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.base.desc",
-		})
-		
-		local vehiclebase = vgui.Create("DNumSlider")
-		vehiclebase:SetText("#tool.uvunitmanager.settings.base")
-		vehiclebase:SetTooltip("#tool.uvunitmanager.settings.base.type")
-		vehiclebase:SetMinMax(1, 3)
-		vehiclebase:SetDecimals(0)
-		vehiclebase:SetValue(GetConVar("uvunitmanager_vehiclebase"))
-		vehiclebase:SetConVar("uvunitmanager_vehiclebase")
-		CPanel:AddItem(vehiclebase)
-		
-		-- CPanel:AddControl("Label", {
-		-- Text = "1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide",
-		-- })
-		
-		CPanel:AddControl("Label", {
-			Text = "#uv.settings.ptech",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.ptech.desc",
-		})
-		
+
+		-- when selecting unit
+		unitCombo.OnSelect = function(_, _, display, value)
+			selectedUnit = value
+			if not selectedUnit then
+				profileCombo:SetVisible(false)
+				subfolderPanel:SetVisible(false)
+				return
+			end
+
+			-- Repopulate profile list
+			profileCombo:SetVisible(true)
+			profileCombo:Clear()
+			for _, prof in ipairs(availableVoiceProfiles) do
+				profileCombo:AddChoice(prof)
+			end
+
+			-- Set saved profile
+			local profileCVar = GetConVar("uvunitmanager_" .. string.lower(selectedUnit) .. "_voiceprofile")
+			if profileCVar then
+				local currentProfile = profileCVar:GetString() or ""
+				if currentProfile ~= "" then
+					profileCombo:SetValue(currentProfile)
+					selectedProfile = currentProfile
+				else
+					selectedProfile = nil
+				end
+			end
+
+			RefreshVoiceSubfolders(selectedUnit, selectedProfile)
+		end
+
+		-- when selecting profile
+		profileCombo.OnSelect = function(_, _, value)
+			selectedProfile = value
+			if not selectedUnit then return end
+
+			RunConsoleCommand("uvunitmanager_" .. string.lower(selectedUnit) .. "_voiceprofile", value)
+			RefreshVoiceSubfolders(selectedUnit, selectedProfile)
+		end
+
+		-- Dispatch / Misc (simple handling, no per-voice subfolders)
+		for _, v in ipairs({ "Dispatch", "Misc" }) do
+			local langKey = (v == "Misc") and "#uv.misc" or "#uv.unit." .. string.lower(v)
+			local localized = language.GetPhrase(langKey)
+			CPanel:AddControl("Label", { Text = localized })
+
+			local key = string.format("uvunitmanager_%s_voiceprofile", string.lower(v))
+			local combo = CPanel:ComboBox("#tool.uvunitmanager.settings.voiceprofile", key)
+			combo:SetConVar(key)
+			for _, prof in ipairs(availableVoiceProfiles) do
+				combo:AddChoice(prof)
+			end
+		end
+
+		CPanel:AddControl("Label", { Text = "" })
+		CPanel:AddControl("Label", { Text = "#uv.settings.ptech" })		
 		local pursuittech = vgui.Create("DCheckBoxLabel")
-		pursuittech:SetText("#tool.uvpursuittech.name")
+		pursuittech:SetText("#tool.uvunitmanager.settings.ptech")
 		pursuittech:SetConVar("uvunitmanager_pursuittech")
 		pursuittech:SetTooltip("#tool.uvunitmanager.settings.ptech.enable.desc")
 		pursuittech:SetValue(GetConVar("uvunitmanager_pursuittech"):GetInt())
+		pursuittech:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech)
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.ptech.spawnwith",
-		})
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.ptech.desc" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.ptech.spawnwith" })
 		
 		local pursuittech_esf = vgui.Create("DCheckBoxLabel")
 		pursuittech_esf:SetText("#uv.ptech.esf")
 		pursuittech_esf:SetConVar("uvunitmanager_pursuittech_esf")
 		pursuittech_esf:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_esf:SetValue(GetConVar("uvunitmanager_pursuittech_esf"):GetInt())
+		pursuittech_esf:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_esf)
 
 		local pursuittech_emp = vgui.Create("DCheckBoxLabel")
@@ -1219,6 +1498,7 @@ if CLIENT then
 		pursuittech_emp:SetConVar("uvunitmanager_pursuittech_emp")
 		pursuittech_emp:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_emp:SetValue(GetConVar("uvunitmanager_pursuittech_emp"):GetInt())
+		pursuittech_emp:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_emp)
 		
 		local pursuittech_spikes = vgui.Create("DCheckBoxLabel")
@@ -1226,6 +1506,7 @@ if CLIENT then
 		pursuittech_spikes:SetConVar("uvunitmanager_pursuittech_spikestrip")
 		pursuittech_spikes:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_spikes:SetValue(GetConVar("uvunitmanager_pursuittech_spikestrip"):GetInt())
+		pursuittech_spikes:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_spikes)
 		
 		local pursuittech_killswitch = vgui.Create("DCheckBoxLabel")
@@ -1233,6 +1514,7 @@ if CLIENT then
 		pursuittech_killswitch:SetConVar("uvunitmanager_pursuittech_killswitch")
 		pursuittech_killswitch:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_killswitch:SetValue(GetConVar("uvunitmanager_pursuittech_killswitch"):GetInt())
+		pursuittech_killswitch:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_killswitch)
 		
 		local pursuittech_repairkit = vgui.Create("DCheckBoxLabel")
@@ -1240,6 +1522,7 @@ if CLIENT then
 		pursuittech_repairkit:SetConVar("uvunitmanager_pursuittech_repairkit")
 		pursuittech_repairkit:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_repairkit:SetValue(GetConVar("uvunitmanager_pursuittech_repairkit"):GetInt())
+		pursuittech_repairkit:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_repairkit)
 
 		local pursuittech_shockram = vgui.Create("DCheckBoxLabel")
@@ -1247,6 +1530,7 @@ if CLIENT then
 		pursuittech_shockram:SetConVar("uvunitmanager_pursuittech_shockram")
 		pursuittech_shockram:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_shockram:SetValue(GetConVar("uvunitmanager_pursuittech_shockram"):GetInt())
+		pursuittech_shockram:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_shockram)
 
 		local pursuittech_gpsdart = vgui.Create("DCheckBoxLabel")
@@ -1254,21 +1538,18 @@ if CLIENT then
 		pursuittech_gpsdart:SetConVar("uvunitmanager_pursuittech_gpsdart")
 		pursuittech_gpsdart:SetTooltip("#tool.uvunitmanager.settings.ptech.spawnwith.desc")
 		pursuittech_gpsdart:SetValue(GetConVar("uvunitmanager_pursuittech_gpsdart"):GetInt())
+		pursuittech_gpsdart:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(pursuittech_gpsdart)
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.commander",
-		})
-		
-		-- CPanel:AddControl("Label", {
-		-- Text = "With One Commander enabled, the Commander will be made as a BOSS! There will be an endless horde of Units until the Commander is taken out!",
-		-- })
-		
+		CPanel:AddControl("Label", { Text = "" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.commander", })
+
 		local onecommander = vgui.Create("DCheckBoxLabel")
 		onecommander:SetText("#tool.uvunitmanager.settings.commander.solo")
 		onecommander:SetConVar("uvunitmanager_onecommander")
 		onecommander:SetTooltip("#tool.uvunitmanager.settings.commander.solo.desc")
 		onecommander:SetValue(GetConVar("uvunitmanager_onecommander"):GetInt())
+		onecommander:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(onecommander)
 		
 		local onecommanderevade = vgui.Create("DCheckBoxLabel")
@@ -1276,6 +1557,7 @@ if CLIENT then
 		onecommanderevade:SetConVar("uvunitmanager_onecommanderevading")
 		onecommanderevade:SetTooltip("#tool.uvunitmanager.settings.commander.evading.desc")
 		onecommanderevade:SetValue(GetConVar("uvunitmanager_onecommanderevading"):GetInt())
+		onecommanderevade:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(onecommanderevade)
 				
 		local commanderrepair = vgui.Create("DCheckBoxLabel")
@@ -1283,6 +1565,7 @@ if CLIENT then
 		commanderrepair:SetConVar("unitvehicle_unit_commanderrepair")
 		commanderrepair:SetTooltip("#tool.uvunitmanager.settings.commander.norepair.desc")
 		commanderrepair:SetValue(GetConVar("unitvehicle_unit_commanderrepair"):GetInt())
+		commanderrepair:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(commanderrepair)
 		
 		local onecommanderhealth = vgui.Create("DNumSlider")
@@ -1294,9 +1577,8 @@ if CLIENT then
 		onecommanderhealth:SetTooltip("#tool.uvunitmanager.settings.commander.health")
 		CPanel:AddItem(onecommanderhealth)
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.heli",
-		})
+		CPanel:AddControl("Label", { Text = "" })
+		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.heli", })
 		
 		local helicoptermodeltable = {
 			"Default",
@@ -1324,9 +1606,9 @@ if CLIENT then
 		helicopterbustracer:SetValue(GetConVar("uvunitmanager_helicopterbusting"):GetInt())
 		CPanel:AddItem(helicopterbustracer)
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvpursuittech.name",
-		})
+		-- CPanel:AddControl("Label", {
+			-- Text = "#tool.uvpursuittech.name",
+		-- })
 		
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.heli.ptech.note",
@@ -1345,27 +1627,7 @@ if CLIENT then
 		helispikes:SetTooltip("#tool.uvunitmanager.settings.heli.ptech.canuse")
 		helispikes:SetValue(GetConVar("uvunitmanager_helicopterspikestrip"):GetInt())
 		CPanel:AddItem(helispikes)
-		
-		-- CPanel:AddControl("Label", {
-		-- Text = "——— SPAWNING ———\n\n- Spawn in a random assigned Unit to test out the Unit Vehicles!\n- Your Unit will be EQUIPPED with Pursuit Tech if its assigned to Pursuit, Interceptor, Special or Commander!",
-		-- })
-		
-		-- local Respawn = vgui.Create( "DButton", CPanel )
-		-- Respawn:SetText( "Spawn in a random assigned Unit" )
-		-- Respawn:SetSize( 280, 20 )
-		-- Respawn.DoClick = function( self )
-		-- local redeploysound = {
-		-- "ui/redeploy/redeploy1.wav",
-		-- "ui/redeploy/redeploy2.wav",
-		-- "ui/redeploy/redeploy3.wav",
-		-- "ui/redeploy/redeploy4.wav",
-		-- }
-		-- surface.PlaySound( redeploysound[math.random(1, #redeploysound)] )
-		-- net.Start("UVHUDRespawnInUV")
-		-- net.SendToServer()
-		-- end
-		-- CPanel:AddItem(Respawn)
-		
+
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.bounty.disable",
 		})
@@ -1441,779 +1703,9 @@ if CLIENT then
 		BountyRhino:SetValue(GetConVar("uvunitmanager_bountyrhino"))
 		BountyRhino:SetConVar("uvunitmanager_bountyrhino")
 		CPanel:AddItem(BountyRhino)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.bounty.10s",
-		})
-		
-		for i = 1, MAX_HEAT_LEVEL do
-			bountytime[i] = vgui.Create("DNumSlider")
-			bountytime[i]:SetText( string.format( lang("uv.hud.heatlvl"), i ) )
-			bountytime[i]:SetTooltip("#tool.uvunitmanager.settings.bounty.10s.desc")
-			bountytime[i]:SetMinMax(0, 1000000)
-			bountytime[i]:SetDecimals(0)
-			bountytime[i]:SetValue(GetConVar("uvunitmanager_bountytime" .. i))
-			bountytime[i]:SetConVar("uvunitmanager_bountytime" .. i)
-			CPanel:AddItem(bountytime[i])
-		end
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.heatlvl.timed.title",
-		})
-		
-		local TimeTillNextHeatEnabled = vgui.Create("DCheckBoxLabel")
-		TimeTillNextHeatEnabled:SetText("#tool.uvunitmanager.settings.heatlvl.timed")
-		TimeTillNextHeatEnabled:SetConVar("uvunitmanager_timetillnextheatenabled")
-		TimeTillNextHeatEnabled:SetTooltip("#tool.uvunitmanager.settings.heatlvl.timed.desc")
-		TimeTillNextHeatEnabled:SetValue(GetConVar("uvunitmanager_timetillnextheatenabled"):GetInt())
-		CPanel:AddItem(TimeTillNextHeatEnabled)
-		
-		-- for i = 1, 5 do
-		-- 	timetillnextheat[i] = vgui.Create("DNumSlider")
-		-- 	timetillnextheat[i]:SetText( string.format( lang("uv.hud.heatlvl"), i .. " > " .. i+1 ) )
-		-- 	timetillnextheat[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl.time")
-		-- 	timetillnextheat[i]:SetMinMax(10, 600)
-		-- 	timetillnextheat[i]:SetDecimals(0)
-		-- 	timetillnextheat[i]:SetValue(GetConVar("uvunitmanager_timetillnextheat" .. i))
-		-- 	timetillnextheat[i]:SetConVar("uvunitmanager_timetillnextheat" .. i)
-		-- 	CPanel:AddItem(timetillnextheat[i])
-		-- end
 
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.minmaxheatlvl.title",
-		})
-
-		local MinHeat = vgui.Create("DNumSlider")
-		MinHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.min")
-		MinHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.min.desc")
-		MinHeat:SetMinMax(1, MAX_HEAT_LEVEL)
-		MinHeat:SetDecimals(0)
-		MinHeat:SetValue(GetConVar("uvunitmanager_minheat"))
-		MinHeat:SetConVar("uvunitmanager_minheat")
-		CPanel:AddItem(MinHeat)
-
-		local MaxHeat = vgui.Create("DNumSlider")
-		MaxHeat:SetText("#tool.uvunitmanager.settings.minmaxheatlvl.max")
-		MaxHeat:SetTooltip("#tool.uvunitmanager.settings.minmaxheatlvl.max.desc")
-		MaxHeat:SetMinMax(1, MAX_HEAT_LEVEL)
-		MaxHeat:SetDecimals(0)
-		MaxHeat:SetValue(GetConVar("uvunitmanager_maxheat"))
-		MaxHeat:SetConVar("uvunitmanager_maxheat")
-		CPanel:AddItem(MaxHeat)
-				
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.assunits.title",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvunitmanager.settings.voiceprofile.title",
-		})
-
-		local availableVoiceProfiles = {}
-		local files, folders = file.Find( "sound/chatter2/*", "GAME" )
-		if folders ~= nil then
-			for k, v in pairs(folders) do
-				table.insert(availableVoiceProfiles, v)
-			end
-		end
-
-		-- local voiceprofile = CPanel:AddControl("ComboBox", {
-		-- 	Label = "Selected Profile",
-		-- })
-
-		-- local files, folders = file.Find( "sound/chatter2/*", "GAME" )
-		-- if folders ~= nil then
-		-- 	for k, v in pairs(folders) do
-		-- 		voiceprofile:AddChoice( v )
-		-- 	end
-		-- end
-
-		-- voiceprofile:SetValue( GetConVar("uvunitmanager_voiceprofile"):GetString() )
-		-- voiceprofile:SetConVar("uvunitmanager_voiceprofile")
-		
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
-			CPanel:AddControl("Label", {
-				Text = v
-			})
-
-			--
-
-			local conVarKey = string.format( 'uvunitmanager_%s_voiceprofile', v )
-			local conVar = GetConVar( conVarKey )
-			local unitKey = v .. "_voiceprofile"
-
-			local comboBawx = CPanel:ComboBox( "Voice Profile", conVarKey )
-			comboBawx:SetConVar( conVarKey )
-			for _, v in pairs( availableVoiceProfiles ) do
-				comboBawx:AddChoice( v )
-			end
-		
-			--
-
-			
-			conVarKey = string.format( 'uvunitmanager_%s_voice', v )
-			conVar = GetConVar( conVarKey )
-			unitKey = v .. "_voice"
-			
-			local textBox = vgui.Create( 'DTextEntry' )
-			UIElements[unitKey] = textBox
-			
-			textBox:SetPlaceholderText( "cop1, cop2, cop3, ..." )
-			textBox:SetText( conVar:GetString() )
-			textBox:SetConVar( conVarKey )
-			textBox:SetTooltip( "Voice profile for " .. v )
-
-			CPanel:AddItem( textBox )
-		end
-
-		for _, v in pairs( {'Dispatch', 'Misc'} ) do
-			CPanel:AddControl("Label", {
-				Text = v
-			})
-
-			local conVarKey = string.format( 'uvunitmanager_%s_voiceprofile', v )
-			local conVar = GetConVar( conVarKey )
-
-			local comboBawx = CPanel:ComboBox( "Voice Profile", conVarKey )
-			comboBawx:SetConVar( conVarKey )
-			for _, v in pairs( availableVoiceProfiles ) do
-				comboBawx:AddChoice( v )
-			end
-		end
-
-		CPanel:AddControl("Label", {
-			Text = "——— Assigned Vehicles ———",
-		})
-		
-		local cBox = CPanel:ComboBox("Selected Heat", "uvunitmanager_selected_heat")
-		
-		for i = 1, MAX_HEAT_LEVEL do
-			cBox:AddChoice( i, i )
-		end
-		
-		-- CPanel:AddControl("Label", {
-		-- 	Text = "#uv.unit.patrol"
-		-- })
-		
-		local selectedHeatConVar = GetConVar( 'uvunitmanager_selected_heat' )
-		local selectedHeat = selectedHeatConVar:GetInt()
-		
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
-			local undercaseName = string.lower( v )
-			local locString = "#uv.unit." .. undercaseName
-			local unitKey = 'Units' .. v
-			local unitConvarString = string.format( "uvunitmanager_units%s%s", undercaseName, selectedHeat )
-			local heatChangeCallbackId = unitKey
-			
-			local unitConvar = GetConVar( unitConvarString )
-			
-			---------------------------------------
-			
-			local function _onChange( self )
-				local text = self:GetText()
-				local unitConvarString = string.format( "uvunitmanager_units%s%s", undercaseName, GetConVar( 'uvunitmanager_selected_heat' ):GetInt() )
-				
-				RunConsoleCommand( unitConvarString, text )
-			end
-			
-			CPanel:AddControl("Label", {
-				Text = locString
-			})
-			
-			local textBox = vgui.Create( 'DTextEntry' )
-			UIElements[unitKey] = textBox
-			
-			textBox:SetPlaceholderText( " " )
-			textBox:SetText( unitConvar:GetString() )
-			textBox:SetTooltip( "#tool.uvunitmanager.settings.heatlvl" .. selectedHeat .. ".desc" )
-			textBox.OnLoseFocus = _onChange
-			
-			CPanel:AddItem( textBox )
-			
-			cvars.RemoveChangeCallback( "uvunitmanager_selected_heat", unitKey )
-			cvars.AddChangeCallback( "uvunitmanager_selected_heat", function(_, o_v, n_v)
-				textBox:SetText( GetConVar( string.format( "uvunitmanager_units%s%s", undercaseName, n_v ) ):GetString() )
-				textBox:SetConVar( string.format( "uvunitmanager_units%s%s", undercaseName, n_v ) )
-				_onChange( textBox )
-			end, unitKey )
-		end
-		
-		-- 	{
-		-- 	Class = 'DNumSlider',
-		-- 	MinMax = {1, 10000000},
-		-- 	Decimals = 0,
-		-- 	ConVar = 'uvunitmanager_heatminimumbounty',
-		-- 	ToolText = '#tool.uvunitmanager.settings.heatlevel.minbounty'
-		-- 	ToolTip = '#tool.uvunitmanager.settings.heatlevel.minbounty.desc'
-		-- },
-		
-		for _, setting_name in pairs( HEAT_SETTINGS ) do
-			local array = UnitSettings[setting_name]
-			
-			if array then
-				local element = vgui.Create( array.Class )
-				local settingKey = 'Setting' .. setting_name
-				
-				if array.MinMax then element:SetMinMax( array.MinMax[1], array.MinMax[2] ) end
-				if array.Decimals then element:SetDecimals( array.Decimals ) end
-				if array.ToolTip then element:SetTooltip( array.ToolTip ) end
-				if array.ToolText then element:SetText( array.ToolText ) end
-				
-				if setting_name == 'timetillnextheat' then
-					element:SetText( string.format( lang("uv.hud.heatlvl"), selectedHeat .. " > " .. selectedHeat + 1 ) )	
-				end
-				
-				if array.ConVar then 
-					element:SetValue( GetConVar( array.ConVar .. selectedHeat ) ) 
-					element:SetConVar( array.ConVar .. selectedHeat )
-					--element:SetValue( GetConVar( array.ConVar .. selectedHeat ) ) 
-					
-					cvars.RemoveChangeCallback( "uvunitmanager_selected_heat", settingKey )
-					cvars.AddChangeCallback( "uvunitmanager_selected_heat", function(_, o_v, n_v)
-						local conVarString = array.ConVar .. n_v
-						local conVar = GetConVar( conVarString )
-						
-						if setting_name == 'timetillnextheat' then
-							element:SetText( string.format( lang("uv.hud.heatlvl"), n_v .. " > " .. n_v + 1 ) )	
-						end
-						
-						element:SetConVar( conVarString )
-					end, settingKey )
-				end
-				
-				CPanel:AddItem( element )
-			end
-		end
-		
-		-- UIElements['SettingsMinBounty'] = 
-		
-		-- heatminimumbounty[i] = vgui.Create("DNumSlider")
-		-- heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
-		-- heatminimumbounty[i]:SetMinMax(1, 10000000)
-		-- heatminimumbounty[i]:SetDecimals(0)
-		-- heatminimumbounty[i]:SetValue(GetConVar("uvunitmanager_heatminimumbounty" .. i))
-		-- heatminimumbounty[i]:SetConVar("uvunitmanager_heatminimumbounty" .. i)
-		-- heatminimumbounty[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.minbounty.desc")
-		-- CPanel:AddItem(heatminimumbounty[i])
-		
-		-- maxunits[i] = vgui.Create("DNumSlider")
-		-- maxunits[i]:SetText("#tool.uvunitmanager.settings.heatlevel.maxunits")
-		-- maxunits[i]:SetMinMax(1, 20)
-		-- maxunits[i]:SetDecimals(0)
-		-- maxunits[i]:SetValue(GetConVar("uvunitmanager_maxunits" .. i))
-		-- maxunits[i]:SetConVar("uvunitmanager_maxunits" .. i)
-		-- maxunits[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.maxunits.desc")
-		-- CPanel:AddItem(maxunits[i])
-		
-		-- unitsavailable[i] = vgui.Create("DNumSlider")
-		-- unitsavailable[i]:SetText("#tool.uvunitmanager.settings.heatlevel.avaunits")
-		-- unitsavailable[i]:SetMinMax(1, 100)
-		-- unitsavailable[i]:SetDecimals(0)
-		-- unitsavailable[i]:SetValue(GetConVar("uvunitmanager_unitsavailable" .. i))
-		-- unitsavailable[i]:SetConVar("uvunitmanager_unitsavailable" .. i)
-		-- unitsavailable[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.avaunits.desc")
-		-- CPanel:AddItem(unitsavailable[i])
-		
-		-- backuptimer[i] = vgui.Create("DNumSlider")
-		-- backuptimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.backuptime")
-		-- backuptimer[i]:SetMinMax(10, 1000)
-		-- backuptimer[i]:SetDecimals(0)
-		-- backuptimer[i]:SetValue(GetConVar("uvunitmanager_backuptimer" .. i))
-		-- backuptimer[i]:SetConVar("uvunitmanager_backuptimer" .. i)
-		-- backuptimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.backuptime.desc")
-		-- CPanel:AddItem(backuptimer[i])
-		
-		-- cooldowntimer[i] = vgui.Create("DNumSlider")
-		-- cooldowntimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.cooldowntime")
-		-- cooldowntimer[i]:SetMinMax(0, 1000)
-		-- cooldowntimer[i]:SetDecimals(0)
-		-- cooldowntimer[i]:SetValue(GetConVar("uvunitmanager_cooldowntimer" .. i))
-		-- cooldowntimer[i]:SetConVar("uvunitmanager_cooldowntimer" .. i)
-		-- cooldowntimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.cooldowntime.desc")
-		-- CPanel:AddItem(cooldowntimer[i])
-		
-		-- roadblocks[i] = vgui.Create("DCheckBoxLabel")
-		-- roadblocks[i]:SetText("#tool.uvunitmanager.settings.heatlevel.roadblocks")
-		-- roadblocks[i]:SetConVar("uvunitmanager_roadblocks" .. i)
-		-- roadblocks[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.roadblocks.desc")
-		-- roadblocks[i]:SetValue(GetConVar("uvunitmanager_roadblocks" .. i):GetInt())
-		-- CPanel:AddItem(roadblocks[i])
-		
-		-- helicopters[i] = vgui.Create("DCheckBoxLabel")
-		-- helicopters[i]:SetText("#tool.uvunitmanager.settings.heatlevel.helicopter")
-		-- helicopters[i]:SetConVar("uvunitmanager_helicopters" .. i)
-		-- helicopters[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.helicopter.desc")
-		-- helicopters[i]:SetValue(GetConVar("uvunitmanager_helicopters" .. i):GetInt())
-		-- CPanel:AddItem(helicopters[i])
-		
-		-- patrolUnit:SetPlaceholderText( " " )
-		-- patrolUnit:SetText( GetConVar( "uvunitmanager_unitspatrol" .. selectedHeat ) )
-		-- patrolUnit:SetTooltip( "#tool.uvunitmanager.settings.heatlvl" .. selectedHeat .. ".desc" )
-		-- patrolUnit.OnLoseFocus = function( self )
-		-- 	if ( self:GetText() == "" ) then
-		-- 		self:SetText( emptydefault )
-		-- 	end
-		
-		-- 	RunConsoleCommand( "uvunitmanager" )
-		-- end
-		
-		-- heatlevel[i] = CPanel:AddControl("Label", {
-		-- 		Text = string.format( lang("tool.uvunitmanager.settings.heatlvl.title"), i ),
-		-- 	})
-		-- for i=1, 1 do
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.patrol",
-		-- 	})
-		
-		-- 	unitspatrol[i] = vgui.Create( "DTextEntry" )
-		-- 	unitspatrol[i]:SetPlaceholderText( " " )
-		-- 	unitspatrol[i]:SetText(GetConVar("uvunitmanager_unitspatrol" .. i):GetString())
-		-- 	unitspatrol[i]:SetConVar("uvunitmanager_unitspatrol" .. i)
-		-- 	unitspatrol[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl1.desc")
-		-- 	unitspatrol[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspatrol" .. i, self:GetText())
-		-- 	end
-		-- 	unitspatrol[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspatrol" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitspatrol[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.support",
-		-- 	})
-		
-		-- 	unitssupport[i] = vgui.Create( "DTextEntry" )
-		-- 	unitssupport[i]:SetPlaceholderText( " " )
-		-- 	unitssupport[i]:SetText(GetConVar("uvunitmanager_unitssupport" .. i):GetString())
-		-- 	unitssupport[i]:SetConVar("uvunitmanager_unitssupport" .. i)
-		-- 	unitssupport[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl2.desc")
-		-- 	unitssupport[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitssupport" .. i, self:GetText())
-		-- 	end
-		-- 	unitssupport[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitssupport" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitssupport[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.pursuit",
-		-- 	})
-		
-		-- 	unitspursuit[i] = vgui.Create( "DTextEntry" )
-		-- 	unitspursuit[i]:SetPlaceholderText( " " )
-		-- 	unitspursuit[i]:SetText(GetConVar("uvunitmanager_unitspursuit" .. i):GetString())
-		-- 	unitspursuit[i]:SetConVar("uvunitmanager_unitspursuit" .. i)
-		-- 	unitspursuit[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl3.desc")
-		-- 	unitspursuit[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspursuit" .. i, self:GetText())
-		-- 	end
-		-- 	unitspursuit[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspursuit" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitspursuit[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.interceptor",
-		-- 	})
-		
-		-- 	unitsinterceptor[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsinterceptor[i]:SetPlaceholderText( " " )
-		-- 	unitsinterceptor[i]:SetText(GetConVar("uvunitmanager_unitsinterceptor" .. i):GetString())
-		-- 	unitsinterceptor[i]:SetConVar("uvunitmanager_unitsinterceptor" .. i)
-		-- 	unitsinterceptor[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl4.desc")
-		-- 	unitsinterceptor[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsinterceptor" .. i, self:GetText())
-		-- 	end
-		-- 	unitsinterceptor[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsinterceptor" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsinterceptor[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.special",
-		-- 	})
-		
-		-- 	unitsspecial[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsspecial[i]:SetPlaceholderText( " " )
-		-- 	unitsspecial[i]:SetText(GetConVar("uvunitmanager_unitsspecial" .. i):GetString())
-		-- 	unitsspecial[i]:SetConVar("uvunitmanager_unitsspecial" .. i)
-		-- 	unitsspecial[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	unitsspecial[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsspecial" .. i, self:GetText())
-		-- 	end
-		-- 	unitsspecial[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsspecial" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsspecial[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.commander",
-		-- 	})
-		
-		-- 	unitscommander[i] = vgui.Create( "DTextEntry" )
-		-- 	unitscommander[i]:SetPlaceholderText( " " )
-		-- 	unitscommander[i]:SetText(GetConVar("uvunitmanager_unitscommander" .. i):GetString())
-		-- 	unitscommander[i]:SetConVar("uvunitmanager_unitscommander" .. i)
-		-- 	unitscommander[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl6.desc")
-		-- 	unitscommander[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitscommander" .. i, self:GetText())
-		-- 	end
-		-- 	unitscommander[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitscommander" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitscommander[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.rhino",
-		-- 	})
-		
-		-- 	unitsrhino[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsrhino[i]:SetPlaceholderText( " " )
-		-- 	unitsrhino[i]:SetText(GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
-		-- 	unitsrhino[i]:SetConVar("uvunitmanager_unitsrhino" .. i)
-		-- 	unitsrhino[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	unitsrhino[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
-		-- 	end
-		-- 	unitsrhino[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsrhino[i])
-		
-		-- 	heatminimumbounty[i] = vgui.Create("DNumSlider")
-		-- 	heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
-		-- 	heatminimumbounty[i]:SetMinMax(1, 10000000)
-		-- 	heatminimumbounty[i]:SetDecimals(0)
-		-- 	heatminimumbounty[i]:SetValue(GetConVar("uvunitmanager_heatminimumbounty" .. i))
-		-- 	heatminimumbounty[i]:SetConVar("uvunitmanager_heatminimumbounty" .. i)
-		-- 	heatminimumbounty[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.minbounty.desc")
-		-- 	CPanel:AddItem(heatminimumbounty[i])
-		
-		-- 	maxunits[i] = vgui.Create("DNumSlider")
-		-- 	maxunits[i]:SetText("#tool.uvunitmanager.settings.heatlevel.maxunits")
-		-- 	maxunits[i]:SetMinMax(1, 20)
-		-- 	maxunits[i]:SetDecimals(0)
-		-- 	maxunits[i]:SetValue(GetConVar("uvunitmanager_maxunits" .. i))
-		-- 	maxunits[i]:SetConVar("uvunitmanager_maxunits" .. i)
-		-- 	maxunits[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.maxunits.desc")
-		-- 	CPanel:AddItem(maxunits[i])
-		
-		-- 	unitsavailable[i] = vgui.Create("DNumSlider")
-		-- 	unitsavailable[i]:SetText("#tool.uvunitmanager.settings.heatlevel.avaunits")
-		-- 	unitsavailable[i]:SetMinMax(1, 100)
-		-- 	unitsavailable[i]:SetDecimals(0)
-		-- 	unitsavailable[i]:SetValue(GetConVar("uvunitmanager_unitsavailable" .. i))
-		-- 	unitsavailable[i]:SetConVar("uvunitmanager_unitsavailable" .. i)
-		-- 	unitsavailable[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.avaunits.desc")
-		-- 	CPanel:AddItem(unitsavailable[i])
-		
-		-- 	backuptimer[i] = vgui.Create("DNumSlider")
-		-- 	backuptimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.backuptime")
-		-- 	backuptimer[i]:SetMinMax(10, 1000)
-		-- 	backuptimer[i]:SetDecimals(0)
-		-- 	backuptimer[i]:SetValue(GetConVar("uvunitmanager_backuptimer" .. i))
-		-- 	backuptimer[i]:SetConVar("uvunitmanager_backuptimer" .. i)
-		-- 	backuptimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.backuptime.desc")
-		-- 	CPanel:AddItem(backuptimer[i])
-		
-		-- 	cooldowntimer[i] = vgui.Create("DNumSlider")
-		-- 	cooldowntimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.cooldowntime")
-		-- 	cooldowntimer[i]:SetMinMax(0, 1000)
-		-- 	cooldowntimer[i]:SetDecimals(0)
-		-- 	cooldowntimer[i]:SetValue(GetConVar("uvunitmanager_cooldowntimer" .. i))
-		-- 	cooldowntimer[i]:SetConVar("uvunitmanager_cooldowntimer" .. i)
-		-- 	cooldowntimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.cooldowntime.desc")
-		-- 	CPanel:AddItem(cooldowntimer[i])
-		
-		-- 	roadblocks[i] = vgui.Create("DCheckBoxLabel")
-		-- 	roadblocks[i]:SetText("#tool.uvunitmanager.settings.heatlevel.roadblocks")
-		-- 	roadblocks[i]:SetConVar("uvunitmanager_roadblocks" .. i)
-		-- 	roadblocks[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.roadblocks.desc")
-		-- 	roadblocks[i]:SetValue(GetConVar("uvunitmanager_roadblocks" .. i):GetInt())
-		-- 	CPanel:AddItem(roadblocks[i])
-		
-		-- 	helicopters[i] = vgui.Create("DCheckBoxLabel")
-		-- 	helicopters[i]:SetText("#tool.uvunitmanager.settings.heatlevel.helicopter")
-		-- 	helicopters[i]:SetConVar("uvunitmanager_helicopters" .. i)
-		-- 	helicopters[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.helicopter.desc")
-		-- 	helicopters[i]:SetValue(GetConVar("uvunitmanager_helicopters" .. i):GetInt())
-		-- 	CPanel:AddItem(helicopters[i])
-		-- end
-		
-		
-		
-		-- for i = 1, 6 do
-		
-		-- 	heatlevel[i] = CPanel:AddControl("Label", {
-		-- 		Text = string.format( lang("tool.uvunitmanager.settings.heatlvl.title"), i ),
-		-- 	})
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.patrol",
-		-- 	})
-		
-		-- 	unitspatrol[i] = vgui.Create( "DTextEntry" )
-		-- 	unitspatrol[i]:SetPlaceholderText( " " )
-		-- 	unitspatrol[i]:SetText(GetConVar("uvunitmanager_unitspatrol" .. i):GetString())
-		-- 	unitspatrol[i]:SetConVar("uvunitmanager_unitspatrol" .. i)
-		-- 	unitspatrol[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl1.desc")
-		-- 	unitspatrol[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspatrol" .. i, self:GetText())
-		-- 	end
-		-- 	unitspatrol[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspatrol" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitspatrol[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.support",
-		-- 	})
-		
-		-- 	unitssupport[i] = vgui.Create( "DTextEntry" )
-		-- 	unitssupport[i]:SetPlaceholderText( " " )
-		-- 	unitssupport[i]:SetText(GetConVar("uvunitmanager_unitssupport" .. i):GetString())
-		-- 	unitssupport[i]:SetConVar("uvunitmanager_unitssupport" .. i)
-		-- 	unitssupport[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl2.desc")
-		-- 	unitssupport[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitssupport" .. i, self:GetText())
-		-- 	end
-		-- 	unitssupport[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitssupport" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitssupport[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.pursuit",
-		-- 	})
-		
-		-- 	unitspursuit[i] = vgui.Create( "DTextEntry" )
-		-- 	unitspursuit[i]:SetPlaceholderText( " " )
-		-- 	unitspursuit[i]:SetText(GetConVar("uvunitmanager_unitspursuit" .. i):GetString())
-		-- 	unitspursuit[i]:SetConVar("uvunitmanager_unitspursuit" .. i)
-		-- 	unitspursuit[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl3.desc")
-		-- 	unitspursuit[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspursuit" .. i, self:GetText())
-		-- 	end
-		-- 	unitspursuit[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitspursuit" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitspursuit[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.interceptor",
-		-- 	})
-		
-		-- 	unitsinterceptor[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsinterceptor[i]:SetPlaceholderText( " " )
-		-- 	unitsinterceptor[i]:SetText(GetConVar("uvunitmanager_unitsinterceptor" .. i):GetString())
-		-- 	unitsinterceptor[i]:SetConVar("uvunitmanager_unitsinterceptor" .. i)
-		-- 	unitsinterceptor[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl4.desc")
-		-- 	unitsinterceptor[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsinterceptor" .. i, self:GetText())
-		-- 	end
-		-- 	unitsinterceptor[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsinterceptor" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsinterceptor[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.special",
-		-- 	})
-		
-		-- 	unitsspecial[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsspecial[i]:SetPlaceholderText( " " )
-		-- 	unitsspecial[i]:SetText(GetConVar("uvunitmanager_unitsspecial" .. i):GetString())
-		-- 	unitsspecial[i]:SetConVar("uvunitmanager_unitsspecial" .. i)
-		-- 	unitsspecial[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	unitsspecial[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsspecial" .. i, self:GetText())
-		-- 	end
-		-- 	unitsspecial[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsspecial" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsspecial[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.commander",
-		-- 	})
-		
-		-- 	unitscommander[i] = vgui.Create( "DTextEntry" )
-		-- 	unitscommander[i]:SetPlaceholderText( " " )
-		-- 	unitscommander[i]:SetText(GetConVar("uvunitmanager_unitscommander" .. i):GetString())
-		-- 	unitscommander[i]:SetConVar("uvunitmanager_unitscommander" .. i)
-		-- 	unitscommander[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl6.desc")
-		-- 	unitscommander[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitscommander" .. i, self:GetText())
-		-- 	end
-		-- 	unitscommander[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitscommander" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitscommander[i])
-		
-		-- 	CPanel:AddControl("Label", {
-		-- 		Text = "#uv.unit.rhino",
-		-- 	})
-		
-		-- 	unitsrhino[i] = vgui.Create( "DTextEntry" )
-		-- 	unitsrhino[i]:SetPlaceholderText( " " )
-		-- 	unitsrhino[i]:SetText(GetConVar("uvunitmanager_unitsrhino" .. i):GetString())
-		-- 	unitsrhino[i]:SetConVar("uvunitmanager_unitsrhino" .. i)
-		-- 	unitsrhino[i]:SetTooltip("#tool.uvunitmanager.settings.heatlvl5.desc")
-		-- 	unitsrhino[i].OnLoseFocus = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
-		-- 	end
-		-- 	unitsrhino[i].OnEnter = function( self )
-		-- 		if ( self:GetText() == "" ) then
-		-- 			self:SetText( emptydefault )
-		-- 		end
-		-- 		RunConsoleCommand("uvunitmanager_unitsrhino" .. i, self:GetText())
-		-- 	end
-		-- 	CPanel:AddItem(unitsrhino[i])
-		
-		-- 	heatminimumbounty[i] = vgui.Create("DNumSlider")
-		-- 	heatminimumbounty[i]:SetText("#tool.uvunitmanager.settings.heatlevel.minbounty")
-		-- 	heatminimumbounty[i]:SetMinMax(1, 10000000)
-		-- 	heatminimumbounty[i]:SetDecimals(0)
-		-- 	heatminimumbounty[i]:SetValue(GetConVar("uvunitmanager_heatminimumbounty" .. i))
-		-- 	heatminimumbounty[i]:SetConVar("uvunitmanager_heatminimumbounty" .. i)
-		-- 	heatminimumbounty[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.minbounty.desc")
-		-- 	CPanel:AddItem(heatminimumbounty[i])
-		
-		-- 	maxunits[i] = vgui.Create("DNumSlider")
-		-- 	maxunits[i]:SetText("#tool.uvunitmanager.settings.heatlevel.maxunits")
-		-- 	maxunits[i]:SetMinMax(1, 20)
-		-- 	maxunits[i]:SetDecimals(0)
-		-- 	maxunits[i]:SetValue(GetConVar("uvunitmanager_maxunits" .. i))
-		-- 	maxunits[i]:SetConVar("uvunitmanager_maxunits" .. i)
-		-- 	maxunits[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.maxunits.desc")
-		-- 	CPanel:AddItem(maxunits[i])
-		
-		-- 	unitsavailable[i] = vgui.Create("DNumSlider")
-		-- 	unitsavailable[i]:SetText("#tool.uvunitmanager.settings.heatlevel.avaunits")
-		-- 	unitsavailable[i]:SetMinMax(1, 100)
-		-- 	unitsavailable[i]:SetDecimals(0)
-		-- 	unitsavailable[i]:SetValue(GetConVar("uvunitmanager_unitsavailable" .. i))
-		-- 	unitsavailable[i]:SetConVar("uvunitmanager_unitsavailable" .. i)
-		-- 	unitsavailable[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.avaunits.desc")
-		-- 	CPanel:AddItem(unitsavailable[i])
-		
-		-- 	backuptimer[i] = vgui.Create("DNumSlider")
-		-- 	backuptimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.backuptime")
-		-- 	backuptimer[i]:SetMinMax(10, 1000)
-		-- 	backuptimer[i]:SetDecimals(0)
-		-- 	backuptimer[i]:SetValue(GetConVar("uvunitmanager_backuptimer" .. i))
-		-- 	backuptimer[i]:SetConVar("uvunitmanager_backuptimer" .. i)
-		-- 	backuptimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.backuptime.desc")
-		-- 	CPanel:AddItem(backuptimer[i])
-		
-		-- 	cooldowntimer[i] = vgui.Create("DNumSlider")
-		-- 	cooldowntimer[i]:SetText("#tool.uvunitmanager.settings.heatlevel.cooldowntime")
-		-- 	cooldowntimer[i]:SetMinMax(0, 1000)
-		-- 	cooldowntimer[i]:SetDecimals(0)
-		-- 	cooldowntimer[i]:SetValue(GetConVar("uvunitmanager_cooldowntimer" .. i))
-		-- 	cooldowntimer[i]:SetConVar("uvunitmanager_cooldowntimer" .. i)
-		-- 	cooldowntimer[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.cooldowntime.desc")
-		-- 	CPanel:AddItem(cooldowntimer[i])
-		
-		-- 	roadblocks[i] = vgui.Create("DCheckBoxLabel")
-		-- 	roadblocks[i]:SetText("#tool.uvunitmanager.settings.heatlevel.roadblocks")
-		-- 	roadblocks[i]:SetConVar("uvunitmanager_roadblocks" .. i)
-		-- 	roadblocks[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.roadblocks.desc")
-		-- 	roadblocks[i]:SetValue(GetConVar("uvunitmanager_roadblocks" .. i):GetInt())
-		-- 	CPanel:AddItem(roadblocks[i])
-		
-		-- 	helicopters[i] = vgui.Create("DCheckBoxLabel")
-		-- 	helicopters[i]:SetText("#tool.uvunitmanager.settings.heatlevel.helicopter")
-		-- 	helicopters[i]:SetConVar("uvunitmanager_helicopters" .. i)
-		-- 	helicopters[i]:SetTooltip("#tool.uvunitmanager.settings.heatlevel.helicopter.desc")
-		-- 	helicopters[i]:SetValue(GetConVar("uvunitmanager_helicopters" .. i):GetInt())
-		-- 	CPanel:AddItem(helicopters[i])
-		
-		-- end
-		
+		CPanel:AddControl("Label", { Text = "" })
 	end
-	
 end
 
 function TOOL:RightClick(trace)
