@@ -288,6 +288,8 @@ local function _setConVar( cvar, value )
 	end
 end
 
+UVUnitManagerTool = UVUnitManagerTool or {}
+
 if SERVER then
 	
 	net.Receive("UVUnitManagerGetUnitInfo", function( length, ply )
@@ -455,12 +457,18 @@ if CLIENT then
 					file.Write("unitvehicles/prop_vehicle_jeep/units/"..Name..".txt", string.Implode("",shit) )
 				end
 				
-				UVUnitManagerScrollPanel:Clear()
-				UVUnitManagerScrollPanelGlide:Clear()
-				UVUnitManagerScrollPanelJeep:Clear()
-				UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-				UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
-				UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
+				-- UVUnitManagerScrollPanel:Clear()
+				-- UVUnitManagerScrollPanelGlide:Clear()
+				-- UVUnitManagerScrollPanelJeep:Clear()
+				-- UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
+				-- UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
+				-- UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
+				-- UnitAdjust:Close()
+				
+				local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
+				if IsValid(UVUnitManagerTool.ScrollPanel) and UVUnitManagerTool.PopulateVehicleList then
+					UVUnitManagerTool.PopulateVehicleList(baseId)
+				end
 				UnitAdjust:Close()
 				
 				local file_ext = (((UVTOOLMemory.VehicleBase == 'base_glide_car' or UVTOOLMemory.VehicleBase == "base_glide_motorcycle") and "json") or "txt")
@@ -935,13 +943,14 @@ if CLIENT then
 		CPanel:AddItem(FrameListPanel)
 
 		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
-		-- ScrollPanel:SetSize(280, 320)
-		-- ScrollPanel:SetPos(0, 0)
 		ScrollPanel:DockMargin(0, -25, 0, 0)
 		ScrollPanel:Dock(FILL)
 
-		-- Populate the scroll panel
-		local function PopulateVehicleList(baseId)
+		-- Save this for later access by net.Receive
+		UVUnitManagerTool.ScrollPanel = ScrollPanel
+
+		-- Also store the population function, so we can call it from net.Receive
+		UVUnitManagerTool.PopulateVehicleList = function(baseId)
 			ScrollPanel:Clear()
 			selecteditem = nil
 
@@ -950,13 +959,12 @@ if CLIENT then
 					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
 					local index, highlight, offset = 0, false, 22
 
-					-- Handle empty lists
 					if #savedVehicles == 0 then
 						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
 						emptyLabel:SetText("#tool.uvunitmanager.settings.novehicle")
 						emptyLabel:SetTextColor(Color(200, 200, 200))
 						emptyLabel:SetFont("DermaDefaultBold")
-						emptyLabel:SetContentAlignment(5) -- center
+						emptyLabel:SetContentAlignment(5)
 						emptyLabel:Dock(TOP)
 						emptyLabel:SetTall(offset)
 						return
@@ -1027,8 +1035,8 @@ if CLIENT then
 		end
 
 		-- Initialize
-		PopulateVehicleList(currentBaseId)
-		
+		UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
+
 		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
 		
 		-- Refresh Button
@@ -1036,7 +1044,7 @@ if CLIENT then
 		RefreshBtn:SetText("#refresh")
 		RefreshBtn:SetSize(280, 20)
 		RefreshBtn.DoClick = function()
-			PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
+			UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
 			notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
 			surface.PlaySound("buttons/button15.wav")
 		end
@@ -1062,7 +1070,7 @@ if CLIENT then
 					Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
 				end
 			end
-			PopulateVehicleList(baseId)
+			UVUnitManagerTool.PopulateVehicleList(baseId)
 		end
 		CPanel:AddItem(DeleteBtn)
 		
@@ -1276,7 +1284,7 @@ if CLIENT then
 			local baseId = tonumber(data)
 			if not baseId then return end
 			RunConsoleCommand("uvunitmanager_vehiclebase", baseId)
-			PopulateVehicleList(baseId)
+			UVUnitManagerTool.PopulateVehicleList(baseId)
 			PopulateVehicleListHeatLvl(baseId, selectedUnit, selectedHeat)
 		end
 
