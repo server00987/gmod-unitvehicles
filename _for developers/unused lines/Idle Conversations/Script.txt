@@ -1,0 +1,48 @@
+/// IDLE 1
+Moka: We've got reports of a possible DUI near Adam Street. Do we have any available units nearby able to investigate?
+Talon: This is Unit 5, I'm close by. Can you give me details on that driver?
+Moka: Suspect's in a black 4-door. Caller mentioned it had a damaged front bumper.
+Talon: Copy that, I think I see him. Pulling him over now.
+
+/// IDLE 2
+Moka: We're getting reports of a drunk and disorderly male outside of a bar. Anybody nearby able to check it out?
+Talon: This is Adam-8, I'm available to take care of that guy. Any more details?
+Moka: Address is King's Bar on Bravado Boulevard. Suspect's a white male in a green tank top. Shouldn't be too difficult to spot.
+Talon: 10-4, I'm heading over now.
+
+/// IDLE 3
+Talon: This is Hector-5, I j-just threw up in my car and uh... I don't feel good at all... I'm 10-25...
+Moka: *chuckle* Uh, copy that. Do you require someone to pick you up?
+Talon: No, I'll just leave my cruiser at the station and head home... I feel si- *gag*
+
+/// IDLE 4
+Moka: Dispatch to Gold-14.
+Talon: This is Gold-14.
+Moka: A wanted Code 6 suspect was spotted in Tri-Polis, somewhere near the construction site. I need you to head on over and check it out.
+Talon: Uh, copy that, but... are you sure you want me? My cruiser's damaged.
+Moka: We're aware of the condition of your vehicle, but you are the closest unit to the last known area of the Code 6.
+Talon: Alright, got it. Heading over now.
+
+/// IDLE 5
+Talon: Dispatch, some kid just popped one of my tires... I have the kid here and his parents on the line. I'll be 10-25.
+Moka: *Chuckle* Yep, received. We're sending another unit to pick you up, and a wrecker to collect your cruiser.
+Talon: Thank you, Dispatch. Yea, your kid's been a naughty little sh- *cut off*
+
+/// IDLE 6
+Talon: 2-Echo-12, please switch over to channel 3.
+?: Copy that, switching now.
+
+/// IDLE 7
+?: Dispatch, this is Unit 12. I got eyes on an active robbery at a convenience store. Can I get some assistance here?
+Moka: Acknowledged. All units, Unit 12 requesting backup for an active robbery at a convenience store.
+Talon: 3-Charlie-9, I am around that area. Unit 12, I will be there in a little bit.
+
+/// IDLE 8
+Air: Dispatch, this is Air Unit. My equipment is acting up again, I'll have to head back to HQ.
+Moka: Copy. Technicians will be on site to check on the helicopter once you land.
+
+/// IDLE 9
+
+/// IDLE 10
+Air: Dispatch, can you check for any air traffic? Don't wanna end up crashing into anyone.
+Moka: Acknowledged. We'll contact the ATC and relay their answer to your screen.
