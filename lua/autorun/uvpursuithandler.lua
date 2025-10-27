@@ -1324,22 +1324,9 @@ if SERVER then
 		local ltimeout = (UVCooldownTimer+5)
 
 		--Idle presence
-		if not UVTargeting and (UVPresenceMode or UVRacerPresenceMode) and #ents.FindByClass("npc_uv*") < UVHeatLevel then
-			local ply = Entity(1)
-
-			if not ply then 
-				return 
-			end
-
-			if uvIdleSpawning - CurTime() + 5 <= 0 then
-				if SpawnMainUnits:GetBool() and UVPresenceMode then
-					UVAutoSpawn(nil)
-				end
-				if UVRacerPresenceMode and #ents.FindByClass("npc_racervehicle") < UVHeatLevel then
-					UVAutoSpawnRacer(ply)
-				end
-				uvIdleSpawning = CurTime()
-			end
+		if not UVTargeting and (UVPresenceMode or UVRacerPresenceMode) and uvIdleSpawning - CurTime() + 5 <= 0 then
+			HandleVehicleSpawning(true)
+			uvIdleSpawning = CurTime()
 		end
 
 		--Deploying backup

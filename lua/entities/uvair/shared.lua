@@ -13,8 +13,9 @@ function ENT:SetupDataTables()
 end
 
 function ENT:GetTargetPos()
-	if IsValid(self:GetTarget()) then 
-		return self:GetTarget():GetPos() 
+	local suspect = self:GetTarget() or self.potentialtarget
+	if IsValid(suspect) then 
+		return suspect:GetPos() 
 	else
 		return self:GetPos()
 	end

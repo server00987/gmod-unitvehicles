@@ -599,12 +599,12 @@ function ApplyHeatSettings(heatLevel)
 end
 
 -- Helper function for vehicle spawning logic
-function HandleVehicleSpawning()
+function HandleVehicleSpawning(Patrolling)
 	local function CheckVehicleLimit()
 		return (#ents.FindByClass("npc_uv*") + #UVWreckedVehicles) < UVMaxUnits or #ents.FindByClass("npc_uv*") < 1
 	end
 	
-	if (not UVTargeting) or UVJammerDeployed then return end
+	if UVJammerDeployed then return end
 	if not CheckVehicleLimit() then return end
 	
 	if UVRacerPresenceMode then
@@ -617,7 +617,7 @@ function HandleVehicleSpawning()
 	end
 	
 	-- Handle other special spawns
-	local specialChance = math.random(1,10)
+	local specialChance = Patrolling and math.random(6,10) or math.random(1,10)
 	
 	if UVCommanderRespawning then
 		

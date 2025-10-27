@@ -37,10 +37,8 @@ function ENT:SpawnFunction(ply, tr, cl)
 	ent = ents.Create(cl)
 	ent:SetPos(tr.HitPos)
 	ent:SetAngles(Angle(0,ply:GetAngles().y+180,0))
-	ent.Owner = ply
 	ent:Spawn()
 	ent:Activate()
-	ent:SetTarget(ply)
 	
 	return ent
 end
@@ -126,8 +124,6 @@ function ENT:Initialize()
 	
 	self.RotateVelocity = 0
 	
-	self.Owner = self.Owner or game.GetWorld()
-
 	self.UVAir = self
 	self.UnitVehicle = self
 
@@ -150,13 +146,17 @@ function ENT:Initialize()
 	timer.Simple((math.random(60,180)), function() 
 		if IsValid(self) then --Fuel is randomized 
 			if Chatter:GetBool() and not (self.crashing or self.disengaging) then
-				UVChatterLowOnFuel(self)
+				if IsValid(self:GetTarget()) then
+					UVChatterLowOnFuel(self)
+				else
+					UVChatterDisengaging(self)
+				end
 			end
 			self.disengaging = true
 		end
 	end)
 	
-	if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+	if UVTargeting and Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
 		UVChatterInitialize(self) 
 	end
 
@@ -207,6 +207,11 @@ function ENT:Think()
 			self.spotted = true
 			UVLosing = CurTime()
 			timer.Simple(20, function() self.cooldown = nil end)
+
+			if not UVTargeting then
+				UVTargeting = true
+			end
+
 			if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
 				UVChatterSpottedEnemy(self) 
 			end
@@ -411,9 +416,7 @@ function ENT:PhysicsUpdate()
 				UVChatterCloseToEnemy(self)
 			end
 		end
-		
-		if not IsValid(self:GetTarget()) and self.Owner~=game.GetWorld() then self:SetTarget(self.Owner) end
-		
+				
 		local closetotar = self.CloseToTarget
 		self.CloseToTarget = false
 		
@@ -435,15 +438,22 @@ function ENT:PhysicsUpdate()
 			else
 				targetpos = self:GetTargetPos()
 			end
+		else
+			if IsValid(self.potentialtarget) then
+				targetpos = self.potentialtarget:GetPos()
+			else
+				if next(UVPotentialSuspects) ~= nil then
+					self.potentialtarget = UVPotentialSuspects[math.random(1, #UVPotentialSuspects)]
+				end
+				
+				if self.spotted then
+					self.spotted = nil
+				end
+			end
 		end
 		
 		if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
-			if next(UVWantedTableVehicle) == nil then
-				self.disengaging = true
-				if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
-					UVChatterDisengaging(self)
-				end
-			else
+			if next(UVWantedTableVehicle) ~= nil then
 				local suspecttable = UVWantedTableVehicle
 				for k, v in pairs(suspecttable) do
 					if v.uvbusted then
@@ -469,10 +479,7 @@ function ENT:PhysicsUpdate()
 				self.CloseToTarget = true
 			end
 		else
-			if not UVEnemyBusted then 
-				self:RotateAround(targetpos)
-			end
-			self:ApplyHeight("up")
+			self:RotateAround(targetpos)
 			self:SelfRotate()
 			self.LastUpdate = CurTime()
 		end
@@ -586,9 +593,9 @@ function ENT:RotateAround(pos)
 	local vel2 = WorldToLocal(self.phys:GetVelocity(),Angle(),Vector(),ang)
 	
 	local dist = self:DistIgnoreZ(pos) or 0
-	local spd = math.min(100/750*dist,300)
+	local spd = math.min(100/750*dist,1000)
 	
-	if vel1.y>spd or dist<50 then return end
+	if vel1.y>spd then return end
 	
 	local vel = Vector(math.max(math.abs(vel2.x),dist>50 and 20 or 0)*(vel2.x~=0 and vel2.x/math.abs(vel2.x) or 1),vel1.y>spd and vel1.y or spd,vel2.z)
 	vel = LocalToWorld(vel,Angle(),Vector(),ang)
@@ -625,9 +632,7 @@ function ENT:SlowDown(pos)
 end
 
 function ENT:DistIgnoreZ(pos)
-	if IsValid(self:GetTarget()) then
 	return self:GetPos():Distance(Vector(pos.x,pos.y,self:GetPos().z))
-	end
 end
 
 function ENT:CheckWorldHeight()
@@ -675,7 +680,10 @@ end
 
 function ENT:IsSeeTarget()
 	if not util.IsInWorld(self:WorldSpaceCenter()) then return end
-	local tr = util.TraceLine({start = self:WorldSpaceCenter(), endpos = self:GetTarget():WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, self:GetTarget()}}).Fraction==1
+
+	local suspect = IsValid(self:GetTarget()) and self:GetTarget() or IsValid(self.potentialtarget) and self.potentialtarget
+
+	local tr = util.TraceLine({start = self:WorldSpaceCenter(), endpos = suspect:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, suspect}}).Fraction==1
 	if UVHiding then
 		return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 2000
 	else
