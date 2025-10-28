@@ -902,18 +902,32 @@ if CLIENT then
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
+
+			local function sad()
+				print("sad")
+				return " "
+			end
+
+			local function ReturnValidString(cVar)
+				cVar = GetConVar(cVar)
+				local str = cVar:GetString()
+				print(string.len(str))
+				return string.len( str ) > 0 and str or sad()
+			end
 			
 			for i = 1, MAX_HEAT_LEVEL do
 				table.Empty(convar_table)
 
 				convar_table['unitvehicle_unit_bountytime' .. i] = GetConVar('uvunitmanager_bountytime' .. i):GetInt()
-				convar_table['unitvehicle_unit_unitspatrol' .. i] = GetConVar('uvunitmanager_unitspatrol' .. i):GetString()
-				convar_table['unitvehicle_unit_unitssupport' .. i] = GetConVar('uvunitmanager_unitssupport' .. i):GetString()
-				convar_table['unitvehicle_unit_unitspursuit' .. i] = GetConVar('uvunitmanager_unitspursuit' .. i):GetString()
-				convar_table['unitvehicle_unit_unitsinterceptor' .. i] = GetConVar('uvunitmanager_unitsinterceptor' .. i):GetString()
-				convar_table['unitvehicle_unit_unitsspecial' .. i] = GetConVar('uvunitmanager_unitsspecial' .. i):GetString()
-				convar_table['unitvehicle_unit_unitscommander' .. i] = GetConVar('uvunitmanager_unitscommander' .. i):GetString()
-				convar_table['unitvehicle_unit_unitsrhino' .. i] = GetConVar('uvunitmanager_unitsrhino' .. i):GetString()
+
+				convar_table['unitvehicle_unit_unitspatrol' .. i] = ReturnValidString('uvunitmanager_unitspatrol' .. i)
+				convar_table['unitvehicle_unit_unitssupport' .. i] = ReturnValidString('uvunitmanager_unitssupport' .. i)
+				convar_table['unitvehicle_unit_unitspursuit' .. i] = ReturnValidString('uvunitmanager_unitspursuit' .. i)
+				convar_table['unitvehicle_unit_unitsinterceptor' .. i] = ReturnValidString('uvunitmanager_unitsinterceptor' .. i)
+				convar_table['unitvehicle_unit_unitsspecial' .. i] = ReturnValidString('uvunitmanager_unitsspecial' .. i)
+				convar_table['unitvehicle_unit_unitscommander' .. i] = ReturnValidString('uvunitmanager_unitscommander' .. i)
+				convar_table['unitvehicle_unit_unitsrhino' .. i] = ReturnValidString('uvunitmanager_unitsrhino' .. i)
+
 				convar_table['unitvehicle_unit_heatminimumbounty' .. i] = GetConVar('uvunitmanager_heatminimumbounty' .. i):GetInt()
 				convar_table['unitvehicle_unit_maxunits' .. i] = GetConVar('uvunitmanager_maxunits' .. i):GetInt()
 				convar_table['unitvehicle_unit_unitsavailable' .. i] = GetConVar('uvunitmanager_unitsavailable' .. i):GetInt()

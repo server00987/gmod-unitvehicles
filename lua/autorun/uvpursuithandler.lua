@@ -2369,13 +2369,14 @@ if SERVER then
 				local convar = GetConVar(key)
 
 				if convar then
-					if convarType == 'boolean' then
-						RunConsoleCommand(key, tostring(value))
-					elseif convarType == 'number' then
-						RunConsoleCommand(key, tostring(value))
-					elseif convarType == 'string' then
-						RunConsoleCommand(key, value)
-					end
+					convar:SetString(value)
+					-- if convarType == 'boolean' then
+					-- 	--RunConsoleCommand(key, tostring(value))
+					-- elseif convarType == 'number' then
+					-- 	--RunConsoleCommand(key, tostring(value))
+					-- elseif convarType == 'string' then
+					-- 	--RunConsoleCommand(key, value)
+					-- end
 				end
 			end
 		--[[
