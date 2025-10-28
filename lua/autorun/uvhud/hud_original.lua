@@ -85,7 +85,13 @@ UV_UI.pursuit.original.events = {
     --     end
     -- end,
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
-		local text = string.format( language.GetPhrase( "uv.hud.original.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo )
+		local uname = isPlayer and language.GetPhrase( unitType ) or name -- Fallback
+		
+		if GetConVar("unitvehicle_vehiclenametakedown"):GetBool() then
+			uname = name and string.Trim(language.GetPhrase(name), "#") or nil
+		end
+		
+		local text = string.format( language.GetPhrase( "uv.hud.original.takedown" ), uname, bounty, bountyCombo ),
         LocalPlayer():PrintMessage(HUD_PRINTCENTER, text)
 	end,
     onUnitWreck = function(...)

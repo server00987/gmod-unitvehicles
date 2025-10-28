@@ -782,8 +782,14 @@ end,
 UV_UI.pursuit.mostwanted.events = {
     notifState = {},
     onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		local uname = isPlayer and language.GetPhrase( unitType ) or name -- Fallback
+		
+		if GetConVar("unitvehicle_vehiclenametakedown"):GetBool() then
+			uname = name and string.Trim(language.GetPhrase(name), "#") or nil
+		end
+		
 		UV_UI.racing.mostwanted.events.CenterNotification({
-			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), isPlayer and language.GetPhrase( unitType ) or name, bounty, bountyCombo ),
+			text = string.format( language.GetPhrase( "uv.hud.mw.takedown" ), uname, bounty, bountyCombo ),
 			immediate = true,
 		})
 	end,
