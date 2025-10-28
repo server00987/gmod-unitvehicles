@@ -1234,7 +1234,7 @@ if CLIENT then
 			vehiclePanelHeat:SetTall(math.min(#savedVehicles, maxVisible) * entryHeight + 5)
 
 			for _, v in ipairs(savedVehicles) do
-				local isAllowed = string.match(v, string.char( 32 ))
+				local isNotAllowed = string.match(v, string.char( 32 ))
 
 				local btn = vgui.Create("DButton", vehiclePanelHeat)
 				btn:SetText(v)
@@ -1245,12 +1245,12 @@ if CLIENT then
 
 				btn.isActive = selected[v] or false
 				btn.Paint = function(self,w,h)
-					local col = isAllowed and Color(150,0,0) or self.isActive and Color(0,150,0) or self:IsHovered() and Color(41,128,185) or Color(60,60,60)
+					local col = isNotAllowed and Color(150,0,0) or self.isActive and Color(0,150,0) or self:IsHovered() and Color(41,128,185) or Color(60,60,60)
 					draw.RoundedBox(4,0,0,w,h,col)
 				end
 
 				btn.DoClick = function(self)
-					if not isAllowed then return end
+					if isNotAllowed then return end
 					self.isActive = not self.isActive
 					selected[v] = self.isActive
 
