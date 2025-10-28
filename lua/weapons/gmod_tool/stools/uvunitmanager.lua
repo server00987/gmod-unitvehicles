@@ -392,8 +392,17 @@ if CLIENT then
 			local HeatLevel = math.floor(HeatLevelEntry:GetValue())
 			local AssignToHeatLevel = AssignToHeatLevelEntry:GetChecked()
 			local UnitClass = UnitClassEntry:GetValue()
-			
+
 			if Name ~= "" then
+				local charArray = string.Explode( "", string.Trim( Name ) )
+				for k, v in pairs(charArray) do
+					if v == string.char( 32 ) then
+						charArray[k] = string.char( 95 )
+					end
+				end
+
+				Name = table.concat( charArray )
+
 				if UVTOOLMemory.VehicleBase == "gmod_sent_vehicle_fphysics_base" then
 					local DataString = ""
 					
@@ -822,12 +831,23 @@ if CLIENT then
 
 		local applysettings = vgui.Create("DButton") -- Apply Button
 		applysettings:SetText("#spawnmenu.savechanges")
+
+		local cooldown = -math.huge
+
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
 				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
+
+			if CurTime() - cooldown < 5 then 
+				notification.AddLegacy( "COOLDOWN!", NOTIFY_ERROR, 5 )
+				surface.PlaySound( "buttons/button10.wav" )
+				return
+			end
+
+			cooldown = CurTime()
 			
 			local convar_table = {}
 			
@@ -853,14 +873,20 @@ if CLIENT then
 			convar_table['unitvehicle_unit_helicopterbarrels'] = GetConVar('uvunitmanager_helicopterbarrels'):GetInt()
 			convar_table['unitvehicle_unit_helicopterbusting'] = GetConVar('uvunitmanager_helicopterbusting'):GetInt()
 			
-			convar_table['unitvehicle_unit_bountypatrol'] = GetConVar('uvunitmanager_bountypatrol'):GetString()
-			convar_table['unitvehicle_unit_bountysupport'] = GetConVar('uvunitmanager_bountysupport'):GetString()
-			convar_table['unitvehicle_unit_bountypursuit'] = GetConVar('uvunitmanager_bountypursuit'):GetString()
-			convar_table['unitvehicle_unit_bountyinterceptor'] = GetConVar('uvunitmanager_bountyinterceptor'):GetString()
-			convar_table['unitvehicle_unit_bountyair'] = GetConVar('uvunitmanager_bountyair'):GetString()
-			convar_table['unitvehicle_unit_bountyspecial'] = GetConVar('uvunitmanager_bountyspecial'):GetString()
-			convar_table['unitvehicle_unit_bountycommander'] = GetConVar('uvunitmanager_bountycommander'):GetString()
-			convar_table['unitvehicle_unit_bountyrhino'] = GetConVar('uvunitmanager_bountyrhino'):GetString()
+			convar_table['unitvehicle_unit_bountypatrol'] = GetConVar('uvunitmanager_bountypatrol'):GetInt()
+			convar_table['unitvehicle_unit_bountysupport'] = GetConVar('uvunitmanager_bountysupport'):GetInt()
+			convar_table['unitvehicle_unit_bountypursuit'] = GetConVar('uvunitmanager_bountypursuit'):GetInt()
+			convar_table['unitvehicle_unit_bountyinterceptor'] = GetConVar('uvunitmanager_bountyinterceptor'):GetInt()
+			convar_table['unitvehicle_unit_bountyair'] = GetConVar('uvunitmanager_bountyair'):GetInt()
+			convar_table['unitvehicle_unit_bountyspecial'] = GetConVar('uvunitmanager_bountyspecial'):GetInt()
+			convar_table['unitvehicle_unit_bountycommander'] = GetConVar('uvunitmanager_bountycommander'):GetInt()
+			convar_table['unitvehicle_unit_bountyrhino'] = GetConVar('uvunitmanager_bountyrhino'):GetInt()
+
+			convar_table['unitvehicle_unit_timetillnextheatenabled'] = GetConVar('uvunitmanager_timetillnextheatenabled'):GetInt()
+
+			for i = 1, MAX_HEAT_LEVEL - 1 do
+				convar_table['unitvehicle_unit_timetillnextheat' .. i] = GetConVar('uvunitmanager_timetillnextheat' .. i):GetInt()
+			end
 
 			for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 				local lowercaseUnit = string.lower( v )
@@ -872,14 +898,14 @@ if CLIENT then
 				local lowercaseType = string.lower( v )
 				convar_table['unitvehicle_unit_' .. lowercaseType .. '_voiceprofile'] = GetConVar('uvunitmanager_' .. lowercaseType .. '_voiceprofile'):GetString()
 			end
-			
-			convar_table['unitvehicle_unit_timetillnextheatenabled'] = GetConVar('uvunitmanager_timetillnextheatenabled'):GetInt()
-			
-			for i = 1, MAX_HEAT_LEVEL - 1 do
-				convar_table['unitvehicle_unit_timetillnextheat' .. i] = GetConVar('uvunitmanager_timetillnextheat' .. i):GetInt()
-			end
+
+			net.Start("UVUpdateSettings")
+			net.WriteTable(convar_table)
+			net.SendToServer()
 			
 			for i = 1, MAX_HEAT_LEVEL do
+				table.Empty(convar_table)
+
 				convar_table['unitvehicle_unit_bountytime' .. i] = GetConVar('uvunitmanager_bountytime' .. i):GetInt()
 				convar_table['unitvehicle_unit_unitspatrol' .. i] = GetConVar('uvunitmanager_unitspatrol' .. i):GetString()
 				convar_table['unitvehicle_unit_unitssupport' .. i] = GetConVar('uvunitmanager_unitssupport' .. i):GetString()
@@ -896,11 +922,11 @@ if CLIENT then
 				convar_table['unitvehicle_unit_cooldowntimer' .. i] = GetConVar('uvunitmanager_cooldowntimer' .. i):GetInt()
 				convar_table['unitvehicle_unit_roadblocks' .. i] = GetConVar('uvunitmanager_roadblocks' .. i):GetInt()
 				convar_table['unitvehicle_unit_helicopters' .. i] = GetConVar('uvunitmanager_helicopters' .. i):GetInt()
+
+				net.Start("UVUpdateSettings")
+				net.WriteTable(convar_table)
+				net.SendToServer()
 			end
-			
-			net.Start("UVUpdateSettings")
-			net.WriteTable(convar_table)
-			net.SendToServer()
 			
 			notification.AddLegacy( "#tool.uvunitmanager.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
@@ -1208,6 +1234,8 @@ if CLIENT then
 			vehiclePanelHeat:SetTall(math.min(#savedVehicles, maxVisible) * entryHeight + 5)
 
 			for _, v in ipairs(savedVehicles) do
+				local isAllowed = string.match(v, string.char( 32 ))
+
 				local btn = vgui.Create("DButton", vehiclePanelHeat)
 				btn:SetText(v)
 				btn:SetTextColor(Color(255,255,255))
@@ -1217,11 +1245,12 @@ if CLIENT then
 
 				btn.isActive = selected[v] or false
 				btn.Paint = function(self,w,h)
-					local col = self.isActive and Color(0,150,0) or self:IsHovered() and Color(41,128,185) or Color(60,60,60)
+					local col = isAllowed and Color(150,0,0) or self.isActive and Color(0,150,0) or self:IsHovered() and Color(41,128,185) or Color(60,60,60)
 					draw.RoundedBox(4,0,0,w,h,col)
 				end
 
 				btn.DoClick = function(self)
+					if not isAllowed then return end
 					self.isActive = not self.isActive
 					selected[v] = self.isActive
 
