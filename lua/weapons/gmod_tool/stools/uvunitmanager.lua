@@ -903,16 +903,10 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			local function sad()
-				print("sad")
-				return " "
-			end
-
 			local function ReturnValidString(cVar)
 				cVar = GetConVar(cVar)
 				local str = cVar:GetString()
-				print(string.len(str))
-				return string.len( str ) > 0 and str or sad()
+				return string.len( str ) > 0 and str or " "
 			end
 			
 			for i = 1, MAX_HEAT_LEVEL do
