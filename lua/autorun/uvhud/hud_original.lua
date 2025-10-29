@@ -91,7 +91,7 @@ UV_UI.pursuit.original.events = {
 			uname = name and string.Trim(language.GetPhrase(name), "#") or nil
 		end
 		
-		local text = string.format( language.GetPhrase( "uv.hud.original.takedown" ), uname, bounty, bountyCombo ),
+		local text = string.format( language.GetPhrase( "uv.hud.original.takedown" ), uname, bounty, bountyCombo )
         LocalPlayer():PrintMessage(HUD_PRINTCENTER, text)
 	end,
     onUnitWreck = function(...)

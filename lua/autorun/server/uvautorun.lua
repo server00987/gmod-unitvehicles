@@ -1186,6 +1186,25 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				if (NPC and NPC:IsPlayer()) and not UVTargeting and not UVEnemyEscaped and not UVEnemyBusted and table.HasValue(UVPotentialSuspects, object) then
 					UVTargeting = true
 				end
+			elseif car.TrafficVehicle then --TRAFFIC
+				local ourOldVel = coldata.OurOldVelocity:Length()
+				local ourNewVel = coldata.OurNewVelocity:Length()
+				local resultVel = ourOldVel
+				if ourOldVel > ourNewVel then --slowed
+					resultVel = ourOldVel - ourNewVel
+				else --sped up
+					resultVel = ourNewVel - ourOldVel
+				end
+				local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
+				dot = math.abs(dot) / 2
+				local dmg = resultVel * dot
+				if dmg >= 100 then
+					timer.Simple(0.1, function()
+						if IsValid(car.TrafficVehicle) then
+							car.TrafficVehicle:Wreck()
+						end
+					end)
+				end
 			end
 			if not object.UnitVehicle then --CALL HANDLER
 				if not object:IsWorld() then
@@ -1558,6 +1577,25 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		if (NPC and NPC:IsPlayer()) and not UVTargeting and not UVEnemyEscaped and not UVEnemyBusted and table.HasValue(UVPotentialSuspects, object) then
 			UVTargeting = true
 		end
+	elseif car.TrafficVehicle then --TRAFFIC
+		local ourOldVel = coldata.OurOldVelocity:Length()
+		local ourNewVel = coldata.OurNewVelocity:Length()
+		local resultVel = ourOldVel
+		if ourOldVel > ourNewVel then --slowed
+			resultVel = ourOldVel - ourNewVel
+		else --sped up
+			resultVel = ourNewVel - ourOldVel
+		end
+		local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
+		dot = math.abs(dot) / 2
+		local dmg = resultVel * dot
+		if dmg >= 100 then
+			timer.Simple(0.1, function()
+				if IsValid(car.TrafficVehicle) then
+					car.TrafficVehicle:Wreck()
+				end
+			end)
+		end
 	end
 
 	if not object.UnitVehicle then --CALL HANDLER
@@ -1873,6 +1911,25 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 
 			if (NPC and NPC:IsPlayer()) and not UVTargeting and not UVEnemyEscaped and not UVEnemyBusted and table.HasValue(UVPotentialSuspects, object) then
 				UVTargeting = true
+			end
+		elseif car.TrafficVehicle then --TRAFFIC
+			local ourOldVel = coldata.OurOldVelocity:Length()
+			local ourNewVel = coldata.OurNewVelocity:Length()
+			local resultVel = ourOldVel
+			if ourOldVel > ourNewVel then --slowed
+				resultVel = ourOldVel - ourNewVel
+			else --sped up
+				resultVel = ourNewVel - ourOldVel
+			end
+			local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
+			dot = math.abs(dot) / 2
+			local dmg = resultVel * dot
+			if dmg >= 100 then
+				timer.Simple(0.1, function()
+					if IsValid(car.TrafficVehicle) then
+						car.TrafficVehicle:Wreck()
+					end
+				end)
 			end
 		end
 		if not object.UnitVehicle and not object:IsWorld() then --CALL HANDLER
