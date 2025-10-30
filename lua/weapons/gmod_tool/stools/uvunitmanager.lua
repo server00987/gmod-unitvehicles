@@ -136,6 +136,8 @@ TOOL.ClientConVar["bountyspecial"] = 25000
 TOOL.ClientConVar["bountycommander"] = 100000
 TOOL.ClientConVar["bountyrhino"] = 50000
 
+
+
 local defaultvoicetable = {
 	"cop1, cop2, cop3, cop4, cop5", --Patrol
 	"cop1, cop2, cop3, cop4, cop5", --Support
@@ -300,6 +302,65 @@ if SERVER then
 end
 
 if CLIENT then
+
+	local function Export( name )
+		local jsonArray = {
+			['Name'] = name,
+			['Data'] = {}
+		}
+
+		for _, cVarKey in pairs( conVarList ) do
+			if table.HasValue( PROTECTED_CONVARS, cVarKey ) then continue end
+
+			local cVar = GetConVar( cVarKey )
+			if cVar then
+				jsonArray.Data[cVarKey] = cVar:GetString()
+			end
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export' )
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export/uvunitmanager', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export/uvunitmanager' )
+		end
+
+		file.Write( 'unitvehicles/preset_export/uvunitmanager/' .. name .. '.json', util.TableToJSON( jsonArray ) )
+		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/" .. name .. ".json" )
+	end
+
+	if not file.IsDir( 'unitvehicles/preset_import', 'DATA' ) then
+		file.CreateDir( 'unitvehicles/preset_import' )
+	end
+
+	if not file.IsDir( 'unitvehicles/preset_import/uvunitmanager', 'DATA' ) then
+		file.CreateDir( 'unitvehicles/preset_import/uvunitmanager' )
+	end
+
+	local importFiles, _ = file.Find( 'unitvehicles/preset_import/uvunitmanager/*', 'DATA' )
+
+	for _, impFile in pairs( importFiles ) do
+		local success = ProtectedCall(function()
+			local data = util.JSONToTable( file.Read( 'unitvehicles/preset_import/uvunitmanager/' .. impFile, 'DATA' ) )
+
+			if type(data) == 'table' and (data.Name and data.Data) then
+				presets.Add( 
+					'units', 
+					data.Name, 
+					data.Data 
+				)
+			else
+				error('Malformed JSON data!')
+			end
+		end)
+
+		if success then
+			chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvunitmanager)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
+		else
+			chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvunitmanager)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
+		end
+	end
 	
 	TOOL.Information = {
 		{ name = "info"},
@@ -942,6 +1003,16 @@ if CLIENT then
 			
 		end
 		CPanel:AddItem(applysettings)
+
+		local exportsettings = vgui.Create("DButton")
+		exportsettings:SetText("Export Settings")
+		exportsettings.DoClick = function()
+			Derma_StringRequest("#tool.uvracemanager.export", "What should the preset be named?", cpID, function(txt)
+				chat.AddText("Exporting preset...")
+				Export( txt )
+			end, nil, "#addons.confirm", "#addons.cancel")
+		end
+		CPanel:AddItem(exportsettings)
 
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvunitmanager.settings.desc",

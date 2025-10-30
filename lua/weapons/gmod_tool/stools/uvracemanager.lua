@@ -722,7 +722,6 @@ function TOOL:RightClick()
 	})
 	
 	local ent = tr.Entity
-	print(ent:GetClass())
 	if ent:GetClass() ~= "uvrace_checkpoint" then return end
 	
 	selectedCP = ent

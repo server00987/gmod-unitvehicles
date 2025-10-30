@@ -32,7 +32,7 @@ local PursuitTechDefs = {
             duration = { default = 10, min = 1, max = 30, decimals = 0 },
             power    = { default = 1000000, min = 100000, max = 10000000, decimals = 0 },
             damage   = { default = 0.2, min = 0, max = 1, decimals = 1 },
-            damagecommander = { default = 0.1, min = 0, max = 1, decimals = 1 },
+            damagecommander = { default = 0.1, min = 0, max = 1, decimals = 1, nounit = true },
             cooldown = { default = 30, min = 0, max = 120, decimals = 0 },
             maxammo     = { default = 5, min = 0, max = 120, decimals = 0 }
         }
@@ -201,7 +201,7 @@ for displayName, info in pairs(PursuitTechDefs) do
             local key = short.."_"..param
             TOOL.ClientConVar[key] = TOOL.ClientConVar[key] or dat.default
         end
-        if info.unit then
+        if info.unit and not dat.nounit then
             local key = short.."_"..param.."_unit"
             TOOL.ClientConVar[key] = TOOL.ClientConVar[key] or dat.default
         end
@@ -209,6 +209,7 @@ for displayName, info in pairs(PursuitTechDefs) do
 end
 
 local conVarsDefault = TOOL:BuildConVarList()
+local conVarList = table.GetKeys(conVarsDefault)
 
 -- ===================== Helpers ===============================
 local function SanitizeForConvar(s)
@@ -245,8 +246,74 @@ local function PlayerCanModifyPT(ply, ent)
     return false
 end
 
+local PROTECTED_CONVARS = {
+    'uvpursuittech_racer_slot1',
+    'uvpursuittech_racer_slot2',
+    'uvpursuittech_unit_slot1',
+    'uvpursuittech_unit_slot2'
+}
+
 -- ===================== Client: Visuals & CPanel ===============================
 if CLIENT then
+    local function Export( name )
+		local jsonArray = {
+			['Name'] = name,
+			['Data'] = {}
+		}
+
+		for _, cVarKey in pairs( conVarList ) do
+			if table.HasValue( PROTECTED_CONVARS, cVarKey ) then continue end
+
+			local cVar = GetConVar( cVarKey )
+			if cVar then
+				jsonArray.Data[cVarKey] = cVar:GetString()
+			end
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export' )
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export/uvpursuittech', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export/uvpursuittech' )
+		end
+
+		file.Write( 'unitvehicles/preset_export/uvpursuittech/' .. name .. '.json', util.TableToJSON( jsonArray ) )
+		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/" .. name .. ".json" )
+	end
+
+	if not file.IsDir( 'unitvehicles/preset_import', 'DATA' ) then
+		file.CreateDir( 'unitvehicles/preset_import' )
+	end
+
+	if not file.IsDir( 'unitvehicles/preset_import/uvpursuittech', 'DATA' ) then
+		file.CreateDir( 'unitvehicles/preset_import/uvpursuittech' )
+	end
+
+	local importFiles, _ = file.Find( 'unitvehicles/preset_import/uvpursuittech/*', 'DATA' )
+
+	for _, impFile in pairs( importFiles ) do
+		local success = ProtectedCall(function()
+			local data = util.JSONToTable( file.Read( 'unitvehicles/preset_import/uvpursuittech/' .. impFile, 'DATA' ) )
+
+			if type(data) == 'table' and (data.Name and data.Data) then
+				presets.Add( 
+					'units', 
+					data.Name, 
+					data.Data 
+				)
+			else
+				error('Malformed JSON data!')
+			end
+		end)
+
+		if success then
+			chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvpursuittech)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
+		else
+			chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvpursuittech)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
+		end
+	end
+
 	TOOL.Information = {
 		{ name = "info" },
 		{ name = "left" },
@@ -409,6 +476,16 @@ if CLIENT then
 		})
 
 		CPanel:AddControl("Label",{Text=" "})
+
+        local exportsettings = vgui.Create("DButton")
+		exportsettings:SetText("Export Settings")
+		exportsettings.DoClick = function()
+			Derma_StringRequest("#tool.uvracemanager.export", "What should the preset be named?", cpID, function(txt)
+				chat.AddText("Exporting preset...")
+				Export( txt )
+			end, nil, "#addons.confirm", "#addons.cancel")
+		end
+		CPanel:AddItem(exportsettings)
 		
 		local ptPicker = vgui.Create("DComboBox")
 		ptPicker:SetText("#uv.uvpursuittech.select")
@@ -533,7 +610,7 @@ if CLIENT then
 						convar_table[racerKey] = GetConVar(racerKey):GetFloat()
 					end
 
-					if info.unit then
+					if info.unit and not dat.nounit then
 						local unitKey = racerKey .. "_unit"
 						if not ConVarExists(unitKey) then
 							CreateClientConVar(unitKey, tostring(dat.default), true, false)

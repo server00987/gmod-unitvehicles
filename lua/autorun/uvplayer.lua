@@ -1137,14 +1137,29 @@ if SERVER then
 
         car:EmitSound("gadgets/emp/lockfromloop.wav")
         target:EmitSound("gadgets/emp/lockonloop.wav")
-        
+
         local function cleanup()
             car.empTarget = nil
             car.startLock = nil
+            car.empCleanup = nil
             target.LockedOnBy = nil
 
             hook.Remove( "Think", hookIdentifier )
         end
+
+        local function globalCleanup()
+            cleanup()
+            UVPTEvent( 
+                {
+                    carDriver,
+                    targetDriver
+                }, 
+                'EMP', 
+                'Missed'
+            )
+        end
+
+        car.empCleanup = globalCleanup
 
         hook.Add( "Think", hookIdentifier, function()
             if not IsValid( car ) or not IsValid( target ) then return cleanup() end
@@ -1690,6 +1705,8 @@ if SERVER then
         if UVBackupUnderway and not UVBackupTenSeconds and UVResourcePointsTimerMax then
             UVResourcePointsTimerMax = UVResourcePointsTimerMax + 10
         end
+
+        local isUnit = car.UnitVehicle
         
         net.Start("UVWeaponJammerEnable")
         if (UVGetDriver(car) and UVGetDriver(car):IsPlayer()) then
@@ -1714,6 +1731,9 @@ if SERVER then
             if unit.v then
                 UVDeactivateESF(unit.v)
                 UVDeactivateKillSwitch(unit.v)
+                if car.empCleanup then 
+                    car.empCleanup()
+                end
             end
         end
         
@@ -1721,6 +1741,9 @@ if SERVER then
             if IsValid(unitplayers) then
                 UVDeactivateESF(UVPlayerUnitTableVehicle)
                 UVDeactivateKillSwitch(UVPlayerUnitTableVehicle)
+                if car.empCleanup then 
+                    car.empCleanup() 
+                end
             end
         end
         

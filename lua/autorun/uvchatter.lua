@@ -311,7 +311,7 @@ if SERVER then
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
-			self:EmitSound(soundFile, 5000, 100, 1, CHAN_STATIC)
+			self:EmitSound(soundFile, 10000, 100, 1, CHAN_STREAM)
 			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
 			
 		elseif parameters == 3 then
@@ -1406,7 +1406,12 @@ if SERVER then
 	
 	function UVChatterArrest(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
-			return UVSoundChatter(self, self.voice, "arrest")
+			local randomno = math.random(1,2)
+			if randomno == 1 then
+				return UVSoundChatter(self, self.voice, "arrest")
+			else
+				return UVSoundChatter(self, self.voice, "arrest", 2)
+			end
 		end
 		UVDelayChatter()
 		if not IsValid(self.e) then return end

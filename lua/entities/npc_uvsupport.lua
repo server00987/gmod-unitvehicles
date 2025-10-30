@@ -362,12 +362,29 @@ if SERVER then
 			self.v:TriggerInput("Steer", 0)
 		end
 	end
+
+	-- function ENT:StraightToPoint(point)
+	-- 	if not self.v or not point then
+	-- 		return
+	-- 	end
+	-- 	local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = point, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v}}).Fraction==1
+	-- 	return tobool(tr)
+	-- end
 	
-	function ENT:StraightToTarget(target)
+	function ENT:StraightToTarget(target, considerVelocity)
 		if not self.v or not target then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = target:WorldSpaceCenter(), mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
+
+		local targetPos = target:WorldSpaceCenter()
+		if considerVelocity then
+			targetPos = targetPos + target:GetVelocity()
+			local trace = util.TraceLine({start = target:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}})
+			if trace.Hit then targetPos = trace.HitPos end
+		end
+
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
+		print(tobool(tr))
 		return tobool(tr)
 	end
 	
@@ -1145,13 +1162,13 @@ if SERVER then
 			local enemyvelocity = self.e:GetVelocity():LengthSqr()
 			
 			--Determine pursuit standards
-			if not UVEnemyEscaping and self:StraightToTarget(self.e) then
+			if not UVEnemyEscaping and self:StraightToTarget(self.e, true) then
 				self.tableroutetoenemy = {}
 				if self.NavigateBlind then 
 					self.NavigateBlind = nil 
 				end
 				if (not self.formationpoint or enemyvelocity <= UVBustSpeed or eedist:LengthSqr() >= 6250000) 
-				or not self:StraightToTarget(self.e) or UVCalm or UVEnemyEscaping or 
+				or not self:StraightToTarget(self.e, true) or UVCalm or UVEnemyEscaping or 
 				self:ObstaclesNearbySide() then
 					if not self.driveinfront or self:ObstaclesNearbySide() then
 						self.targetpos = self.e:WorldSpaceCenter() --Drive towards the enemy
@@ -1197,7 +1214,7 @@ if SERVER then
 			if not (eph and IsValid(eph)) then return end
 			
 			--Unique driving techniques
-			if (UVEnemyEscaping or not self:StraightToTarget(self.e)) and not self.stuck then
+			if (UVEnemyEscaping or not self:StraightToTarget(self.e, true)) and not self.stuck then
 				if dist:Dot(forward) < 0 and not self.stuck then
 					if vectdot > 0 then
 						if right.z > 0 then 
@@ -1250,7 +1267,7 @@ if SERVER then
 						end
 					end
 				end --Slow down
-			elseif (dist:LengthSqr() > 250000 or dist:LengthSqr() < 250000 and not self:StraightToTarget(self.e)) and self.stuck then --No eyes on the target
+			elseif (dist:LengthSqr() > 250000 or dist:LengthSqr() < 250000 and not self:StraightToTarget(self.e, true)) and self.stuck then --No eyes on the target
 				if right.z > 0 then steer = -1 else steer = 1 end
 				if UVEnemyEscaping then throttle = -1 else throttle = throttle * -1 end
 			else --Getting unstuck
@@ -1296,7 +1313,7 @@ if SERVER then
 						self:UVHandbrakeOn()
 					end
 				end --Slow down when enemy's stopped
-				if evectdot < 0 and enemyvelocity > 100000 and dist:Dot(forward) > 0 and throttle > 0 and (self:StraightToTarget(self.e) or not self.aggressive) then
+				if evectdot < 0 and enemyvelocity > 100000 and dist:Dot(forward) > 0 and throttle > 0 and (self:StraightToTarget(self.e, true) or not self.aggressive) then
 					if not Relentless:GetBool() or (selfvelocity+enemyvelocity) > eedist:Length2DSqr() then
 						if selfvelocity > 123904 then throttle = 0 end
 						if dist:Dot(eforward) < 0 then
@@ -1338,7 +1355,7 @@ if SERVER then
 						end
 					end
 				end --Herding technique
-				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and self:StraightToTarget(self.e) then
+				if enemyvelocity < 30976 and dist:Length2DSqr() < 100000 and self:StraightToTarget(self.e, true) then
 					throttle = 0 
 					if vectdot < 0 or eright.z > -0.2 and eright.z < 0.2 or UVCalm then self:UVHandbrakeOn() end
 				end --Pinning/boxing in
@@ -1350,7 +1367,7 @@ if SERVER then
 			--Roadblocking
 			if self.v.roadblocking then
 				self:UVHandbrakeOn()
-				if not self.v.roadblockingmissed and eeevectdot > 0 and self.v.roadblocking and self:StraightToTarget(self.e) then
+				if not self.v.roadblockingmissed and eeevectdot > 0 and self.v.roadblocking and self:StraightToTarget(self.e, true) then
 					self.v.roadblockingmissed = true
 					
 					if self.v.disperse then
@@ -1511,7 +1528,7 @@ if SERVER then
 							end
 						end
 					end
-					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
+					if not UVEnemyEscaping and self:StraightToTarget(self.e, true) and self.metwithenemy and not self.stuck then
 						if math.abs(steer) > 0.5 and selfvelocity > 100000 and enemyvelocity < selfvelocity then
 							if self.v:GetGear() >= 3 then
 								throttle = -1
@@ -1532,7 +1549,7 @@ if SERVER then
 						steer = 0
 						throttle = 1
 					end --Straighten out
-					if not UVEnemyEscaping and self:StraightToTarget(self.e) and self.metwithenemy and not self.stuck then
+					if not UVEnemyEscaping and self:StraightToTarget(self.e, true) and self.metwithenemy and not self.stuck then
 						if math.abs(steer) > 0.5 and selfvelocity > 100000 and enemyvelocity < selfvelocity then
 							if self.v:GetGear() >= 1 then
 								throttle = -1
@@ -1542,7 +1559,7 @@ if SERVER then
 						end --Cornering
 					end
 				else
-					if vectdot > 0 and evectdot > 0 and dist:Dot(forward) > 0 and dist:Length2DSqr() > 250000 and self:StraightToTarget(self.e) then 
+					if vectdot > 0 and evectdot > 0 and dist:Dot(forward) > 0 and dist:Length2DSqr() > 250000 and self:StraightToTarget(self.e, true) then 
 						local maththrottle = throttle - math.abs(steer)
 						if maththrottle >= 0 then
 							throttle = maththrottle
