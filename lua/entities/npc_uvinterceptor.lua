@@ -378,7 +378,6 @@ if SERVER then
 		end
 
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
-		print(tobool(tr))
 		return tobool(tr)
 	end
 	
@@ -1910,8 +1909,6 @@ if SERVER then
 					v.UnitVehicle = self
 					v:EnableEngine(true)
 					v:StartEngine(true)
-				else
-					print("unable to find in vehicle")
 				end
 			elseif v.IsGlideVehicle then --Glide
 				if not IsValid(v:GetDriver()) then
@@ -1959,8 +1956,6 @@ if SERVER then
 							v.UnitVehicle = self
 							v:EnableEngine(true)
 							v:StartEngine(true)
-						else
-							print("unable to find in sphere")
 						end
 					elseif v.IsGlideVehicle then --Glide
 						if not IsValid(v:GetDriver()) then

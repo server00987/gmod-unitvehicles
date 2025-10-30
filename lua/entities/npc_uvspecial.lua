@@ -383,7 +383,6 @@ if SERVER then
 		end
 
 		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
-		print(tobool(tr))
 		return tobool(tr)
 	end
 	
