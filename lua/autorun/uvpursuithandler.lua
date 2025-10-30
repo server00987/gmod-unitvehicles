@@ -2498,6 +2498,8 @@ else -- CLIENT Settings | HUD/Options
 	UVTraxFreeroam = CreateClientConVar("unitvehicle_uvtraxinfreeroam", 0, true, false, "Unit Vehicles: If set to 1, UV TRAX™ will play in Freeroam whenever you're in a vehicle.")
 	OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
+	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
+	
 
 	-- unit convars
 	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -4928,6 +4930,9 @@ else -- CLIENT Settings | HUD/Options
 
 			option = panel:CheckBox("#uv.settings.ui.subtitles", "unitvehicle_subtitles")
 			option:SetTooltip("#uv.settings.ui.subtitles.desc")
+
+			option = panel:CheckBox("#uv.settings.ui.vehnametakedown", "unitvehicle_vehiclenametakedown")
+			option:SetTooltip("#uv.settings.ui.vehnametakedown.desc")
 
 			panel:Help("#uv.settings.audio.title")
 

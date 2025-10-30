@@ -598,8 +598,14 @@ UV_UI.racing.undercover.events = {
 
 UV_UI.pursuit.undercover.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		local uname = isPlayer and language.GetPhrase( unitType .. ".caps" ) or name -- Fallback
+		
+		if GetConVar("unitvehicle_vehiclenametakedown"):GetBool() then
+			uname = name and string.Trim(language.GetPhrase(name), "#") or nil
+		end
+		
 		UV_UI.racing.undercover.events.CenterNotification({
-			text = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo ),
+			text = string.format( language.GetPhrase( "uv.hud.undercover.takedown" ), uname, bounty, bountyCombo ),
 			immediate = true,
 		})
     end,

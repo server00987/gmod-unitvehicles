@@ -4,22 +4,13 @@ from collections import defaultdict
 import tkinter as tk
 from tkinter import simpledialog
 
-# output file
 OUT_FILE = "unitvehicles_subtitles.properties"
-# default existing string file path for comparison (use components for portability)
 DEFAULT_EXISTING_FILE = os.path.join("resource", "localization", "en", "unitvehicles_subtitles.properties")
 
 def natural_sort_key(s):
-    """Split string into ints and text for natural sorting."""
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
 
 def read_existing_strings(file_path):
-    """
-    Read an existing string file into:
-      - original_lines: list of raw lines (kept for potential future use)
-      - key_to_line: mapping key -> original line (preserves comment state if the key line is commented)
-    It will capture keys even if they're commented with '#' at the start (e.g. '# uvsub.default...=...')
-    """
     original_lines = []
     key_to_line = {}
     if not file_path or not os.path.isfile(file_path):
@@ -29,24 +20,17 @@ def read_existing_strings(file_path):
         for raw in f:
             line = raw.rstrip("\n")
             original_lines.append(line)
-
             striped = line.lstrip()
             is_commented = striped.startswith("#")
             candidate = striped[1:].lstrip() if is_commented else striped
-
             if "=" in candidate:
-                key, val = candidate.split("=", 1)
+                key, _ = candidate.split("=", 1)
                 key = key.strip()
                 if key:
                     key_to_line[key] = line
     return original_lines, key_to_line
 
 def parse_key_to_group(key, expected_folder_name):
-    """
-    Given a key like: uvsub.default.misc.static.static-01
-    return (unit_type, speech_folder) -> ('misc', 'static')
-    Only returns a result if key appears to match the uvsub.<folder>.<unit>.<speech>... structure.
-    """
     parts = key.split(".")
     if len(parts) >= 4 and parts[0].lower() == "uvsub":
         folder_component = parts[1].lower()
@@ -57,14 +41,10 @@ def parse_key_to_group(key, expected_folder_name):
     return None, None
 
 def ensure_replaceme(line):
-    """
-    Add 'REPLACEME' if line contains '=' but no value after it (ignoring whitespace).
-    Works for both commented and uncommented lines.
-    """
     stripped = line.lstrip()
     prefix = ""
     if stripped.startswith("#"):
-        prefix = line[:line.index("#") + 1]  # capture leading spacing + '#'
+        prefix = line[:line.index("#") + 1]
         candidate = stripped[1:].lstrip()
     else:
         candidate = stripped
@@ -72,17 +52,14 @@ def ensure_replaceme(line):
     if "=" in candidate:
         left, right = candidate.split("=", 1)
         if right.strip() == "":
-            # no value after '=' -> add REPLACEME
-            new_candidate = f"{left.strip()}=REPLACEME"
+            new_candidate = f"# {left.strip()}= "
             return prefix + " " + new_candidate if prefix else new_candidate
     return line
 
 def main():
-    # Tkinter prompts
     root = tk.Tk()
-    root.withdraw()  # hide main window
+    root.withdraw()
 
-    # Folder under sound/chatter2
     folder_name = simpledialog.askstring(
         "Folder Selection",
         "Enter the folder name under sound/chatter2/ (e.g., default, nfsmw, alternative):",
@@ -96,7 +73,6 @@ def main():
         print(f"Folder does not exist: {ROOT}")
         return
 
-    # Existing string file selection (can be in subfolders); default path provided
     existing_file = simpledialog.askstring(
         "Existing String File",
         "Enter the path to the existing string file for comparison:",
@@ -108,7 +84,6 @@ def main():
 
     original_lines, existing_key_lines = read_existing_strings(existing_file)
 
-    # Group audio entries by unit type and speech folder
     grouped_entries = defaultdict(lambda: defaultdict(list))
     audio_keys_set = set()
 
@@ -118,40 +93,39 @@ def main():
                 full_path = os.path.join(dirpath, filename)
                 rel_path = os.path.relpath(full_path, ROOT).replace("\\", "/")
                 parts = rel_path.split("/")
-
                 if len(parts) < 2:
                     continue
-
                 unit_type = parts[0].lower()
                 speech_folder = parts[1].lower()
                 key_path = ".".join([p.lower() for p in parts])
                 key = f"uvsub.{folder_name.lower()}.{key_path.rsplit('.', 1)[0]}"
-
                 grouped_entries[unit_type][speech_folder].append(key)
                 audio_keys_set.add(key)
 
-    all_keys_to_write = {}
+    all_keys_to_write = defaultdict(list)
+    notfound_entries = defaultdict(lambda: defaultdict(list))
 
-    # 1) Process existing keys
+    # Process existing keys
     for key, original_line in existing_key_lines.items():
+        stripped = original_line.lstrip()
+        is_commented = stripped.startswith("#")
+        unit_type, speech_folder = parse_key_to_group(key, folder_name)
+
         if key in audio_keys_set:
             line_to_use = ensure_replaceme(original_line)
-            all_keys_to_write[key] = line_to_use
+            all_keys_to_write[key].append(line_to_use)
         else:
-            stripped = original_line.lstrip()
-            if stripped.startswith("#"):
-                all_keys_to_write[key] = ensure_replaceme(original_line)
-            else:
-                all_keys_to_write[key] = ensure_replaceme("# " + original_line)
+            if unit_type and speech_folder:
+                notfound_entries[unit_type][speech_folder].append(key)
 
-    # 2) Add new keys (audio exists but not in existing file)
+    # Add new keys (audio exists but not in existing file)
     for unit in grouped_entries:
         for speech_folder in grouped_entries[unit]:
             for key in grouped_entries[unit][speech_folder]:
-                if key not in all_keys_to_write:
-                    all_keys_to_write[key] = f"{key}=REPLACEME"
+                if key not in all_keys_to_write and key not in notfound_entries[unit][speech_folder]:
+                    all_keys_to_write[key].append(f"{key}= ")
 
-    # 3) Add missing-audio keys (commented) into groups so they appear
+    # Add missing keys to groups
     if existing_key_lines:
         for key in existing_key_lines.keys():
             if key not in audio_keys_set:
@@ -160,18 +134,56 @@ def main():
                     if key not in grouped_entries[unit_type][speech_folder]:
                         grouped_entries[unit_type][speech_folder].append(key)
 
-    # 4) Write the output file
+    # Write legit files first
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         for unit in sorted(grouped_entries.keys(), key=natural_sort_key):
             f.write(f"#------ {unit.capitalize()}\n")
             for speech_folder in sorted(grouped_entries[unit].keys(), key=natural_sort_key):
                 keys_sorted = sorted(grouped_entries[unit][speech_folder], key=natural_sort_key)
+                prev_subcategory = None
                 for key in keys_sorted:
-                    f.write(all_keys_to_write.get(key, f"{key}=REPLACEME") + "\n")
+                    insert_blank_before = False
+                    # Detect both vehicledescription and addressgroup_map
+                    if "vehicledescription" in key or "addressgroup_map" in key:
+                        parts = key.split(".")
+                        try:
+                            if "vehicledescription" in key:
+                                idx = parts.index("vehicledescription")
+                            else:
+                                idx = parts.index("addressgroup_map")
+                            subcat = parts[idx + 1] if len(parts) > idx + 1 else None
+                        except ValueError:
+                            subcat = None
+
+                        # Insert blank line when the subcategory changes
+                        if subcat and prev_subcategory is not None and subcat != prev_subcategory:
+                            insert_blank_before = True
+                        prev_subcategory = subcat or prev_subcategory
+
+                    if insert_blank_before:
+                        f.write("\n")
+
+                    lines_for_key = all_keys_to_write.get(key, [f"{key}= "])
+                    for out_line in lines_for_key:
+                        f.write(out_line + "\n")
                 f.write("\n")
             f.write("\n")
 
-    print(f"Written grouped entries with REPLACEME placeholders to {OUT_FILE}")
+        # Write all NOTFOUND entries at the end
+        f.write("# ----------- [ FILES NOT FOUND ] -----------\n")
+        for unit in sorted(notfound_entries.keys(), key=natural_sort_key):
+            f.write(f"#------ {unit.capitalize()}\n")
+            for speech_folder in sorted(notfound_entries[unit].keys(), key=natural_sort_key):
+                keys_sorted = sorted(notfound_entries[unit][speech_folder], key=natural_sort_key)
+                for key in keys_sorted:
+                    original_line = existing_key_lines.get(key, f"{key}= ")
+                    stripped = original_line.lstrip()
+                    if stripped.startswith("#"):
+                        stripped = stripped[1:].lstrip()
+                    f.write(f"# {stripped}\n")
+            f.write("\n")
+
+    print(f"Written grouped entries with REPLACEME placeholders and NOTFOUND markings to {OUT_FILE}")
 
 if __name__ == "__main__":
     main()

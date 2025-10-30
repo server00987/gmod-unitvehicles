@@ -1024,8 +1024,14 @@ UV_UI.racing.carbon.events = {
 
 UV_UI.pursuit.carbon.events = {
 	onUnitTakedown = function( unitType, name, bounty, bountyCombo, isPlayer )
+		local uname = isPlayer and language.GetPhrase( unitType .. ".caps" ) or name -- Fallback
+		
+		if GetConVar("unitvehicle_vehiclenametakedown"):GetBool() then
+			uname = name and string.Trim(language.GetPhrase(name), "#") or nil
+		end
+		
 		UV_UI.racing.carbon.events.CenterNotification({
-			text = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ), isPlayer and language.GetPhrase( unitType .. ".caps" ) or name, bounty, bountyCombo ),
+			text = string.format( language.GetPhrase( "uv.hud.carbon.takedown" ), uname, bounty, bountyCombo ),
 			iconSize = 0.0475,
 			immediate = true,
 		})
