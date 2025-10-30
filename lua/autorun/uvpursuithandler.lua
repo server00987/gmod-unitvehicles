@@ -1038,6 +1038,7 @@ if SERVER then
 	RacerPursuitTech = CreateConVar("unitvehicle_racerpursuittech", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
 	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	OptimizeRespawn = CreateConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
+	SpottedFreezeCam = CreateConVar("unitvehicle_spottedfreezecam", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the game will freeze and the camera will point to the closest Unit when starting a pursuit (single-player only).")
 
 	--traffic convars
 	UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -1984,6 +1985,36 @@ if SERVER then
 		UpdatePursuitTable( 'Tags', UVTags )
 		UpdatePursuitTable( 'Bounty', UVBounty )
 
+		--SPOTTED CAMERA
+		local FREEZE_DURATION = 3
+
+		if game.SinglePlayer() and SpottedFreezeCam:GetBool() then
+			local ply = Entity(1)
+
+			if IsValid(ply) and ply.isUVFrozen and RealTime() >= ply.isUVFreezeTime then
+        	    net.Start("UVSpottedUnfreeze")
+        	    net.Send(ply)
+
+        	    ply.isUVFrozen = nil
+				ply:Freeze(false)
+
+				if IsValid(ply.UVLastVehicleDriven) then
+					if ply.UVLastVehicleDriven.IsSimfphyscar then
+						ply:EnterVehicle( ply.UVLastVehicleDriven.DriverSeat )
+					elseif ply.UVLastVehicleDriven.IsGlideVehicle then
+						local seat = ply.UVLastVehicleDriven.seats[1]
+						if IsValid(seat) then
+							ply:EnterVehicle(seat)
+						end
+					elseif ply.UVLastVehicleDriven:GetClass() == "prop_vehicle_jeep" then
+						ply:EnterVehicle(ply.UVLastVehicleDriven)
+					end
+				end
+
+        	    game.SetTimeScale(1.0)
+        	end
+		end
+
 		--HUD Triggers
 		if UVTargeting then
 			if UVBounty < 100 and UVUTimeTillNextHeatEnabled:GetInt() ~= 1 then
@@ -2008,6 +2039,53 @@ if SERVER then
 				end
 				if timer.Exists("UVTimeTillNextHeat") then
 					timer.UnPause("UVTimeTillNextHeat")
+				end
+
+				if game.SinglePlayer() and SpottedFreezeCam:GetBool() then --SPOTTED CAMERA
+					local ply = Entity(1)
+
+					local closestunit
+					local closestdistancetounit
+
+					local units = ents.FindByClass("npc_uv*")
+					local airUnits = ents.FindByClass("uvair")
+					local playerUnits = UVPlayerUnitTableVehicle
+
+					table.Add( units, airUnits )
+					table.Add( units, playerUnits )
+
+					local r = math.huge
+					local closestdistancetounit, closestunit = r^2
+
+					for i, w in pairs(units) do
+						local plypos = ply:WorldSpaceCenter()
+						local distance = plypos:DistToSqr(w:WorldSpaceCenter())
+						if distance < closestdistancetounit then
+							if w:GetClass() ~= 'uvair' then
+								closestdistancetounit, closestunit = distance, w.v
+							else
+								closestdistancetounit, closestunit = distance, w
+							end
+						end
+					end
+
+					if UVStraightToWaypoint(ply:WorldSpaceCenter(), closestunit:WorldSpaceCenter()) then
+						ply.isUVFrozen = true
+                    	ply.isUVFreezeTime = RealTime() + FREEZE_DURATION
+					
+						ply:Freeze(true)
+                    	net.Start("UVSpottedFreeze")
+                    	net.WriteFloat(FREEZE_DURATION)
+                    	net.WriteEntity(closestunit)
+                    	net.Send(ply)
+                    	game.SetTimeScale(0.001) --Source dosen't like it if you set it to 0
+
+						--Glide and VCMod overrides CalcView so here's a hacky way for now
+						if IsValid(UVGetVehicle(ply)) then
+							ply.UVLastVehicleDriven = UVGetVehicle(ply)
+							ply:ExitVehicle()
+						end
+					end
 				end
 			end
 
@@ -4825,6 +4903,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.pursuit.autohealth.desc")
 			option = panel:CheckBox("#uv.settings.pursuit.wheelsdetaching", "unitvehicle_wheelsdetaching")
 			option:SetTooltip("#uv.settings.pursuit.wheelsdetaching.desc")
+			option = panel:CheckBox("#uv.settings.pursuit.spottedfreezecam", "unitvehicle_spottedfreezecam")
+			option:SetTooltip("#uv.settings.pursuit.spottedfreezecam.desc")
 			option = panel:NumSlider("#uv.settings.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
 			option:SetTooltip("#uv.settings.pursuit.repaircooldown.desc")
 			option = panel:NumSlider("#uv.settings.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)

@@ -259,6 +259,8 @@ NETWORK_STRINGS = {
 	'UVResetPosition',
 	"UVRace_BeginEndCountdown",
 	"UVRace_StopEndCountdown",
+	"UVSpottedFreeze",
+	"UVSpottedUnfreeze",
 }
 
 for _, v in pairs( NETWORK_STRINGS ) do

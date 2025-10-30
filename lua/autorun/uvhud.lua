@@ -307,6 +307,47 @@ if CLIENT then
     surface.CreateFont("UVWorldFont6-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0225)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Names
     surface.CreateFont("UVWorldFont7-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Results
 	
+    local isUVFrozen = false
+    local effectDuration = 0
+    local UVFreezeTime = 0
+
+    local spottedCameraView = {}
+    local cameraTransitionTime = 2
+    local transitionStart = 0
+
+    local copEnt = nil
+
+    net.Receive("UVSpottedFreeze", function()
+        effectDuration = net.ReadFloat()
+        copEnt = net.ReadEntity()
+
+        isUVFrozen = true
+        UVFreezeTime = RealTime() + effectDuration
+        transitionStart = RealTime()
+
+        surface.PlaySound("ui/pursuit/spottedfreezecam.wav")
+
+        LocalPlayer():SetNoDraw(true)
+        local hands = LocalPlayer():GetHands()
+        if IsValid(hands) then
+            hands:SetNoDraw(true)
+        end
+
+        RunConsoleCommand("cl_drawhud", 0)
+    end)
+
+    net.Receive("UVSpottedUnfreeze", function()
+        isUVFrozen = false
+
+        LocalPlayer():SetNoDraw(false)
+        local hands = LocalPlayer():GetHands()
+        if IsValid(hands) then
+            hands:SetNoDraw(false)
+        end
+
+        RunConsoleCommand("cl_drawhud", 1)
+    end)
+
     local orbitYaw = 0
 
     gameevent.Listen( "player_spawn" ); hook.Add( "player_spawn", "UVOnLocalPlayerSpawn", function( data ) 
@@ -321,6 +362,38 @@ if CLIENT then
         
         UVLastVehicleDriven = IsValid(UVGetVehicle(ply)) and UVGetVehicle(ply) or UVLastVehicleDriven
         local isVehicleValid = IsValid(UVLastVehicleDriven)
+
+        --Spotted (SINGLEPLAYER)
+        if isUVFrozen and IsValid(copEnt) then
+
+            local t = math.Clamp((RealTime() - transitionStart) / cameraTransitionTime, 0, 1)
+
+            local copPos = copEnt:GetPos()
+            local plyPos = ply:GetPos()
+            local dist = plyPos:Distance(copPos)
+            
+            local camPos = plyPos + ply:GetForward() * -300 + Vector(0, 0, 100)
+            local camAng = (copPos - camPos):Angle()
+            local camFov
+            
+            local normalized_dist = math.Clamp(dist / 5000, 0, 1)
+
+            camFov = Lerp(normalized_dist, 60, 10)
+
+            local currentView = {
+                origin = ply:EyePos(),
+                angles = ply:EyeAngles(),
+                fov = fov,
+            }
+
+            local spottedCameraView = {}
+
+            spottedCameraView.origin = LerpVector(t, currentView.origin, camPos)
+            spottedCameraView.angles = LerpAngle(t, currentView.angles, camAng)
+            spottedCameraView.fov = Lerp(t, currentView.fov, camFov)
+
+            return spottedCameraView
+        end
 
         -- Dead
         if not ply:Alive() and isVehicleValid then
@@ -348,6 +421,26 @@ if CLIENT then
         end
 
     end)
+
+    --[[hook.Add("RenderScreenspaceEffects", "UVRenderScreenspaceEffects", function()
+        if isUVFrozen then
+            local t_elapsed = RealTime() - (UVFreezeTime - effectDuration)
+            local t_norm = t_elapsed / effectDuration
+
+            -- A red flash effect that fades out.
+            local redFlashAlpha = math.sin(t_norm * math.pi) * 150
+            render.SetColorModulation(1, 0.2, 0.2)
+            render.SetBlend(redFlashAlpha / 255)
+            render.DrawScreenQuad()
+            render.SetColorModulation(1, 1, 1)
+            render.SetBlend(1)
+
+            -- A static noise overlay that fades out.
+            local noiseAlpha = (1 - t_norm) * 100
+            surface.SetDrawColor(255, 255, 255, noiseAlpha)
+            surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+        end
+    end)]]
 
     if not isVehicleValid then
         UVLastVehicleDriven = nil
