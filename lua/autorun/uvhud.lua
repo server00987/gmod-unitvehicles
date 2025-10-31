@@ -325,8 +325,6 @@ if CLIENT then
         UVFreezeTime = RealTime() + effectDuration
         transitionStart = RealTime()
 
-        surface.PlaySound("ui/pursuit/spottedfreezecam.wav")
-
         LocalPlayer():SetNoDraw(true)
         local hands = LocalPlayer():GetHands()
         if IsValid(hands) then
@@ -422,6 +420,7 @@ if CLIENT then
 
     end)
 
+    --WIP
     --[[hook.Add("RenderScreenspaceEffects", "UVRenderScreenspaceEffects", function()
         if isUVFrozen then
             local t_elapsed = RealTime() - (UVFreezeTime - effectDuration)
