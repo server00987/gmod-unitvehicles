@@ -2030,15 +2030,16 @@ if SERVER then
 						UVAddToWantedListVehicle(ent)
 					end
 				end
-				if UVHeatLevel <= 3 then
-					--Entity(1):EmitSound("ui/pursuit/start.wav", 0, 100, 0.5)
-					UVRelaySoundToClients("ui/pursuit/start.wav", false)
-				else
-					--Entity(1):EmitSound("ui/pursuit/start_wanted_level_high.wav", 0, 100, 0.5)
-					UVRelaySoundToClients("ui/pursuit/start_wanted_level_high.wav", false)
-				end
 				if timer.Exists("UVTimeTillNextHeat") then
 					timer.UnPause("UVTimeTillNextHeat")
+				end
+
+				local function StartPursuitSound()
+					if UVHeatLevel <= 3 then
+						UVRelaySoundToClients("ui/pursuit/start.wav", false)
+					else
+						UVRelaySoundToClients("ui/pursuit/start_wanted_level_high.wav", false)
+					end
 				end
 
 				if game.SinglePlayer() and SpottedFreezeCam:GetBool() then --SPOTTED CAMERA
@@ -2085,7 +2086,13 @@ if SERVER then
                     	net.Send(ply)
                     	game.SetTimeScale(0.001) --Source dosen't like it if you set it to 0
 
+
+						UVRelaySoundToClients("ui/pursuit/spottedfreezecam.wav", false)
+					else
+						StartPursuitSound()
 					end
+				else
+					StartPursuitSound()
 				end
 			end
 
