@@ -2072,6 +2072,11 @@ if SERVER then
 					if UVStraightToWaypoint(ply:WorldSpaceCenter(), closestunit:WorldSpaceCenter()) then
 						ply.isUVFrozen = true
                     	ply.isUVFreezeTime = RealTime() + FREEZE_DURATION
+
+						if IsValid(UVGetVehicle(ply)) then
+							ply.UVLastVehicleDriven = UVGetVehicle(ply)
+							ply:ExitVehicle()
+						end
 					
 						ply:Freeze(true)
                     	net.Start("UVSpottedFreeze")
@@ -2080,11 +2085,6 @@ if SERVER then
                     	net.Send(ply)
                     	game.SetTimeScale(0.001) --Source dosen't like it if you set it to 0
 
-						--Glide and VCMod overrides CalcView so here's a hacky way for now
-						if IsValid(UVGetVehicle(ply)) then
-							ply.UVLastVehicleDriven = UVGetVehicle(ply)
-							ply:ExitVehicle()
-						end
 					end
 				end
 			end
