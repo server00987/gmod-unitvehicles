@@ -330,19 +330,21 @@ if CLIENT then
 		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/" .. name .. ".json" )
 	end
 
-	if not file.IsDir( 'unitvehicles/preset_import', 'DATA' ) then
+	if not file.IsDir( 'data_static/unitvehicles/preset_import', 'GAME' ) then
 		file.CreateDir( 'unitvehicles/preset_import' )
 	end
 
-	if not file.IsDir( 'unitvehicles/preset_import/uvunitmanager', 'DATA' ) then
+	if not file.IsDir( 'data_static/unitvehicles/preset_import/uvunitmanager', 'GAME' ) then
 		file.CreateDir( 'unitvehicles/preset_import/uvunitmanager' )
 	end
 
-	local importFiles, _ = file.Find( 'unitvehicles/preset_import/uvunitmanager/*', 'DATA' )
+	local importFiles, _ = file.Find( 'data_static/unitvehicles/preset_import/uvunitmanager/*', 'GAME' )
 
 	for _, impFile in pairs( importFiles ) do
+
+		
 		local success = ProtectedCall(function()
-			local data = util.JSONToTable( file.Read( 'unitvehicles/preset_import/uvunitmanager/' .. impFile, 'DATA' ) )
+			local data = util.JSONToTable( file.Read( 'data_static/unitvehicles/preset_import/uvunitmanager/' .. impFile, 'GAME' ) )
 
 			if type(data) == 'table' and (data.Name and data.Data) then
 				presets.Add( 
