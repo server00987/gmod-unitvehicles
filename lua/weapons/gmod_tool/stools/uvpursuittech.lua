@@ -290,29 +290,31 @@ if CLIENT then
 		file.CreateDir( 'unitvehicles/preset_import/uvpursuittech' )
 	end
 
-	local importFiles, _ = file.Find( 'data/unitvehicles/preset_import/uvpursuittech/*', 'GAME' )
+	timer.Simple(1, function()
+		local importFiles, _ = file.Find( 'data/unitvehicles/preset_import/uvpursuittech/*', 'GAME' )
+		
+		for _, impFile in pairs( importFiles ) do
+			local success = ProtectedCall(function()
+				local data = util.JSONToTable( file.Read( 'data/unitvehicles/preset_import/uvpursuittech/' .. impFile, 'GAME' ) )
+				
+				if type(data) == 'table' and (data.Name and data.Data) then
+					presets.Add( 
+						'units', 
+						data.Name, 
+						data.Data 
+					)
+				else
+					error('Malformed JSON data!')
+				end
+			end)
 
-	for _, impFile in pairs( importFiles ) do
-		local success = ProtectedCall(function()
-			local data = util.JSONToTable( file.Read( 'data/unitvehicles/preset_import/uvpursuittech/' .. impFile, 'GAME' ) )
-
-			if type(data) == 'table' and (data.Name and data.Data) then
-				presets.Add( 
-					'units', 
-					data.Name, 
-					data.Data 
-				)
+			if success then
+				chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvpursuittech)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 			else
-				error('Malformed JSON data!')
+				chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvpursuittech)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 			end
-		end)
-
-		if success then
-			chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvpursuittech)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
-		else
-			chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvpursuittech)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 		end
-	end
+	end)
 
 	TOOL.Information = {
 		{ name = "info" },

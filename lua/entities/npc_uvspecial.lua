@@ -372,23 +372,51 @@ if SERVER then
 	
 	function ENT:StraightToTarget(target, considerVelocity)
 		if not self.v or not target then
-			return
+			return false
 		end
 		
 		local targetPos = target:WorldSpaceCenter()
 		if considerVelocity then
+			local targetVel = Vector(0, 0, 0)
 			local physObj = target:GetPhysicsObject()
+
 			if IsValid(physObj) then
-				targetPos = targetPos + physObj:GetVelocity()
+				targetVel = physObj:GetVelocity()
 			else
-				targetPos = targetPos + target:GetVelocity()
+				targetVel = target:GetVelocity()
 			end
-			local trace = util.TraceLine({start = target:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}})
+
+			targetPos = targetPos + (targetVel * 1.5)
+			local trace = util.TraceLine({
+				start = target:WorldSpaceCenter(), 
+				endpos = targetPos, 
+				mask = MASK_NPCWORLDSTATIC, 
+				filter = {self, self.v, target}
+			})
+
 			if trace.Hit then targetPos = trace.HitPos end
 		end
-
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = targetPos, mask = MASK_NPCWORLDSTATIC, filter = {self, self.v, target}}).Fraction==1
-		return tobool(tr)
+	
+		local startPos = self.v:WorldSpaceCenter()
+		
+		local tr = util.TraceLine({
+			start = startPos, 
+			endpos = targetPos, 
+			mask = MASK_NPCWORLDSTATIC, 
+			filter = {self, self.v, target}
+		})
+		
+		if tr.Fraction < 1 then return false end
+		
+		local midPoint = (startPos + targetPos) / 2
+		local groundCheck = util.TraceLine({
+			start = midPoint,
+			endpos = midPoint - Vector(0, 0, 250),
+			mask = MASK_NPCWORLDSTATIC,
+			filter = {self, self.v, target}
+		})
+		
+		return groundCheck.Hit and groundCheck.Fraction < 0.7
 	end
 	
 	function ENT:VisualOnTarget(target)

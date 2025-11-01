@@ -330,39 +330,39 @@ if CLIENT then
 		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/" .. name .. ".json" )
 	end
 
-	if not file.IsDir( 'data_static/unitvehicles/preset_import', 'GAME' ) then
+	if not file.IsDir( 'data/unitvehicles/preset_import', 'GAME' ) then
 		file.CreateDir( 'unitvehicles/preset_import' )
 	end
 
-	if not file.IsDir( 'data_static/unitvehicles/preset_import/uvunitmanager', 'GAME' ) then
+	if not file.IsDir( 'data/unitvehicles/preset_import/uvunitmanager', 'GAME' ) then
 		file.CreateDir( 'unitvehicles/preset_import/uvunitmanager' )
 	end
 
-	local importFiles, _ = file.Find( 'data_static/unitvehicles/preset_import/uvunitmanager/*', 'GAME' )
-
-	for _, impFile in pairs( importFiles ) do
-
+	timer.Simple(1, function()
+		local importFiles, _ = file.Find( 'data/unitvehicles/preset_import/uvunitmanager/*', 'GAME' )
 		
-		local success = ProtectedCall(function()
-			local data = util.JSONToTable( file.Read( 'data_static/unitvehicles/preset_import/uvunitmanager/' .. impFile, 'GAME' ) )
+		for _, impFile in pairs( importFiles ) do
+			local success = ProtectedCall(function()
+				local data = util.JSONToTable( file.Read( 'data/unitvehicles/preset_import/uvunitmanager/' .. impFile, 'GAME' ) )
+				
+				if type(data) == 'table' and (data.Name and data.Data) then
+					presets.Add( 
+						'units', 
+						data.Name, 
+						data.Data 
+					)
+				else
+					error('Malformed JSON data!')
+				end
+			end)
 
-			if type(data) == 'table' and (data.Name and data.Data) then
-				presets.Add( 
-					'units', 
-					data.Name, 
-					data.Data 
-				)
+			if success then
+				chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvunitmanager)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 			else
-				error('Malformed JSON data!')
+				chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvunitmanager)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 			end
-		end)
-
-		if success then
-			chat.AddText( Color(0, 255, 0), "[Unit Vehicles (uvunitmanager)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
-		else
-			chat.AddText( Color(255, 0, 0), "[Unit Vehicles (uvunitmanager)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!" )
 		end
-	end
+	end)
 	
 	TOOL.Information = {
 		{ name = "info"},
@@ -2101,37 +2101,43 @@ function TOOL:LeftClick( trace )
 		undo.Finish( "Undo (" .. tostring( table.Count( Ents ) ) ..  ")" )
 
 		if cffunctions then
-			Ent.NitrousPower = ply.UVTOOLMemory.NitrousPower
-			Ent.NitrousDepletionRate = ply.UVTOOLMemory.NitrousDepletionRate
-			Ent.NitrousRegenRate = ply.UVTOOLMemory.NitrousRegenRate
-			Ent.NitrousRegenDelay = ply.UVTOOLMemory.NitrousRegenDelay
-			Ent.NitrousPitchChangeFrequency = ply.UVTOOLMemory.NitrousPitchChangeFrequency
-			Ent.NitrousPitchMultiplier = ply.UVTOOLMemory.NitrousPitchMultiplier
-			Ent.NitrousBurst = ply.UVTOOLMemory.NitrousBurst
-			Ent.NitrousColor = ply.UVTOOLMemory.NitrousColor
-			Ent.NitrousStartSound = ply.UVTOOLMemory.NitrousStartSound
-			Ent.NitrousLoopingSound = ply.UVTOOLMemory.NitrousLoopingSound
-			Ent.NitrousEndSound = ply.UVTOOLMemory.NitrousEndSound
-			Ent.NitrousEmptySound = ply.UVTOOLMemory.NitrousEmptySound
-			Ent.NitrousReadyBurstSound = ply.UVTOOLMemory.NitrousReadyBurstSound
-			Ent.NitrousStartBurstSound = ply.UVTOOLMemory.NitrousStartBurstSound
-			Ent.NitrousStartBurstAnnotationSound = ply.UVTOOLMemory.NitrousStartBurstAnnotationSound
-			Ent.CriticalDamageSound = ply.UVTOOLMemory.CriticalDamageSound
-			Ent.NitrousEnabled = ply.UVTOOLMemory.NitrousEnabled
-			
-			if Ent.NitrousColor then
-				local r = Ent.NitrousColor.r
-    			local g = Ent.NitrousColor.g
-    			local b = Ent.NitrousColor.b
-			
-    			net.Start( "cfnitrouscolor" )
-    			    net.WriteEntity(Ent)
-    			    net.WriteInt(r, 9)
-    			    net.WriteInt(g, 9)
-    			    net.WriteInt(b, 9)
-					net.WriteBool(Ent.NitrousBurst)
-					net.WriteBool(Ent.NitrousEnabled)
-    			net.Broadcast()
+			for k, v in pairs(Ents) do
+				if cffunctions then
+					v.NitrousPower = ply.UVTOOLMemory.Entities[k].NitrousPower
+					v.NitrousDepletionRate = ply.UVTOOLMemory.Entities[k].NitrousDepletionRate
+					v.NitrousRegenRate = ply.UVTOOLMemory.Entities[k].NitrousRegenRate
+					v.NitrousRegenDelay = ply.UVTOOLMemory.Entities[k].NitrousRegenDelay
+					v.NitrousPitchChangeFrequency = ply.UVTOOLMemory.Entities[k].NitrousPitchChangeFrequency
+					v.NitrousPitchMultiplier = ply.UVTOOLMemory.Entities[k].NitrousPitchMultiplier
+					v.NitrousBurst = ply.UVTOOLMemory.Entities[k].NitrousBurst
+					v.NitrousColor = ply.UVTOOLMemory.Entities[k].NitrousColor
+					v.NitrousStartSound = ply.UVTOOLMemory.Entities[k].NitrousStartSound
+					v.NitrousLoopingSound = ply.UVTOOLMemory.Entities[k].NitrousLoopingSound
+					v.NitrousEndSound = ply.UVTOOLMemory.Entities[k].NitrousEndSound
+					v.NitrousEmptySound = ply.UVTOOLMemory.Entities[k].NitrousEmptySound
+					v.NitrousReadyBurstSound = ply.UVTOOLMemory.Entities[k].NitrousReadyBurstSound
+					v.NitrousStartBurstSound = ply.UVTOOLMemory.Entities[k].NitrousStartBurstSound
+					v.NitrousStartBurstAnnotationSound = ply.UVTOOLMemory.Entities[k].NitrousStartBurstAnnotationSound
+					v.CriticalDamageSound = ply.UVTOOLMemory.Entities[k].CriticalDamageSound
+					v.NitrousEnabled = ply.UVTOOLMemory.Entities[k].NitrousEnabled
+
+					v:SetNWBool( 'NitrousEnabled', ply.UVTOOLMemory.Entities[k].NitrousEnabled == nil and true or ply.UVTOOLMemory.Entities[k].NitrousEnabled )
+
+					if ply.UVTOOLMemory.Entities[k].NitrousColor then
+						local r = ply.UVTOOLMemory.Entities[k].NitrousColor.r
+						local g = ply.UVTOOLMemory.Entities[k].NitrousColor.g
+						local b = ply.UVTOOLMemory.Entities[k].NitrousColor.b
+					
+						net.Start( "cfnitrouscolor" )
+							net.WriteEntity(v)
+							net.WriteInt(r, 9)
+							net.WriteInt(g, 9)
+							net.WriteInt(b, 9)
+							net.WriteBool(v.NitrousBurst)
+							net.WriteBool(v.NitrousEnabled)
+						net.Broadcast()
+					end
+				end
 			end
 		end
 		
@@ -2636,24 +2642,28 @@ function TOOL:GetVehicleData( ent, ply )
 			ply.UVTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
 
-		if cffunctions then
-			ply.UVTOOLMemory.NitrousPower = ent.NitrousPower or 2
-			ply.UVTOOLMemory.NitrousDepletionRate = ent.NitrousDepletionRate or 0.5
-			ply.UVTOOLMemory.NitrousRegenRate = ent.NitrousRegenRate or 0.1
-			ply.UVTOOLMemory.NitrousRegenDelay = ent.NitrousRegenDelay or 2
-			ply.UVTOOLMemory.NitrousPitchChangeFrequency = ent.NitrousPitchChangeFrequency or 1 
-			ply.UVTOOLMemory.NitrousPitchMultiplier = ent.NitrousPitchMultiplier or 0.2
-			ply.UVTOOLMemory.NitrousBurst = ent.NitrousBurst or false
-			ply.UVTOOLMemory.NitrousColor = ent.NitrousColor or Color(35, 204, 255)
-			ply.UVTOOLMemory.NitrousStartSound = ent.NitrousStartSound or "glide_nitrous/nitrous_burst.wav"
-			ply.UVTOOLMemory.NitrousLoopingSound = ent.NitrousLoopingSound or "glide_nitrous/nitrous_burst.wav"
-			ply.UVTOOLMemory.NitrousEndSound = ent.NitrousEndSound or "glide_nitrous/nitrous_activation_whine.wav"
-			ply.UVTOOLMemory.NitrousEmptySound = ent.NitrousEmptySound or "glide_nitrous/nitrous_empty.wav"
-			ply.UVTOOLMemory.NitrousReadyBurstSound = ent.NitrousReadyBurstSound or "glide_nitrous/nitrous_burst/ready/ready.wav"
-			ply.UVTOOLMemory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
-			ply.UVTOOLMemory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
-			ply.UVTOOLMemory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
-			ply.UVTOOLMemory.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
+		PrintTable(ply.UVTOOLMemory.Entities)
+
+		for _, v in pairs(ply.UVTOOLMemory.Entities) do
+			if cffunctions then
+				v.NitrousPower = ent.NitrousPower or 2
+				v.NitrousDepletionRate = ent.NitrousDepletionRate or 0.5
+				v.NitrousRegenRate = ent.NitrousRegenRate or 0.1
+				v.NitrousRegenDelay = ent.NitrousRegenDelay or 2
+				v.NitrousPitchChangeFrequency = ent.NitrousPitchChangeFrequency or 1 
+				v.NitrousPitchMultiplier = ent.NitrousPitchMultiplier or 0.2
+				v.NitrousBurst = ent.NitrousBurst or false
+				v.NitrousColor = ent.NitrousColor or Color(35, 204, 255)
+				v.NitrousStartSound = ent.NitrousStartSound or "glide_nitrous/nitrous_burst.wav"
+				v.NitrousLoopingSound = ent.NitrousLoopingSound or "glide_nitrous/nitrous_burst.wav"
+				v.NitrousEndSound = ent.NitrousEndSound or "glide_nitrous/nitrous_activation_whine.wav"
+				v.NitrousEmptySound = ent.NitrousEmptySound or "glide_nitrous/nitrous_empty.wav"
+				v.NitrousReadyBurstSound = ent.NitrousReadyBurstSound or "glide_nitrous/nitrous_burst/ready/ready.wav"
+				v.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
+				v.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
+				v.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
+				v.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
+			end
 		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then

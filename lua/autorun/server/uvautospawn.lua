@@ -495,6 +495,25 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			e:Spawn()
 			e:Activate()
 
+			if cffunctions then
+				if v.NitrousColor then
+					local r = v.NitrousColor.r
+					local g = v.NitrousColor.g
+					local b = v.NitrousColor.b
+
+					timer.Simple(1, function()
+						net.Start( "cfnitrouscolor" )
+							net.WriteEntity(e)
+							net.WriteInt(r, 9)
+							net.WriteInt(g, 9)
+							net.WriteInt(b, 9)
+							net.WriteBool(v.NitrousBurst)
+							net.WriteBool(v.NitrousEnabled)
+						net.Broadcast()
+					end)
+				end
+			end
+
 			if ( e.RestoreNetworkVars ) then
 				e:RestoreNetworkVars( v.DT )
 			end
