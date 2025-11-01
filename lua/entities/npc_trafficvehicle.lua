@@ -333,6 +333,21 @@ if SERVER then
 			return
 		end
 
+		if self.emergencystop then
+			if not self.emergencystopcooldown then
+				self.emergencystopcooldown = true
+				timer.Simple(10, function()
+					if IsValid(self) then
+						self.emergencystop = nil
+						self.emergencystopcooldown = nil
+					end
+				end)
+			end
+
+			self:Stop()
+			return
+		end
+
 		if self.PatrolWaypoint then
 
 			if not self.patrolling then

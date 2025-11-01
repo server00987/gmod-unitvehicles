@@ -1203,11 +1203,9 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				dot = math.abs(dot) / 2
 				local dmg = resultVel * dot
 				if dmg >= 100 then
-					timer.Simple(0.1, function()
-						if IsValid(car.TrafficVehicle) then
-							car.TrafficVehicle:Wreck()
-						end
-					end)
+					if IsValid(car.TrafficVehicle) then
+						car.TrafficVehicle.emergencystop = true
+					end
 				end
 			end
 			if not object.UnitVehicle then --CALL HANDLER
@@ -1529,11 +1527,9 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		dot = math.abs(dot) / 2
 		local dmg = resultVel * dot
 		if dmg >= 100 then
-			timer.Simple(0.1, function()
-				if IsValid(car.TrafficVehicle) then
-					car.TrafficVehicle:Wreck()
-				end
-			end)
+			if IsValid(car.TrafficVehicle) then
+				car.TrafficVehicle.emergencystop = true
+			end
 		end
 	end
 
@@ -1864,11 +1860,9 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			dot = math.abs(dot) / 2
 			local dmg = resultVel * dot
 			if dmg >= 100 then
-				timer.Simple(0.1, function()
-					if IsValid(car.TrafficVehicle) then
-						car.TrafficVehicle:Wreck()
-					end
-				end)
+				if IsValid(car.TrafficVehicle) then
+					car.TrafficVehicle.emergencystop = true
+				end
 			end
 		end
 		if not object.UnitVehicle and not object:IsWorld() then --CALL HANDLER

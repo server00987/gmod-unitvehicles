@@ -9,6 +9,8 @@ local Relentless = GetConVar("unitvehicle_relentless")
 local Barrels = GetConVar("unitvehicle_unit_helicopterbarrels")
 local SpikeStrips = GetConVar("unitvehicle_unit_helicopterspikestrip")
 
+local dvd = DecentVehicleDestination
+
 local isenemyt = {
 	["npc_combine_s"] = true,
 	["npc_cscanner"] = true,
@@ -186,6 +188,25 @@ function ENT:OnRemove()
 	end
 	if table.HasValue(UVUnitsChasing, self) then
 		table.RemoveByValue(UVUnitsChasing, self)
+	end
+end
+
+function ENT:FindPatrol()
+	if next(dvd.Waypoints) == nil then
+		return
+	end
+	
+	local Waypoint = dvd.GetNearestWaypoint(self:WorldSpaceCenter())
+	if Waypoint.Neighbors then
+		local WaypointTable = {}
+		for k, v in pairs(Waypoint.Neighbors) do
+			if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+				table.insert(WaypointTable, v)
+			end
+		end --Don't turn around
+		self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+	else
+		self.PatrolWaypoint = Waypoint
 	end
 end
 
@@ -452,7 +473,7 @@ function ENT:PhysicsUpdate()
 			end
 		end
 		
-		if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
+		if UVTargeting and not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
 			if next(UVWantedTableVehicle) ~= nil then
 				local suspecttable = UVWantedTableVehicle
 				for k, v in pairs(suspecttable) do
@@ -479,8 +500,39 @@ function ENT:PhysicsUpdate()
 				self.CloseToTarget = true
 			end
 		else
-			self:RotateAround(targetpos)
-			self:SelfRotate()
+			if self.PatrolWaypoint then
+				self.waypointPos = self.PatrolWaypoint["Target"]+(vector_up * 50)
+
+				self:FlyTo(self.waypointPos, true)
+				self:RotateToTarget(self.waypointPos)
+
+				--When there
+				if self:DistIgnoreZ(self.waypointPos) <= 1000 then
+					if self.PatrolWaypoint.Neighbors then
+						local WaypointTable = {}
+						for k, v in pairs(self.PatrolWaypoint.Neighbors) do
+							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+								table.insert(WaypointTable, v)
+							end
+						end --Don't turn around
+						self.PreviousPatrolWaypoint = self.PatrolWaypoint
+						self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+					else
+						self.PatrolWaypoint = nil
+					end
+				end
+
+				if self.potentialtarget and 
+				self.potentialtarget.UVWanted and
+				UVStraightToWaypoint(self:GetPos(), self.potentialtarget:GetPos()) and 
+				not UVTargeting then
+					UVTargeting = true
+				end
+			else
+				self:RotateAround(targetpos)
+				self:SelfRotate()
+				self:FindPatrol()
+			end
 			self.LastUpdate = CurTime()
 		end
 	else
@@ -606,13 +658,14 @@ function ENT:RotateAround(pos)
 	end
 end
 
-function ENT:FlyTo(pos)
+function ENT:FlyTo(pos, slowdown)
 	local time = CurTime()-self.LastUpdate
 	local dist = self:DistIgnoreZ(pos)
 	local vel = WorldToLocal(self.phys:GetVelocity(),Angle(),Vector(),(Vector(pos.x,pos.y,self:GetPos().z)-self:GetPos()):Angle())
+	local speed = slowdown and 1000 or 5000
 	
-	vel.x = math.min(5000,vel.x+(dist-100)/1*time)
-	vel.y = math.min(5000,vel.y-vel.y/1*time)
+	vel.x = math.min(speed,vel.x+(dist-100)/1*time)
+	vel.y = math.min(speed,vel.y-vel.y/1*time)
 	
 	vel = LocalToWorld(vel,Angle(),Vector(),(Vector(pos.x,pos.y,self:GetPos().z)-self:GetPos()):Angle())
 	self.phys:SetVelocity(vel)
@@ -853,6 +906,10 @@ function ENT:StartTouch(prop)
 				self:Explode()
 			end
 		end
+	end
+
+	if prop == self.potentialtarget and not UVTargeting then
+		UVTargeting = true
 	end
 
 end
