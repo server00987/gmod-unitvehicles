@@ -2098,6 +2098,7 @@ if SERVER then
 
 			if not UVHUDPursuit then
 				UpdatePursuitTable( 'PursuitStart', CurTime() )
+				UVHUDScreenFlashStartTime = CurTime()
 			end
 
 			UVHUDPursuit = true
@@ -2516,6 +2517,8 @@ else -- CLIENT Settings | HUD/Options
 	local UVHUDPursuitRespawnNoticeTriggered = false
 	local UVHUDPursuitRespawnNoticeEndTime = nil
 	local UVHUDPursuitRespawnNoticeStartTime = nil
+
+	local UVHUDScreenFlashHeatUp = 0
 
 	UVDeploys = 0
 	UVUnitsChasing = 0
@@ -3356,10 +3359,15 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive("UVHUDHeatLevelIncrease", function()
+		UVHUDScreenFlashHeatUp = CurTime()
 
 		if not lastHeatlevel then
 			lastHeatlevel = tonumber( UVHeatLevel )
 		end
+		
+		UV_UI.general.events.CenterNotification({
+			text = string.format( language.GetPhrase("uv.hud.heatlvl"), UVHeatLevel + 1 )
+		})
 
 		if lastHeatlevel <= UVHeatLevel then
 			return
@@ -3369,10 +3377,6 @@ else -- CLIENT Settings | HUD/Options
 			UVHeatLevelIncrease = true
 			UVStopSound()
 		end
-
-		-- timer.Simple(0.1, function()
-		-- 	UVHeatLevelIncrease = nil
-		-- end)
 	end)
 
 	net.Receive("UVHUDPursuitTech", function()
@@ -3737,6 +3741,28 @@ else -- CLIENT Settings | HUD/Options
 			end
 		end
 	end)
+	
+	local UVHUDScreenFlashDuration = 1.25
+
+	local function DrawScreenFlash(startTime, color)
+		local elapsed = CurTime() - tonumber(startTime)
+		if elapsed >= UVHUDScreenFlashDuration then return end
+
+		local alphaFrac
+		if elapsed < (UVHUDScreenFlashDuration / 6) then
+			-- Quick fade-in (first 1/6)
+			alphaFrac = elapsed / (UVHUDScreenFlashDuration / 6)
+		else
+			-- Smooth fade-out (remaining 5/6)
+			local fadeOutFrac = (elapsed - (UVHUDScreenFlashDuration / 6)) / (UVHUDScreenFlashDuration * (5/6))
+			alphaFrac = 1 - (fadeOutFrac ^ 2)
+		end
+
+		local alpha = 255 * math.Clamp(alphaFrac, 0, 1)
+		surface.SetMaterial(UVMaterials["SCREENFLASH"])
+		surface.SetDrawColor(color.r, color.g, color.b, alpha)
+		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+	end
 
 	hook.Add( "HUDPaint", "UVHUDPursuit", function() --HUD
 
@@ -3751,6 +3777,9 @@ else -- CLIENT Settings | HUD/Options
 		
 		local main = UVHUDTypeMain:GetString()
 		local backup = UVHUDTypeBackup:GetString()
+
+		DrawScreenFlash(PursuitTable.PursuitStart, Color(255, 255, 255)) -- white flash
+		DrawScreenFlash(UVHUDScreenFlashHeatUp, Color(255, 0, 0))        -- red flash
 
 		local hudHandler = UV_UI.pursuit[main] and UV_UI.pursuit[main].main
 
@@ -3771,7 +3800,7 @@ else -- CLIENT Settings | HUD/Options
 		if UV_UI.general then
 			UV_UI.general.main()
 		end
-		
+
 		local var = UVKeybindResetPosition:GetInt()
 
 		if not displayingracingandpursuit then
@@ -4696,6 +4725,7 @@ else -- CLIENT Settings | HUD/Options
 		if racer == LocalPlayer():GetName() then lp = true end
 
 		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBusted', racer, cop, lp )
+		-- UVStopSound()
 	end)
 
 	net.Receive("UVHUDWreckedDebrief", function()

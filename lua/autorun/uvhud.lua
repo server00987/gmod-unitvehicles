@@ -36,6 +36,8 @@ UVMaterials = {
     ["RACE_COUNTDOWN_BG"] = Material("unitvehicles/hud/COUNTDOWN_BG.png"),
     ["RESPAWN_BG"] = Material("unitvehicles/hud/RESPAWN_BG.png"),
     ["PT_BG"] = Material("unitvehicles/hud/PT_BG.png"),
+    ["SCREENFLASH"] = Material("unitvehicles/hud/SCREENFLASH.png"),
+    ["SCREENFLASH_SMALL"] = Material("unitvehicles/hud/SCREENFLASH_SMALL.png"),
 	
     ["PT_LEFT"] = Material("unitvehicles/hud/PTLeft.png"),
     ["PT_RIGHT"] = Material("unitvehicles/hud/PTRight.png"),
