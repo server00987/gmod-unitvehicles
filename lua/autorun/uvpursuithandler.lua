@@ -5112,7 +5112,7 @@ else -- CLIENT Settings | HUD/Options
 					PopulatePursuitFilePaths(value)
 				end
 
-				if UVPlayingHeat and PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
+				if (UVPlayingHeat or UVPlayingBusting or UVPlayingCooldown or UVPlayingBusted or UVPlayingEscaped) and PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
 					UVResetRandomHeatTrack()
 				end
 
