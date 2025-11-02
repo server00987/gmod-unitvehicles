@@ -227,6 +227,13 @@ if SERVER then
 		self:SetELS(false)
 		self:SetELSSound(false)
 		self:SetHorn(false)
+
+		if self.v.rammed then
+			self:SetHorn(true)
+		else
+			self:SetHorn(false)
+		end
+
 		if self.v.IsScar then
 			self.v:GoNeutral()
 			self.v:NotTurning()
@@ -330,21 +337,6 @@ if SERVER then
 	function ENT:Patrol()
 
 		if next(dvd.Waypoints) == nil then
-			return
-		end
-
-		if self.emergencystop then
-			if not self.emergencystopcooldown then
-				self.emergencystopcooldown = true
-				timer.Simple(10, function()
-					if IsValid(self) then
-						self.emergencystop = nil
-						self.emergencystopcooldown = nil
-					end
-				end)
-			end
-
-			self:Stop()
 			return
 		end
 
@@ -484,6 +476,22 @@ if SERVER then
 				else
 					self.PatrolWaypoint = nil
 				end
+			end
+
+			--Emergency Stop
+			if self.emergencystop then
+				if not self.emergencystopcooldown then
+					self.emergencystopcooldown = true
+					timer.Simple(10, function()
+						if IsValid(self) then
+							self.emergencystop = nil
+							self.emergencystopcooldown = nil
+						end
+					end)
+				end
+
+				throttle = 0
+				self:UVHandbrakeOn()
 			end
 
 			--Set throttle/steering
