@@ -1277,19 +1277,94 @@ if CLIENT then
 		end
 		CPanel:AddItem(vehiclePanelHeat)
 
+		local selectedLabel = CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.assunits.selected" })
+		selectedLabel:SetVisible(false)
+
+		local selectedVehiclesPanelHeat = vgui.Create("DScrollPanel", CPanel)
+		selectedVehiclesPanelHeat:SetVisible(false)
+		selectedVehiclesPanelHeat.Paint = function(self, w, h)
+			draw.RoundedBox(5,0,0,w,h,Color(115,115,115,255))
+			draw.RoundedBox(5,1,1,w-2,h-2,Color(0,0,0))
+		end
+		CPanel:AddItem(selectedVehiclesPanelHeat)
+
 		-- local buffer = vgui.Create("DPanel", vehiclePanelHeat)
 		-- buffer:SetTall(25)
 		-- buffer:Dock(BOTTOM)
 
 		-- Populate multi-choice list for selected heat/unit
+
+		local function PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
+			selectedVehiclesPanelHeat:Clear()
+			selectedVehiclesPanelHeat:SetVisible(true)
+			selectedLabel:SetVisible(true)
+
+			local count = 0
+			local entryHeight = 25
+			local maxVisible = 12
+			
+			for unit, isSelected in pairs(selected) do
+				if not isSelected then continue end
+				count = count + 1
+				local btn = vgui.Create("DButton", selectedVehiclesPanelHeat)
+				btn:SetText(unit)
+				btn:SetTextColor(Color(255,255,255))
+				btn:SetTall(22)
+				btn:Dock(TOP)
+				btn:DockMargin(5,3,5,0)
+				
+				btn.Paint = function(self,w,h)
+					local col = self:IsHovered() and Color(150,0,0) or Color(60,60,60)
+					draw.RoundedBox(4,0,0,w,h,col)
+				end
+
+				btn.DoClick = function(self)
+					selected[unit] = nil
+					activeButtons[unit].isActive = false
+					btn:Remove()
+
+					count = count - 1
+					selectedVehiclesPanelHeat:SetTall(math.min(count, maxVisible) * entryHeight + 5)
+
+					if count == 0 then
+						local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
+						lbl:SetText("#tool.uvunitmanager.settings.novehicle")
+						lbl:SetTextColor(Color(200,200,200))
+						lbl:Dock(TOP)
+						lbl:DockMargin(5,5,5,5)
+						selectedVehiclesPanelHeat:SetTall(25)
+					end
+
+					local newList = {}
+					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
+					RunConsoleCommand(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel), table.concat(newList," "))
+				end
+			end
+
+			if count == 0 then
+				local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
+				lbl:SetText("#tool.uvunitmanager.settings.novehicle")
+				lbl:SetTextColor(Color(200,200,200))
+				lbl:Dock(TOP)
+				lbl:DockMargin(5,5,5,5)
+				selectedVehiclesPanelHeat:SetTall(25)
+				return
+			end
+
+			selectedVehiclesPanelHeat:SetTall(math.min(count, maxVisible) * entryHeight + 5)
+		end
+
 		local function PopulateVehicleListHeatLvl(baseId, unitName, heatLevel)
 			vehiclePanelHeat:Clear()
+			--selectedVehiclesPanelHeat:Clear()
 			-- vehiclePanelHeat:AddItem(buffer)
 			if not unitName or not heatLevel then
 				vehiclePanelHeat:SetVisible(false)
+				--selectedVehiclesPanelHeat:SetVisible(false)
 				return
 			end
 			vehiclePanelHeat:SetVisible(true)
+			--selectedVehiclesPanelHeat:SetVisible(true)
 
 			local base = vehicleBases[baseId]
 			if not base then return end
@@ -1313,6 +1388,8 @@ if CLIENT then
 			local entryHeight = 25
 			local maxVisible = 12
 			vehiclePanelHeat:SetTall(math.min(#savedVehicles, maxVisible) * entryHeight + 5)
+
+			local activeButtons = {}
 
 			for _, v in ipairs(savedVehicles) do
 				local isNotAllowed = string.match(v, string.char( 32 ))
@@ -1338,8 +1415,14 @@ if CLIENT then
 					local newList = {}
 					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
 					RunConsoleCommand(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel), table.concat(newList," "))
+
+					PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 				end
+
+				activeButtons[v] = btn
 			end
+
+			PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 		end
 
 		-- Heat selection callback
