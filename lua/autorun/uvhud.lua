@@ -378,7 +378,7 @@ if CLIENT then
             
             local normalized_dist = math.Clamp(dist / 5000, 0, 1)
 
-            camFov = Lerp(normalized_dist, 60, 10)
+            camFov = Lerp(normalized_dist, 30, 5)
 
             local currentView = {
                 origin = ply:EyePos(),
