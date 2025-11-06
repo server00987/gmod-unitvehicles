@@ -1045,7 +1045,7 @@ if SERVER then
 			self.rdeploying = CurTime()
 			--self.bountytimer = CurTime()
 			
-			if UVTargeting and not IsValid(self.e) then 
+			if UVTargeting then 
 				local enemy = self:TargetEnemyAdvanced() --Find an ongoing pursuit.
 				if IsValid(enemy) then
 					self.idle = nil
@@ -1070,9 +1070,7 @@ if SERVER then
 						end
 					end
 				end
-			end
-			
-			if not UVTargeting and not IsValid(self.e) then
+			else
 				local enemy = self:TargetEnemy() --Find an enemy.			
 				if IsValid(enemy) then
 					self.e = enemy
