@@ -4,7 +4,6 @@ local function ImportData(folder)
     local datafiles, datafolders = file.Find("data_static/uv_import/"..folder.."/uvdata/*", "GAME")
     
     for _, dataFld in ipairs(datafolders) do
-        print(dataFld)
         local path = "unitvehicles/" .. dataFld
         
         if not file.IsDir(path, "DATA") then

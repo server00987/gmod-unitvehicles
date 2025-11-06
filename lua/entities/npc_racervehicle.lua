@@ -519,7 +519,6 @@ if SERVER then
 
 			if self:ObstaclesNearby() and not self.v.uvraceparticipant and not (self.v.UVWanted and UVTargeting) then
 				throttle = throttle * -1
-				print("no")
 			end --Slow down when free roaming
 			
 			-- -- slow it down for tight corners if we are going too fast
