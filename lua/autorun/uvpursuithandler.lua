@@ -1016,7 +1016,7 @@ if SERVER then
 	CanWreck = CreateConVar("unitvehicle_canwreck", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit Vehicles can crash out. Set this to 0 to disable.")
 	Chatter = CreateConVar("unitvehicle_chatter", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units' radio chatter can be heard.")
 	SpeedLimit = CreateConVar("unitvehicle_speedlimit", 60, {FCVAR_ARCHIVE}, "Unit Vehicles: Speed limit in MPH for idle Units to enforce. Patrolling Units still enforces speed limits set on DV Waypoints. Set this to 0 to disable.")
-	AutoHealth = CreateConVar("unitvehicle_autohealth", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health and your health as a suspect will be set according to your vehicle's mass.")
+	AutoHealth = CreateConVar("unitvehicle_autohealth", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health.")
 	WheelsDetaching = CreateConVar("unitvehicle_wheelsdetaching", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, wrecked vehicles will have their wheels detached.")
 	MinHeatLevel = CreateConVar("unitvehicle_minheatlevel", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
 	MaxHeatLevel = CreateConVar("unitvehicle_maxheatlevel", 6, {FCVAR_ARCHIVE}, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
@@ -2061,7 +2061,7 @@ if SERVER then
 					for i, w in pairs(units) do
 						local plypos = ply:WorldSpaceCenter()
 						local distance = plypos:DistToSqr(w:WorldSpaceCenter())
-						if distance < closestdistancetounit then
+						if distance < closestdistancetounit and UVStraightToWaypoint(plypos, w:WorldSpaceCenter()) then
 							if w:GetClass() ~= 'uvair' then
 								closestdistancetounit, closestunit = distance, w.v
 							else
@@ -2070,7 +2070,7 @@ if SERVER then
 						end
 					end
 
-					if UVStraightToWaypoint(ply:WorldSpaceCenter(), closestunit:WorldSpaceCenter()) then
+					if closestunit then
 						ply.isUVFrozen = true
                     	ply.isUVFreezeTime = RealTime() + FREEZE_DURATION
 
@@ -2561,7 +2561,7 @@ else -- CLIENT Settings | HUD/Options
 	CanWreck = CreateClientConVar("unitvehicle_canwreck", 1, true, false, "Unit Vehicles: If set to 1, Unit Vehicles can crash out. Set this to 0 to disable.")
 	Chatter = CreateClientConVar("unitvehicle_chatter", 1, true, false, "Unit Vehicles: If set to 1, Units' radio chatter can be heard.")
 	SpeedLimit = CreateClientConVar("unitvehicle_speedlimit", 60, true, false, "Unit Vehicles: Speed limit in MPH for idle Units to enforce. Patrolling Units still enforces speed limits set on DV Waypoints. Set this to 0 to disable.")
-	AutoHealth = CreateClientConVar("unitvehicle_autohealth", 0, true, false, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health and your health as a suspect will be set according to your vehicle's mass.")
+	AutoHealth = CreateClientConVar("unitvehicle_autohealth", 0, true, false, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health.")
 	WheelsDetaching = CreateClientConVar("unitvehicle_wheelsdetaching", 1, true, false, "Unit Vehicles: If set to 1, wrecked vehicles will have their wheels detached.")
 	MinHeatLevel = CreateClientConVar("unitvehicle_minheatlevel", 1, true, false, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
 	MaxHeatLevel = CreateClientConVar("unitvehicle_maxheatlevel", 6, true, false, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
