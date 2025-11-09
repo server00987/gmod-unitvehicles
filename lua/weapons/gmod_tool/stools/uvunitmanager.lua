@@ -2725,8 +2725,6 @@ function TOOL:GetVehicleData( ent, ply )
 			ply.UVTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
 
-		PrintTable(ply.UVTOOLMemory.Entities)
-
 		for _, v in pairs(ply.UVTOOLMemory.Entities) do
 			if cffunctions then
 				v.NitrousPower = ent.NitrousPower or 2

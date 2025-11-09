@@ -116,7 +116,7 @@ if CLIENT then
 		RoadblockHeatLevel:SetText( "#tool.uvroadblock.joinpursuit" )
 		RoadblockHeatLevel:SetTooltip( "#tool.uvroadblock.joinpursuit.desc" )
 		RoadblockHeatLevel:SetMin( 1 )
-		RoadblockHeatLevel:SetMax( 6 )
+		RoadblockHeatLevel:SetMax( MAX_HEAT_LEVEL )
 		RoadblockHeatLevel:SetDecimals( 0 )
 		RoadblockHeatLevel:SetValue( 1 )
 		RoadblockHeatLevel:SetSize(RoadblocksAdjust:GetWide(), 22)
