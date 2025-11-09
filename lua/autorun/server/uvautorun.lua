@@ -731,7 +731,7 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 	if ( start == goal ) then return true end
 	
 	local directDistance = start:GetCenter():Distance( goal:GetCenter() )
-	if directDistance > 100000 then
+	if directDistance > 1000000 then
 		return false
 	end
 	
@@ -750,7 +750,7 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 	start:UpdateOnOpenList()
 
 	local i = 0
-	local maxIterations = math.min(2000, math.max(100, directDistance / 10))
+	local maxIterations = math.min(5000, math.max(100, directDistance / 10))
 	local startTime = SysTime()
 	local maxTime = 0.016
 	

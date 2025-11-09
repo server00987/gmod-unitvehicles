@@ -419,7 +419,7 @@ if SERVER then
 			filter = {self, self.v, target}
 		})
 		
-		if tr.Fraction < 1 then return false end
+		if tr.Fraction < 0.8 then return false end
 		
 		-- local midPoint = (startPos + targetPos) / 2
 		-- local groundCheck = util.TraceLine({

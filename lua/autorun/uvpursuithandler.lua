@@ -559,7 +559,7 @@ function UVSoundBusted(heatlevel)
 		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
 
 		if bustedTrack then
-			UVPlaySound(bustedTrack, false, true)
+			UVPlaySound(bustedTrack, false, true, nil, true)
 		else
 			UVSoundHeat( UVHeatLevel )
 			return
@@ -647,7 +647,7 @@ function UVSoundEscaped(heatlevel)
 	UVPlayingEscaped = true
 end
  
-function UVInitSound( src, loop, stoploop, timeout )
+function UVInitSound( src, loop, stoploop, timeout, applyMusicVolume )
 	if not IsValid(src) then UVStopSound() return end
 
 	if loop then
@@ -655,6 +655,10 @@ function UVInitSound( src, loop, stoploop, timeout )
 		src:SetVolume(PursuitVolume:GetFloat())
 	else
 		UVSoundSource = src
+	end
+
+	if applyMusicVolume then
+		src:SetVolume(PursuitVolume:GetFloat())
 	end
 
 	src:EnableLooping(loop)
@@ -681,7 +685,7 @@ function UVInitSound( src, loop, stoploop, timeout )
 	end)
 end
 
-function UVPlaySound( FileName, Loop, StopLoop, Timeout )
+function UVPlaySound( FileName, Loop, StopLoop, Timeout, applyMusicVolume )
 	if UVLoadedSounds ~= FileName then
 		if Loop or StopLoop then
 			if UVSoundLoop then
@@ -703,7 +707,7 @@ function UVPlaySound( FileName, Loop, StopLoop, Timeout )
 
 	if UVLoadedSounds ~= FileName or (not UVSoundLoop) then
 		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
-			UVInitSound(source, Loop, StopLoop, Timeout)
+			UVInitSound(source, Loop, StopLoop, Timeout, applyMusicVolume)
 		end)
 	end
 
