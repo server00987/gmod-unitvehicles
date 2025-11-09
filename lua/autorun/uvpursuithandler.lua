@@ -4351,30 +4351,75 @@ else -- CLIENT Settings | HUD/Options
 
 	function UVRenderPursuitBreaker(pos)
 		local localPlayer = LocalPlayer()
-		local box_color = Color(255, 0, 0)
 
 		if IsValid(localPlayer) then
+			local w = ScrW()
+			local h = ScrH()
 			local pos = pos
 
-			local MaxX, MinX, MaxY, MinY
-			local isVisible = false
+			local screenPos = pos:ToScreen()
+			if not screenPos.visible then return end
+			
+			local textX = screenPos.x
+			local textY = screenPos.y -- This is in pixels and stays consistent
+        
+			-- Distance in meters
+			local fadeAlpha = 1
+			local fadeDist = 150
 
-			local p = pos
-			local screenPos = p:ToScreen()
-			isVisible = screenPos.visible
+			local dist = localPlayer:GetPos():Distance(pos)
+			local distInMeters = dist * 0.01905
+			
+			if distInMeters <= fadeDist then
+				fadeAlpha = 1 * ((fadeDist - distInMeters) / 25)
+			elseif distInMeters > fadeDist then
+				fadeAlpha = 0
+			end
+			
+			-- Edge fade (screen position based)
+			local edgeFadeAlpha = 1
 
-			if MaxX ~= nil then
-				MaxX, MaxY = math.max(MaxX, screenPos.x), math.max(MaxY, screenPos.y)
-				MinX, MinY = math.min(MinX, screenPos.x), math.min(MinY, screenPos.y)
-			else
-				MaxX, MaxY = screenPos.x, screenPos.y
-				MinX, MinY = screenPos.x, screenPos.y
+			local edgeStartX = w * 0.2
+			local edgeEndX = w * 0.8
+			local edgeStartY = h * 0.2
+			local edgeEndY = h * 0.8
+
+			-- Horizontal fade
+			if textX < w * 0.05 or textX > w * 0.95 then
+				edgeFadeAlpha = 0
+			elseif textX < edgeStartX then
+				edgeFadeAlpha = 1 * ((textX - w * 0.05) / (edgeStartX - w * 0.05))
+			elseif textX > edgeEndX then
+				edgeFadeAlpha = 1 * ((w * 0.95 - textX) / (w * 0.95 - edgeEndX))
 			end
 
-			local textX = (MinX + MaxX) / 2
-			local textY = MinY - 20
+			-- Vertical fade
+			if textY < h * 0.05 or textY > h * 0.95 then
+				edgeFadeAlpha = math.min(edgeFadeAlpha, 0)
+			elseif textY < edgeStartY then
+				edgeFadeAlpha = math.min(edgeFadeAlpha, 1 * ((textY - h * 0.05) / (edgeStartY - h * 0.05)))
+			elseif textY > edgeEndY then
+				edgeFadeAlpha = math.min(edgeFadeAlpha, 1 * ((h * 0.95 - textY) / (h * 0.95 - edgeEndY)))
+			end
+
+			-- Combine with distance fade
+			fadeAlpha = math.min(fadeAlpha, edgeFadeAlpha)
+			
+			-- Base size at some reference distance
+			local baseSize = 50
+			local referenceDist = 25
+
+			-- Scale factor decreases with distance
+			local minSize, maxSize = 0, 75
+			local scale = math.Clamp(baseSize * (referenceDist / math.max(distInMeters, 1)), minSize, maxSize)
+
 			cam.Start2D()
-			draw.DrawText("⛛", "UVFont4", textX, textY - 30, box_color, TEXT_ALIGN_CENTER)
+			-- draw.DrawText(math.Round(distInMeters) .. " m", "UVFont4", textX, textY - 65, Color(255, 0, 0, 255 * fadeAlpha), TEXT_ALIGN_CENTER)
+
+			surface.SetDrawColor( 255, 127, 127, 255 * fadeAlpha)
+			surface.SetMaterial(UVMaterials["PBREAKER"])
+			surface.DrawTexturedRectRotated( textX, textY - 15, scale, scale, 0)
+
 			cam.End2D()
 		end
 	end
