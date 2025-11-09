@@ -2543,7 +2543,7 @@ else -- CLIENT Settings | HUD/Options
 
 	--hook.Run('HUDArrest')
 
-	PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "nfsmostwanted", true, false, "Unit Vehicles: Type either one of these two pursuit themes to play from 'nfsmostwanted' 'nfsundercover'.")
+	PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "", true, false, "Unit Vehicles: Pursuit Theme (string).")
 	HeatLevels = CreateClientConVar("unitvehicle_heatlevels", 1, true, false, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit.")
 	DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
@@ -3581,9 +3581,11 @@ else -- CLIENT Settings | HUD/Options
 		local heatCount = 0
 		local isExcluded = false
 		
-		for i, v in pairs(heatTable) do
-			if i ~= 'default' then
-				heatCount = heatCount + 1
+		if heatTable then
+			for i, v in pairs(heatTable) do
+				if i ~= 'default' then
+					heatCount = heatCount + 1
+				end
 			end
 		end
 
