@@ -408,7 +408,7 @@ if SERVER then
 				targetVel = target:GetVelocity()
 			end
 
-			targetPos = targetPos + (targetVel * 1.5)
+			targetPos = targetPos + targetVel
 			local trace = util.TraceLine({
 				start = target:GetPos(), 
 				endpos = targetPos, 
@@ -430,15 +430,17 @@ if SERVER then
 		
 		if tr.Fraction < 1 then return false end
 		
-		local midPoint = (startPos + targetPos) / 2
-		local groundCheck = util.TraceLine({
-			start = midPoint,
-			endpos = midPoint - Vector(0, 0, 250),
-			mask = MASK_NPCWORLDSTATIC,
-			filter = {self, self.v, target}
-		})
+		-- local midPoint = (startPos + targetPos) / 2
+		-- local groundCheck = util.TraceLine({
+		-- 	start = midPoint,
+		-- 	endpos = midPoint - Vector(0, 0, 250),
+		-- 	mask = MASK_NPCWORLDSTATIC,
+		-- 	filter = {self, self.v, target}
+		-- })
+
+		return true
 		
-		return groundCheck.Hit and groundCheck.Fraction < 0.7
+		-- return groundCheck.Hit and groundCheck.Fraction < 0.7
 	end
 	
 	function ENT:VisualOnTarget(target)

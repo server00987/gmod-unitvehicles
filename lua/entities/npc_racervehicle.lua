@@ -763,7 +763,7 @@ if SERVER then
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() then
 						v:SetLightsEnabled(true)
 					end
-					if GetConVar("unitvehicle_autohealth"):GetBool() then
+					if GetConVar("unitvehicle_autohealth"):GetBool() or AutoHealthRacer:GetBool() then
 						v:SetMaxHealth(math.huge)
 						v:SetCurHealth(math.huge)
 					end
@@ -774,7 +774,7 @@ if SERVER then
 					v.RacerVehicle = self
 					v:EnableEngine(true)
 					v:StartEngine(true)
-					if GetConVar("unitvehicle_autohealth"):GetBool() then
+					if GetConVar("unitvehicle_autohealth"):GetBool() or AutoHealthRacer:GetBool() then
 						if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
 							v:VC_repairFull_Admin()
 							if not v:VC_hasGodMode() then
@@ -791,6 +791,12 @@ if SERVER then
 					v.inputThrottleModifierMode = 2
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
+					end
+					if AutoHealthRacer:GetBool() then
+						v:SetChassisHealth(math.huge)
+						v:SetEngineHealth(math.huge)
+						v:UpdateHealthOutputs()
+						v.FallOnCollision = nil
 					end
 				end
 			end
@@ -818,7 +824,7 @@ if SERVER then
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
 								v:SetLightsEnabled(true)
 							end
-							if GetConVar("unitvehicle_autohealth"):GetBool() then
+							if GetConVar("unitvehicle_autohealth"):GetBool() or AutoHealthRacer:GetBool() then
 								v:SetMaxHealth(math.huge)
 								v:SetCurHealth(math.huge)
 							end
@@ -830,7 +836,7 @@ if SERVER then
 							v.RacerVehicle = self
 							v:EnableEngine(true)
 							v:StartEngine(true)
-							if GetConVar("unitvehicle_autohealth"):GetBool() then
+							if GetConVar("unitvehicle_autohealth"):GetBool() or AutoHealthRacer:GetBool() then
 								if vcmod_main and v:GetClass() == "prop_vehicle_jeep" then
 									v:VC_repairFull_Admin()
 									if not v:VC_hasGodMode() then
@@ -848,6 +854,12 @@ if SERVER then
 							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
+							end
+							if AutoHealthRacer:GetBool() then
+								v:SetChassisHealth(math.huge)
+								v:SetEngineHealth(math.huge)
+								v:UpdateHealthOutputs()
+								v.FallOnCollision = nil
 							end
 							break
 						end

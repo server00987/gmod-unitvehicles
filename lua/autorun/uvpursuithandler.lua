@@ -797,7 +797,8 @@ LOCAL_CONVARS = {
 	['unitvehicle_spawncooldown'] = 'integer',
 	["unitvehicle_usenitrousracer"] = 'integer',
 	["unitvehicle_usenitrousunit"] = 'integer',
-	["unitvehicle_customizeracer"] = 'integer'
+	["unitvehicle_customizeracer"] = 'integer',
+	["unitvehicle_autohealthracer"] = 'integer',
 }
 
 HEAT_SETTINGS = {
@@ -1016,6 +1017,7 @@ if SERVER then
 	CanWreck = CreateConVar("unitvehicle_canwreck", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit Vehicles can crash out. Set this to 0 to disable.")
 	Chatter = CreateConVar("unitvehicle_chatter", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units' radio chatter can be heard.")
 	SpeedLimit = CreateConVar("unitvehicle_speedlimit", 60, {FCVAR_ARCHIVE}, "Unit Vehicles: Speed limit in MPH for idle Units to enforce. Patrolling Units still enforces speed limits set on DV Waypoints. Set this to 0 to disable.")
+	AutoHealthRacer = CreateConVar("unitvehicle_autohealthracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
 	AutoHealth = CreateConVar("unitvehicle_autohealth", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health and your health as a suspect will be set according to your vehicle's mass.")
 	WheelsDetaching = CreateConVar("unitvehicle_wheelsdetaching", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, wrecked vehicles will have their wheels detached.")
 	MinHeatLevel = CreateConVar("unitvehicle_minheatlevel", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
@@ -4978,6 +4980,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.ailogic.usenitrousracer.desc")
 			option = panel:CheckBox("#uv.settings.ailogic.usenitrousunit", "unitvehicle_usenitrousunit")
 			option:SetTooltip("#uv.settings.ailogic.usenitrousunit.desc")
+			option = panel:CheckBox("#uv.settings.ailogic.autohealthracer", "unitvehicle_autohealthracer")
+			option:SetTooltip("#uv.settings.ailogic.autohealthracer.desc")
 			option = panel:CheckBox("#uv.settings.ailogic.customizeracer", "unitvehicle_customizeracer")
 			option:SetTooltip("#uv.settings.ailogic.customizeracer.desc")
 

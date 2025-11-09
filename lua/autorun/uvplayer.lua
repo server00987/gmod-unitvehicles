@@ -1058,7 +1058,11 @@ if SERVER then
             spikes.unitdeployed = unit
         end
         local ph = unit:GetPhysicsObject()
-        spikes:SetPos(unit:WorldSpaceCenter())
+        local pos = unit:GetPos()
+        if unit.IsGlideVehicle then
+            pos = pos + (unit:GetForward() * -unit:BoundingRadius())
+        end
+        spikes:SetPos(pos)
         if unit:GetClass() == "prop_vehicle_jeep" then
             spikes:SetAngles(ph:GetAngles())
         else
