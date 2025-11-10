@@ -1,6 +1,7 @@
 local altFontLanguages = {
 	["cs"] = true, -- Czech
 	["el"] = true, -- Greek
+	["uk"] = true, -- Ukrainian
 }
 
 local function GetFontSuffixForLanguage()
