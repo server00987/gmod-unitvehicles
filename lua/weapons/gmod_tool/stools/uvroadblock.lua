@@ -113,8 +113,8 @@ if CLIENT then
 
 		local RoadblockHeatLevel = vgui.Create( "DNumSlider", RoadblocksAdjust )
 		RoadblockHeatLevel:SetPos( 20, 120 )
-		RoadblockHeatLevel:SetText( "#tool.uvroadblock.joinpursuit" )
-		RoadblockHeatLevel:SetTooltip( "#tool.uvroadblock.joinpursuit.desc" )
+		RoadblockHeatLevel:SetText( "#tool.uvroadblock.minheat" )
+		RoadblockHeatLevel:SetTooltip( "#tool.uvroadblock.minheat.desc" )
 		RoadblockHeatLevel:SetMin( 1 )
 		RoadblockHeatLevel:SetMax( MAX_HEAT_LEVEL )
 		RoadblockHeatLevel:SetDecimals( 0 )
@@ -124,7 +124,7 @@ if CLIENT then
 		local DisperseAfterPassing = vgui.Create( "DCheckBoxLabel", RoadblocksAdjust )
 		DisperseAfterPassing:SetPos( 20, 160 )
 		DisperseAfterPassing:SetText( "#tool.uvroadblock.joinpursuit" )
-		DisperseAfterPassing:SetTooltip( "tool.uvroadblock.joinpursuit.desc" )
+		DisperseAfterPassing:SetTooltip( "#tool.uvroadblock.joinpursuit.desc" )
 		DisperseAfterPassing:SetValue( false )
 
 		local RoadblockAngle = LocalPlayer():EyeAngles()

@@ -55,6 +55,8 @@ UVMaterials = {
     ["RESULTCOP"] = Material("unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png"),
     ["RESULTRACE"] = Material("unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"),
     ["HIDECAR"] = Material("unitvehicles/icons/HIDE_CAR_ICON.png"),
+    ["PBREAKER"] = Material("unitvehicles/icons/MINIMAP_ICON_PURSUIT_BREAKER.png"),
+    ["PBREAKER3D"] = Material("unitvehicles/icons/WORLD_PURSUITBREAKER.png"),
     
     ["RACE_BG_POS"] = Material("unitvehicles/hud/POSITION_BACKING.png"),
     ["RACE_BG_TIME"] = Material("unitvehicles/hud/TIME_BACKING.png"),
