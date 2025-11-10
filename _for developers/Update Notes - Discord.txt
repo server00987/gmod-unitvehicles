@@ -1,3 +1,36 @@
+<------- November 11 ------->
+# New Features
+**Unit Manager**
+- Completely revamped the Unit Manager to have a more sleek settings menu
+
+**Preset Import/Export**
+- Presets for the Pursuit Tech and Unit Manager tools can now be exported and imported outside the data folder. This means that people can now create presets and upload them to the Workshop
+
+**Pursuit**
+- Added a screen flash effect when starting a Pursuit, and when the Heat Level changes
+- Added a notification for when the Heat Level changes
+
+**UI**
+- Added subtitles to the Undercover Cop Profile pack; Currently work-in-progress - some lines are missing and some are wrong
+- Tweaked Pursuit Breaker icon in 3D space; it now fades out when too far away, and scales depending on distance to it
+
+**Localization**
+- Added Ukrainian localization
+
+**Other**
+- Added a Singleplayer-only Freeze Cam on Pursuit Start option; Currently work-in-progress and needs refining
+- Added an option to toggle Infinite Durability during Pursuits for AI
+
+# Changes
+**UI**
+- Added an option to display AI Vehicle Names on Takedowns rather than Unit Names
+
+**Other**
+- Fixed that the Roadblock Creator tool did not account for the increased maximum heat level
+- Air Units now patrol the map when a pursuit is concluded instead of despawning
+
+And various other undocumented tweaks
+
 <------- October 15 ------->
 # New Features
 **Vehicles**
