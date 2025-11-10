@@ -907,8 +907,21 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 		local oldphysCollide = glidevehicle.PhysicsCollide
 		glidevehicle.PhysicsCollide = function( car, coldata, ent )
 			oldphysCollide(car, coldata, ent)
-			if isfunction(car.UVPhysicsCollide) then
-				car:UVPhysicsCollide(coldata)
+			-- if isfunction(car.UVPhysicsCollide) then
+			-- 	car:UVPhysicsCollide(coldata)
+			-- end
+
+			if coldata.HitEntity.PursuitBreakerActive then
+				local driver = car.UnitVehicle or car.TrafficVehicle
+                    
+				if driver then
+					if driver:IsNPC() then
+						driver:Wreck()
+					else
+						UVPlayerWreck(car)
+					end
+					return
+				end	
 			end
 
 			if car.DecentVehicle or car.TrafficVehicle then
