@@ -2128,9 +2128,16 @@ else -- CLIENT stuff
 
 		local debuglineamount = 24
 		local cardW, cardH = w * 0.15, h * 0.0325
-		local cardsPerColumn = 12
+		local cardsPerColumn = 10
 		local spacing = 2
-		
+		local spawnCount = #ents.FindByClass("uvrace_spawn")
+
+		local blink = 255 * math.abs(math.sin(RealTime() * 3))
+
+		if (#UVRace_RacerList + 1) > spawnCount then
+			draw.SimpleTextOutlined( string.format(language.GetPhrase("uv.race.invite.toomany"), #UVRace_RacerList + 1, spawnCount ), "UVFont5Shadow", w * 0.99, h * 0.5, Color(255, blink, blink, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		end
+
 		if UVRace_RacerList and #UVRace_RacerList > 0 then
 			for i, racer in ipairs(UVRace_RacerList) do
 				local statusstr = "#uv.race.invite.status.invited"
@@ -2150,7 +2157,17 @@ else -- CLIENT stuff
 					clr = Color(255,100,100, alpha)
 					statusstr = "#uv.race.invite.status.declined"
 				end
-				
+
+				-- Update vehicle name dynamically for the host
+				if racer.status == "Host" and IsValid(racer.ent) then
+					local veh = racer.ent:GetVehicle()
+					if IsValid(veh) then
+						racer.vehiclename = veh:GetNWString("VehicleName", "")
+					else
+						racer.vehiclename = ""
+					end
+				end
+
 				local col = math.floor((i - 1) / cardsPerColumn)
 				local row = (i - 1) % cardsPerColumn
 
@@ -2160,18 +2177,32 @@ else -- CLIENT stuff
 				surface.SetDrawColor(0, 0, 0, 200)
 				surface.DrawRect(x, y, cardW, cardH)
 				
-				if #racername > 20 then -- If standard racer name is too long, shorten it
-					racername = string.sub(racername, 1, 23 - 3) .. "..."
+				surface.SetFont("UVMostWantedLeaderboardFont2")
+
+				-- Racer name
+				local maxW = cardW - 10
+				local textW = surface.GetTextSize(racername)
+				if textW > maxW then
+					while surface.GetTextSize(racername .. "...") > maxW do
+						racername = string.sub(racername, 1, -2)
+					end
+					racername = racername .. "..."
+				end
+
+				-- Vehicle name
+				vehname = vehname or "..."
+				textW = surface.GetTextSize(vehname)
+				if textW > maxW then
+					while surface.GetTextSize(vehname .. "...") > maxW do
+						vehname = string.sub(vehname, 1, -2)
+					end
+					vehname = vehname .. "..."
 				end
 
 				if racer.isAI then -- AI gets a tag regardless
 					racername = racername .. " (AI)"
 				end
 
-				if #vehname > 35 then -- If vehicle name is too long, shorten it
-					vehname = string.sub(vehname, 1, 37 - 3) .. "..."
-				end
-					
 				draw.SimpleText(statusstr, "UVMostWantedLeaderboardFont2", x + (w * 0.145), y, clr, TEXT_ALIGN_RIGHT)
 				draw.SimpleText(racername, "UVMostWantedLeaderboardFont2", x + (w * 0.001), y, Color(255,255,255), TEXT_ALIGN_LEFT)
 				draw.SimpleText(vehname or "...", "UVMostWantedLeaderboardFont2", x + (w * 0.001), y + 15, Color(200,200,200), TEXT_ALIGN_LEFT)
