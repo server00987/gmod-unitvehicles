@@ -803,6 +803,7 @@ LOCAL_CONVARS = {
 	["unitvehicle_usenitrousunit"] = 'integer',
 	["unitvehicle_customizeracer"] = 'integer',
 	["unitvehicle_autohealthracer"] = 'integer',
+	["unitvehicle_randomplayerunits"] = 'integer',
 }
 
 HEAT_SETTINGS = {
@@ -815,7 +816,7 @@ HEAT_SETTINGS = {
 	'backuptimer',
 	'cooldowntimer',
 	'roadblocks',
-	'helicopters'
+	'helicopters',
 }
 
 HEAT_DEFAULTS = {
@@ -1045,6 +1046,7 @@ if SERVER then
 	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	OptimizeRespawn = CreateConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	SpottedFreezeCam = CreateConVar("unitvehicle_spottedfreezecam", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the game will freeze and the camera will point to the closest Unit when starting a pursuit (single-player only).")
+	RandomPlayerUnits = CreateConVar("unitvehicle_randomplayerunits", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
 
 	--traffic convars
 	UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -1118,6 +1120,7 @@ if SERVER then
 			-------------------------------------------
 
 			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE})
+			CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_chance", 100, {FCVAR_ARCHIVE})
 		end
 
 		for _, conVar in pairs( HEAT_SETTINGS ) do
@@ -2269,13 +2272,12 @@ if SERVER then
 		end
 	end)
 
-	net.Receive("UVHUDRespawnInUV", function( length, ply )
-		local unit = net.ReadString()
-		local unitnpc = net.ReadString()
-		local isrhino = net.ReadBool()
-		local unitname = net.ReadString()
-
+	function UVHUDRespawn( ply, unit, unitnpc, isrhino, unitname )
 		local timerName = "UVSpawnQueue_" .. ply:SteamID64()
+
+		if RandomPlayerUnits:GetBool() then
+			unitname = "random"
+		end
 
 		if ply.uvspawningunit then
 			net.Start( "UVHUDRespawnInUVPlyMsg" )
@@ -2386,9 +2388,23 @@ if SERVER then
 				UVAutoSpawn(ply, isrhino, nil, playercontrolled)
 			end)
 		end
+	end
+
+	net.Receive("UVHUDRespawnInUV", function( length, ply )
+		local unit = net.ReadString()
+		local unitnpc = net.ReadString()
+		local isrhino = net.ReadBool()
+		local unitname = net.ReadString()
+
+		UVHUDRespawn(ply, unit, unitnpc, isrhino, unitname)
 	end)
 	
 	net.Receive("UVHUDRespawnInUVGetInfo", function( length, ply )
+		if RandomPlayerUnits:GetBool() then
+			UVHUDRespawn(ply, "", "", false, "Random")
+			return
+		end
+
 		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
 		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
 		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
@@ -2398,6 +2414,16 @@ if SERVER then
 		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
 		
 		if UVOneCommanderActive or UVOneCommanderDeployed then
+			UnitsCommander = ""
+		end
+
+		if RandomPlayerUnits:GetBool() then
+			UnitsPatrol = ""
+			UnitsSupport = ""
+			UnitsPursuit = ""
+			UnitsInterceptor = ""
+			UnitsSpecial = ""
+			UnitsRhino = ""
 			UnitsCommander = ""
 		end
 
@@ -3913,7 +3939,7 @@ else -- CLIENT Settings | HUD/Options
 		if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
 			local localPlayer = LocalPlayer()
 
-			if localPlayer.uvspawningunit then
+			if localPlayer.uvspawningunit and not localPlayer.uvunitselectdelayed then
 				net.Start("UVCancelUnitRespawn")
 				net.SendToServer()
 
@@ -3925,6 +3951,12 @@ else -- CLIENT Settings | HUD/Options
 				end)
 			elseif not localPlayer.uvunitselectdelayed then
 				LocalPlayer():ConCommand('uvrace_resetposition')
+				localPlayer.uvunitselectdelayed = true
+				timer.Simple(1, function()
+					if localPlayer.uvunitselectdelayed then
+						localPlayer.uvunitselectdelayed = nil
+					end
+				end)
 			end
 		end
 
@@ -4989,6 +5021,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.heatlevels.aiunits.desc")
 
 			panel:Help("#uv.settings.pursuit") -- Pursuit Settings
+			option = panel:CheckBox("#uv.settings.pursuit.randomplayerunits", "unitvehicle_randomplayerunits")
+			option:SetTooltip("#uv.settings.pursuit.randomplayerunits.desc")
 			option = panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
 			option:SetTooltip("#uv.settings.pursuit.autohealth.desc")
 			option = panel:CheckBox("#uv.settings.pursuit.wheelsdetaching", "unitvehicle_wheelsdetaching")

@@ -162,6 +162,152 @@ local function GetAngleFromSpawnlist( model )
 	return output
 end
 
+function UVGetRandom( pool )
+	local totalWeight = 0
+
+	for _, selection in pairs( pool ) do
+		totalWeight = totalWeight + selection.weight
+	end
+
+	local random = math.random( 1, totalWeight )
+	local counter = 0
+
+	for _, selection in pairs( pool ) do
+		counter = counter + selection.weight
+		if random <= counter then
+			return selection
+		end
+	end
+
+	return nil
+end
+
+function UVGetRandomUnit( heat, modifiers )
+	heat = heat or UVHeatLevel
+
+	if heat <= 1 then
+		heat = 1
+	elseif heat > MAX_HEAT_LEVEL then
+		heat = MAX_HEAT_LEVEL
+	end
+
+	local appliedunits, uvnextclasstospawn
+
+	--FIND UNITS
+	-- local givenunitstable
+	-- local givenclasses = {
+	-- 	"npc_uvpatrol",
+	-- 	"npc_uvsupport",
+	-- 	"npc_uvpursuit",
+	-- 	"npc_uvinterceptor",
+	-- 	"npc_uvspecial",
+	-- 	"npc_uvcommander",
+	-- }
+
+	-- local availableunitstable = {}
+	-- local availableclasses = {}
+	-- local availablechances = {}
+
+	-- local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. heat ):GetString() )
+	-- local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. heat ):GetString() )
+	-- local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. heat ):GetString() )
+	-- local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. heat ):GetString() )
+	-- local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. heat ):GetString() )
+	-- local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. heat ):GetString() )
+	-- local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. heat ):GetString() )
+
+	-- local UnitsPatrolChance = GetConVar( 'unitvehicle_unit_unitspatrol' .. heat .. '_chance' ):GetInt()
+	-- local UnitsSupportChance = GetConVar( 'unitvehicle_unit_unitssupport' .. heat .. '_chance' ):GetInt()
+	-- local UnitsPursuitChance = GetConVar( 'unitvehicle_unit_unitspursuit' .. heat .. '_chance' ):GetInt()
+	-- local UnitsInterceptorChance = GetConVar( 'unitvehicle_unit_unitsinterceptor' .. heat .. '_chance' ):GetInt()
+	-- local UnitsSpecialChance = GetConVar( 'unitvehicle_unit_unitsspecial' .. heat .. '_chance' ):GetInt()
+	-- local UnitsCommanderChance = GetConVar( 'unitvehicle_unit_unitscommander' .. heat .. '_chance' ):GetInt()
+	-- local UnitsRhinoChance = GetConVar( 'unitvehicle_unit_unitsrhino' .. heat .. '_chance' ):GetInt()
+
+	local selectionPool = {}
+
+	if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+		UnitsCommander = ""
+		UnitsCommanderChance = nil
+	end
+
+	if UVEnemyEscaping then
+		UnitsRhino = nil
+		UnitsCommanderChance = nil
+	end
+
+	modifiers = type(modifiers) == 'table' and modifiers
+
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+		local unitConVarKey = string.format( 'unitvehicle_unit_units%s%s', string.lower(v), heat )
+		local chanceConVarKey = unitConVarKey .. '_chance'
+		local npcClassName = 'npc_uv' .. string.lower(v)
+
+		if modifiers then
+			if v == 'Rhino' then
+				if UVEnemyEscaping then continue end
+			end
+
+			if v == 'Commander' then
+				if UVOneCommanderActive or UVOneCommanderDeployed or modifiers.posspecified or (UVUnitsHavePlayers and not modifiers.playercontrolled) then continue end
+			end
+
+			if modifiers.rhinoattack and v ~= 'Rhino' then continue end
+		end
+
+		local unitCollection = GetConVar( unitConVarKey ):GetString()
+		if string.match( unitCollection, "^%s*$" ) then continue end
+		
+		table.insert(selectionPool, {
+			name = string.lower(v),
+			weight = GetConVar( chanceConVarKey ):GetInt(),
+			units = string.Trim( GetConVar( unitConVarKey ):GetString() ),
+			npc = npcClassName
+		})
+	end
+
+	return UVGetRandom( selectionPool )
+
+	-- local givenunitstable = {
+	-- 	UnitsPatrol,
+	-- 	UnitsSupport,
+	-- 	UnitsPursuit,
+	-- 	UnitsInterceptor,
+	-- 	UnitsSpecial,
+	-- 	UnitsCommander,
+	-- }
+
+	-- local chances = {
+	-- 	UnitsPatrolChance,
+	-- 	UnitsSupportChance,
+	-- 	UnitsPursuitChance,
+	-- 	UnitsInterceptorChance,
+	-- 	UnitsSpecialChance,
+	-- 	UnitsCommanderChance,
+	-- }
+
+	-- for k, v in pairs(givenunitstable) do
+	-- 	if not string.match(v, "^%s*$") then --not an empty string
+	-- 		table.insert(availableunitstable, givenunitstable[k])
+	-- 		table.insert(availableclasses, givenclasses[k])
+	-- 	end
+	-- end
+
+	-- local randomclassunit = UVGetRandom( selectionPool )
+
+	-- -- local randomclassunit = math.random(1, #availableclasses)
+
+	-- -- if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
+	-- -- 	appliedunits = UnitsRhino
+	-- -- else
+	-- -- 	rhinoattack = nil
+	-- -- 	appliedunits = availableunitstable[randomclassunit]
+	-- -- end
+
+	-- uvnextclasstospawn = availableclasses[randomclassunit]
+	-- return appliedunits, uvnextclasstospawn
+end
+
 function UVCreateConstraintsFromTable( Constraint, EntityList )
 
 	local Factory = duplicator.ConstraintType[ Constraint.Type ]
@@ -325,6 +471,52 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		uvspawnpointangles = Angle(0,math.random(0,360),0)
 	end
 	
+	if helicopter then
+		local heli = ents.Create("uvair")
+		heli:SetPos(uvspawnpoint + (vector_up * 1000))
+		heli:SetAngles(Angle(0, math.random(-180, 180), 0))
+		heli:Spawn()
+		heli:Activate()
+		heli:SetTarget(suspect)
+		return
+	end
+	
+	local vehiclebase = UVUVehicleBase:GetInt()
+	local appliedUnits
+	local returnedUnitList
+
+	if commanderrespawn then
+		appliedunits = commanderrespawn
+		uvnextclasstospawn = "npc_uvcommander" 
+	end
+
+	local returnedUnitList = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
+		playercontrolled = playercontrolled,
+		posspecified = posspecified,
+		rhinoattack = rhinoattack,
+		commanderrespawn = commanderrespawn
+	} )
+
+	if commanderrespawn then
+		appliedunits = commanderrespawn
+		uvnextclasstospawn = "npc_uvcommander" 
+	end
+
+	if returnedUnitList then
+		if returnedUnitList.name == 'rhino' then
+			rhinoattack = true
+		end
+
+		if playercontrolled and not RandomPlayerUnits:GetBool() then
+			appliedunits = playercontrolled.unit
+			uvnextclasstospawn = playercontrolled.unitnpc
+		else
+			appliedunits = returnedUnitList.units
+			uvnextclasstospawn = returnedUnitList.npc
+		end
+	end
+
+		
 	if UVTargeting then
 		if not rhinoattack then
 			local mathangle = math.random(1,2)
@@ -343,82 +535,69 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		uvspawnpointangles = angles
 	end
 	
-	if helicopter then
-		local heli = ents.Create("uvair")
-		heli:SetPos(uvspawnpoint + (vector_up * 1000))
-		heli:SetAngles(Angle(0, math.random(-180, 180), 0))
-		heli:Spawn()
-		heli:Activate()
-		heli:SetTarget(suspect)
-		return
-	end
-	
-	local vehiclebase = UVUVehicleBase:GetInt()
-	local appliedUnits
-	
-	if not playercontrolled then
-		--FIND UNITS
-		local givenunitstable
-		local givenclasses = {
-			"npc_uvpatrol",
-			"npc_uvsupport",
-			"npc_uvpursuit",
-			"npc_uvinterceptor",
-			"npc_uvspecial",
-			"npc_uvcommander",
-		}
+	--if not playercontrolled then
+		-- --FIND UNITS
+		-- local givenunitstable
+		-- local givenclasses = {
+		-- 	"npc_uvpatrol",
+		-- 	"npc_uvsupport",
+		-- 	"npc_uvpursuit",
+		-- 	"npc_uvinterceptor",
+		-- 	"npc_uvspecial",
+		-- 	"npc_uvcommander",
+		-- }
 
-		local availableunitstable = {}
-		local availableclasses = {}
+		-- local availableunitstable = {}
+		-- local availableclasses = {}
 
-		if UVHeatLevel <= 1 then
-			UVHeatLevel = 1
-		elseif UVHeatLevel > MAX_HEAT_LEVEL then
-			UVHeatLevel = MAX_HEAT_LEVEL
-		end
+		-- if UVHeatLevel <= 1 then
+		-- 	UVHeatLevel = 1
+		-- elseif UVHeatLevel > MAX_HEAT_LEVEL then
+		-- 	UVHeatLevel = MAX_HEAT_LEVEL
+		-- end
 
-		local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
-		local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
-		local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
-		local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
-		local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
-		local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
-		local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
+		-- local UnitsPatrol = string.Trim( GetConVar( 'unitvehicle_unit_unitspatrol' .. UVHeatLevel ):GetString() )
+		-- local UnitsSupport = string.Trim( GetConVar( 'unitvehicle_unit_unitssupport' .. UVHeatLevel ):GetString() )
+		-- local UnitsPursuit = string.Trim( GetConVar( 'unitvehicle_unit_unitspursuit' .. UVHeatLevel ):GetString() )
+		-- local UnitsInterceptor = string.Trim( GetConVar( 'unitvehicle_unit_unitsinterceptor' .. UVHeatLevel ):GetString() )
+		-- local UnitsSpecial = string.Trim( GetConVar( 'unitvehicle_unit_unitsspecial' .. UVHeatLevel ):GetString() )
+		-- local UnitsCommander = string.Trim( GetConVar( 'unitvehicle_unit_unitscommander' .. UVHeatLevel ):GetString() )
+		-- local UnitsRhino = string.Trim( GetConVar( 'unitvehicle_unit_unitsrhino' .. UVHeatLevel ):GetString() )
 
-		if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-			UnitsCommander = ""
-		end
+		-- if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+		-- 	UnitsCommander = ""
+		-- end
 
-		givenunitstable = {
-			UnitsPatrol,
-			UnitsSupport,
-			UnitsPursuit,
-			UnitsInterceptor,
-			UnitsSpecial,
-			UnitsCommander,
-		}
+		-- givenunitstable = {
+		-- 	UnitsPatrol,
+		-- 	UnitsSupport,
+		-- 	UnitsPursuit,
+		-- 	UnitsInterceptor,
+		-- 	UnitsSpecial,
+		-- 	UnitsCommander,
+		-- }
 
-		for k, v in pairs(givenunitstable) do
-			if not string.match(v, "^%s*$") then --not an empty string
-				table.insert(availableunitstable, givenunitstable[k])
-				table.insert(availableclasses, givenclasses[k])
-			end
-		end
+		-- for k, v in pairs(givenunitstable) do
+		-- 	if not string.match(v, "^%s*$") then --not an empty string
+		-- 		table.insert(availableunitstable, givenunitstable[k])
+		-- 		table.insert(availableclasses, givenclasses[k])
+		-- 	end
+		-- end
 
-		local randomclassunit = math.random(1, #availableclasses)
+		-- local randomclassunit = math.random(1, #availableclasses)
 
-		if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
-			appliedunits = UnitsRhino
-		else
-			rhinoattack = nil
-			appliedunits = availableunitstable[randomclassunit]
-		end
+		-- if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
+		-- 	appliedunits = UnitsRhino
+		-- else
+		-- 	rhinoattack = nil
+		-- 	appliedunits = availableunitstable[randomclassunit]
+		-- end
 
-		uvnextclasstospawn = availableclasses[randomclassunit]
-	else
-		appliedunits = playercontrolled.unit
-		uvnextclasstospawn = playercontrolled.unitnpc
-	end
+		-- uvnextclasstospawn = availableclasses[randomclassunit]
+	-- else
+	-- 	appliedunits = playercontrolled.unit
+	-- 	uvnextclasstospawn = playercontrolled.unitnpc
+	-- end
 	
 	if not isstring(appliedunits) then
 		PrintMessage( HUD_PRINTTALK, "There's currently no assigned Units to spawn. Use the Unit Manager tool to assign Units at that particular Heat Level!")
@@ -436,11 +615,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		for k, v in pairs(saved_vehicles) do
 			local match
-			if (playercontrolled and playercontrolled.unit) then
-				match = playercontrolled.unit == v
-			else
+			-- if (playercontrolled and playercontrolled.unit) then
+			-- 	match = playercontrolled.unit == v
+			-- else
 				match = string.find( appliedunits, v )
-			end
+			--end
 			if match then
 				table.insert(availableunits, v)
 			end

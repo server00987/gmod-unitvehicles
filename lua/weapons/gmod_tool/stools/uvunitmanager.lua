@@ -231,6 +231,7 @@ for i = 1, MAX_HEAT_LEVEL do
 	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 		local lowercaseUnit = string.lower( v )
 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
+		local chanceConVarKey = string.format( 'units%s%s_chance', lowercaseUnit, i )
 		
 		-------------------------------------------
 		if i == 1 then
@@ -248,6 +249,8 @@ for i = 1, MAX_HEAT_LEVEL do
 		else
 			TOOL.ClientConVar[conVarKey] = ""
 		end
+
+		TOOL.ClientConVar[chanceConVarKey] = 100
 	end
 	
 	for _, conVar in pairs( HEAT_SETTINGS ) do
@@ -854,6 +857,10 @@ if CLIENT then
 			local count1 = 0
 
 			for _, newCV in pairs(conVarList) do
+				if string.match(newCV, "_chance") and not data[newCV] then 
+					_setConVar( newCV, 100 )
+					continue
+				end -- Backwards compatibility, a little hacky but it works
 				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
 			end
 
@@ -976,6 +983,14 @@ if CLIENT then
 				table.Empty(convar_table)
 
 				convar_table['unitvehicle_unit_bountytime' .. i] = GetConVar('uvunitmanager_bountytime' .. i):GetInt()
+
+				convar_table['unitvehicle_unit_unitspatrol' .. i .. '_chance'] = GetConVar('uvunitmanager_unitspatrol' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitssupport' .. i .. '_chance'] = GetConVar('uvunitmanager_unitssupport' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitspursuit' .. i .. '_chance'] = GetConVar('uvunitmanager_unitspursuit' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitsinterceptor' .. i .. '_chance'] = GetConVar('uvunitmanager_unitsinterceptor' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitsspecial' .. i .. '_chance'] = GetConVar('uvunitmanager_unitsspecial' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitscommander' .. i .. '_chance'] = GetConVar('uvunitmanager_unitscommander' .. i .. '_chance'):GetInt()
+				convar_table['unitvehicle_unit_unitsrhino' .. i .. '_chance'] = GetConVar('uvunitmanager_unitsrhino' .. i .. '_chance'):GetInt()
 
 				convar_table['unitvehicle_unit_unitspatrol' .. i] = ReturnValidString('uvunitmanager_unitspatrol' .. i)
 				convar_table['unitvehicle_unit_unitssupport' .. i] = ReturnValidString('uvunitmanager_unitssupport' .. i)
@@ -1268,6 +1283,15 @@ if CLIENT then
 			unitCombo:AddChoice(language.GetPhrase(loc), v)
 		end
 
+		local chanceSlider = vgui.Create("DNumSlider")
+		chanceSlider:SetVisible(false)
+		chanceSlider:SetText("#tool.uvunitmanager.settings.assunits.chance")
+		chanceSlider:SetTooltip("#tool.uvunitmanager.settings.assunits.chance.desc")
+		chanceSlider:SetMinMax(0, 100)
+		chanceSlider:SetDecimals(0)
+		chanceSlider:SetValue(100)
+		CPanel:AddItem(chanceSlider)
+
 		-- Vehicle Multi-Choice Panel for Heat/Unit
 		local vehiclePanelHeat = vgui.Create("DScrollPanel", CPanel)
 		vehiclePanelHeat:SetVisible(false)
@@ -1297,7 +1321,12 @@ if CLIENT then
 		local function PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 			selectedVehiclesPanelHeat:Clear()
 			selectedVehiclesPanelHeat:SetVisible(true)
+			chanceSlider:SetVisible(true)
 			selectedLabel:SetVisible(true)
+
+			local chanceConVar = string.format("uvunitmanager_units%s%s_chance", string.lower(unitName), heatLevel)
+			chanceSlider:SetConVar(chanceConVar)
+			chanceSlider:SetValue(GetConVar(chanceConVar):GetInt())
 
 			local count = 0
 			local entryHeight = 25

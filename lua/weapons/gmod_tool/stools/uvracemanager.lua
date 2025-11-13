@@ -106,6 +106,7 @@ if SERVER then
 			end
 		end
 		
+		table.Shuffle( UVRaceCurrentParticipants )
 		local ready_drivers = 0
 		
 		for _, v in pairs(table.Copy(UVRaceCurrentParticipants)) do
