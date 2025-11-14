@@ -3793,7 +3793,7 @@ else -- CLIENT Settings | HUD/Options
 		end
 
 		local alpha = 255 * math.Clamp(alphaFrac, 0, 1)
-		surface.SetMaterial(UVMaterials["SCREENFLASH"])
+		surface.SetMaterial(UVMaterials["SCREENFLASH_SMALL"])
 		surface.SetDrawColor(color.r, color.g, color.b, alpha)
 		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 	end
