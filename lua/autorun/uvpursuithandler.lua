@@ -3813,7 +3813,7 @@ else -- CLIENT Settings | HUD/Options
 		local backup = UVHUDTypeBackup:GetString()
 
 		DrawScreenFlash(PursuitTable.PursuitStart, Color(255, 255, 255)) -- white flash
-		DrawScreenFlash(UVHUDScreenFlashHeatUp, Color(255, 0, 0))        -- red flash
+		DrawScreenFlash(UVHUDScreenFlashHeatUp, Color(0, 0, 255))        -- blue flash
 
 		local hudHandler = UV_UI.pursuit[main] and UV_UI.pursuit[main].main
 

@@ -1189,7 +1189,7 @@ if SERVER then
 				if self.NavigateBlind then 
 					self.NavigateBlind = nil 
 				end
-				if (not self.formationpoint or enemyvelocity <= UVBustSpeed or eedist:LengthSqr() >= 6250000) 
+				if (not self.formationpoint or enemyvelocity <= UVBustSpeed) 
 				or not self:StraightToTarget(self.e, true) or UVCalm or UVEnemyEscaping or 
 				self:ObstaclesNearbySide() then
 					if not self.driveinfront or self:ObstaclesNearbySide() then

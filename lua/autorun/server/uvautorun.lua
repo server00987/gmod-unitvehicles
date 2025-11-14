@@ -2064,6 +2064,7 @@ end
 function UVChangeTactics(tactic)
 	if not tactic or next(UVUnitsChasing) == nil then return end
 	
+	--Clear existing formations
 	local AvailableUnits = {}
 	for k, v in pairs(UVUnitsChasing) do
 		if v.formationpoint then
@@ -2071,32 +2072,17 @@ function UVChangeTactics(tactic)
 		end
 		table.insert(AvailableUnits, v)
 	end
+
+	local FormationPoints
 	
-	if #UVUnitsChasing == 1 and not Relentless:GetBool() then --One unit remaining
-		local FormationPoints = {
-			Vector(0,-300,0), --Rear
-		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
-
-	elseif tactic == 0 then --No formation
+	if tactic == 0 then --No formation
 		return
-
+	elseif #UVUnitsChasing == 1 and not Relentless:GetBool() then --One unit remaining
+		FormationPoints = {
+			Vector(0,-300,0), --Rear
+		}
 	elseif tactic == 1 then --Box formation
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,300,0), --Front
 			Vector(0,-300,0), --Rear
 			Vector(-200,0,0), --Left
@@ -2108,24 +2094,8 @@ function UVChangeTactics(tactic)
 			Vector(0,-600,0), --Rear Rear
 			Vector(0,-900,0), --Rear Rear Rear
 		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
-
 	elseif tactic == 2 then --Rolling Roadblock formation
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,300,0), --Front
 			Vector(0,-300,0), --Rear
 			Vector(-200,300,0), --Left Front
@@ -2137,24 +2107,8 @@ function UVChangeTactics(tactic)
 			Vector(-400,-300,0), --Left Left Rear
 			Vector(400,-300,0), --Right Right Rear
 		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
-
 	elseif tactic == 3 then --Spearhead formation
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,600,0), --Front Front
 			Vector(0,-300,0), --Rear
 			Vector(-200,300,0), --Left Front
@@ -2166,24 +2120,8 @@ function UVChangeTactics(tactic)
 			Vector(-400,-900,0), --Left Left Rear Rear Rear
 			Vector(400,-900,0), --Right Right Rear Rear Rear
 		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
-
 	elseif tactic == 4 then --Box formation (right priority)
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,300,0), --Front
 			Vector(0,-300,0), --Rear
 			Vector(200,0,0), --Right
@@ -2195,24 +2133,8 @@ function UVChangeTactics(tactic)
 			Vector(0,-600,0), --Rear Rear
 			Vector(0,-900,0), --Rear Rear Rear
 		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
-
 	elseif tactic == 5 then --Rolling Roadblock formation (right priority)
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,300,0), --Front
 			Vector(0,-300,0), --Rear
 			Vector(200,300,0), --Right Front
@@ -2224,23 +2146,8 @@ function UVChangeTactics(tactic)
 			Vector(400,-300,0), --Right Right Rear
 			Vector(-400,-300,0), --Left Left Rear
 		}
-		for i = 1, #UVUnitsChasing do
-			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
-			local unit = AvailableUnits[1]
-			local point = FormationPoints[1]
-			if unit.e then
-				if unit.e.IsSimfphyscar then
-					point:Rotate(Angle(0, (unit.e.VehicleData.LocalAngForward.y-90), 0))
-				elseif unit.e.IsGlideVehicle then
-					point:Rotate(Angle(0, (unit.e:GetForward().y-90), 0))
-				end
-			end
-			unit.formationpoint = point
-			table.RemoveByValue(AvailableUnits, unit)
-			table.RemoveByValue(FormationPoints, point)
-		end
 	elseif tactic == 6 then --Spearhead formation (right priority)
-		local FormationPoints = {
+		FormationPoints = {
 			Vector(0,600,0), --Front Front
 			Vector(0,-300,0), --Rear
 			Vector(200,300,0), --Right Front
@@ -2252,6 +2159,9 @@ function UVChangeTactics(tactic)
 			Vector(400,-900,0), --Right Right Rear Rear Rear
 			Vector(-400,-900,0), --Left Left Rear Rear Rear
 		}
+	end
+
+	if FormationPoints and istable(FormationPoints) then
 		for i = 1, #UVUnitsChasing do
 			if next(FormationPoints) == nil or next(AvailableUnits) == nil then break end
 			local unit = AvailableUnits[1]
