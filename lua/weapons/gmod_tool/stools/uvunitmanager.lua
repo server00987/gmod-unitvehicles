@@ -53,7 +53,7 @@ local UnitSettings = {
 		MinMax = {20, 600},
 		Decimals = 0,
 		ConVar = 'uvunitmanager_timetillnextheat',
-		ToolText = '#tool.uvunitmanager.settings.heatlevel.maxunits',
+		ToolText = '#tool.uvunitmanager.settings.heatlvl.timed',
 		ToolTip = '#tool.uvunitmanager.settings.heatlvl.timed.desc'
 	},
 	['unitsavailable'] = {
