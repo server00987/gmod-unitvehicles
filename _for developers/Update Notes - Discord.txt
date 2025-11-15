@@ -1,18 +1,21 @@
 <------- November 11 ------->
 # New Features
-**Unit Manager**
-- Completely revamped the Unit Manager to have a more sleek settings menu
-
 **Preset Import/Export**
 - Presets for the Pursuit Tech and Unit Manager tools can now be exported and imported outside the data folder. This means that people can now create presets and upload them to the Workshop
+
+**Racing**
+- Race participants will now be re-shuffled when the race begins - the host will never always start in last place
 
 **Pursuit**
 - Added a screen flash effect when starting a Pursuit, and when the Heat Level changes
 - Added a notification for when the Heat Level changes
+- Added the option for players to spawn in a random unit (legacy functionality)
+- Added the option to choose how high percentage chance a Unit type appears in a chase
 
 **UI**
-- Added subtitles to the Undercover Cop Profile pack; Currently work-in-progress - some lines are missing and some are wrong
 - Tweaked Pursuit Breaker icon in 3D space; it now fades out when too far away, and scales depending on distance to it
+- Added the option to display distance units in default meters, yards or feet
+- Added subtitles to the Undercover Cop Profile pack; Currently work-in-progress - some lines are missing and some are wrong
 
 **Localization**
 - Added Ukrainian localization
@@ -22,6 +25,10 @@
 - Added an option to toggle Infinite Durability during Pursuits for AI
 
 # Changes
+**Tools**
+- Unit Manager - Remade the settings to be more sleek
+- Race Manager - Remade the Import menu
+
 **UI**
 - Added an option to display AI Vehicle Names on Takedowns rather than Unit Names
 

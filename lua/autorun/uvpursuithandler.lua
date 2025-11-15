@@ -2619,6 +2619,7 @@ else -- CLIENT Settings | HUD/Options
 	OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
 	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
+	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
 	
 
 	-- unit convars
@@ -2824,6 +2825,8 @@ else -- CLIENT Settings | HUD/Options
 
 		local main = UVHUDTypeMain:GetString()
 		local backup = UVHUDTypeBackup:GetString()
+
+		if main == "" then return end
 
 		local hudHandler = UV_UI.racing[main] and UV_UI.racing[main].events.onRaceStartTimer
 		
@@ -4400,11 +4403,11 @@ else -- CLIENT Settings | HUD/Options
 			local fadeDist = 150
 
 			local dist = localPlayer:GetPos():Distance(pos)
-			local distInMeters = dist * 0.01905
-			
-			if distInMeters <= fadeDist then
-				fadeAlpha = 1 * ((fadeDist - distInMeters) / 25)
-			elseif distInMeters > fadeDist then
+			local distMeters = dist * 0.01905
+
+			if distMeters <= fadeDist then
+				fadeAlpha = 1 * ((fadeDist - distMeters) / 25)
+			elseif distMeters > fadeDist then
 				fadeAlpha = 0
 			end
 			
@@ -4443,10 +4446,10 @@ else -- CLIENT Settings | HUD/Options
 
 			-- Scale factor decreases with distance
 			local minSize, maxSize = 0, 75
-			local scale = math.Clamp(baseSize * (referenceDist / math.max(distInMeters, 1)), minSize, maxSize)
+			local scale = math.Clamp(baseSize * (referenceDist / math.max(distMeters, 1)), minSize, maxSize)
 
 			cam.Start2D()
-			-- draw.DrawText(math.Round(distInMeters) .. " m", "UVFont4", textX, textY - 65, Color(255, 0, 0, 255 * fadeAlpha), TEXT_ALIGN_CENTER)
+			-- draw.DrawText(math.Round(distMeters) .. " m", "UVFont4", textX, textY - 65, Color(255, 0, 0, 255 * fadeAlpha), TEXT_ALIGN_CENTER)
 
 			surface.SetDrawColor( 255, 127, 127, 255 * fadeAlpha)
 			surface.SetMaterial(UVMaterials["PBREAKER"])
@@ -5139,6 +5142,13 @@ else -- CLIENT Settings | HUD/Options
 
 			option = panel:CheckBox("#uv.settings.ui.vehnametakedown", "unitvehicle_vehiclenametakedown")
 			option:SetTooltip("#uv.settings.ui.vehnametakedown.desc")
+
+			local displayunits, label = panel:ComboBox( "#uv.settings.ui.unitstype", "unitvehicle_unitstype" )
+			displayunits:AddChoice( "#uv.settings.ui.unitstype.meter", 0)
+			displayunits:AddChoice( "#uv.settings.ui.unitstype.feet", 1)
+			displayunits:AddChoice( "#uv.settings.ui.unitstype.yards", 2)
+			
+			displayunits:SetTooltip( "#uv.settings.ui.unitstype.desc" )
 
 			panel:Help("#uv.settings.audio.title")
 

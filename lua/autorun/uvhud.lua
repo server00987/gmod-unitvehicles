@@ -612,10 +612,30 @@ function UVRenderCommander(ent)
 
 		-- Combine with distance fade
 		fadeAlpha = math.min(fadeAlpha, edgeFadeAlpha)
+	
+		local feet  = distInMeters * 3.28084
+		local yards = distInMeters * 1.09361
 
+		local unitType = GetConVar("unitvehicle_unitstype"):GetInt() -- 0=M,1=FT,2=YD
+
+		local displayDist, displayString
+		if unitType == 1 then
+			displayDist = feet
+			displayString = language.GetPhrase("uv.dist.feet")
+		elseif unitType == 2 then
+			displayDist = yards
+			displayString = language.GetPhrase("uv.dist.yards")
+		else
+			displayDist = distInMeters
+			displayString = language.GetPhrase("uv.dist.meter")
+		end
+		
         cam.Start2D()
 			if not GetConVar("cl_drawhud"):GetBool() then return end
-			local bustdist = math.Round(distInMeters) .. " m"
+			
+			-- local bustdist = math.Round(displayDist) .. " m"
+			
+			local bustdist = string.format( displayString, math.Round(displayDist) )
 			
 			local cname = lang("uv.unit.commander")
 			if IsValid(UVHUDCommander) then
@@ -810,13 +830,32 @@ function UVRenderEnemySquare(ent)
 
 		ent._bustAlpha = ent._bustAlpha or 0
 		ent._bustOffset = ent._bustOffset or 0
+	
+		local feet  = distInMeters * 3.28084
+		local yards = distInMeters * 1.09361
 
+		local unitType = GetConVar("unitvehicle_unitstype"):GetInt() -- 0=M,1=FT,2=YD
+
+		local displayDist, displayString
+		if unitType == 1 then
+			displayDist = feet
+			displayString = language.GetPhrase("uv.dist.feet")
+		elseif unitType == 2 then
+			displayDist = yards
+			displayString = language.GetPhrase("uv.dist.yards")
+		else
+			displayDist = distInMeters
+			displayString = language.GetPhrase("uv.dist.meter")
+		end
+		
         cam.Start2D()
 			if not GetConVar("cl_drawhud"):GetBool() then return end
 			local pos = ent:GetPos() + Vector(0, 0, 80)
 			local bustpro = math.Clamp(math.floor((((ent.UVBustingProgress or 0) / BustedTimer:GetInt()) * 100) + .5), 0, 100)
 			local bustdist = math.Round(distInMeters) .. " m"
-			
+						
+			local bustdist = string.format( displayString, math.Round(displayDist) )
+
 			enemypos = enemypos or bustdist
 
 			surface.SetFont("UVFont4")
