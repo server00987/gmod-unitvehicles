@@ -499,7 +499,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 
 	if commanderrespawn then
 		appliedunits = commanderrespawn
-		uvnextclasstospawn = "npc_uvcommander" 
+		uvnextclasstospawn = "npc_uvcommander"
 	end
 
 	if returnedUnitList then
@@ -514,6 +514,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			appliedunits = returnedUnitList.units
 			uvnextclasstospawn = returnedUnitList.npc
 		end
+	else
+		return
 	end
 
 		
