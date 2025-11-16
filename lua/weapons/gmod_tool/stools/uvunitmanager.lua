@@ -357,6 +357,8 @@ if CLIENT then
 				else
 					error('Malformed JSON data!')
 				end
+				
+				file.Delete( impFile, 'unitvehicles/preset_import/uvunitmanager' )
 			end)
 
 			if success then

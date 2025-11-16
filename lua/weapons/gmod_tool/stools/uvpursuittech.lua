@@ -306,6 +306,8 @@ if CLIENT then
 				else
 					error('Malformed JSON data!')
 				end
+
+				file.Delete( impFile, 'unitvehicles/preset_import/uvpursuittech' )
 			end)
 
 			if success then
