@@ -299,7 +299,7 @@ if CLIENT then
 				
 				if type(data) == 'table' and (data.Name and data.Data) then
 					presets.Add( 
-						'units', 
+						'pursuittech', 
 						data.Name, 
 						data.Data 
 					)
