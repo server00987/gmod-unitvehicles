@@ -1414,8 +1414,8 @@ if SERVER then
 			local randomno = math.random(1,2)
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "arrest", nil)
-			else
-				return UVSoundChatter(self, self.voice, "arrest", 2, enemy)
+			-- else
+			-- 	return UVSoundChatter(self, self.voice, "arrest", 2, enemy)
 			end
 		end
 		UVDelayChatter()
