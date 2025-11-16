@@ -5,7 +5,7 @@
 [b][url=https://discord.gg/kQuzmjZaPQ] >>> JOIN OUR DISCORD SERVER <<<[/url][/b]
 
 [h3] Requirements [/h3]
-Before we get started: [b]Decent Vehicle - Basic AI[/b] is [b]REQUIRED[/b] for Unit Vehicles to function properly.
+Before we get started: [b]Decent Vehicle - Basic AI[/b] and [b]Glide // Styled's Vehicle Base[/b] is [b]REQUIRED[/b] for Unit Vehicles to function properly.
 
 [hr][/hr]
 [h1] Features [/h1]
@@ -109,4 +109,5 @@ And [b]so much more[/b]!
 [*][b]Tak036[/b] - Thai
 [/list]
 
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556][img]https://i.imgur.com/NzLh8Zm.jpeg[/img][/url]
 [url=https://discord.gg/kQuzmjZaPQ][img]https://i.imgur.com/RPca3Yd.jpeg[/img][/url]
