@@ -1309,6 +1309,19 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 
 	local object = coldata.HitEntity
 
+	if object.PursuitBreakerActive then
+		local driver = car.UnitVehicle or car.TrafficVehicle
+			
+		if driver then
+			if driver:IsNPC() then
+				driver:Wreck()
+			else
+				UVPlayerWreck(car)
+			end
+			return
+		end	
+	end
+
 	if car.juggernauton and not object:IsWorld() then --Juggernaut
 		local ourOldVel = coldata.OurOldVelocity
 		local ourOldAngVel = coldata.OurOldAngularVelocity
@@ -1652,6 +1665,19 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 		local dot = coldata.OurOldVelocity:GetNormalized():Dot(coldata.HitNormal)
 		dot = math.abs(dot) / 2
 		local dmg = resultVel * dot
+
+		if object.PursuitBreakerActive then
+			local driver = car.UnitVehicle or car.TrafficVehicle
+				
+			if driver then
+				if driver:IsNPC() then
+					driver:Wreck()
+				else
+					UVPlayerWreck(car)
+				end
+				return
+			end	
+		end
 
 		if car.UnitVehicle or (car.UVWanted and not AutoHealth:GetBool()) then --DAMAGE
 			if not car.healthset then
