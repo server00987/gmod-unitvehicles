@@ -330,7 +330,7 @@ if CLIENT then
 		end
 
 		file.Write( 'unitvehicles/preset_export/uvunitmanager/' .. name .. '.json', util.TableToJSON( jsonArray ) )
-		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/" .. name .. ".json" )
+		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/uvunitmanager/" .. name .. ".json" )
 	end
 
 	if not file.IsDir( 'data/unitvehicles/preset_import', 'GAME' ) then
