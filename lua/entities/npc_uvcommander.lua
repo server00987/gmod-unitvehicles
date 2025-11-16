@@ -388,7 +388,7 @@ if SERVER then
 			return false
 		end
 		
-		local targetPos = target:GetPos()
+		local targetPos = target:WorldSpaceCenter()
 		if considerVelocity then
 			local targetVel = Vector(0, 0, 0)
 			local physObj = target:GetPhysicsObject()
@@ -401,7 +401,7 @@ if SERVER then
 
 			targetPos = targetPos + targetVel
 			local trace = util.TraceLine({
-				start = target:GetPos(), 
+				start = target:WorldSpaceCenter(), 
 				endpos = targetPos, 
 				mask = MASK_NPCWORLDSTATIC, 
 				filter = {self, self.v, target}
@@ -410,7 +410,7 @@ if SERVER then
 			if trace.Hit then targetPos = trace.HitPos end
 		end
 	
-		local startPos = self.v:GetPos()
+		local startPos = self.v:WorldSpaceCenter()
 		
 		local tr = util.TraceLine({
 			start = startPos, 
