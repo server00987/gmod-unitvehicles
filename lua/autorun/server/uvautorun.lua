@@ -434,7 +434,9 @@ concommand.Add("uv_startpursuit", function(ply)
 
 		if IsValid(ply) then
 			if time > 1 then
-				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
+				if time <= 4 then
+					ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
+				end
 			else
 				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
 
@@ -2253,11 +2255,6 @@ function UVBustEnemy(self, enemy, finearrest)
 	if UVTargeting or self.UVAir or finearrest then --Arrest
 		if enemy:IsVehicle() then
 			local e = UVGetVehicleMakeAndModel(enemy)
-			if enemyDriver and enemyDriver:IsPlayer() then 
-				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been busted by "..self.callsign.."!")
-			else
-				print("The "..e.." has been busted by "..self.callsign.."!")
-			end
 			if Chatter:GetBool() then
 				if finearrest then
 					net.Start( "UVFineArrest" )
@@ -2419,11 +2416,6 @@ function UVBustEnemy(self, enemy, finearrest)
 		end
 		if enemy:IsVehicle() then
 			local e = UVGetVehicleMakeAndModel(enemy)
-			if enemyDriver and enemyDriver:IsPlayer() then 
-				print(enemyDriver:GetName().." ("..UVBounty.." Bounty, "..UVWrecks.." Wreck(s), "..UVTags.." Tags(s)) has been fined by "..self.callsign.."!")
-			else
-				print("The "..e.." has been fined by "..self.callsign.."!")
-			end
 			if not enemy.UVFinedCount then
 				enemy.UVFinedCount = 0
 			end
