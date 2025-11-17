@@ -473,19 +473,25 @@ function ENT:PhysicsUpdate()
 			end
 		end
 		
-		if UVTargeting and not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
-			if next(UVWantedTableVehicle) ~= nil then
-				local suspecttable = UVWantedTableVehicle
-				for k, v in pairs(suspecttable) do
-					if v.uvbusted then
-						table.remove(suspecttable, k)
+		if UVTargeting then
+			if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
+				if next(UVWantedTableVehicle) ~= nil then -- Look for remaining suspects
+					local suspecttable = UVWantedTableVehicle
+					for k, v in pairs(suspecttable) do
+						if v.uvbusted then
+							table.remove(suspecttable, k)
+						end
 					end
+					local randomsuspect = suspecttable[math.random(1, #suspecttable)]
+					self:SetTarget(randomsuspect)
 				end
-				local randomsuspect = suspecttable[math.random(1, #suspecttable)]
-				self:SetTarget(randomsuspect)
+			else
+				self:RotateToTarget(targetpos)
 			end
 		else
-			self:RotateToTarget(targetpos)
+			if IsValid(self:GetTarget()) and self:GetTarget().uvbusted then
+				self:SetTarget(nil) -- Forget busted suspect
+			end
 		end
 		
 		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not uvJammerDeployed then

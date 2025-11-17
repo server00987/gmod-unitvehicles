@@ -2391,9 +2391,6 @@ function UVBustEnemy(self, enemy, finearrest)
 			driver:EmitSound("ui/pursuit/busted.wav", 0, 100, 0.5)
 		end
 		self.chasing = nil
-		if self.UVAir then
-			self.disengaging = true
-		end
 		UVEnemyBusted = true
 		self.aggressive = nil
 		timer.Simple(timeacknowledge, function()
