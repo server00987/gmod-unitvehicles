@@ -68,10 +68,19 @@ local function ImportData(folder)
 end
 
 local _, folders = file.Find("data_static/uv_import/*", "GAME")
+local isImported = false
 
 for _, folder in ipairs(folders) do
+    isImported = true
     ImportData(folder)
+
     if CLIENT then
-        chat.AddText(Color(0, 255, 0), "[Unit Vehicles] Imported data from: " .. folder)
+        MsgC(Color(0, 255, 0), "[Unit Vehicles] Imported data from: " .. folder .. "\n")
     end
+end
+
+if isImported and CLIENT then
+    timer.Simple(1, function()
+        chat.AddText(Color(0, 255, 0), "[Unit Vehicles] New data was imported! Check the console for more information.\n")
+    end)
 end

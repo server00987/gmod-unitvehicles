@@ -494,7 +494,7 @@ function ENT:PhysicsUpdate()
 			end
 		end
 		
-		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not uvJammerDeployed then
+		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not UVJammerDeployed then
 			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((targetpos+self:GetTarget():GetVelocity()))^2) and not (self:DistIgnoreZ(targetpos) <= 500 and self:IsSeeTarget()) then
 				self:FlyTo(targetpos)
 			else
@@ -659,7 +659,7 @@ function ENT:RotateAround(pos)
 	vel = LocalToWorld(vel,Angle(),Vector(),ang)
 	self.phys:SetVelocity(vel)
 
-	if uvJammerDeployed then
+	if UVJammerDeployed then
 		self.RotateVelocity = -45
 	end
 end

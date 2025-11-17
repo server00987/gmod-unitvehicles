@@ -213,7 +213,7 @@ if SERVER then
 		local unitVoiceProfile = GetUnitVoiceProfile(self, isDispatch, false)
 		local miscVoiceProfile = GetUnitVoiceProfile(self, isDispatch, true)
 		
-		if uvJammerDeployed then
+		if UVJammerDeployed then
 			local staticFiles = file.Find("sound/chatter2/" .. miscVoiceProfile .. "/misc/static/*", "GAME")
 			if next(staticFiles) == nil then return 5 end
 			
