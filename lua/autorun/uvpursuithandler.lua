@@ -1046,7 +1046,7 @@ if SERVER then
 	RacerFriendlyFire = CreateConVar("unitvehicle_racerfriendlyfire", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	OptimizeRespawn = CreateConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	SpottedFreezeCam = CreateConVar("unitvehicle_spottedfreezecam", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the game will freeze and the camera will point to the closest Unit when starting a pursuit (single-player only).")
-	RandomPlayerUnits = CreateConVar("unitvehicle_randomplayerunits", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
+	RandomPlayerUnits = CreateConVar("unitvehicle_randomplayerunits", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
 
 	--traffic convars
 	UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -2602,10 +2602,12 @@ else -- CLIENT Settings | HUD/Options
 	RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
 	UVTraxFreeroam = CreateClientConVar("unitvehicle_uvtraxinfreeroam", 0, true, false, "Unit Vehicles: If set to 1, UV TRAX™ will play in Freeroam whenever you're in a vehicle.")
-	OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
-	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
-	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
-	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
+	OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, true, false, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
+	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, true, false, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
+	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, true, false, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
+	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, true, false, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
+	RandomPlayerUnits = CreateClientConVar("unitvehicle_randomplayerunits", 0, true, false, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
+	AutoHealthRacer = CreateClientConVar("unitvehicle_autohealthracer", 0, true, false, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
 	
 
 	-- unit convars
