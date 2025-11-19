@@ -1351,7 +1351,9 @@ if CLIENT then
 
 				btn.DoClick = function(self)
 					selected[unit] = nil
-					activeButtons[unit].isActive = false
+					if activeButtons[unit] then
+						activeButtons[unit].isActive = false
+					end
 					btn:Remove()
 
 					count = count - 1
@@ -1368,7 +1370,8 @@ if CLIENT then
 
 					local newList = {}
 					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
-					RunConsoleCommand(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel), table.concat(newList," "))
+					local cVar = GetConVar(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel))
+					cVar:SetString(table.concat(newList," "))
 				end
 			end
 
@@ -1445,7 +1448,8 @@ if CLIENT then
 
 					local newList = {}
 					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
-					RunConsoleCommand(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel), table.concat(newList," "))
+					local cVar = GetConVar(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel))
+					cVar:SetString(table.concat(newList," "))
 
 					PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 				end
