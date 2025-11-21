@@ -150,42 +150,19 @@ if SERVER then
 						local hit = false
 
 						for i, j in pairs(array[1].wheels) do
-							if not j.bursted then
+							if not j.bursted and not j.params.isBulletProof then
 								local dist = (j:GetPos() - array[2]):Length()
-
-								local og_forwardtractionmax = j.params.forwardTractionMax
-								local og_sidetractionmax = j.params.sideTractionMax
-
-								local og_radius = j.params.radius
 
 								function j:_restore() -- temp func
 									j.bursted = false
-									j.params.forwardTractionMax = og_forwardtractionmax
-									j.params.sideTractionMax = og_sidetractionmax
-									j:SetRadius(og_radius)
+									j:Repair()
 									timer.Remove("uvspiked"..j:EntIndex())
 								end
 
 								if dist < 50 then
 									hit = true
 									j.bursted = true
-									j.params.forwardTractionMax = og_forwardtractionmax * .1
-									j.params.sideTractionMax = og_sidetractionmax * .1
-
-									local e = EffectData()
-									e:SetEntity(j.Entity)
-									util.Effect("entity_remove", e)
-
-									j:EmitSound("glide/wheels/blowout.wav")
-
-									local radius = j.params.radius * 0.8
-
-									local size = j.params.modelScale * radius * 2
-									local obbSize = j:OBBMaxs() - j:OBBMins()
-									local scale = Vector(size[1] / obbSize[1], size[2] / obbSize[2], size[3] / obbSize[3])
-
-									j:SetRadius(radius)
-									constraint.NoCollide(j, self, 0, 0)
+									j:Blow()
 
 									timer.Create("uvspiked"..j:EntIndex(), GetConVar("unitvehicle_spikestripduration"):GetFloat(), 1, function() 
 										if j.bursted and IsValid(j) and IsValid(array[1]) and GetConVar("unitvehicle_spikestripduration"):GetFloat() > 0 then
