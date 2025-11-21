@@ -1125,9 +1125,7 @@ function TOOL:LeftClick( trace )
 		Ent:SetSoundoverride( ply.UVTrafficTOOLMemory.SoundOverride or "" )
 		
 		Ent:SetLights_List( Ent.LightsTable or "no_lights" )
-		
-		Ent:SetBulletProofTires(true)
-		
+				
 		Ent.snd_horn = ply.UVTrafficTOOLMemory.HornSound
 		
 		Ent.snd_blowoff = ply.UVTrafficTOOLMemory.snd_blowoff

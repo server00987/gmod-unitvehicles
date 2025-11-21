@@ -150,7 +150,7 @@ if SERVER then
 						local hit = false
 
 						for i, j in pairs(array[1].wheels) do
-							if not j.bursted and not j.params.isBulletProof then
+							if not j.bursted then
 								local dist = (j:GetPos() - array[2]):Length()
 
 								function j:_restore() -- temp func
