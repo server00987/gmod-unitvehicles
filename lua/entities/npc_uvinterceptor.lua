@@ -1953,6 +1953,11 @@ if SERVER then
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
+					for k, v in pairs(v.wheels) do
+						if v.params then
+							v.params.isBulletProof = true
+						end
+					end
 				end
 			end
 		else
@@ -1999,6 +2004,11 @@ if SERVER then
 							v.inputThrottleModifierMode = 2
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
+							end
+							for k, v in pairs(v.wheels) do
+								if v.params then
+									v.params.isBulletProof = true
+								end
 							end
 						end
 					end

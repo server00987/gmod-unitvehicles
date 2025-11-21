@@ -2026,6 +2026,11 @@ function UVAddToWantedListVehicle(vehicle)
 				vehicle:SetEngineHealth(math.huge)
 				vehicle:UpdateHealthOutputs()
 				vehicle.FallOnCollision = nil
+				for k, v in pairs(vehicle.wheels) do
+					if v.params then
+						v.params.isBulletProof = true
+					end
+				end
 			end
 		end
 
@@ -2076,6 +2081,13 @@ function UVAddToPlayerUnitListVehicle(vehicle, ply)
 			local mass = vehicle:GetPhysicsObject():GetMass()
 			vehicle:SetMaxHealth(mass)
 			vehicle:SetHealth(mass)
+		end
+		if vehicle.IsGlideVehicle then
+			for k, v in pairs(vehicle.wheels) do
+				if v.params then
+					v.params.isBulletProof = true
+				end
+			end
 		end
 		table.insert(UVPlayerUnitTableVehicle, vehicle)
 		vehicle:CallOnRemove( "UVPlayerUnitVehicleRemoved", function(ent)

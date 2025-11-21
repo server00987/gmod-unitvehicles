@@ -2199,6 +2199,12 @@ function TOOL:LeftClick( trace )
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
 		end
+
+		for k, v in pairs(Ent.wheels) do
+			if v.params then
+				v.params.isBulletProof = true
+			end
+		end
 		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )

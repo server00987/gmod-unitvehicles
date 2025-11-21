@@ -778,6 +778,12 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			}
 			duplicator.StoreEntityModifier( Ent, "colour", data )
 		end
+
+		for k, v in pairs(Ent.wheels) do
+			if v.params then
+				v.params.isBulletProof = true
+			end
+		end
 		
 		Ent.uvclasstospawnon = uvnextclasstospawn
 		
@@ -1837,9 +1843,7 @@ function UVAutoSpawnTraffic()
 			Ent:SetSoundoverride( MEMORY.SoundOverride or "" )
 			
 			Ent:SetLights_List( Ent.LightsTable or "no_lights" )
-			
-			Ent:SetBulletProofTires(true)
-			
+						
 			Ent.snd_horn = MEMORY.HornSound
 			
 			Ent.snd_blowoff = MEMORY.snd_blowoff
