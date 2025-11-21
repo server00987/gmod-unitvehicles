@@ -340,7 +340,7 @@ if SERVER then
 					local dot = forward:Dot(toCheckpoint)
 					local dist = self.v:WorldSpaceCenter():Distance(target_pos)
 					
-					if dist < tolerance and velocity:LengthSqr() > 50000 then --dot > dotThreshold
+					if dist < tolerance and velocity:LengthSqr() > 100000 then --dot > dotThreshold
 						--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
 						--if self:CanSeeGoal(next_point.target_point) then
 						target = next_point

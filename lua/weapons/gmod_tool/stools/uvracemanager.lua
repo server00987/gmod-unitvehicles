@@ -1078,9 +1078,12 @@ function TOOL:Reload( trace )
 	
 	if game.SinglePlayer() or SERVER then
 		local spawn = ents.Create("uvrace_spawn")
-		spawn:SetPos(hp)
+		--print(spawn:BoundingRadius())
+		--spawn:SetPos(hp + (trace.HitNormal * spawn:BoundingRadius()))
 		spawn:SetAngles(Angle(0, ply:EyeAngles().y, 0))
 		spawn:Spawn()
+
+		spawn:SetPos(hp + spawn:LocalToWorld(Vector(spawn:BoundingRadius(), 0, 0)))
 		
 		undo.Create("UVRaceEnt")
 		undo.AddEntity(spawn)
