@@ -53,6 +53,10 @@ if SERVER then
             UVCheckForSpeeders()
             UVTimeToCheckForPotentialSuspects = CurTime()
         end
+
+        if UVTargeting then 
+            uvcallexists = false
+        end
         
         if GetConVar("ai_ignoreplayers"):GetBool() or not GetConVar("unitvehicle_callresponse"):GetBool() or UVTargeting or uvcallexists then
             if UVCallLocation and UVTargeting then --Remove the call, allow for new calls to come in

@@ -820,6 +820,13 @@ function UVEstablishVectorsnavmesh( start, goal, carwidth )
 			current:ComputeAdjacentConnectionHeightChange(neighbor) > 1 ) then
 				continue
 			end
+
+			if carwidth and carwidth > 0 then
+				local areaWidth = neighbor:GetSizeX()
+				if areaWidth < carwidth then
+					continue
+				end
+			end
 			
 			local cacheKey = neighbor:GetID() .. "_" .. goal:GetID()
 			local neighborHeuristic = heuristicCache[cacheKey]

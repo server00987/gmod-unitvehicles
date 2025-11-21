@@ -376,9 +376,11 @@ if SERVER then
 			local physObj = target:GetPhysicsObject()
 
 			if IsValid(physObj) then
-				targetVel = physObj:GetVelocity()
+				local vel = physObj:GetVelocity()
+				targetVel = vel * 2
 			else
-				targetVel = target:GetVelocity()
+				local vel = target:GetVelocity()
+				targetVel = vel * 2
 			end
 
 			targetPos = targetPos + targetVel
@@ -651,7 +653,7 @@ if SERVER then
 			end
 			
 			--Determine patrol standards
-			if not uvcalllocation then
+			if not UVCallLocation then
 				if self.respondingtocall then
 					self.respondingtocall = nil
 				end
@@ -676,7 +678,7 @@ if SERVER then
 					local Neighbor = self.tableroutetoenemy[(#self.tableroutetoenemy-1)]
 					self.waypointPos = self:DriveOnPath()
 				else
-					self:PathFindToEnemy(uvcalllocation)
+					self:PathFindToEnemy(UVCallLocation)
 					self:SetELS(true)
 					self:SetELSSound(true)
 					self:ChangeELSSiren()
@@ -809,7 +811,7 @@ if SERVER then
 							self.PatrolWaypoint = nil
 							self.respondingtocall = false
 							self.returningtopatrol = true
-							uvcalllocation = nil --Remove the call, allow for new calls to come in
+							UVCallLocation = nil --Remove the call, allow for new calls to come in
 							UVChatterCallResponded(self)
 						end
 					end --When there
