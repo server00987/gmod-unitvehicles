@@ -282,8 +282,6 @@ UV_PT.EMP = {
         local targetCreationID = target[2]
         local targetCallsign = target[3]
 
-        print(targetCallsign, carCallsign)
-
         local target = Entity( targetEntIndex )
         if not IsValid( target ) then return end
 
