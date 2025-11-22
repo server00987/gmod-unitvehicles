@@ -194,7 +194,6 @@ if SERVER then
 			local unitType = unit and unit.type
 			if not unitType then return GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString() end
 			
-			if unit.v.rhino then unitType = 'rhino' end
 			voiceProfile = GetConVar("unitvehicle_unit_" .. unitType .. "_voiceprofile"):GetString()
 		end
 		
