@@ -112,12 +112,7 @@ if SERVER then
 					local damage = UVPTStunMineDamage:GetFloat()
 					local force = power * (1 - (vectorDifference:Length()/1000))
 					objectphys:ApplyForceCenter(angle:Forward()*force)
-					object.rammed = true
-					timer.Simple(3, function()
-						if IsValid(object) then
-							object.rammed = nil
-						end
-					end)
+					UVRamVehicle(object)
 					if object.UnitVehicle or (object.UVWanted and not AutoHealth:GetBool()) or not (object.UnitVehicle and object.UVWanted) then
 						damage = (table.HasValue(UVCommanders, object) and UVPTStunMineCommanderDamage:GetFloat()) or damage
 						if object.IsSimfphyscar then
