@@ -1926,17 +1926,17 @@ function UVRamVehicle(vehicle)
 
 	vehicle.rammed = true
 
-	if update and vehicle.IsGlideVehicle then
-		vehicle.ogAngularDrag = vehicle.AngularDrag or vector_origin
-		vehicle.AngularDrag = vector_origin
-	end
+	-- if update and vehicle.IsGlideVehicle then
+	-- 	vehicle.ogAngularDrag = vehicle.AngularDrag or vector_origin
+	-- 	vehicle.AngularDrag = vector_origin
+	-- end
 
 	timer.Create("UVRamVehicle"..vehicle:EntIndex(), 3, 1, function() 
 		if IsValid(vehicle) and not vehicle.wrecked then 
 			vehicle.rammed = nil
-			if vehicle.IsGlideVehicle then
-				vehicle.AngularDrag = vehicle.ogAngularDrag
-			end
+			-- if vehicle.IsGlideVehicle then
+			-- 	vehicle.AngularDrag = vehicle.ogAngularDrag
+			-- end
 		end 
 	end)
 end
