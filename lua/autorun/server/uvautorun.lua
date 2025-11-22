@@ -974,15 +974,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 			end
 
 			if car.DecentVehicle or car.TrafficVehicle then
-				if car.rammed then
-					car.rammed = nil
-				end
-				car.rammed = true
-				timer.Simple(3, function() 
-					if not car.wrecked then 
-						car.rammed = nil
-					end 
-				end)
+				UVRamVehicle(car)
 			end
 
 			local object = coldata.HitEntity
@@ -1060,13 +1052,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				local force = power * (1 - (vectorDifference:Length()/1000))
 
 				enemyVehiclePhys:ApplyForceCenter(angle:Forward()*force)
-				enemyVehicle.rammed = true
-
-				timer.Simple(3, function()
-					if IsValid(enemyVehicle) then
-						enemyVehicle.rammed = nil
-					end
-				end)
+				UVRamVehicle(enemyVehicle)
 
 				if enemyDriver then
 					if enemyDriver:IsPlayer() then
@@ -1190,15 +1176,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				local NPC = ((IsValid(driver) and driver) or car.UnitVehicle)--car.UnitVehicle
 				if NPC and (NPC:IsNPC() or NPC:IsPlayer()) then
 					if (not UVTargeting and UVPassConVarFilter(object) or UVTargeting and object.UVWanted) then
-						if car.rammed then
-							car.rammed = nil
-						end
-						car.rammed = true
-						timer.Simple(3, function() 
-							if not car.wrecked then 
-								car.rammed = nil
-							end 
-						end)
+						UVRamVehicle(car)
 					end
 					if object.UVWanted and not car.tagged then
 						car.tagged = true
@@ -1305,15 +1283,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 	if not IsValid(car) or car:GetClass() ~= "gmod_sent_vehicle_fphysics_base" then return end
 
 	if car.DecentVehicle or car.TrafficVehicle then
-		if car.rammed then
-			car.rammed = nil
-		end
-		car.rammed = true
-		timer.Simple(3, function() 
-			if not car.wrecked then 
-				car.rammed = nil
-			end 
-		end)
+		UVRamVehicle(car)
 	end
 
 	local object = coldata.HitEntity
@@ -1401,13 +1371,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		local force = power * (1 - (vectorDifference:Length()/1000))
 
 		enemyVehiclePhys:ApplyForceCenter(angle:Forward()*force)
-		enemyVehicle.rammed = true
-
-		timer.Simple(3, function()
-			if IsValid(enemyVehicle) then
-				enemyVehicle.rammed = nil
-			end
-		end)
+		UVRamVehicle(enemyVehicle)
 
 		if enemyDriver then
 			if enemyDriver:IsPlayer() then
@@ -1527,15 +1491,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 
 		if NPC and (NPC:IsNPC() or NPC:IsPlayer()) then
 			if (not UVTargeting and UVPassConVarFilter(object) or UVTargeting and object.UVWanted) then
-				if car.rammed then
-					car.rammed = nil
-				end
-				car.rammed = true
-				timer.Simple(3, function() 
-					if IsValid(NPC) then 
-						car.rammed = nil
-					end 
-				end)
+				UVRamVehicle(car)
 			end
 			if object.UVWanted and not car.tagged then
 				car.tagged = true
@@ -1651,15 +1607,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 		if not IsValid(car) or car:GetClass() ~= "prop_vehicle_jeep" then return end
 
 		if car.DecentVehicle or car.TrafficVehicle then
-			if car.rammed then
-				car.rammed = nil
-			end
-			car.rammed = true
-			timer.Simple(3, function() 
-				if not car.wrecked then 
-					car.rammed = nil
-				end 
-			end)
+			UVRamVehicle(car)
 		end
 
 		local object = coldata.HitEntity
@@ -1785,12 +1733,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local angle = vectorDifference:Angle()
 			local force = power * (1 - (vectorDifference:Length()/1000))
 			enemyVehiclePhys:ApplyForceCenter(angle:Forward()*force)
-			enemyVehicle.rammed = true
-			timer.Simple(3, function()
-				if IsValid(enemyVehicle) then
-					enemyVehicle.rammed = nil
-				end
-			end)
+			UVRamVehicle(enemyVehicle)
 			if enemyDriver then
 				if enemyDriver:IsPlayer() then
 					enemyCallsign = enemyDriver:GetName()
@@ -1888,15 +1831,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local NPC = ((IsValid(driver) and driver) or car.UnitVehicle)--car.UnitVehicle
 			if NPC and (NPC:IsNPC() or NPC:IsPlayer()) then
 				if (not UVTargeting and UVPassConVarFilter(object) or UVTargeting and object.UVWanted) then
-					if car.rammed then
-						car.rammed = nil
-					end
-					car.rammed = true
-					timer.Simple(3, function() 
-						if IsValid(NPC) then 
-							car.rammed = nil
-						end 
-					end)
+					UVRamVehicle(car)
 				end
 				if object.UVWanted and not car.tagged then
 					car.tagged = true
@@ -1979,6 +1914,32 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 		end
 	end)
 end)
+
+function UVRamVehicle(vehicle)
+	local update
+
+	if vehicle.rammed then
+		vehicle.rammed = nil
+	else
+		update = true
+	end
+
+	vehicle.rammed = true
+
+	if update and vehicle.IsGlideVehicle then
+		vehicle.ogAngularDrag = vehicle.AngularDrag or vector_origin
+		vehicle.AngularDrag = vector_origin
+	end
+
+	timer.Create("UVRamVehicle"..vehicle:EntIndex(), 3, 1, function() 
+		if IsValid(vehicle) and not vehicle.wrecked then 
+			vehicle.rammed = nil
+			if vehicle.IsGlideVehicle then
+				vehicle.AngularDrag = vehicle.ogAngularDrag
+			end
+		end 
+	end)
+end
 
 function UVAddToWantedListVehicle(vehicle)
 	if not vehicle.UVWanted then

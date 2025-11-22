@@ -225,12 +225,7 @@ if SERVER then
 					local MaxHealth = car:GetMaxHealth()
 					local damage = MaxHealth*0.1
 					car:ApplyDamage( damage, DMG_GENERIC )
-					car.rammed = true
-					timer.Simple(3, function()
-						if IsValid(car) then
-							car.rammed = nil
-						end
-					end)
+					UVRamVehicle(car)
 				end
 				local ogwheelpos = ent.GhostEnt:GetLocalPos()
 				ent:SetDamaged(true)
@@ -304,12 +299,7 @@ if SERVER then
 					local MaxHealth = car:GetMaxHealth()
 					local damage = MaxHealth*0.1
 					car:ApplyDamage( damage, DMG_GENERIC )
-					car.rammed = true
-					timer.Simple(3, function()
-						if IsValid(car) then
-							car.rammed = nil
-						end
-					end)
+					UVRamVehicle(car)
 				end
 				local ogwheelpos
 				if ent.GhostEnt then
