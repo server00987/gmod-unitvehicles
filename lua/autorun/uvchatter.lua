@@ -230,10 +230,7 @@ if SERVER then
 				unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			end
 
-			print(self, voice)
-			
 			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
-			print("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*")
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[math.random(1, #soundFiles)]
 			
@@ -248,8 +245,6 @@ if SERVER then
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
-
-			print(soundFile)
 
 			ChatterLastPlay = initTime
 
