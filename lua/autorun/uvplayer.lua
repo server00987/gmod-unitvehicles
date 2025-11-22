@@ -1635,7 +1635,7 @@ if SERVER then
                 local force = power * (1 - (vectorDifference:Length()/1000))
 
                 objectphys:ApplyForceCenter(angle:Forward()*force)
-                UVRamVehicle(object)
+                --UVRamVehicle(object)
 
                 --local victim = UVGetDriver(object)
                 --local victimName = UVGetDriverName(object)
@@ -1871,7 +1871,7 @@ if SERVER then
                 local force = power * (1 - (vectorDifference:Length()/1000))
 
                 objectphys:ApplyForceCenter(angle:Forward()*force)
-                UVRamVehicle(object)
+                --UVRamVehicle(object)
 
                 --local victim = UVGetDriver(object)
                 --local victimName = UVGetDriverName(object)
