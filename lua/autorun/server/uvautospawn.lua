@@ -226,15 +226,15 @@ function UVGetRandomUnit( heat, modifiers )
 
 	local selectionPool = {}
 
-	if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
-		UnitsCommander = ""
-		UnitsCommanderChance = nil
-	end
+	-- if UVOneCommanderActive or UVOneCommanderDeployed or posspecified or (UVUnitsHavePlayers and not playercontrolled) then
+	-- 	UnitsCommander = ""
+	-- 	UnitsCommanderChance = nil
+	-- end
 
-	if UVEnemyEscaping then
-		UnitsRhino = nil
-		UnitsCommanderChance = nil
-	end
+	-- if UVEnemyEscaping then
+	-- 	UnitsRhino = nil
+	-- 	UnitsCommanderChance = nil
+	-- end
 
 	modifiers = type(modifiers) == 'table' and modifiers
 
@@ -250,6 +250,7 @@ function UVGetRandomUnit( heat, modifiers )
 
 			if v == 'Commander' then
 				if UVOneCommanderActive or UVOneCommanderDeployed or modifiers.posspecified or (UVUnitsHavePlayers and not modifiers.playercontrolled) then continue end
+				--if UVOneCommanderActive and not modifiers.commanderrespawn then continue end
 			end
 
 			if modifiers.rhinoattack and v ~= 'Rhino' then continue end
@@ -485,22 +486,12 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local appliedUnits
 	local returnedUnitList
 
-	if commanderrespawn then
-		appliedunits = commanderrespawn
-		uvnextclasstospawn = "npc_uvcommander" 
-	end
-
 	local returnedUnitList = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
 		playercontrolled = playercontrolled,
 		posspecified = posspecified,
 		rhinoattack = rhinoattack,
 		commanderrespawn = commanderrespawn
 	} )
-
-	if commanderrespawn then
-		appliedunits = commanderrespawn
-		uvnextclasstospawn = "npc_uvcommander"
-	end
 
 	if returnedUnitList then
 		if returnedUnitList.name == 'rhino' then
@@ -518,7 +509,12 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		return
 	end
 
-		
+	if commanderrespawn then
+		rhinoattack = nil
+		appliedunits = commanderrespawn
+		uvnextclasstospawn = "npc_uvcommander"
+	end
+
 	if UVTargeting then
 		if not rhinoattack then
 			local mathangle = math.random(1,2)
