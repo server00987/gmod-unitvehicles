@@ -37,7 +37,7 @@ if SERVER then
     			local power = 1000000
                 local force = power * (1 - (vectorDifference:Length()/1000))
                 objectphys:ApplyForceCenter(angle:Forward()*force)
-               	--UVRamVehicle(object)
+                UVRamVehicle(object)
             end
     	end
     	self:Remove()

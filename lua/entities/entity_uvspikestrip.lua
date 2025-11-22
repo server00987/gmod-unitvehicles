@@ -225,7 +225,7 @@ if SERVER then
 					local MaxHealth = car:GetMaxHealth()
 					local damage = MaxHealth*0.1
 					car:ApplyDamage( damage, DMG_GENERIC )
-					--UVRamVehicle(car)
+					UVRamVehicle(car)
 				end
 				local ogwheelpos = ent.GhostEnt:GetLocalPos()
 				ent:SetDamaged(true)
@@ -299,7 +299,7 @@ if SERVER then
 					local MaxHealth = car:GetMaxHealth()
 					local damage = MaxHealth*0.1
 					car:ApplyDamage( damage, DMG_GENERIC )
-					--UVRamVehicle(car)
+					UVRamVehicle(car)
 				end
 				local ogwheelpos
 				if ent.GhostEnt then
