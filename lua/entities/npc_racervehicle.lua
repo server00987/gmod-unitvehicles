@@ -607,6 +607,21 @@ if SERVER then
 					CFtoggleNitrous( self.v, self.usenitrous )
 				end
 				self.v:TriggerInput("Handbrake", 0)
+				if GetConVar("unitvehicle_tractioncontrol"):GetBool() and self.v.wheels then
+					local maxSlip = 0
+					for _, wheel in ipairs(self.v.wheels) do
+						maxSlip = math.max(maxSlip, math.abs(wheel:GetForwardSlip() or 0))
+					end
+					local minThrottle = 0.5
+					local recoverRate = FrameTime()
+					self.AI_ThrottleMul = self.AI_ThrottleMul or 1
+					if maxSlip > 8 then
+						self.AI_ThrottleMul = math.max(self.AI_ThrottleMul - FrameTime()*2, minThrottle)
+					else
+						self.AI_ThrottleMul = math.min(self.AI_ThrottleMul + recoverRate, 1)
+					end
+					throttle = throttle * self.AI_ThrottleMul
+				end
 				self.v:TriggerInput("Throttle", throttle)
 				self.v:TriggerInput("Brake", throttle * -1)
 				steer = steer * ((self.v.uvraceparticipant and 1.5) or 2) --Attempt to make steering more sensitive.

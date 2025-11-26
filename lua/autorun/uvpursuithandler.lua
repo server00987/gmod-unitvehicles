@@ -804,6 +804,7 @@ LOCAL_CONVARS = {
 	["unitvehicle_customizeracer"] = 'integer',
 	["unitvehicle_autohealthracer"] = 'integer',
 	["unitvehicle_randomplayerunits"] = 'integer',
+	["unitvehicle_tractioncontrol"] = 'integer',
 }
 
 HEAT_SETTINGS = {
@@ -1047,6 +1048,7 @@ if SERVER then
 	OptimizeRespawn = CreateConVar("unitvehicle_optimizerespawn", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	SpottedFreezeCam = CreateConVar("unitvehicle_spottedfreezecam", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, the game will freeze and the camera will point to the closest Unit when starting a pursuit (single-player only).")
 	RandomPlayerUnits = CreateConVar("unitvehicle_randomplayerunits", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
+	TractionControl = CreateConVar("unitvehicle_tractioncontrol", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units and Racer Vehicles will apply reduced throttle when wheel spinning.")
 
 	--traffic convars
 	UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
@@ -2608,8 +2610,8 @@ else -- CLIENT Settings | HUD/Options
 	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, true, false, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
 	RandomPlayerUnits = CreateClientConVar("unitvehicle_randomplayerunits", 0, true, false, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
 	AutoHealthRacer = CreateClientConVar("unitvehicle_autohealthracer", 0, true, false, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
+	TractionControl = CreateClientConVar("unitvehicle_tractioncontrol", 1, true, false, "Unit Vehicles: If set to 1, Units and Racer Vehicles will apply reduced throttle when wheel spinning.")
 	
-
 	-- unit convars
 	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 	UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 0, true, false)
@@ -5122,6 +5124,8 @@ else -- CLIENT Settings | HUD/Options
 			option:SetTooltip("#uv.settings.ailogic.autohealthracer.desc")
 			option = panel:CheckBox("#uv.settings.ailogic.customizeracer", "unitvehicle_customizeracer")
 			option:SetTooltip("#uv.settings.ailogic.customizeracer.desc")
+			option = panel:CheckBox("#uv.settings.ailogic.tractioncontrol", "unitvehicle_tractioncontrol")
+			option:SetTooltip("#uv.settings.ailogic.tractioncontrol.desc")
 
 			panel:Help("#uv.settings.ainav")
 			option = panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
