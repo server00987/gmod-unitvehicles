@@ -607,7 +607,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local MEMORY = {}
 
 	local appliedUnitsStrings = string.Explode( " ", appliedunits )
-	PrintTable(appliedUnitsStrings)
 	
 	if vehiclebase == 3 then --Glide
 		local createdEntities = {}
