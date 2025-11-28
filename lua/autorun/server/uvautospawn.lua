@@ -605,6 +605,9 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local availableunits = {}
 	local availableunit
 	local MEMORY = {}
+
+	local appliedUnitsStrings = string.Explode( " ", appliedunits )
+	PrintTable(appliedUnitsStrings)
 	
 	if vehiclebase == 3 then --Glide
 		local createdEntities = {}
@@ -616,8 +619,12 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			-- if (playercontrolled and playercontrolled.unit) then
 			-- 	match = playercontrolled.unit == v
 			-- else
-				match = string.find( appliedunits, v )
-			--end
+				for _, string in pairs(appliedUnitsStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
 			if match then
 				table.insert(availableunits, v)
 			end
@@ -887,7 +894,17 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		local saved_vehicles = file.Find("unitvehicles/simfphys/units/*.txt", "DATA")
 		
 		for k, v in pairs(saved_vehicles) do
-			local match = string.find( appliedunits, v )
+			local match
+			if (playercontrolled and playercontrolled.unit) then
+				match = playercontrolled.unit == v
+			else
+				for _, string in pairs(appliedUnitsStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
+			end
 			if match then
 				table.insert(availableunits, v)
 			end
@@ -1242,7 +1259,17 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/units/*.txt", "DATA")
 		
 		for k, v in pairs(saved_vehicles) do
-			local match = string.find( appliedunits, v )
+			local match
+			if (playercontrolled and playercontrolled.unit) then
+				match = playercontrolled.unit == v
+			else
+				for _, string in pairs(appliedUnitsStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
+			end
 			if match then
 				table.insert(availableunits, v)
 			end
@@ -2169,6 +2196,7 @@ function UVAutoSpawnRacer()
 	local MEMORY = {}
 
 	local AssignedRacers = string.Trim( GetConVar( 'unitvehicle_racer_racers' ):GetString() )
+	local AssignedRacersStrings = string.Explode( " ", AssignedRacers )
 	
 	if vehiclebase == 3 then --Glide
 		local saved_vehicles = file.Find("unitvehicles/glide/racers/*.json", "DATA")
@@ -2184,7 +2212,13 @@ function UVAutoSpawnRacer()
 		
 		if UVRAssignRacers:GetBool() then
 			for k, v in pairs(saved_vehicles) do
-				local match = string.find( AssignedRacers, v )
+				local match
+				for _, string in pairs(AssignedRacersStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
 				if match then
 					table.insert(availableracers, v)
 				end
@@ -2196,12 +2230,6 @@ function UVAutoSpawnRacer()
 			end
 
 			availableracer = availableracers[math.random(1, #availableracers)]
-
-			for k, v in pairs(saved_vehicles) do
-				table.insert(availableracer, v)
-			end
-
-			availableracer = availableracer[math.random(1, #availableracer)]
 		else
 			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
 		end
@@ -2392,7 +2420,13 @@ function UVAutoSpawnRacer()
 		
 		if UVRAssignRacers:GetBool() then
 			for k, v in pairs(saved_vehicles) do
-				local match = string.find( AssignedRacers, v )
+				local match
+				for _, string in pairs(AssignedRacersStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
 				if match then
 					table.insert(availableracers, v)
 				end
@@ -2404,12 +2438,6 @@ function UVAutoSpawnRacer()
 			end
 
 			availableracer = availableracers[math.random(1, #availableracers)]
-
-			for k, v in pairs(saved_vehicles) do
-				table.insert(availableracer, v)
-			end
-
-			availableracer = availableracer[math.random(1, #availableracer)]
 		else
 			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
 		end
@@ -2652,7 +2680,13 @@ function UVAutoSpawnRacer()
 		
 		if UVRAssignRacers:GetBool() then
 			for k, v in pairs(saved_vehicles) do
-				local match = string.find( AssignedRacers, v )
+				local match
+				for _, string in pairs(AssignedRacersStrings) do
+					if string == v then
+						match = true
+						break
+					end
+				end
 				if match then
 					table.insert(availableracers, v)
 				end
@@ -2664,12 +2698,6 @@ function UVAutoSpawnRacer()
 			end
 
 			availableracer = availableracers[math.random(1, #availableracers)]
-
-			for k, v in pairs(saved_vehicles) do
-				table.insert(availableracer, v)
-			end
-
-			availableracer = availableracer[math.random(1, #availableracer)]
 		else
 			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
 		end
