@@ -1012,7 +1012,7 @@ if SERVER then
 				end
 			end
 			if UVTargeting and closestdistancetosuspect > 100000000 and not self:StraightToTarget(closestsuspect) and 
-			not UVEnemyBusted and not UVEnemyEscaped and self.uvmarkedfordeletion and (not UVRacerPresenceMode or self.stuck) then
+			not UVEnemyBusted and not UVEnemyEscaped and self.uvmarkedfordeletion then
 				if not OptimizeRespawn:GetBool() or (UVResourcePoints <= (#ents.FindByClass("npc_uv*")) and #ents.FindByClass("npc_uv*") ~= 1) then
 					SafeRemoveEntity(self)
 				else

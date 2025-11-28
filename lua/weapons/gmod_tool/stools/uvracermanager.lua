@@ -1,28 +1,30 @@
 TOOL.Category		=	"uv.settings.unitvehicles"
-TOOL.Name			=	"#tool.uvtrafficmanager.name"
+TOOL.Name			=	"#tool.uvracermanager.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
 
 TOOL.ClientConVar["vehiclebase"] = 1
-TOOL.ClientConVar["spawncondition"] = 2
-TOOL.ClientConVar["maxtraffic"] = 5
+TOOL.ClientConVar["assignracers"] = 0
+TOOL.ClientConVar["racers"] = ""
+TOOL.ClientConVar["spawncondition"] = 1
+TOOL.ClientConVar["maxracer"] = 3
 
 local conVarsDefault = TOOL:BuildConVarList()
 
 if SERVER then
 	
-	net.Receive("UVTrafficManagerGetTrafficInfo", function( length, ply )
-		ply.UVTrafficTOOLMemory = net.ReadTable()
+	net.Receive("UVRacerManagerGetRacerInfo", function( length, ply )
+		ply.UVRacerTOOLMemory = net.ReadTable()
 		ply:SelectWeapon( "gmod_tool" )
 	end)
 
-	local function ClearTraffic( ply, cmd, args )
+	local function ClearRacer( ply, cmd, args )
 		if not ply:IsSuperAdmin() then return end
-		for _, v in pairs(ents.FindByClass("npc_trafficvehicle")) do
+		for _, v in pairs(ents.FindByClass("npc_racervehicle")) do
 			v:Remove()
 		end
 	end
-	concommand.Add("uv_cleartraffic", ClearTraffic)
+	concommand.Add("uv_clearracers", ClearRacer)
 
 end
 
@@ -35,69 +37,69 @@ if CLIENT then
 	}
 	
 	local selecteditem = nil
-	local UVTrafficTOOLMemory = {}
+	local UVRacerTOOLMemory = {}
 	
-	net.Receive("UVTrafficManagerGetTrafficInfo", function( length )
-		UVTrafficTOOLMemory = net.ReadTable()
-		--PrintTable(UVTrafficTOOLMemory)
+	net.Receive("UVRacerManagerGetRacerInfo", function( length )
+		UVRacerTOOLMemory = net.ReadTable()
+		--PrintTable(UVRacerTOOLMemory)
 	end)
 	
-	net.Receive("UVTrafficManagerAdjustTraffic", function()
-		local TrafficAdjust = vgui.Create("DFrame")
+	net.Receive("UVRacerManagerAdjustRacer", function()
+		local RacerAdjust = vgui.Create("DFrame")
 		local OK = vgui.Create("DButton")
 		local lang = language.GetPhrase
 		
-		TrafficAdjust:Add(OK)
-		TrafficAdjust:SetSize(600, 300)
-		TrafficAdjust:SetBackgroundBlur(true)
-		TrafficAdjust:Center()
-		TrafficAdjust:SetTitle("#tool.uvtrafficmanager.create")
-		TrafficAdjust:SetDraggable(false)
-		TrafficAdjust:MakePopup()
+		RacerAdjust:Add(OK)
+		RacerAdjust:SetSize(600, 300)
+		RacerAdjust:SetBackgroundBlur(true)
+		RacerAdjust:Center()
+		RacerAdjust:SetTitle("#tool.uvracermanager.create")
+		RacerAdjust:SetDraggable(false)
+		RacerAdjust:MakePopup()
 		
-		local Intro = vgui.Create( "DLabel", TrafficAdjust )
+		local Intro = vgui.Create( "DLabel", RacerAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( string.format( lang("tool.uvunitmanager.create.base"), UVTrafficTOOLMemory.VehicleBase ) )
+		Intro:SetText( string.format( lang("tool.uvunitmanager.create.base"), UVRacerTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 		
-		local Intro2 = vgui.Create( "DLabel", TrafficAdjust )
+		local Intro2 = vgui.Create( "DLabel", RacerAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( string.format( lang("tool.uvunitmanager.create.rawname"), UVTrafficTOOLMemory.SpawnName ) )
+		Intro2:SetText( string.format( lang("tool.uvunitmanager.create.rawname"), UVRacerTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 		
-		local Intro3 = vgui.Create( "DLabel", TrafficAdjust )
+		local Intro3 = vgui.Create( "DLabel", RacerAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "#tool.uvtrafficmanager.create.uniquename" )
+		Intro3:SetText( "#tool.uvracermanager.create.uniquename" )
 		Intro3:SizeToContents()
 		
-		local TrafficNameEntry = vgui.Create( "DTextEntry", TrafficAdjust )
-		TrafficNameEntry:SetPos( 20, 120 )
-		TrafficNameEntry:SetPlaceholderText( "#tool.uvtrafficmanager.create.name" )
-		TrafficNameEntry:SetSize(TrafficAdjust:GetWide() / 2, 22)
+		local RacerNameEntry = vgui.Create( "DTextEntry", RacerAdjust )
+		RacerNameEntry:SetPos( 20, 120 )
+		RacerNameEntry:SetPlaceholderText( "#tool.uvracermanager.create.name" )
+		RacerNameEntry:SetSize(RacerAdjust:GetWide() / 2, 22)
 		
-		local SaveColour = vgui.Create("DCheckBoxLabel", TrafficAdjust )
+		local SaveColour = vgui.Create("DCheckBoxLabel", RacerAdjust )
 		SaveColour:SetPos( 20, 160 )
-		SaveColour:SetText("#tool.uvtrafficmanager.create.color")
-		SaveColour:SetSize(TrafficAdjust:GetWide(), 22)
+		SaveColour:SetText("#tool.uvracermanager.create.color")
+		SaveColour:SetSize(RacerAdjust:GetWide(), 22)
 		
-		OK:SetText("#tool.uvtrafficmanager.create.create")
-		OK:SetSize(TrafficAdjust:GetWide() * 5 / 16, 22)
+		OK:SetText("#tool.uvracermanager.create.create")
+		OK:SetSize(RacerAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
 		function OK:DoClick()
 			
-			local Name = TrafficNameEntry:GetValue()
+			local Name = RacerNameEntry:GetValue()
 			local Color = SaveColour:GetChecked() == true or nil
 
 			if Color then
-				UVTrafficTOOLMemory.SaveColor = true
+				UVRacerTOOLMemory.SaveColor = true
 			end
 			
 			if Name ~= "" then
-				if UVTrafficTOOLMemory.VehicleBase == "gmod_sent_vehicle_fphysics_base" then
+				if UVRacerTOOLMemory.VehicleBase == "gmod_sent_vehicle_fphysics_base" then
 					local DataString = ""
 					
-					for k,v in pairs(UVTrafficTOOLMemory) do
+					for k,v in pairs(UVRacerTOOLMemory) do
 						if k == "SubMaterials" then
 							local mats = ""
 							local first = true
@@ -122,14 +124,14 @@ if CLIENT then
 						shit[k] =  string.char( string.byte( v ) + 20 )
 					end
 					
-					file.Write("unitvehicles/simfphys/traffic/"..Name..".txt", string.Implode("",shit) )
-				elseif UVTrafficTOOLMemory.VehicleBase == "base_glide_car" or UVTrafficTOOLMemory.VehicleBase == "base_glide_motorcycle" then
-					local jsondata = util.TableToJSON(UVTrafficTOOLMemory)
-					file.Write("unitvehicles/glide/traffic/"..Name..".json", jsondata )
-				elseif UVTrafficTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
+					file.Write("unitvehicles/simfphys/racers/"..Name..".txt", string.Implode("",shit) )
+				elseif UVRacerTOOLMemory.VehicleBase == "base_glide_car" or UVRacerTOOLMemory.VehicleBase == "base_glide_motorcycle" then
+					local jsondata = util.TableToJSON(UVRacerTOOLMemory)
+					file.Write("unitvehicles/glide/racers/"..Name..".json", jsondata )
+				elseif UVRacerTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
 					local DataString = ""
 					
-					for k,v in pairs(UVTrafficTOOLMemory) do
+					for k,v in pairs(UVRacerTOOLMemory) do
 						if k == "SubMaterials" then
 							local mats = ""
 							local first = true
@@ -154,32 +156,32 @@ if CLIENT then
 						shit[k] =  string.char( string.byte( v ) + 20 )
 					end
 					
-					file.Write("unitvehicles/prop_vehicle_jeep/traffic/"..Name..".txt", string.Implode("",shit) )
+					file.Write("unitvehicles/prop_vehicle_jeep/racers/"..Name..".txt", string.Implode("",shit) )
 				end
 				
-				UVTrafficManagerScrollPanel:Clear()
-				UVTrafficManagerScrollPanelGlide:Clear()
-				UVTrafficManagerScrollPanelJeep:Clear()
-				UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-				UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-				UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-				TrafficAdjust:Close()
+				UVRacerManagerScrollPanel:Clear()
+				UVRacerManagerScrollPanelGlide:Clear()
+				UVRacerManagerScrollPanelJeep:Clear()
+				UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
+				UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
+				UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
+				RacerAdjust:Close()
 
-				notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.saved"), Name ), NOTIFY_UNDO, 5 )
-				Msg( "Saved "..Name.." as a Traffic!\n" )
+				notification.AddLegacy( string.format( lang("tool.uvracermanager.saved"), Name ), NOTIFY_UNDO, 5 )
+				Msg( "Saved "..Name.." as a Racer!\n" )
 				
 				surface.PlaySound( "buttons/button15.wav" )
 				
 			else
-				TrafficNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
+				RacerNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
 		end
 	end)
 	
-	function UVTrafficManagerGetSaves( panel )
-		local saved_vehicles = file.Find("unitvehicles/simfphys/traffic/*.txt", "DATA")
+	function UVRacerManagerGetSaves( panel )
+		local saved_vehicles = file.Find("unitvehicles/simfphys/racers/*.txt", "DATA")
 		local index = 0
 		local highlight = false
 		local offset = 22
@@ -213,7 +215,7 @@ if CLIENT then
 					
 					SetClipboardText(selecteditem)
 					
-					local DataString = file.Read( "unitvehicles/simfphys/traffic/"..selecteditem, "DATA" )
+					local DataString = file.Read( "unitvehicles/simfphys/racers/"..selecteditem, "DATA" )
 					
 					local words = string.Explode( "", DataString )
 					local shit = {}
@@ -224,7 +226,7 @@ if CLIENT then
 					
 					local Data = string.Explode( "#", string.Implode("",shit) )
 					
-					table.Empty( UVTrafficTOOLMemory )
+					table.Empty( UVRacerTOOLMemory )
 					
 					for _,v in pairs(Data) do
 						local Var = string.Explode( "=", v )
@@ -233,20 +235,20 @@ if CLIENT then
 						
 						if name and variable then
 							if name == "SubMaterials" then
-								UVTrafficTOOLMemory[name] = {}
+								UVRacerTOOLMemory[name] = {}
 								
 								local submats = string.Explode( ",", variable )
 								for i = 0, (table.Count( submats ) - 1) do
-									UVTrafficTOOLMemory[name][i] = submats[i+1]
+									UVRacerTOOLMemory[name][i] = submats[i+1]
 								end
 							else
-								UVTrafficTOOLMemory[name] = variable
+								UVRacerTOOLMemory[name] = variable
 							end
 						end
 					end
 					
-					net.Start("UVTrafficManagerGetTrafficInfo")
-					net.WriteTable( UVTrafficTOOLMemory )
+					net.Start("UVRacerManagerGetRacerInfo")
+					net.WriteTable( UVRacerTOOLMemory )
 					net.SendToServer()
 				end
 			end
@@ -256,8 +258,8 @@ if CLIENT then
 		end
 	end
 	
-	function UVTrafficManagerGetSavesGlide( panel )
-		local saved_vehicles = file.Find("unitvehicles/glide/traffic/*.json", "DATA")
+	function UVRacerManagerGetSavesGlide( panel )
+		local saved_vehicles = file.Find("unitvehicles/glide/racers/*.json", "DATA")
 		local index = 0
 		local highlight = false
 		local offset = 22
@@ -291,13 +293,13 @@ if CLIENT then
 					
 					SetClipboardText(selecteditem)
 					
-					local JSONData = file.Read( "unitvehicles/glide/traffic/"..selecteditem, "DATA" )
+					local JSONData = file.Read( "unitvehicles/glide/racers/"..selecteditem, "DATA" )
 					if not JSONData then return end
 					
-					UVTrafficTOOLMemory = util.JSONToTable(JSONData, true)
+					UVRacerTOOLMemory = util.JSONToTable(JSONData, true)
 					
-					net.Start("UVTrafficManagerGetTrafficInfo")
-					net.WriteTable( UVTrafficTOOLMemory )
+					net.Start("UVRacerManagerGetRacerInfo")
+					net.WriteTable( UVRacerTOOLMemory )
 					net.SendToServer()
 				end
 			end
@@ -307,8 +309,8 @@ if CLIENT then
 		end
 	end
 	
-	function UVTrafficManagerGetSavesJeep( panel )
-		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/traffic/*.txt", "DATA")
+	function UVRacerManagerGetSavesJeep( panel )
+		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/racers/*.txt", "DATA")
 		local index = 0
 		local highlight = false
 		local offset = 22
@@ -342,7 +344,7 @@ if CLIENT then
 					
 					SetClipboardText(selecteditem)
 					
-					local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/traffic/"..selecteditem, "DATA" )
+					local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/racers/"..selecteditem, "DATA" )
 					
 					local words = string.Explode( "", DataString )
 					local shit = {}
@@ -353,7 +355,7 @@ if CLIENT then
 					
 					local Data = string.Explode( "#", string.Implode("",shit) )
 					
-					table.Empty( UVTrafficTOOLMemory )
+					table.Empty( UVRacerTOOLMemory )
 					
 					for _,v in pairs(Data) do
 						local Var = string.Explode( "=", v )
@@ -362,20 +364,20 @@ if CLIENT then
 						
 						if name and variable then
 							if name == "SubMaterials" then
-								UVTrafficTOOLMemory[name] = {}
+								UVRacerTOOLMemory[name] = {}
 								
 								local submats = string.Explode( ",", variable )
 								for i = 0, (table.Count( submats ) - 1) do
-									UVTrafficTOOLMemory[name][i] = submats[i+1]
+									UVRacerTOOLMemory[name][i] = submats[i+1]
 								end
 							else
-								UVTrafficTOOLMemory[name] = variable
+								UVRacerTOOLMemory[name] = variable
 							end
 						end
 					end
 					
-					net.Start("UVTrafficManagerGetTrafficInfo")
-					net.WriteTable( UVTrafficTOOLMemory )
+					net.Start("UVRacerManagerGetRacerInfo")
+					net.WriteTable( UVRacerTOOLMemory )
 					net.SendToServer()
 				end
 			end
@@ -388,19 +390,19 @@ if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
 		local lang = language.GetPhrase
 		
-		if not file.Exists( "unitvehicles/glide/traffic", "DATA" ) then
-			file.CreateDir( "unitvehicles/glide/traffic" )
-			print("Created a Glide data file for the Traffic Vehicles!")
+		if not file.Exists( "unitvehicles/glide/racers", "DATA" ) then
+			file.CreateDir( "unitvehicles/glide/racers" )
+			print("Created a Glide data file for the Racer Vehicles!")
 		end
 		
-		if not file.Exists( "unitvehicles/simfphys/traffic", "DATA" ) then
-			file.CreateDir( "unitvehicles/simfphys/traffic" )
-			print("Created a simfphys data file for the Traffic Vehicles!")
+		if not file.Exists( "unitvehicles/simfphys/racers", "DATA" ) then
+			file.CreateDir( "unitvehicles/simfphys/racers" )
+			print("Created a simfphys data file for the Racer Vehicles!")
 		end
 		
-		if not file.Exists( "unitvehicles/prop_vehicle_jeep/traffic", "DATA" ) then
-			file.CreateDir( "unitvehicles/prop_vehicle_jeep/traffic" )
-			print("Created a Default Vehicle Base data file for the Traffic Vehicles!")
+		if not file.Exists( "unitvehicles/prop_vehicle_jeep/racers", "DATA" ) then
+			file.CreateDir( "unitvehicles/prop_vehicle_jeep/racers" )
+			print("Created a Default Vehicle Base data file for the Racer Vehicles!")
 		end
 		
 		local applysettings = vgui.Create("DButton")
@@ -414,24 +416,26 @@ if CLIENT then
 			
 			local convar_table = {}
 			
-			convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
-			convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
-			convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
+			convar_table['unitvehicle_racer_vehiclebase'] = GetConVar('uvracermanager_vehiclebase'):GetInt()
+			convar_table['unitvehicle_racer_assignracers'] = GetConVar('uvracermanager_assignracers'):GetInt()
+			convar_table['unitvehicle_racer_racers'] = GetConVar('uvracermanager_racers'):GetString()
+			convar_table['unitvehicle_racer_spawncondition'] = GetConVar('uvracermanager_spawncondition'):GetInt()
+			convar_table['unitvehicle_racer_maxracer'] = GetConVar('uvracermanager_maxracer'):GetInt()
 
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
 			
-			notification.AddLegacy( "#tool.uvtrafficmanager.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvracermanager.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "#tool.uvtrafficmanager.applied" )
+			Msg( "#tool.uvracermanager.applied" )
 			
 		end
 		CPanel:AddItem(applysettings)
 		
 		CPanel:AddControl("ComboBox", {
 			MenuButton = 1,
-			Folder = "traffic",
+			Folder = "racers",
 			Options = {
 				["#preset.default"] = conVarsDefault
 			},
@@ -443,12 +447,12 @@ if CLIENT then
 		})
 
 		CPanel:AddControl("Button", {
-			Text = "#tool.uvtrafficmanager.clear",
-			Command = "uv_cleartraffic"
+			Text = "#tool.uvracermanager.clear",
+			Command = "uv_clearracers"
 		})
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.simphys",
+			Text = "#tool.uvracermanager.settings.global.simphys",
 		})
 		
 		local Frame = vgui.Create( "DFrame" )
@@ -463,20 +467,20 @@ if CLIENT then
 		end
 		CPanel:AddItem(Frame)
 		
-		UVTrafficManagerScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVTrafficManagerScrollPanel:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanel:SetPos( 0, 0 )
+		UVRacerManagerScrollPanel = vgui.Create( "DScrollPanel", Frame )
+		UVRacerManagerScrollPanel:SetSize( 280, 320 )
+		UVRacerManagerScrollPanel:SetPos( 0, 0 )
 		
-		UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
+		UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
 		
 		local Refresh = vgui.Create( "DButton", CPanel )
 		Refresh:SetText( "#refresh" )
 		Refresh:SetSize( 280, 20 )
 		Refresh.DoClick = function( self )
-			UVTrafficManagerScrollPanel:Clear()
+			UVRacerManagerScrollPanel:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
+			UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
+			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
@@ -487,21 +491,21 @@ if CLIENT then
 		Delete.DoClick = function( self )
 			
 			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/simfphys/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				if file.Delete( "unitvehicles/simfphys/racers/"..selecteditem ) then
+					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
+					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
 				end
 			end
 			
-			UVTrafficManagerScrollPanel:Clear()
+			UVRacerManagerScrollPanel:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
+			UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
 		end
 		CPanel:AddItem(Delete)
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.glide",
+			Text = "#tool.uvracermanager.settings.global.glide",
 		})
 		
 		local FrameGlide = vgui.Create( "DFrame" )
@@ -516,20 +520,20 @@ if CLIENT then
 		end
 		CPanel:AddItem(FrameGlide)
 		
-		UVTrafficManagerScrollPanelGlide = vgui.Create( "DScrollPanel", FrameGlide )
-		UVTrafficManagerScrollPanelGlide:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanelGlide:SetPos( 0, 0 )
+		UVRacerManagerScrollPanelGlide = vgui.Create( "DScrollPanel", FrameGlide )
+		UVRacerManagerScrollPanelGlide:SetSize( 280, 320 )
+		UVRacerManagerScrollPanelGlide:SetPos( 0, 0 )
 		
-		UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
+		UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
 		
 		local RefreshGlide = vgui.Create( "DButton", CPanel )
 		RefreshGlide:SetText( "#refresh" )
 		RefreshGlide:SetSize( 280, 20 )
 		RefreshGlide.DoClick = function( self )
-			UVTrafficManagerScrollPanelGlide:Clear()
+			UVRacerManagerScrollPanelGlide:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
+			UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
+			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(RefreshGlide)
@@ -540,21 +544,21 @@ if CLIENT then
 		DeleteGlide.DoClick = function( self )
 			
 			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/glide/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				if file.Delete( "unitvehicles/glide/racers/"..selecteditem ) then
+					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
+					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
 				end
 			end
 			
-			UVTrafficManagerScrollPanelGlide:Clear()
+			UVRacerManagerScrollPanelGlide:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
+			UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
 		end
 		CPanel:AddItem(DeleteGlide)
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.hl2",
+			Text = "#tool.uvracermanager.settings.global.hl2",
 		})
 		
 		local FrameJeep = vgui.Create( "DFrame" )
@@ -569,20 +573,20 @@ if CLIENT then
 		end
 		CPanel:AddItem(FrameJeep)
 		
-		UVTrafficManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
-		UVTrafficManagerScrollPanelJeep:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanelJeep:SetPos( 0, 0 )
+		UVRacerManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
+		UVRacerManagerScrollPanelJeep:SetSize( 280, 320 )
+		UVRacerManagerScrollPanelJeep:SetPos( 0, 0 )
 		
-		UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
+		UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
 		
 		local RefreshJeep = vgui.Create( "DButton", CPanel )
 		RefreshJeep:SetText( "#refresh" )
 		RefreshJeep:SetSize( 280, 20 )
 		RefreshJeep.DoClick = function( self )
-			UVTrafficManagerScrollPanelJeep:Clear()
+			UVRacerManagerScrollPanelJeep:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
+			UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
+			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(RefreshJeep)
@@ -593,53 +597,73 @@ if CLIENT then
 		DeleteJeep.DoClick = function( self )
 			
 			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/prop_vehicle_jeep/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				if file.Delete( "unitvehicles/prop_vehicle_jeep/racers/"..selecteditem ) then
+					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
+					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
 				end
 			end
 			
-			UVTrafficManagerScrollPanelJeep:Clear()
+			UVRacerManagerScrollPanelJeep:Clear()
 			selecteditem = nil
-			UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
+			UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
 		end
 		CPanel:AddItem(DeleteJeep)
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.base.title",
+			Text = "#tool.uvracermanager.settings.base.title",
 		})
 		
 		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.base.desc",
+			Text = "#tool.uvracermanager.settings.base.desc",
 		})
 
 		local vehiclebase = vgui.Create("DNumSlider")
-		vehiclebase:SetText("#tool.uvtrafficmanager.settings.base")
-		vehiclebase:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
+		vehiclebase:SetText("#tool.uvracermanager.settings.base")
+		vehiclebase:SetTooltip("#tool.uvracermanager.settings.base.desc")
 		vehiclebase:SetMinMax(1, 3)
 		vehiclebase:SetDecimals(0)
-		vehiclebase:SetValue(GetConVar("uvtrafficmanager_vehiclebase"))
-		vehiclebase:SetConVar("uvtrafficmanager_vehiclebase")
+		vehiclebase:SetValue(GetConVar("uvracermanager_vehiclebase"))
+		vehiclebase:SetConVar("uvracermanager_vehiclebase")
 		CPanel:AddItem(vehiclebase)
 
+		CPanel:AddControl("Label", {
+			Text = "#tool.uvracermanager.settings.racers",
+		})
+
+		local assignracers = vgui.Create("DCheckBoxLabel")
+		assignracers:SetText("#tool.uvracermanager.settings.assignracers")
+		assignracers:SetConVar("uvracermanager_assignracers")
+		assignracers:SetTooltip("#tool.uvracermanager.settings.assignracers.desc")
+		assignracers:SetValue(GetConVar("uvracermanager_assignracers"):GetInt())
+		CPanel:AddItem(assignracers)
+
+		-- /// TO BE REPLACED /// --
+		local racers = vgui.Create( "DTextEntry", CPanel )
+		racers:SetPlaceholderText( "#tool.uvracermanager.settings.racers.desc" )
+		racers:SetSize(CPanel:GetWide(), 22)
+		racers:SetValue(GetConVar("uvracermanager_racers"):GetString())
+		racers:SetConVar("uvracermanager_racers")
+		CPanel:AddItem(racers)
+		-- /// --
+
 		local spawncondition = vgui.Create("DNumSlider")
-		spawncondition:SetText("#tool.uvtrafficmanager.settings.spawncondition")
-		spawncondition:SetTooltip("#tool.uvtrafficmanager.settings.spawncondition.desc")
+		spawncondition:SetText("#tool.uvracermanager.settings.spawncondition")
+		spawncondition:SetTooltip("#tool.uvracermanager.settings.spawncondition.desc")
 		spawncondition:SetMinMax(1, 3)
 		spawncondition:SetDecimals(0)
-		spawncondition:SetValue(GetConVar("uvtrafficmanager_spawncondition"))
-		spawncondition:SetConVar("uvtrafficmanager_spawncondition")
+		spawncondition:SetValue(GetConVar("uvracermanager_spawncondition"))
+		spawncondition:SetConVar("uvracermanager_spawncondition")
 		CPanel:AddItem(spawncondition)
 
-		local maxtraffic = vgui.Create("DNumSlider")
-		maxtraffic:SetText("#tool.uvtrafficmanager.settings.maxtraffic")
-		maxtraffic:SetTooltip("#tool.uvtrafficmanager.settings.maxtraffic.desc")
-		maxtraffic:SetMinMax(0, 20)
-		maxtraffic:SetDecimals(0)
-		maxtraffic:SetValue(GetConVar("uvtrafficmanager_maxtraffic"))
-		maxtraffic:SetConVar("uvtrafficmanager_maxtraffic")
-		CPanel:AddItem(maxtraffic)
+		local maxracer = vgui.Create("DNumSlider")
+		maxracer:SetText("#tool.uvracermanager.settings.maxracer")
+		maxracer:SetTooltip("#tool.uvracermanager.settings.maxracer.desc")
+		maxracer:SetMinMax(0, 20)
+		maxracer:SetDecimals(0)
+		maxracer:SetValue(GetConVar("uvracermanager_maxracer"))
+		maxracer:SetConVar("uvracermanager_maxracer")
+		CPanel:AddItem(maxracer)
 		
 	end
 	
@@ -651,16 +675,16 @@ function TOOL:RightClick(trace)
 	local ent = trace.Entity
 	local ply = self:GetOwner()
 	
-	if not istable(ply.UVTrafficTOOLMemory) then 
-		ply.UVTrafficTOOLMemory = {}
+	if not istable(ply.UVRacerTOOLMemory) then 
+		ply.UVRacerTOOLMemory = {}
 	end
 	
 	if ent.IsSimfphyscar or ent.IsGlideVehicle or ent:GetClass() == "prop_vehicle_jeep" then
 		if not IsValid(ent) then 
-			table.Empty( ply.UVTrafficTOOLMemory )
+			table.Empty( ply.UVRacerTOOLMemory )
 			
-			net.Start("UVTrafficManagerGetTrafficInfo")
-			net.WriteTable( ply.UVTrafficTOOLMemory )
+			net.Start("UVRacerManagerGetRacerInfo")
+			net.WriteTable( ply.UVRacerTOOLMemory )
 			net.Send( ply )
 			
 			return false
@@ -670,7 +694,7 @@ function TOOL:RightClick(trace)
 		
 	end
 	
-	net.Start("UVTrafficManagerAdjustTraffic")
+	net.Start("UVRacerManagerAdjustRacer")
 	net.Send(ply)
 	
 	return true
@@ -843,19 +867,19 @@ function TOOL:LeftClick( trace )
 	
 	local ply = self:GetOwner()
 	
-	if not istable(ply.UVTrafficTOOLMemory) then
-		ply:PrintMessage( HUD_PRINTTALK, "Select a Traffic" )
+	if not istable(ply.UVRacerTOOLMemory) then
+		ply:PrintMessage( HUD_PRINTTALK, "Select a Racer" )
 		return 
 	end
 	
-	if ply.UVTrafficTOOLMemory.VehicleBase == "base_glide_car" or ply.UVTrafficTOOLMemory.VehicleBase == "base_glide_motorcycle" then
+	if ply.UVRacerTOOLMemory.VehicleBase == "base_glide_car" or ply.UVRacerTOOLMemory.VehicleBase == "base_glide_motorcycle" then
 		local SpawnCenter = trace.HitPos
-		SpawnCenter.z = SpawnCenter.z - ply.UVTrafficTOOLMemory.Mins.z
+		SpawnCenter.z = SpawnCenter.z - ply.UVRacerTOOLMemory.Mins.z
 		
 		duplicator.SetLocalPos( SpawnCenter+Vector( 0, 0, 50 ) )
 		duplicator.SetLocalAng( Angle( 0, ply:EyeAngles().yaw, 0 ) )
 		
-		local Ents = duplicator.Paste( self:GetOwner(), ply.UVTrafficTOOLMemory.Entities, ply.UVTrafficTOOLMemory.Constraints )
+		local Ents = duplicator.Paste( self:GetOwner(), ply.UVRacerTOOLMemory.Entities, ply.UVRacerTOOLMemory.Constraints )
 		
 		local Ent = nil
 		if next(Ents) ~= nil then
@@ -868,31 +892,31 @@ function TOOL:LeftClick( trace )
 		end
 		
 		if not IsValid( Ent ) then 
-			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVTrafficTOOLMemory.SpawnName .." dosen't seem to be installed!" )
+			PrintMessage( HUD_PRINTTALK, "The vehicle ".. ply.UVRacerTOOLMemory.SpawnName .." dosen't seem to be installed!" )
 			return 
 		end
 
-		if ply.UVTrafficTOOLMemory.SubMaterials then
-			if istable( ply.UVTrafficTOOLMemory.SubMaterials ) then
-				for i = 0, table.Count( ply.UVTrafficTOOLMemory.SubMaterials ) do
-					Ent:SetSubMaterial( i, ply.UVTrafficTOOLMemory.SubMaterials[i] )
+		if ply.UVRacerTOOLMemory.SubMaterials then
+			if istable( ply.UVRacerTOOLMemory.SubMaterials ) then
+				for i = 0, table.Count( ply.UVRacerTOOLMemory.SubMaterials ) do
+					Ent:SetSubMaterial( i, ply.UVRacerTOOLMemory.SubMaterials[i] )
 				end
 			end
 
-			local groups = string.Explode( ",", ply.UVTrafficTOOLMemory.BodyGroups)
+			local groups = string.Explode( ",", ply.UVRacerTOOLMemory.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
 
-			Ent:SetSkin( ply.UVTrafficTOOLMemory.Skin )
+			Ent:SetSkin( ply.UVRacerTOOLMemory.Skin )
 
-			local c = string.Explode( ",", ply.UVTrafficTOOLMemory.Color )
+			local c = string.Explode( ",", ply.UVRacerTOOLMemory.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
 
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 
-			if ply.UVTrafficTOOLMemory.SaveColor then
+			if ply.UVRacerTOOLMemory.SaveColor then
 				Ent:SetColor( Color )
 			else
 				if isfunction(Ent.GetSpawnColor) then
@@ -928,28 +952,28 @@ function TOOL:LeftClick( trace )
 		end
 		
 		undo.SetPlayer( self:GetOwner() )
-		undo.SetCustomUndoText( "Undone Glide Traffic" )
+		undo.SetCustomUndoText( "Undone Glide Racer" )
 		
 		undo.Finish( "Undo (" .. tostring( table.Count( Ents ) ) ..  ")" )
 
 		if cffunctions then
-			Ent.NitrousPower = ply.UVTrafficTOOLMemory.NitrousPower
-			Ent.NitrousDepletionRate = ply.UVTrafficTOOLMemory.NitrousDepletionRate
-			Ent.NitrousRegenRate = ply.UVTrafficTOOLMemory.NitrousRegenRate
-			Ent.NitrousRegenDelay = ply.UVTrafficTOOLMemory.NitrousRegenDelay
-			Ent.NitrousPitchChangeFrequency = ply.UVTrafficTOOLMemory.NitrousPitchChangeFrequency
-			Ent.NitrousPitchMultiplier = ply.UVTrafficTOOLMemory.NitrousPitchMultiplier
-			Ent.NitrousBurst = ply.UVTrafficTOOLMemory.NitrousBurst
-			Ent.NitrousColor = ply.UVTrafficTOOLMemory.NitrousColor
-			Ent.NitrousStartSound = ply.UVTrafficTOOLMemory.NitrousStartSound
-			Ent.NitrousLoopingSound = ply.UVTrafficTOOLMemory.NitrousLoopingSound
-			Ent.NitrousEndSound = ply.UVTrafficTOOLMemory.NitrousEndSound
-			Ent.NitrousEmptySound = ply.UVTrafficTOOLMemory.NitrousEmptySound
-			Ent.NitrousReadyBurstSound = ply.UVTrafficTOOLMemory.NitrousReadyBurstSound
-			Ent.NitrousStartBurstSound = ply.UVTrafficTOOLMemory.NitrousStartBurstSound
-			Ent.NitrousStartBurstAnnotationSound = ply.UVTrafficTOOLMemory.NitrousStartBurstAnnotationSound
-			Ent.CriticalDamageSound = ply.UVTrafficTOOLMemory.CriticalDamageSound
-			Ent:SetNWBool( 'NitrousEnabled', ply.UVTrafficTOOLMemory.NitrousEnabled == nil and true or ply.UVTrafficTOOLMemory.NitrousEnabled )
+			Ent.NitrousPower = ply.UVRacerTOOLMemory.NitrousPower
+			Ent.NitrousDepletionRate = ply.UVRacerTOOLMemory.NitrousDepletionRate
+			Ent.NitrousRegenRate = ply.UVRacerTOOLMemory.NitrousRegenRate
+			Ent.NitrousRegenDelay = ply.UVRacerTOOLMemory.NitrousRegenDelay
+			Ent.NitrousPitchChangeFrequency = ply.UVRacerTOOLMemory.NitrousPitchChangeFrequency
+			Ent.NitrousPitchMultiplier = ply.UVRacerTOOLMemory.NitrousPitchMultiplier
+			Ent.NitrousBurst = ply.UVRacerTOOLMemory.NitrousBurst
+			Ent.NitrousColor = ply.UVRacerTOOLMemory.NitrousColor
+			Ent.NitrousStartSound = ply.UVRacerTOOLMemory.NitrousStartSound
+			Ent.NitrousLoopingSound = ply.UVRacerTOOLMemory.NitrousLoopingSound
+			Ent.NitrousEndSound = ply.UVRacerTOOLMemory.NitrousEndSound
+			Ent.NitrousEmptySound = ply.UVRacerTOOLMemory.NitrousEmptySound
+			Ent.NitrousReadyBurstSound = ply.UVRacerTOOLMemory.NitrousReadyBurstSound
+			Ent.NitrousStartBurstSound = ply.UVRacerTOOLMemory.NitrousStartBurstSound
+			Ent.NitrousStartBurstAnnotationSound = ply.UVRacerTOOLMemory.NitrousStartBurstAnnotationSound
+			Ent.CriticalDamageSound = ply.UVRacerTOOLMemory.CriticalDamageSound
+			Ent:SetNWBool( 'NitrousEnabled', ply.UVRacerTOOLMemory.NitrousEnabled == nil and true or ply.UVRacerTOOLMemory.NitrousEnabled )
 			
 			if Ent.NitrousColor then
 				local r = Ent.NitrousColor.r
@@ -967,12 +991,12 @@ function TOOL:LeftClick( trace )
 			end
 		end
 		
-		Ent.TrafficVehicle = ply
+		Ent.RacerVehicle = ply
 		
 		return true
 		
-	elseif ply.UVTrafficTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
-		local class = ply.UVTrafficTOOLMemory.SpawnName
+	elseif ply.UVRacerTOOLMemory.VehicleBase == "prop_vehicle_jeep" then
+		local class = ply.UVRacerTOOLMemory.SpawnName
 		local vehicles = list.Get("Vehicles")
 		local lst = vehicles[class]
 		if not lst then
@@ -982,7 +1006,7 @@ function TOOL:LeftClick( trace )
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
 		Ent.VehicleTable = lst
-		Ent.VehicleName = ply.UVTrafficTOOLMemory.VehicleName
+		Ent.VehicleName = ply.UVRacerTOOLMemory.VehicleName
 		Ent:SetModel(lst.Model) 
 		Ent:SetPos(trace.HitPos)
 		
@@ -1000,28 +1024,28 @@ function TOOL:LeftClick( trace )
 		local vehicle = Ent
 		gamemode.Call( "PlayerSpawnedVehicle", ply, vehicle ) --Some vehicles has different models implanted together, so do that.
 		
-		if istable( ply.UVTrafficTOOLMemory.SubMaterials ) then
-			for i = 0, table.Count( ply.UVTrafficTOOLMemory.SubMaterials ) do
-				Ent:SetSubMaterial( i, ply.UVTrafficTOOLMemory.SubMaterials[i] )
+		if istable( ply.UVRacerTOOLMemory.SubMaterials ) then
+			for i = 0, table.Count( ply.UVRacerTOOLMemory.SubMaterials ) do
+				Ent:SetSubMaterial( i, ply.UVRacerTOOLMemory.SubMaterials[i] )
 			end
 		end
 		
 		timer.Simple(0.5, function()
 			if not IsValid(Ent) then return end
-			local groups = string.Explode( ",", ply.UVTrafficTOOLMemory.BodyGroups)
+			local groups = string.Explode( ",", ply.UVRacerTOOLMemory.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
 			
-			Ent:SetSkin( ply.UVTrafficTOOLMemory.Skin )
+			Ent:SetSkin( ply.UVRacerTOOLMemory.Skin )
 			
-			local c = string.Explode( ",", ply.UVTrafficTOOLMemory.Color )
+			local c = string.Explode( ",", ply.UVRacerTOOLMemory.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
 			
 			local dot = Color.r * Color.g * Color.b * Color.a
 			Ent.OldColor = dot
 			
-			if ply.UVTrafficTOOLMemory.SaveColor then
+			if ply.UVRacerTOOLMemory.SaveColor then
 				Ent:SetColor( Color )
 			else
 				Color.r = math.random(0, 255)
@@ -1044,13 +1068,13 @@ function TOOL:LeftClick( trace )
 		undo.SetCustomUndoText( "Undone " .. class )
 		undo.Finish( "Vehicle (" .. tostring( class ) .. ")" )
 		
-		Ent.TrafficVehicle = ply
+		Ent.RacerVehicle = ply
 		
 		return true
 		
 	end
 	
-	local vname = ply.UVTrafficTOOLMemory.SpawnName
+	local vname = ply.UVRacerTOOLMemory.SpawnName
 	local Update = false
 	local VehicleList = list.Get( "simfphys_vehicles" )
 	local vehicle = VehicleList[ vname ]
@@ -1090,53 +1114,53 @@ function TOOL:LeftClick( trace )
 	timer.Simple( 0.5, function()
 		if not IsValid(Ent) then return end
 		
-		local tsc = string.Explode( ",", ply.UVTrafficTOOLMemory.TireSmokeColor )
+		local tsc = string.Explode( ",", ply.UVRacerTOOLMemory.TireSmokeColor )
 		Ent:SetTireSmokeColor( Vector( tonumber(tsc[1]), tonumber(tsc[2]), tonumber(tsc[3]) ) )
 		
-		Ent.Turbocharged = tobool( ply.UVTrafficTOOLMemory.HasTurbo )
-		Ent.Supercharged = tobool( ply.UVTrafficTOOLMemory.HasBlower )
+		Ent.Turbocharged = tobool( ply.UVRacerTOOLMemory.HasTurbo )
+		Ent.Supercharged = tobool( ply.UVRacerTOOLMemory.HasBlower )
 		
-		Ent:SetEngineSoundPreset( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.SoundPreset ), -1, 23) )
-		Ent:SetMaxTorque( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.PeakTorque ), 20, 1000) )
-		Ent:SetDifferentialGear( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.FinalGear ),0.2, 6 ) )
+		Ent:SetEngineSoundPreset( math.Clamp( tonumber( ply.UVRacerTOOLMemory.SoundPreset ), -1, 23) )
+		Ent:SetMaxTorque( math.Clamp( tonumber( ply.UVRacerTOOLMemory.PeakTorque ), 20, 1000) )
+		Ent:SetDifferentialGear( math.Clamp( tonumber( ply.UVRacerTOOLMemory.FinalGear ),0.2, 6 ) )
 		
-		Ent:SetSteerSpeed( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.SteerSpeed ), 1, 16 ) )
-		Ent:SetFastSteerAngle( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.SteerAngFast ), 0, 1) )
-		Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.SteerFadeSpeed ), 1, 5000 ) )
+		Ent:SetSteerSpeed( math.Clamp( tonumber( ply.UVRacerTOOLMemory.SteerSpeed ), 1, 16 ) )
+		Ent:SetFastSteerAngle( math.Clamp( tonumber( ply.UVRacerTOOLMemory.SteerAngFast ), 0, 1) )
+		Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( ply.UVRacerTOOLMemory.SteerFadeSpeed ), 1, 5000 ) )
 		
-		Ent:SetEfficiency( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.Efficiency ) ,0.2,4) )
-		Ent:SetMaxTraction( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.MaxTraction ) , 5,1000) )
-		Ent:SetTractionBias( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.GripOffset ),-0.99,0.99) )
-		Ent:SetPowerDistribution( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.PowerDistribution ) ,-1,1) )
+		Ent:SetEfficiency( math.Clamp( tonumber( ply.UVRacerTOOLMemory.Efficiency ) ,0.2,4) )
+		Ent:SetMaxTraction( math.Clamp( tonumber( ply.UVRacerTOOLMemory.MaxTraction ) , 5,1000) )
+		Ent:SetTractionBias( math.Clamp( tonumber( ply.UVRacerTOOLMemory.GripOffset ),-0.99,0.99) )
+		Ent:SetPowerDistribution( math.Clamp( tonumber( ply.UVRacerTOOLMemory.PowerDistribution ) ,-1,1) )
 		
-		Ent:SetBackFire( tobool( ply.UVTrafficTOOLMemory.HasBackfire ) )
-		Ent:SetDoNotStall( tobool( ply.UVTrafficTOOLMemory.DoesntStall ) )
+		Ent:SetBackFire( tobool( ply.UVRacerTOOLMemory.HasBackfire ) )
+		Ent:SetDoNotStall( tobool( ply.UVRacerTOOLMemory.DoesntStall ) )
 		
-		Ent:SetIdleRPM( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.IdleRPM ),1,25000) )
-		Ent:SetLimitRPM( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.MaxRPM ),4,25000) )
-		Ent:SetRevlimiter( tobool( ply.UVTrafficTOOLMemory.HasRevLimiter ) )
-		Ent:SetPowerBandEnd( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.PowerEnd ), 3, 25000) )
-		Ent:SetPowerBandStart( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.PowerStart ) ,2 ,25000) )
+		Ent:SetIdleRPM( math.Clamp( tonumber( ply.UVRacerTOOLMemory.IdleRPM ),1,25000) )
+		Ent:SetLimitRPM( math.Clamp( tonumber( ply.UVRacerTOOLMemory.MaxRPM ),4,25000) )
+		Ent:SetRevlimiter( tobool( ply.UVRacerTOOLMemory.HasRevLimiter ) )
+		Ent:SetPowerBandEnd( math.Clamp( tonumber( ply.UVRacerTOOLMemory.PowerEnd ), 3, 25000) )
+		Ent:SetPowerBandStart( math.Clamp( tonumber( ply.UVRacerTOOLMemory.PowerStart ) ,2 ,25000) )
 		
 		Ent:SetTurboCharged( Ent.Turbocharged )
 		Ent:SetSuperCharged( Ent.Supercharged )
-		Ent:SetBrakePower( math.Clamp( tonumber( ply.UVTrafficTOOLMemory.BrakePower ), 0.1, 500) )
+		Ent:SetBrakePower( math.Clamp( tonumber( ply.UVRacerTOOLMemory.BrakePower ), 0.1, 500) )
 		
-		Ent:SetSoundoverride( ply.UVTrafficTOOLMemory.SoundOverride or "" )
+		Ent:SetSoundoverride( ply.UVRacerTOOLMemory.SoundOverride or "" )
 		
 		Ent:SetLights_List( Ent.LightsTable or "no_lights" )
 				
-		Ent.snd_horn = ply.UVTrafficTOOLMemory.HornSound
+		Ent.snd_horn = ply.UVRacerTOOLMemory.HornSound
 		
-		Ent.snd_blowoff = ply.UVTrafficTOOLMemory.snd_blowoff
-		Ent.snd_spool = ply.UVTrafficTOOLMemory.snd_spool
-		Ent.snd_bloweron = ply.UVTrafficTOOLMemory.snd_bloweron
-		Ent.snd_bloweroff = ply.UVTrafficTOOLMemory.snd_bloweroff
+		Ent.snd_blowoff = ply.UVRacerTOOLMemory.snd_blowoff
+		Ent.snd_spool = ply.UVRacerTOOLMemory.snd_spool
+		Ent.snd_bloweron = ply.UVRacerTOOLMemory.snd_bloweron
+		Ent.snd_bloweroff = ply.UVRacerTOOLMemory.snd_bloweroff
 		
-		Ent:SetBackfireSound( ply.UVTrafficTOOLMemory.backfiresound or "" )
+		Ent:SetBackfireSound( ply.UVRacerTOOLMemory.backfiresound or "" )
 		
 		local Gears = {}
-		local Data = string.Explode( ",", ply.UVTrafficTOOLMemory.Gears  )
+		local Data = string.Explode( ",", ply.UVRacerTOOLMemory.Gears  )
 		for i = 1, table.Count( Data ) do 
 			local gRatio = tonumber( Data[i] )
 			
@@ -1154,17 +1178,17 @@ function TOOL:LeftClick( trace )
 		end
 		Ent.Gears = Gears
 		
-		if istable( ply.UVTrafficTOOLMemory.SubMaterials ) then
-			for i = 0, table.Count( ply.UVTrafficTOOLMemory.SubMaterials ) do
-				Ent:SetSubMaterial( i, ply.UVTrafficTOOLMemory.SubMaterials[i] )
+		if istable( ply.UVRacerTOOLMemory.SubMaterials ) then
+			for i = 0, table.Count( ply.UVRacerTOOLMemory.SubMaterials ) do
+				Ent:SetSubMaterial( i, ply.UVRacerTOOLMemory.SubMaterials[i] )
 			end
 		end
 		
-		if ply.UVTrafficTOOLMemory.FrontDampingOverride and ply.UVTrafficTOOLMemory.FrontConstantOverride and ply.UVTrafficTOOLMemory.RearDampingOverride and ply.UVTrafficTOOLMemory.RearConstantOverride then
-			Ent.FrontDampingOverride = tonumber( ply.UVTrafficTOOLMemory.FrontDampingOverride )
-			Ent.FrontConstantOverride = tonumber( ply.UVTrafficTOOLMemory.FrontConstantOverride )
-			Ent.RearDampingOverride = tonumber( ply.UVTrafficTOOLMemory.RearDampingOverride )
-			Ent.RearConstantOverride = tonumber( ply.UVTrafficTOOLMemory.RearConstantOverride )
+		if ply.UVRacerTOOLMemory.FrontDampingOverride and ply.UVRacerTOOLMemory.FrontConstantOverride and ply.UVRacerTOOLMemory.RearDampingOverride and ply.UVRacerTOOLMemory.RearConstantOverride then
+			Ent.FrontDampingOverride = tonumber( ply.UVRacerTOOLMemory.FrontDampingOverride )
+			Ent.FrontConstantOverride = tonumber( ply.UVRacerTOOLMemory.FrontConstantOverride )
+			Ent.RearDampingOverride = tonumber( ply.UVRacerTOOLMemory.RearDampingOverride )
+			Ent.RearConstantOverride = tonumber( ply.UVRacerTOOLMemory.RearConstantOverride )
 			
 			local data = {
 				[1] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
@@ -1199,23 +1223,23 @@ function TOOL:LeftClick( trace )
 			end
 		end
 		
-		Ent:SetFrontSuspensionHeight( tonumber( ply.UVTrafficTOOLMemory.FrontHeight ) )
-		Ent:SetRearSuspensionHeight( tonumber( ply.UVTrafficTOOLMemory.RearHeight ) )
+		Ent:SetFrontSuspensionHeight( tonumber( ply.UVRacerTOOLMemory.FrontHeight ) )
+		Ent:SetRearSuspensionHeight( tonumber( ply.UVRacerTOOLMemory.RearHeight ) )
 		
-		local groups = string.Explode( ",", ply.UVTrafficTOOLMemory.BodyGroups)
+		local groups = string.Explode( ",", ply.UVRacerTOOLMemory.BodyGroups)
 		for i = 1, table.Count( groups ) do
 			Ent:SetBodygroup(i, tonumber(groups[i]) )
 		end
 		
-		Ent:SetSkin( ply.UVTrafficTOOLMemory.Skin )
+		Ent:SetSkin( ply.UVRacerTOOLMemory.Skin )
 		
-		local c = string.Explode( ",", ply.UVTrafficTOOLMemory.Color )
+		local c = string.Explode( ",", ply.UVRacerTOOLMemory.Color )
 		local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
 		
 		local dot = Color.r * Color.g * Color.b * Color.a
 		Ent.OldColor = dot
 		
-		if ply.UVTrafficTOOLMemory.SaveColor then
+		if ply.UVRacerTOOLMemory.SaveColor then
 			Ent:SetColor( Color )
 		else
 			Color.r = math.random(0, 255)
@@ -1294,17 +1318,17 @@ function TOOL:LeftClick( trace )
 			if Ent.GhostWheels then
 				timer.Simple( Update and 0.25 or 0, function()
 					if not IsValid( Ent ) then return end
-					if ply.UVTrafficTOOLMemory.WheelTool_Foffset and ply.UVTrafficTOOLMemory.WheelTool_Roffset then
-						SetWheelOffset( Ent, ply.UVTrafficTOOLMemory.WheelTool_Foffset, ply.UVTrafficTOOLMemory.WheelTool_Roffset )
+					if ply.UVRacerTOOLMemory.WheelTool_Foffset and ply.UVRacerTOOLMemory.WheelTool_Roffset then
+						SetWheelOffset( Ent, ply.UVRacerTOOLMemory.WheelTool_Foffset, ply.UVRacerTOOLMemory.WheelTool_Roffset )
 					end
 					
-					if not ply.UVTrafficTOOLMemory.FrontWheelOverride and not ply.UVTrafficTOOLMemory.RearWheelOverride then return end
+					if not ply.UVRacerTOOLMemory.FrontWheelOverride and not ply.UVRacerTOOLMemory.RearWheelOverride then return end
 					
-					local front_model = ply.UVTrafficTOOLMemory.FrontWheelOverride or vehicle.Members.CustomWheelModel
+					local front_model = ply.UVRacerTOOLMemory.FrontWheelOverride or vehicle.Members.CustomWheelModel
 					local front_angle = GetAngleFromSpawnlist(front_model)
 					
-					local camber = ply.UVTrafficTOOLMemory.Camber or 0
-					local rear_model = ply.UVTrafficTOOLMemory.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
+					local camber = ply.UVRacerTOOLMemory.Camber or 0
+					local rear_model = ply.UVRacerTOOLMemory.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
 					local rear_angle = GetAngleFromSpawnlist(rear_model)
 					
 					if not front_model or not rear_model or not front_angle or not rear_angle then return end
@@ -1319,7 +1343,7 @@ function TOOL:LeftClick( trace )
 			end
 		end
 		
-		Ent.TrafficVehicle = ply
+		Ent.RacerVehicle = ply
 		
 	end)
 	
@@ -1328,66 +1352,66 @@ end
 
 function TOOL:GetVehicleData( ent, ply )
 	if not IsValid(ent) then return end
-	if not istable(ply.UVTrafficTOOLMemory) then ply.UVTrafficTOOLMemory = {} end
+	if not istable(ply.UVRacerTOOLMemory) then ply.UVRacerTOOLMemory = {} end
 	
-	table.Empty( ply.UVTrafficTOOLMemory )
+	table.Empty( ply.UVRacerTOOLMemory )
 	
 	if ent.IsSimfphyscar then
-		ply.UVTrafficTOOLMemory.VehicleBase = ent:GetClass()
-		ply.UVTrafficTOOLMemory.SpawnName = ent:GetSpawn_List()
-		ply.UVTrafficTOOLMemory.SteerSpeed = ent:GetSteerSpeed()
-		ply.UVTrafficTOOLMemory.SteerFadeSpeed = ent:GetFastSteerConeFadeSpeed()
-		ply.UVTrafficTOOLMemory.SteerAngFast = ent:GetFastSteerAngle()
-		ply.UVTrafficTOOLMemory.SoundPreset = ent:GetEngineSoundPreset()
-		ply.UVTrafficTOOLMemory.IdleRPM = ent:GetIdleRPM()
-		ply.UVTrafficTOOLMemory.MaxRPM = ent:GetLimitRPM()
-		ply.UVTrafficTOOLMemory.PowerStart = ent:GetPowerBandStart()
-		ply.UVTrafficTOOLMemory.PowerEnd = ent:GetPowerBandEnd()
-		ply.UVTrafficTOOLMemory.PeakTorque = ent:GetMaxTorque()
-		ply.UVTrafficTOOLMemory.HasTurbo = ent:GetTurboCharged()
-		ply.UVTrafficTOOLMemory.HasBlower = ent:GetSuperCharged()
-		ply.UVTrafficTOOLMemory.HasRevLimiter = ent:GetRevlimiter()
-		ply.UVTrafficTOOLMemory.HasBulletProofTires = ent:GetBulletProofTires()
-		ply.UVTrafficTOOLMemory.MaxTraction = ent:GetMaxTraction()
-		ply.UVTrafficTOOLMemory.GripOffset = ent:GetTractionBias()
-		ply.UVTrafficTOOLMemory.BrakePower = ent:GetBrakePower()
-		ply.UVTrafficTOOLMemory.PowerDistribution = ent:GetPowerDistribution()
-		ply.UVTrafficTOOLMemory.Efficiency = ent:GetEfficiency()
-		ply.UVTrafficTOOLMemory.HornSound = ent.snd_horn
-		ply.UVTrafficTOOLMemory.HasBackfire = ent:GetBackFire()
-		ply.UVTrafficTOOLMemory.DoesntStall = ent:GetDoNotStall()
-		ply.UVTrafficTOOLMemory.SoundOverride = ent:GetSoundoverride()
+		ply.UVRacerTOOLMemory.VehicleBase = ent:GetClass()
+		ply.UVRacerTOOLMemory.SpawnName = ent:GetSpawn_List()
+		ply.UVRacerTOOLMemory.SteerSpeed = ent:GetSteerSpeed()
+		ply.UVRacerTOOLMemory.SteerFadeSpeed = ent:GetFastSteerConeFadeSpeed()
+		ply.UVRacerTOOLMemory.SteerAngFast = ent:GetFastSteerAngle()
+		ply.UVRacerTOOLMemory.SoundPreset = ent:GetEngineSoundPreset()
+		ply.UVRacerTOOLMemory.IdleRPM = ent:GetIdleRPM()
+		ply.UVRacerTOOLMemory.MaxRPM = ent:GetLimitRPM()
+		ply.UVRacerTOOLMemory.PowerStart = ent:GetPowerBandStart()
+		ply.UVRacerTOOLMemory.PowerEnd = ent:GetPowerBandEnd()
+		ply.UVRacerTOOLMemory.PeakTorque = ent:GetMaxTorque()
+		ply.UVRacerTOOLMemory.HasTurbo = ent:GetTurboCharged()
+		ply.UVRacerTOOLMemory.HasBlower = ent:GetSuperCharged()
+		ply.UVRacerTOOLMemory.HasRevLimiter = ent:GetRevlimiter()
+		ply.UVRacerTOOLMemory.HasBulletProofTires = ent:GetBulletProofTires()
+		ply.UVRacerTOOLMemory.MaxTraction = ent:GetMaxTraction()
+		ply.UVRacerTOOLMemory.GripOffset = ent:GetTractionBias()
+		ply.UVRacerTOOLMemory.BrakePower = ent:GetBrakePower()
+		ply.UVRacerTOOLMemory.PowerDistribution = ent:GetPowerDistribution()
+		ply.UVRacerTOOLMemory.Efficiency = ent:GetEfficiency()
+		ply.UVRacerTOOLMemory.HornSound = ent.snd_horn
+		ply.UVRacerTOOLMemory.HasBackfire = ent:GetBackFire()
+		ply.UVRacerTOOLMemory.DoesntStall = ent:GetDoNotStall()
+		ply.UVRacerTOOLMemory.SoundOverride = ent:GetSoundoverride()
 		
-		ply.UVTrafficTOOLMemory.FrontHeight = ent:GetFrontSuspensionHeight()
-		ply.UVTrafficTOOLMemory.RearHeight = ent:GetRearSuspensionHeight()
+		ply.UVRacerTOOLMemory.FrontHeight = ent:GetFrontSuspensionHeight()
+		ply.UVRacerTOOLMemory.RearHeight = ent:GetRearSuspensionHeight()
 		
-		ply.UVTrafficTOOLMemory.Camber = ent.Camber or 0
+		ply.UVRacerTOOLMemory.Camber = ent.Camber or 0
 		
 		if ent.FrontDampingOverride and ent.FrontConstantOverride and ent.RearDampingOverride and ent.RearConstantOverride then
-			ply.UVTrafficTOOLMemory.FrontDampingOverride = ent.FrontDampingOverride
-			ply.UVTrafficTOOLMemory.FrontConstantOverride = ent.FrontConstantOverride
-			ply.UVTrafficTOOLMemory.RearDampingOverride = ent.RearDampingOverride
-			ply.UVTrafficTOOLMemory.RearConstantOverride = ent.RearConstantOverride
+			ply.UVRacerTOOLMemory.FrontDampingOverride = ent.FrontDampingOverride
+			ply.UVRacerTOOLMemory.FrontConstantOverride = ent.FrontConstantOverride
+			ply.UVRacerTOOLMemory.RearDampingOverride = ent.RearDampingOverride
+			ply.UVRacerTOOLMemory.RearConstantOverride = ent.RearConstantOverride
 		end
 		
 		if ent.CustomWheels then
 			if ent.GhostWheels then
 				if IsValid(ent.GhostWheels[1]) then
-					ply.UVTrafficTOOLMemory.FrontWheelOverride = ent.GhostWheels[1]:GetModel()
+					ply.UVRacerTOOLMemory.FrontWheelOverride = ent.GhostWheels[1]:GetModel()
 				elseif IsValid(ent.GhostWheels[2]) then
-					ply.UVTrafficTOOLMemory.FrontWheelOverride = ent.GhostWheels[2]:GetModel()
+					ply.UVRacerTOOLMemory.FrontWheelOverride = ent.GhostWheels[2]:GetModel()
 				end
 				
 				if IsValid(ent.GhostWheels[3]) then
-					ply.UVTrafficTOOLMemory.RearWheelOverride = ent.GhostWheels[3]:GetModel()
+					ply.UVRacerTOOLMemory.RearWheelOverride = ent.GhostWheels[3]:GetModel()
 				elseif IsValid(ent.GhostWheels[4]) then
-					ply.UVTrafficTOOLMemory.RearWheelOverride = ent.GhostWheels[4]:GetModel()
+					ply.UVRacerTOOLMemory.RearWheelOverride = ent.GhostWheels[4]:GetModel()
 				end
 			end
 		end
 		
 		local tsc = ent:GetTireSmokeColor()
-		ply.UVTrafficTOOLMemory.TireSmokeColor = tsc.r..","..tsc.g..","..tsc.b
+		ply.UVRacerTOOLMemory.TireSmokeColor = tsc.r..","..tsc.g..","..tsc.b
 		
 		local Gears = ""
 		for _,v in pairs(ent.Gears) do
@@ -1395,168 +1419,168 @@ function TOOL:GetVehicleData( ent, ply )
 		end
 		
 		local c = ent:GetColor()
-		ply.UVTrafficTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
+		ply.UVRacerTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
 		
 		local bodygroups = {}
 		for k,v in pairs(ent:GetBodyGroups()) do
 			bodygroups[k] = ent:GetBodygroup( k ) 
 		end
 		
-		ply.UVTrafficTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
+		ply.UVRacerTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
 		
-		ply.UVTrafficTOOLMemory.Skin = ent:GetSkin()
+		ply.UVRacerTOOLMemory.Skin = ent:GetSkin()
 		
-		ply.UVTrafficTOOLMemory.Gears = Gears
-		ply.UVTrafficTOOLMemory.FinalGear = ent:GetDifferentialGear()
+		ply.UVRacerTOOLMemory.Gears = Gears
+		ply.UVRacerTOOLMemory.FinalGear = ent:GetDifferentialGear()
 		
 		if ent.WheelTool_Foffset then
-			ply.UVTrafficTOOLMemory.WheelTool_Foffset = ent.WheelTool_Foffset
+			ply.UVRacerTOOLMemory.WheelTool_Foffset = ent.WheelTool_Foffset
 		end
 		
 		if ent.WheelTool_Roffset then
-			ply.UVTrafficTOOLMemory.WheelTool_Roffset = ent.WheelTool_Roffset
+			ply.UVRacerTOOLMemory.WheelTool_Roffset = ent.WheelTool_Roffset
 		end
 		
 		if ent.snd_blowoff then
-			ply.UVTrafficTOOLMemory.snd_blowoff = ent.snd_blowoff
+			ply.UVRacerTOOLMemory.snd_blowoff = ent.snd_blowoff
 		end
 		
 		if ent.snd_spool then
-			ply.UVTrafficTOOLMemory.snd_spool = ent.snd_spool
+			ply.UVRacerTOOLMemory.snd_spool = ent.snd_spool
 		end
 		
 		if ent.snd_bloweron then
-			ply.UVTrafficTOOLMemory.snd_bloweron = ent.snd_bloweron
+			ply.UVRacerTOOLMemory.snd_bloweron = ent.snd_bloweron
 		end
 		
 		if ent.snd_bloweroff then
-			ply.UVTrafficTOOLMemory.snd_bloweroff = ent.snd_bloweroff
+			ply.UVRacerTOOLMemory.snd_bloweroff = ent.snd_bloweroff
 		end
 		
-		ply.UVTrafficTOOLMemory.backfiresound = ent:GetBackfireSound()
+		ply.UVRacerTOOLMemory.backfiresound = ent:GetBackfireSound()
 		
-		ply.UVTrafficTOOLMemory.SubMaterials = {}
+		ply.UVRacerTOOLMemory.SubMaterials = {}
 		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
-			ply.UVTrafficTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
+			ply.UVRacerTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
 	elseif ent.IsGlideVehicle then
 		local pos = ent:GetPos()
 		duplicator.SetLocalPos( pos )
 		
-		ply.UVTrafficTOOLMemory = duplicator.Copy( ent )
+		ply.UVRacerTOOLMemory = duplicator.Copy( ent )
 
-		PrintTable(ply.UVTrafficTOOLMemory)
+		PrintTable(ply.UVRacerTOOLMemory)
 		
 		duplicator.SetLocalPos( vector_origin )
 		duplicator.SetLocalAng( angle_zero )
 		
-		if ( not ply.UVTrafficTOOLMemory ) then return false end
+		if ( not ply.UVRacerTOOLMemory ) then return false end
 
-		for _, v in pairs(ply.UVTrafficTOOLMemory.Constraints) do
+		for _, v in pairs(ply.UVRacerTOOLMemory.Constraints) do
 			if v.OnDieFunctions then
 				v.OnDieFunctions = nil
 			end
 		end
 		
 		local Key = "VehicleBase"
-		ply.UVTrafficTOOLMemory[Key] = ent.Base
+		ply.UVRacerTOOLMemory[Key] = ent.Base
 		local Key2 = "SpawnName"
-		ply.UVTrafficTOOLMemory[Key2] = ent:GetClass()
-		ply.UVTrafficTOOLMemory.Mins = Vector(ply.UVTrafficTOOLMemory.Mins.x,ply.UVTrafficTOOLMemory.Mins.y,0)
+		ply.UVRacerTOOLMemory[Key2] = ent:GetClass()
+		ply.UVRacerTOOLMemory.Mins = Vector(ply.UVRacerTOOLMemory.Mins.x,ply.UVRacerTOOLMemory.Mins.y,0)
 
-		-- for _,v in pairs(ply.UVTrafficTOOLMemory.Entities) do
+		-- for _,v in pairs(ply.UVRacerTOOLMemory.Entities) do
 		-- 	v.Angle = 0
 		-- 	v.PhysicsObjects[0].Angle = 0
 		-- end
 		
 		if not ent.Sockets or next(ent.Sockets) == nil then --Not a semi
-			ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].Angle = Angle(0,180,0)
+			ply.UVRacerTOOLMemory.Entities[next(ply.UVRacerTOOLMemory.Entities)].Angle = Angle(0,180,0)
 		end
-		-- ply.UVTrafficTOOLMemory.Entities[next(ply.UVTrafficTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
+		-- ply.UVRacerTOOLMemory.Entities[next(ply.UVRacerTOOLMemory.Entities)].PhysicsObjects[0].Angle = Angle(0,180,0)
 
 		local c = ent:GetColor()
-		ply.UVTrafficTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
+		ply.UVRacerTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
 		
 		local bodygroups = {}
 		for k,v in pairs(ent:GetBodyGroups()) do
 			bodygroups[k] = ent:GetBodygroup( k ) 
 		end
 		
-		ply.UVTrafficTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
+		ply.UVRacerTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
 		
-		ply.UVTrafficTOOLMemory.Skin = ent:GetSkin()
+		ply.UVRacerTOOLMemory.Skin = ent:GetSkin()
 		
-		ply.UVTrafficTOOLMemory.SubMaterials = {}
+		ply.UVRacerTOOLMemory.SubMaterials = {}
 		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
-			ply.UVTrafficTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
+			ply.UVRacerTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
 
 		if cffunctions then
-			ply.UVTrafficTOOLMemory.NitrousPower = ent.NitrousPower or 2
-			ply.UVTrafficTOOLMemory.NitrousDepletionRate = ent.NitrousDepletionRate or 0.5
-			ply.UVTrafficTOOLMemory.NitrousRegenRate = ent.NitrousRegenRate or 0.1
-			ply.UVTrafficTOOLMemory.NitrousRegenDelay = ent.NitrousRegenDelay or 2
-			ply.UVTrafficTOOLMemory.NitrousPitchChangeFrequency = ent.NitrousPitchChangeFrequency or 1 
-			ply.UVTrafficTOOLMemory.NitrousPitchMultiplier = ent.NitrousPitchMultiplier or 0.2
-			ply.UVTrafficTOOLMemory.NitrousBurst = ent.NitrousBurst or false
-			ply.UVTrafficTOOLMemory.NitrousColor = ent.NitrousColor or Color(35, 204, 255)
-			ply.UVTrafficTOOLMemory.NitrousStartSound = ent.NitrousStartSound or "glide_nitrous/nitrous_burst.wav"
-			ply.UVTrafficTOOLMemory.NitrousLoopingSound = ent.NitrousLoopingSound or "glide_nitrous/nitrous_burst.wav"
-			ply.UVTrafficTOOLMemory.NitrousEndSound = ent.NitrousEndSound or "glide_nitrous/nitrous_activation_whine.wav"
-			ply.UVTrafficTOOLMemory.NitrousEmptySound = ent.NitrousEmptySound or "glide_nitrous/nitrous_empty.wav"
-			ply.UVTrafficTOOLMemory.NitrousReadyBurstSound = ent.NitrousReadyBurstSound or "glide_nitrous/nitrous_burst/ready/ready.wav"
-			ply.UVTrafficTOOLMemory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
-			ply.UVTrafficTOOLMemory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
-			ply.UVTrafficTOOLMemory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
-			ply.UVTrafficTOOLMemory.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
+			ply.UVRacerTOOLMemory.NitrousPower = ent.NitrousPower or 2
+			ply.UVRacerTOOLMemory.NitrousDepletionRate = ent.NitrousDepletionRate or 0.5
+			ply.UVRacerTOOLMemory.NitrousRegenRate = ent.NitrousRegenRate or 0.1
+			ply.UVRacerTOOLMemory.NitrousRegenDelay = ent.NitrousRegenDelay or 2
+			ply.UVRacerTOOLMemory.NitrousPitchChangeFrequency = ent.NitrousPitchChangeFrequency or 1 
+			ply.UVRacerTOOLMemory.NitrousPitchMultiplier = ent.NitrousPitchMultiplier or 0.2
+			ply.UVRacerTOOLMemory.NitrousBurst = ent.NitrousBurst or false
+			ply.UVRacerTOOLMemory.NitrousColor = ent.NitrousColor or Color(35, 204, 255)
+			ply.UVRacerTOOLMemory.NitrousStartSound = ent.NitrousStartSound or "glide_nitrous/nitrous_burst.wav"
+			ply.UVRacerTOOLMemory.NitrousLoopingSound = ent.NitrousLoopingSound or "glide_nitrous/nitrous_burst.wav"
+			ply.UVRacerTOOLMemory.NitrousEndSound = ent.NitrousEndSound or "glide_nitrous/nitrous_activation_whine.wav"
+			ply.UVRacerTOOLMemory.NitrousEmptySound = ent.NitrousEmptySound or "glide_nitrous/nitrous_empty.wav"
+			ply.UVRacerTOOLMemory.NitrousReadyBurstSound = ent.NitrousReadyBurstSound or "glide_nitrous/nitrous_burst/ready/ready.wav"
+			ply.UVRacerTOOLMemory.NitrousStartBurstSound = ent.NitrousStartBurstSound or file.Find("sound/glide_nitrous/nitrous_burst/*", "GAME")
+			ply.UVRacerTOOLMemory.NitrousStartBurstAnnotationSound = ent.NitrousStartBurstAnnotationSound or file.Find("sound/glide_nitrous/nitrous_burst/annotation/*", "GAME")
+			ply.UVRacerTOOLMemory.CriticalDamageSound = ent.CriticalDamageSound or "glide_healthbar/criticaldamage.wav"
+			ply.UVRacerTOOLMemory.NitrousEnabled = ent:GetNWBool( 'NitrousEnabled' )
 		end
 		
 	elseif ent:GetClass() == "prop_vehicle_jeep" then
-		ply.UVTrafficTOOLMemory.VehicleBase = ent:GetClass()
-		ply.UVTrafficTOOLMemory.SpawnName = ent:GetVehicleClass()
-		ply.UVTrafficTOOLMemory.VehicleName = ent.VehicleName
+		ply.UVRacerTOOLMemory.VehicleBase = ent:GetClass()
+		ply.UVRacerTOOLMemory.SpawnName = ent:GetVehicleClass()
+		ply.UVRacerTOOLMemory.VehicleName = ent.VehicleName
 		
-		if not ply.UVTrafficTOOLMemory.SpawnName then 
+		if not ply.UVRacerTOOLMemory.SpawnName then 
 			print("This vehicle dosen't have a vehicle class set" )
 			return 
 		end
 		
 		local c = ent:GetColor()
-		ply.UVTrafficTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
+		ply.UVRacerTOOLMemory.Color = c.r..","..c.g..","..c.b..","..c.a
 		
 		local bodygroups = {}
 		for k,v in pairs(ent:GetBodyGroups()) do
 			bodygroups[k] = ent:GetBodygroup( k ) 
 		end
 		
-		ply.UVTrafficTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
+		ply.UVRacerTOOLMemory.BodyGroups = string.Implode( ",", bodygroups)
 		
-		ply.UVTrafficTOOLMemory.Skin = ent:GetSkin()
+		ply.UVRacerTOOLMemory.Skin = ent:GetSkin()
 		
-		ply.UVTrafficTOOLMemory.SubMaterials = {}
+		ply.UVRacerTOOLMemory.SubMaterials = {}
 		for i = 0, (table.Count( ent:GetMaterials() ) - 1) do
-			ply.UVTrafficTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
+			ply.UVRacerTOOLMemory.SubMaterials[i] = ent:GetSubMaterial( i )
 		end
 	end
 	
 	if not IsValid( ply ) then return end
 
-	if ply.UVTrafficTOOLMemory.Entities then
-		for _, v in pairs(ply.UVTrafficTOOLMemory.Entities) do
+	if ply.UVRacerTOOLMemory.Entities then
+		for _, v in pairs(ply.UVRacerTOOLMemory.Entities) do
 			v.OnDieFunctions = nil
 			v.AutomaticFrameAdvance = nil
 			v.BaseClass = nil
 		end
 	end
 
-	if ply.UVTrafficTOOLMemory.Constraints then
-		for _, v in pairs(ply.UVTrafficTOOLMemory.Constraints) do
+	if ply.UVRacerTOOLMemory.Constraints then
+		for _, v in pairs(ply.UVRacerTOOLMemory.Constraints) do
 			v.OnDieFunctions = nil
 		end
 	end
 	
-	net.Start("UVTrafficManagerGetTrafficInfo")
-	net.WriteTable( ply.UVTrafficTOOLMemory )
+	net.Start("UVRacerManagerGetRacerInfo")
+	net.WriteTable( ply.UVRacerTOOLMemory )
 	net.Send( ply )
 	
 end

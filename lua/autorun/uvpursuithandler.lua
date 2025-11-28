@@ -1055,6 +1055,13 @@ if SERVER then
 	UVTSpawnCondition = CreateConVar("unitvehicle_traffic_spawncondition", 2, {FCVAR_ARCHIVE}, "\n1) Never \n2) When driving \n3) Always")
 	UVTMaxTraffic = CreateConVar("unitvehicle_traffic_maxtraffic", 5, {FCVAR_ARCHIVE}, "Max amount of Traffic Vehicles roaming.")
 
+	--racer convars
+	UVRVehicleBase = CreateConVar("unitvehicle_racer_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+	UVRAssignRacers = CreateConVar("unitvehicle_racer_assignracers", 0, {FCVAR_ARCHIVE}, "Spawns Racer Vehicles only from the list. Otherwise, spawns a random Racer Vehicle from the database.")
+	UVRRacers = CreateConVar("unitvehicle_racer_racers", "", {FCVAR_ARCHIVE}, "Assigned Racer Vehicles")
+	UVRSpawnCondition = CreateConVar("unitvehicle_racer_spawncondition", 1, {FCVAR_ARCHIVE}, "\n1) Never \n2) When driving \n3) Always")
+	UVRMaxRacer = CreateConVar("unitvehicle_racer_maxracer", 5, {FCVAR_ARCHIVE}, "Max amount of Racer Vehicles roaming.")
+
 	--unit convars
 	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 
@@ -1188,7 +1195,6 @@ if SERVER then
 		UVTargeting = nil
 		UVResetStats()
 		UVPresenceMode = false
-		UVRacerPresenceMode = false
 		UVCallLocation = nil
 		uvcallexists = nil
 		UVHiding = nil
@@ -1336,7 +1342,7 @@ if SERVER then
 		local ltimeout = (UVCooldownTimer+5)
 
 		--Idle presence
-		if not UVTargeting and (UVPresenceMode or UVRacerPresenceMode) and uvIdleSpawning - CurTime() + 5 <= 0 then
+		if not UVTargeting and (UVPresenceMode) and uvIdleSpawning - CurTime() + 5 <= 0 then
 			HandleVehicleSpawning(true)
 			uvIdleSpawning = CurTime()
 		end
@@ -2173,7 +2179,6 @@ if SERVER then
 				UVHUDBusting = nil
 				net.Start( "UVHUDStopBusting" )
 				net.Broadcast()
-				UVRacerPresenceMode = false
 				if timer.Exists("UVTimeTillNextHeat") then
 					timer.Pause("UVTimeTillNextHeat")
 				end
@@ -5333,11 +5338,6 @@ else -- CLIENT Settings | HUD/Options
 			-- panel:AddControl("Header", {Description = "——— Pursuit ———"})
 			panel:Button( "#uv.settings.pm.pursuit.start", "uv_startpursuit")
 			panel:Button( "#uv.settings.pm.pursuit.stop", "uv_stoppursuit")
-
-			panel:Help("#uv.settings.pm.racers")
-			-- panel:AddControl("Header", {Description = "——— Racers ———"})
-			panel:Button( "#uv.settings.hor.start", "uv_racershordestart")
-			panel:Button( "#uv.settings.hor.stop", "uv_racershordestop")
 
 			panel:Help("#uv.settings.pm.misc")
 			-- panel:AddControl("Header", {Description = "——— Misc ———"})

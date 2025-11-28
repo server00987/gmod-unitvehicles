@@ -201,6 +201,9 @@ if SERVER then
 		end
 	end
 	concommand.Add("uvrace_startinvite", StartRaceInvite)
+	concommand.Add("uvrace_spawnai", function()
+		UVAutoSpawnRacer()
+	end)
 	
 	local function ImportExportText(name, export, ply)
 		local nick = ply:Nick():lower():Replace(" ", "_")
@@ -1107,6 +1110,7 @@ function TOOL.BuildCPanel(panel)
 	end
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.stop", Command = "uvrace_stop"})
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.invite", Command = "uvrace_startinvite"})
+	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.spawnai", Command = "uvrace_spawnai"})
 	
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.saveloadrace", Description = "Race"})
 	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.loadrace", Command = "uvrace_queryimport" })

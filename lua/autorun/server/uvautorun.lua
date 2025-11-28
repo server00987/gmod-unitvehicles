@@ -220,6 +220,10 @@ NETWORK_STRINGS = {
 	-- Traffic Manager
 	"UVTrafficManagerAdjustTraffic",
 	"UVTrafficManagerGetTrafficInfo",
+
+	-- Racer Manager
+	"UVRacerManagerAdjustRacer",
+	"UVRacerManagerGetRacerInfo",
 	
 	-- Racers
 	"UVUpdateRacerName",
@@ -466,28 +470,6 @@ concommand.Add("uv_stoppursuit", function(ply)
 	UVCounterActive = false
 end)
 
-concommand.Add("uv_racershordestart", function(ply)
-	if not ply:IsSuperAdmin() then return end
-	PrintMessage( HUD_PRINTTALK, "Starting a horde of Racers!" )
-	
-	UVApplyHeatLevel()
-	UVAutoSpawnRacer(ply)
-	
-	uvIdleSpawning = CurTime()
-	UVRacerPresenceMode = true
-	
-	UVRestoreResourcePoints()
-	
-	ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
-	RunConsoleCommand("ai_ignoreplayers", "0")
-end)
-
-concommand.Add("uv_racershordestop", function(ply)
-	if not ply:IsSuperAdmin() then return end
-	PrintMessage( HUD_PRINTTALK, "Stopping the horde of Racers!" )
-	UVRacerPresenceMode = false
-end)
-
 concommand.Add("uv_wantedtable", function(ply)
 	print("Bounty: "..string.Comma(UVBounty))
 	print("/// Wanted Vehicles ///")
@@ -610,15 +592,6 @@ function HandleVehicleSpawning(Patrolling)
 	
 	if UVJammerDeployed then return end
 	if not CheckVehicleLimit() then return end
-	
-	if UVRacerPresenceMode then
-		local racerChance = math.random(1,2)
-		
-		if racerChance == 1 and #ents.FindByClass("npc_racervehicle") < UVHeatLevel then
-			UVAutoSpawnRacer(ply)
-			return
-		end
-	end
 
 	-- Handle other special spawns
 

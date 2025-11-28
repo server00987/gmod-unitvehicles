@@ -2095,17 +2095,14 @@ function UVAutoSpawnTraffic()
 	
 end
 
-function UVAutoSpawnRacer(ply)
+function UVAutoSpawnRacer()
 	
-	if not ply then
-		ply = Entity(1)
-	end
+	local ply = Entity(1)
 	
-	local uvnextclasstospawn
-	
+	local uvnextclasstospawn = "npc_racervehicle"
 	local enemylocation
-	local suspect = ply
-	enemylocation = (suspect:GetPos()+ (vector_up * 50))
+	local suspect
+	local suspectvelocity = Vector(0,0,0)
 	
 	if next(dvd.Waypoints) == nil then
 		if not UVNoDVWaypointsNotify then
@@ -2113,52 +2110,311 @@ function UVAutoSpawnRacer(ply)
 			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
 		end
 		return
+	end
+	UVNoDVWaypointsNotify = nil
+	
+	if next(UVWantedTableVehicle) ~= nil then
+		local suspects = UVWantedTableVehicle
+		local random_entry = math.random(#suspects)
+		suspect = suspects[random_entry]
+		
+		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
+		suspectvelocity = suspect:GetVelocity()
+	elseif not playercontrolled then
+		enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
 	else
-
-		UVNoDVWaypointsNotify = nil
-
-		local waypointtable = {}
-		local prioritywaypointtable = {}
-		local prioritywaypointtable2 = {}
-		for k, v in ipairs(dvd.Waypoints) do
-			local Waypoint = v["Target"]
-			local distance = enemylocation - Waypoint
-			if distance:LengthSqr() > 25000000 and v["Group"] == 0 then
-				table.insert(prioritywaypointtable, v)
-			end
-		end
-		if next(prioritywaypointtable) ~= nil then
-			uvspawnpointwaypoint = prioritywaypointtable[math.random(#prioritywaypointtable)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		else
-			uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
-			uvspawnpoint = uvspawnpointwaypoint["Target"]
-		end
-		local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
-		if neighbor then
-			local neighborpoint = neighbor["Target"]
-			local neighbordistance = neighborpoint - uvspawnpoint
-			uvspawnpointangles = neighbordistance:Angle()+Angle(0,180,0)
-		else
-			uvspawnpointangles = Angle(0,math.random(0,360),0)
+		enemylocation = ply:GetPos() + Vector(0, 0, 50)
+	end
+	
+	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
+	local waypointtable = {}
+	for k, v in ipairs(dvd.Waypoints) do
+		local Waypoint = v["Target"]
+		local distance = enemylocation - Waypoint
+		local vect = distance:GetNormalized()
+		local evectdot = vect:Dot(suspectvelocity)
+		if distance:LengthSqr() > 25000000 and v["Group"] == 0 then
+			table.insert(waypointtable, v)
 		end
 	end
 	
-	local vehiclebase = 2
+	if next(waypointtable) ~= nil then
+		uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	else
+		uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
+		uvspawnpoint = uvspawnpointwaypoint["Target"]
+	end
+
+	local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+
+	if neighbor then
+		local neighborpoint = neighbor["Target"]
+		local neighbordistance = neighborpoint - uvspawnpoint
+		uvspawnpointangles = neighbordistance:Angle()+Angle(0,180,0)
+	else
+		uvspawnpointangles = Angle(0,math.random(0,360),0)
+	end
+	
+	if posspecified then
+		uvspawnpoint = posspecified
+	end
+	if angles then
+		uvspawnpointangles = angles
+	end
+	
+	local vehiclebase = UVRVehicleBase:GetInt()
+	local availableracers = {}
+	local availableracer
+	local MEMORY = {}
+
+	local AssignedRacers = string.Trim( GetConVar( 'unitvehicle_racer_racers' ):GetString() )
 	
 	if vehiclebase == 3 then --Glide
+		local saved_vehicles = file.Find("unitvehicles/glide/racers/*.json", "DATA")
+
+		if saved_vehicles == nil or next(saved_vehicles) == nil then
+			if not UVNoRacerNotify then
+				UVNoRacerNotify = true
+				PrintMessage( HUD_PRINTTALK, "There are no Racers to spawn. Use the Racer Manager tool to add Racers!")
+			end
+			return
+		end
+		UVNoRacerNotify = nil
+		
+		if UVRAssignRacers:GetBool() then
+			for k, v in pairs(saved_vehicles) do
+				local match = string.find( AssignedRacers, v )
+				if match then
+					table.insert(availableracers, v)
+				end
+			end
+
+			if next(availableracers) == nil then
+				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Racer that is NOT in the database.")
+				return
+			end
+
+			availableracer = availableracers[math.random(1, #availableracers)]
+
+			for k, v in pairs(saved_vehicles) do
+				table.insert(availableracer, v)
+			end
+
+			availableracer = availableracer[math.random(1, #availableracer)]
+		else
+			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
+		end
+		
+		local JSONData = file.Read( "unitvehicles/glide/racers/"..availableracer, "DATA" )
+		
+		MEMORY = util.JSONToTable(JSONData, true)
+		
+		-- local pos = uvspawnpoint+Vector( 0, 0, 50 )
+		-- local ang = uvspawnpointangles
+
+		--local pos, ang = LocalToWorld( MEMORY.Pos, MEMORY.Angle, uvspawnpoint+Vector( 0, 0, 50 ), uvspawnpointangles )
+		
+		--ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
+	
+		--local entArray = MEMORY.Entities[next(MEMORY.Entities)]
+
+		local createdEntities = {}
+
+		local entCount = 0
+
+		for _, _ in pairs(MEMORY.Entities) do
+			entCount = entCount + 1
+		end
+
+		for id, v in pairs(MEMORY.Entities) do
+			local Ent = ents.Create( v.Class )
+			if not IsValid( Ent ) then continue end
+
+			local pos, ang = LocalToWorld( v.Pos, ( (entCount > 1 and v.Angle) or Angle(0,0,0) ), uvspawnpoint + Vector( 0, 0, 50 ), uvspawnpointangles + Angle(0,180,0) ) -- rotate entities 180 degrees to face the right way of dv
+
+			duplicator.DoGeneric( Ent, v )
+
+			Ent:SetPos( pos )
+			Ent:SetAngles( ang )
+
+			table.Merge( Ent:GetTable(), v )
+
+			Ent:Spawn()
+			Ent:Activate()
+
+			if ( Ent.RestoreNetworkVars ) then
+				Ent:RestoreNetworkVars( v.DT )
+			end
+
+			if ( Ent.OnDuplicated ) then
+				Ent:OnDuplicated( v )
+			end
+
+			createdEntities[id] = Ent
+
+			if createdEntities[id] then
+				createdEntities[id].BoneMods = table.Copy( v.BoneMods )
+				createdEntities[id].EntityMods = table.Copy( v.EntityMods )
+				createdEntities[id].PhysicsObjects = table.Copy( v.PhysicsObjects )
+			end
+
+			if MEMORY.SubMaterials then
+				if istable( MEMORY.SubMaterials ) then
+					for i = 0, table.Count( MEMORY.SubMaterials ) do
+						createdEntities[id]:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+					end
+				end
+				
+				local groups = string.Explode( ",", MEMORY.BodyGroups)
+				for i = 1, table.Count( groups ) do
+					createdEntities[id]:SetBodygroup(i, tonumber(groups[i]) )
+				end
+				
+				createdEntities[id]:SetSkin( MEMORY.Skin )
+				
+				local c = string.Explode( ",", MEMORY.Color )
+				local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+				
+				local dot = Color.r * Color.g * Color.b * Color.a
+				Ent.OldColor = dot
+	
+				if MEMORY.SaveColor then
+					createdEntities[id]:SetColor( Color )
+				else
+					if isfunction(Ent.GetSpawnColor) then
+						Color = createdEntities[id]:GetSpawnColor()
+						createdEntities[id]:SetColor( Color )
+					else
+						Color.r = math.random(0, 255)
+						Color.g = math.random(0, 255)
+						Color.b = math.random(0, 255)
+						createdEntities[id]:SetColor( Color )
+					end
+				end
+				
+				local data = {
+					Color = Color,
+					RenderMode = 0,
+					RenderFX = 0
+				}
+				duplicator.StoreEntityModifier( createdEntities[id], "colour", data )
+			end
+
+			createdEntities[id].uvclasstospawnon = uvnextclasstospawn
+
+			table.insert(UVVehicleInitializing, createdEntities[id])
+		end
+
+		for _, v in pairs(MEMORY.Constraints) do
+			local constraintEntity = UVCreateConstraintsFromTable( v, createdEntities )
+		end
+
+		for k, v in pairs( createdEntities ) do
+			duplicator.ApplyEntityModifiers( NULL, v )
+			duplicator.ApplyBoneModifiers( NULL, v )
+
+			--if ( v.PostEntityPaste ) then
+			--	v:PostEntityPaste( NULL, nil, Ent, createdEntities )
+			--end
+		end
+		-- local Ent = ents.Create( entArray.Class )
+		-- duplicator.DoGeneric( Ent, entArray )
+		
+		-- Ent:SetPos( pos )
+		-- Ent:SetAngles( ang )
+
+		-- Ent:Spawn()
+		-- Ent:Activate()
+
+		-- table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
+		
+		-- if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableracer.."' is missing!") return end
+		
+		-- if MEMORY.SubMaterials then
+		-- 	if istable( MEMORY.SubMaterials ) then
+		-- 		for i = 0, table.Count( MEMORY.SubMaterials ) do
+		-- 			Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+		-- 		end
+		-- 	end
+			
+		-- 	local groups = string.Explode( ",", MEMORY.BodyGroups)
+		-- 	for i = 1, table.Count( groups ) do
+		-- 		Ent:SetBodygroup(i, tonumber(groups[i]) )
+		-- 	end
+			
+		-- 	Ent:SetSkin( MEMORY.Skin )
+			
+		-- 	local c = string.Explode( ",", MEMORY.Color )
+		-- 	local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+			
+		-- 	local dot = Color.r * Color.g * Color.b * Color.a
+		-- 	Ent.OldColor = dot
+
+		-- 	if MEMORY.SaveColor then
+		-- 		Ent:SetColor( Color )
+		-- 	else
+		-- 		if isfunction(Ent.GetSpawnColor) then
+		-- 			Color = Ent:GetSpawnColor()
+		-- 			Ent:SetColor( Color )
+		-- 		else
+		-- 			Color.r = math.random(0, 255)
+		-- 			Color.g = math.random(0, 255)
+		-- 			Color.b = math.random(0, 255)
+		-- 			Ent:SetColor( Color )
+		-- 		end
+		-- 	end
+			
+		-- 	local data = {
+		-- 		Color = Color,
+		-- 		RenderMode = 0,
+		-- 		RenderFX = 0
+		-- 	}
+		-- 	duplicator.StoreEntityModifier( Ent, "colour", data )
+		-- end
+		
+		-- Ent.uvclasstospawnon = uvnextclasstospawn
+		
+		-- table.insert(UVVehicleInitializing, Ent)
 		
 	elseif vehiclebase == 2 then --simfphys
 		
-		local RACERMEMORY = {}
-		local racertable = file.Find("saved_vehicles/*.txt", "DATA")
+		local saved_vehicles = file.Find("unitvehicles/simfphys/racers/*.txt", "DATA")
 		
-		if not racertable then
-			PrintMessage( HUD_PRINTTALK, "There's no saved vehicles on the simfphys duplicator to spawn!")
+		if saved_vehicles == nil or next(saved_vehicles) == nil then
+			if not UVNoRacerNotify then
+				UVNoRacerNotify = true
+				PrintMessage( HUD_PRINTTALK, "There are no Racers to spawn. Use the Racer Manager tool to add Racers!")
+			end
 			return
 		end
+		UVNoRacerNotify = nil
 		
-		local DataString = file.Read( "saved_vehicles/"..racertable[math.random(#racertable)], "DATA" )
+		if UVRAssignRacers:GetBool() then
+			for k, v in pairs(saved_vehicles) do
+				local match = string.find( AssignedRacers, v )
+				if match then
+					table.insert(availableracers, v)
+				end
+			end
+
+			if next(availableracers) == nil then
+				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Racer that is NOT in the database.")
+				return
+			end
+
+			availableracer = availableracers[math.random(1, #availableracers)]
+
+			for k, v in pairs(saved_vehicles) do
+				table.insert(availableracer, v)
+			end
+
+			availableracer = availableracer[math.random(1, #availableracer)]
+		else
+			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
+		end
+		
+		local DataString = file.Read( "unitvehicles/simfphys/racers/"..availableracer, "DATA" )
 		
 		local words = string.Explode( "", DataString )
 		local shit = {}
@@ -2176,23 +2432,23 @@ function UVAutoSpawnRacer(ply)
 			
 			if name and variable then
 				if name == "SubMaterials" then
-					RACERMEMORY[name] = {}
+					MEMORY[name] = {}
 					
 					local submats = string.Explode( ",", variable )
 					for i = 0, (table.Count( submats ) - 1) do
-						RACERMEMORY[name][i] = submats[i+1]
+						MEMORY[name][i] = submats[i+1]
 					end
 				else
-					RACERMEMORY[name] = variable
+					MEMORY[name] = variable
 				end
 			end
 		end
 		
-		if not istable(RACERMEMORY) then return end
+		if not istable(MEMORY) then return end
 		
 		local Ent
 		
-		local vname = RACERMEMORY.SpawnName
+		local vname = MEMORY.SpawnName
 		local VehicleList = list.Get( "simfphys_vehicles" )
 		local vehicle = VehicleList[ vname ]
 		
@@ -2205,7 +2461,8 @@ function UVAutoSpawnRacer(ply)
 		
 		local SpawnAng = uvspawnpointangles
 		SpawnAng.pitch = 0
-		SpawnAng.yaw = SpawnAng.yaw + 180 + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
+		Spawnang.yaw = SpawnAng.yaw + 180
+		SpawnAng.yaw = SpawnAng.yaw + (vehicle.SpawnAngleOffset and vehicle.SpawnAngleOffset or 0)
 		SpawnAng.roll = 0
 		
 		Ent = simfphys.SpawnVehicle( ply, SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, vname, vehicle )
@@ -2215,55 +2472,53 @@ function UVAutoSpawnRacer(ply)
 		timer.Simple( 0.5, function()
 			if not IsValid(Ent) then return end
 			
-			local tsc = string.Explode( ",", RACERMEMORY.TireSmokeColor )
+			local tsc = string.Explode( ",", MEMORY.TireSmokeColor )
 			Ent:SetTireSmokeColor( Vector( tonumber(tsc[1]), tonumber(tsc[2]), tonumber(tsc[3]) ) )
 			
-			Ent.Turbocharged = tobool( RACERMEMORY.HasTurbo )
-			Ent.Supercharged = tobool( RACERMEMORY.HasBlower )
+			Ent.Turbocharged = tobool( MEMORY.HasTurbo )
+			Ent.Supercharged = tobool( MEMORY.HasBlower )
 			
-			Ent:SetEngineSoundPreset( math.Clamp( tonumber( RACERMEMORY.SoundPreset ), -1, 23) )
-			Ent:SetMaxTorque( math.Clamp( tonumber( RACERMEMORY.PeakTorque ), 20, 1000) )
-			Ent:SetDifferentialGear( math.Clamp( tonumber( RACERMEMORY.FinalGear ),0.2, 6 ) )
+			Ent:SetEngineSoundPreset( math.Clamp( tonumber( MEMORY.SoundPreset ), -1, 23) )
+			Ent:SetMaxTorque( math.Clamp( tonumber( MEMORY.PeakTorque ), 20, 1000) )
+			Ent:SetDifferentialGear( math.Clamp( tonumber( MEMORY.FinalGear ),0.2, 6 ) )
 			
-			Ent:SetSteerSpeed( math.Clamp( tonumber( RACERMEMORY.SteerSpeed ), 1, 16 ) )
-			Ent:SetFastSteerAngle( math.Clamp( tonumber( RACERMEMORY.SteerAngFast ), 0, 1) )
-			Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( RACERMEMORY.SteerFadeSpeed ), 1, 5000 ) )
+			Ent:SetSteerSpeed( math.Clamp( tonumber( MEMORY.SteerSpeed ), 1, 16 ) )
+			Ent:SetFastSteerAngle( math.Clamp( tonumber( MEMORY.SteerAngFast ), 0, 1) )
+			Ent:SetFastSteerConeFadeSpeed( math.Clamp( tonumber( MEMORY.SteerFadeSpeed ), 1, 5000 ) )
 			
-			Ent:SetEfficiency( math.Clamp( tonumber( RACERMEMORY.Efficiency ) ,0.2,4) )
-			Ent:SetMaxTraction( math.Clamp( tonumber( RACERMEMORY.MaxTraction ) , 5,1000) )
-			Ent:SetTractionBias( math.Clamp( tonumber( RACERMEMORY.GripOffset ),-0.99,0.99) )
-			Ent:SetPowerDistribution( math.Clamp( tonumber( RACERMEMORY.PowerDistribution ) ,-1,1) )
+			Ent:SetEfficiency( math.Clamp( tonumber( MEMORY.Efficiency ) ,0.2,4) )
+			Ent:SetMaxTraction( math.Clamp( tonumber( MEMORY.MaxTraction ) , 5,1000) )
+			Ent:SetTractionBias( math.Clamp( tonumber( MEMORY.GripOffset ),-0.99,0.99) )
+			Ent:SetPowerDistribution( math.Clamp( tonumber( MEMORY.PowerDistribution ) ,-1,1) )
 			
-			Ent:SetBackFire( tobool( RACERMEMORY.HasBackfire ) )
-			Ent:SetDoNotStall( tobool( RACERMEMORY.DoesntStall ) )
+			Ent:SetBackFire( tobool( MEMORY.HasBackfire ) )
+			Ent:SetDoNotStall( tobool( MEMORY.DoesntStall ) )
 			
-			Ent:SetIdleRPM( math.Clamp( tonumber( RACERMEMORY.IdleRPM ),1,25000) )
-			Ent:SetLimitRPM( math.Clamp( tonumber( RACERMEMORY.MaxRPM ),4,25000) )
-			Ent:SetRevlimiter( tobool( RACERMEMORY.HasRevLimiter ) )
-			Ent:SetPowerBandEnd( math.Clamp( tonumber( RACERMEMORY.PowerEnd ), 3, 25000) )
-			Ent:SetPowerBandStart( math.Clamp( tonumber( RACERMEMORY.PowerStart ) ,2 ,25000) )
+			Ent:SetIdleRPM( math.Clamp( tonumber( MEMORY.IdleRPM ),1,25000) )
+			Ent:SetLimitRPM( math.Clamp( tonumber( MEMORY.MaxRPM ),4,25000) )
+			Ent:SetRevlimiter( tobool( MEMORY.HasRevLimiter ) )
+			Ent:SetPowerBandEnd( math.Clamp( tonumber( MEMORY.PowerEnd ), 3, 25000) )
+			Ent:SetPowerBandStart( math.Clamp( tonumber( MEMORY.PowerStart ) ,2 ,25000) )
 			
 			Ent:SetTurboCharged( Ent.Turbocharged )
 			Ent:SetSuperCharged( Ent.Supercharged )
-			Ent:SetBrakePower( math.Clamp( tonumber( RACERMEMORY.BrakePower ), 0.1, 500) )
+			Ent:SetBrakePower( math.Clamp( tonumber( MEMORY.BrakePower ), 0.1, 500) )
 			
-			Ent:SetSoundoverride( RACERMEMORY.SoundOverride or "" )
+			Ent:SetSoundoverride( MEMORY.SoundOverride or "" )
 			
 			Ent:SetLights_List( Ent.LightsTable or "no_lights" )
+						
+			Ent.snd_horn = MEMORY.HornSound
 			
-			Ent:SetBulletProofTires(true)
+			Ent.snd_blowoff = MEMORY.snd_blowoff
+			Ent.snd_spool = MEMORY.snd_spool
+			Ent.snd_bloweron = MEMORY.snd_bloweron
+			Ent.snd_bloweroff = MEMORY.snd_bloweroff
 			
-			Ent.snd_horn = RACERMEMORY.HornSound
-			
-			Ent.snd_blowoff = RACERMEMORY.snd_blowoff
-			Ent.snd_spool = RACERMEMORY.snd_spool
-			Ent.snd_bloweron = RACERMEMORY.snd_bloweron
-			Ent.snd_bloweroff = RACERMEMORY.snd_bloweroff
-			
-			Ent:SetBackfireSound( RACERMEMORY.backfiresound or "" )
+			Ent:SetBackfireSound( MEMORY.backfiresound or "" )
 			
 			local Gears = {}
-			local Data = string.Explode( ",", RACERMEMORY.Gears  )
+			local Data = string.Explode( ",", MEMORY.Gears  )
 			for i = 1, table.Count( Data ) do 
 				local gRatio = tonumber( Data[i] )
 				
@@ -2281,17 +2536,17 @@ function UVAutoSpawnRacer(ply)
 			end
 			Ent.Gears = Gears
 			
-			if istable( RACERMEMORY.SubMaterials ) then
-				for i = 0, table.Count( RACERMEMORY.SubMaterials ) do
-					Ent:SetSubMaterial( i, RACERMEMORY.SubMaterials[i] )
+			if istable( MEMORY.SubMaterials ) then
+				for i = 0, table.Count( MEMORY.SubMaterials ) do
+					Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
 				end
 			end
 			
-			if RACERMEMORY.FrontDampingOverride and RACERMEMORY.FrontConstantOverride and RACERMEMORY.RearDampingOverride and RACERMEMORY.RearConstantOverride then
-				Ent.FrontDampingOverride = tonumber( RACERMEMORY.FrontDampingOverride )
-				Ent.FrontConstantOverride = tonumber( RACERMEMORY.FrontConstantOverride )
-				Ent.RearDampingOverride = tonumber( RACERMEMORY.RearDampingOverride )
-				Ent.RearConstantOverride = tonumber( RACERMEMORY.RearConstantOverride )
+			if MEMORY.FrontDampingOverride and MEMORY.FrontConstantOverride and MEMORY.RearDampingOverride and MEMORY.RearConstantOverride then
+				Ent.FrontDampingOverride = tonumber( MEMORY.FrontDampingOverride )
+				Ent.FrontConstantOverride = tonumber( MEMORY.FrontConstantOverride )
+				Ent.RearDampingOverride = tonumber( MEMORY.RearDampingOverride )
+				Ent.RearConstantOverride = tonumber( MEMORY.RearConstantOverride )
 				
 				local data = {
 					[1] = {Ent.FrontConstantOverride,Ent.FrontDampingOverride},
@@ -2326,17 +2581,17 @@ function UVAutoSpawnRacer(ply)
 				end
 			end
 			
-			Ent:SetFrontSuspensionHeight( tonumber( RACERMEMORY.FrontHeight ) )
-			Ent:SetRearSuspensionHeight( tonumber( RACERMEMORY.RearHeight ) )
+			Ent:SetFrontSuspensionHeight( tonumber( MEMORY.FrontHeight ) )
+			Ent:SetRearSuspensionHeight( tonumber( MEMORY.RearHeight ) )
 			
-			local groups = string.Explode( ",", RACERMEMORY.BodyGroups)
+			local groups = string.Explode( ",", MEMORY.BodyGroups)
 			for i = 1, table.Count( groups ) do
 				Ent:SetBodygroup(i, tonumber(groups[i]) )
 			end
 			
-			Ent:SetSkin( RACERMEMORY.Skin )
+			Ent:SetSkin( MEMORY.Skin )
 			
-			local c = string.Explode( ",", RACERMEMORY.Color )
+			local c = string.Explode( ",", MEMORY.Color )
 			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
 			
 			local dot = Color.r * Color.g * Color.b * Color.a
@@ -2353,17 +2608,17 @@ function UVAutoSpawnRacer(ply)
 			if Ent.CustomWheels then
 				if Ent.GhostWheels then
 					if not IsValid( Ent ) then return end
-					if RACERMEMORY.WheelTool_Foffset and RACERMEMORY.WheelTool_Roffset then
-						SetWheelOffset( Ent, RACERMEMORY.WheelTool_Foffset, RACERMEMORY.WheelTool_Roffset )
+					if MEMORY.WheelTool_Foffset and MEMORY.WheelTool_Roffset then
+						SetWheelOffset( Ent, MEMORY.WheelTool_Foffset, MEMORY.WheelTool_Roffset )
 					end
 					
-					if not RACERMEMORY.FrontWheelOverride and not RACERMEMORY.RearWheelOverride then return end
+					if not MEMORY.FrontWheelOverride and not MEMORY.RearWheelOverride then return end
 					
-					local front_model = RACERMEMORY.FrontWheelOverride or vehicle.Members.CustomWheelModel
+					local front_model = MEMORY.FrontWheelOverride or vehicle.Members.CustomWheelModel
 					local front_angle = GetAngleFromSpawnlist(front_model)
 					
-					local camber = RACERMEMORY.Camber or 0
-					local rear_model = RACERMEMORY.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
+					local camber = MEMORY.Camber or 0
+					local rear_model = MEMORY.RearWheelOverride or (vehicle.Members.CustomWheelModel_R and vehicle.Members.CustomWheelModel_R or front_model)
 					local rear_angle = GetAngleFromSpawnlist(rear_model)
 					
 					if not front_model or not rear_model or not front_angle or not rear_angle then return end
@@ -2379,33 +2634,145 @@ function UVAutoSpawnRacer(ply)
 		end)
 		
 		
-		Ent.uvclasstospawnon = "npc_racervehicle"
-		
+		Ent.uvclasstospawnon = uvnextclasstospawn
+
 		table.insert(UVVehicleInitializing, Ent)
 		
-		Ent:CallOnRemove( "UVSimfphysVehicleRemoved", function(car)
-			if table.HasValue(UVVehicleInitializing, car) then
-				table.RemoveByValue(UVVehicleInitializing, car)
-			end
-			if table.HasValue(UVCommanders, car) then
-				table.RemoveByValue(UVCommanders, car)
-			end
-		end)
-		
-		timer.Simple(2, function() 
-			if IsValid(Ent) and not Ent.RacerVehicle then
-				Ent:Remove()
-			else
-				UVAddToWantedListVehicle(Ent)
-			end
-		end)
-		
 	elseif vehiclebase == 1 then --Default Vehicle Base
+		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/racers/*.txt", "DATA")
+		
+		if saved_vehicles == nil or next(saved_vehicles) == nil then
+			if not UVNoRacerNotify then
+				UVNoRacerNotify = true
+				PrintMessage( HUD_PRINTTALK, "There are no Racers to spawn. Use the Racer Manager tool to add Racers!")
+			end
+			return
+		end
+		UVNoRacerNotify = nil
+		
+		if UVRAssignRacers:GetBool() then
+			for k, v in pairs(saved_vehicles) do
+				local match = string.find( AssignedRacers, v )
+				if match then
+					table.insert(availableracers, v)
+				end
+			end
+
+			if next(availableracers) == nil then
+				PrintMessage( HUD_PRINTTALK, "Unit Manager attempted to spawn a Racer that is NOT in the database.")
+				return
+			end
+
+			availableracer = availableracers[math.random(1, #availableracers)]
+
+			for k, v in pairs(saved_vehicles) do
+				table.insert(availableracer, v)
+			end
+
+			availableracer = availableracer[math.random(1, #availableracer)]
+		else
+			availableracer = saved_vehicles[math.random(1, #saved_vehicles)]
+		end
+		
+		local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/racers/"..availableracer, "DATA" )
+		
+		local words = string.Explode( "", DataString )
+		local shit = {}
+		
+		for k, v in pairs( words ) do
+			shit[k] =  string.char( string.byte( v ) - 20 )
+		end
+		
+		local Data = string.Explode( "#", string.Implode("",shit) )
+		
+		for _,v in pairs(Data) do
+			local Var = string.Explode( "=", v )
+			local name = Var[1]
+			local variable = Var[2]
+			
+			if name and variable then
+				if name == "SubMaterials" then
+					MEMORY[name] = {}
+					
+					local submats = string.Explode( ",", variable )
+					for i = 0, (table.Count( submats ) - 1) do
+						MEMORY[name][i] = submats[i+1]
+					end
+				else
+					MEMORY[name] = variable
+				end
+			end
+		end
+		
+		if not istable(MEMORY) then return end
+		
+		local class = MEMORY.SpawnName
+		
+		local vehicles = list.Get("Vehicles")
+		local lst = vehicles[class]
+		if not lst then
+			PrintMessage( HUD_PRINTTALK, "The vehicle '"..class.."' is missing!")
+			return
+		end
+		
+		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
+		uvspawnpointangles.yaw = rhinoattack and not posspecified and uvspawnpointangles.yaw or uvspawnpointangles.yaw + 180
+		
+		local Ent = ents.Create("prop_vehicle_jeep")
+		Ent.VehicleTable = lst
+		Ent.VehicleName = MEMORY.VehicleName
+		Ent:SetModel(lst.Model) 
+		Ent:SetPos(uvspawnpoint+ (vector_up * 50))
+		Ent:SetAngles(uvspawnpointangles)
+		Ent:SetKeyValue("vehiclescript", lst.KeyValues.vehiclescript)
+		Ent:SetVehicleClass( class )
+		Ent:Spawn()
+		Ent:Activate()
+		
+		local vehicle = Ent
+		if IsValid(Entity(1)) then
+			gamemode.Call( "PlayerSpawnedVehicle", Entity(1), vehicle ) --Some vehicles has different models implanted together, so do that.
+		end
+		
+		if istable( MEMORY.SubMaterials ) then
+			for i = 0, table.Count( MEMORY.SubMaterials ) do
+				Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
+			end
+		end
+		
+		timer.Simple(0.5, function()
+			if not IsValid(Ent) then return end
+			local groups = string.Explode( ",", MEMORY.BodyGroups)
+			for i = 1, table.Count( groups ) do
+				Ent:SetBodygroup(i, tonumber(groups[i]) )
+			end
+			
+			Ent:SetSkin( MEMORY.Skin )
+			
+			local c = string.Explode( ",", MEMORY.Color )
+			local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
+			
+			local dot = Color.r * Color.g * Color.b * Color.a
+			Ent.OldColor = dot
+			Ent:SetColor( Color )
+			
+			local data = {
+				Color = Color,
+				RenderMode = 0,
+				RenderFX = 0
+			}
+			duplicator.StoreEntityModifier( Ent, "colour", data )
+		end)
+		
+		Ent.uvclasstospawnon = uvnextclasstospawn
+
+		table.insert(UVVehicleInitializing, Ent)
 		
 	else
 		PrintMessage( HUD_PRINTTALK, "Invalid Vehicle Base! Reverting to Default Vehicle Base! Please set the Vehicle Base in the Unit Manager Tool settings!")
-		RunConsoleCommand("unitvehicle_unit_vehiclebase", 1)
+		RunConsoleCommand("unitvehicle_racer_vehiclebase", 1)
 	end
+	
 end
 
 --RACE FUNCTIONS

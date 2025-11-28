@@ -32,15 +32,47 @@ if SERVER then
 
         local timeout = 3
         local ctimeout = 1
+
+        local function SpawnAI(racer, traffic)
+
+            if racer and traffic then
+                local chance = math.random(1,2)
+                if chance == 1 then
+                    UVAutoSpawnRacer()
+                else
+                    UVAutoSpawnTraffic()
+                end
+            elseif racer then
+                UVAutoSpawnRacer()
+            elseif traffic then
+                UVAutoSpawnTraffic()
+            end
+            
+        end
         
         if CurTime() > UVTimeToCheckForPotentialSuspects + timeout then --Check for potential suspects
+            local SpawnRacerAI
+            local SpawnTrafficAI
+
+            if #ents.FindByClass("npc_racervehicle") < UVRMaxRacer:GetInt() then
+                if UVRSpawnCondition:GetInt() == 3 then
+                    SpawnRacerAI = true
+                elseif UVRSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
+                    SpawnRacerAI = true
+                end
+            end
+
             if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
                 if UVTSpawnCondition:GetInt() == 3 then
                     UVAutoSpawnTraffic()
+                    SpawnTrafficAI = true
                 elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
                     UVAutoSpawnTraffic()
+                    SpawnTrafficAI = true
                 end
             end
+
+            SpawnAI(SpawnRacerAI, SpawnTrafficAI)
 
             if #UVLoadedPursuitBreakers < UVPBMax:GetInt() then
 				if UVPBSpawnCondition:GetInt() == 3 then
