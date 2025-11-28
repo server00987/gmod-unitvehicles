@@ -64,10 +64,8 @@ if SERVER then
 
             if #ents.FindByClass("npc_trafficvehicle") < UVTMaxTraffic:GetInt() then
                 if UVTSpawnCondition:GetInt() == 3 then
-                    UVAutoSpawnTraffic()
                     SpawnTrafficAI = true
                 elseif UVTSpawnCondition:GetInt() == 2 and next(UVPotentialSuspects) ~= nil then
-                    UVAutoSpawnTraffic()
                     SpawnTrafficAI = true
                 end
             end
