@@ -1,9 +1,11 @@
 - What is this addon all about?
+- Do I have to install other addon(s) for this?
 - Does this addon have a GitHub repository?
 - How do I start a pursuit?
 - How do I start a race?
-- How can I invite AI racers/friends to race me?
 - How do I use the Unit Manager? I want different cop cars!
+- I want to be a cop. Can I join the Units?
+- How do I use the Racer Manager? Can I get Racers of the same tier to race me?
 - How do I get traffic to spawn?
 - How do I set up police roadblocks?
 - How do I create races?
@@ -11,7 +13,6 @@
 - How do I set up Pursuit Breakers?
 - What are Pursuit Techs? Are they like power-ups?
 - Can I change the name of the Racers or Units?
-- What console variables are there?
 - What console commands are there?
 - Where can I find and edit UV-related data?
 - Where can I find more UV-related content?
