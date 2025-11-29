@@ -1,3 +1,28 @@
+<------- December 1 ------->
+[h1]New Features[/h1]
+[b]Tools[/b]
+[list]
+	[*]Added the [b]Manager: AI Racer[/b] tool, allowing you to create free roaming AI racers, or tweak a new Vehicle Override feature
+[/list]
+
+[h1]Changes[/h1]
+[b]Tools[/b]
+[list]
+	[*]Race Manager - Added a new "Race Options" menu when you try to begin a race, now having the option to immediately start it as-is, spawn X amount of AI racers and invite them, or fill the entire grid with AI and then invite them
+	[*]Race Manager - Added a new "Save props" prompt when exporting new races
+	[*]Manager: Traffic - Applied the nice settings from Manager: Units.
+[/list]
+
+[b]UI[/b]
+[list]
+	[*]Capped the amount of racers on the racer list on multiple UI Styles
+	[*]Tweaked a few UI Styles to be more 1:1
+	[*]Fixed that the Underground 2 race results caused an error when trying to close it with the jump button
+	[*]Added the vehicle names used by racers to some UI Style race results
+[/list]
+
+And various other undocumented tweaks
+
 <------- November 11 ------->
 [h1]New Features[/h1]
 [b]Preset Import/Export[/b]
