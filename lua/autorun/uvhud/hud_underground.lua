@@ -458,7 +458,7 @@ local function underground_racing_main( ... )
     
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 16), 1 do
         --if racer_count == 1 then return end
         local entry = string_array[i]
         
@@ -530,7 +530,7 @@ local function underground_racing_main( ... )
         draw.NoTexture()
         surface.DrawRect(w * 0.8, h * 0.16 + racercount, w * 0.0175, h * 0.025)
         
-        draw.DrawText(i .. ":", "UVFont4", w * 0.8075, (h * 0.16) + racercount, color, TEXT_ALIGN_CENTER)
+        draw.DrawText(i .. ":", "UVFont4", w * 0.808, (h * 0.16) + racercount, color, TEXT_ALIGN_CENTER)
         draw.DrawText(text, "UVFont4", w * 0.97, (h * 0.16) + racercount, color, TEXT_ALIGN_RIGHT)
     end
 end

@@ -93,7 +93,29 @@ UV_UI.racing.underground2.events = {
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-            
+				
+			local ymax = w * 0.45
+			local ynmax = w * 0.175
+			surface.SetFont("UVFont")
+		   local vehname = info["VehicleName"]
+		   vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+
+			textW = surface.GetTextSize(vehname)
+			textnW = surface.GetTextSize(name)
+			if textW > ymax then
+				while surface.GetTextSize(vehname .. "...") > ymax do
+					vehname = string.sub(vehname, 1, -2)
+				end
+				vehname = vehname .. "..."
+			end
+			
+			if textnW > ynmax then
+				while surface.GetTextSize(name .. "...") > ynmax do
+					name = string.sub(vehname, 1, -2)
+				end
+				name = name .. "..."
+			end
+				
             if info["LocalPlayer"] then
                 LP = true
                 LC = Color(196, 208, 151)
@@ -103,6 +125,7 @@ UV_UI.racing.underground2.events = {
                 y = yPos,
                 posText = tostring(i),
                 nameText = name,
+				carText = vehname,
                 timeText = UV_FormatRaceEndTime(totalTime),
                 color = LC,
                 localPlayer = LP
@@ -165,6 +188,7 @@ UV_UI.racing.underground2.events = {
             
             draw.SimpleText("#uv.results.race.eventresults", "UVFont", w * 0.05, h * 0.12, Color(196, 208, 151, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
             draw.SimpleText("#uv.results.race.name", "UVFont", w * 0.1, h * 0.2025, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+            draw.SimpleText("#uv.results.race.car", "UVFont", w * 0.3, h * 0.2025, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
             draw.SimpleText("#uv.results.race.time.finish", "UVFont", w * 0.9, h * 0.205, Color(255, 255, 255, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
             
             for i = startIndex, endIndex do
@@ -183,6 +207,9 @@ UV_UI.racing.underground2.events = {
                 end
                 if entry.nameText then
                     draw.SimpleText(entry.nameText, "UVFont", w * 0.1, yPos, Color(entry.color.r, entry.color.g, entry.color.b, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
+                if entry.carText then
+                    draw.SimpleText(entry.carText, "UVFont", w * 0.3, yPos, Color(entry.color.r, entry.color.g, entry.color.b, math.floor(255 * fadeAlpha)), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
                 if entry.timeText then
                     draw.SimpleText(entry.timeText, "UVFont", w * 0.9, yPos, Color(entry.color.r, entry.color.g, entry.color.b, math.floor(255 * fadeAlpha)), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
@@ -233,6 +260,7 @@ UV_UI.racing.underground2.events = {
         end
         
         function OK:DoClick()
+			hook.Remove("CreateMove", "JumpKeyCloseResults")
             if not closing then
                 surface.PlaySound( "uvui/ug/closemenu.wav" )
                 closing = true
@@ -248,7 +276,8 @@ UV_UI.racing.underground2.events = {
 				if IsValid(ResultPanel) and not closing then
 					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					surface.PlaySound( "uvui/ug/closemenu.wav" )
-					startCloseAnimation()
+					closing = true
+					closeStartTime = CurTime()
 				end
 			end
 		end)

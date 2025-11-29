@@ -43,7 +43,7 @@ local function prostreet_racing_main( ... )
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
     local boxyes = false
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 20), 1 do
         --if racer_count == 1 then return end
         local entry = string_array[i]
         
@@ -52,7 +52,7 @@ local function prostreet_racing_main( ... )
         local mode = entry[3]
         local diff = entry[4]
         local racercount = i * w * 0.0135
-        local racercountbox = i * w * 0.0135 * racer_count
+        local racercountbox = i * w * 0.0135 * math.Clamp(racer_count, 1, 20)
         
         local Strings = {
             ["Time"] = "%s",

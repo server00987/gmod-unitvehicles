@@ -1138,7 +1138,7 @@ local function undercover_racing_main( ... )
     local baseY = h * 0.21 -- starting Y position of the list (adjust this freely)
     local spacing = h * 0.035 -- spacing between each racer (vertical gap)
     
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 12), 1 do
         if racer_count == 1 then
             return
         end

@@ -80,7 +80,7 @@ if CLIENT then
 		PursuitBreakerAdjust:SetSize(400, 220)
 		PursuitBreakerAdjust:SetBackgroundBlur(true)
 		PursuitBreakerAdjust:Center()
-		PursuitBreakerAdjust:SetTitle("#tool.uvpursuitbreaker.create")
+		PursuitBreakerAdjust:SetTitle("#tool.uvpursuitbreaker.name")
 		PursuitBreakerAdjust:SetDraggable(false)
 		PursuitBreakerAdjust:MakePopup()
 
@@ -110,7 +110,7 @@ if CLIENT then
 		DontUnweldProps:SetValue( 0 )
 		DontUnweldProps:SetTooltip( "#tool.uvpursuitbreaker.create.keepweld.desc" )
 
-		OK:SetText("#tool.uvpursuitbreaker.create.spawn")
+		OK:SetText("#tool.uvshared.create")
 		OK:SetSize(PursuitBreakerAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 
@@ -132,7 +132,7 @@ if CLIENT then
 				surface.PlaySound( "buttons/button15.wav" )
 
 			else
-				PursuitBreakerNameEntry:SetPlaceholderText( "#tool.uvpursuitbreaker.create.name.fill" )
+				PursuitBreakerNameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -182,7 +182,7 @@ if CLIENT then
 					net.Start("UVPursuitBreakerLoad")
 					net.WriteString(selecteditem)
 					net.SendToServer()
-					notification.AddLegacy( string.format( language.GetPhrase("tool.uvpursuitbreaker.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( language.GetPhrase("tool.uvshared.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
 					
 				end
@@ -221,9 +221,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "#tool.uvpursuitbreaker.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "#tool.uvpursuitbreaker.applied" )
+			-- Msg( "#tool.uvshared.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -307,9 +307,9 @@ if CLIENT then
 			
 			if isstring(selecteditem) then
 				file.Delete( "unitvehicles/pursuitbreakers/"..game.GetMap().."/"..selecteditem )
-				notification.AddLegacy( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( language.GetPhrase("tool.uvshared.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
-				Msg( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ) )
+				-- Msg( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ) )
 			end
 			
 			UVPursuitBreakerScrollPanel:Clear()

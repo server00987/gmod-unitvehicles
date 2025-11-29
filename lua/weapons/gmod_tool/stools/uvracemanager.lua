@@ -1186,7 +1186,7 @@ concommand.Add("uvrace_racemenu", RaceMenu)
 	concommand.Add("uvrace_updatevars", UpdateVars)
 	
 	local function QueryExport()
-		Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvracemanager.export.desc", "", function(txt)
+		Derma_StringRequest("#tool.uvshared.export.settings", "#tool.uvracemanager.export.desc", "", function(txt)
 			QuerySaveProps(txt)
 		end, nil, "#addons.confirm", "#addons.cancel")
 	end

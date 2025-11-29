@@ -352,6 +352,7 @@ UV_UI.racing.mostwanted.events = {
         local h1, h2 = h*0.2475, h*0.2875
         local xLeft = w * 0.205
         local xMiddle = w * 0.3
+        local xCar = w * 0.45
         local xRight = w * 0.795
         local revealInterval = 0.033
         
@@ -374,11 +375,34 @@ UV_UI.racing.mostwanted.events = {
             local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-            
+            				
+			surface.SetFont("UVFont5UI")
+		   local vehname = info["VehicleName"]
+		   vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+
+			local ymax = w * 0.25
+			local ynmax = w * 0.13
+			textW = surface.GetTextSize(vehname)
+			textnW = surface.GetTextSize(name)
+			if textW > ymax then
+				while surface.GetTextSize(vehname .. "...") > ymax do
+					vehname = string.sub(vehname, 1, -2)
+				end
+				vehname = vehname .. "..."
+			end
+			
+			if textnW > ynmax then
+				while surface.GetTextSize(name .. "...") > ynmax do
+					name = string.sub(vehname, 1, -2)
+				end
+				name = name .. "..."
+			end
+				
             local entry = {
                 y = yPos,
                 leftText = tostring(i),
                 middleText = name,
+				carText = vehname,
                 rightText = UV_FormatRaceEndTime(totalTime),
                 revealTime = revealTime
             }
@@ -518,6 +542,9 @@ UV_UI.racing.mostwanted.events = {
                 if entry.middleText then
                     draw.SimpleText(entry.middleText, "UVFont5UI", xMiddle, yPos, UVColors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
+                if entry.carText then
+                    draw.SimpleText(entry.carText, "UVFont5UI", xCar, yPos, UVColors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
                 if entry.rightText then
                     draw.SimpleText(entry.rightText, "UVFont5UI", xRight, yPos, UVColors.MW_Racer, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
@@ -541,10 +568,11 @@ UV_UI.racing.mostwanted.events = {
                 -- Icon and texts fade in (stay full alpha after flash)
                 DrawIcon(UVMaterials['RESULTRACE'], w * 0.225, h * 0.1575, .07, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha))
                 draw.DrawText("#uv.results.standings", "UVFont5", w * 0.25, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                
-                draw.DrawText("#uv.results.race.pos", "UVFont5UI", w * 0.205, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                draw.DrawText("#uv.results.race.name", "UVFont5UI", w * 0.3, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                draw.DrawText("#uv.results.race.time", "UVFont5UI", w * 0.795, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
+
+                draw.DrawText("#uv.results.race.pos", "UVFont5UI", xLeft, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("#uv.results.race.name", "UVFont5UI", xMiddle, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("#uv.results.race.car", "UVFont5UI", xCar, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("#uv.results.race.time", "UVFont5UI", xRight, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
                 
@@ -1338,7 +1366,7 @@ local function mw_racing_main( ... )
     
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 12), 1 do
         if racer_count == 1 then
             return
         end
@@ -1389,24 +1417,31 @@ local function mw_racing_main( ... )
 			end
 		end
         
-        local color = nil
+        local color = Color(0, 0, 0)
         
+        surface.SetDrawColor(125, 125, 125, 100)
+		
         if is_local_player then
-            color = UVColors.MW_LocalPlayer
+            -- color = UVColors.MW_LocalPlayer
+			surface.SetDrawColor(223, 184, 127, 175)
         elseif entry[3] == "Disqualified" or entry[3] == "Busted" then
-            color = UVColors.MW_Disqualified
+            -- color = UVColors.MW_Disqualified
+			-- surface.SetDrawColor(255, 100, 100, 200)
         else
-            color = UVColors.MW_Others
+            -- color = UVColors.MW_Others
         end
         
         local text = alt and (status_text) or (racer_name)
         
-        surface.SetDrawColor(0, 0, 0, 200)
+        -- surface.SetDrawColor(0, 0, 0, 200)
         draw.NoTexture()
         surface.DrawRect(w * 0.7275, h * 0.185 + racercount, w * 0.2475, h * 0.025)
         
-        draw.DrawText(i,"UVMostWantedLeaderboardFont",w * 0.73,(h * 0.185) + racercount,color,TEXT_ALIGN_LEFT)
-        draw.DrawText(text,"UVMostWantedLeaderboardFont",w * 0.97,(h * 0.185) + racercount,color,TEXT_ALIGN_RIGHT)
+        -- draw.DrawText(i,"UVMostWantedLeaderboardFont",w * 0.73,(h * 0.185) + racercount,color,TEXT_ALIGN_LEFT)
+        -- draw.DrawText(text,"UVMostWantedLeaderboardFont",w * 0.97,(h * 0.185) + racercount,color,TEXT_ALIGN_RIGHT)
+		
+		draw.SimpleTextOutlined( i, "UVMostWantedLeaderboardFont",w * 0.73,( h * 0.185) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 0.75, Color(0, 0, 0, 75) )
+		draw.SimpleTextOutlined( text, "UVMostWantedLeaderboardFont",w * 0.97,( h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 0.75, Color(0, 0, 0, 75) )
     end
 end
 

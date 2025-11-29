@@ -617,7 +617,7 @@ local function original_racing_main( ... )
     TEXT_ALIGN_RIGHT)
     
     -- Racer List
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 16), 1 do
         local entry = string_array[i]
         
         local racer_name = entry[1]
@@ -665,7 +665,7 @@ local function original_racing_main( ... )
 		end
         
         if UVHUDRaceInfo.Info.Laps > 1 then
-            racerpos = 3.25
+            racerpos = 3.15
         end
         
         local color = nil

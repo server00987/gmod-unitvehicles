@@ -629,9 +629,9 @@ if CLIENT then
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
-			notification.AddLegacy("#tool.uvpursuittech.applied", NOTIFY_UNDO,5)
+			notification.AddLegacy("#tool.uvshared.applied", NOTIFY_UNDO,5)
 			surface.PlaySound("buttons/button15.wav")
-			Msg("#tool.uvpursuittech.applied")
+			-- Msg("#tool.uvshared.applied")
 		end
 		CPanel:AddItem(applysettings)
 	end

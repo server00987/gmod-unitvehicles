@@ -590,7 +590,8 @@ UV_UI.racing.carbon.events = {
             surface.DrawRect( w*0.25, h*0.3, w*0.5, h*0.03)
             
             draw.DrawText( "#uv.results.race.pos.caps", "UVCarbonLeaderboardFont", w*0.2565, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
-            draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.4, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+            draw.DrawText( "#uv.results.race.name.caps", "UVCarbonLeaderboardFont", w*0.325, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
+            draw.DrawText( "#uv.results.race.car.caps", "UVCarbonLeaderboardFont", w*0.45, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_LEFT )
             draw.DrawText( "#uv.results.race.time.caps", "UVCarbonLeaderboardFont", w*0.74, h*0.3025, Color( 255, 255, 255), TEXT_ALIGN_RIGHT )
             
             -- Draw visible racer entries
@@ -603,14 +604,36 @@ UV_UI.racing.carbon.events = {
             for i = startIndex, endIndex do
                 local racer = racersArray[i]
                 local y = rowYStart + ((i - startIndex) * rowHeight)
-                
+                local ymax = w * 0.2
+                local ynmax = w * 0.12
+				
                 local info = racer.array or racer  -- fallback if 'array' doesn't exist
                 
                 local name = info["Name"] or "Unknown"
                 local totalTime = info["TotalTime"] and info["TotalTime"] or "#uv.race.suffix.dnf"
                 
                 if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
-                
+				
+			   	surface.SetFont("UVCarbonLeaderboardFont")
+               local vehname = info["VehicleName"]
+			   vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+
+				textW = surface.GetTextSize(vehname)
+				textnW = surface.GetTextSize(name)
+				if textW > ymax then
+					while surface.GetTextSize(vehname .. "...") > ymax do
+						vehname = string.sub(vehname, 1, -2)
+					end
+					vehname = vehname .. "..."
+				end
+				
+				if textnW > ynmax then
+					while surface.GetTextSize(name .. "...") > ynmax do
+						name = string.sub(vehname, 1, -2)
+					end
+					name = name .. "..."
+				end
+				
                 -- Background for zebra striping
                 local bgAlpha = (i % 2 == 0) and 100 or 50
                 surface.SetMaterial(UVMaterials['BACKGROUND_CARBON_FILLED'])
@@ -621,8 +644,8 @@ UV_UI.racing.carbon.events = {
                 surface.DrawTexturedRect( w * 0.735, y, w * 0.015, rowHeight)
 
 				draw.SimpleTextOutlined( tostring(i), "UVCarbonLeaderboardFont", w * 0.2565, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-				draw.SimpleTextOutlined( name, "UVCarbonLeaderboardFont", w * 0.4, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
-				-- draw.SimpleTextOutlined( info["VehicleName"], "UVCarbonLeaderboardFont", w * 0.52, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+				draw.SimpleTextOutlined( name, "UVCarbonLeaderboardFont", w * 0.325, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+				draw.SimpleTextOutlined( vehname, "UVCarbonLeaderboardFont", w * 0.45, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 				draw.SimpleTextOutlined( UV_FormatRaceEndTime(totalTime), "UVCarbonLeaderboardFont", w * 0.74, y + h * 0.0035, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
             end
             
@@ -1546,7 +1569,7 @@ local function carbon_racing_main( ... )
 
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
-    for i = 1, racer_count, 1 do
+    for i = 1, math.Clamp(racer_count, 1, 16), 1 do
         if racer_count == 1 then
             return
         end

@@ -146,7 +146,7 @@ local function ctu_racing_main( ... )
 
 		-- Racer List
 		local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
-		for i = 1, racer_count, 1 do
+		for i = 1, math.Clamp(racer_count, 1, 16), 1 do
 			--if racer_count == 1 then return end
 			local entry = string_array[i]
 			

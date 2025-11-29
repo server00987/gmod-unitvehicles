@@ -97,7 +97,7 @@ if CLIENT then
 		RoadblocksAdjust:SetSize(500, 220)
 		RoadblocksAdjust:SetBackgroundBlur(true)
 		RoadblocksAdjust:Center()
-		RoadblocksAdjust:SetTitle("#tool.uvroadblock.create")
+		RoadblocksAdjust:SetTitle("#tool.uvroadblock.name")
 		RoadblocksAdjust:SetDraggable(false)
 		RoadblocksAdjust:MakePopup()
 
@@ -247,9 +247,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "Roadblock Settings Applied!", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "#tool.uvroadblock.applied" )
+			-- Msg( "#tool.uvshared.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -309,7 +309,7 @@ if CLIENT then
 			end
 			net.Start("UVRoadblocksLoadAll")
 			net.SendToServer()
-			notification.AddLegacy( "#tool.uvroadblock.loaded.all", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvshared.loaded.all", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(LoadAll)
@@ -321,7 +321,7 @@ if CLIENT then
 			UVRoadblocksScrollPanel:Clear()
 			selecteditem = nil
 			UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
-			notification.AddLegacy( "#tool.uvroadblock.refreshed", NOTIFY_UNDO, 5 )
+			-- notification.AddLegacy( "#tool.uvroadblock.refreshed", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
@@ -333,9 +333,9 @@ if CLIENT then
 			
 			if isstring(selecteditem) then
 				file.Delete( "unitvehicles/roadblocks/"..game.GetMap().."/"..selecteditem )
-				notification.AddLegacy( string.format( language.GetPhrase("tool.uvroadblock.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( language.GetPhrase("tool.uvshared.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
-				Msg( "Roadblock "..selecteditem.." has been deleted!\n" )
+				-- Msg( "Roadblock "..selecteditem.." has been deleted!\n" )
 			end
 			
 			UVRoadblocksScrollPanel:Clear()

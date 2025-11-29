@@ -12,18 +12,15 @@ if CLIENT then
 	}
 
 	function TOOL.BuildCPanel(CPanel)
-
 		CPanel:AddControl("Label", { Text = "#tool.uvnamechanger.desc" })
 
 		local NameEntry = vgui.Create( "DTextEntry", CPanel )
-		NameEntry:SetPlaceholderText( "#tool.uvnamechanger.settings.nameentry" )
+		NameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
 		NameEntry:SetSize(CPanel:GetWide(), 22)
 		NameEntry:SetValue(GetConVar("uvnamechanger_name"):GetString())
 		NameEntry:SetConVar("uvnamechanger_name")
 		CPanel:AddItem(NameEntry)
-			
 	end
-
 end
 
 function TOOL:LeftClick( trace )

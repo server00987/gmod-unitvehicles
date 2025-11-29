@@ -68,7 +68,7 @@ if CLIENT then
 		
 		local Intro3 = vgui.Create( "DLabel", TrafficAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "#tool.uvtrafficmanager.create.uniquename" )
+		Intro3:SetText( "#tool.uvshared.create.uniquename" )
 		Intro3:SizeToContents()
 		
 		local TrafficNameEntry = vgui.Create( "DTextEntry", TrafficAdjust )
@@ -78,10 +78,10 @@ if CLIENT then
 		
 		local SaveColour = vgui.Create("DCheckBoxLabel", TrafficAdjust )
 		SaveColour:SetPos( 20, 160 )
-		SaveColour:SetText("#tool.uvtrafficmanager.create.color")
+		SaveColour:SetText("#tool.uvshared.savecol")
 		SaveColour:SetSize(TrafficAdjust:GetWide(), 22)
 		
-		OK:SetText("#tool.uvtrafficmanager.create.create")
+		OK:SetText("#tool.uvshared.create")
 		OK:SetSize(TrafficAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
@@ -164,13 +164,13 @@ if CLIENT then
 				end
 				TrafficAdjust:Close()
 				
-				notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.saved"), Name ), NOTIFY_UNDO, 5 )
-				Msg( "Saved "..Name.." as a Traffic!\n" )
+				notification.AddLegacy( string.format( lang("tool.uvshared.saved"), Name ), NOTIFY_UNDO, 5 )
+				-- Msg( "Saved "..Name.." as a Traffic!\n" )
 				
 				surface.PlaySound( "buttons/button15.wav" )
 				
 			else
-				TrafficNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
+				TrafficNameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -430,9 +430,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 			
-			notification.AddLegacy( "#tool.uvtrafficmanager.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			Msg( "#tool.uvtrafficmanager.applied" )
+			-- Msg( "#tool.uvtrafficmanager.applied" )
 			
 		end
 		CPanel:AddItem(applysettings)
@@ -490,7 +490,7 @@ if CLIENT then
 
 					if #savedVehicles == 0 then
 						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#tool.uvtrafficmanager.settings.novehicle")
+						emptyLabel:SetText("#tool.uvshared.novehicle")
 						emptyLabel:SetTextColor(Color(200, 200, 200))
 						emptyLabel:SetFont("DermaDefaultBold")
 						emptyLabel:SetContentAlignment(5)
