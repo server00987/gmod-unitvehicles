@@ -9,6 +9,8 @@ TOOL.ClientConVar["maxtraffic"] = 5
 
 local conVarsDefault = TOOL:BuildConVarList()
 
+UVTrafficManagerTool = UVTrafficManagerTool or {}
+
 if SERVER then
 	
 	net.Receive("UVTrafficManagerGetTrafficInfo", function( length, ply )
@@ -39,7 +41,6 @@ if CLIENT then
 	
 	net.Receive("UVTrafficManagerGetTrafficInfo", function( length )
 		UVTrafficTOOLMemory = net.ReadTable()
-		--PrintTable(UVTrafficTOOLMemory)
 	end)
 	
 	net.Receive("UVTrafficManagerAdjustTraffic", function()
@@ -156,15 +157,13 @@ if CLIENT then
 					
 					file.Write("unitvehicles/prop_vehicle_jeep/traffic/"..Name..".txt", string.Implode("",shit) )
 				end
-				
-				UVTrafficManagerScrollPanel:Clear()
-				UVTrafficManagerScrollPanelGlide:Clear()
-				UVTrafficManagerScrollPanelJeep:Clear()
-				UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-				UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-				UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-				TrafficAdjust:Close()
 
+				local baseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
+				if IsValid(UVTrafficManagerTool.ScrollPanel) and UVTrafficManagerTool.PopulateVehicleList then
+					UVTrafficManagerTool.PopulateVehicleList(baseId)
+				end
+				TrafficAdjust:Close()
+				
 				notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.saved"), Name ), NOTIFY_UNDO, 5 )
 				Msg( "Saved "..Name.." as a Traffic!\n" )
 				
@@ -403,6 +402,15 @@ if CLIENT then
 			print("Created a Default Vehicle Base data file for the Traffic Vehicles!")
 		end
 		
+		CPanel:AddControl("ComboBox", {
+			MenuButton = 1,
+			Folder = "traffic",
+			Options = {
+				["#preset.default"] = conVarsDefault
+			},
+			CVars = table.GetKeys(conVarsDefault)
+		})
+		
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
@@ -428,200 +436,179 @@ if CLIENT then
 			
 		end
 		CPanel:AddItem(applysettings)
-		
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "traffic",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.settings.clickapply",
-		})
 
 		CPanel:AddControl("Button", {
 			Text = "#tool.uvtrafficmanager.clear",
 			Command = "uv_cleartraffic"
 		})
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.simphys",
-		})
-		
-		local Frame = vgui.Create( "DFrame" )
-		Frame:SetSize( 280, 320 )
-		Frame:SetTitle( "" )
-		Frame:SetVisible( true )
-		Frame:ShowCloseButton( false )
-		Frame:SetDraggable( false )
-		Frame.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(Frame)
-		
-		UVTrafficManagerScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVTrafficManagerScrollPanel:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanel:SetPos( 0, 0 )
-		
-		UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-		
-		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "#refresh" )
-		Refresh:SetSize( 280, 20 )
-		Refresh.DoClick = function( self )
-			UVTrafficManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(Refresh)
-		
-		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "#spawnmenu.menu.delete" )
-		Delete:SetSize( 280, 20 )
-		Delete.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/simfphys/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVTrafficManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSaves( UVTrafficManagerScrollPanel )
-		end
-		CPanel:AddItem(Delete)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.glide",
-		})
-		
-		local FrameGlide = vgui.Create( "DFrame" )
-		FrameGlide:SetSize( 280, 320 )
-		FrameGlide:SetTitle( "" )
-		FrameGlide:SetVisible( true )
-		FrameGlide:ShowCloseButton( false )
-		FrameGlide:SetDraggable( false )
-		FrameGlide.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameGlide)
-		
-		UVTrafficManagerScrollPanelGlide = vgui.Create( "DScrollPanel", FrameGlide )
-		UVTrafficManagerScrollPanelGlide:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanelGlide:SetPos( 0, 0 )
-		
-		UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-		
-		local RefreshGlide = vgui.Create( "DButton", CPanel )
-		RefreshGlide:SetText( "#refresh" )
-		RefreshGlide:SetSize( 280, 20 )
-		RefreshGlide.DoClick = function( self )
-			UVTrafficManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshGlide)
-		
-		local DeleteGlide = vgui.Create( "DButton", CPanel )
-		DeleteGlide:SetText( "#spawnmenu.menu.delete" )
-		DeleteGlide:SetSize( 280, 20 )
-		DeleteGlide.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/glide/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVTrafficManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSavesGlide( UVTrafficManagerScrollPanelGlide )
-		end
-		CPanel:AddItem(DeleteGlide)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.global.hl2",
-		})
-		
-		local FrameJeep = vgui.Create( "DFrame" )
-		FrameJeep:SetSize( 280, 320 )
-		FrameJeep:SetTitle( "" )
-		FrameJeep:SetVisible( true )
-		FrameJeep:ShowCloseButton( false )
-		FrameJeep:SetDraggable( false )
-		FrameJeep.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameJeep)
-		
-		UVTrafficManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
-		UVTrafficManagerScrollPanelJeep:SetSize( 280, 320 )
-		UVTrafficManagerScrollPanelJeep:SetPos( 0, 0 )
-		
-		UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-		
-		local RefreshJeep = vgui.Create( "DButton", CPanel )
-		RefreshJeep:SetText( "#refresh" )
-		RefreshJeep:SetSize( 280, 20 )
-		RefreshJeep.DoClick = function( self )
-			UVTrafficManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-			notification.AddLegacy( "#tool.uvtrafficmanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshJeep)
-		
-		local DeleteJeep = vgui.Create( "DButton", CPanel )
-		DeleteJeep:SetText( "#spawnmenu.menu.delete" )
-		DeleteJeep:SetSize( 280, 20 )
-		DeleteJeep.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/prop_vehicle_jeep/traffic/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvtrafficmanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVTrafficManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVTrafficManagerGetSavesJeep( UVTrafficManagerScrollPanelJeep )
-		end
-		CPanel:AddItem(DeleteJeep)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.base.title",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvtrafficmanager.settings.base.desc",
-		})
+		-- Unified Vehicle Base UI
+		local vehicleBases = {
+			{ id = 1, name = "HL2 Jeep", func = UVTrafficManagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/traffic/", type = "txt" },
+			{ id = 2, name = "Simfphys", func = UVTrafficManagerGetSaves, path = "unitvehicles/simfphys/traffic/", type = "txt" },
+			{ id = 3, name = "Glide", func = UVTrafficManagerGetSavesGlide, path = "unitvehicles/glide/traffic/", type = "json" }
+		}
 
-		local vehiclebase = vgui.Create("DNumSlider")
-		vehiclebase:SetText("#tool.uvtrafficmanager.settings.base")
-		vehiclebase:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
-		vehiclebase:SetMinMax(1, 3)
-		vehiclebase:SetDecimals(0)
-		vehiclebase:SetValue(GetConVar("uvtrafficmanager_vehiclebase"))
-		vehiclebase:SetConVar("uvtrafficmanager_vehiclebase")
-		CPanel:AddItem(vehiclebase)
+		local vehicleBaseCombo = vgui.Create("DComboBox")
+		vehicleBaseCombo:SetSize(280, 20)
+		vehicleBaseCombo:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
+		local currentBaseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
+		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
+		for _, base in ipairs(vehicleBases) do
+			vehicleBaseCombo:AddChoice(base.name, base.id)
+		end
+
+		-- Scroll Panel
+		local FrameListPanel = vgui.Create("DFrame")
+		FrameListPanel:SetSize(280, 200)
+		FrameListPanel:SetTitle("")
+		FrameListPanel:SetVisible(true)
+		FrameListPanel:ShowCloseButton(false)
+		FrameListPanel:SetDraggable(false)
+		FrameListPanel.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+		CPanel:AddItem(FrameListPanel)
+
+		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
+		ScrollPanel:DockMargin(0, -25, 0, 0)
+		ScrollPanel:Dock(FILL)
+
+		-- Save this for later access by net.Receive
+		UVTrafficManagerTool.ScrollPanel = ScrollPanel
+
+		-- Also store the population function, so we can call it from net.Receive
+		UVTrafficManagerTool.PopulateVehicleList = function(baseId)
+			ScrollPanel:Clear()
+			selecteditem = nil
+
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
+					local index, highlight, offset = 0, false, 22
+
+					if #savedVehicles == 0 then
+						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
+						emptyLabel:SetText("#tool.uvtrafficmanager.settings.novehicle")
+						emptyLabel:SetTextColor(Color(200, 200, 200))
+						emptyLabel:SetFont("DermaDefaultBold")
+						emptyLabel:SetContentAlignment(5)
+						emptyLabel:Dock(TOP)
+						emptyLabel:SetTall(offset)
+						return
+					end
+
+					for _, v in ipairs(savedVehicles) do
+						local printname = v
+						if not selecteditem then selecteditem = v end
+
+						local Button = vgui.Create("DButton", ScrollPanel)
+						Button:SetText(printname)
+						Button:SetTextColor(Color(255, 255, 255))
+						Button:Dock(TOP)
+						Button:SetTall(offset)
+						Button:DockMargin(0, 0, 0, 2)
+
+						Button.highlight = highlight
+						Button.printname = v
+
+						Button.Paint = function(self, w, h)
+							local c_selected = Color(128, 185, 128, 255)
+							local c_normal = self.highlight and Color(108, 111, 114, 200) or Color(77, 80, 82, 200)
+							local c_hovered = Color(41, 128, 185, 255)
+							local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
+							draw.RoundedBox(5, 1, 1, w - 2, h - 1, c_)
+						end
+
+						Button.DoClick = function(self)
+							selecteditem = self.printname
+							SetClipboardText(selecteditem)
+
+							if base.type == "json" then
+								UVTOOLMemory = util.JSONToTable(file.Read(base.path .. selecteditem, "DATA"), true)
+							else
+								local DataString = file.Read(base.path .. selecteditem, "DATA")
+								local words, decoded = string.Explode("", DataString), {}
+								for k, v in pairs(words) do decoded[k] = string.char(string.byte(v) - 20) end
+								local Data = string.Explode("#", string.Implode("", decoded))
+								table.Empty(UVTOOLMemory)
+								for _, v in pairs(Data) do
+									local Var = string.Explode("=", v)
+									local name, variable = Var[1], Var[2]
+									if name and variable then
+										if name == "SubMaterials" then
+											UVTOOLMemory[name] = {}
+											local submats = string.Explode(",", variable)
+											for i = 0, (table.Count(submats) - 1) do
+												UVTOOLMemory[name][i] = submats[i + 1]
+											end
+										else
+											UVTOOLMemory[name] = variable
+										end
+									end
+								end
+							end
+
+							net.Start("UVTrafficManagerGetTrafficInfo")
+							net.WriteTable(UVTOOLMemory)
+							net.SendToServer()
+						end
+
+						index = index + 1
+						highlight = not highlight
+					end
+					break
+				end
+			end
+		end
+
+		-- Initialize
+		UVTrafficManagerTool.PopulateVehicleList(GetConVar("uvtrafficmanager_vehiclebase"):GetInt())
+
+		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
+		
+		-- Refresh Button
+		local RefreshBtn = vgui.Create("DButton")
+		RefreshBtn:SetText("#refresh")
+		RefreshBtn:SetSize(280, 20)
+		RefreshBtn.DoClick = function()
+			UVTrafficManagerTool.PopulateVehicleList(GetConVar("uvtrafficmanager_vehiclebase"):GetInt())
+			notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
+			surface.PlaySound("buttons/button15.wav")
+		end
+		CPanel:AddItem(RefreshBtn)
+
+		-- Delete Button
+		local DeleteBtn = vgui.Create("DButton")
+		DeleteBtn:SetText("#spawnmenu.menu.delete")
+		DeleteBtn:SetSize(280, 20)
+		DeleteBtn.DoClick = function()
+			local baseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
+			local basePath, baseType
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					basePath, baseType = base.path, base.type
+					break
+				end
+			end
+			if isstring(selecteditem) and basePath then
+				if file.Delete(basePath .. selecteditem) then
+					notification.AddLegacy(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem), NOTIFY_UNDO, 5)
+					surface.PlaySound("buttons/button15.wav")
+					Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
+				end
+			end
+			UVTrafficManagerTool.PopulateVehicleList(baseId)
+		end
+		CPanel:AddItem(DeleteBtn)
+				
+		-- Dropdown for vehicle base selection
+		CPanel:AddControl("Label", { Text = "#tool.uvtrafficmanager.settings.base.title" })
+		CPanel:AddItem(vehicleBaseCombo)
+
+		CPanel:AddControl("Label", { Text = "" }) -- General Heat Settings
+		CPanel:AddControl("Label", { Text = "#tool.uvtrafficmanager.settings.general.title" })
 
 		local spawncondition = vgui.Create("DNumSlider")
 		spawncondition:SetText("#tool.uvtrafficmanager.settings.spawncondition")
@@ -641,8 +628,14 @@ if CLIENT then
 		maxtraffic:SetConVar("uvtrafficmanager_maxtraffic")
 		CPanel:AddItem(maxtraffic)
 		
+		-- Sync dropdown and slider
+		vehicleBaseCombo.OnSelect = function(self, index, value, data)
+			local baseId = tonumber(data)
+			if not baseId then return end
+			RunConsoleCommand("uvtrafficmanager_vehiclebase", baseId)
+			UVTrafficManagerTool.PopulateVehicleList(baseId)
+		end
 	end
-	
 end
 
 function TOOL:RightClick(trace)

@@ -11,6 +11,8 @@ TOOL.ClientConVar["maxracer"] = 3
 
 local conVarsDefault = TOOL:BuildConVarList()
 
+UVRacerManagerTool = UVRacerManagerTool or {}
+
 if SERVER then
 	
 	net.Receive("UVRacerManagerGetRacerInfo", function( length, ply )
@@ -158,15 +160,13 @@ if CLIENT then
 					
 					file.Write("unitvehicles/prop_vehicle_jeep/racers/"..Name..".txt", string.Implode("",shit) )
 				end
-				
-				UVRacerManagerScrollPanel:Clear()
-				UVRacerManagerScrollPanelGlide:Clear()
-				UVRacerManagerScrollPanelJeep:Clear()
-				UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
-				UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
-				UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
-				RacerAdjust:Close()
 
+				local baseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
+				if IsValid(UVRacerManagerTool.ScrollPanel) and UVRacerManagerTool.PopulateVehicleList then
+					UVRacerManagerTool.PopulateVehicleList(baseId)
+				end
+				RacerAdjust:Close()
+				
 				notification.AddLegacy( string.format( lang("tool.uvracermanager.saved"), Name ), NOTIFY_UNDO, 5 )
 				Msg( "Saved "..Name.." as a Racer!\n" )
 				
@@ -405,6 +405,15 @@ if CLIENT then
 			print("Created a Default Vehicle Base data file for the Racer Vehicles!")
 		end
 		
+		CPanel:AddControl("ComboBox", {
+			MenuButton = 1,
+			Folder = "racers",
+			Options = {
+				["#preset.default"] = conVarsDefault
+			},
+			CVars = table.GetKeys(conVarsDefault)
+		})
+		
 		local applysettings = vgui.Create("DButton")
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
@@ -432,203 +441,184 @@ if CLIENT then
 			
 		end
 		CPanel:AddItem(applysettings)
-		
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "racers",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.settings.clickapply",
-		})
 
 		CPanel:AddControl("Button", {
 			Text = "#tool.uvracermanager.clear",
 			Command = "uv_clearracers"
 		})
 		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.global.simphys",
-		})
-		
-		local Frame = vgui.Create( "DFrame" )
-		Frame:SetSize( 280, 320 )
-		Frame:SetTitle( "" )
-		Frame:SetVisible( true )
-		Frame:ShowCloseButton( false )
-		Frame:SetDraggable( false )
-		Frame.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(Frame)
-		
-		UVRacerManagerScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVRacerManagerScrollPanel:SetSize( 280, 320 )
-		UVRacerManagerScrollPanel:SetPos( 0, 0 )
-		
-		UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
-		
-		local Refresh = vgui.Create( "DButton", CPanel )
-		Refresh:SetText( "#refresh" )
-		Refresh:SetSize( 280, 20 )
-		Refresh.DoClick = function( self )
-			UVRacerManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
-			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(Refresh)
-		
-		local Delete = vgui.Create( "DButton", CPanel )
-		Delete:SetText( "#spawnmenu.menu.delete" )
-		Delete:SetSize( 280, 20 )
-		Delete.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/simfphys/racers/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVRacerManagerScrollPanel:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSaves( UVRacerManagerScrollPanel )
-		end
-		CPanel:AddItem(Delete)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.global.glide",
-		})
-		
-		local FrameGlide = vgui.Create( "DFrame" )
-		FrameGlide:SetSize( 280, 320 )
-		FrameGlide:SetTitle( "" )
-		FrameGlide:SetVisible( true )
-		FrameGlide:ShowCloseButton( false )
-		FrameGlide:SetDraggable( false )
-		FrameGlide.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameGlide)
-		
-		UVRacerManagerScrollPanelGlide = vgui.Create( "DScrollPanel", FrameGlide )
-		UVRacerManagerScrollPanelGlide:SetSize( 280, 320 )
-		UVRacerManagerScrollPanelGlide:SetPos( 0, 0 )
-		
-		UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
-		
-		local RefreshGlide = vgui.Create( "DButton", CPanel )
-		RefreshGlide:SetText( "#refresh" )
-		RefreshGlide:SetSize( 280, 20 )
-		RefreshGlide.DoClick = function( self )
-			UVRacerManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
-			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshGlide)
-		
-		local DeleteGlide = vgui.Create( "DButton", CPanel )
-		DeleteGlide:SetText( "#spawnmenu.menu.delete" )
-		DeleteGlide:SetSize( 280, 20 )
-		DeleteGlide.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/glide/racers/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVRacerManagerScrollPanelGlide:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSavesGlide( UVRacerManagerScrollPanelGlide )
-		end
-		CPanel:AddItem(DeleteGlide)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.global.hl2",
-		})
-		
-		local FrameJeep = vgui.Create( "DFrame" )
-		FrameJeep:SetSize( 280, 320 )
-		FrameJeep:SetTitle( "" )
-		FrameJeep:SetVisible( true )
-		FrameJeep:ShowCloseButton( false )
-		FrameJeep:SetDraggable( false )
-		FrameJeep.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
-		end
-		CPanel:AddItem(FrameJeep)
-		
-		UVRacerManagerScrollPanelJeep = vgui.Create( "DScrollPanel", FrameJeep )
-		UVRacerManagerScrollPanelJeep:SetSize( 280, 320 )
-		UVRacerManagerScrollPanelJeep:SetPos( 0, 0 )
-		
-		UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
-		
-		local RefreshJeep = vgui.Create( "DButton", CPanel )
-		RefreshJeep:SetText( "#refresh" )
-		RefreshJeep:SetSize( 280, 20 )
-		RefreshJeep.DoClick = function( self )
-			UVRacerManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
-			notification.AddLegacy( "#tool.uvracermanager.refreshed", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(RefreshJeep)
-		
-		local DeleteJeep = vgui.Create( "DButton", CPanel )
-		DeleteJeep:SetText( "#spawnmenu.menu.delete" )
-		DeleteJeep:SetSize( 280, 20 )
-		DeleteJeep.DoClick = function( self )
-			
-			if isstring(selecteditem) then
-				if file.Delete( "unitvehicles/prop_vehicle_jeep/racers/"..selecteditem ) then
-					notification.AddLegacy( string.format( lang("tool.uvracermanager.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
-					surface.PlaySound( "buttons/button15.wav" )
-					Msg( string.format( lang("tool.uvracermanager.deleted"), selecteditem ) )
-				end
-			end
-			
-			UVRacerManagerScrollPanelJeep:Clear()
-			selecteditem = nil
-			UVRacerManagerGetSavesJeep( UVRacerManagerScrollPanelJeep )
-		end
-		CPanel:AddItem(DeleteJeep)
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.base.title",
-		})
-		
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.base.desc",
-		})
+		-- Unified Vehicle Base UI
+		local vehicleBases = {
+			{ id = 1, name = "HL2 Jeep", func = uvracermanagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/racers/", type = "txt" },
+			{ id = 2, name = "Simfphys", func = uvracermanagerGetSaves, path = "unitvehicles/simfphys/racers/", type = "txt" },
+			{ id = 3, name = "Glide", func = uvracermanagerGetSavesGlide, path = "unitvehicles/glide/racers/", type = "json" }
+		}
 
-		local vehiclebase = vgui.Create("DNumSlider")
-		vehiclebase:SetText("#tool.uvracermanager.settings.base")
-		vehiclebase:SetTooltip("#tool.uvracermanager.settings.base.desc")
-		vehiclebase:SetMinMax(1, 3)
-		vehiclebase:SetDecimals(0)
-		vehiclebase:SetValue(GetConVar("uvracermanager_vehiclebase"))
-		vehiclebase:SetConVar("uvracermanager_vehiclebase")
-		CPanel:AddItem(vehiclebase)
+		local vehicleBaseCombo = vgui.Create("DComboBox")
+		vehicleBaseCombo:SetSize(280, 20)
+		vehicleBaseCombo:SetTooltip("#tool.uvracermanager.settings.base.desc")
+		local currentBaseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
+		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
+		for _, base in ipairs(vehicleBases) do
+			vehicleBaseCombo:AddChoice(base.name, base.id)
+		end
+		
+		-- Scroll Panel
+		local FrameListPanel = vgui.Create("DFrame")
+		FrameListPanel:SetSize(280, 200)
+		FrameListPanel:SetTitle("")
+		FrameListPanel:SetVisible(true)
+		FrameListPanel:ShowCloseButton(false)
+		FrameListPanel:SetDraggable(false)
+		FrameListPanel.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+		CPanel:AddItem(FrameListPanel)
 
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvracermanager.settings.racers",
+		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
+		ScrollPanel:DockMargin(0, -25, 0, 0)
+		ScrollPanel:Dock(FILL)
+
+		-- Save this for later access by net.Receive
+		UVRacerManagerTool.ScrollPanel = ScrollPanel
+
+		-- Also store the population function, so we can call it from net.Receive
+		UVRacerManagerTool.PopulateVehicleList = function(baseId)
+			ScrollPanel:Clear()
+			selecteditem = nil
+
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
+					local index, highlight, offset = 0, false, 22
+
+					if #savedVehicles == 0 then
+						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
+						emptyLabel:SetText("#tool.uvracermanager.settings.novehicle")
+						emptyLabel:SetTextColor(Color(200, 200, 200))
+						emptyLabel:SetFont("DermaDefaultBold")
+						emptyLabel:SetContentAlignment(5)
+						emptyLabel:Dock(TOP)
+						emptyLabel:SetTall(offset)
+						return
+					end
+
+					for _, v in ipairs(savedVehicles) do
+						local printname = v
+						if not selecteditem then selecteditem = v end
+
+						local Button = vgui.Create("DButton", ScrollPanel)
+						Button:SetText(printname)
+						Button:SetTextColor(Color(255, 255, 255))
+						Button:Dock(TOP)
+						Button:SetTall(offset)
+						Button:DockMargin(0, 0, 0, 2)
+
+						Button.highlight = highlight
+						Button.printname = v
+
+						Button.Paint = function(self, w, h)
+							local c_selected = Color(128, 185, 128, 255)
+							local c_normal = self.highlight and Color(108, 111, 114, 200) or Color(77, 80, 82, 200)
+							local c_hovered = Color(41, 128, 185, 255)
+							local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
+							draw.RoundedBox(5, 1, 1, w - 2, h - 1, c_)
+						end
+
+						Button.DoClick = function(self)
+							selecteditem = self.printname
+							SetClipboardText(selecteditem)
+
+							if base.type == "json" then
+								UVTOOLMemory = util.JSONToTable(file.Read(base.path .. selecteditem, "DATA"), true)
+							else
+								local DataString = file.Read(base.path .. selecteditem, "DATA")
+								local words, decoded = string.Explode("", DataString), {}
+								for k, v in pairs(words) do decoded[k] = string.char(string.byte(v) - 20) end
+								local Data = string.Explode("#", string.Implode("", decoded))
+								table.Empty(UVTOOLMemory)
+								for _, v in pairs(Data) do
+									local Var = string.Explode("=", v)
+									local name, variable = Var[1], Var[2]
+									if name and variable then
+										if name == "SubMaterials" then
+											UVTOOLMemory[name] = {}
+											local submats = string.Explode(",", variable)
+											for i = 0, (table.Count(submats) - 1) do
+												UVTOOLMemory[name][i] = submats[i + 1]
+											end
+										else
+											UVTOOLMemory[name] = variable
+										end
+									end
+								end
+							end
+
+							net.Start("uvracermanagerGetTrafficInfo")
+							net.WriteTable(UVTOOLMemory)
+							net.SendToServer()
+						end
+
+						index = index + 1
+						highlight = not highlight
+					end
+					break
+				end
+			end
+		end
+
+		-- Initialize
+		UVRacerManagerTool.PopulateVehicleList(GetConVar("uvracermanager_vehiclebase"):GetInt())
+
+		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
+		
+		-- Refresh Button
+		local RefreshBtn = vgui.Create("DButton")
+		RefreshBtn:SetText("#refresh")
+		RefreshBtn:SetSize(280, 20)
+		RefreshBtn.DoClick = function()
+			UVRacerManagerTool.PopulateVehicleList(GetConVar("uvracermanager_vehiclebase"):GetInt())
+			notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
+			surface.PlaySound("buttons/button15.wav")
+		end
+		CPanel:AddItem(RefreshBtn)
+
+		-- Delete Button
+		local DeleteBtn = vgui.Create("DButton")
+		DeleteBtn:SetText("#spawnmenu.menu.delete")
+		DeleteBtn:SetSize(280, 20)
+		DeleteBtn.DoClick = function()
+			local baseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
+			local basePath, baseType
+			for _, base in ipairs(vehicleBases) do
+				if base.id == baseId then
+					basePath, baseType = base.path, base.type
+					break
+				end
+			end
+			if isstring(selecteditem) and basePath then
+				if file.Delete(basePath .. selecteditem) then
+					notification.AddLegacy(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem), NOTIFY_UNDO, 5)
+					surface.PlaySound("buttons/button15.wav")
+					Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
+				end
+			end
+			UVRacerManagerTool.PopulateVehicleList(baseId)
+		end
+		CPanel:AddItem(DeleteBtn)
+				
+		-- Dropdown for vehicle base selection
+		CPanel:AddControl("Label", { Text = "#tool.uvracermanager.settings.base.title" })
+		CPanel:AddItem(vehicleBaseCombo)
+
+		CPanel:AddControl("Label", { Text = "" }) -- General Settings
+		CPanel:AddControl("Label", { Text = "#tool.uvracermanager.settings.assignracers.title" })
+
+		CPanel:AddControl("Button", {
+			Label = "#tool.uvracermanager.settings.spawnai",
+			Tooltip = "#tool.uvracermanager.settings.spawnai.desc",
+			Command = "uvrace_spawnai"
 		})
 
 		local assignracers = vgui.Create("DCheckBoxLabel")
@@ -639,13 +629,277 @@ if CLIENT then
 		CPanel:AddItem(assignracers)
 
 		-- /// TO BE REPLACED /// --
-		local racers = vgui.Create( "DTextEntry", CPanel )
-		racers:SetPlaceholderText( "#tool.uvracermanager.settings.racers.desc" )
-		racers:SetSize(CPanel:GetWide(), 22)
-		racers:SetValue(GetConVar("uvracermanager_racers"):GetString())
-		racers:SetConVar("uvracermanager_racers")
-		CPanel:AddItem(racers)
+		-- local racers = vgui.Create( "DTextEntry", CPanel )
+		-- racers:SetPlaceholderText( "#tool.uvracermanager.settings.racers.desc" )
+		-- racers:SetSize(CPanel:GetWide(), 22)
+		-- racers:SetValue(GetConVar("uvracermanager_racers"):GetString())
+		-- racers:SetConVar("uvracermanager_racers")
+		-- CPanel:AddItem(racers)
 		-- /// --
+
+		-- Create the vehicle tree panel
+		local vehicleTree = vgui.Create("DTree", CPanel)
+		vehicleTree:SetSize(CPanel:GetWide(), 200)
+		vehicleTree:Dock(FILL)
+		CPanel:AddItem(vehicleTree)
+
+		local clearButton = vgui.Create("DButton", CPanel)
+		clearButton:SetText("Clear All")
+		clearButton:Dock(TOP)
+		CPanel:AddItem(clearButton)
+
+		-----------------------------------------------------
+		-- SELECTED TABLE SYNC
+		-----------------------------------------------------
+		local selectedRacers = {}
+
+		local function ParseConvar()
+			local t = {}
+			for class in string.gmatch(GetConVar("uvracermanager_racers"):GetString(), "%S+") do
+				t[class] = true
+			end
+			return t
+		end
+
+		local function UpdateRacersConvar()
+			local out = {}
+
+			for class, _ in pairs(selectedRacers) do
+				table.insert(out, class)
+			end
+			table.sort(out)
+
+			local str = table.concat(out, " ")
+			RunConsoleCommand("uvracermanager_racers", str)
+		end
+
+		local classToNode = {} -- lookup so textbox edits update icons
+
+		local function RefreshNodeIcons()
+			for class, node in pairs(classToNode) do
+				if IsValid(node) then
+					if selectedRacers[class] then
+						node:SetIcon("icon16/tick.png")
+					else
+						node:SetIcon("icon16/car.png")
+					end
+				end
+			end
+		end
+
+		local function UpdateFolderIcon(folderNode)
+			if not IsValid(folderNode) then return end
+
+			local hasSelectedChild = false
+			for _, child in ipairs(folderNode:GetChildren() or {}) do
+				if child.ClassName and selectedRacers[child.ClassName] then
+					hasSelectedChild = true
+					break
+				end
+				for _, gc in ipairs(child.GetChildren and child:GetChildren() or {}) do
+					if gc.ClassName and selectedRacers[gc.ClassName] then
+						hasSelectedChild = true
+						break
+					end
+				end
+			end
+
+			if folderNode.SetIcon then
+				if hasSelectedChild then
+					folderNode:SetIcon("icon16/folder_add.png")
+				else
+					local expanded = folderNode.Expander and folderNode.Expander.IsExpanded and folderNode.Expander:IsExpanded()
+					if expanded then
+						folderNode:SetIcon("icon16/folder_add.png")
+					else
+						folderNode:SetIcon("icon16/folder.png")
+					end
+				end
+			end
+		end
+
+		-- ADD VEHICLE NODES
+		local function AddVehicleNodes(parentNode, vehicles)
+			table.sort(vehicles, function(a, b) return (a.name or "") < (b.name or "") end)
+
+			selectedRacers = ParseConvar()
+
+			for _, veh in ipairs(vehicles) do
+				local class = veh.class
+				local node = parentNode:AddNode(veh.name or class)
+				node.ClassName = class
+
+				classToNode[class] = node
+
+				if selectedRacers[class] then
+					node:SetIcon("icon16/tick.png")
+				else
+					node:SetIcon("icon16/car.png")
+				end
+
+				node:SetTooltip("#tool.uvracermanager.settings.racers.desc")
+
+				function node:DoRightClick()
+					if selectedRacers[class] then
+						selectedRacers[class] = nil
+						self:SetIcon("icon16/car.png")
+					else
+						selectedRacers[class] = true
+						self:SetIcon("icon16/tick.png")
+					end
+
+					UpdateRacersConvar()
+					UpdateFolderIcon(parentNode)
+				end
+			end
+
+			UpdateFolderIcon(parentNode)
+		end
+
+		-- HL2 Jeeps
+		local baseVehicles = list.Get("Vehicles") or {}
+		local baseCategories = {}
+		for class, data in pairs(baseVehicles) do
+			local cat = data.Category or "Other"
+			baseCategories[cat] = baseCategories[cat] or {}
+			table.insert(baseCategories[cat], {name = data.PrintName or class, class = class})
+		end
+		for catName, vehs in SortedPairs(baseCategories) do
+			local catNode = vehicleTree:AddNode(catName)
+			AddVehicleNodes(catNode, vehs)
+		end
+
+		-- Simfphys
+		local simfphysVehicles = list.Get("simfphys_vehicles") or {}
+		if next(simfphysVehicles) then
+			local simNode = vehicleTree:AddNode("[simfphys]")
+			local simCategories = {}
+			for class, data in pairs(simfphysVehicles) do
+				local cat = data.Category or "Other"
+				simCategories[cat] = simCategories[cat] or {}
+				table.insert(simCategories[cat], {name = data.Name or class, class = class})
+			end
+			for catName, vehs in SortedPairs(simCategories) do
+				local catNode = simNode:AddNode(catName)
+				AddVehicleNodes(catNode, vehs)
+			end
+		end
+
+		-- Glide
+		local glideNode = vehicleTree:AddNode("Glide - Select to load")
+		glideNode:SetExpanded(false)
+		local glideDataRequested = false
+
+		-- Request server data when Glide node is selected
+		function glideNode:OnNodeSelected()
+			if glideDataRequested then return end
+			glideDataRequested = true
+
+			net.Start("RequestGlideVehicles")
+			net.SendToServer()
+		end
+
+		-- Receive Glide vehicle data
+		net.Receive("GlideVehiclesTable", function()
+			local glideVehicles = net.ReadTable()
+			local glideCategories = list.Get("GlideCategories") or {}
+
+			if IsValid(glideNode) then
+				glideNode:SetText("Glide")
+			end
+
+			-- Always show Default first
+			if glideVehicles["Default"] then
+				local defaultNode = glideNode:AddNode("Default")
+				AddVehicleNodes(defaultNode, glideVehicles["Default"])
+			end
+
+			-- Populate Glide categories
+			for catID, catData in SortedPairs(glideCategories) do
+				local vehicles = glideVehicles[catID] or {}
+				if #vehicles > 0 then
+					local catNode = glideNode:AddNode(catData.name or catID)
+					AddVehicleNodes(catNode, vehicles)
+				end
+			end
+		end)
+		
+		clearButton.DoClick = function()
+			-- Clear the convar
+			RunConsoleCommand("uvracermanager_racers", "")
+			selectedRacers = {}
+
+			-- Remove all nodes
+			vehicleTree:Clear()
+			classToNode = {}
+
+			-- Rebuild HL2 Jeeps
+			local baseVehicles = list.Get("Vehicles") or {}
+			local baseCategories = {}
+			for class, data in pairs(baseVehicles) do
+				local cat = data.Category or "Other"
+				baseCategories[cat] = baseCategories[cat] or {}
+				table.insert(baseCategories[cat], {name = data.PrintName or class, class = class})
+			end
+			for catName, vehs in SortedPairs(baseCategories) do
+				local catNode = vehicleTree:AddNode(catName)
+				AddVehicleNodes(catNode, vehs)
+			end
+
+			-- Rebuild Simfphys
+			local simfphysVehicles = list.Get("simfphys_vehicles") or {}
+			if next(simfphysVehicles) then
+				local simNode = vehicleTree:AddNode("[simfphys]")
+				local simCategories = {}
+				for class, data in pairs(simfphysVehicles) do
+					local cat = data.Category or "Other"
+					simCategories[cat] = simCategories[cat] or {}
+					table.insert(simCategories[cat], {name = data.Name or class, class = class})
+				end
+				for catName, vehs in SortedPairs(simCategories) do
+					local catNode = simNode:AddNode(catName)
+					AddVehicleNodes(catNode, vehs)
+				end
+			end
+
+			-- Rebuild Glide node
+			local glideNode = vehicleTree:AddNode("Glide - Select to load")
+			glideNode:SetExpanded(false)
+			local glideDataRequested = false
+
+			function glideNode:OnNodeSelected()
+				if glideDataRequested then return end
+				glideDataRequested = true
+
+				net.Start("RequestGlideVehicles")
+				net.SendToServer()
+			end
+
+			net.Receive("GlideVehiclesTable", function()
+				local glideVehicles = net.ReadTable()
+				local glideCategories = list.Get("GlideCategories") or {}
+
+				if IsValid(glideNode) then
+					glideNode:SetText("Glide")
+				end
+
+				if glideVehicles["Default"] then
+					local defaultNode = glideNode:AddNode("Default")
+					AddVehicleNodes(defaultNode, glideVehicles["Default"])
+				end
+
+				for catID, catData in SortedPairs(glideCategories) do
+					local vehicles = glideVehicles[catID] or {}
+					if #vehicles > 0 then
+						local catNode = glideNode:AddNode(catData.name or catID)
+						AddVehicleNodes(catNode, vehicles)
+					end
+				end
+			end)
+		end
+
+		CPanel:AddControl("Label", { Text = "" }) -- General Settings
+		CPanel:AddControl("Label", { Text = "#tool.uvracermanager.settings.general.title" })
 
 		local spawncondition = vgui.Create("DNumSlider")
 		spawncondition:SetText("#tool.uvracermanager.settings.spawncondition")
@@ -664,9 +918,16 @@ if CLIENT then
 		maxracer:SetValue(GetConVar("uvracermanager_maxracer"))
 		maxracer:SetConVar("uvracermanager_maxracer")
 		CPanel:AddItem(maxracer)
-		
+
+		-- Sync dropdown and slider
+		vehicleBaseCombo.OnSelect = function(self, index, value, data)
+			local baseId = tonumber(data)
+			if not baseId then return end
+			RunConsoleCommand("uvracermanager_vehiclebase", baseId)
+			UVRacerManagerTool.PopulateVehicleList(baseId)
+		end
 	end
-	
+
 end
 
 function TOOL:RightClick(trace)
@@ -1583,4 +1844,32 @@ function TOOL:GetVehicleData( ent, ply )
 	net.WriteTable( ply.UVRacerTOOLMemory )
 	net.Send( ply )
 	
+end
+
+if SERVER then
+    util.AddNetworkString("RequestGlideVehicles")
+    util.AddNetworkString("GlideVehiclesTable")
+
+    net.Receive("RequestGlideVehicles", function(len, ply)
+        if not ply:IsSuperAdmin() then return end
+
+        local glideVehicles = {}
+
+        for className, scripted in pairs(scripted_ents.GetList() or {}) do
+            if scripted.Base == "base_glide_car" and istable(scripted.t) and scripted.t.GlideCategory then
+                local cat = scripted.t.GlideCategory or "Default"
+                glideVehicles[cat] = glideVehicles[cat] or {}
+                table.insert(glideVehicles[cat], {
+                    name  = scripted.t.PrintName or className,
+                    class = className -- Use key directly, guaranteed valid
+                })
+            end
+        end
+
+        local totalCategories = table.Count(glideVehicles)
+
+        net.Start("GlideVehiclesTable")
+        net.WriteTable(glideVehicles)
+        net.Send(ply)
+    end)
 end

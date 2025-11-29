@@ -533,15 +533,7 @@ if CLIENT then
 					
 					file.Write("unitvehicles/prop_vehicle_jeep/units/"..Name..".txt", string.Implode("",shit) )
 				end
-				
-				-- UVUnitManagerScrollPanel:Clear()
-				-- UVUnitManagerScrollPanelGlide:Clear()
-				-- UVUnitManagerScrollPanelJeep:Clear()
-				-- UVUnitManagerGetSaves( UVUnitManagerScrollPanel )
-				-- UVUnitManagerGetSavesGlide( UVUnitManagerScrollPanelGlide )
-				-- UVUnitManagerGetSavesJeep( UVUnitManagerScrollPanelJeep )
-				-- UnitAdjust:Close()
-				
+
 				local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
 				if IsValid(UVUnitManagerTool.ScrollPanel) and UVUnitManagerTool.PopulateVehicleList then
 					UVUnitManagerTool.PopulateVehicleList(baseId)
@@ -1055,7 +1047,7 @@ if CLIENT then
 		
 		-- Scroll Panel
 		local FrameListPanel = vgui.Create("DFrame")
-		FrameListPanel:SetSize(280, 320)
+		FrameListPanel:SetSize(280, 200)
 		FrameListPanel:SetTitle("")
 		FrameListPanel:SetVisible(true)
 		FrameListPanel:ShowCloseButton(false)
@@ -1303,102 +1295,13 @@ if CLIENT then
 		end
 		CPanel:AddItem(vehiclePanelHeat)
 
-		local selectedLabel = CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.assunits.selected" })
-		selectedLabel:SetVisible(false)
-
-		local selectedVehiclesPanelHeat = vgui.Create("DScrollPanel", CPanel)
-		selectedVehiclesPanelHeat:SetVisible(false)
-		selectedVehiclesPanelHeat.Paint = function(self, w, h)
-			draw.RoundedBox(5,0,0,w,h,Color(115,115,115,255))
-			draw.RoundedBox(5,1,1,w-2,h-2,Color(0,0,0))
-		end
-		CPanel:AddItem(selectedVehiclesPanelHeat)
-
-		-- local buffer = vgui.Create("DPanel", vehiclePanelHeat)
-		-- buffer:SetTall(25)
-		-- buffer:Dock(BOTTOM)
-
-		-- Populate multi-choice list for selected heat/unit
-
-		local function PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
-			selectedVehiclesPanelHeat:Clear()
-			selectedVehiclesPanelHeat:SetVisible(true)
-			chanceSlider:SetVisible(true)
-			selectedLabel:SetVisible(true)
-
-			local chanceConVar = string.format("uvunitmanager_units%s%s_chance", string.lower(unitName), heatLevel)
-			chanceSlider:SetConVar(chanceConVar)
-			chanceSlider:SetValue(GetConVar(chanceConVar):GetInt())
-
-			local count = 0
-			local entryHeight = 25
-			local maxVisible = 12
-			
-			for unit, isSelected in pairs(selected) do
-				if not isSelected then continue end
-				count = count + 1
-				local btn = vgui.Create("DButton", selectedVehiclesPanelHeat)
-				btn:SetText(unit)
-				btn:SetTextColor(Color(255,255,255))
-				btn:SetTall(22)
-				btn:Dock(TOP)
-				btn:DockMargin(5,3,5,0)
-				
-				btn.Paint = function(self,w,h)
-					local col = self:IsHovered() and Color(150,0,0) or Color(60,60,60)
-					draw.RoundedBox(4,0,0,w,h,col)
-				end
-
-				btn.DoClick = function(self)
-					selected[unit] = nil
-					if activeButtons[unit] then
-						activeButtons[unit].isActive = false
-					end
-					btn:Remove()
-
-					count = count - 1
-					selectedVehiclesPanelHeat:SetTall(math.min(count, maxVisible) * entryHeight + 5)
-
-					if count == 0 then
-						local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
-						lbl:SetText("#tool.uvunitmanager.settings.novehicle")
-						lbl:SetTextColor(Color(200,200,200))
-						lbl:Dock(TOP)
-						lbl:DockMargin(5,5,5,5)
-						selectedVehiclesPanelHeat:SetTall(25)
-					end
-
-					local newList = {}
-					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
-					local cVar = GetConVar(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel))
-					cVar:SetString(table.concat(newList," "))
-				end
-			end
-
-			if count == 0 then
-				local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
-				lbl:SetText("#tool.uvunitmanager.settings.novehicle")
-				lbl:SetTextColor(Color(200,200,200))
-				lbl:Dock(TOP)
-				lbl:DockMargin(5,5,5,5)
-				selectedVehiclesPanelHeat:SetTall(25)
-				return
-			end
-
-			selectedVehiclesPanelHeat:SetTall(math.min(count, maxVisible) * entryHeight + 5)
-		end
-
 		local function PopulateVehicleListHeatLvl(baseId, unitName, heatLevel)
 			vehiclePanelHeat:Clear()
-			--selectedVehiclesPanelHeat:Clear()
-			-- vehiclePanelHeat:AddItem(buffer)
 			if not unitName or not heatLevel then
 				vehiclePanelHeat:SetVisible(false)
-				--selectedVehiclesPanelHeat:SetVisible(false)
 				return
 			end
 			vehiclePanelHeat:SetVisible(true)
-			--selectedVehiclesPanelHeat:SetVisible(true)
 
 			local base = vehicleBases[baseId]
 			if not base then return end
@@ -1450,14 +1353,10 @@ if CLIENT then
 					for k,v in pairs(selected) do if v then table.insert(newList,k) end end
 					local cVar = GetConVar(string.format("uvunitmanager_units%s%s", string.lower(unitName), heatLevel))
 					cVar:SetString(table.concat(newList," "))
-
-					PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 				end
 
 				activeButtons[v] = btn
 			end
-
-			PopulateSelectedVehiclesPanelHeat(selected, activeButtons, unitName, heatLevel)
 		end
 
 		-- Heat selection callback

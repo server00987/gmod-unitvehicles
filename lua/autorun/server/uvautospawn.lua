@@ -2193,6 +2193,79 @@ function UVAutoSpawnRacer()
 	local availableracers = {}
 	local availableracer
 	local MEMORY = {}
+	
+	-- Override mode
+	local OverrideEnabled = GetConVar("uvracermanager_assignracers"):GetBool()
+	local OverrideList = string.Trim(GetConVar("uvracermanager_racers"):GetString())
+	local OverrideVehicles = string.Explode(" ", OverrideList)
+
+	if OverrideEnabled and #OverrideVehicles > 0 then
+		local uvnextclasstospawn = "npc_racervehicle"
+
+		-- Pick a random vehicle from the override list
+		local class_name = OverrideVehicles[math.random(1, #OverrideVehicles)]
+
+		if vehiclebase == 3 then
+			-- Glide
+			local Ent = ents.Create(class_name)
+			if IsValid(Ent) then
+				Ent:SetPos(uvspawnpoint + Vector(0,0,50))
+				Ent:SetAngles(uvspawnpointangles)
+				Ent:Spawn()
+				Ent:Activate()
+
+				-- Tag for AI
+				Ent.uvclasstospawnon = uvnextclasstospawn
+				table.insert(UVVehicleInitializing, Ent)
+			end
+
+		elseif vehiclebase == 2 then
+			-- Simfphys
+			local VehicleList = list.Get("simfphys_vehicles")
+			local vehicle = VehicleList[class_name]
+
+			if vehicle then
+				local SpawnPos = uvspawnpoint + (vector_up * 50) + (vehicle.SpawnOffset or vector_origin)
+				local SpawnAng = uvspawnpointangles
+				SpawnAng.pitch = 0
+				SpawnAng.yaw = SpawnAng.yaw + 180
+				SpawnAng.roll = 0
+
+				local Ent = simfphys.SpawnVehicle(Entity(1), SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, class_name, vehicle)
+				if IsValid(Ent) then
+					Ent.uvclasstospawnon = uvnextclasstospawn
+					table.insert(UVVehicleInitializing, Ent)
+				end
+			else
+				PrintMessage(HUD_PRINTTALK, "Simfphys vehicle '"..class_name.."' not found!")
+			end
+
+		elseif vehiclebase == 1 then
+			-- HL2 Jeep
+			local Vehicles = list.Get("Vehicles")
+			local vehData = Vehicles[class_name]
+
+			if vehData then
+				local Ent = ents.Create("prop_vehicle_jeep")
+				Ent.VehicleTable = vehData
+				Ent.VehicleName = vehData.PrintName or class_name
+				Ent:SetModel(vehData.Model)
+				Ent:SetPos(uvspawnpoint + Vector(0,0,50))
+				Ent:SetAngles(uvspawnpointangles)
+				Ent:SetKeyValue("vehiclescript", vehData.KeyValues.vehiclescript)
+				Ent:SetVehicleClass(class_name)
+				Ent:Spawn()
+				Ent:Activate()
+
+				Ent.uvclasstospawnon = uvnextclasstospawn
+				table.insert(UVVehicleInitializing, Ent)
+			else
+				PrintMessage(HUD_PRINTTALK, "HL2 Jeep vehicle '"..class_name.."' not found!")
+			end
+		end
+
+		return -- skip the rest of the function
+	end
 
 	local AssignedRacers = string.Trim( GetConVar( 'unitvehicle_racer_racers' ):GetString() )
 	local AssignedRacersStrings = string.Explode( " ", AssignedRacers )
@@ -2236,15 +2309,6 @@ function UVAutoSpawnRacer()
 		local JSONData = file.Read( "unitvehicles/glide/racers/"..availableracer, "DATA" )
 		
 		MEMORY = util.JSONToTable(JSONData, true)
-		
-		-- local pos = uvspawnpoint+Vector( 0, 0, 50 )
-		-- local ang = uvspawnpointangles
-
-		--local pos, ang = LocalToWorld( MEMORY.Pos, MEMORY.Angle, uvspawnpoint+Vector( 0, 0, 50 ), uvspawnpointangles )
-		
-		--ang.yaw = ang.yaw + 180 --Points the other way when spawning based on player
-	
-		--local entArray = MEMORY.Entities[next(MEMORY.Entities)]
 
 		local createdEntities = {}
 
@@ -2340,70 +2404,8 @@ function UVAutoSpawnRacer()
 		for k, v in pairs( createdEntities ) do
 			duplicator.ApplyEntityModifiers( NULL, v )
 			duplicator.ApplyBoneModifiers( NULL, v )
-
-			--if ( v.PostEntityPaste ) then
-			--	v:PostEntityPaste( NULL, nil, Ent, createdEntities )
-			--end
 		end
-		-- local Ent = ents.Create( entArray.Class )
-		-- duplicator.DoGeneric( Ent, entArray )
-		
-		-- Ent:SetPos( pos )
-		-- Ent:SetAngles( ang )
 
-		-- Ent:Spawn()
-		-- Ent:Activate()
-
-		-- table.Merge( Ent:GetTable(), MEMORY.Entities[next(MEMORY.Entities)] )
-		
-		-- if not IsValid(Ent) then PrintMessage( HUD_PRINTTALK, "The vehicle '"..availableracer.."' is missing!") return end
-		
-		-- if MEMORY.SubMaterials then
-		-- 	if istable( MEMORY.SubMaterials ) then
-		-- 		for i = 0, table.Count( MEMORY.SubMaterials ) do
-		-- 			Ent:SetSubMaterial( i, MEMORY.SubMaterials[i] )
-		-- 		end
-		-- 	end
-			
-		-- 	local groups = string.Explode( ",", MEMORY.BodyGroups)
-		-- 	for i = 1, table.Count( groups ) do
-		-- 		Ent:SetBodygroup(i, tonumber(groups[i]) )
-		-- 	end
-			
-		-- 	Ent:SetSkin( MEMORY.Skin )
-			
-		-- 	local c = string.Explode( ",", MEMORY.Color )
-		-- 	local Color =  Color( tonumber(c[1]), tonumber(c[2]), tonumber(c[3]), tonumber(c[4]) )
-			
-		-- 	local dot = Color.r * Color.g * Color.b * Color.a
-		-- 	Ent.OldColor = dot
-
-		-- 	if MEMORY.SaveColor then
-		-- 		Ent:SetColor( Color )
-		-- 	else
-		-- 		if isfunction(Ent.GetSpawnColor) then
-		-- 			Color = Ent:GetSpawnColor()
-		-- 			Ent:SetColor( Color )
-		-- 		else
-		-- 			Color.r = math.random(0, 255)
-		-- 			Color.g = math.random(0, 255)
-		-- 			Color.b = math.random(0, 255)
-		-- 			Ent:SetColor( Color )
-		-- 		end
-		-- 	end
-			
-		-- 	local data = {
-		-- 		Color = Color,
-		-- 		RenderMode = 0,
-		-- 		RenderFX = 0
-		-- 	}
-		-- 	duplicator.StoreEntityModifier( Ent, "colour", data )
-		-- end
-		
-		-- Ent.uvclasstospawnon = uvnextclasstospawn
-		
-		-- table.insert(UVVehicleInitializing, Ent)
-		
 	elseif vehiclebase == 2 then --simfphys
 		
 		local saved_vehicles = file.Find("unitvehicles/simfphys/racers/*.txt", "DATA")
