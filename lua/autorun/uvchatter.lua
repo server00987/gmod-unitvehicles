@@ -3839,6 +3839,7 @@ if SERVER then
 	end
 	
 	function UVChatterAirDown(self)
+		if UVChatterDelayed then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "airdown", 4)
 		end
