@@ -354,7 +354,8 @@ if SERVER then
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
 			ent.DoNotDuplicate = true
-			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .. " " .. tostring(ent:GetLocalPos()) .. " " .. tostring(ent:GetLocalMaxPos()) .. " " .. tostring(ent:GetChunk()) .. " " .. tostring(ent:GetChunkMax()) .. "\n"
+			local strinfmap = InfMap and " " .. tostring(ent:GetLocalPos()) .. " " .. tostring(ent:GetLocalMaxPos()) .. " " .. tostring(ent:GetChunk()) .. " " .. tostring(ent:GetChunkMax()) or ""
+			str = str .. tostring(ent:GetID()) .. " " .. tostring(ent:GetPos()) .. " " .. tostring(ent:GetMaxPos()) .. " " .. tostring(ent:GetSpeedLimit()) .. strinfmap .. "\n"
 		end
 		
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
@@ -365,10 +366,12 @@ if SERVER then
 		file.CreateDir("unitvehicles/races/" .. game.GetMap())
 		file.Write(filename, str)
 
-		local jsonfilename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".json"
-		local jsonstr = gmsave.SaveMap( ply )
+		if args[2] then --Save props option
+			local jsonfilename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".json"
+			local jsonstr = gmsave.SaveMap( ply )
 
-		file.Write(jsonfilename, jsonstr)
+			file.Write(jsonfilename, jsonstr)
+		end
 		
 		ImportExportText(name, true, ply)
 	end
@@ -1149,6 +1152,23 @@ local function RaceMenu()
     end
 end
 
+local function QuerySaveProps(txt)
+	Derma_Query(
+	    "#tool.uvracemanager.export.props.desc",
+	    "#tool.uvracemanager.export.props",
+	    "#openurl.yes",
+	    function()
+			chat.AddText("Exporting UV Race...")
+			RunConsoleCommand("uvrace_export", txt, "true") 
+		end,
+		"#openurl.nope",
+		function()
+			chat.AddText("Exporting UV Race...")
+			RunConsoleCommand("uvrace_export", txt) 
+		end
+	)
+end
+
 concommand.Add("uvrace_racemenu", RaceMenu)
 
 	local function UpdateVars( ply, cmd, args )
@@ -1166,9 +1186,8 @@ concommand.Add("uvrace_racemenu", RaceMenu)
 	concommand.Add("uvrace_updatevars", UpdateVars)
 	
 	local function QueryExport()
-		Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvracemanager.export.desc", cpID, function(txt)
-			chat.AddText("Exporting UV Race...")
-			RunConsoleCommand("uvrace_export", txt)
+		Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvracemanager.export.desc", "", function(txt)
+			QuerySaveProps(txt)
 		end, nil, "#addons.confirm", "#addons.cancel")
 	end
 	concommand.Add("uvrace_queryexport", QueryExport)
