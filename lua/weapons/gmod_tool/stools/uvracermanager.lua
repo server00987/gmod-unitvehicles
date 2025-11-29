@@ -555,7 +555,7 @@ if CLIENT then
 								end
 							end
 
-							net.Start("uvracermanagerGetTrafficInfo")
+							net.Start("UVRacerManagerGetRacerInfo")
 							net.WriteTable(UVTOOLMemory)
 							net.SendToServer()
 						end
