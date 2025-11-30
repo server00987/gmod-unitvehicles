@@ -376,33 +376,33 @@ UV_UI.racing.mostwanted.events = {
             
             if info["Busted"] then totalTime = "#uv.race.suffix.busted" end
             				
-			-- surface.SetFont("UVFont5UI")
-		   -- local vehname = info["VehicleName"]
-		   -- vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
+			surface.SetFont("UVFont5UI")
+		   local vehname = info["VehicleName"]
+		   vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or "<UNKNOWN>"
 
-			-- local ymax = w * 0.25
-			-- local ynmax = w * 0.13
-			-- textW = surface.GetTextSize(vehname)
-			-- textnW = surface.GetTextSize(name)
-			-- if textW > ymax then
-				-- while surface.GetTextSize(vehname .. "...") > ymax do
-					-- vehname = string.sub(vehname, 1, -2)
-				-- end
-				-- vehname = vehname .. "..."
-			-- end
+			local ymax = w * 0.25
+			local ynmax = w * 0.13
+			textW = surface.GetTextSize(vehname)
+			if textW > ymax then
+				while surface.GetTextSize(vehname .. "...") > ymax do
+					vehname = string.sub(vehname, 1, -2)
+				end
+				vehname = vehname .. "..."
+			end
 			
-			-- if textnW > ynmax then
-				-- while surface.GetTextSize(name .. "...") > ynmax do
-					-- name = string.sub(vehname, 1, -2)
-				-- end
-				-- name = name .. "..."
-			-- end
+			textnW = surface.GetTextSize(name)
+			if textnW > ynmax then
+				while surface.GetTextSize(name .. "...") > ynmax do
+					name = string.sub(name, 1, -2)
+				end
+				name = name .. "..."
+			end
 				
             local entry = {
                 y = yPos,
                 leftText = tostring(i),
                 middleText = name,
-				-- carText = vehname,
+				carText = vehname or "---",
                 rightText = UV_FormatRaceEndTime(totalTime),
                 revealTime = revealTime
             }
@@ -542,9 +542,9 @@ UV_UI.racing.mostwanted.events = {
                 if entry.middleText then
                     draw.SimpleText(entry.middleText, "UVFont5UI", xMiddle, yPos, UVColors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 end
-                -- if entry.carText then
-                    -- draw.SimpleText(entry.carText, "UVFont5UI", xCar, yPos, UVColors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-                -- end
+                if entry.carText then
+                    draw.SimpleText(entry.carText, "UVFont5UI", xCar, yPos, UVColors.MW_Racer, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                end
                 if entry.rightText then
                     draw.SimpleText(entry.rightText, "UVFont5UI", xRight, yPos, UVColors.MW_Racer, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
                 end
@@ -571,7 +571,7 @@ UV_UI.racing.mostwanted.events = {
 
                 draw.DrawText("#uv.results.race.pos", "UVFont5UI", xLeft, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 draw.DrawText("#uv.results.race.name", "UVFont5UI", xMiddle, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
-                -- draw.DrawText("#uv.results.race.car", "UVFont5UI", xCar, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+                draw.DrawText("#uv.results.race.car", "UVFont5UI", xCar, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
                 draw.DrawText("#uv.results.race.time", "UVFont5UI", xRight, h * 0.2, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
                 
                 local blink = 255 * math.abs(math.sin(RealTime() * 8))
