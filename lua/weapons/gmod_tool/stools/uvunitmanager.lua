@@ -1347,7 +1347,7 @@ if CLIENT then
 
 					if count == 0 then
 						local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
-						lbl:SetText("#tool.uvunitmanager.settings.novehicle")
+						lbl:SetText("#tool.uvshared.novehicle")
 						lbl:SetTextColor(Color(200,200,200))
 						lbl:Dock(TOP)
 						lbl:DockMargin(5,5,5,5)
@@ -1389,7 +1389,7 @@ if CLIENT then
 			local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
 			if not savedVehicles or #savedVehicles == 0 then
 				local lbl = vgui.Create("DLabel", vehiclePanelHeat)
-				lbl:SetText("#tool.uvunitmanager.settings.novehicle")
+				lbl:SetText("#tool.uvshared.novehicle")
 				lbl:SetTextColor(Color(200,200,200))
 				lbl:Dock(TOP)
 				lbl:DockMargin(5,5,5,5)
