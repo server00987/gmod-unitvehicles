@@ -388,7 +388,7 @@ if SERVER then
 			if not self.respondingtocall and (selfvelocity > self.Speeding or selfvelocity > 1115136) then
 				throttle = 0
 			end
-			if selfvelocity > 10000 then
+			if GetConVar("unitvehicle_tractioncontrol"):GetBool() and selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do

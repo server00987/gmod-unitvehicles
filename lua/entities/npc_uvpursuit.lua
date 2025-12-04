@@ -724,7 +724,7 @@ if SERVER then
 			if not self.respondingtocall and (selfvelocity > self.Speeding or selfvelocity > 1115136) then
 				throttle = 0
 			end
-			if selfvelocity > 10000 and not self.stuck then
+			if GetConVar("unitvehicle_tractioncontrol"):GetBool() and selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
@@ -1716,7 +1716,7 @@ if SERVER then
 				end
 			end
 			
-			if selfvelocity > 10000 and not self.stuck then
+			if GetConVar("unitvehicle_tractioncontrol"):GetBool() and selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
 					if istable(self.v.Wheels) then
 						for i = 1, table.Count( self.v.Wheels ) do
@@ -1737,13 +1737,20 @@ if SERVER then
 						end --Cornering
 					end
 				elseif self.v.IsGlideVehicle then
-					local EntityMeta = FindMetaTable( "Entity" )
-					local getTable = EntityMeta.GetTable
-					local selfvTbl = getTable( self.v )
-					local wheelslip = selfvTbl.avgForwardSlip > 0 and selfvTbl.avgForwardSlip or selfvTbl.avgForwardSlip < 0 and selfvTbl.avgForwardSlip * -1
-					if wheelslip ~= false then
-						throttle = throttle - (wheelslip/10) --Glide traction control
+					local maxSlip = 0
+					for _, wheel in ipairs(self.v.wheels) do
+						maxSlip = math.max(maxSlip, math.abs(wheel:GetForwardSlip() or 0))
 					end
+					local minThrottle = 0.5
+					local recoverRate = FrameTime()
+					self.AI_ThrottleMul = self.AI_ThrottleMul or 1
+					if maxSlip > 8 then
+						self.AI_ThrottleMul = math.max(self.AI_ThrottleMul - FrameTime()*2, minThrottle)
+					else
+						self.AI_ThrottleMul = math.min(self.AI_ThrottleMul + recoverRate, 1)
+					end
+					throttle = throttle * self.AI_ThrottleMul --Glide traction control
+					self.usenitrous = self.AI_ThrottleMul == 1 and true or false
 					if dist:Length2DSqr() > 250000 and vectdot < 0 and dist:Dot(forward) > 0 and (right.z > 0.75 or right.z < -0.75) and not self.stuck then
 						steer = 0
 						throttle = 1
@@ -1800,21 +1807,6 @@ if SERVER then
 			elseif self.v.IsGlideVehicle then
 				if cffunctions then
 					CFtoggleNitrous( self.v, self.usenitrous )
-				end
-				if GetConVar("unitvehicle_tractioncontrol"):GetBool() and self.v.wheels then
-					local maxSlip = 0
-					for _, wheel in ipairs(self.v.wheels) do
-						maxSlip = math.max(maxSlip, math.abs(wheel:GetForwardSlip() or 0))
-					end
-					local minThrottle = 0.5
-					local recoverRate = FrameTime()
-					self.AI_ThrottleMul = self.AI_ThrottleMul or 1
-					if maxSlip > 8 then
-						self.AI_ThrottleMul = math.max(self.AI_ThrottleMul - FrameTime()*2, minThrottle)
-					else
-						self.AI_ThrottleMul = math.min(self.AI_ThrottleMul + recoverRate, 1)
-					end
-					throttle = throttle * self.AI_ThrottleMul
 				end
 				self.v:TriggerInput("Throttle", throttle)
 				self.v:TriggerInput("Brake", throttle * -1)
