@@ -1634,7 +1634,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 				if car:Health() <= car:GetMaxHealth()/4 and not car.jeepdamaged then 
 					car.jeepdamaged = true
 					if car:LookupAttachment("vehicle_engine") > 0 then
-						ParticleEffectAttach("smoke_burning_engine_01", PATT+ACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
+						ParticleEffectAttach("smoke_burning_engine_01", PATTACH_POINT_FOLLOW, car, car:LookupAttachment("vehicle_engine"))
 					end
 				end
 			end
