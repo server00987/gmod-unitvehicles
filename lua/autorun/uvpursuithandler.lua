@@ -469,10 +469,12 @@ function UVSoundCooldown(heatlevel)
 
 	local vehicle = LocalPlayer():GetVehicle()
 	if vehicle then
-		vehicle = vehicle:GetParent() or vehicle
+		vehicle = IsValid(vehicle:GetParent()) and vehicle:GetParent() or vehicle
 	end
+	local physObj = IsValid(vehicle:GetPhysicsObject()) and vehicle:GetPhysicsObject() or vehicle
 
-	appendingString = (vehicle and vehicle:GetVelocity():LengthSqr() > 500000) and "high" or "low"
+
+	appendingString = (physObj and physObj:GetVelocity():LengthSqr() > 500000) and "high" or "low"
 
 	-- local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/5" .. appendingString )
 	-- if cooldownSound then
