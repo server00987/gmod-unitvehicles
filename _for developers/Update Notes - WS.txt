@@ -1,8 +1,18 @@
-<------- December 1 ------->
+<------- December 5 ------->
 [h1]New Features[/h1]
 [b]Tools[/b]
 [list]
 	[*]Added the [b]Manager: AI Racer[/b] tool, allowing you to create free roaming AI racers, or tweak a new Vehicle Override feature
+[/list]
+
+[b]AI[/b]
+[list]
+	[*]Added the option for [b]Traction Control[/b] for AI Racers and Units, where they reduce their throttle when driving Glide or Simfphys cars when losing control
+[/list]
+
+[b]Localization[/b]
+[list]
+	[*]Added WIP Thai localization
 [/list]
 
 [h1]Changes[/h1]
@@ -15,10 +25,17 @@
 
 [b]UI[/b]
 [list]
+	[*]Adjusted localization for all tools
 	[*]Capped the amount of racers on the racer list on multiple UI Styles
 	[*]Tweaked a few UI Styles to be more 1:1
 	[*]Fixed that the Underground 2 race results caused an error when trying to close it with the jump button
 	[*]Added the vehicle names used by racers to some UI Style race results
+[/list]
+
+[b]Other[/b]
+[list]
+	[*]Adjusted localization for all tools
+	[*]Fixed that HL2 Jeep vehicles caused errors at certain times
 [/list]
 
 And various other undocumented tweaks
