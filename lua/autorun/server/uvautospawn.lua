@@ -2757,6 +2757,10 @@ function UVAutoSpawnRacer()
 		Ent:SetVehicleClass( class )
 		Ent:Spawn()
 		Ent:Activate()
+		if ( Ent.OnDuplicated ) then
+			print('called')
+			Ent:OnDuplicated( MEMORY )
+		end
 		
 		local vehicle = Ent
 		if IsValid(Entity(1)) then
