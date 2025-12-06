@@ -2270,10 +2270,6 @@ if SERVER then
 	function UVHUDRespawn( ply, unit, unitnpc, isrhino, unitname )
 		local timerName = "UVSpawnQueue_" .. ply:SteamID64()
 
-		if RandomPlayerUnits:GetBool() then
-			unitname = "random"
-		end
-
 		if ply.uvspawningunit then
 			net.Start( "UVHUDRespawnInUVPlyMsg" )
 			net.WriteString("uv.chase.select.spam")
@@ -2323,11 +2319,12 @@ if SERVER then
 			ply:Spawn()
 			UVAutoSpawn(ply, isrhino, nil, playercontrolled)
 			plymsg.msg = "uv.chase.select.spawning"
-			
+
+			if RandomPlayerUnits:GetBool() then plymsg.msg = "uv.chase.select.spawning.random" end
+
 			net.Start( "UVHUDRespawnInUVPlyMsg" )
-			net.WriteString("uv.chase.select.spawning")
+			net.WriteString(plymsg.msg)
 			net.WriteString(unitname)
-			-- net.WriteString(cooldown)
 			net.Send(ply)
 		else
 			if not SpawnCooldownTable[ply] then
@@ -2336,6 +2333,8 @@ if SERVER then
 				if CurTime() - SpawnCooldownTable[ply] < SpawnCooldown:GetInt() then
 					plymsg.msg = "uv.chase.select.spawning.cooldown"
 					plymsg.cooldown = cooldown
+					
+					if RandomPlayerUnits:GetBool() then plymsg.msg = "uv.chase.select.spawning.cooldown.random" end
 					
 					net.Start("UVSpawnQueueUpdate")
 					net.WriteString(unitname)      -- vehicle/unit name
@@ -2357,9 +2356,12 @@ if SERVER then
 				ply.uvspawningunit = nil
 				net.Start( "UVHUDRespawnInUVPlyMsg" )
 				
-				net.WriteString("uv.chase.select.spawning")
+				if RandomPlayerUnits:GetBool() then
+					net.WriteString("uv.chase.select.spawning.random")
+				else
+					net.WriteString("uv.chase.select.spawning")
+				end
 				net.WriteString(unitname)
-				-- net.WriteString(cooldown)
 				net.Send(ply)
 				
 				net.Start("UVSpawnQueueUpdate")
@@ -4047,7 +4049,14 @@ else -- CLIENT Settings | HUD/Options
 			-- Display text only after bar is white or fading
 			if animTime >= whiteStart then
 				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
-				draw.SimpleTextOutlined( string.format( lang("uv.chase.select.spawning.cooldown"), carn, timel ), "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				local text = "%s %s"
+				if RandomPlayerUnits:GetBool() then
+					text = string.format( lang("uv.chase.select.spawning.cooldown.random"), timel )
+				else
+					text = string.format( lang("uv.chase.select.spawning.cooldown"), carn, timel )
+				end
+				
+				draw.SimpleTextOutlined( text, "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				draw.SimpleTextOutlined( string.format( lang("uv.chase.select.spawning.cooldown2"), UVBindButtonName(UVKeybindResetPosition:GetInt()) ), "UVFont5", w * 0.5, h * 0.95, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
 		end
@@ -4488,11 +4497,11 @@ else -- CLIENT Settings | HUD/Options
 	
 	net.Receive( "UVHUDRespawnInUVPlyMsg", function()
 		local msg = net.ReadString()
-		local unit = net.ReadString()
+		local unit = net.ReadString() or ""
 		local cooldown = net.ReadString()
 		local msgt = string.format( language.GetPhrase(msg), language.GetPhrase(unit), cooldown )
 
-		if not cooldown then
+		if (RandomPlayerUnits:GetBool() and cooldown) or not cooldown then
 			msgt = string.format( language.GetPhrase(msg), language.GetPhrase(unit) )
 		end
 

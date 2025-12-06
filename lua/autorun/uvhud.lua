@@ -311,6 +311,15 @@ if CLIENT then
     surface.CreateFont("UVWorldFont6-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0225)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Names
     surface.CreateFont("UVWorldFont7-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Results
 	
+    -- Settings Fonts
+    surface.CreateFont("UVSettingsFont", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, })
+    surface.CreateFont("UVSettingsFont-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, italic = true })
+    surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, })
+    surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, italic = true })
+    surface.CreateFont("UVSettingsFontSmall", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, })
+    surface.CreateFont("UVSettingsFontSmall-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, italic = true })
+    surface.CreateFont("UVSettingsFontSmall-Bold", { font = "EurostileBold", size = (math.Round(ScrH()*0.02)), weight = 1000, shadow = true, extended = true, })
+
     local isUVFrozen = false
     local effectDuration = 0
     local UVFreezeTime = 0
