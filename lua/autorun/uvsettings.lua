@@ -319,6 +319,7 @@ And various other undocumented tweaks
 	-- small materials for on/off indicators
 	local matTick = Material("unitvehicles/icons/generic_check.png", "mips")
 	local matCross = Material("unitvehicles/icons/generic_uncheck.png", "mips")
+
 	-- Build one setting (label / bool / slider / combo / button)
 	function UV.BuildSetting(parent, st, descPanel)
 		local function GetDisplayText()
@@ -530,57 +531,143 @@ And various other undocumented tweaks
 			local wrap = vgui.Create("DPanel", parent)
 			wrap:Dock(TOP)
 			wrap:DockMargin(6, 4, 6, 4)
-			wrap:SetTall(30)
-			wrap:SetText("")
+			wrap:SetTall(36)
 			wrap.Paint = function(self, w, h)
-				local hovered = self:IsHovered()
-				local bg = Color( 125, 125, 125, 0 )
-
-				-- background & text
-				draw.RoundedBox(6, 0, 0, w, h, bg)
-				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.RoundedBox(6, w*0.575, 0, w*0.425, h, Color(0,0,0,120))
+				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2,
+					color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
-			wrap.OnCursorEntered = function()
+			-------------------------------------------------------------
+			-- Hover description functions
+			-------------------------------------------------------------
+			local function PushDesc()
 				if descPanel then
 					descPanel.Text = st.text
 					descPanel.Desc = st.desc or ""
 				end
 			end
-
-			wrap.OnCursorExited = function()
+			local function PopDesc()
 				if descPanel then
 					descPanel.Text = ""
 					descPanel.Desc = ""
 				end
 			end
+			wrap.OnCursorEntered = PushDesc
+			wrap.OnCursorExited  = PopDesc
 
+			-------------------------------------------------------------
+			-- Slider
+			-------------------------------------------------------------
 			local slider = vgui.Create("DNumSlider", wrap)
 			slider:Dock(RIGHT)
-			slider:SetWide(300)
-			slider:DockMargin(6, 6, 6, 6)
-			slider:SetDecimals(st.decimals or 0)
+			slider:SetWide(220)
+			slider:DockMargin(8, 8, 6, 8)
 			slider:SetMin(st.min or 0)
 			slider:SetMax(st.max or 100)
+			slider:SetDecimals(st.decimals or 0)
+			slider:SetValue(st.min or 0)
+			slider.Label:SetVisible(false)
+			slider.TextArea:SetVisible(false)
+			slider.OnCursorEntered = PushDesc
+			slider.OnCursorExited  = PopDesc
+
+			-------------------------------------------------------------
+			-- Value box and confirm button container
+			-------------------------------------------------------------
+			local valPanel = vgui.Create("DPanel", wrap)
+			valPanel:SetWide(84)
+			valPanel:Dock(RIGHT)
+			valPanel:DockMargin(4, 8, 4, 8)
+			valPanel:SetPaintBackground(false)
+
+			local valBox = vgui.Create("DTextEntry", valPanel)
+			valBox:SetWide(60)
+			valBox:SetPos(0,0)
+			valBox:SetFont("UVMostWantedLeaderboardFont")
+			valBox:SetTextColor(color_white)
+			valBox:SetHighlightColor(Color(58,193,0))
+			valBox:SetCursorColor(Color(58,193,0))
+			valBox.Paint = function(self2, w, h)
+				draw.RoundedBox(4, 0, 0, w, h, Color(30,30,30,200))
+				self2:DrawTextEntryText(color_white, Color(58,193,0), color_white)
+			end
+			valBox.OnCursorEntered = PushDesc
+			valBox.OnCursorExited  = PopDesc
+
+			local applyBtn = vgui.Create("DButton", valPanel)
+			applyBtn:SetSize(20, valBox:GetTall())
+			applyBtn:SetPos(valBox:GetWide() + 2,0)
+			applyBtn:SetText("✔")
+			applyBtn:SetVisible(false)
+			applyBtn.Paint = function(self2, w, h)
+				draw.RoundedBox(4,0,0,w,h,self2:IsHovered() and Color(60,180,60) or Color(45,140,45))
+				draw.SimpleText("✔", "UVMostWantedLeaderboardFont", w/2,h/2,color_white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			end
+			applyBtn.OnCursorEntered = PushDesc
+			applyBtn.OnCursorExited  = PopDesc
+
+			-------------------------------------------------------------
+			-- Value tracking
+			-------------------------------------------------------------
+			local appliedValue = st.min or 0
+			local pendingValue = appliedValue
+
+			local function RoundValue(val)
+				if st.decimals ~= nil then
+					local factor = 10 ^ st.decimals
+					return math.floor(val * factor + 0.5) / factor
+				end
+				return val
+			end
+
+			local function ApplyPendingValue()
+				local val = RoundValue(pendingValue)
+				appliedValue = val
+				if st.convar then RunConsoleCommand(st.convar, tostring(val)) end
+				if st.func then pcall(st.func, val) end
+				valBox:SetText(string.format("%."..(st.decimals or 2).."f", val))
+				applyBtn:SetVisible(false)
+			end
+
+			valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
+			slider:SetValue(appliedValue)
+
+			-------------------------------------------------------------
+			-- Slider -> valBox sync
+			-------------------------------------------------------------
+			slider.OnValueChanged = function(_, val)
+				pendingValue = val
+				if IsValid(valBox) then
+					valBox:SetText(string.format("%."..slider:GetDecimals().."f", val))
+				end
+				applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
+			end
+
+			-------------------------------------------------------------
+			-- valBox -> slider sync
+			-------------------------------------------------------------
+			valBox.OnTextChanged = function(self2)
+				local v = tonumber(self2:GetValue())
+				if not v then return end
+				pendingValue = v
+				slider:SetValue(v)
+				applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
+			end
+
+			valBox.OnEnter = ApplyPendingValue
+			applyBtn.DoClick = ApplyPendingValue
+
+			-------------------------------------------------------------
+			-- Initialize from convar
+			-------------------------------------------------------------
 			if st.convar then
 				local cv = GetConVar(st.convar)
-				if cv then slider:SetValue(cv:GetFloat()) end
-			end
-			slider.OnValueChanged = function(_, val)
-				if st.convar then RunConsoleCommand(st.convar, tostring(val)) end
-			end
-
-			slider.OnCursorEntered = function()
-				if descPanel then
-					descPanel.Text = st.text
-					descPanel.Desc = st.desc or ""
-				end
-			end
-
-			slider.OnCursorExited = function()
-				if descPanel then
-					descPanel.Text = ""
-					descPanel.Desc = ""
+				if cv then
+					appliedValue = cv:GetFloat()
+					pendingValue = appliedValue
+					slider:SetValue(appliedValue)
+					valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
 				end
 			end
 
