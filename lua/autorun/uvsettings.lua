@@ -1249,12 +1249,19 @@ For example:
 				surface.SetFont(font)
 				local desc = language.GetPhrase(self.Desc or "") or ""
 
-				for paragraph in desc:gmatch("[^\n]+") do
-					local wrapped = UV_WrapText(paragraph, font, wrapWidth)
-					for _, line in ipairs(wrapped) do
-						draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
-						local _, th = surface.GetTextSize(line)
+				local paragraphs = string.Split(desc, "\n")
+				for _, paragraph in ipairs(paragraphs) do
+					if paragraph == "" then
+						-- Blank line → add font height as spacing
+						local _, th = surface.GetTextSize("A")
 						yOffset = yOffset + th
+					else
+						local wrapped = UV_WrapText(paragraph, font, wrapWidth)
+						for _, line in ipairs(wrapped) do
+							draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
+							local _, th = surface.GetTextSize(line)
+							yOffset = yOffset + th
+						end
 					end
 				end
 			end
