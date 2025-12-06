@@ -165,7 +165,7 @@ if CLIENT then -- Start of CLIENT Section
 	-- Create the desktop icon entry (clicking it runs console command which opens our menu)
 	list.Set("DesktopWindows", "UnitVehiclesSettings", {
 		title = "#uv.settings.unitvehicles",
-		icon  = "unitvehicles/icons/milestone_pursuit.png",
+		icon  = "unitvehicles/icons/MILESTONE_OUTRUN_PURSUITS_WON.png",
 		init = function(icon, window)
 			RunConsoleCommand("unitvehicles_open_settings")
 		end
