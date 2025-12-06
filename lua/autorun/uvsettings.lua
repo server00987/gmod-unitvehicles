@@ -26,9 +26,68 @@ if CLIENT then -- Start of CLIENT Section
 		end
 	end
 
+	-- Patch Notes -- Change this whenever a new update is releasing!
+	local pnote = [[
+# New Features
+**Tools**
+- Added the **Manager: AI Racer** tool, allowing you to create free roaming AI racers, or tweak a new Vehicle Override feature
+
+**AI**
+- Added the option for **Traction Control** for AI Racers and Units, where they reduce their throttle when driving Glide or Simfphys cars when losing control
+
+**Localization**
+- Added WIP Thai localization
+
+# Changes
+**Tools**
+- Race Manager - Added a new "Race Options" menu when you try to begin a race, now having the option to immediately start it as-is, spawn X amount of AI racers and invite them, or fill the entire grid with AI and then invite them
+- Race Manager - Added a new "Save props" prompt when exporting new races
+- Manager: Traffic - Applied the nice settings from Manager: Units.
+
+**UI**
+- Capped the amount of racers on the racer list on multiple UI Styles
+- Tweaked a few UI Styles to be more 1:1
+- Fixed that the Underground 2 race results caused an error when trying to close it with the jump button
+- Added the vehicle names used by racers to some UI Style race results
+
+**Other**
+- Adjusted localization for all tools
+- Fixed that HL2 Jeep vehicles caused errors at certain times
+
+And various other undocumented tweaks
+]]
+
 	UV.SettingsTable = {
 		{
 			TabName = "#uv.settings.tab.welcome", Icon = "unitvehicles/icons_settings/ingame_icon_options.png",
+			
+			{ type = "label", text = "#uv.settings.quick", desc = "#uv.settings.quick.desc" },
+			{ type = "combo", text = "#uv.settings.uistyle.main", desc = "uv.settings.uistyle.main.desc", convar = "unitvehicle_hudtype_main", content = {
+					{ "Crash Time - Undercover", "ctu"} ,
+					{ "NFS Most Wanted", "mostwanted"} ,
+					{ "NFS Carbon", "carbon"} ,
+					{ "NFS Underground", "underground"} ,
+					{ "NFS Underground 2", "underground2"} ,
+					{ "NFS Undercover", "undercover"} ,
+					{ "NFS ProStreet", "prostreet"} ,
+					{ "NFS World", "world"} ,
+					{ "#uv.uistyle.original", "original"} ,
+					{ "#uv.uistyle.none", "" }
+				},
+			},
+			{ type = "combo", text = "#uv.settings.audio.uvtrax.profile", desc = "uv.settings.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
+			{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
+			function(self2)
+				RunConsoleCommand("uv_spawn_as_unit")
+				if IsValid(UV.SettingsFrame) then
+					UV.SettingsFrame:Remove()
+				end
+			end
+			},
+			
+			{ type = "label", text = "#uv.settings.pnotes" },
+			{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
+			{ type = "info", text = pnote },
 		},
 		{
 			TabName = "#uv.settings.uistyle.title", Icon = "unitvehicles/icons_settings/options_icon_display.png",
@@ -104,6 +163,87 @@ if CLIENT then -- Start of CLIENT Section
 			-- { type = "keybind", text = "#uv.settings.keybind.resetposition", desc = "uv.settings.keybind.resetposition.desc", convar = "UVKeybindResetPosition", slot = 4 },
 			-- { type = "keybind", text = "#uv.settings.keybind.showresults", desc = "uv.settings.keybind.showresults.desc", convar = "UVKeybindShowRaceResults", slot = 5 },
 		-- },
+		{
+			TabName = "#uv.settings.pm", Icon = "unitvehicles/icons/cops_icon.png",
+
+			{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
+			function(self2)
+				RunConsoleCommand("uv_spawn_as_unit")
+				if IsValid(UV.SettingsFrame) then
+					UV.SettingsFrame:Remove()
+				end
+			end
+			},
+
+			{ type = "label", text = "#uv.settings.server", sv = true },
+			-- { type = "button", text = "#uv.settings.pm.pursuit.toggle", desc = "uv.settings.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
+			{ type = "button", text = "#uv.settings.pm.pursuit.start", desc = "uv.settings.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
+			{ type = "button", text = "#uv.settings.pm.pursuit.stop", desc = "uv.settings.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
+			{ type = "slider", text = "#uv.settings.pm.heatlevel", desc = "uv.settings.pm.heatlevel.desc", convar = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+			
+			{ type = "button", text = "#uv.settings.pm.ai.spawn", convar = "uv_spawnvehicles", sv = true },
+			{ type = "button", text = "#uv.settings.pm.ai.despawn", convar = "uv_despawnvehicles", sv = true },
+			
+			{ type = "label", text = "#uv.settings.pm.misc", sv = true },
+			{ type = "button", text = "#uv.settings.clearbounty", convar = "uv_clearbounty", sv = true },
+			{ type = "button", text = "#uv.settings.print.wantedtable", convar = "uv_wantedtable", sv = true },
+		},
+		{
+			TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons_settings/ingame_icon_options.png", sv = true,
+			{ type = "label", text = "#uv.settings.heatlevels", sv = true },
+			{ type = "bool", text = "#uv.settings.heatlevels.enable", desc = "uv.settings.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
+			{ type = "bool", text = "#uv.settings.heatlevels.aiunits", desc = "uv.settings.heatlevels.aiunits.desc", convar = "unitvehicle_spawnmainunits", sv = true },
+			
+			{ type = "label", text = "#uv.settings.general", sv = true },
+			{ type = "bool", text = "#uv.settings.pursuit.randomplayerunits", desc = "uv.settings.pursuit.randomplayerunits.desc", convar = "unitvehicle_randomplayerunits", sv = true },
+			{ type = "bool", text = "#uv.settings.pursuit.autohealth", desc = "uv.settings.pursuit.autohealth.desc", convar = "unitvehicle_autohealth", sv = true },
+			{ type = "bool", text = "#uv.settings.pursuit.wheelsdetaching", desc = "uv.settings.pursuit.wheelsdetaching.desc", convar = "unitvehicle_wheelsdetaching", sv = true },
+			{ type = "bool", text = "#uv.settings.pursuit.spottedfreezecam", desc = "uv.settings.pursuit.spottedfreezecam.desc", convar = "unitvehicle_spottedfreezecam", sv = true },
+			{ type = "slider", text = "#uv.settings.pursuit.repaircooldown", desc = "uv.settings.pursuit.repaircooldown.desc", convar = "unitvehicle_repaircooldown", min = 5, max = 300, decimals = 0, sv = true },
+			{ type = "slider", text = "#uv.settings.pursuit.repairrange", desc = "uv.settings.pursuit.repairrange.desc", convar = "unitvehicle_repairrange", min = 10, max = 1000, decimals = 0, sv = true },
+			{ type = "bool", text = "#uv.settings.pursuit.noevade", desc = "uv.settings.pursuit.noevade.desc", convar = "unitvehicle_neverevade", sv = true },
+			{ type = "slider", text = "#uv.settings.pursuit.bustedtime", desc = "uv.settings.pursuit.bustedtime.desc", convar = "unitvehicle_bustedtimer", min = 0, max = 10, decimals = 1, sv = true },
+			{ type = "slider", text = "#uv.settings.pursuit.respawntime", desc = "uv.settings.pursuit.respawntime.desc", convar = "unitvehicle_spawncooldown", min = 0, max = 120, decimals = 0, sv = true },
+			{ type = "slider", text = "#uv.settings.pursuit.spikeduration", desc = "uv.settings.pursuit.spikeduration.desc", convar = "unitvehicle_spikestripduration", min = 0, max = 120, decimals = 0, sv = true },
+		},
+		{
+			TabName = "#uv.settings.ptech", Icon = "unitvehicles/icons_carbon/wingman_target.png", sv = true,
+			{ type = "label", text = "#uv.settings.general", sv = true },
+			{ type = "bool", text = "#uv.settings.ptech.racer", desc = "uv.settings.ptech.racer.desc", convar = "unitvehicle_racerpursuittech", sv = true },
+			{ type = "bool", text = "#uv.settings.ptech.friendlyfire", desc = "uv.settings.ptech.friendlyfire.desc", convar = "unitvehicle_racerfriendlyfire", sv = true },
+			{ type = "bool", text = "#uv.settings.ptech.roadblockfriendlyfire", desc = "uv.settings.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
+		},
+		{
+			TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons_settings/ingame_icon_options.png", sv = true,
+			{ type = "label", text = "#uv.settings.ailogic", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.optimizerespawn", desc = "uv.settings.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.relentless", desc = "uv.settings.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.wrecking", desc = "uv.settings.ailogic.wrecking.desc", convar = "unitvehicle_canwreck", sv = true },
+			{ type = "slider", text = "#uv.settings.ailogic.detectionrange", desc = "uv.settings.ailogic.detectionrange.desc", convar = "unitvehicle_detectionrange", min = 1, max = 100, decimals = 0, sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.headlights", desc = "uv.settings.ailogic.headlights.desc", convar = "unitvehicle_enableheadlights", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.usenitrousracer", desc = "uv.settings.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.usenitrousunit", desc = "uv.settings.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.autohealthracer", desc = "uv.settings.ailogic.autohealthracer.desc", convar = "unitvehicle_autohealthracer", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.customizeracer", desc = "uv.settings.ailogic.customizeracer.desc", convar = "unitvehicle_customizeracer", sv = true },
+			{ type = "bool", text = "#uv.settings.ailogic.tractioncontrol", desc = "uv.settings.ailogic.tractioncontrol.desc", convar = "unitvehicle_tractioncontrol", sv = true },
+			
+			{ type = "label", text = "#uv.settings.ainav", sv = true },
+			{ type = "bool", text = "#uv.settings.ainav.pathfind", desc = "uv.settings.ainav.pathfind.desc", convar = "unitvehicle_pathfinding", sv = true },
+			{ type = "bool", text = "#uv.settings.ainav.dvpriority", desc = "uv.settings.ainav.dvpriority.desc", convar = "unitvehicle_dvwaypointspriority", sv = true },
+			
+			{ type = "label", text = "#uv.settings.chatter", sv = true },
+			{ type = "bool", text = "#uv.settings.chatter.enable", desc = "uv.settings.chatter.enable.desc", convar = "unitvehicle_chatter", sv = true },
+			{ type = "bool", text = "#uv.settings.chatter.text", desc = "uv.settings.chatter.text.desc", convar = "unitvehicle_chattertext", sv = true },
+			
+			{ type = "label", text = "#uv.settings.response", sv = true },
+			{ type = "bool", text = "#uv.settings.response.enable", desc = "uv.settings.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
+			{ type = "slider", text = "#uv.settings.response.speedlimit", desc = "uv.settings.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
+		},
+		{
+			TabName = "#uv.settings.tab.addons", Icon = "unitvehicles/icons_settings/ingame_icon_options.png", sv = true,
+			{ type = "label", text = "#uv.settings.addon.builtin", desc = "uv.settings.addon.builtin.desc", sv = true },
+			{ type = "bool", text = "#uv.settings.addon.vcmod.els", desc = "uv.settings.addon.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+		},
 	}
 
 	-- Open / close helpers
@@ -119,6 +259,7 @@ if CLIENT then -- Start of CLIENT Section
 			local ply = LocalPlayer()
 			if not IsValid(ply) then return false end
 			if not ply:IsAdmin() and not ply:IsSuperAdmin() then
+			-- if ply:IsAdmin() and ply:IsSuperAdmin() then
 				return false
 			end
 		end
@@ -178,7 +319,6 @@ if CLIENT then -- Start of CLIENT Section
 	-- small materials for on/off indicators
 	local matTick = Material("unitvehicles/icons/generic_check.png", "mips")
 	local matCross = Material("unitvehicles/icons/generic_uncheck.png", "mips")
-
 	-- Build one setting (label / bool / slider / combo / button)
 	function UV.BuildSetting(parent, st, descPanel)
 		local function GetDisplayText()
@@ -196,6 +336,100 @@ if CLIENT then -- Start of CLIENT Section
 			return prefix .. language.GetPhrase(st.text)
 		end
 			
+		-- if st is an information panel
+		if st.type == "info" then
+			local function ConvertDiscordFormatting(str)
+				str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
+				str = str:gsub("(%s)%*(.-)%*", "%1[i]%2[/i]")
+				str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
+				str = str:gsub("__(.-)__", "[u]%1[/u]")
+				str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
+				str = str:gsub("\n#%s*(.-)\n", "\n<font=UVSettingsFontBig>%1</font>\n")
+				return str
+			end
+
+			local p = vgui.Create("DPanel", parent)
+			p:Dock(TOP)
+			p:DockMargin(6, 6, 6, 2)
+			p:SetPaintBackground(false)
+
+			local rawText = language.GetPhrase(st.text or "") or ""
+			rawText = ConvertDiscordFormatting(rawText)
+
+			local mk = nil
+			local lastWidth = 0
+
+			-- function to rebuild markup when width changes
+			function p:Rebuild()
+				local w = self:GetWide()
+				if w <= 0 then return end
+
+				mk = markup.Parse("<font=UVSettingsFontSmall>" .. rawText .. "</font>", w - 20)
+
+				self:SetTall(mk:GetHeight() + 20)
+			end
+
+			-- Called every time the panel is laid out
+			function p:PerformLayout()
+				local w = self:GetWide()
+				if w ~= lastWidth then
+					lastWidth = w
+					self:Rebuild()
+				end
+			end
+
+			p.Paint = function(self, w, h)
+				surface.SetDrawColor(28, 28, 28, 150)
+				surface.DrawRect(0, 0, w, h)
+
+				if mk then
+					mk:Draw(10, 10)
+				end
+			end
+
+			return p
+		end
+		
+		-- if st is a singular image
+		if st.type == "image" then
+			local p = vgui.Create("DPanel", parent)
+			p:Dock(TOP)
+			p:DockMargin(6, 6, 6, 2)
+
+			-- Force 16:9 height based on available width
+			p.PerformLayout = function(self, w, h)
+				local newH = math.floor((w / 16) * 9)
+				self:SetTall(newH)
+			end
+
+			local mat = Material(st.image or "", "smooth")
+
+			p.Paint = function(self, w, h)
+				surface.SetDrawColor(0, 0, 0, 200)
+				surface.DrawRect(0, 0, w, h)
+
+				if not mat or mat:IsError() then
+					draw.SimpleText("Missing image", "DermaLarge", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					return
+				end
+
+				-- Draw image fully scaled to panel (letterboxed)
+				local iw, ih = mat:Width(), mat:Height()
+				if iw == 0 or ih == 0 then return end
+
+				local ratio = math.min(w / iw, h / ih)
+				local fw, fh = iw * ratio, ih * ratio
+				local x = (w - fw) * 0.5
+				local y = (h - fh) * 0.5
+
+				surface.SetMaterial(mat)
+				surface.SetDrawColor(255, 255, 255)
+				surface.DrawTexturedRect(x, y, fw, fh)
+			end
+			return p
+		end
+
+
 		-- if st is a header label
 		if st.type == "label" then
 			local p = vgui.Create("DPanel", parent)
@@ -448,9 +682,21 @@ if CLIENT then -- Start of CLIENT Section
 			btn:Dock(TOP)
 			btn:DockMargin(6, 6, 6, 6)
 			btn:SetTall(30)
-			btn:SetText(st.text)
+			btn:SetText("")
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+				local bga = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
+				local bg = Color( 125, 125, 125, bga )
+
+				-- background & text
+				draw.RoundedBox(12, 0, 0, w*0.99, h, bg)
+				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
 			btn.DoClick = function(self)
 				if st.func then st.func(self) end
+				if st.convar and not st.func then
+					RunConsoleCommand(st.convar)
+				end
 			end
 			btn.OnCursorEntered = function()
 				if descPanel then
