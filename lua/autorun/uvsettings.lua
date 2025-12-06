@@ -57,9 +57,205 @@ if CLIENT then -- Start of CLIENT Section
 And various other undocumented tweaks
 ]]
 
+	-- FAQ - Update if need be.
+local faqnotes = {
+[1] = [[
+# What is this addon all about?
+Unit Vehicles is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police (Units) and thrilling races on any map.
+
+**Here are the currently supported vehicle bases:**
+- prop_vehicle_jeep (default vehicle base)
+- simfphys
+- Glide
+]],
+[2] = [[
+# Do I have to install other addon(s) for this?
+Yes. Decent Vehicle - Basic AI and Glide // Styled's Vehicle Base is REQUIRED for Unit Vehicles to function properly.
+- Decent Vehicle provides waypoints for AIs to spawn and roam around in.
+- Glide provides the vehicles needed to use with the Default preset.
+]],
+[3] = [[
+# Does this addon have a GitHub repository?
+Yes. It is currently private at the moment until official release.
+]],
+[4] = [[
+# How do I start a pursuit?
+Start a pursuit by going to **Pursuit Manager**, then clicking **Force-Start Pursuit**. 
+Alternatively, find a patrolling Unit and get them to chase you; just don't pull over!
+]],
+[5] = [[
+# How do I start a race?
+Using the **Race Manager** tool:
+- Click 'Import Race'
+- Select any race from the list
+- Invite other racers, or hit 'Start Race'
+- You can immediately start the race, or automatically spawn AI to join your race
+
+**Notes**
+- There must be at least 1 Grid Slot to start the race!
+- You can invite friends/AI Racers by clicking 'Invite Racers' before clicking 'Start Race' as long as the race is imported.
+- If there are no existing races, you'll have to make your own (or look for any addon on the workshop that contains UV Race data for that particular map).
+]],
+[6] = [[
+# How do I spawn or modify Units?
+Use the **Manager: Units** tool:
+
+**Step 1: Save a Unit**
+Right-click a vehicle and enter the details. It should appear on the database list depending on what vehicle base you have chosen. Do this for other vehicles you would like to chase you.
+
+**Step 2: Assign a Unit**
+Choose a Heat Level, then select the Unit you want for this vehicle to appear as. Click on the vehicle to assign/select it.
+For all Heat Levels from Min to Max, there must be at least one assigned Unit!
+
+**Step 3: Adjust other settings**
+The Manager: Units tool allows for many variables to be adjusted. Tweak the settings as you see fit.
+
+**Step 4: Save Changes**
+Click 'Save Changes' button at the very top. Now be prepared to face new enemies!
+Save them as presets so you don't have to worry about doing it all again. You can even export the settings and share it to the community!
+]],
+[6] = [[
+# I want to be a cop. Can I join the Units?
+You can! Assuming there are already assigned Units, head over to **Pursuit Manager** and select **Spawn as a Unit**!
+]],
+[7] = [[
+# How do I get traffic to spawn?
+Use the **Manager: Traffic** tool:
+
+Right-click a vehicle and enter the details. It should appear on the database list depending on what vehicle base you have chosen.
+]],
+[8] = [[
+# How do I set up roadblocks?
+Use the **Creator: Roadblocks** Tool:
+
+**Step 1: Creation**
+Using the tool, create the props and pieces necessary for the roadblock.
+
+**Step 2: Welding it (very important)**
+Switch to the **Weld** tool and ensure that all the pieces are connected to one another.
+
+**Step 3: Saving**
+Once the pieces are welded, you can right-click on any piece to save the roadblock.
+]],
+[9] = [[
+# How do I create races?
+Use the **Race Manager** tool:
+
+**Step 1: Create Checkpoints**
+Left-click on one corner to start placing the checkpoint, left click again to finish (hold E to increase the height of the checkpoint).
+Leave some space between the checkpoints to ensure easier detection when racing.
+
+**Step 2: Set the Checkpoints in order**
+Right-click an existing checkpoint to set a new ID, beginning with 1. Must be in sequential order; use the same ID for branching checkpoints.
+For branching checkpoints, the AI will ALWAYS take the MOST RECENT checkpoint created.
+
+**Step 3: Create Grid Slots**
+Press your Reload key to place grid slots at your crosshair. The numbers represent the starting order.
+If you want more racers to join in, place more grid slots!
+
+**Step 4: Export Race**
+Press the 'Export Race' button and give it a name. Now you can import the race!
+]],
+[10] = [[
+# AI Racers don't slow down at corners! How can I fix that?
+You can set the speed limit for each checkpoint BEFORE creating a new one.
+You can alternatively edit the last number in the line for each checkpoint within the .txt file.
+]],
+[11] = [[
+# How do I set up Pursuit Breakers?
+Using the **Creator: Pursuit Breaker** tool:
+
+**Step 1: Build a simple structure**
+Build a structure, be it a scaffolding or a gas station. Get creative! Don't use too many props or else the game might lag!
+
+**Step 2: Weld the structure**
+Weld the structure. For easier welding process, try using addons such as **Smart Weld** and **OptiWeld**.
+TIP: After welding the structure, unfreeze the pillars so your vehicle doesn't take damage when ramming through!
+
+**Step 3: Save the structure**
+Right-click the structure and enter the details.
+TIP: Save the structure as a dupe so you don't have to do Step 1 and 2 when reusing the same structure!
+]],
+[12] = [[
+# What are Pursuit Techs? Are they like power-ups?
+Pursuit Tech are a series of weapons and support devices utilised by both Racers and Units. Up to 2 Pursuit Techs can be equipped to a single vehicle at any point.
+
+**Shared Pursuit Tech**
+EMP, ESF, Repair Kit & Spike Strips
+
+**Racer Pursuit Tech**
+Power Play, Juggernaut, Jammer, Shockwave & Stun Mine
+
+**Unit Pursuit Tech**
+Killswitch, Shock Ram & GPS Dart
+
+You can assign Pursuit Tech with the **Pursuit Tech** tool, and learn more about them.
+]],
+[13] = [[
+# Can I change the name of the Racers or Units?
+Use the **Name Changer** tool to change the name of Racers and Units!
+]],
+[14] = [[
+# What console commands are there I can use?
+- uv_spawnvehicles - Spawns patrolling AI Units
+- uv_setheat [x] - Sets the Heat Level
+- uv_despawnvehicles - Despawns Patrolling AI Units
+- uv_resetallsettings - Resets all server settings to their default values
+- uv_startpursuit - Starts a countdown before beginning a pursuit
+- uv_stoppursuit - Stops a pursuit with AI Units assuming you've escaped
+- uv_wantedtable - Prints a list of wanted suspects to the console
+- uv_clearbounty - Sets the bounty value to 0
+- uv_setbounty [x] - Sets the bounty value
+- uv_spawn_as_unit - Allows you to join as the Unit
+]],
+[15] = [[
+# Where can I find and edit UV-related data?
+Find and edit UV-related under in your game's *data* folder, then in *unitvehicles*.
+]],
+[16] = [[
+# My game is lagging a lot whenever a new Unit spawns. Is this addon resource-intensive?
+Units using simfphys tends to be more resource-intensive compared to other vehicle bases. Either lower the count of 'Maximum Units' or use other vehicle bases.
+]],
+[17] = [[
+# How can I keep up to date with the latest updates? Is there a road map?
+You can follow us on our Trello page, or our Discord server, both of which you can find on our Workshop page.
+]],
+[18] = [[
+# Source engine limits the true potential of UV, most noticeably with limited map size. Will it expand into other games as an addon anytime soon?
+There are plans to expand UV into s&box, making full use of Source 2 engine, but only time will tell :3
+]],
+[19] = [[
+# How can I export UV files/presets as addons?
+
+**Note** - This is slightly dumbed down and does not have a direct download for the preset. Visit our Discord server to find out more!
+
+With the recent update for Unit Vehicles, we have introduced a import/export system which will allow users to upload their Unit presets as Workshop addons, as well as any other UV related data (such as races, roadblocks, racer names, etc.).
+
+You can now find a new button inside of Unit Manager and Pursuit Tech STool panel right under the preset dropdown menu, Export Settings. This will export your currently loaded preset into a file which can later be used inside of our addon template for "UV data packs", using which you can upload that preset as well as any other UV files of your choosing onto the Workshop. This allows you to easily distribute & share your cool configs :)
+
+**How does it work?**
+After exporting a preset, the path of it will be located inside garrysmod/data/unitvehicles/preset_export/. Inside of that folder you will be able to find another folder which corresponds to the tool from which you exported the preset (e.g. exporting a Unit Manager preset will save it inside a "uvunitmanager" folder). We will take the contents of preset_export and use it for our UV data pack
+
+Essentially, what you're looking for is a file structure like this: **data_static/uv_import/presetnamehere**
+Inside this folder, you'll have the following file structures:
+**uvdata** - Place any UV-related folders here, such as **glide**, **simfphys** or **races**. 
+**uvdvwaypoints** - You can dump any DV Waypoint .txt files in here.
+
+Now that you've included all the relevant files you wish to include with your addon, it's time to add your exported STool presets. You'd want to create a new folder inside of uvdata named preset_import. Once you've done this, simply copy the folders from garrysmod/data/unitvehicles/preset_export/ inside of the newly created folder.
+
+That's all! You can now upload your data pack to Workshop and share it without having users go through the hassle of manually placing your files!
+
+IMPORTANT
+You must not include dots while naming the 'presetnamehere' folder, otherwise the presets will fail to load!
+
+For example:
+"my preset 1.0" - ❌ This will not work
+"my preset" - ✅ Will work 
+]],
+}
 	UV.SettingsTable = {
 		{
-			TabName = "#uv.settings.tab.welcome", Icon = "unitvehicles/icons_settings/ingame_icon_options.png",
+			TabName = "#uv.settings.tab.welcome", Icon = "unitvehicles/icons_settings/generic_info.png",
 			
 			{ type = "label", text = "#uv.settings.quick", desc = "#uv.settings.quick.desc" },
 			{ type = "combo", text = "#uv.settings.uistyle.main", desc = "uv.settings.uistyle.main.desc", convar = "unitvehicle_hudtype_main", content = {
@@ -80,14 +276,14 @@ And various other undocumented tweaks
 			function(self2)
 				RunConsoleCommand("uv_spawn_as_unit")
 				if IsValid(UV.SettingsFrame) then
-					UV.SettingsFrame:Remove()
+					UV.CloseSettings()
 				end
 			end
 			},
 			
 			{ type = "label", text = "#uv.settings.pnotes" },
-			{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			{ type = "info", text = pnote },
+			{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 		},
 		{
 			TabName = "#uv.settings.uistyle.title", Icon = "unitvehicles/icons_settings/options_icon_display.png",
@@ -170,7 +366,7 @@ And various other undocumented tweaks
 			function(self2)
 				RunConsoleCommand("uv_spawn_as_unit")
 				if IsValid(UV.SettingsFrame) then
-					UV.SettingsFrame:Remove()
+					UV.CloseSettings()
 				end
 			end
 			},
@@ -244,14 +440,46 @@ And various other undocumented tweaks
 			{ type = "label", text = "#uv.settings.addon.builtin", desc = "uv.settings.addon.builtin.desc", sv = true },
 			{ type = "bool", text = "#uv.settings.addon.vcmod.els", desc = "uv.settings.addon.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
 		},
+		{
+			TabName = "#uv.settings.tab.faq", Icon = "unitvehicles/icons_settings/generic_question.png",
+			{ type = "info", text = faqnotes[1] },
+			{ type = "info", text = faqnotes[2] },
+			{ type = "info", text = faqnotes[3] },
+			{ type = "info", text = faqnotes[4] },
+			{ type = "info", text = faqnotes[5] },
+			{ type = "info", text = faqnotes[6] },
+			{ type = "info", text = faqnotes[7] },
+			{ type = "info", text = faqnotes[8] },
+			{ type = "info", text = faqnotes[9] },
+			{ type = "info", text = faqnotes[10] },
+			{ type = "info", text = faqnotes[11] },
+			{ type = "info", text = faqnotes[12] },
+			{ type = "info", text = faqnotes[13] },
+			{ type = "info", text = faqnotes[14] },
+			{ type = "info", text = faqnotes[15] },
+			{ type = "info", text = faqnotes[16] },
+			{ type = "info", text = faqnotes[17] },
+			{ type = "info", text = faqnotes[18] },
+			{ type = "info", text = faqnotes[19] },
+		},
 	}
 
 	-- Open / close helpers
 	function UV.CloseSettings()
-		if IsValid(UV.SettingsFrame) then
-			UV.SettingsFrame:Remove()
+		if not IsValid(UV.SettingsFrame) then
+			gui.EnableScreenClicker(false)
+			return
 		end
-		gui.EnableScreenClicker(false)
+
+		local frame = UV.SettingsFrame
+
+		if frame._closing then return end
+		frame._closing = true
+
+		frame._closeStart = CurTime()
+		frame._closeFadeDur = 0.2
+		frame._closeShrinkDur = 0.25
+		frame._closeShrinkStart = frame._closeStart + frame._closeFadeDur * 0.5
 	end
 	
 	function UV.PlayerCanSeeSetting(st)
@@ -341,7 +569,7 @@ And various other undocumented tweaks
 		if st.type == "info" then
 			local function ConvertDiscordFormatting(str)
 				str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
-				str = str:gsub("(%s)%*(.-)%*", "%1[i]%2[/i]")
+				str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
 				str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
 				str = str:gsub("__(.-)__", "[u]%1[/u]")
 				str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
@@ -507,14 +735,14 @@ And various other undocumented tweaks
 				end
 				
 				-- background & text
-				draw.RoundedBox(6, w*0.955, 0, w*0.045, h, bg)
+				draw.RoundedBox(6, w*0.965, 0, w*0.035, h, bg)
 				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 				-- icon right
 				if enabled then
 					surface.SetDrawColor(255,255,255, enabled and 255 or 200)
 					surface.SetMaterial(enabled and matTick or matCross)
-					surface.DrawTexturedRect(w - 32, 0, 30, 30)
+					surface.DrawTexturedRect(w - 34, 0, 30, 30)
 				end
 			end
 
@@ -533,7 +761,7 @@ And various other undocumented tweaks
 			wrap:DockMargin(6, 4, 6, 4)
 			wrap:SetTall(36)
 			wrap.Paint = function(self, w, h)
-				draw.RoundedBox(6, w*0.575, 0, w*0.425, h, Color(0,0,0,120))
+				draw.RoundedBox(6, w*0.675, 0, w*0.325, h, Color(0,0,0,120))
 				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2,
 					color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
@@ -776,7 +1004,7 @@ And various other undocumented tweaks
 				local bg = Color( 125, 125, 125, bga )
 
 				-- background & text
-				draw.RoundedBox(12, 0, 0, w*0.99, h, bg)
+				draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
 				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			btn.DoClick = function(self)
@@ -964,54 +1192,69 @@ And various other undocumented tweaks
 
 	-- Main open function (horizontal expansion, tabs icons on left which extend left on hover)
 	function UV.OpenSettings()
-		-- remove existing
 		if IsValid(UV.SettingsFrame) then UV.SettingsFrame:Remove() end
 		gui.EnableScreenClicker(true)
 
 		local sw, sh = ScrW(), ScrH()
-		local fw, fh = math.max(800, sw * 0.62), math.max(480, sh * 0.66)
+		local fw, fh = math.max(800, sw * 0.9), math.max(480, sh * 0.66)
 		local fx, fy = (sw - fw) * 0.5, (sh - fh) * 0.5
 		local watchedConvars = {}
 
 		local frame = vgui.Create("DFrame")
 		UV.SettingsFrame = frame
-		frame:SetSize(0, fh)
-		frame:SetPos(fx + fw * 0.5, fy)
+		frame:SetSize(0, 0)
+		frame:SetPos(fx + fw * 0.5, fy + fh * 0.5)
 		frame:SetTitle("")
 		frame:ShowCloseButton(false)
 		frame:SetDraggable(false)
 		frame:MakePopup()
 
 		frame.TargetWidth = fw
+		frame.TargetHeight = fh
+
 		local animStart = CurTime()
-		local animDur = 0.25
+		local animDur = 0.4
+		local primaryFadeStart = animStart + animDur * 0.5
+		local primaryFadeDur = 0.25
+		local secondaryFadeStart = animStart + animDur * 0.8
+		local secondaryFadeDur = 0.5
+
+		frame._open_animStart = animStart
+		frame._open_animDur = animDur
+		frame._open_primaryFadeStart = primaryFadeStart
+		frame._open_primaryFadeEnd = primaryFadeStart + primaryFadeDur
+		frame._open_secondaryFadeStart = secondaryFadeStart
+		frame._open_secondaryFadeEnd = secondaryFadeStart + secondaryFadeDur
+		frame._closing = false
+
+		frame.TitleAlpha = 0
 
 		-- Right description
 		local descPanel = vgui.Create("DPanel", frame)
 		descPanel:Dock(RIGHT)
 		descPanel:SetWide(math.Clamp(fw * 0.25, 220, 380))
 		descPanel.Paint = function(self, w, h)
-			surface.SetDrawColor(28,28,28,150)
-			surface.DrawRect(0,0,w,h)
+			local a = self:GetAlpha()
 
-			if self.Text then
+			surface.SetDrawColor(28, 28, 28, math.floor(150 * (a / 255)))
+			surface.DrawRect(0, 0, w, h)
+
+			if self.Text and a > 5 then
 				local font = "UVMostWantedLeaderboardFont2"
-				local color = Color(200,200,200)
+				local color = Color(255, 255, 255, a)
 				local xPadding, yPadding = 10, 10
 				local wrapWidth = w - xPadding * 2
 				local yOffset = yPadding
 
 				surface.SetFont(font)
-
 				local desc = language.GetPhrase(self.Desc or "") or ""
 
 				for paragraph in desc:gmatch("[^\n]+") do
 					local wrapped = UV_WrapText(paragraph, font, wrapWidth)
-
 					for _, line in ipairs(wrapped) do
 						draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
-						local _, h = surface.GetTextSize(line)
-						yOffset = yOffset + h
+						local _, th = surface.GetTextSize(line)
+						yOffset = yOffset + th
 					end
 				end
 			end
@@ -1019,19 +1262,21 @@ And various other undocumented tweaks
 
 		descPanel.Text = ""
 		descPanel.Desc = ""
+		descPanel:SetAlpha(0)
 
 		-- Center settings
 		local center = vgui.Create("DScrollPanel", frame)
 		center:Dock(FILL)
 		center:DockMargin(8, 8, 8, 8)
+		center:SetAlpha(0)
 
 		-- Left tabs
 		local tabsPanel = vgui.Create("DPanel", frame)
 		tabsPanel:Dock(LEFT)
-		tabsPanel:SetWide(64)
+		tabsPanel:SetWide(ScrW()*0.15)
 		tabsPanel.Paint = function() end
+		tabsPanel:SetAlpha(0)
 
-		-- Close X (top-right of frame)
 		local closeBtn = vgui.Create("DButton", frame)
 		closeBtn:SetSize(20, 20)
 		closeBtn:SetText("")
@@ -1039,17 +1284,24 @@ And various other undocumented tweaks
 		closeBtn.DoClick = function()
 			UV.CloseSettings()
 		end
-		closeBtn.Paint = function(self,w,h)
+		closeBtn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
-			draw.RoundedBox(4,0,0,w,h, hovered and Color(200,60,60) or Color(140,50,50))
-			draw.SimpleText("X", "DermaDefaultBold", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			local bg = hovered and Color(200, 60, 60, self:GetAlpha()) or Color(140, 50, 50, self:GetAlpha())
+			draw.RoundedBox(4, 0, 0, w, h, bg)
+			draw.SimpleText("X", "DermaDefaultBold", w / 2, h / 2, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
+		closeBtn:SetAlpha(0)
 
-		frame.Paint = function(self,w,h)
-			draw.RoundedBox(0,0,0,w,h * 0.05, Color(25, 25, 25, 225))
-			
-			draw.RoundedBox(0,0,0,w,h, Color(25, 25, 25, 200))
-			draw.SimpleText("#uv.settings.unitvehicles", "UVFont5UI", w*0.01, h *0.025, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		-- store primary and secondary groups for easier alpha control
+		local primaryGroup = {closeBtn}
+		local secondaryGroup = {tabsPanel, descPanel, center}
+
+		frame.Paint = function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h * 0.05, Color(25, 25, 25, 225))
+			draw.RoundedBox(0, 0, 0, w, h, Color(25, 25, 25, 200))
+
+			local titleColor = Color(255, 255, 255, math.Clamp(math.floor(self.TitleAlpha), 0, 255))
+			draw.SimpleText("#uv.settings.unitvehicles", "UVFont5UI", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		local CURRENT_TAB = 1
@@ -1064,19 +1316,15 @@ And various other undocumented tweaks
 			local tab = UV.SettingsTable[tabIndex]
 			if not tab then return end
 
-			-- Title at top of center
 			local title = vgui.Create("DLabel", center)
-			-- title:SetText(tab.TabName or ("Tab " .. tostring(tabIndex)))
-			-- title:SetFont("UVFont5UI")
 			title:SetText("")
 			title:Dock(TOP)
 			title:DockMargin(6, 6, 6, 12)
 			title:SetTall(36)
-			
-			title.Paint = function(self,w,h)
-				draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5UI", w*0.5, h *0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
 
+			title.Paint = function(self, w, h)
+				draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5UI", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
 
 			watchedConvars = {} -- reset
 
@@ -1091,77 +1339,161 @@ And various other undocumented tweaks
 				end
 			end
 
-			-- Process entries
 			for k2, entry in ipairs(tab) do
 				if istable(entry) and entry.type then
-					-- Always build the element
 					local pnl = UV.BuildSetting(center, entry, descPanel)
 
-					-- If the element is valid, toggle visibility based on ShouldDrawSetting
 					if IsValid(pnl) then
 						pnl:SetVisible(UV.ShouldDrawSetting(entry))
+						pnl:SetAlpha(0)
 					end
 				end
 			end
 		end
-		
+
 		local lastValues = {}
-		
-		-- widget to re-center the close button as frame width animates
-		frame.Think = function(self)
-			local t = math.Clamp((CurTime() - animStart) / animDur, 0, 1)
-			local w = Lerp(t, 0, self.TargetWidth)
-			-- place the frame so it opens horizontally expanding from center leftwards:
-			local x = fx + (fw * 0.5) - (w * 0.5)
-			self:SetSize(w, fh)
-			self:SetPos(x, fy)
 
-			closeBtn:SetPos(self:GetWide() - 36, 8)
-
-			-- auto-close if click happened outside
-			if input.IsMouseDown(MOUSE_LEFT) then
-				local mx, my = gui.MousePos()
-				if mx and my then
-					local fx2, fy2 = self:GetPos()
-					local fw2, fh2 = self:GetSize()
-					if mx < fx2 or mx > fx2 + fw2 or my < fy2 or my > fy2 + fh2 then
-						-- small delay so immediate click that opened doesn't immediately close
-						timer.Simple(0, function()
-							if IsValid(self) then UV.CloseSettings() end
-						end)
-					end
+		local function SetGroupAlpha(group, a)
+			for _, pnl in ipairs(group) do
+				if IsValid(pnl) and pnl.SetAlpha then
+					pnl:SetAlpha(a)
 				end
-			end
-			    
-			local shouldRefresh = false
-			for cvName in pairs(watchedConvars) do
-				local cv = GetConVar(cvName)
-				if cv then
-					local val = cv:GetBool() -- only need bools for visibility
-					if lastValues[cvName] ~= val then
-						lastValues[cvName] = val
-						shouldRefresh = true
-					end
-				end
-			end
-
-			if shouldRefresh then
-				BuildTab(center.CurrentTabIndex)
 			end
 		end
 
-		-- Create tab icons with hover popup that extends LEFT
+		local function SetCenterChildrenAlpha(a)
+			for _, child in ipairs(center:GetChildren()) do
+				if IsValid(child) and child.SetAlpha then
+					child:SetAlpha(a)
+				end
+			end
+		end
+		
+		local function SetAlphaRecursive(panel, a)
+			if not IsValid(panel) then return end
+			if panel.SetAlpha then panel:SetAlpha(a) end
+
+			for _, child in ipairs(panel:GetChildren()) do
+				SetAlphaRecursive(child, a)
+			end
+		end
+
+		frame.Think = function(self)
+			if not self._closing then
+				local elapsed = CurTime() - self._open_animStart
+				local p = math.Clamp(elapsed / self._open_animDur, 0, 1)
+
+				local w = Lerp(p, 0, self.TargetWidth)
+				local h = Lerp(p, 0, self.TargetHeight)
+				local x = fx + (fw * 0.5) - (w * 0.5)
+				local y = fy + (fh * 0.5) - (h * 0.5)
+				self:SetSize(w, h)
+				self:SetPos(x, y)
+
+				closeBtn:SetPos(math.max(self:GetWide() - 36, 8), 8)
+
+				local primaryA = 0
+				if CurTime() >= self._open_primaryFadeStart then
+					primaryA = math.Clamp((CurTime() - self._open_primaryFadeStart) / (self._open_primaryFadeEnd - self._open_primaryFadeStart), 0, 1) * 255
+				end
+				self.TitleAlpha = primaryA
+				SetGroupAlpha(primaryGroup, primaryA)
+
+				local secondaryA = 0
+				if CurTime() >= self._open_secondaryFadeStart then
+					secondaryA = math.Clamp((CurTime() - self._open_secondaryFadeStart) / (self._open_secondaryFadeEnd - self._open_secondaryFadeStart), 0, 1) * 255
+				end
+				SetGroupAlpha(secondaryGroup, secondaryA)
+				SetAlphaRecursive(center, secondaryA)
+
+				-- auto-close
+				if input.IsMouseDown(MOUSE_LEFT) then
+					local mx, my = gui.MousePos()
+					if mx and my then
+						local fx2, fy2 = self:GetPos()
+						local fw2, fh2 = self:GetSize()
+						if mx < fx2 or mx > fx2 + fw2 or my < fy2 or my > fy2 + fh2 then
+							timer.Simple(0, function()
+								if IsValid(self) then UV.CloseSettings() end
+							end)
+						end
+					end
+				end
+
+				local shouldRefresh = false
+				for cvName in pairs(watchedConvars) do
+					local cv = GetConVar(cvName)
+					if cv then
+						local val = cv:GetBool()
+						if lastValues[cvName] ~= val then
+							lastValues[cvName] = val
+							shouldRefresh = true
+						end
+					end
+				end
+
+				if shouldRefresh then
+					BuildTab(center.CurrentTabIndex)
+				end
+			else
+				local now = CurTime()
+				local fadeStart = self._closeStart
+				local fadeEnd = fadeStart + self._closeFadeDur
+				local shrinkStart = self._closeShrinkStart
+				local shrinkEnd = shrinkStart + self._closeShrinkDur
+
+				local fadeT = 0
+				if now <= fadeStart then
+					fadeT = 0
+				elseif now >= fadeEnd then
+					fadeT = 1
+				else
+					fadeT = (now - fadeStart) / (fadeEnd - fadeStart)
+				end
+				local invFade = 1 - fadeT
+				local fadeA = math.floor(invFade * 255)
+
+				self.TitleAlpha = fadeA
+				SetGroupAlpha(primaryGroup, fadeA)
+				SetGroupAlpha(secondaryGroup, fadeA)
+				SetCenterChildrenAlpha(fadeA)
+
+				local shrinkT = 0
+				if now <= shrinkStart then
+					shrinkT = 0
+				elseif now >= shrinkEnd then
+					shrinkT = 1
+				else
+					shrinkT = (now - shrinkStart) / (shrinkEnd - shrinkStart)
+				end
+				local w = Lerp(shrinkT, self.TargetWidth, 0)
+				local h = Lerp(shrinkT, self.TargetHeight, 0)
+				local x = fx + (fw * 0.5) - (w * 0.5)
+				local y = fy + (fh * 0.5) - (h * 0.5)
+				self:SetSize(w, h)
+				self:SetPos(x, y)
+
+				if now >= math.max(fadeEnd, shrinkEnd) then
+					if IsValid(self) then
+						self:Remove()
+					end
+					gui.EnableScreenClicker(false)
+					UV.SettingsFrame = nil
+				end
+			end
+		end
+
 		local TAB_START_OFFSET = 15
 		local TAB_BUTTON_HEIGHT = 64
 		local TAB_BUTTON_PADDING = 0
 		local TAB_SIDE_PADDING = 6
 		local TAB_CORNER_RADIUS = 4
-		
+
 		tabsPanel:DockPadding(0, TAB_START_OFFSET, 0, 0)
 
 		for i, tab in ipairs(UV.SettingsTable) do
 			if not UV.PlayerCanSeeSetting(tab) then
-				continue -- skip this tab entirely
+				continue
 			end
 
 			local btn = vgui.Create("DButton", tabsPanel)
@@ -1177,71 +1509,71 @@ And various other undocumented tweaks
 				local bga = hovered and 175 or 75
 				local bg = isSelected and Color(255, 255, 255, bga) or Color(125, 125, 125, bga)
 
-				draw.RoundedBox(TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING*2, h - 8, bg)
+				draw.RoundedBox(TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, bg)
 
-				-- Draw icon dynamically scaled
+				draw.SimpleText(tab.TabName or "Tab", "UVMostWantedLeaderboardFont", w * 0.21, h*0.5, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
 				if tab.Icon then
 					local mat = Material(tab.Icon, "smooth")
 
-					local iconSize = h * 0.75       -- Scales with button height
+					local iconSize = h * 0.75
 					local iconX = TAB_SIDE_PADDING + 2
 					local iconY = (h - iconSize) / 2
 
-					surface.SetDrawColor(255,255,255, hovered and 255 or 200)
+					surface.SetDrawColor(255, 255, 255, self:GetAlpha())
 					surface.SetMaterial(mat)
 					surface.DrawTexturedRect(iconX, iconY, iconSize, iconSize)
 				else
 					draw.SimpleText(tab.TabName or "Tab",
 						"UVMostWantedLeaderboardFont",
-						w/2, h/2,
-						color_white,
+						w / 2, h / 2,
+						Color(255, 255, 255, self:GetAlpha()),
 						TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			end
 
-			-- Hover pop-up name
-			local hoverPopup
-			btn.OnCursorEntered = function(self)
-				if IsValid(hoverPopup) then hoverPopup:Remove() end
+			-- local hoverPopup
+			-- btn.OnCursorEntered = function(self)
+				-- if IsValid(hoverPopup) then hoverPopup:Remove() end
 
-				hoverPopup = vgui.Create("DPanel")
-				local pw, ph = ScrW()*0.15, 32
-				local sx, sy = self:LocalToScreen(0, 8)
+				-- hoverPopup = vgui.Create("DPanel")
+				-- local pw, ph = ScrW() * 0.15, 32
+				-- local sx, sy = self:LocalToScreen(0, 8)
 
-				hoverPopup:SetPos(sx - pw - 6, sy)
-				hoverPopup:SetSize(pw, ph)
+				-- hoverPopup:SetPos(sx - pw - 6, sy)
+				-- hoverPopup:SetSize(pw, ph)
 
-				hoverPopup.Paint = function(_, w, h)
-					draw.RoundedBox(6, 0, 0, w, h, Color(30,30,30,220))
-					draw.SimpleText(tab.TabName or "",
-						"UVMostWantedLeaderboardFont",
-						w/2, h/2,
-						color_white,
-						TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				end
+				-- hoverPopup.Paint = function(_, w, h)
+					-- draw.RoundedBox(6, 0, 0, w, h, Color(30, 30, 30, 220))
+					-- draw.SimpleText(tab.TabName or "",
+						-- "UVMostWantedLeaderboardFont",
+						-- w / 2, h / 2,
+						-- color_white,
+						-- TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				-- end
 
-				self._hoverPopup = hoverPopup
-			end
+				-- self._hoverPopup = hoverPopup
+			-- end
 
-			btn.OnCursorExited = function(self)
-				if IsValid(self._hoverPopup) then
-					self._hoverPopup:Remove()
-					self._hoverPopup = nil
-				end
-			end
+			-- btn.OnCursorExited = function(self)
+				-- if IsValid(self._hoverPopup) then
+					-- self._hoverPopup:Remove()
+					-- self._hoverPopup = nil
+				-- end
+			-- end
 
 			btn.DoClick = function()
 				CURRENT_TAB = i
 				BuildTab(i)
-				tabsPanel:InvalidateLayout(true) -- force repaint of buttons
+				tabsPanel:InvalidateLayout(true)
 			end
 
 			if i == 1 then BuildTab(1) end
 		end
 
-		-- Remove focus when frame removed
 		frame.OnRemove = function()
 			gui.EnableScreenClicker(false)
+			if UV.SettingsFrame == frame then UV.SettingsFrame = nil end
 		end
 	end
 
