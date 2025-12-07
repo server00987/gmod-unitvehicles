@@ -274,7 +274,9 @@ if SERVER then
 				for _, v in pairs(vehicle.wheels) do
 					if IsValid(v) and v.bursted then
 						repaired = true
-						v:_restore()
+						v.bursted = false
+					    v:Repair()
+					    timer.Remove("uvspiked"..v:EntIndex())
 					end
 				end
 				
@@ -1337,7 +1339,9 @@ if SERVER then
             for _, v in pairs(car.wheels) do
                 if IsValid(v) and v.bursted then
                     repaired = true
-                    v:_restore()
+                    v.bursted = false
+					v:Repair()
+					timer.Remove("uvspiked"..v:EntIndex())
                 end
             end
 
