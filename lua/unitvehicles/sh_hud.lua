@@ -980,14 +980,16 @@ function carbon_noti_draw(text, font, font2, x, y, color, color2)
 end
 
 -- Automatically add all files to client and server
-local path = "autorun/uvhud/"
-local files, _ = file.Find(path .. "*.lua", "LUA")
+local path = "unitvehicles/uvhud/"
+local files = file.Find(path .. "*.lua", "LUA")
+
 table.sort(files)
 
--- print("[UVHUD] Loading HUD files:", #files)
 for _, f in ipairs(files) do
     AddCSLuaFile(path .. f)
-    include(path .. f)
+    if CLIENT then
+        include(path .. f)
+    end
 end
 
 -- timer.Simple(1, function()
