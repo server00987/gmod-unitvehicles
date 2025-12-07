@@ -4702,12 +4702,19 @@ else -- CLIENT Settings | HUD/Options
 			"Spike Strips Dodged - " .. UVSpikestripsDodged
 		)
 
-		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBustedDebrief', debrieftable )
-
 		timer.Simple(5, function()
 			UVHUDDisplayBusting = false
 			UVHUDDisplayNotification = false
 		end)
+				
+		if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
+			UVMenu.CloseCurrentMenu()
+			timer.Simple(0.5, function()
+				hook.Run( 'UIEventHook', 'pursuit', 'onRacerBustedDebrief', debrieftable )
+			end)
+			return
+		end
+		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBustedDebrief', debrieftable )
 	end)
 
 	net.Receive("UVHUDEscapedDebrief", function()
@@ -4728,7 +4735,14 @@ else -- CLIENT Settings | HUD/Options
 			"Roadblocks Dodged - " .. UVRoadblocksDodged .. "\n" ..
 			"Spike Strips Dodged - " .. UVSpikestripsDodged
 		)
-
+		
+		if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
+			UVMenu.CloseCurrentMenu()
+			timer.Simple(0.5, function()
+				hook.Run( 'UIEventHook', 'pursuit', 'onRacerEscapedDebrief', debrieftable )
+			end)
+			return
+		end
 		hook.Run( 'UIEventHook', 'pursuit', 'onRacerEscapedDebrief', debrieftable )
 	end)
 
@@ -4748,7 +4762,14 @@ else -- CLIENT Settings | HUD/Options
 			"Roadblocks Dodged - " .. UVRoadblocksDodged .. "\n" ..
 			"Spike Strips Dodged - " .. UVSpikestripsDodged
 		)
-
+		
+		if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
+			UVMenu.CloseCurrentMenu()
+			timer.Simple(0.5, function()
+				hook.Run( 'UIEventHook', 'pursuit', 'onCopEscapedDebrief', debrieftable )
+			end)
+			return
+		end
 		hook.Run( 'UIEventHook', 'pursuit', 'onCopEscapedDebrief', debrieftable )
 	end)
 
@@ -4768,7 +4789,14 @@ else -- CLIENT Settings | HUD/Options
 			"Roadblocks Dodged - " .. UVRoadblocksDodged .. "\n" ..
 			"Spike Strips Dodged - " .. UVSpikestripsDodged
 		)
-
+		
+		if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
+			UVMenu.CloseCurrentMenu()
+			timer.Simple(0.5, function()
+				hook.Run( 'UIEventHook', 'pursuit', 'onCopBustedDebrief', debrieftable )
+			end)
+			return
+		end
 		hook.Run( 'UIEventHook', 'pursuit', 'onCopBustedDebrief', debrieftable )
 	end)
 

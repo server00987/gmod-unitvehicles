@@ -312,7 +312,13 @@ UV_UI.racing.underground2.events = {
             
             if input.IsKeyDown( UVKeybindShowRaceResults:GetInt() ) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
                 hook.Remove( 'Think', 'RaceResultDisplay' )
-                -- _main()
+				if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
+					UVMenu.CloseCurrentMenu()
+					timer.Simple(0.5, function()
+						UV_UI.racing.underground2.events.ShowResults(sortedRacers)
+					end)
+					return
+				end
                 UV_UI.racing.underground2.events.ShowResults(sortedRacers)
             end
         end)
