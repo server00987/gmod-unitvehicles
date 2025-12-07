@@ -385,7 +385,7 @@ For example:
 			{ type = "button", text = "#uv.settings.print.wantedtable", convar = "uv_wantedtable", sv = true },
 		},
 		{
-			TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons_settings/ingame_icon_options.png", sv = true,
+			TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", sv = true,
 			{ type = "label", text = "#uv.settings.heatlevels", sv = true },
 			{ type = "bool", text = "#uv.settings.heatlevels.enable", desc = "uv.settings.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
 			{ type = "bool", text = "#uv.settings.heatlevels.aiunits", desc = "uv.settings.heatlevels.aiunits.desc", convar = "unitvehicle_spawnmainunits", sv = true },
@@ -410,7 +410,7 @@ For example:
 			{ type = "bool", text = "#uv.settings.ptech.roadblockfriendlyfire", desc = "uv.settings.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
 		},
 		{
-			TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons_settings/ingame_icon_options.png", sv = true,
+			TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
 			{ type = "label", text = "#uv.settings.ailogic", sv = true },
 			{ type = "bool", text = "#uv.settings.ailogic.optimizerespawn", desc = "uv.settings.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
 			{ type = "bool", text = "#uv.settings.ailogic.relentless", desc = "uv.settings.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
@@ -477,8 +477,8 @@ For example:
 		frame._closing = true
 
 		frame._closeStart = CurTime()
-		frame._closeFadeDur = 0.2
-		frame._closeShrinkDur = 0.25
+		frame._closeFadeDur = 0.1
+		frame._closeShrinkDur = 0.2
 		frame._closeShrinkStart = frame._closeStart + frame._closeFadeDur * 0.5
 	end
 	
@@ -666,7 +666,7 @@ For example:
 			p:SetTall(36)
 			p:DockMargin(6, 6, 6, 2)
 			p.Paint = function(self, w, h)
-				draw.RoundedBox(4, 0, 0, w, h, Color(0, 0, 0, 200))
+				draw.RoundedBox(4, 0, 0, w, h, Color(100, 100, 100, 75))
 				draw.SimpleText(st.text, "UVFont5UI", w*0.5, h*0.4, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
@@ -735,7 +735,7 @@ For example:
 				end
 				
 				-- background & text
-				draw.RoundedBox(6, w*0.965, 0, w*0.035, h, bg)
+				draw.RoundedBox(6, w - 34, 0, 30, h, bg)
 				draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 				-- icon right
@@ -822,6 +822,18 @@ For example:
 			end
 			valBox.OnCursorEntered = PushDesc
 			valBox.OnCursorExited  = PopDesc
+
+			valBox.OnGetFocus = function()
+				if IsValid(UV.SettingsFrame) then
+					UV.SettingsFrame:SetKeyboardInputEnabled(true)
+				end
+			end
+
+			valBox.OnLoseFocus = function()
+				if IsValid(UV.SettingsFrame) then
+					UV.SettingsFrame:SetKeyboardInputEnabled(false)
+				end
+			end
 
 			local applyBtn = vgui.Create("DButton", valPanel)
 			applyBtn:SetSize(20, valBox:GetTall())
@@ -1208,16 +1220,17 @@ For example:
 		frame:ShowCloseButton(false)
 		frame:SetDraggable(false)
 		frame:MakePopup()
+		frame:SetKeyboardInputEnabled(false)
 
 		frame.TargetWidth = fw
 		frame.TargetHeight = fh
 
 		local animStart = CurTime()
-		local animDur = 0.4
+		local animDur = 0.2
 		local primaryFadeStart = animStart + animDur * 0.5
 		local primaryFadeDur = 0.25
-		local secondaryFadeStart = animStart + animDur * 0.8
-		local secondaryFadeDur = 0.5
+		local secondaryFadeStart = animStart + animDur * 0.5
+		local secondaryFadeDur = 0.25
 
 		frame._open_animStart = animStart
 		frame._open_animDur = animDur
@@ -1304,8 +1317,8 @@ For example:
 		local secondaryGroup = {tabsPanel, descPanel, center}
 
 		frame.Paint = function(self, w, h)
-			draw.RoundedBox(0, 0, 0, w, h * 0.05, Color(25, 25, 25, 225))
-			draw.RoundedBox(0, 0, 0, w, h, Color(25, 25, 25, 200))
+			draw.RoundedBox(0, 0, 0, w, h, Color(25, 25, 25, 245))
+			-- draw.RoundedBox(0, 0, 0, w, h * 0.05, Color(25, 25, 25, 245))
 
 			local titleColor = Color(255, 255, 255, math.Clamp(math.floor(self.TitleAlpha), 0, 255))
 			draw.SimpleText("#uv.settings.unitvehicles", "UVFont5UI", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
