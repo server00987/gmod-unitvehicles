@@ -45,15 +45,15 @@ UV.PNotes = [[
 -- Main Menu
 UVMenu.Main = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
-		Name = "#uv.settings.unitvehicles",
+		Name = "#uv.unitvehicles",
 		Width = ScrW() * 0.8,
 		Height = ScrH() * 0.7,
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
-			{ TabName = "#uv.settings.tab.welcome", Icon = "unitvehicles/icons_settings/info.png",
-				{ type = "label", text = "#uv.settings.quick", desc = "#uv.settings.quick.desc" },
-				{ type = "combo", text = "#uv.settings.uistyle.main", desc = "uv.settings.uistyle.main.desc", convar = "unitvehicle_hudtype_main", content = {
+			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png",
+				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
+				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
 						{ "Crash Time - Undercover", "ctu"} ,
 						{ "NFS Most Wanted", "mostwanted"} ,
 						{ "NFS Carbon", "carbon"} ,
@@ -62,12 +62,12 @@ UVMenu.Main = function()
 						{ "NFS Undercover", "undercover"} ,
 						{ "NFS ProStreet", "prostreet"} ,
 						{ "NFS World", "world"} ,
-						{ "#uv.uistyle.original", "original"} ,
-						{ "#uv.uistyle.none", "" }
+						{ "#uv.ui.original", "original"} ,
+						{ "#uv.ui.none", "" }
 					},
 				},
-				{ type = "combo", text = "#uv.settings.audio.uvtrax.profile", desc = "uv.settings.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
-				{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
+				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
+				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu()
 					timer.Simple(0.25, function()
@@ -76,17 +76,17 @@ UVMenu.Main = function()
 				end
 				},
 				
-				{ type = "label", text = "#uv.settings.pnotes" },
+				{ type = "label", text = "#uv.menu.pnotes" },
 				{ type = "info", text = UV.PNotes },
 				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
-			{ TabName = "#tool.uvracemanager.name", Icon = "unitvehicles/icons/race_events.png", sv = true, func = function()
+			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, func = function()
 					UVMenu.OpenMenu(UVMenu.RaceManager)
 				end,
-				{ type = "label", text = "#uv.settings.addon.builtin" },
+				{ type = "label", text = "#uv.addons.builtin" },
 			},
-			{ TabName = "#uv.settings.pm", Icon = "unitvehicles/icons/milestone_911.png",
-				{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
+			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png",
+				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu()
 					timer.Simple(0.25, function()
@@ -96,26 +96,26 @@ UVMenu.Main = function()
 				},
 
 				{ type = "label", text = "#uv.settings.server", sv = true },
-				-- { type = "button", text = "#uv.settings.pm.pursuit.toggle", desc = "uv.settings.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
-				{ type = "button", text = "#uv.settings.pm.pursuit.start", desc = "uv.settings.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
-				{ type = "button", text = "#uv.settings.pm.pursuit.stop", desc = "uv.settings.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
-				{ type = "slider", text = "#uv.settings.pm.heatlevel", desc = "uv.settings.pm.heatlevel.desc", convar = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+				-- { type = "button", text = "#uv.pm.pursuit.toggle", desc = "uv.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
+				{ type = "button", text = "#uv.pm.pursuit.start", desc = "uv.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
+				{ type = "button", text = "#uv.pm.pursuit.stop", desc = "uv.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
+				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", convar = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
 				
-				{ type = "button", text = "#uv.settings.pm.ai.spawn", convar = "uv_spawnvehicles", sv = true },
-				{ type = "button", text = "#uv.settings.pm.ai.despawn", convar = "uv_despawnvehicles", sv = true },
+				{ type = "button", text = "#uv.pm.ai.spawn", convar = "uv_spawnvehicles", sv = true },
+				{ type = "button", text = "#uv.pm.ai.despawn", convar = "uv_despawnvehicles", sv = true },
 				
-				{ type = "label", text = "#uv.settings.pm.misc", sv = true },
-				{ type = "button", text = "#uv.settings.clearbounty", convar = "uv_clearbounty", sv = true },
-				{ type = "button", text = "#uv.settings.print.wantedtable", convar = "uv_wantedtable", sv = true },
+				{ type = "label", text = "#uv.pm.misc", sv = true },
+				{ type = "button", text = "#uv.pm.clearbounty", convar = "uv_clearbounty", sv = true },
+				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
 			},
-			{ TabName = "#uv.settings.tab.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
-				{ type = "label", text = "#uv.settings.addon.builtin", desc = "uv.settings.addon.builtin.desc", sv = true },
-				{ type = "bool", text = "#uv.settings.addon.vcmod.els", desc = "uv.settings.addon.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
+				{ type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
+				{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
 				{ type = "label", text = "Circular Functions", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.usenitrousracer", desc = "uv.settings.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.usenitrousunit", desc = "uv.settings.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+				{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+				{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
 			},
-			{ TabName = "#uv.settings.tab.faq", Icon = "unitvehicles/icons_settings/question.png",
+			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png",
 				{ type = "info", text = UV.FAQ[1] },
 				{ type = "info", text = UV.FAQ[2] },
 				{ type = "info", text = UV.FAQ[3] },
@@ -136,10 +136,10 @@ UVMenu.Main = function()
 				{ type = "info", text = UV.FAQ[18] },
 				{ type = "info", text = UV.FAQ[19] },
 			},
-			{ TabName = "#uv.settings.tab.settings", Icon = "unitvehicles/icons_settings/options.png", func = function()
+			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", func = function()
 					UVMenu.OpenMenu(UVMenu.Settings)
 				end,
-				{ type = "label", text = "#uv.settings.addon.builtin" },
+				{ type = "label", text = "#uv.addons.builtin" },
 			},
 		}
 	})
@@ -148,16 +148,16 @@ end
 -- Settings
 UVMenu.Settings = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
-		Name = language.GetPhrase("uv.settings.unitvehicles") .. " | " .. language.GetPhrase("uv.settings.tab.settings"),
+		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.settings"),
 		Width = ScrW() * 0.8,
 		Height = ScrH() * 0.7,
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
-			{ TabName = "#uv.settings.uistyle.title", Icon = "unitvehicles/icons_settings/display.png",
+			{ TabName = "#uv.ui.title", Icon = "unitvehicles/icons_settings/display.png",
 
 				{ type = "label", text = "#uv.settings.general" },
-				{ type = "combo", text = "#uv.settings.uistyle.main", desc = "uv.settings.uistyle.main.desc", convar = "unitvehicle_hudtype_main", content = {
+				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
 						{ "Crash Time - Undercover", "ctu"} ,
 						{ "NFS Most Wanted", "mostwanted"} ,
 						{ "NFS Carbon", "carbon"} ,
@@ -166,120 +166,120 @@ UVMenu.Settings = function()
 						{ "NFS Undercover", "undercover"} ,
 						{ "NFS ProStreet", "prostreet"} ,
 						{ "NFS World", "world"} ,
-						{ "#uv.uistyle.original", "original"} ,
-						{ "#uv.uistyle.none", "" }
+						{ "#uv.ui.original", "original"} ,
+						{ "#uv.ui.none", "" }
 					},
 				},
-				{ type = "combo", text = "#uv.settings.uistyle.backup", desc = "uv.settings.uistyle.backup.desc", convar = "unitvehicle_hudtype_backup", content = {
+				{ type = "combo", text = "#uv.ui.backup", desc = "uv.ui.backup.desc", convar = "unitvehicle_hudtype_backup", content = {
 							{ "NFS Most Wanted", "mostwanted" },
 							{ "NFS Carbon", "carbon" },
 							{ "NFS Undercover", "undercover" },
 							{ "NFS World", "world" },
-							{ "#uv.uistyle.original", "original" }
+							{ "#uv.ui.original", "original" }
 					},
 				},
-				{ type = "bool", text = "#uv.settings.ui.racertags", desc = "uv.settings.ui.racertags.desc", convar = "unitvehicle_racertags" },
-				{ type = "bool", text = "#uv.settings.ui.preracepopup", desc = "uv.settings.ui.preracepopup.desc", convar = "unitvehicle_preraceinfo" },
-				{ type = "bool", text = "#uv.settings.ui.subtitles", desc = "uv.settings.ui.subtitles.desc", convar = "unitvehicle_subtitles" },
-				{ type = "bool", text = "#uv.settings.ui.vehnametakedown", desc = "uv.settings.ui.vehnametakedown.desc", convar = "unitvehicle_vehiclenametakedown" },
-				{ type = "combo", text = "#uv.settings.ui.unitstype", desc = "uv.settings.ui.unitstype.desc", convar = "unitvehicle_unitstype", content = {
-						{ "#uv.settings.ui.unitstype.meter", 0 },
-						{ "#uv.settings.ui.unitstype.feet", 1 },
-						{ "#uv.settings.ui.unitstype.yards", 2 },
+				{ type = "bool", text = "#uv.ui.racertags", desc = "uv.ui.racertags.desc", convar = "unitvehicle_racertags" },
+				{ type = "bool", text = "#uv.ui.preracepopup", desc = "uv.ui.preracepopup.desc", convar = "unitvehicle_preraceinfo" },
+				{ type = "bool", text = "#uv.ui.subtitles", desc = "uv.ui.subtitles.desc", convar = "unitvehicle_subtitles" },
+				{ type = "bool", text = "#uv.ui.vehnametakedown", desc = "uv.ui.vehnametakedown.desc", convar = "unitvehicle_vehiclenametakedown" },
+				{ type = "combo", text = "#uv.ui.unitstype", desc = "uv.ui.unitstype.desc", convar = "unitvehicle_unitstype", content = {
+						{ "#uv.ui.unitstype.meter", 0 },
+						{ "#uv.ui.unitstype.feet", 1 },
+						{ "#uv.ui.unitstype.yards", 2 },
 					},
 				},
 			},
-			{ TabName = "#uv.settings.audio.title", Icon = "unitvehicles/icons_settings/audio.png",
+			{ TabName = "#uv.audio.title", Icon = "unitvehicles/icons_settings/audio.png",
 
 				{ type = "label", text = "#uv.settings.general" },
-				{ type = "slider", text = "#uv.settings.audio.volume", desc = "uv.settings.audio.volume.desc", convar = "unitvehicle_pursuitthemevolume", min = 0, max = 2, decimals = 1 },
-				{ type = "slider", text = "#uv.settings.audio.copchatter", desc = "uv.settings.audio.copchatter.desc", convar = "unitvehicle_chattervolume", min = 0, max = 5, decimals = 1 },
-				{ type = "bool", text = "#uv.settings.audio.mutecp", desc = "uv.settings.audio.mutecp.desc", convar = "unitvehicle_mutecheckpointsfx" },
+				{ type = "slider", text = "#uv.audio.volume", desc = "uv.audio.volume.desc", convar = "unitvehicle_pursuitthemevolume", min = 0, max = 2, decimals = 1 },
+				{ type = "slider", text = "#uv.audio.copchatter", desc = "uv.audio.copchatter.desc", convar = "unitvehicle_chattervolume", min = 0, max = 5, decimals = 1 },
+				{ type = "bool", text = "#uv.audio.mutecp", desc = "uv.audio.mutecp.desc", convar = "unitvehicle_mutecheckpointsfx" },
 
-				{ type = "label", text = "#uv.settings.audio.uvtrax" },
-				{ type = "bool", text = "#uv.settings.audio.uvtrax.enable", desc = "uv.settings.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
-				{ type = "combo", text = "#uv.settings.audio.uvtrax.profile", desc = "uv.settings.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
-				{ type = "bool", text = "#uv.settings.audio.uvtrax.freeroam", desc = "uv.settings.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
-				{ type = "bool", text = "#uv.settings.audio.uvtrax.pursuits", desc = "uv.settings.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "label", text = "#uv.audio.uvtrax" },
+				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
+				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "bool", text = "#uv.audio.uvtrax.freeroam", desc = "uv.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "bool", text = "#uv.audio.uvtrax.pursuits", desc = "uv.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
 
-				{ type = "label", text = "#uv.settings.audio.pursuit" },
-				{ type = "bool", text = "#uv.settings.audio.pursuit.enable", desc = "uv.settings.audio.pursuit.desc", convar = "unitvehicle_playmusic" },
-				{ type = "combo", text = "#uv.settings.audio.pursuittheme", desc = "uv.settings.audio.pursuittheme.desc", convar = "unitvehicle_pursuittheme", content = pursuitcontent, requireparentconvar = "unitvehicle_playmusic" },
-				{ type = "bool", text = "#uv.settings.audio.pursuitpriority", desc = "uv.settings.audio.pursuitpriority.desc", convar = "unitvehicle_racingmusicpriority", requireparentconvar = "unitvehicle_playmusic" },
-				{ type = "bool", text = "#uv.settings.audio.pursuittheme.random", desc = "uv.settings.audio.pursuittheme.random.desc", convar = "unitvehicle_pursuitthemeplayrandomheat" },
-				{ type = "combo", text = "#uv.settings.audio.pursuittheme.random.type", desc = "uv.settings.audio.pursuittheme.random.type.desc", convar = "unitvehicle_pursuitthemeplayrandomheattype", requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat", content = {
-						{ "#uv.settings.audio.pursuittheme.random.type.sequential", "sequential" },
-						{ "#uv.settings.audio.pursuittheme.random.minutes", "everyminutes" },
+				{ type = "label", text = "#uv.audio.pursuit" },
+				{ type = "bool", text = "#uv.audio.pursuit.enable", desc = "uv.audio.pursuit.desc", convar = "unitvehicle_playmusic" },
+				{ type = "combo", text = "#uv.audio.pursuittheme", desc = "uv.audio.pursuittheme.desc", convar = "unitvehicle_pursuittheme", content = pursuitcontent, requireparentconvar = "unitvehicle_playmusic" },
+				{ type = "bool", text = "#uv.audio.pursuitpriority", desc = "uv.audio.pursuitpriority.desc", convar = "unitvehicle_racingmusicpriority", requireparentconvar = "unitvehicle_playmusic" },
+				{ type = "bool", text = "#uv.audio.pursuittheme.random", desc = "uv.audio.pursuittheme.random.desc", convar = "unitvehicle_pursuitthemeplayrandomheat" },
+				{ type = "combo", text = "#uv.audio.pursuittheme.random.type", desc = "uv.audio.pursuittheme.random.type.desc", convar = "unitvehicle_pursuitthemeplayrandomheattype", requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat", content = {
+						{ "#uv.audio.pursuittheme.random.type.sequential", "sequential" },
+						{ "#uv.audio.pursuittheme.random.minutes", "everyminutes" },
 					},
 				},
-				{ type = "slider", text = "#uv.settings.audio.pursuittheme.random.minutes", desc = "uv.settings.audio.pursuittheme.random.minutes.desc", convar = "unitvehicle_chattervolume", min = 1, max = 10, decimals = 0, requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat" },
+				{ type = "slider", text = "#uv.audio.pursuittheme.random.minutes", desc = "uv.audio.pursuittheme.random.minutes.desc", convar = "unitvehicle_chattervolume", min = 1, max = 10, decimals = 0, requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat" },
 				
-				{ type = "label", text = "#uv.settings.audio.racing" },
-				{ type = "combo", text = "#uv.settings.audio.racing.sfx", desc = "uv.settings.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
+				{ type = "label", text = "#uv.audio.racing" },
+				{ type = "combo", text = "#uv.audio.racing.sfx", desc = "uv.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
 			},
-			-- { TabName = "#uv.settings.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
+			-- { TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
 
-				-- { type = "label", text = "#uv.settings.keybinds.pt" },
-				-- { type = "keybind", text = "#uv.settings.ptech.slot1", desc = "uv.settings.keybind.skipsong.desc", convar = "UVPTKeybindSlot1", slot = 1 },
-				-- { type = "keybind", text = "#uv.settings.ptech.slot2", desc = "uv.settings.keybind.skipsong.desc", convar = "UVPTKeybindSlot2", slot = 2 },
+				-- { type = "label", text = "#uv.keybinds.pt" },
+				-- { type = "keybind", text = "#uv.ptech.slot1", desc = "uv.keybind.skipsong.desc", convar = "UVPTKeybindSlot1", slot = 1 },
+				-- { type = "keybind", text = "#uv.ptech.slot2", desc = "uv.keybind.skipsong.desc", convar = "UVPTKeybindSlot2", slot = 2 },
 				
-				-- { type = "label", text = "#uv.settings.keybinds.races" },
-				-- { type = "keybind", text = "#uv.settings.keybind.skipsong", desc = "uv.settings.keybind.skipsong.desc", convar = "unitvehicle_keybind_skipsong", slot = 3 },
-				-- { type = "keybind", text = "#uv.settings.keybind.resetposition", desc = "uv.settings.keybind.resetposition.desc", convar = "UVKeybindResetPosition", slot = 4 },
-				-- { type = "keybind", text = "#uv.settings.keybind.showresults", desc = "uv.settings.keybind.showresults.desc", convar = "UVKeybindShowRaceResults", slot = 5 },
+				-- { type = "label", text = "#uv.keybinds.races" },
+				-- { type = "keybind", text = "#uv.keybind.skipsong", desc = "uv.keybind.skipsong.desc", convar = "unitvehicle_keybind_skipsong", slot = 3 },
+				-- { type = "keybind", text = "#uv.keybind.resetposition", desc = "uv.keybind.resetposition.desc", convar = "UVKeybindResetPosition", slot = 4 },
+				-- { type = "keybind", text = "#uv.keybind.showresults", desc = "uv.keybind.showresults.desc", convar = "UVKeybindShowRaceResults", slot = 5 },
 			-- },
-			{ TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
-				{ type = "label", text = "#uv.settings.heatlevels", sv = true },
-				{ type = "bool", text = "#uv.settings.heatlevels.enable", desc = "uv.settings.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
-				{ type = "bool", text = "#uv.settings.heatlevels.aiunits", desc = "uv.settings.heatlevels.aiunits.desc", convar = "unitvehicle_spawnmainunits", sv = true },
+			{ TabName = "#uv.pursuit", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
+				{ type = "label", text = "#uv.pursuit.heatlevels", sv = true },
+				{ type = "bool", text = "#uv.pursuit.heatlevels.enable", desc = "uv.pursuit.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
+				{ type = "bool", text = "#uv.pursuit.heatlevels.aiunits", desc = "uv.pursuit.heatlevels.aiunits.desc", convar = "unitvehicle_spawnmainunits", sv = true },
 				
 				{ type = "label", text = "#uv.settings.general", sv = true },
-				{ type = "bool", text = "#uv.settings.pursuit.randomplayerunits", desc = "uv.settings.pursuit.randomplayerunits.desc", convar = "unitvehicle_randomplayerunits", sv = true },
-				{ type = "bool", text = "#uv.settings.pursuit.autohealth", desc = "uv.settings.pursuit.autohealth.desc", convar = "unitvehicle_autohealth", sv = true },
-				{ type = "bool", text = "#uv.settings.pursuit.wheelsdetaching", desc = "uv.settings.pursuit.wheelsdetaching.desc", convar = "unitvehicle_wheelsdetaching", sv = true },
-				{ type = "bool", text = "#uv.settings.pursuit.spottedfreezecam", desc = "uv.settings.pursuit.spottedfreezecam.desc", convar = "unitvehicle_spottedfreezecam", sv = true },
-				{ type = "slider", text = "#uv.settings.pursuit.repaircooldown", desc = "uv.settings.pursuit.repaircooldown.desc", convar = "unitvehicle_repaircooldown", min = 5, max = 300, decimals = 0, sv = true },
-				{ type = "slider", text = "#uv.settings.pursuit.repairrange", desc = "uv.settings.pursuit.repairrange.desc", convar = "unitvehicle_repairrange", min = 10, max = 1000, decimals = 0, sv = true },
-				{ type = "bool", text = "#uv.settings.pursuit.noevade", desc = "uv.settings.pursuit.noevade.desc", convar = "unitvehicle_neverevade", sv = true },
-				{ type = "slider", text = "#uv.settings.pursuit.bustedtime", desc = "uv.settings.pursuit.bustedtime.desc", convar = "unitvehicle_bustedtimer", min = 0, max = 10, decimals = 1, sv = true },
-				{ type = "slider", text = "#uv.settings.pursuit.respawntime", desc = "uv.settings.pursuit.respawntime.desc", convar = "unitvehicle_spawncooldown", min = 0, max = 120, decimals = 0, sv = true },
-				{ type = "slider", text = "#uv.settings.pursuit.spikeduration", desc = "uv.settings.pursuit.spikeduration.desc", convar = "unitvehicle_spikestripduration", min = 0, max = 120, decimals = 0, sv = true },
+				{ type = "bool", text = "#uv.pursuit.randomplayerunits", desc = "uv.pursuit.randomplayerunits.desc", convar = "unitvehicle_randomplayerunits", sv = true },
+				{ type = "bool", text = "#uv.pursuit.autohealth", desc = "uv.pursuit.autohealth.desc", convar = "unitvehicle_autohealth", sv = true },
+				{ type = "bool", text = "#uv.pursuit.wheelsdetaching", desc = "uv.pursuit.wheelsdetaching.desc", convar = "unitvehicle_wheelsdetaching", sv = true },
+				{ type = "bool", text = "#uv.pursuit.spottedfreezecam", desc = "uv.pursuit.spottedfreezecam.desc", convar = "unitvehicle_spottedfreezecam", sv = true },
+				{ type = "slider", text = "#uv.pursuit.repaircooldown", desc = "uv.pursuit.repaircooldown.desc", convar = "unitvehicle_repaircooldown", min = 5, max = 300, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.pursuit.repairrange", desc = "uv.pursuit.repairrange.desc", convar = "unitvehicle_repairrange", min = 10, max = 1000, decimals = 0, sv = true },
+				{ type = "bool", text = "#uv.pursuit.noevade", desc = "uv.pursuit.noevade.desc", convar = "unitvehicle_neverevade", sv = true },
+				{ type = "slider", text = "#uv.pursuit.bustedtime", desc = "uv.pursuit.bustedtime.desc", convar = "unitvehicle_bustedtimer", min = 0, max = 10, decimals = 1, sv = true },
+				{ type = "slider", text = "#uv.pursuit.respawntime", desc = "uv.pursuit.respawntime.desc", convar = "unitvehicle_spawncooldown", min = 0, max = 120, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.pursuit.spikeduration", desc = "uv.pursuit.spikeduration.desc", convar = "unitvehicle_spikestripduration", min = 0, max = 120, decimals = 0, sv = true },
 			},
-			{ TabName = "#uv.settings.ptech", Icon = "unitvehicles/icons_carbon/wingman_target.png", sv = true,
+			{ TabName = "#uv.ptech", Icon = "unitvehicles/icons_carbon/wingman_target.png", sv = true,
 				{ type = "label", text = "#uv.settings.general", sv = true },
-				{ type = "bool", text = "#uv.settings.ptech.racer", desc = "uv.settings.ptech.racer.desc", convar = "unitvehicle_racerpursuittech", sv = true },
-				{ type = "bool", text = "#uv.settings.ptech.friendlyfire", desc = "uv.settings.ptech.friendlyfire.desc", convar = "unitvehicle_racerfriendlyfire", sv = true },
-				{ type = "bool", text = "#uv.settings.ptech.roadblockfriendlyfire", desc = "uv.settings.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
+				{ type = "bool", text = "#uv.ptech.racer", desc = "uv.ptech.racer.desc", convar = "unitvehicle_racerpursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.friendlyfire", desc = "uv.ptech.friendlyfire.desc", convar = "unitvehicle_racerfriendlyfire", sv = true },
+				{ type = "bool", text = "#uv.ptech.roadblockfriendlyfire", desc = "uv.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
 			},
-			{ TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons/cops_icon.png", sv = true,
-				{ type = "label", text = "#uv.settings.ailogic", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.optimizerespawn", desc = "uv.settings.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.relentless", desc = "uv.settings.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.wrecking", desc = "uv.settings.ailogic.wrecking.desc", convar = "unitvehicle_canwreck", sv = true },
-				{ type = "slider", text = "#uv.settings.ailogic.detectionrange", desc = "uv.settings.ailogic.detectionrange.desc", convar = "unitvehicle_detectionrange", min = 1, max = 100, decimals = 0, sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.headlights", desc = "uv.settings.ailogic.headlights.desc", convar = "unitvehicle_enableheadlights", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.autohealthracer", desc = "uv.settings.ailogic.autohealthracer.desc", convar = "unitvehicle_autohealthracer", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.customizeracer", desc = "uv.settings.ailogic.customizeracer.desc", convar = "unitvehicle_customizeracer", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.tractioncontrol", desc = "uv.settings.ailogic.tractioncontrol.desc", convar = "unitvehicle_tractioncontrol", sv = true },
+			{ TabName = "#uv.ai.title", Icon = "unitvehicles/icons/cops_icon.png", sv = true,
+				{ type = "label", text = "#uv.ailogic", sv = true },
+				{ type = "bool", text = "#uv.ailogic.optimizerespawn", desc = "uv.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
+				{ type = "bool", text = "#uv.ailogic.relentless", desc = "uv.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
+				{ type = "bool", text = "#uv.ailogic.wrecking", desc = "uv.ailogic.wrecking.desc", convar = "unitvehicle_canwreck", sv = true },
+				{ type = "slider", text = "#uv.ailogic.detectionrange", desc = "uv.ailogic.detectionrange.desc", convar = "unitvehicle_detectionrange", min = 1, max = 100, decimals = 0, sv = true },
+				{ type = "bool", text = "#uv.ailogic.headlights", desc = "uv.ailogic.headlights.desc", convar = "unitvehicle_enableheadlights", sv = true },
+				{ type = "bool", text = "#uv.ailogic.autohealthracer", desc = "uv.ailogic.autohealthracer.desc", convar = "unitvehicle_autohealthracer", sv = true },
+				{ type = "bool", text = "#uv.ailogic.customizeracer", desc = "uv.ailogic.customizeracer.desc", convar = "unitvehicle_customizeracer", sv = true },
+				{ type = "bool", text = "#uv.ailogic.tractioncontrol", desc = "uv.ailogic.tractioncontrol.desc", convar = "unitvehicle_tractioncontrol", sv = true },
 				
-				{ type = "label", text = "#uv.settings.ainav", sv = true },
-				{ type = "bool", text = "#uv.settings.ainav.pathfind", desc = "uv.settings.ainav.pathfind.desc", convar = "unitvehicle_pathfinding", sv = true },
-				{ type = "bool", text = "#uv.settings.ainav.dvpriority", desc = "uv.settings.ainav.dvpriority.desc", convar = "unitvehicle_dvwaypointspriority", sv = true },
+				{ type = "label", text = "#uv.ainav", sv = true },
+				{ type = "bool", text = "#uv.ainav.pathfind", desc = "uv.ainav.pathfind.desc", convar = "unitvehicle_pathfinding", sv = true },
+				{ type = "bool", text = "#uv.ainav.dvpriority", desc = "uv.ainav.dvpriority.desc", convar = "unitvehicle_dvwaypointspriority", sv = true },
 				
-				{ type = "label", text = "#uv.settings.chatter", sv = true },
-				{ type = "bool", text = "#uv.settings.chatter.enable", desc = "uv.settings.chatter.enable.desc", convar = "unitvehicle_chatter", sv = true },
-				{ type = "bool", text = "#uv.settings.chatter.text", desc = "uv.settings.chatter.text.desc", convar = "unitvehicle_chattertext", sv = true },
+				{ type = "label", text = "#uv.chatter", sv = true },
+				{ type = "bool", text = "#uv.chatter.enable", desc = "uv.chatter.enable.desc", convar = "unitvehicle_chatter", sv = true },
+				{ type = "bool", text = "#uv.chatter.text", desc = "uv.chatter.text.desc", convar = "unitvehicle_chattertext", sv = true },
 				
-				{ type = "label", text = "#uv.settings.response", sv = true },
-				{ type = "bool", text = "#uv.settings.response.enable", desc = "uv.settings.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
-				{ type = "slider", text = "#uv.settings.response.speedlimit", desc = "uv.settings.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
+				{ type = "label", text = "#uv.response", sv = true },
+				{ type = "bool", text = "#uv.response.enable", desc = "uv.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
+				{ type = "slider", text = "#uv.response.speedlimit", desc = "uv.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
 			},
 			
 			-- { TabName = "#uv.back", Icon = "unitvehicles/icons_settings/options.png", func = function()
 			{ TabName = "#uv.back", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
-				{ type = "label", text = "#uv.settings.addon.builtin" },
+				{ type = "label", text = "#uv.addons.builtin" },
 			},
 		}
 	})
@@ -288,7 +288,7 @@ end
 if CLIENT then
 	-- Create the desktop icon entry (clicking it runs console command which opens our menu)
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
-		title = "#uv.settings.unitvehicles",
+		title = "#uv.unitvehicles",
 		icon  = "unitvehicles/icons/MILESTONE_OUTRUN_PURSUITS_WON.png",
 		init = function(icon, window)
 			RunConsoleCommand("unitvehicles_menu")
@@ -526,6 +526,14 @@ Author: Adapted from UnitVehicles Settings menu
 
 -- Store all menus globally
 UVMenu.Menus = UVMenu.Menus or {}
+
+-- [[ Start of Color ConVars ]] --
+-- Background
+-- CreateClientConVar("uvmenu_col_bg_r", 255, true, false)
+-- CreateClientConVar("uvmenu_col_bg_g", 255, true, false)
+-- CreateClientConVar("uvmenu_col_bg_b", 255, true, false)
+-- CreateClientConVar("uvmenu_col_bg_a", 255, true, false)
+-- [[ End of Color ConVars ]] --
 
 function UV.PlayerCanSeeSetting(st)
 	if st.sv or st.admin then
@@ -1315,7 +1323,7 @@ end
 -- Opens a UVMenu menu
 function UVMenu:Open(menu)
     local CurrentMenu = menu or {}
-    local Name = CurrentMenu.Name or "#uv.settings.unitvehicles"
+    local Name = CurrentMenu.Name or "#uv.unitvehicles"
     local Width = CurrentMenu.Width or math.max(800, ScrW() * 0.9)
     local Height = CurrentMenu.Height or math.max(480, ScrH() * 0.66)
     local ShowDesc = CurrentMenu.Description == true
@@ -1615,7 +1623,7 @@ function UVMenu:Open(menu)
     frame.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(25, 25, 25, 245))
         local titleColor = Color(255, 255, 255, math.Clamp(math.floor(self.TitleAlpha), 0, 255))
-        draw.SimpleText(Name, "UVFont5UI", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(Name, "UVMostWantedLeaderboardFont", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 
     -- Build tabs if more than 1

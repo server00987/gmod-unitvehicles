@@ -39,9 +39,9 @@ PT_Slots_Replacement_Strings = {
 local Control_Strings = {
 	[1] = "#uv.ptech.slot.left",
 	[2] = "#uv.ptech.slot.right",
-	[3] = "#uv.settings.keybind.skipsong",
-	[4] = "#uv.settings.keybind.resetposition",
-	[5] = "#uv.settings.keybind.showresults"
+	[3] = "#uv.keybind.skipsong",
+	[4] = "#uv.keybind.resetposition",
+	[5] = "#uv.keybind.showresults"
 }
 
 local Colors = {
@@ -5064,7 +5064,7 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	hook.Add("PopulateToolMenu", "UVMenu", function()
-		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVServerOptions", "#uv.settings.server", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.unitvehicles", "UVServerOptions", "#uv.settings.server", "", "", function(panel)
 			local option
 			
 			panel:Clear()
@@ -5075,91 +5075,91 @@ else -- CLIENT Settings | HUD/Options
 			panel:Button("#spawnmenu.savechanges", "uv_local_update_settings") -- Save button
 			panel:Help("")
 
-			panel:Help("#uv.settings.heatlevels") -- Heat Levels
-			panel:CheckBox("#uv.settings.heatlevels.enable", "unitvehicle_heatlevels")
-			panel:ControlHelp("#uv.settings.heatlevels.enable.desc")
+			panel:Help("#uv.pursuit.heatlevels") -- Heat Levels
+			panel:CheckBox("#uv.pursuit.heatlevels.enable", "unitvehicle_heatlevels")
+			panel:ControlHelp("#uv.pursuit.heatlevels.enable.desc")
 
-			option = panel:CheckBox("#uv.settings.heatlevels.aiunits", "unitvehicle_spawnmainunits")
-			option:SetTooltip("#uv.settings.heatlevels.aiunits.desc")
+			option = panel:CheckBox("#uv.pursuit.heatlevels.aiunits", "unitvehicle_spawnmainunits")
+			option:SetTooltip("#uv.pursuit.heatlevels.aiunits.desc")
 
-			panel:Help("#uv.settings.pursuit") -- Pursuit Settings
-			option = panel:CheckBox("#uv.settings.pursuit.randomplayerunits", "unitvehicle_randomplayerunits")
-			option:SetTooltip("#uv.settings.pursuit.randomplayerunits.desc")
-			option = panel:CheckBox("#uv.settings.pursuit.autohealth", "unitvehicle_autohealth")
-			option:SetTooltip("#uv.settings.pursuit.autohealth.desc")
-			option = panel:CheckBox("#uv.settings.pursuit.wheelsdetaching", "unitvehicle_wheelsdetaching")
-			option:SetTooltip("#uv.settings.pursuit.wheelsdetaching.desc")
-			option = panel:CheckBox("#uv.settings.pursuit.spottedfreezecam", "unitvehicle_spottedfreezecam")
-			option:SetTooltip("#uv.settings.pursuit.spottedfreezecam.desc")
-			option = panel:NumSlider("#uv.settings.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
-			option:SetTooltip("#uv.settings.pursuit.repaircooldown.desc")
-			option = panel:NumSlider("#uv.settings.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)
-			option:SetTooltip("#uv.settings.pursuit.repairrange.desc")
-			option = panel:CheckBox("#uv.settings.pursuit.noevade", "unitvehicle_neverevade")
-			option:SetTooltip("#uv.settings.pursuit.noevade.desc")
-			option = panel:NumSlider("#uv.settings.pursuit.bustedtime", "unitvehicle_bustedtimer", 0, 10, 1)
-			option:SetTooltip("#uv.settings.pursuit.bustedtime.desc")
-			option = panel:NumSlider("#uv.settings.pursuit.respawntime", "unitvehicle_spawncooldown", 0, 120, 1)
-			option:SetTooltip("#uv.settings.pursuit.respawntime.desc")
-			option = panel:NumSlider("#uv.settings.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
-			option:SetTooltip("#uv.settings.pursuit.spikeduration.desc")
+			panel:Help("#uv.pursuit") -- Pursuit Settings
+			option = panel:CheckBox("#uv.pursuit.randomplayerunits", "unitvehicle_randomplayerunits")
+			option:SetTooltip("#uv.pursuit.randomplayerunits.desc")
+			option = panel:CheckBox("#uv.pursuit.autohealth", "unitvehicle_autohealth")
+			option:SetTooltip("#uv.pursuit.autohealth.desc")
+			option = panel:CheckBox("#uv.pursuit.wheelsdetaching", "unitvehicle_wheelsdetaching")
+			option:SetTooltip("#uv.pursuit.wheelsdetaching.desc")
+			option = panel:CheckBox("#uv.pursuit.spottedfreezecam", "unitvehicle_spottedfreezecam")
+			option:SetTooltip("#uv.pursuit.spottedfreezecam.desc")
+			option = panel:NumSlider("#uv.pursuit.repaircooldown", "unitvehicle_repaircooldown", 5, 300, 0)
+			option:SetTooltip("#uv.pursuit.repaircooldown.desc")
+			option = panel:NumSlider("#uv.pursuit.repairrange", "unitvehicle_repairrange", 10, 1000, 0)
+			option:SetTooltip("#uv.pursuit.repairrange.desc")
+			option = panel:CheckBox("#uv.pursuit.noevade", "unitvehicle_neverevade")
+			option:SetTooltip("#uv.pursuit.noevade.desc")
+			option = panel:NumSlider("#uv.pursuit.bustedtime", "unitvehicle_bustedtimer", 0, 10, 1)
+			option:SetTooltip("#uv.pursuit.bustedtime.desc")
+			option = panel:NumSlider("#uv.pursuit.respawntime", "unitvehicle_spawncooldown", 0, 120, 1)
+			option:SetTooltip("#uv.pursuit.respawntime.desc")
+			option = panel:NumSlider("#uv.pursuit.spikeduration", "unitvehicle_spikestripduration", 0, 100, 0)
+			option:SetTooltip("#uv.pursuit.spikeduration.desc")
 
-			panel:Help("#uv.settings.ptech")
-			panel:CheckBox("#uv.settings.ptech.racer", "unitvehicle_racerpursuittech")
-			option:SetTooltip("#uv.settings.ptech.racer.desc")
-			panel:CheckBox("#uv.settings.ptech.friendlyfire", "unitvehicle_racerfriendlyfire")
-			option:SetTooltip("#uv.settings.ptech.friendlyfire.desc")
-			panel:CheckBox("#uv.settings.ptech.roadblockfriendlyfire", "unitvehicle_spikestriproadblockfriendlyfire")
-			option:SetTooltip("#uv.settings.ptech.roadblockfriendlyfire.desc")
+			panel:Help("#uv.ptech")
+			panel:CheckBox("#uv.ptech.racer", "unitvehicle_racerpursuittech")
+			option:SetTooltip("#uv.ptech.racer.desc")
+			panel:CheckBox("#uv.ptech.friendlyfire", "unitvehicle_racerfriendlyfire")
+			option:SetTooltip("#uv.ptech.friendlyfire.desc")
+			panel:CheckBox("#uv.ptech.roadblockfriendlyfire", "unitvehicle_spikestriproadblockfriendlyfire")
+			option:SetTooltip("#uv.ptech.roadblockfriendlyfire.desc")
 
-			panel:Help("#uv.settings.ailogic")
-			option = panel:CheckBox("#uv.settings.ailogic.optimizerespawn", "unitvehicle_optimizerespawn")
-			option:SetTooltip("#uv.settings.ailogic.optimizerespawn.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.relentless", "unitvehicle_relentless")
-			option:SetTooltip("#uv.settings.ailogic.relentless.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.wrecking", "unitvehicle_canwreck")
-			option:SetTooltip("#uv.settings.ailogic.wrecking.desc")
-			option = panel:NumSlider("#uv.settings.ailogic.detectionrange", "unitvehicle_detectionrange", 1, 100, 0)
-			option:SetTooltip("#uv.settings.ailogic.detectionrange.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.headlights", "unitvehicle_enableheadlights")
-			option:SetTooltip("#uv.settings.ailogic.headlights.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.usenitrousracer", "unitvehicle_usenitrousracer")
-			option:SetTooltip("#uv.settings.ailogic.usenitrousracer.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.usenitrousunit", "unitvehicle_usenitrousunit")
-			option:SetTooltip("#uv.settings.ailogic.usenitrousunit.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.autohealthracer", "unitvehicle_autohealthracer")
-			option:SetTooltip("#uv.settings.ailogic.autohealthracer.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.customizeracer", "unitvehicle_customizeracer")
-			option:SetTooltip("#uv.settings.ailogic.customizeracer.desc")
-			option = panel:CheckBox("#uv.settings.ailogic.tractioncontrol", "unitvehicle_tractioncontrol")
-			option:SetTooltip("#uv.settings.ailogic.tractioncontrol.desc")
+			panel:Help("#uv.ailogic")
+			option = panel:CheckBox("#uv.ailogic.optimizerespawn", "unitvehicle_optimizerespawn")
+			option:SetTooltip("#uv.ailogic.optimizerespawn.desc")
+			option = panel:CheckBox("#uv.ailogic.relentless", "unitvehicle_relentless")
+			option:SetTooltip("#uv.ailogic.relentless.desc")
+			option = panel:CheckBox("#uv.ailogic.wrecking", "unitvehicle_canwreck")
+			option:SetTooltip("#uv.ailogic.wrecking.desc")
+			option = panel:NumSlider("#uv.ailogic.detectionrange", "unitvehicle_detectionrange", 1, 100, 0)
+			option:SetTooltip("#uv.ailogic.detectionrange.desc")
+			option = panel:CheckBox("#uv.ailogic.headlights", "unitvehicle_enableheadlights")
+			option:SetTooltip("#uv.ailogic.headlights.desc")
+			option = panel:CheckBox("#uv.ailogic.usenitrousracer", "unitvehicle_usenitrousracer")
+			option:SetTooltip("#uv.ailogic.usenitrousracer.desc")
+			option = panel:CheckBox("#uv.ailogic.usenitrousunit", "unitvehicle_usenitrousunit")
+			option:SetTooltip("#uv.ailogic.usenitrousunit.desc")
+			option = panel:CheckBox("#uv.ailogic.autohealthracer", "unitvehicle_autohealthracer")
+			option:SetTooltip("#uv.ailogic.autohealthracer.desc")
+			option = panel:CheckBox("#uv.ailogic.customizeracer", "unitvehicle_customizeracer")
+			option:SetTooltip("#uv.ailogic.customizeracer.desc")
+			option = panel:CheckBox("#uv.ailogic.tractioncontrol", "unitvehicle_tractioncontrol")
+			option:SetTooltip("#uv.ailogic.tractioncontrol.desc")
 
-			panel:Help("#uv.settings.ainav")
-			option = panel:CheckBox("#uv.settings.ainav.pathfind", "unitvehicle_pathfinding")
-			option:SetTooltip("#uv.settings.ainav.pathfind.desc")
-			option = panel:CheckBox("#uv.settings.ainav.dvpriority", "unitvehicle_dvwaypointspriority")
-			option:SetTooltip("#uv.settings.ainav.dvpriority.desc")
+			panel:Help("#uv.ainav")
+			option = panel:CheckBox("#uv.ainav.pathfind", "unitvehicle_pathfinding")
+			option:SetTooltip("#uv.ainav.pathfind.desc")
+			option = panel:CheckBox("#uv.ainav.dvpriority", "unitvehicle_dvwaypointspriority")
+			option:SetTooltip("#uv.ainav.dvpriority.desc")
 
-			panel:Help("#uv.settings.chatter")
-			option = panel:CheckBox("#uv.settings.chatter.enable", "unitvehicle_chatter")
-			option = panel:CheckBox("#uv.settings.chatter.text", "unitvehicle_chattertext")
-			option:SetTooltip("#uv.settings.chatter.text.desc")
+			panel:Help("#uv.chatter")
+			option = panel:CheckBox("#uv.chatter.enable", "unitvehicle_chatter")
+			option = panel:CheckBox("#uv.chatter.text", "unitvehicle_chattertext")
+			option:SetTooltip("#uv.chatter.text.desc")
 
-			panel:Help("#uv.settings.response")
-			option = panel:CheckBox("#uv.settings.response.enable", "unitvehicle_callresponse")
-			option:SetTooltip("#uv.settings.response.enable.desc")
-			option = panel:NumSlider("#uv.settings.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
-			option:SetTooltip("#uv.settings.response.speedlimit.desc")
+			panel:Help("#uv.response")
+			option = panel:CheckBox("#uv.response.enable", "unitvehicle_callresponse")
+			option:SetTooltip("#uv.response.enable.desc")
+			option = panel:NumSlider("#uv.response.speedlimit", "unitvehicle_speedlimit", 0, 100, 0)
+			option:SetTooltip("#uv.response.speedlimit.desc")
 
-			panel:Help("#uv.settings.addon")
-			option = panel:CheckBox("#uv.settings.addon.vcmod.els", "unitvehicle_vcmodelspriority")
-			option:SetTooltip("#uv.settings.addon.vcmod.els.desc")
+			panel:Help("#uv.addons")
+			option = panel:CheckBox("#uv.addons.vcmod.els", "unitvehicle_vcmodelspriority")
+			option:SetTooltip("#uv.addons.vcmod.els.desc")
 
 			panel:Help("#uv.settings.reset")
 			panel:Button( "#uv.settings.reset.all", "uv_resetallsettings")
 
 		end)
-		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVClientOptions", "#uv.settings.client", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.unitvehicles", "UVClientOptions", "#uv.settings.client", "", "", function(panel)
 			local option
 			
 			panel:Clear()
@@ -5167,9 +5167,9 @@ else -- CLIENT Settings | HUD/Options
 			panel:ControlHelp(" ")
 			panel:ControlHelp("#uv.settings.hoverovertips")
 
-			panel:Help("#uv.settings.uistyle.title")
+			panel:Help("#uv.ui.title")
 
-			local uistylemain, label = panel:ComboBox( "#uv.settings.uistyle.main", "unitvehicle_hudtype_main" )
+			local uistylemain, label = panel:ComboBox( "#uv.ui.main", "unitvehicle_hudtype_main" )
 			uistylemain:AddChoice( "Crash Time - Undercover", "ctu")
 			uistylemain:AddChoice( "NFS Most Wanted", "mostwanted")
 			uistylemain:AddChoice( "NFS Carbon", "carbon")
@@ -5178,43 +5178,43 @@ else -- CLIENT Settings | HUD/Options
 			uistylemain:AddChoice( "NFS Undercover", "undercover")
 			uistylemain:AddChoice( "NFS ProStreet", "prostreet")
 			uistylemain:AddChoice( "NFS World", "world")
-			uistylemain:AddChoice( "#uv.uistyle.original", "original")
-			uistylemain:AddChoice( "#uv.uistyle.none", "")
+			uistylemain:AddChoice( "#uv.ui.original", "original")
+			uistylemain:AddChoice( "#uv.ui.none", "")
 			
-			uistylemain:SetTooltip( "#uv.settings.uistyle.main.desc" )
+			uistylemain:SetTooltip( "#uv.ui.main.desc" )
 
-			local uistylebackup, label = panel:ComboBox( "#uv.settings.uistyle.backup", "unitvehicle_hudtype_backup" )
+			local uistylebackup, label = panel:ComboBox( "#uv.ui.backup", "unitvehicle_hudtype_backup" )
 			uistylebackup:AddChoice( "NFS Most Wanted", "mostwanted")
 			uistylebackup:AddChoice( "NFS Carbon", "carbon")
 			uistylebackup:AddChoice( "NFS Undercover", "undercover")
 			uistylebackup:AddChoice( "NFS World", "world")
-			uistylebackup:AddChoice( "#uv.uistyle.original", "original")
+			uistylebackup:AddChoice( "#uv.ui.original", "original")
 			
-			uistylebackup:SetTooltip( "#uv.settings.uistyle.backup.desc" )
+			uistylebackup:SetTooltip( "#uv.ui.backup.desc" )
 
-			option = panel:CheckBox("#uv.settings.ui.racertags", "unitvehicle_racertags")
-			option:SetTooltip("#uv.settings.ui.racertags.desc")
+			option = panel:CheckBox("#uv.ui.racertags", "unitvehicle_racertags")
+			option:SetTooltip("#uv.ui.racertags.desc")
 
-			option = panel:CheckBox("#uv.settings.ui.preracepopup", "unitvehicle_preraceinfo")
-			option:SetTooltip("#uv.settings.ui.preracepopup.desc")
+			option = panel:CheckBox("#uv.ui.preracepopup", "unitvehicle_preraceinfo")
+			option:SetTooltip("#uv.ui.preracepopup.desc")
 
-			option = panel:CheckBox("#uv.settings.ui.subtitles", "unitvehicle_subtitles")
-			option:SetTooltip("#uv.settings.ui.subtitles.desc")
+			option = panel:CheckBox("#uv.ui.subtitles", "unitvehicle_subtitles")
+			option:SetTooltip("#uv.ui.subtitles.desc")
 
-			option = panel:CheckBox("#uv.settings.ui.vehnametakedown", "unitvehicle_vehiclenametakedown")
-			option:SetTooltip("#uv.settings.ui.vehnametakedown.desc")
+			option = panel:CheckBox("#uv.ui.vehnametakedown", "unitvehicle_vehiclenametakedown")
+			option:SetTooltip("#uv.ui.vehnametakedown.desc")
 
-			local displayunits, label = panel:ComboBox( "#uv.settings.ui.unitstype", "unitvehicle_unitstype" )
-			displayunits:AddChoice( "#uv.settings.ui.unitstype.meter", 0)
-			displayunits:AddChoice( "#uv.settings.ui.unitstype.feet", 1)
-			displayunits:AddChoice( "#uv.settings.ui.unitstype.yards", 2)
+			local displayunits, label = panel:ComboBox( "#uv.ui.unitstype", "unitvehicle_unitstype" )
+			displayunits:AddChoice( "#uv.ui.unitstype.meter", 0)
+			displayunits:AddChoice( "#uv.ui.unitstype.feet", 1)
+			displayunits:AddChoice( "#uv.ui.unitstype.yards", 2)
 			
-			displayunits:SetTooltip( "#uv.settings.ui.unitstype.desc" )
+			displayunits:SetTooltip( "#uv.ui.unitstype.desc" )
 
-			panel:Help("#uv.settings.audio.title")
+			panel:Help("#uv.audio.title")
 
-			local volume_theme = panel:NumSlider("#uv.settings.audio.volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
-			volume_theme:SetTooltip("#uv.settings.audio.volume.desc")
+			local volume_theme = panel:NumSlider("#uv.audio.volume", "unitvehicle_pursuitthemevolume", 0, 2, 1)
+			volume_theme:SetTooltip("#uv.audio.volume.desc")
 
 			volume_theme.OnValueChanged = function( self, value )
 				if UVSoundLoop then
@@ -5222,8 +5222,8 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 
-			local volume_chatter = panel:NumSlider("#uv.settings.audio.copchatter", "unitvehicle_chattervolume", 0, 5, 1)
-			volume_chatter:SetTooltip("#uv.settings.audio.copchatter.desc")
+			local volume_chatter = panel:NumSlider("#uv.audio.copchatter", "unitvehicle_chattervolume", 0, 5, 1)
+			volume_chatter:SetTooltip("#uv.audio.copchatter.desc")
 
 			volume_chatter.OnValueChanged = function( self, value )
 				if uvchatterplaying then
@@ -5231,41 +5231,41 @@ else -- CLIENT Settings | HUD/Options
 				end
 			end
 			
-			option = panel:CheckBox("#uv.settings.audio.mutecp", "unitvehicle_mutecheckpointsfx")
-			option:SetTooltip("#uv.settings.audio.mutecp.desc")
+			option = panel:CheckBox("#uv.audio.mutecp", "unitvehicle_mutecheckpointsfx")
+			option:SetTooltip("#uv.audio.mutecp.desc")
 
 			panel:ControlHelp(" ")
 
-			option = panel:CheckBox("#uv.settings.audio.uvtrax", "unitvehicle_racingmusic")
-			option:SetTooltip("#uv.settings.audio.uvtrax.desc")
+			option = panel:CheckBox("#uv.audio.uvtrax", "unitvehicle_racingmusic")
+			option:SetTooltip("#uv.audio.uvtrax.desc")
 			
-			local racetheme, label = panel:ComboBox( "#uv.settings.audio.uvtrax.profile", "unitvehicle_racetheme" )
+			local racetheme, label = panel:ComboBox( "#uv.audio.uvtrax.profile", "unitvehicle_racetheme" )
 			local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
 			if folders ~= nil then
 				for k, v in pairs(folders) do
 					racetheme:AddChoice( v )
 				end
 			end
-			racetheme:SetTooltip("#uv.settings.audio.uvtrax.profile.desc")
+			racetheme:SetTooltip("#uv.audio.uvtrax.profile.desc")
 
-			option = panel:CheckBox("#uv.settings.audio.uvtrax.freeroam", "unitvehicle_uvtraxinfreeroam")
-			option:SetTooltip("#uv.settings.audio.uvtrax.freeroam.desc")
-			option = panel:CheckBox("#uv.settings.audio.uvtrax.pursuits", "unitvehicle_racingmusicoutsideraces")
-			option:SetTooltip("#uv.settings.audio.uvtrax.pursuits.desc")
+			option = panel:CheckBox("#uv.audio.uvtrax.freeroam", "unitvehicle_uvtraxinfreeroam")
+			option:SetTooltip("#uv.audio.uvtrax.freeroam.desc")
+			option = panel:CheckBox("#uv.audio.uvtrax.pursuits", "unitvehicle_racingmusicoutsideraces")
+			option:SetTooltip("#uv.audio.uvtrax.pursuits.desc")
 
 			panel:ControlHelp(" ")
 
-			option = panel:CheckBox("#uv.settings.audio.pursuit", "unitvehicle_playmusic")
-			option:SetTooltip("#uv.settings.audio.pursuit.desc")
+			option = panel:CheckBox("#uv.audio.pursuit", "unitvehicle_playmusic")
+			option:SetTooltip("#uv.audio.pursuit.desc")
 			
-			local pursuittheme, label = panel:ComboBox( "#uv.settings.audio.pursuittheme", "unitvehicle_pursuittheme" )
+			local pursuittheme, label = panel:ComboBox( "#uv.audio.pursuittheme", "unitvehicle_pursuittheme" )
 			local files, folders = file.Find( "sound/uvpursuitmusic/*", "GAME" )
 			if folders ~= nil then
 				for k, v in pairs(folders) do
 					pursuittheme:AddChoice( v )
 				end
 			end
-			pursuittheme:SetTooltip("#uv.settings.audio.pursuittheme.desc")
+			pursuittheme:SetTooltip("#uv.audio.pursuittheme.desc")
 			local oldThemeSelect = pursuittheme.OnSelect
 			function pursuittheme:OnSelect(index, value)
 				if not PursuitFilePathsTable[value] then
@@ -5279,26 +5279,26 @@ else -- CLIENT Settings | HUD/Options
 				oldThemeSelect(self, index, value)
 			end
 			
-			option = panel:CheckBox("#uv.settings.audio.pursuitpriority", "unitvehicle_racingmusicpriority")
-			option:SetTooltip("#uv.settings.audio.pursuitpriority.desc")
+			option = panel:CheckBox("#uv.audio.pursuitpriority", "unitvehicle_racingmusicpriority")
+			option:SetTooltip("#uv.audio.pursuitpriority.desc")
 			
-			option = panel:CheckBox("#uv.settings.audio.pursuittheme.random", "unitvehicle_pursuitthemeplayrandomheat")
-			option:SetTooltip("#uv.settings.audio.pursuittheme.random.desc")
+			option = panel:CheckBox("#uv.audio.pursuittheme.random", "unitvehicle_pursuitthemeplayrandomheat")
+			option:SetTooltip("#uv.audio.pursuittheme.random.desc")
 
-			local pursuitthemeplayrandomheattype, label = panel:ComboBox( "#uv.settings.audio.pursuittheme.random.type", "unitvehicle_pursuitthemeplayrandomheattype" )
-			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.type.sequential", "sequential")
-			pursuitthemeplayrandomheattype:AddChoice( "#uv.settings.audio.pursuittheme.random.minutes", "everyminutes")
-			pursuitthemeplayrandomheattype:SetTooltip("#uv.settings.audio.pursuittheme.random.type.desc")
+			local pursuitthemeplayrandomheattype, label = panel:ComboBox( "#uv.audio.pursuittheme.random.type", "unitvehicle_pursuitthemeplayrandomheattype" )
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.audio.pursuittheme.random.type.sequential", "sequential")
+			pursuitthemeplayrandomheattype:AddChoice( "#uv.audio.pursuittheme.random.minutes", "everyminutes")
+			pursuitthemeplayrandomheattype:SetTooltip("#uv.audio.pursuittheme.random.type.desc")
 			
-			local numslider = panel:NumSlider("#uv.settings.audio.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)
+			local numslider = panel:NumSlider("#uv.audio.pursuittheme.random.minutes", "unitvehicle_pursuitthemeplayrandomheatminutes", 1, 10, 0)
 			local oldTypeChange = pursuitthemeplayrandomheattype.OnSelect
 			function pursuitthemeplayrandomheattype:OnSelect(index, name, value)
 				numslider:SetEnabled(value == "everyminutes")
 				oldTypeChange(self, index, name, value)
 			end
 
-			panel:Help("#uv.settings.keybinds")
-			panel:Help("#uv.settings.keybinds.races")
+			panel:Help("#uv.keybinds")
+			panel:Help("#uv.keybinds.races")
 
 			KeyBindButtons[3] = {
 				UVKeybindSkipSong:GetName(),
@@ -5315,7 +5315,7 @@ else -- CLIENT Settings | HUD/Options
 				panel:Button(language.GetPhrase(Control_Strings[5]) .. " - "..string.upper(input.GetKeyName(UVKeybindShowRaceResults:GetInt())), "uv_keybinds", '5')
 			}
 
-			panel:Help("#uv.settings.keybinds.pt")
+			panel:Help("#uv.keybinds.pt")
 
 			KeyBindButtons[1] = {
 				UVPTKeybindSlot1:GetName(), --Convar string, button
@@ -5327,26 +5327,26 @@ else -- CLIENT Settings | HUD/Options
 			}
 
 		end)
-		spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVPursuitManager", "#uv.settings.pm", "", "", function(panel)
+		spawnmenu.AddToolMenuOption("Options", "uv.unitvehicles", "UVPursuitManager", "#uv.pm", "", "", function(panel)
 
 			panel:SetContentAlignment(8)
-			panel:Help("#uv.settings.pm.units")
+			panel:Help("#uv.pm.units")
 			-- panel:AddControl("Header", {Description = "	——— Units ———"})
-			panel:Button( "#uv.settings.pm.ai.spawn", "uv_spawnvehicles")
-			panel:Button( "#uv.settings.pm.ai.despawn", "uv_despawnvehicles")
-			panel:Button( "#uv.settings.pm.ai.spawnas", "uv_spawn_as_unit")
+			panel:Button( "#uv.pm.ai.spawn", "uv_spawnvehicles")
+			panel:Button( "#uv.pm.ai.despawn", "uv_despawnvehicles")
+			panel:Button( "#uv.pm.spawnas", "uv_spawn_as_unit")
 
-			panel:Help("#uv.settings.pm.pursuit")
+			panel:Help("#uv.pm.pursuit")
 			-- panel:AddControl("Header", {Description = "——— Pursuit ———"})
-			panel:Button( "#uv.settings.pm.pursuit.start", "uv_startpursuit")
-			panel:Button( "#uv.settings.pm.pursuit.stop", "uv_stoppursuit")
+			panel:Button( "#uv.pm.pursuit.start", "uv_startpursuit")
+			panel:Button( "#uv.pm.pursuit.stop", "uv_stoppursuit")
 
-			panel:Help("#uv.settings.pm.misc")
+			panel:Help("#uv.pm.misc")
 			-- panel:AddControl("Header", {Description = "——— Misc ———"})
-			panel:Button( "#uv.settings.clearbounty", "uv_clearbounty")
-			panel:Button( "#uv.settings.print.wantedtable", "uv_wantedtable")
+			panel:Button( "#uv.pm.clearbounty", "uv_clearbounty")
+			panel:Button( "#uv.pm.wantedtable", "uv_wantedtable")
 
-			local heatLevelSlider = panel:NumSlider("#uv.settings.pm.heatlevel", nil, 1, MAX_HEAT_LEVEL, 0)
+			local heatLevelSlider = panel:NumSlider("#uv.pm.heatlevel", nil, 1, MAX_HEAT_LEVEL, 0)
 			heatLevelSlider:SetValue( 1 )
 			heatLevelSlider.OnValueChanged = function( self, val )
 				local roundedVal = math.Round( val - 0.5 )

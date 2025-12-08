@@ -1,4 +1,4 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Category		=	"uv.unitvehicles"
 TOOL.Name			=	"#tool.uvunitmanager.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
@@ -397,17 +397,17 @@ if CLIENT then
 		
 		local Intro = vgui.Create( "DLabel", UnitAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( string.format( lang("tool.uvshared.create.base"), UVTOOLMemory.VehicleBase ) )
+		Intro:SetText( string.format( lang("uv.tool.create.base"), UVTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 		
 		local Intro2 = vgui.Create( "DLabel", UnitAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( string.format( lang("tool.uvshared.create.rawname"), UVTOOLMemory.SpawnName ) )
+		Intro2:SetText( string.format( lang("uv.tool.create.rawname"), UVTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 		
 		local Intro3 = vgui.Create( "DLabel", UnitAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "#tool.uvshared.create.uniquename" )
+		Intro3:SetText( "#uv.tool.create.uniquename" )
 		Intro3:SizeToContents()
 		
 		local UnitNameEntry = vgui.Create( "DTextEntry", UnitAdjust )
@@ -450,7 +450,7 @@ if CLIENT then
 		HeatLevelEntry:SetDecimals(0)
 		HeatLevelEntry:SetSize(UnitAdjust:GetWide() / 2, 22)
 		
-		OK:SetText("#tool.uvshared.create")
+		OK:SetText("#uv.tool.create")
 		OK:SetSize(UnitAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
@@ -593,17 +593,17 @@ if CLIENT then
 							RunConsoleCommand("uvunitmanager_unitsrhino"..HeatLevel, availableunits.." "..Name.."."..file_ext)
 						end
 					end
-					notification.AddLegacy( string.format( lang("tool.uvshared.saved.heatlevel"), Name, HeatLevel ), NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("uv.tool.saved.heatlevel"), Name, HeatLevel ), NOTIFY_UNDO, 5 )
 					-- Msg( "Saved "..Name.." as a Unit at Heat Level "..HeatLevel.."!\n" )
 				else
-					notification.AddLegacy( string.format( lang("tool.uvshared.saved"), Name ), NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( lang("uv.tool.saved"), Name ), NOTIFY_UNDO, 5 )
 					-- Msg( "Saved "..Name.." as a Unit!\n" )
 				end
 				
 				surface.PlaySound( "buttons/button15.wav" )
 				
 			else
-				UnitNameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
+				UnitNameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -900,13 +900,13 @@ if CLIENT then
 
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
 
 			if CurTime() - cooldown < 5 then 
-				notification.AddLegacy( "#tool.uvshared.cooldown", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.tool.cooldown", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -1008,7 +1008,7 @@ if CLIENT then
 				net.SendToServer()
 			end
 			
-			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 			-- Msg( "#tool.uvunitmanager.applied" )
 			
@@ -1016,9 +1016,9 @@ if CLIENT then
 		CPanel:AddItem(applysettings)
 
 		local exportsettings = vgui.Create("DButton")
-		exportsettings:SetText("#tool.uvshared.export.settings")
+		exportsettings:SetText("#uv.tool.export.settings")
 		exportsettings.DoClick = function()
-			Derma_StringRequest("#tool.uvracemanager.export", "#tool.uvshared.export.title", cpID, function(txt)
+			Derma_StringRequest("#tool.uvracemanager.export", "#uv.tool.export.title", cpID, function(txt)
 				-- chat.AddText("Exporting preset...")
 				Export( txt )
 			end, nil, "#addons.confirm", "#addons.cancel")
@@ -1038,7 +1038,7 @@ if CLIENT then
 
 		local vehicleBaseCombo = vgui.Create("DComboBox")
 		vehicleBaseCombo:SetSize(280, 20)
-		vehicleBaseCombo:SetTooltip("#tool.uvshared.base.desc")
+		vehicleBaseCombo:SetTooltip("#uv.tool.base.desc")
 		local currentBaseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
 		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
 		for _, base in ipairs(vehicleBases) do
@@ -1077,7 +1077,7 @@ if CLIENT then
 
 					if #savedVehicles == 0 then
 						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#tool.uvshared.novehicle")
+						emptyLabel:SetText("#uv.tool.novehicle")
 						emptyLabel:SetTextColor(Color(200, 200, 200))
 						emptyLabel:SetFont("DermaDefaultBold")
 						emptyLabel:SetContentAlignment(5)
@@ -1181,7 +1181,7 @@ if CLIENT then
 			end
 			if isstring(selecteditem) and basePath then
 				if file.Delete(basePath .. selecteditem) then
-					notification.AddLegacy(string.format(language.GetPhrase("tool.uvshared.deleted"), selecteditem), NOTIFY_UNDO, 5)
+					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.deleted"), selecteditem), NOTIFY_UNDO, 5)
 					surface.PlaySound("buttons/button15.wav")
 					-- Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
 				end
@@ -1191,7 +1191,7 @@ if CLIENT then
 		CPanel:AddItem(DeleteBtn)
 		
 		-- Dropdown for vehicle base selection
-		CPanel:AddControl("Label", { Text = "#tool.uvshared.base.title" })
+		CPanel:AddControl("Label", { Text = "#uv.tool.base.title" })
 		CPanel:AddItem(vehicleBaseCombo)
 
 		CPanel:AddControl("Label", { Text = "" }) -- General Heat Settings
@@ -1347,7 +1347,7 @@ if CLIENT then
 
 					if count == 0 then
 						local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
-						lbl:SetText("#tool.uvshared.novehicle")
+						lbl:SetText("#uv.tool.novehicle")
 						lbl:SetTextColor(Color(200,200,200))
 						lbl:Dock(TOP)
 						lbl:DockMargin(5,5,5,5)
@@ -1363,7 +1363,7 @@ if CLIENT then
 
 			if count == 0 then
 				local lbl = vgui.Create("DLabel", selectedVehiclesPanelHeat)
-				lbl:SetText("#tool.uvshared.novehicle")
+				lbl:SetText("#uv.tool.novehicle")
 				lbl:SetTextColor(Color(200,200,200))
 				lbl:Dock(TOP)
 				lbl:DockMargin(5,5,5,5)
@@ -1389,7 +1389,7 @@ if CLIENT then
 			local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
 			if not savedVehicles or #savedVehicles == 0 then
 				local lbl = vgui.Create("DLabel", vehiclePanelHeat)
-				lbl:SetText("#tool.uvshared.novehicle")
+				lbl:SetText("#uv.tool.novehicle")
 				lbl:SetTextColor(Color(200,200,200))
 				lbl:Dock(TOP)
 				lbl:DockMargin(5,5,5,5)
@@ -1693,7 +1693,7 @@ if CLIENT then
 		end
 
 		CPanel:AddControl("Label", { Text = "" })
-		CPanel:AddControl("Label", { Text = "#uv.settings.ptech" })		
+		CPanel:AddControl("Label", { Text = "#uv.ptech" })		
 		local pursuittech = vgui.Create("DCheckBoxLabel")
 		pursuittech:SetText("#tool.uvunitmanager.settings.ptech")
 		pursuittech:SetConVar("uvunitmanager_pursuittech")

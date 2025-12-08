@@ -1006,7 +1006,7 @@ UV_UI.pursuit.world.events = {
 			local autoCloseRemaining = math.max(0,30 - elapsed)
 			local conttext = language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump")
 			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining))
-			local uwstext = language.GetPhrase("uv.settings.pm.ai.spawnas").." - "..UVBindButton("+reload")
+			local uwstext = language.GetPhrase("uv.pm.spawnas").." - "..UVBindButton("+reload")
 
 			surface.SetDrawColor(255,255,255,effectiveAlpha*math.abs(math.sin(RealTime()*3)))
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])

@@ -1,5 +1,5 @@
 -- UNLOCALIZED NOTE: some notification strings below are unlocalized placeholders for easy localization later.
-TOOL.Category      = "uv.settings.unitvehicles"
+TOOL.Category      = "uv.unitvehicles"
 TOOL.Name          = "#tool.uvpursuittech.name"
 TOOL.Command       = nil
 TOOL.ConfigName    = ""
@@ -374,7 +374,7 @@ if CLIENT then
         surface.SetDrawColor(255,132,0,25)
         surface.SetMaterial(toolicon_racer)
         surface.DrawTexturedRect(width*0.3,height*0.1,width*0.4,height*0.4)
-        draw.SimpleText("#uv.uvpursuittech.tg.racer", "UVFont4BiggerItalic2", width*0.5, height*0.175, Color(255,132,0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("#tool.uvpursuittech.tg.racer", "UVFont4BiggerItalic2", width*0.5, height*0.175, Color(255,132,0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.SimpleText("|", "UVFont4", width*0.5, height*0.3, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.SimpleText((PursuitTechDefs[racer_s1] and PursuitTechDefs[racer_s1].sname or racer_s1), "UVFont4", width*0.475, height*0.3, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         draw.SimpleText((PursuitTechDefs[racer_s2] and PursuitTechDefs[racer_s2].sname or racer_s2), "UVFont4", width*0.525, height*0.3, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -383,7 +383,7 @@ if CLIENT then
         surface.SetDrawColor(125,125,255,50)
         surface.SetMaterial(toolicon_unit)
         surface.DrawTexturedRect(width*0.3,height*0.6,width*0.4,height*0.4)
-        draw.SimpleText("#uv.uvpursuittech.tg.unit", "UVFont4BiggerItalic2", width*0.5, height*0.675, Color(125,125,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("#tool.uvpursuittech.tg.unit", "UVFont4BiggerItalic2", width*0.5, height*0.675, Color(125,125,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.SimpleText("|", "UVFont4", width*0.5, height*0.8, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.SimpleText((PursuitTechDefs[unit_s1] and PursuitTechDefs[unit_s1].sname or unit_s1), "UVFont4", width*0.475, height*0.8, Color(255,255,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         draw.SimpleText((PursuitTechDefs[unit_s2] and PursuitTechDefs[unit_s2].sname or unit_s2), "UVFont4", width*0.525, height*0.8, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -393,10 +393,10 @@ if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
 		CPanel:ClearControls()
 		-- CPanel:AddControl("Label", {Text=" "})
-		CPanel:AddControl("Label", {Text="#uv.uvpursuittech.desc"})
+		CPanel:AddControl("Label", {Text="#tool.uvpursuittech.desc"})
 
 		-- ===== Racer slots =====
-		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.racer"})
+		CPanel:AddControl("Label",{Text="#tool.uvpursuittech.slot.racer"})
 
 		local slotCombos = {}
 
@@ -462,14 +462,14 @@ if CLIENT then
 
 		-- ===== Unit slots =====
 		CPanel:AddControl("Label", {Text=" "})
-		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.slot.unit"})
+		CPanel:AddControl("Label",{Text="#tool.uvpursuittech.slot.unit"})
 		local unitSlot1Combo = CreateSlotCombo("unit_slot1", pttable_unit)
 		local unitSlot2Combo = CreateSlotCombo("unit_slot2", pttable_unit)
 
 		-- ===== Settings PT picker =====
 		CPanel:AddControl("Label",{Text=" "})
-		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.settings"})
-		CPanel:AddControl("Label",{Text="#uv.uvpursuittech.settings.desc"})
+		CPanel:AddControl("Label",{Text="#tool.uvpursuittech.settings"})
+		CPanel:AddControl("Label",{Text="#tool.uvpursuittech.settings.desc"})
 
 		-- ===== Preset =====
 		CPanel:AddControl("ComboBox", {
@@ -492,7 +492,7 @@ if CLIENT then
 		CPanel:AddItem(exportsettings)
 		
 		local ptPicker = vgui.Create("DComboBox")
-		ptPicker:SetText("#uv.uvpursuittech.select")
+		ptPicker:SetText("#tool.uvpursuittech.select")
 		ptPicker:SetTextColor(Color(0,0,0))
 
 		local selectedPT = nil
@@ -548,7 +548,7 @@ if CLIENT then
 			-- Racer sliders
 			if info.racer then
 				local lab = vgui.Create("DLabel", paramsPanel)
-				lab:SetText("#uv.uvpursuittech.slot.racer")
+				lab:SetText("#tool.uvpursuittech.slot.racer")
 				lab:SetPos(4,y); lab:SizeToContents(); y=y+20
 				lab:SetTextColor(Color(255,132,0))
 				table.insert(sliders, lab)
@@ -566,7 +566,7 @@ if CLIENT then
 					table.insert(sliders, sep)
 				end
 				local lab2 = vgui.Create("DLabel", paramsPanel)
-				lab2:SetText("#uv.uvpursuittech.slot.unit"); lab2:SetPos(4,y); lab2:SizeToContents(); y=y+20
+				lab2:SetText("#tool.uvpursuittech.slot.unit"); lab2:SetPos(4,y); lab2:SizeToContents(); y=y+20
 				lab2:SetTextColor(Color(125,125,255))
 				table.insert(sliders, lab2)
 				for param, dat in pairs(info.convars) do
@@ -629,9 +629,9 @@ if CLIENT then
 			net.Start("UVUpdateSettings")
 			net.WriteTable(convar_table)
 			net.SendToServer()
-			notification.AddLegacy("#tool.uvshared.applied", NOTIFY_UNDO,5)
+			notification.AddLegacy("#uv.tool.applied", NOTIFY_UNDO,5)
 			surface.PlaySound("buttons/button15.wav")
-			-- Msg("#tool.uvshared.applied")
+			-- Msg("#uv.tool.applied")
 		end
 		CPanel:AddItem(applysettings)
 	end

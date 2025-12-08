@@ -501,7 +501,7 @@ UV_UI.pursuit.original.events = {
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) ), "UVFont2-Smaller", w*0.99, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT )
 			
 			if UVHUDWantedSuspects and #UVHUDWantedSuspects > 0 then
-				draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas"), "UVFont2-Smaller", w*0.01, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
+				draw.DrawText( "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.pm.spawnas"), "UVFont2-Smaller", w*0.01, h*0.885, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT )
 			end
 
             if timeremaining < 1 then

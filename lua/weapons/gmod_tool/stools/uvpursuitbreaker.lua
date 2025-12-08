@@ -1,4 +1,4 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Category		=	"uv.unitvehicles"
 TOOL.Name			=	"#tool.uvpursuitbreaker.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
@@ -110,7 +110,7 @@ if CLIENT then
 		DontUnweldProps:SetValue( 0 )
 		DontUnweldProps:SetTooltip( "#tool.uvpursuitbreaker.create.keepweld.desc" )
 
-		OK:SetText("#tool.uvshared.create")
+		OK:SetText("#uv.tool.create")
 		OK:SetSize(PursuitBreakerAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 
@@ -132,7 +132,7 @@ if CLIENT then
 				surface.PlaySound( "buttons/button15.wav" )
 
 			else
-				PursuitBreakerNameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
+				PursuitBreakerNameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -182,7 +182,7 @@ if CLIENT then
 					net.Start("UVPursuitBreakerLoad")
 					net.WriteString(selecteditem)
 					net.SendToServer()
-					notification.AddLegacy( string.format( language.GetPhrase("tool.uvshared.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
+					notification.AddLegacy( string.format( language.GetPhrase("uv.tool.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
 					surface.PlaySound( "buttons/button15.wav" )
 					
 				end
@@ -203,7 +203,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -221,9 +221,9 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 
-			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
-			-- Msg( "#tool.uvshared.applied" )
+			-- Msg( "#uv.tool.applied" )
 		end
 		CPanel:AddItem(applysettings)
 	
@@ -237,7 +237,7 @@ if CLIENT then
 		})
 	
 		CPanel:AddControl("Label", {
-			Text = "#tool.settings.clickapply",
+			Text = "#uv.clickapply",
 		})
 
 		CPanel:AddControl("Label", {
@@ -277,7 +277,7 @@ if CLIENT then
 		LoadAll:SetSize( 280, 20 )
 		LoadAll.DoClick = function( self )
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.settings.superadmin", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.superadmin", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -307,7 +307,7 @@ if CLIENT then
 			
 			if isstring(selecteditem) then
 				file.Delete( "unitvehicles/pursuitbreakers/"..game.GetMap().."/"..selecteditem )
-				notification.AddLegacy( string.format( language.GetPhrase("tool.uvshared.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( language.GetPhrase("uv.tool.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
 				-- Msg( string.format( language.GetPhrase("tool.uvpursuitbreaker.deleted"), selecteditem ) )
 			end
