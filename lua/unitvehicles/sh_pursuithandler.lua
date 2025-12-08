@@ -4531,6 +4531,7 @@ else -- CLIENT Settings | HUD/Options
 		end
 	end)
 
+--[[
 	net.Receive( "UVHUDRespawnInUVSelect", function()
 		if UVHUDRespawnInUVSelectOpen then return end
 
@@ -4645,6 +4646,119 @@ else -- CLIENT Settings | HUD/Options
 		function dframe:OnClose()
 			UVHUDRespawnInUVSelectOpen = nil
 		end
+	end)
+	
+]]--
+
+	function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
+		local menuEntries = {}
+
+		for classIndex, unitsString in ipairs(unittable) do
+			-- split units list
+			local available = {}
+			for unitName in string.gmatch(unitsString, "%S+") do
+				table.insert(available, unitName)
+			end
+
+			if #available > 0 then
+				-- Category label
+				table.insert(menuEntries, {
+					type = "label",
+					text = unittablename[classIndex],
+				})
+
+				-- Buttons for each unit
+				for _, unitName in ipairs(available) do
+					table.insert(menuEntries, {
+						type = "button",
+						text = unitName,
+						func = function()
+							local npcClass = unittablenpc[classIndex]
+							local isRhino = (classIndex == 6)
+							local cleanLabel = string.Trim(unittablename[classIndex], "#")
+
+							net.Start("UVHUDRespawnInUV")
+							net.WriteString(unitName)
+							net.WriteString(npcClass)
+							net.WriteBool(isRhino)
+							net.WriteString(cleanLabel)
+							net.SendToServer()
+
+							UVMenu.CloseCurrentMenu()
+						end
+					})
+				end
+			end
+		end
+
+		-- Back button
+		table.insert(menuEntries, {
+			type = "button",
+			text = "#uv.back",
+			func = function()
+				UVMenu.OpenMenu(UVMenu.Main)
+			end
+		})
+
+		-- Open the menu with fully prebuilt entries
+		UVMenu.CurrentMenu = UVMenu:Open({
+			Name = " ",
+			Width = ScrW() * 0.45,
+			Height = ScrH() * 0.65,
+			-- Description = true,
+			UnfocusClose = true,
+
+			Tabs = {
+				{
+					TabName = "#uv.chase.select.menu",
+					unpack(menuEntries),
+				}
+			}
+		})
+	end
+
+	net.Receive("UVHUDRespawnInUVSelect", function()
+		local UnitsPatrol     = net.ReadString()
+		local UnitsSupport    = net.ReadString()
+		local UnitsPursuit    = net.ReadString()
+		local UnitsInterceptor= net.ReadString()
+		local UnitsSpecial    = net.ReadString()
+		local UnitsRhino      = net.ReadString()
+		local UnitsCommander  = net.ReadString()
+
+		local unittable = {
+			UnitsPatrol,
+			UnitsSupport,
+			UnitsPursuit,
+			UnitsInterceptor,
+			UnitsSpecial,
+			UnitsRhino,
+			UnitsCommander
+		}
+
+		local unittablename = {
+			"#uv.unit.patrol",
+			"#uv.unit.support",
+			"#uv.unit.pursuit",
+			"#uv.unit.interceptor",
+			"#uv.unit.special",
+			"#uv.unit.rhino",
+			"#uv.unit.commander"
+		}
+
+		local unittablenpc = {
+			"npc_uvpatrol",
+			"npc_uvsupport",
+			"npc_uvpursuit",
+			"npc_uvinterceptor",
+			"npc_uvspecial",
+			"npc_uvspecial",
+			"npc_uvcommander"
+		}
+
+		UVMenu.OpenMenu(function()
+			UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
+		end, true)
 	end)
 
 	net.Receive( "UV_AddWantedVehicle", function()

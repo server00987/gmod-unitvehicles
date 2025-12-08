@@ -69,8 +69,10 @@ UVMenu.Main = function()
 				{ type = "combo", text = "#uv.settings.audio.uvtrax.profile", desc = "uv.settings.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
 				{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
-					RunConsoleCommand("uv_spawn_as_unit")
 					UVMenu.CloseCurrentMenu()
+					timer.Simple(0.25, function()
+						RunConsoleCommand("uv_spawn_as_unit")
+					end)
 				end
 				},
 				
@@ -86,8 +88,10 @@ UVMenu.Main = function()
 			{ TabName = "#uv.settings.pm", Icon = "unitvehicles/icons/milestone_911.png",
 				{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
-					RunConsoleCommand("uv_spawn_as_unit")
 					UVMenu.CloseCurrentMenu()
+					timer.Simple(0.25, function()
+						RunConsoleCommand("uv_spawn_as_unit")
+					end)
 				end
 				},
 
@@ -107,6 +111,9 @@ UVMenu.Main = function()
 			{ TabName = "#uv.settings.tab.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
 				{ type = "label", text = "#uv.settings.addon.builtin", desc = "uv.settings.addon.builtin.desc", sv = true },
 				{ type = "bool", text = "#uv.settings.addon.vcmod.els", desc = "uv.settings.addon.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+				{ type = "label", text = "Circular Functions", sv = true },
+				{ type = "bool", text = "#uv.settings.ailogic.usenitrousracer", desc = "uv.settings.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+				{ type = "bool", text = "#uv.settings.ailogic.usenitrousunit", desc = "uv.settings.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
 			},
 			{ TabName = "#uv.settings.tab.faq", Icon = "unitvehicles/icons_settings/question.png",
 				{ type = "info", text = UV.FAQ[1] },
@@ -251,8 +258,6 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.settings.ailogic.wrecking", desc = "uv.settings.ailogic.wrecking.desc", convar = "unitvehicle_canwreck", sv = true },
 				{ type = "slider", text = "#uv.settings.ailogic.detectionrange", desc = "uv.settings.ailogic.detectionrange.desc", convar = "unitvehicle_detectionrange", min = 1, max = 100, decimals = 0, sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.headlights", desc = "uv.settings.ailogic.headlights.desc", convar = "unitvehicle_enableheadlights", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.usenitrousracer", desc = "uv.settings.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
-				{ type = "bool", text = "#uv.settings.ailogic.usenitrousunit", desc = "uv.settings.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.autohealthracer", desc = "uv.settings.ailogic.autohealthracer.desc", convar = "unitvehicle_autohealthracer", sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.customizeracer", desc = "uv.settings.ailogic.customizeracer.desc", convar = "unitvehicle_customizeracer", sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.tractioncontrol", desc = "uv.settings.ailogic.tractioncontrol.desc", convar = "unitvehicle_tractioncontrol", sv = true },
@@ -790,14 +795,11 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap:DockMargin(6, 4, 6, 4)
 		wrap:SetTall(36)
 		wrap.Paint = function(self, w, h)
-			draw.RoundedBox(6, w*0.675, 0, w*0.325, h, Color(0,0,0,120))
+			-- draw.RoundedBox(6, w*0.675, 0, w*0.325, h, Color(0,0,0,120))
 			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2,
 				color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
-		-------------------------------------------------------------
-		-- Hover description functions
-		-------------------------------------------------------------
 		local function PushDesc()
 			if descPanel then
 				descPanel.Text = st.text
@@ -813,9 +815,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap.OnCursorEntered = PushDesc
 		wrap.OnCursorExited  = PopDesc
 
-		-------------------------------------------------------------
-		-- Slider
-		-------------------------------------------------------------
 		local slider = vgui.Create("DNumSlider", wrap)
 		slider:Dock(RIGHT)
 		slider:SetWide(220)
@@ -829,9 +828,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		slider.OnCursorEntered = PushDesc
 		slider.OnCursorExited  = PopDesc
 
-		-------------------------------------------------------------
-		-- Value box and confirm button container
-		-------------------------------------------------------------
 		local valPanel = vgui.Create("DPanel", wrap)
 		valPanel:SetWide(84)
 		valPanel:Dock(RIGHT)
@@ -876,9 +872,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		applyBtn.OnCursorEntered = PushDesc
 		applyBtn.OnCursorExited  = PopDesc
 
-		-------------------------------------------------------------
 		-- Value tracking
-		-------------------------------------------------------------
 		local appliedValue = st.min or 0
 		local pendingValue = appliedValue
 
@@ -902,9 +896,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
 		slider:SetValue(appliedValue)
 
-		-------------------------------------------------------------
-		-- Slider -> valBox sync
-		-------------------------------------------------------------
 		slider.OnValueChanged = function(_, val)
 			pendingValue = val
 			if IsValid(valBox) then
@@ -913,9 +904,6 @@ function UV.BuildSetting(parent, st, descPanel)
 			applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
 		end
 
-		-------------------------------------------------------------
-		-- valBox -> slider sync
-		-------------------------------------------------------------
 		valBox.OnTextChanged = function(self2)
 			local v = tonumber(self2:GetValue())
 			if not v then return end
@@ -927,9 +915,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		valBox.OnEnter = ApplyPendingValue
 		applyBtn.DoClick = ApplyPendingValue
 
-		-------------------------------------------------------------
-		-- Initialize from convar
-		-------------------------------------------------------------
 		if st.convar then
 			local cv = GetConVar(st.convar)
 			if cv then
@@ -1060,6 +1045,61 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Desc = st.desc or ""
 			end
 		end
+		btn.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+			end
+		end
+
+		return btn
+	end
+
+	---- button with scroll wheel functionality ----
+	if st.type == "buttonsw" then
+		local val = st.start or st.min or 1
+		local min = st.min or 0
+		local max = st.max or 10
+
+		local btn = vgui.Create("DButton", parent)
+		btn:Dock(TOP)
+		btn:DockMargin(6, 6, 6, 6)
+		btn:SetTall(30)
+		btn:SetText("")
+
+		btn.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local a = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
+			local bg = Color(125, 125, 125, a)
+
+			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
+
+			local display = language.GetPhrase(st.text)
+			if st.text:find("%%s") then
+				display = string.format(GetDisplayText(), val)
+			end
+
+			draw.SimpleText(display, "UVMostWantedLeaderboardFont",
+				w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+
+		-- Adjust value with mouse wheel
+		btn.OnMouseWheeled = function(self, delta)
+			val = math.Clamp(val + delta, min, max)
+			return true
+		end
+
+		btn.DoClick = function(self)
+			if st.func then st.func(self, val) end
+		end
+
+		btn.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+			end
+		end
+
 		btn.OnCursorExited = function()
 			if descPanel then
 				descPanel.Text = ""
