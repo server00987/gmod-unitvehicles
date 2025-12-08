@@ -236,7 +236,13 @@ function UVGetRandomUnit( heat, modifiers )
 	-- 	UnitsCommanderChance = nil
 	-- end
 
-	modifiers = type(modifiers) == 'table' and modifiers
+	modifiers = type(modifiers) == 'table' and modifiers or {}
+
+	local rhinoConVarKey = string.format( 'unitvehicle_unit_unitsrhino%s', heat )
+	local rhinoCollection = GetConVar( rhinoConVarKey ):GetString()
+	local isRhinoEnabled = not string.match( rhinoCollection, "^%s*$" )
+
+	modifiers.rhinoattack = modifiers.rhinoattack and isRhinoEnabled
 
 	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
 		local unitConVarKey = string.format( 'unitvehicle_unit_units%s%s', string.lower(v), heat )
@@ -250,10 +256,11 @@ function UVGetRandomUnit( heat, modifiers )
 
 			if v == 'Commander' then
 				if UVOneCommanderActive or UVOneCommanderDeployed or modifiers.posspecified or (UVUnitsHavePlayers and not modifiers.playercontrolled) then continue end
-				--if UVOneCommanderActive and not modifiers.commanderrespawn then continue end
 			end
 
-			if modifiers.rhinoattack and v ~= 'Rhino' then continue end
+			if modifiers.rhinoattack then
+				if v ~= 'Rhino' then continue end
+ 			end
 		end
 
 		local unitCollection = GetConVar( unitConVarKey ):GetString()
@@ -267,46 +274,7 @@ function UVGetRandomUnit( heat, modifiers )
 		})
 	end
 
-	return UVGetRandom( selectionPool )
-
-	-- local givenunitstable = {
-	-- 	UnitsPatrol,
-	-- 	UnitsSupport,
-	-- 	UnitsPursuit,
-	-- 	UnitsInterceptor,
-	-- 	UnitsSpecial,
-	-- 	UnitsCommander,
-	-- }
-
-	-- local chances = {
-	-- 	UnitsPatrolChance,
-	-- 	UnitsSupportChance,
-	-- 	UnitsPursuitChance,
-	-- 	UnitsInterceptorChance,
-	-- 	UnitsSpecialChance,
-	-- 	UnitsCommanderChance,
-	-- }
-
-	-- for k, v in pairs(givenunitstable) do
-	-- 	if not string.match(v, "^%s*$") then --not an empty string
-	-- 		table.insert(availableunitstable, givenunitstable[k])
-	-- 		table.insert(availableclasses, givenclasses[k])
-	-- 	end
-	-- end
-
-	-- local randomclassunit = UVGetRandom( selectionPool )
-
-	-- -- local randomclassunit = math.random(1, #availableclasses)
-
-	-- -- if rhinoattack and not string.match(UnitsRhino, "^%s*$") then
-	-- -- 	appliedunits = UnitsRhino
-	-- -- else
-	-- -- 	rhinoattack = nil
-	-- -- 	appliedunits = availableunitstable[randomclassunit]
-	-- -- end
-
-	-- uvnextclasstospawn = availableclasses[randomclassunit]
-	-- return appliedunits, uvnextclasstospawn
+	return UVGetRandom( selectionPool ), modifiers
 end
 
 function UVCreateConstraintsFromTable( Constraint, EntityList )
@@ -486,12 +454,21 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local appliedUnits
 	local returnedUnitList
 
-	local returnedUnitList = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
+	local returnedUnitList, modifiers = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
 		playercontrolled = playercontrolled,
 		posspecified = posspecified,
 		rhinoattack = rhinoattack,
 		commanderrespawn = commanderrespawn
 	} )
+
+	if modifiers then
+		if modifiers.rhinoattack ~= nil then rhinoattack = modifiers.rhinoattack end
+		if modifiers.commanderrespawn ~= nil then commanderrespawn = modifiers.commanderrespawn end
+		if modifiers.posspecified ~= nil then posspecified = modifiers.posspecified end
+		if modifiers.playercontrolled ~= nil then playercontrolled = modifiers.playercontrolled end
+		if modifiers.angles ~= nil then angles = modifiers.angles end
+		if modifiers.disperse ~= nil then disperse = modifiers.disperse end
+	end
 
 	if returnedUnitList then
 		if returnedUnitList.name == 'rhino' then

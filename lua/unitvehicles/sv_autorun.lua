@@ -351,6 +351,10 @@ concommand.Add("uv_despawnvehicles", function(ply)
 	for k, v in pairs(ents.FindByClass("npc_uv*")) do
 		v:Remove()
 	end
+
+	for k, v in pairs(ents.FindByClass("uvair")) do
+		v:Remove()
+	end
 	
 	UVRestoreResourcePoints()
 end)
