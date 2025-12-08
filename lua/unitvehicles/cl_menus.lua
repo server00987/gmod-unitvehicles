@@ -78,12 +78,12 @@ UVMenu.Main = function()
 				{ type = "info", text = UV.PNotes },
 				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
-			{ TabName = "#tool.uvracemanager.name", Icon = "unitvehicles/icons/milestone_outrun_races_won.png", sv = true, func = function()
+			{ TabName = "#tool.uvracemanager.name", Icon = "unitvehicles/icons/race_events.png", sv = true, func = function()
 					UVMenu.OpenMenu(UVMenu.RaceManager)
 				end,
 				{ type = "label", text = "#uv.settings.addon.builtin" },
 			},
-			{ TabName = "#uv.settings.pm", Icon = "unitvehicles/icons/cops_icon.png",
+			{ TabName = "#uv.settings.pm", Icon = "unitvehicles/icons/milestone_911.png",
 				{ type = "button", text = "#uv.settings.pm.ai.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					RunConsoleCommand("uv_spawn_as_unit")
@@ -104,7 +104,7 @@ UVMenu.Main = function()
 				{ type = "button", text = "#uv.settings.clearbounty", convar = "uv_clearbounty", sv = true },
 				{ type = "button", text = "#uv.settings.print.wantedtable", convar = "uv_wantedtable", sv = true },
 			},
-			{ TabName = "#uv.settings.tab.addons", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", sv = true,
+			{ TabName = "#uv.settings.tab.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
 				{ type = "label", text = "#uv.settings.addon.builtin", desc = "uv.settings.addon.builtin.desc", sv = true },
 				{ type = "bool", text = "#uv.settings.addon.vcmod.els", desc = "uv.settings.addon.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
 			},
@@ -221,7 +221,7 @@ UVMenu.Settings = function()
 				-- { type = "keybind", text = "#uv.settings.keybind.resetposition", desc = "uv.settings.keybind.resetposition.desc", convar = "UVKeybindResetPosition", slot = 4 },
 				-- { type = "keybind", text = "#uv.settings.keybind.showresults", desc = "uv.settings.keybind.showresults.desc", convar = "UVKeybindShowRaceResults", slot = 5 },
 			-- },
-			{ TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons/(9)T_UI_PlayerCop_Large_Icon.png", sv = true,
+			{ TabName = "#uv.settings.pursuit", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
 				{ type = "label", text = "#uv.settings.heatlevels", sv = true },
 				{ type = "bool", text = "#uv.settings.heatlevels.enable", desc = "uv.settings.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
 				{ type = "bool", text = "#uv.settings.heatlevels.aiunits", desc = "uv.settings.heatlevels.aiunits.desc", convar = "unitvehicle_spawnmainunits", sv = true },
@@ -244,7 +244,7 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.settings.ptech.friendlyfire", desc = "uv.settings.ptech.friendlyfire.desc", convar = "unitvehicle_racerfriendlyfire", sv = true },
 				{ type = "bool", text = "#uv.settings.ptech.roadblockfriendlyfire", desc = "uv.settings.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
 			},
-			{ TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
+			{ TabName = "#uv.settings.tab.ai", Icon = "unitvehicles/icons/cops_icon.png", sv = true,
 				{ type = "label", text = "#uv.settings.ailogic", sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.optimizerespawn", desc = "uv.settings.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
 				{ type = "bool", text = "#uv.settings.ailogic.relentless", desc = "uv.settings.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
