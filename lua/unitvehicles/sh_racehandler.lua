@@ -1311,7 +1311,7 @@ else -- CLIENT stuff
 		end
 	end)
 
-	local UVRaceStarting = false
+	UVRaceStarting = false
 
 	net.Receive( "uvrace_end", function()
 		if not UVHUDRace then return end

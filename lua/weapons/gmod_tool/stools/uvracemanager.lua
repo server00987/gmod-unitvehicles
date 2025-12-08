@@ -512,362 +512,6 @@ elseif CLIENT then
 	end
 	net.Receive("UVRace_SelectID", SelectID)
 
-	local function QueryImport()
-		if IsValid(ImportPanel) then ImportPanel:Remove() end
-
-		local showPreview = false
-		local sw, sh = ScrW(), ScrH()
-		local pw, ph = sw * (showPreview and 0.45 or 0.25), sh * 0.6
-		local px, py = (sw - pw) * 0.5, (sh - ph) * 0.5
-
-		local files = file.Find("unitvehicles/races/" .. game.GetMap() .. "/*.txt", "DATA")
-
-		ImportPanel = vgui.Create("DFrame")
-		ImportPanel:SetSize(pw, ph)
-		ImportPanel:SetPos(px, py)
-		ImportPanel:SetTitle("")
-		ImportPanel:ShowCloseButton(false)
-		ImportPanel:SetDraggable(false)
-		ImportPanel:SetKeyboardInputEnabled(false)
-		ImportPanel:SetDeleteOnClose(true)
-		ImportPanel:MakePopup()
-		gui.EnableScreenClicker(true)
-
-		local bgScale, bgAlpha, bgAnimStart = 0, 0, CurTime()
-		local contentAlpha, contentStart = 0, CurTime()
-		local closing, closeStartTime = false, 0
-
-		local raceEntries, highlightedIndex, selectedIndex = {}, nil, nil
-
-		-- === Parse a race file (improved multi-checkpoint + spawn parser) ===
-		local function ParseRaceFile(path)
-			local content = file.Read(path, "DATA")
-			if not content then return nil end
-
-			local lines = string.Split(content, "\n")
-			local header = lines[1] or ""
-			local params = string.Split(header, " ")
-			local raceName = params[2] or "Unknown"
-			local author = header:match("'(.-)'") or "Unknown"
-
-			local checkpoints = {}     -- [id] = { {start=Vector(), endp=Vector()}, ... }
-			local idList = {}           -- keeps numeric order of found IDs
-			local spawns = {}
-
-			for _, line in ipairs(lines) do
-				if string.match(line, "^%d+%s") then
-					local t = string.Explode(" ", line)
-					local id = tonumber(t[1])
-					if id and #t >= 8 then
-						if not checkpoints[id] then
-							checkpoints[id] = {}
-							table.insert(idList, id)
-						end
-						table.insert(checkpoints[id], {
-							start = Vector(tonumber(t[2]), tonumber(t[3]), tonumber(t[4])),
-							endp  = Vector(tonumber(t[5]), tonumber(t[6]), tonumber(t[7]))
-						})
-					end
-				elseif string.match(line, "^spawn") then
-					local t = string.Explode(" ", line)
-					if #t >= 6 then
-						table.insert(spawns, Vector(tonumber(t[2]), tonumber(t[3]), tonumber(t[4])))
-					end
-				end
-			end
-
-			table.SortByMember(idList, nil, true)
-			table.sort(idList, function(a,b) return a < b end)
-
-			return {
-				filename = string.GetFileFromFilename(path),
-				name = raceName:Replace("_", " "),
-				author = author,
-				checkpoints = checkpoints,
-				idList = idList,
-				spawns = spawns,
-			}
-		end
-
-		-- === Layout panels ===
-		local leftW = showPreview and pw * 0.4 or pw
-		local rightW = showPreview and pw - leftW or 0
-
-		-- Left list + info container
-		local leftContainer = vgui.Create("DPanel", ImportPanel)
-		leftContainer:SetPos(4, ph * 0.1)
-		leftContainer:SetSize(leftW - 8, ph - 12)
-		leftContainer.Paint = nil
-
-		-- Race list (top 70%)
-		local listPanel = vgui.Create("DPanel", leftContainer)
-		listPanel:Dock(TOP)
-		listPanel:SetTall((ph - 12) * 0.8)
-		listPanel.Paint = nil
-
-		local scroll = vgui.Create("DScrollPanel", listPanel)
-		scroll:Dock(FILL)
-
-		-- Info panel (bottom 30%)
-		local infoPanel = vgui.Create("DPanel", leftContainer)
-		infoPanel:Dock(FILL)
-		infoPanel.Paint = function(self, w, h)
-			if highlightedIndex then
-				local data = raceEntries[highlightedIndex]
-				local a = math.Clamp(contentAlpha, 0, 255)
-				draw.SimpleText(string.format(language.GetPhrase("tool.uvracemanager.import.author"), data.author), "UVMostWantedLeaderboardFont", w * 0.01, 0, Color(255,255,255,a))
-				draw.SimpleText(string.format(language.GetPhrase("tool.uvracemanager.import.checkpoints"), #data.checkpoints), "UVMostWantedLeaderboardFont", w * 0.01, h * 0.175, Color(255,255,255,a))
-				draw.SimpleText(string.format(language.GetPhrase("tool.uvracemanager.import.gridslot"), #data.spawns), "UVMostWantedLeaderboardFont", w * 0.01, h * 0.35, Color(255,255,255,a))
-			end
-		end
-
-		-- Right preview area
-		local previewPanel
-		if showPreview then
-			previewPanel = vgui.Create("DPanel", ImportPanel)
-			previewPanel:SetPos(leftW, ph * 0.1)
-			previewPanel:SetSize(rightW - 6, ph - 12)
-	previewPanel.Paint = function(self, w, h)
-		local a = math.Clamp(contentAlpha, 0, 255)
-		surface.SetDrawColor(20, 20, 20, a)
-		surface.DrawRect(0, 0, w, h)
-
-		if not highlightedIndex then
-			draw.SimpleText("Select a race to preview", "DermaLarge",
-				w * 0.5, h * 0.5, Color(200,200,200,a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			return
-		end
-
-		local race = raceEntries[highlightedIndex]
-		local checkpoints, idList, spawns = race.checkpoints, race.idList, race.spawns
-
-		-- === Collect all positions for bounding box ===
-		local allPts = {}
-		for _, group in pairs(checkpoints) do
-			for _, cp in ipairs(group) do
-				table.insert(allPts, cp.start)
-				table.insert(allPts, cp.endp)
-			end
-		end
-		for _, sp in ipairs(spawns) do table.insert(allPts, sp) end
-		if #allPts == 0 then
-			draw.SimpleText("No positional data", "DermaLarge", w*0.5, h*0.5,
-				Color(255,180,180,a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			return
-		end
-
-		local minx, miny, maxx, maxy = math.huge, math.huge, -math.huge, -math.huge
-		for _, v in ipairs(allPts) do
-			minx = math.min(minx, v.x)
-			miny = math.min(miny, v.y)
-			maxx = math.max(maxx, v.x)
-			maxy = math.max(maxy, v.y)
-		end
-
-		local pad = 0.1  -- 10% padding
-		local dx, dy = (maxx - minx), (maxy - miny)
-		if dx == 0 then dx = 1 end
-		if dy == 0 then dy = 1 end
-		local scale = math.min(w / (dx * (1 + pad)), h / (dy * (1 + pad)))
-		local ox = w * 0.5 - ((minx + maxx)/2 - minx) * scale
-		local oy = h * 0.5 - ((miny + maxy)/2 - miny) * scale
-
-		-- === Utility: convert 3D → 2D preview coords ===
-		local function ToScreen(vec)
-			return (vec.x - minx) * scale + ox, h - ((vec.y - miny) * scale + oy)
-		end
-
-
-		-- === Utility: draw dashed line ===
-		local function DrawDashedLine(x1, y1, x2, y2, dashLen)
-			local dx, dy = x2 - x1, y2 - y1
-			local dist = math.sqrt(dx*dx + dy*dy)
-			local nx, ny = dx / dist, dy / dist
-			local drawn = 0
-			while drawn < dist do
-				local seg = math.min(dashLen, dist - drawn)
-				local sx, sy = x1 + nx * drawn, y1 + ny * drawn
-				local ex, ey = sx + nx * (seg * 0.5), sy + ny * (seg * 0.5)
-				surface.DrawLine(sx, sy, ex, ey)
-				drawn = drawn + dashLen
-			end
-		end
-
-		-- === Draw checkpoint connections ===
-		local mainColor = Color(100,180,255,a)
-		local secColor  = Color(160,160,160,a)
-		local ids = idList
-		for i = 1, #ids - 1 do
-			local thisID, nextID = ids[i], ids[i+1]
-			local thisGroup, nextGroup = checkpoints[thisID], checkpoints[nextID]
-			if not thisGroup or not nextGroup then continue end
-
-			local main1 = thisGroup[1].start
-			local main2 = nextGroup[1].start
-			local x1,y1 = ToScreen(main1)
-			local x2,y2 = ToScreen(main2)
-			surface.SetDrawColor(mainColor)
-			surface.DrawLine(x1, y1, x2, y2)
-
-			-- draw secondary paths (dashed)
-			local count = math.min(#thisGroup, #nextGroup)
-			for j = 2, count do
-				local c1, c2 = thisGroup[j].start, nextGroup[j].start
-				local sx,sy = ToScreen(c1)
-				local ex,ey = ToScreen(c2)
-				surface.SetDrawColor(secColor)
-				DrawDashedLine(sx, sy, ex, ey, 10)
-			end
-
-			-- if secondary branch has no partner, converge to next main
-			if #thisGroup > #nextGroup then
-				for j = #nextGroup + 1, #thisGroup do
-					local c1 = thisGroup[j].start
-					local sx,sy = ToScreen(c1)
-					surface.SetDrawColor(secColor)
-					DrawDashedLine(sx, sy, x2, y2, 10)
-				end
-			end
-		end
-
-		-- === Draw checkpoint markers ===
-		for _, id in ipairs(ids) do
-			local group = checkpoints[id]
-			if group then
-				for j, cp in ipairs(group) do
-					local x, y = ToScreen(cp.start)
-					local col = (j == 1) and mainColor or secColor
-					surface.SetDrawColor(col)
-					surface.DrawCircle(x, y, (j == 1) and 3 or 2)
-				end
-			end
-		end
-
-		-- === Draw spawns ===
-		if #spawns > 0 then
-			for i, sp in ipairs(spawns) do
-				local x, y = ToScreen(sp)
-				if i == 1 then
-					surface.SetDrawColor(255,255,255,a)
-					surface.DrawRect(x - 4, y - 4, 8, 8)
-					surface.SetDrawColor(80,255,80,a)
-					surface.DrawRect(x - 3, y - 3, 6, 6)
-				else
-					surface.SetDrawColor(80,255,80,a)
-					surface.DrawRect(x - 3, y - 3, 6, 6)
-				end
-			end
-		end
-
-		-- === Single-checkpoint notice ===
-		if #ids == 1 then
-			draw.SimpleText("Single checkpoint track", "DermaLarge", w*0.5, h*0.9,
-				Color(255,255,255,a), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
-		end
-	end
-
-		end
-		
-		-- === Build race list ===
-		local entryTall, entryPad = 35, 1
-		if #files == 0 then
-			local lbl = vgui.Create("DLabel", ImportPanel)
-			lbl:SetText("No races found for this map.")
-			lbl:SetFont("DermaLarge")
-			lbl:SizeToContents()
-			lbl:SetPos((pw - lbl:GetWide()) * 0.5, (ph - lbl:GetTall()) * 0.5)
-		else
-			for _, fname in ipairs(files) do
-				local path = "unitvehicles/races/" .. game.GetMap() .. "/" .. fname
-				local rec = ParseRaceFile(path)
-				if not rec then continue end
-				table.insert(raceEntries, rec)
-				local entry = vgui.Create("DButton", scroll)
-				entry:SetText("")
-				entry:SetTall(entryTall)
-				entry:Dock(TOP)
-				entry:DockMargin(0,0,0,entryPad)
-				entry.Index = #raceEntries
-
-				entry.Paint = function(self, w, h)
-					local hovered = self:IsHovered()
-					local blink = math.abs(math.sin(RealTime()*3))
-					local bg = hovered and Color(80*blink,120*blink,180*blink,contentAlpha) or Color(40,40,40,contentAlpha)
-					draw.RoundedBox(4, 0, 0, w, h, bg)
-					draw.SimpleText(rec.name, "UVMostWantedLeaderboardFont", w*0.5, h*0.5, Color(255,255,255,contentAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				end
-
-				entry.OnCursorEntered = function() highlightedIndex = entry.Index end
-				entry.OnCursorExited = function() if selectedIndex ~= entry.Index then highlightedIndex = selectedIndex end end
-				entry.DoClick = function()
-					selectedIndex, highlightedIndex = entry.Index, entry.Index
-					RunConsoleCommand("uvrace_import", rec.filename)
-					if not closing then closing = true closeStartTime = CurTime() gui.EnableScreenClicker(false) end
-				end
-			end
-		end
-
-		-- === Cancel button ===
-		local cancelBtn = vgui.Create("DButton", ImportPanel)
-		cancelBtn:SetText("")
-		cancelBtn:SetSize(28,28)
-		cancelBtn:SetPos(pw - cancelBtn:GetWide() - 20, cancelBtn:GetTall()*0.25)
-		cancelBtn.Paint = function(self,w,h)
-			local a = math.Clamp(contentAlpha,0,255)
-			draw.SimpleTextOutlined("x","UVMostWantedLeaderboardFont",w*0.5,0,Color(255,255,255,a),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,a))
-		end
-		cancelBtn.DoClick = function()
-			if not closing then closing = true closeStartTime = CurTime() gui.EnableScreenClicker(false) end
-		end
-
-		-- === Logic/animation (same as before) ===
-		ImportPanel.Think = function(self)
-			local curTime = CurTime()
-			if not closing then
-				local reveal = math.Clamp((curTime - contentStart)/0.6,0,1)
-				contentAlpha = reveal*255
-			end
-			if not closing and input.IsMouseDown(MOUSE_LEFT) then
-				local mx,my = gui.MousePos()
-				local x,y = self:GetPos()
-				local w2,h2 = self:GetSize()
-				if mx and my and (mx < x or mx > x+w2 or my < y or my > y+h2) then
-					closing = true closeStartTime = CurTime() gui.EnableScreenClicker(false)
-				end
-			end
-			if closing then
-				scroll:SetMouseInputEnabled(false)
-				cancelBtn:SetEnabled(false)
-				local elapsed = curTime - closeStartTime
-				local fadeDur, shrinkDur = 0.125, 0.15
-				local textP = math.Clamp(elapsed/fadeDur,0,1)
-				contentAlpha = (1 - textP)*255
-				local bgP = math.Clamp((elapsed - fadeDur)/shrinkDur,0,1)
-				bgScale = 1 - bgP
-				if elapsed >= fadeDur + shrinkDur and IsValid(ImportPanel) then ImportPanel:Close() end
-			end
-		end
-
-		ImportPanel.Paint = function(self, w, h)
-			local curTime = CurTime()
-			local elapsed = curTime - bgAnimStart
-			local openS = math.Clamp(elapsed/0.2,0,1)
-			bgAlpha = math.Clamp((elapsed-0.1)/0.3,0,1)*255
-			local shrink = (closing and bgScale) or openS
-			local scaledH = h * shrink
-			local yOff = (h - scaledH)*0.5
-			surface.SetDrawColor(255,255,255,bgAlpha)
-			surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
-			surface.DrawTexturedRect(0,yOff,w,scaledH)
-			draw.SimpleTextOutlined("#tool.uvracemanager.import","UVFont5",w*0.5,yOff+scaledH*0.01,Color(225,255,255,contentAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,3,Color(0,0,0,contentAlpha))
-		end
-
-		function ImportPanel:OnClose()
-			gui.EnableScreenClicker(false)
-		end
-	end
-	concommand.Add("uvrace_queryimport", QueryImport)
-
 local function RaceMenu()
     -- === Utility: calculate available AI slots ===
     local function GetAvailableAISlots()
@@ -1373,3 +1017,180 @@ function TOOL.BuildCPanel(panel)
 	
 end
 
+if CLIENT then
+	--[[ New Settings entries here ]]--
+	UVMenu.RaceManager = function()
+		UVMenu.CurrentMenu = UVMenu:Open({
+			Name = "#tool.uvracemanager.name",
+			Width = ScrW() * 0.3,
+			Height = ScrH() * 0.45,
+			UnfocusClose = true,
+			Tabs = {
+				{ TabName = "#tool.uvracemanager.name",
+					-- No track loaded, none active
+					{ type = "button", text = "#tool.uvracemanager.settings.loadrace", sv = true, 
+						cond = function() return #ents.FindByClass( "uvrace_spawn" ) == 0 end,
+						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
+					},
+					
+					-- Track loaded, race not started
+					{ type = "button", text = "#tool.uvracemanager.settings.racec.start", sv = true,
+						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
+						func = function(self2) RunConsoleCommand("uvrace_racemenu") UVMenu.CloseCurrentMenu() end
+					},
+					{ type = "button", text = "#tool.uvracemanager.settings.changerace", sv = true,
+						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
+						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
+					},
+					{ type = "button", text = "#tool.uvracemanager.settings.racec.cancel", sv = true,
+						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
+						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
+					},
+					
+					-- Race active
+					{ type = "button", text = "#tool.uvracemanager.settings.racec.stop", sv = true,
+						cond = function() return UVRaceStarting or UVHUDDisplayRacing end,
+						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
+					},
+
+					-- Always active
+					{ type = "button", text = "#tool.uvracemanager.settings.racec.title", sv = true,
+						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerSettings, true) end
+					},
+					{ type = "button", text = "#uv.back", sv = true,
+						func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
+					},
+				}
+			}
+		})
+	end
+	UVMenu.RaceManagerSettings = function()
+		UVMenu.CurrentMenu = UVMenu:Open({
+			Name = "#tool.uvracemanager.settings.racec.title",
+			Width = ScrW() * 0.6,
+			Height = ScrH() * 0.45,
+			Description = true,
+			UnfocusClose = true,
+			Tabs = {
+				{ TabName = " ",
+					-- Track loaded, race not started
+					{ type = "slider", text = "#tool.uvracemanager.settings.raceo.laps", desc = "tool.uvracemanager.settings.raceo.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
+					{ type = "slider", text = "#tool.uvracemanager.settings.raceo.dnftimer", desc = "tool.uvracemanager.settings.raceo.dnftimer.desc", convar = "uvracemanager_dnftimer", min = 0, max = 90, decimals = 0, sv = true },
+					{ type = "button", text = "#uv.back", sv = true,
+						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
+					},
+				}
+			}
+		})
+	end
+
+	--[[ New Settings Track import variables ]]--
+	local function ParseRaceFile(path)
+		local content = file.Read(path, "DATA")
+		if not content then return nil end
+
+		local lines = string.Split(content, "\n")
+		local header = lines[1] or ""
+		local params = string.Split(header, " ")
+		local raceName = params[2] or "Unknown"
+		local author = header:match("'(.-)'") or "Unknown"
+
+		local checkpoints = {}
+		local idList = {}
+		local spawns = {}
+
+		for _, line in ipairs(lines) do
+			if string.match(line, "^%d+%s") then
+				local t = string.Explode(" ", line)
+				local id = tonumber(t[1])
+				if id and #t >= 8 then
+					if not checkpoints[id] then
+						checkpoints[id] = {}
+						table.insert(idList, id)
+					end
+					table.insert(checkpoints[id], {
+						start = Vector(tonumber(t[2]), tonumber(t[3]), tonumber(t[4])),
+						endp  = Vector(tonumber(t[5]), tonumber(t[6]), tonumber(t[7])),
+					})
+				end
+			elseif string.match(line, "^spawn") then
+				local t = string.Explode(" ", line)
+				if #t >= 6 then
+					table.insert(spawns, Vector(tonumber(t[2]), tonumber(t[3]), tonumber(t[4])))
+				end
+			end
+		end
+
+		table.SortByMember(idList, nil, true)
+		table.sort(idList, function(a,b) return a < b end)
+
+		return {
+			filename     = string.GetFileFromFilename(path),
+			name         = raceName:Replace("_", " "),
+			author       = author,
+			checkpoints  = checkpoints,
+			idList       = idList,
+			spawns       = spawns,
+		}
+	end
+
+	--[[ New Settings Track importer ]]--
+	UVMenu.RaceManagerTrackSelect = function()
+		-- Scan all race files
+		local files = file.Find("unitvehicles/races/" .. game.GetMap() .. "/*.txt", "DATA")
+		local raceEntries = {}
+
+		for _, fname in ipairs(files) do
+			local rec = ParseRaceFile("unitvehicles/races/" .. game.GetMap() .. "/" .. fname)
+			if rec then
+				table.insert(raceEntries, {
+					type = "button",
+					text = rec.name,
+					desc = string.format( language.GetPhrase( "tool.uvracemanager.import.author" ), rec.author ) .. "\n"  .. 
+					string.format( language.GetPhrase( "tool.uvracemanager.import.checkpoints" ), #rec.checkpoints ) .. "\n" .. 
+					string.format( language.GetPhrase( "tool.uvracemanager.import.gridslot" ), #rec.spawns ),
+					func = function()
+						RunConsoleCommand("uvrace_import", rec.filename)
+						UVMenu.CloseCurrentMenu()
+						timer.Simple(0.25, function()
+							UVMenu.OpenMenu(UVMenu.RaceManager)
+						end)
+					end
+				})
+			end
+		end
+		
+		local entriesWithBack = {}
+		for _, entry in ipairs(raceEntries) do
+			table.insert(entriesWithBack, entry)
+		end
+
+		-- Add the "Back" button at the end
+		table.insert(entriesWithBack, {
+			type = "button",
+			text = "#uv.back",
+			sv = true,
+			func = function(self2)
+				UVMenu.OpenMenu(UVMenu.RaceManager)
+			end
+		})
+
+		UVMenu:Open({
+			Name = "#tool.uvracemanager.settings.loadrace",
+			Width = ScrW() * 0.3,
+			Height = ScrH() * 0.7,
+			Description = true,
+			UnfocusClose = true,
+			Tabs = {
+				{
+					TabName = " ",
+					unpack(entriesWithBack)
+				}
+			}
+		})
+	end
+
+	concommand.Add("uvrace_queryimport", function()
+		UVMenu.OpenMenu(UVMenu.RaceManagerTrackSelect, true)
+	end)
+end
