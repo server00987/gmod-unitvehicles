@@ -527,15 +527,6 @@ function CalculateHeatLevel(bounty, currentHeat)
 			
 			if bounty >= minBounty then
 				newHeat = level
-
-				if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-					local units = ents.FindByClass("npc_uv*")
-					local random_entry = math.random(#units)
-					local unit = units[random_entry]
-					if not UVTargeting then return end
-					UVChatterReportHeat(unit, level)
-				end
-
 				TriggerHeatLevelEffects(level)
 			else 
 				break 
@@ -561,12 +552,9 @@ function TriggerHeatLevelEffects(level)
 	
 	if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() and UVTargeting then
 		local units = ents.FindByClass("npc_uv*")
-		local unit = units[math.random(#units)]
-		
-		-- local chatterFunc = _G["UVChatterHeat"..(level == 6 and "Six" or NumberToWords(level))]
-		-- if chatterFunc then
-		--     chatterFunc(unit)
-		-- end
+		local random_entry = math.random(#units)
+		local unit = units[random_entry]
+		UVChatterReportHeat(unit, level)
 	end
 	
 	if UVTargeting then
