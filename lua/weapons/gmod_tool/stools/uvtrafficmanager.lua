@@ -1,4 +1,4 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Category		=	"uv.unitvehicles"
 TOOL.Name			=	"#tool.uvtrafficmanager.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
@@ -68,7 +68,7 @@ if CLIENT then
 		
 		local Intro3 = vgui.Create( "DLabel", TrafficAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "#tool.uvshared.create.uniquename" )
+		Intro3:SetText( "#uv.tool.create.uniquename" )
 		Intro3:SizeToContents()
 		
 		local TrafficNameEntry = vgui.Create( "DTextEntry", TrafficAdjust )
@@ -78,10 +78,10 @@ if CLIENT then
 		
 		local SaveColour = vgui.Create("DCheckBoxLabel", TrafficAdjust )
 		SaveColour:SetPos( 20, 160 )
-		SaveColour:SetText("#tool.uvshared.savecol")
+		SaveColour:SetText("#uv.tool.savecol")
 		SaveColour:SetSize(TrafficAdjust:GetWide(), 22)
 		
-		OK:SetText("#tool.uvshared.create")
+		OK:SetText("#uv.tool.create")
 		OK:SetSize(TrafficAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
@@ -164,13 +164,13 @@ if CLIENT then
 				end
 				TrafficAdjust:Close()
 				
-				notification.AddLegacy( string.format( lang("tool.uvshared.saved"), Name ), NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( lang("uv.tool.saved"), Name ), NOTIFY_UNDO, 5 )
 				-- Msg( "Saved "..Name.." as a Traffic!\n" )
 				
 				surface.PlaySound( "buttons/button15.wav" )
 				
 			else
-				TrafficNameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
+				TrafficNameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -415,7 +415,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -430,7 +430,7 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 			
-			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 			-- Msg( "#tool.uvtrafficmanager.applied" )
 			
@@ -490,7 +490,7 @@ if CLIENT then
 
 					if #savedVehicles == 0 then
 						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#tool.uvshared.novehicle")
+						emptyLabel:SetText("#uv.tool.novehicle")
 						emptyLabel:SetTextColor(Color(200, 200, 200))
 						emptyLabel:SetFont("DermaDefaultBold")
 						emptyLabel:SetContentAlignment(5)

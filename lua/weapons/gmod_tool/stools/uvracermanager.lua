@@ -1,4 +1,4 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Category		=	"uv.unitvehicles"
 TOOL.Name			=	"#tool.uvracermanager.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
@@ -64,17 +64,17 @@ if CLIENT then
 		
 		local Intro = vgui.Create( "DLabel", RacerAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( string.format( lang("tool.uvshared.create.base"), UVRacerTOOLMemory.VehicleBase ) )
+		Intro:SetText( string.format( lang("uv.tool.create.base"), UVRacerTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 		
 		local Intro2 = vgui.Create( "DLabel", RacerAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( string.format( lang("tool.uvshared.create.rawname"), UVRacerTOOLMemory.SpawnName ) )
+		Intro2:SetText( string.format( lang("uv.tool.create.rawname"), UVRacerTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 		
 		local Intro3 = vgui.Create( "DLabel", RacerAdjust )
 		Intro3:SetPos( 20, 100 )
-		Intro3:SetText( "#tool.uvshared.create.uniquename" )
+		Intro3:SetText( "#uv.tool.create.uniquename" )
 		Intro3:SizeToContents()
 		
 		local RacerNameEntry = vgui.Create( "DTextEntry", RacerAdjust )
@@ -84,10 +84,10 @@ if CLIENT then
 		
 		local SaveColour = vgui.Create("DCheckBoxLabel", RacerAdjust )
 		SaveColour:SetPos( 20, 160 )
-		SaveColour:SetText("#tool.uvshared.savecol")
+		SaveColour:SetText("#uv.tool.savecol")
 		SaveColour:SetSize(RacerAdjust:GetWide(), 22)
 		
-		OK:SetText("#tool.uvshared.create")
+		OK:SetText("#uv.tool.create")
 		OK:SetSize(RacerAdjust:GetWide() * 5 / 16, 22)
 		OK:Dock(BOTTOM)
 		
@@ -170,7 +170,7 @@ if CLIENT then
 				end
 				RacerAdjust:Close()
 				
-				notification.AddLegacy( string.format( lang("tool.uvshared.saved"), Name ), NOTIFY_UNDO, 5 )
+				notification.AddLegacy( string.format( lang("uv.tool.saved"), Name ), NOTIFY_UNDO, 5 )
 				-- Msg( "Saved "..Name.." as a Racer!\n" )
 				
 				surface.PlaySound( "buttons/button15.wav" )
@@ -421,7 +421,7 @@ if CLIENT then
 		applysettings:SetText("#spawnmenu.savechanges")
 		applysettings.DoClick = function()
 			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
+				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
 				surface.PlaySound( "buttons/button10.wav" )
 				return
 			end
@@ -438,7 +438,7 @@ if CLIENT then
 			net.WriteTable(convar_table)
 			net.SendToServer()
 			
-			notification.AddLegacy( "#tool.uvshared.applied", NOTIFY_UNDO, 5 )
+			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
 			surface.PlaySound( "buttons/button15.wav" )
 			-- Msg( "#tool.uvracermanager.applied" )
 			
@@ -459,7 +459,7 @@ if CLIENT then
 
 		local vehicleBaseCombo = vgui.Create("DComboBox")
 		vehicleBaseCombo:SetSize(280, 20)
-		vehicleBaseCombo:SetTooltip("#tool.uvshared.base.desc")
+		vehicleBaseCombo:SetTooltip("#uv.tool.base.desc")
 		local currentBaseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
 		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
 		for _, base in ipairs(vehicleBases) do
@@ -498,7 +498,7 @@ if CLIENT then
 
 					if #savedVehicles == 0 then
 						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#tool.uvshared.novehicle")
+						emptyLabel:SetText("#uv.tool.novehicle")
 						emptyLabel:SetTextColor(Color(200, 200, 200))
 						emptyLabel:SetFont("DermaDefaultBold")
 						emptyLabel:SetContentAlignment(5)
@@ -602,7 +602,7 @@ if CLIENT then
 			end
 			if isstring(selecteditem) and basePath then
 				if file.Delete(basePath .. selecteditem) then
-					notification.AddLegacy(string.format(language.GetPhrase("tool.uvshared.deleted"), selecteditem), NOTIFY_UNDO, 5)
+					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.deleted"), selecteditem), NOTIFY_UNDO, 5)
 					surface.PlaySound("buttons/button15.wav")
 					-- Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
 				end
@@ -612,7 +612,7 @@ if CLIENT then
 		CPanel:AddItem(DeleteBtn)
 				
 		-- Dropdown for vehicle base selection
-		CPanel:AddControl("Label", { Text = "#tool.uvshared.base.title" })
+		CPanel:AddControl("Label", { Text = "#uv.tool.base.title" })
 		CPanel:AddItem(vehicleBaseCombo)
 
 		CPanel:AddControl("Label", { Text = "" }) -- General Settings

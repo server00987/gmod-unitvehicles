@@ -1398,7 +1398,7 @@ UV_UI.pursuit.carbon.events = {
             -- Time remaining and closing
 			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
-			local uwstext = "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas")
+			local uwstext = "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.pm.spawnas")
 
 			surface.SetFont("UVCarbonLeaderboardFont")
 			local conttextw = surface.GetTextSize(conttext)

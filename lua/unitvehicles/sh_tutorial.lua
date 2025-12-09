@@ -49,7 +49,7 @@
 -- end)
 
 -- hook.Add("PopulateToolMenu", "UVMenuTutorial", function()
--- 	spawnmenu.AddToolMenuOption("Options", "uv.settings.unitvehicles", "UVTutorial", "#uv.settings.tutorial", "", "", function(panel)
+-- 	spawnmenu.AddToolMenuOption("Options", "uv.unitvehicles", "UVTutorial", "#uv.settings.tutorial", "", "", function(panel)
 -- 		panel:Clear()
 
 --         panel:Help("#uv.settings.tutorial.help")

@@ -1,4 +1,4 @@
-TOOL.Category = "uv.settings.unitvehicles"
+TOOL.Category = "uv.unitvehicles"
 TOOL.Name = "#tool.uvracemanager.name"
 TOOL.Command = nil
 TOOL.ConfigName = ""
@@ -512,6 +512,7 @@ elseif CLIENT then
 	end
 	net.Receive("UVRace_SelectID", SelectID)
 
+--[[
 local function RaceMenu()
     -- === Utility: calculate available AI slots ===
     local function GetAvailableAISlots()
@@ -589,7 +590,7 @@ local function RaceMenu()
     local spacing = 40
 
 	-- Button 1: Start Race
-	CreateButton("#tool.uvracemanager.settings.racec.start", startY, function()
+	CreateButton("#uv.rm.startrace", startY, function()
 		RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
 		closing = true
 		closeStartTime = CurTime()
@@ -608,7 +609,7 @@ local function RaceMenu()
 	btn2:SetPos(8, startY + spacing)
 	
 	-- Description panel (to the right of main panel)
-	local descText = "#tool.uvracemanager.settings.racec.scrollwh"
+	local descText = "#uv.rm.startrace.scrollwh"
 	local descFont = "UVMostWantedLeaderboardFont"
 
 	local descPanel = vgui.Create("DPanel")  -- NOTICE: no parent!
@@ -699,14 +700,14 @@ local function RaceMenu()
 		draw.RoundedBox(4, 0, 0, w, h, bg)
 
 		-- Dynamically replace %s with the current spawnAmount
-		local text = string.format(language.GetPhrase("tool.uvracemanager.settings.racec.addai"), spawnAmount)
+		local text = string.format(language.GetPhrase("uv.rm.startrace.addai"), spawnAmount)
 
 		draw.SimpleText(text, "UVMostWantedLeaderboardFont", w * 0.5, h * 0.5,
 			Color(255, 255, 255, contentAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	-- Button 3: Fill Grid with AI & Start Race
-	CreateButton("#tool.uvracemanager.settings.racec.fillai", startY + spacing*2, function()
+	CreateButton("#uv.rm.startrace.fillai", startY + spacing*2, function()
 		local racerList = UVRace_RacerList or {}
 		local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
 		local existingAI = #ents.FindByClass("npc_racervehicle") or 0
@@ -788,7 +789,7 @@ local function RaceMenu()
         surface.SetDrawColor(255,255,255,bgAlpha)
         surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
         surface.DrawTexturedRect(0,yOff,w,scaledH)
-        draw.SimpleTextOutlined("#tool.uvracemanager.settings.racec.title","UVFont5",w*0.5,yOff+scaledH*0.01,Color(225,255,255,contentAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,3,Color(0,0,0,contentAlpha))
+        draw.SimpleTextOutlined("#uv.rm.startrace.title","UVFont5",w*0.5,yOff+scaledH*0.01,Color(225,255,255,contentAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,3,Color(0,0,0,contentAlpha))
     end
 
     function RaceMenuPanel:OnClose()
@@ -813,7 +814,9 @@ local function QuerySaveProps(txt)
 	)
 end
 
-concommand.Add("uvrace_racemenu", RaceMenu)
+-- concommand.Add("uvrace_racemenu", RaceMenu)
+
+]]--
 
 	local function UpdateVars( ply, cmd, args )
 		local convar = args[1]
@@ -830,7 +833,7 @@ concommand.Add("uvrace_racemenu", RaceMenu)
 	concommand.Add("uvrace_updatevars", UpdateVars)
 	
 	local function QueryExport()
-		Derma_StringRequest("#tool.uvshared.export.settings", "#tool.uvracemanager.export.desc", "", function(txt)
+		Derma_StringRequest("#uv.tool.export.settings", "#tool.uvracemanager.export.desc", "", function(txt)
 			QuerySaveProps(txt)
 		end, nil, "#addons.confirm", "#addons.cancel")
 	end
@@ -967,24 +970,24 @@ function TOOL.BuildCPanel(panel)
 	-- panel:AddControl("Header", { Text = "tool.uvracemanager.name", Description = "#tool.uvracemanager.desc"})
 	panel:AddControl("Header", { Text = "tool.uvracemanager.name"})
 	
-	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racec", Description = "Race"})
-	-- panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.start", Command = "uvrace_startrace"})
-	-- panel:Button("#tool.uvracemanager.settings.racec.start").DoClick = function()
+	panel:AddControl("Label", {Text = "#uv.rm.startrace", Description = "Race"})
+	-- panel:AddControl("Button", {Label = "#uv.rm.startrace", Command = "uvrace_startrace"})
+	-- panel:Button("#uv.rm.startrace").DoClick = function()
 		-- RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
 	-- end
-	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.start", Command = "uvrace_racemenu"})
-	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.stop", Command = "uvrace_stop"})
-	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.racec.invite", Command = "uvrace_startinvite"})
+	panel:AddControl("Button", {Label = "#uv.rm.startrace", Command = "uvrace_racemenu"})
+	panel:AddControl("Button", {Label = "#uv.rm.stoprace", Command = "uvrace_stop"})
+	panel:AddControl("Button", {Label = "#uv.rm.sendinvite", Command = "uvrace_startinvite"})
 	
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.saveloadrace", Description = "Race"})
-	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.loadrace", Command = "uvrace_queryimport" })
+	panel:AddControl("Button",  { Label	= "#uv.rm.loadrace", Command = "uvrace_queryimport" })
 	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.saverace", Command = "uvrace_queryexport" })
 
-	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.raceo"})
+	panel:AddControl("Label", {Text = "#uv.rm.options"})
 	local last_lap_value
-	local lap_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.laps", "uvracemanager_laps", 1, 100, 0)
+	local lap_slider = panel:NumSlider("#uv.rm.options.laps", "uvracemanager_laps", 1, 100, 0)
 
-	local sfxtheme, label = panel:ComboBox( "#tool.uvracemanager.settings.raceo.sfx", "unitvehicle_sfxtheme" )
+	local sfxtheme, label = panel:ComboBox( "#uv.rm.options.sfx", "unitvehicle_sfxtheme" )
 	local files, folders = file.Find( "sound/uvracesfx/*", "GAME" )
 	if folders ~= nil then
 		for k, v in pairs(folders) do
@@ -993,7 +996,7 @@ function TOOL.BuildCPanel(panel)
 	end
 	
 	local last_dnftimer_value
-	local dnftimer_slider = panel:NumSlider("#tool.uvracemanager.settings.raceo.dnftimer", "uvracemanager_dnftimer", 0, 90, 0)
+	local dnftimer_slider = panel:NumSlider("#uv.rm.options.dnftimer", "uvracemanager_dnftimer", 0, 90, 0)
 	dnftimer_slider.OnValueChanged = function(self, value)
 		local value = GetConVar("uvracemanager_dnftimer"):GetInt()
 		
@@ -1002,11 +1005,11 @@ function TOOL.BuildCPanel(panel)
 			last_dnftimer_value = value
 		end
 	end
-	panel:AddControl("Label",  { Text	= "#tool.uvracemanager.settings.raceo.dnftimer.desc" })
+	panel:AddControl("Label",  { Text	= "#uv.rm.options.dnftimer.desc" })
 	
-	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.racecreate"})
-	local speed_slider = panel:NumSlider("#tool.uvracemanager.settings.racecreate.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
-	local cpheight_slider = panel:NumSlider("#tool.uvracemanager.settings.racecreate.cpheight", "unitvehicle_cpheight", 1, 500, 0)
+	panel:AddControl("Label", {Text = "#uv.rm.startracereate"})
+	local speed_slider = panel:NumSlider("#uv.rm.startracereate.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
+	local cpheight_slider = panel:NumSlider("#uv.rm.startracereate.cpheight", "unitvehicle_cpheight", 1, 500, 0)
 	
 	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.clearassets"})
 	panel:AddControl("Button", {Label = "#tool.uvracemanager.settings.clearassets.cp", Command = "uvrace_killcps"})
@@ -1021,40 +1024,43 @@ if CLIENT then
 	--[[ New Settings entries here ]]--
 	UVMenu.RaceManager = function()
 		UVMenu.CurrentMenu = UVMenu:Open({
-			Name = "#tool.uvracemanager.name",
+			Name = " ",
 			Width = ScrW() * 0.3,
-			Height = ScrH() * 0.45,
+			Height = ScrH() * 0.35,
 			UnfocusClose = true,
 			Tabs = {
-				{ TabName = "#tool.uvracemanager.name",
+				{ TabName = "#uv.rm",
 					-- No track loaded, none active
-					{ type = "button", text = "#tool.uvracemanager.settings.loadrace", sv = true, 
+					{ type = "button", text = "#uv.rm.loadrace", sv = true, 
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) == 0 end,
 						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 					},
 					
 					-- Track loaded, race not started
-					{ type = "button", text = "#tool.uvracemanager.settings.racec.start", sv = true,
+					{ type = "button", text = "#uv.rm.startrace", sv = true,
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
-						func = function(self2) RunConsoleCommand("uvrace_racemenu") UVMenu.CloseCurrentMenu() end
+						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerStartRace, true) end
 					},
-					{ type = "button", text = "#tool.uvracemanager.settings.changerace", sv = true,
+					{ type = "button", text = "#uv.rm.sendinvite", sv = true, convar = "uvrace_startinvite",
+						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
+					},
+					{ type = "button", text = "#uv.rm.changerace", sv = true,
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 					},
-					{ type = "button", text = "#tool.uvracemanager.settings.racec.cancel", sv = true,
+					{ type = "button", text = "#uv.rm.cancelrace", sv = true,
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
 					
 					-- Race active
-					{ type = "button", text = "#tool.uvracemanager.settings.racec.stop", sv = true,
+					{ type = "button", text = "#uv.rm.stoprace", sv = true,
 						cond = function() return UVRaceStarting or UVHUDDisplayRacing end,
 						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
 
 					-- Always active
-					{ type = "button", text = "#tool.uvracemanager.settings.racec.title", sv = true,
+					{ type = "button", text = "#uv.rm.options", sv = true,
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerSettings, true) end
 					},
 					{ type = "button", text = "#uv.back", sv = true,
@@ -1066,16 +1072,16 @@ if CLIENT then
 	end
 	UVMenu.RaceManagerSettings = function()
 		UVMenu.CurrentMenu = UVMenu:Open({
-			Name = "#tool.uvracemanager.settings.racec.title",
-			Width = ScrW() * 0.6,
+			Name = "#uv.rm.options",
+			Width = ScrW() * 0.45,
 			Height = ScrH() * 0.45,
 			Description = true,
 			UnfocusClose = true,
 			Tabs = {
 				{ TabName = " ",
 					-- Track loaded, race not started
-					{ type = "slider", text = "#tool.uvracemanager.settings.raceo.laps", desc = "tool.uvracemanager.settings.raceo.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
-					{ type = "slider", text = "#tool.uvracemanager.settings.raceo.dnftimer", desc = "tool.uvracemanager.settings.raceo.dnftimer.desc", convar = "uvracemanager_dnftimer", min = 0, max = 90, decimals = 0, sv = true },
+					{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
+					{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "uvracemanager_dnftimer", min = 0, max = 90, decimals = 0, sv = true },
 					{ type = "button", text = "#uv.back", sv = true,
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
@@ -1146,9 +1152,9 @@ if CLIENT then
 				table.insert(raceEntries, {
 					type = "button",
 					text = rec.name,
-					desc = string.format( language.GetPhrase( "tool.uvracemanager.import.author" ), rec.author ) .. "\n"  .. 
-					string.format( language.GetPhrase( "tool.uvracemanager.import.checkpoints" ), #rec.checkpoints ) .. "\n" .. 
-					string.format( language.GetPhrase( "tool.uvracemanager.import.gridslot" ), #rec.spawns ),
+					desc = string.format( language.GetPhrase( "uv.rm.author" ), rec.author ) .. "\n"  .. 
+					string.format( language.GetPhrase( "uv.rm.checkpoints" ), #rec.checkpoints ) .. "\n" .. 
+					string.format( language.GetPhrase( "uv.rm.startslots" ), #rec.spawns ),
 					func = function()
 						RunConsoleCommand("uvrace_import", rec.filename)
 						UVMenu.CloseCurrentMenu()
@@ -1176,15 +1182,103 @@ if CLIENT then
 		})
 
 		UVMenu:Open({
-			Name = "#tool.uvracemanager.settings.loadrace",
+			Name = " ",
 			Width = ScrW() * 0.3,
-			Height = ScrH() * 0.7,
+			Height = ScrH() * 0.45,
 			Description = true,
 			UnfocusClose = true,
 			Tabs = {
 				{
-					TabName = " ",
+					TabName = "#uv.rm.loadrace",
 					unpack(entriesWithBack)
+				}
+			}
+		})
+	end
+
+	UVMenu.RaceManagerStartRace = function()
+		local function GetAvailableAISlots()
+			local racerList = UVRace_RacerList or {}
+			local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
+			local existingAI = #ents.FindByClass("npc_racervehicle") or 0
+			local hostAdjustment = 1
+
+			return math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
+		end
+
+		local function SpawnAIRacers(amount)
+			for i = 1, amount do
+				RunConsoleCommand("uvrace_spawnai")
+			end
+
+			timer.Simple(0.5, function()
+				RunConsoleCommand("uvrace_startinvite")
+			end)
+
+			timer.Simple(2, function()
+				RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+			end)
+		end
+
+		local function FillGridWithAI()
+			local racerList = UVRace_RacerList or {}
+			local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
+			local existingAI = #ents.FindByClass("npc_racervehicle") or 0
+			local hostAdjustment = 1
+
+			RunConsoleCommand("uvrace_startinvite")
+
+			local neededAI = math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
+			for i = 1, neededAI do
+				RunConsoleCommand("uvrace_spawnai")
+			end
+
+			timer.Simple(0.5, function()
+				RunConsoleCommand("uvrace_startinvite")
+			end)
+
+			timer.Simple(2, function()
+				RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+			end)
+		end
+
+		local maxSlots = GetAvailableAISlots()
+		local spawnAmountStart = math.Clamp(1, 1, maxSlots)
+
+		UVMenu.CurrentMenu = UVMenu:Open({
+			Name = " ",
+			Width = ScrW() * 0.5,
+			Height = ScrH() * 0.25,
+			Description = true,
+			UnfocusClose = true,
+			Tabs = {
+				{
+					TabName = "#uv.rm",
+					{ type = "button", text = "#uv.rm.startrace", desc = "uv.rm.startrace.desc", sv = true,
+						func = function()
+							RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+							UVMenu.CloseCurrentMenu()
+						end
+					},
+					{ type  = "buttonsw", text  = language.GetPhrase("uv.rm.startrace.addai"), desc  = "uv.rm.startrace.addai.desc", sv    = true, min   = 1, max   = maxSlots, start = spawnAmountStart,
+						func = function(self2, amount)
+							SpawnAIRacers(amount)
+							UVMenu.CloseCurrentMenu()
+						end,
+						cond = function() return maxSlots > 0 end,
+					},
+					{ type = "button", text = "#uv.rm.startrace.fillai", desc = string.format( language.GetPhrase("uv.rm.startrace.fillai.desc"), maxSlots ), sv   = true,
+						func = function()
+							FillGridWithAI()
+							UVMenu.CloseCurrentMenu()
+						end,
+						cond = function() return maxSlots > 0 end,
+					},
+					{ type = "button", text = "#uv.back", sv   = true,
+						func = function()
+							UVMenu.OpenMenu(UVMenu.RaceManager)
+						end
+					},
 				}
 			}
 		})
@@ -1193,4 +1287,9 @@ if CLIENT then
 	concommand.Add("uvrace_queryimport", function()
 		UVMenu.OpenMenu(UVMenu.RaceManagerTrackSelect, true)
 	end)
+	
+	concommand.Add("uvrace_racemenu", function()
+		UVMenu.OpenMenu(UVMenu.RaceManagerStartRace, true)
+	end)
+
 end

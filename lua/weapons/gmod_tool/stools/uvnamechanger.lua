@@ -1,4 +1,4 @@
-TOOL.Category		=	"uv.settings.unitvehicles"
+TOOL.Category		=	"uv.unitvehicles"
 TOOL.Name			=	"#tool.uvnamechanger.name"
 TOOL.Command		=	nil
 TOOL.ConfigName		=	""
@@ -15,7 +15,7 @@ if CLIENT then
 		CPanel:AddControl("Label", { Text = "#tool.uvnamechanger.desc" })
 
 		local NameEntry = vgui.Create( "DTextEntry", CPanel )
-		NameEntry:SetPlaceholderText( "#tool.uvshared.fillme" )
+		NameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 		NameEntry:SetSize(CPanel:GetWide(), 22)
 		NameEntry:SetValue(GetConVar("uvnamechanger_name"):GetString())
 		NameEntry:SetConVar("uvnamechanger_name")
@@ -31,7 +31,7 @@ function TOOL:LeftClick( trace )
 	local ent = trace.Entity
 
 	if not ply:IsSuperAdmin() then
-		notification.AddLegacy( "#tool.settings.superadmin.settings", NOTIFY_ERROR, 5 )
+		notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
 		surface.PlaySound( "buttons/button10.wav" )
 		return
 	end

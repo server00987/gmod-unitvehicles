@@ -940,7 +940,7 @@ UV_UI.pursuit.undercover.events = {
 
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h*0.64, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-				draw.DrawText( language.GetPhrase("uv.settings.pm.ai.spawnas") .. " [" .. UVBindButton("+reload") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h * 0.67, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
+				draw.DrawText( language.GetPhrase("uv.pm.spawnas") .. " [" .. UVBindButton("+reload") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h * 0.67, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
 			else
 				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
 			end

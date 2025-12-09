@@ -1148,7 +1148,7 @@ UV_UI.pursuit.mostwanted.events = {
 
 				local ustext = ""
 				if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-					ustext = "  [ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.settings.pm.ai.spawnas")
+					ustext = "  [ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.pm.spawnas")
 				end
 				                
                 draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue") .. ustext, "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
