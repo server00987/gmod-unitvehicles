@@ -1098,13 +1098,13 @@ if SERVER then
 	--UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
 	
 	local defaultvoicetable = {
-		"cop1, cop2, cop3", --Patrol
-		"cop1, cop2, cop3", --Support
-		"cop1, cop2, cop3", --Pursuit
-		"cop1, cop2, cop3", --Interceptor
-		"fed1", --Special
-		"fed1", --Commander
-		"cop1, cop2, cop3", --Rhino
+		"cop1, cop2, cop3, cop4, cop5", --Patrol
+		"cop1, cop2, cop3, cop4, cop5", --Support
+		"cop1, cop2, cop3, cop4, cop5", --Pursuit
+		"cop1, cop2, cop3, cop4, cop5", --Interceptor
+		"cop1, cop2, cop3, cop4, cop5", --Special
+		"cop1, cop2, cop3, cop4, cop5", --Commander
+		"rhino1", --Rhino
 		"air", --Air
 	}
 
