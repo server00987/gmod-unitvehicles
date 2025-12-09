@@ -512,312 +512,6 @@ elseif CLIENT then
 	end
 	net.Receive("UVRace_SelectID", SelectID)
 
---[[
-local function RaceMenu()
-    -- === Utility: calculate available AI slots ===
-    local function GetAvailableAISlots()
-        local racerList = UVRace_RacerList or {}
-        local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
-        local existingAI = #ents.FindByClass("npc_racervehicle") or 0
-        local hostAdjustment = 1
-        return math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
-    end
-	
-	local availableSlots = GetAvailableAISlots()
-	if availableSlots <= 0 then
-		-- No AI can be added, start race immediately
-		RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-		return
-	end
-
-    if IsValid(RaceMenuPanel) then RaceMenuPanel:Remove() end
-
-    local sw, sh = ScrW(), ScrH()
-    local pw, ph = sw * 0.3, sh * 0.165
-    local px, py = (sw - pw) * 0.5, (sh - ph) * 0.5
-
-    RaceMenuPanel = vgui.Create("DFrame")
-    RaceMenuPanel:SetSize(pw, ph)
-    RaceMenuPanel:SetPos(px, py)
-    RaceMenuPanel:SetTitle("")
-    RaceMenuPanel:ShowCloseButton(false)
-    RaceMenuPanel:SetDraggable(false)
-    RaceMenuPanel:MakePopup()
-    gui.EnableScreenClicker(true)
-
-    -- Animation variables
-    local bgScale, bgAlpha, bgAnimStart = 0, 0, CurTime()
-    local contentAlpha, contentStart = 0, CurTime()
-    local closing, closeStartTime = false, 0
-
-    -- Current AI spawn count for button 2
-    local spawnAmount = 1
-
-    -- === Button creation utility ===
-    local function CreateButton(baseText, yPos, callback)
-        local btn = vgui.Create("DButton", RaceMenuPanel)
-        btn:SetText("")
-        btn:SetTall(35)
-        btn:SetWide(pw - 16)
-        btn:SetPos(8, yPos)
-        btn.DoClick = callback
-
-        -- Scroll wheel for spawn adjustment (only used for 2nd button)
-        btn.OnMouseWheeled = function(self, delta)
-            local maxAI = GetAvailableAISlots()
-            spawnAmount = math.Clamp(spawnAmount + delta, 1, maxAI)
-            return true
-        end
-
-        btn.Paint = function(self,w,h)
-            local hovered = self:IsHovered()
-            local blink = math.abs(math.sin(RealTime()*3))
-            local bg = hovered and Color(80*blink,120*blink,180*blink,contentAlpha) or Color(40,40,40,contentAlpha)
-
-            draw.RoundedBox(4, 0, 0, w, h, bg)
-
-            local text = baseText
-            if baseText:find("Add AI") then
-                text = string.format(baseText, spawnAmount)
-            end
-
-            draw.SimpleText(text, "UVMostWantedLeaderboardFont", w*0.5, h*0.5, Color(255,255,255,contentAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        end
-        return btn
-    end
-
-    local startY = 55
-    local spacing = 40
-
-	-- Button 1: Start Race
-	CreateButton("#uv.rm.startrace", startY, function()
-		RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-		closing = true
-		closeStartTime = CurTime()
-		gui.EnableScreenClicker(false)
-	end)
-
-	-- Button 2: Add X AI & Start Race (dynamic)
-	-- Current AI spawn amount
-	local spawnAmount = 1
-
-	-- Create the button
-	local btn2 = vgui.Create("DButton", RaceMenuPanel)
-	btn2:SetText("")
-	btn2:SetTall(35)
-	btn2:SetWide(pw - 16)
-	btn2:SetPos(8, startY + spacing)
-	
-	-- Description panel (to the right of main panel)
-	local descText = "#uv.rm.startrace.scrollwh"
-	local descFont = "UVMostWantedLeaderboardFont"
-
-	local descPanel = vgui.Create("DPanel")  -- NOTICE: no parent!
-	descPanel:SetVisible(false)
-
-	local descHeight = draw.GetFontHeight(descFont) + 12
-	descPanel:SetTall(descHeight)
-	descPanel:SetWide(RaceMenuPanel:GetWide())
-
-	-- Position it under the menu
-	local x, y = RaceMenuPanel:GetPos()
-	descPanel:SetPos(x, y + RaceMenuPanel:GetTall() + 2)
-
-	descPanel.Paint = function(self, w, h)
-		surface.SetDrawColor(20, 20, 20, 220)
-		surface.DrawRect(0, 0, w, h)
-
-		draw.SimpleText(
-			descText,
-			descFont,
-			w * 0.5,
-			h * 0.5,
-			Color(255,255,255,contentAlpha),
-			TEXT_ALIGN_CENTER,
-			TEXT_ALIGN_CENTER
-		)
-	end
-
-	-- === SHOW when hover ===
-	btn2.OnCursorEntered = function()
-		local x, y = RaceMenuPanel:GetPos()
-		descPanel:SetPos(x, y + RaceMenuPanel:GetTall() + 2)
-		descPanel:SetWide(RaceMenuPanel:GetWide())
-		descPanel:SetVisible(true)
-	end
-
-	-- === HIDE when leaving ===
-	btn2.OnCursorExited = function()
-		descPanel:SetVisible(false)
-	end
-
-	-- === HIDE on menu close ===
-	local oldClose = RaceMenuPanel.OnClose
-	RaceMenuPanel.OnClose = function(self, ...)
-		if IsValid(descPanel) then descPanel:Remove() end
-		if oldClose then oldClose(self, ...) end
-	end
-
-	-- Scroll wheel to adjust spawnAmount
-	btn2.OnMouseWheeled = function(self, delta)
-		local maxAI = GetAvailableAISlots()
-		if maxAI <= 0 then return true end  -- can't scroll if no slots available
-		spawnAmount = math.Clamp(spawnAmount + delta, 1, maxAI)
-		return true
-	end
-
-	-- Button click
-	btn2.DoClick = function()
-		descPanel:SetVisible(false)
-		local existingAI = #ents.FindByClass("npc_racervehicle") or 0
-		local availableSlots = GetAvailableAISlots() - existingAI
-		spawnAmount = math.Clamp(spawnAmount, 1, availableSlots)
-
-		for i = 1, spawnAmount do
-			RunConsoleCommand("uvrace_spawnai")
-		end
-
-		timer.Simple(0.5, function()
-			RunConsoleCommand("uvrace_startinvite")
-		end)
-
-		timer.Simple(2, function()
-			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-		end)
-
-		closing = true
-		closeStartTime = CurTime()
-		gui.EnableScreenClicker(false)
-	end
-
-	-- Dynamic text in Paint
-	btn2.Paint = function(self, w, h)
-		local hovered = self:IsHovered()
-		local blink = math.abs(math.sin(RealTime() * 3))
-		local bg = hovered and Color(80 * blink, 120 * blink, 180 * blink, contentAlpha) or
-						 Color(40, 40, 40, contentAlpha)
-
-		draw.RoundedBox(4, 0, 0, w, h, bg)
-
-		-- Dynamically replace %s with the current spawnAmount
-		local text = string.format(language.GetPhrase("uv.rm.startrace.addai"), spawnAmount)
-
-		draw.SimpleText(text, "UVMostWantedLeaderboardFont", w * 0.5, h * 0.5,
-			Color(255, 255, 255, contentAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	end
-
-	-- Button 3: Fill Grid with AI & Start Race
-	CreateButton("#uv.rm.startrace.fillai", startY + spacing*2, function()
-		local racerList = UVRace_RacerList or {}
-		local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
-		local existingAI = #ents.FindByClass("npc_racervehicle") or 0
-		local hostAdjustment = 1
-
-		-- Invite current racers first
-		RunConsoleCommand("uvrace_startinvite")
-
-		-- Recalculate available slots
-		local neededAI = math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
-		for i = 1, neededAI do
-			RunConsoleCommand("uvrace_spawnai")
-		end
-
-		-- Invite newly spawned AI
-		timer.Simple(0.5, function()
-			RunConsoleCommand("uvrace_startinvite")
-		end)
-
-		-- Start race after 2s
-		timer.Simple(2, function()
-			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-		end)
-
-		closing = true
-		closeStartTime = CurTime()
-		gui.EnableScreenClicker(false)
-	end)
-
-    -- === Cancel button ===
-    local cancelBtn = vgui.Create("DButton", RaceMenuPanel)
-    cancelBtn:SetText("")
-    cancelBtn:SetSize(28,28)
-    cancelBtn:SetPos(pw - 48, 4)
-    cancelBtn.Paint = function(self,w,h)
-        local a = math.Clamp(contentAlpha,0,255)
-        draw.SimpleTextOutlined("x","UVMostWantedLeaderboardFont",w*0.5,0,Color(255,255,255,a),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,a))
-    end
-    cancelBtn.DoClick = function()
-        closing = true
-        closeStartTime = CurTime()
-        gui.EnableScreenClicker(false)
-    end
-
-    -- === Animation logic ===
-    RaceMenuPanel.Think = function(self)
-        local curTime = CurTime()
-        if not closing then
-            local reveal = math.Clamp((curTime - contentStart)/0.6,0,1)
-            contentAlpha = reveal*255
-        end
-        if not closing and input.IsMouseDown(MOUSE_LEFT) then
-            local mx,my = gui.MousePos()
-            local x,y = self:GetPos()
-            local w2,h2 = self:GetSize()
-            if mx and my and (mx < x or mx > x+w2 or my < y or my > y+h2) then
-                closing = true
-                closeStartTime = CurTime()
-                gui.EnableScreenClicker(false)
-            end
-        end
-        if closing then
-            contentAlpha = math.Clamp(contentAlpha - FrameTime()*255*8, 0, 255)
-            bgScale = math.Clamp(bgScale - FrameTime()*6, 0, 1)
-            if bgScale <= 0 and IsValid(RaceMenuPanel) then
-                RaceMenuPanel:Close()
-            end
-        end
-    end
-
-    RaceMenuPanel.Paint = function(self, w, h)
-        local curTime = CurTime()
-        local elapsed = curTime - bgAnimStart
-        local openS = math.Clamp(elapsed/0.2,0,1)
-        bgAlpha = math.Clamp((elapsed-0.1)/0.3,0,1)*255
-        local shrink = (closing and bgScale) or openS
-        local scaledH = h * shrink
-        local yOff = (h - scaledH)*0.5
-        surface.SetDrawColor(255,255,255,bgAlpha)
-        surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
-        surface.DrawTexturedRect(0,yOff,w,scaledH)
-        draw.SimpleTextOutlined("#uv.rm.startrace.title","UVFont5",w*0.5,yOff+scaledH*0.01,Color(225,255,255,contentAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,3,Color(0,0,0,contentAlpha))
-    end
-
-    function RaceMenuPanel:OnClose()
-        gui.EnableScreenClicker(false)
-    end
-end
-
-local function QuerySaveProps(txt)
-	Derma_Query(
-	    "#tool.uvracemanager.export.props.desc",
-	    "#tool.uvracemanager.export.props",
-	    "#openurl.yes",
-	    function()
-			chat.AddText("Exporting UV Race...")
-			RunConsoleCommand("uvrace_export", txt, "true") 
-		end,
-		"#openurl.nope",
-		function()
-			chat.AddText("Exporting UV Race...")
-			RunConsoleCommand("uvrace_export", txt) 
-		end
-	)
-end
-
--- concommand.Add("uvrace_racemenu", RaceMenu)
-
-]]--
-
 	local function UpdateVars( ply, cmd, args )
 		local convar = args[1]
 		local value = args[2]
@@ -1031,39 +725,39 @@ if CLIENT then
 			Tabs = {
 				{ TabName = "#uv.rm",
 					-- No track loaded, none active
-					{ type = "button", text = "#uv.rm.loadrace", sv = true, 
+					{ type = "button", text = "#uv.rm.loadrace", sv = true, playsfx = "clickopen",
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) == 0 end,
 						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 					},
 					
 					-- Track loaded, race not started
-					{ type = "button", text = "#uv.rm.startrace", sv = true,
+					{ type = "button", text = "#uv.rm.startrace", sv = true, playsfx = "clickopen",
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerStartRace, true) end
 					},
-					{ type = "button", text = "#uv.rm.sendinvite", sv = true, convar = "uvrace_startinvite",
+					{ type = "button", text = "#uv.rm.sendinvite", sv = true, convar = "uvrace_startinvite", playsfx = "confirm",
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 					},
-					{ type = "button", text = "#uv.rm.changerace", sv = true,
+					{ type = "button", text = "#uv.rm.changerace", sv = true, playsfx = "clickopen",
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 						func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 					},
-					{ type = "button", text = "#uv.rm.cancelrace", sv = true,
+					{ type = "button", text = "#uv.rm.cancelrace", sv = true, playsfx = "clickopen",
 						cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
 					
 					-- Race active
-					{ type = "button", text = "#uv.rm.stoprace", sv = true,
+					{ type = "button", text = "#uv.rm.stoprace", sv = true, playsfx = "clickopen",
 						cond = function() return UVRaceStarting or UVHUDDisplayRacing end,
 						func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
 
 					-- Always active
-					{ type = "button", text = "#uv.rm.options", sv = true,
+					{ type = "button", text = "#uv.rm.options", sv = true, playsfx = "clickopen",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerSettings, true) end
 					},
-					{ type = "button", text = "#uv.back", sv = true,
+					{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
 					},
 				}
@@ -1079,10 +773,9 @@ if CLIENT then
 			UnfocusClose = true,
 			Tabs = {
 				{ TabName = " ",
-					-- Track loaded, race not started
 					{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
 					{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "uvracemanager_dnftimer", min = 0, max = 90, decimals = 0, sv = true },
-					{ type = "button", text = "#uv.back", sv = true,
+					{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
 				}
@@ -1155,11 +848,13 @@ if CLIENT then
 					desc = string.format( language.GetPhrase( "uv.rm.author" ), rec.author ) .. "\n"  .. 
 					string.format( language.GetPhrase( "uv.rm.checkpoints" ), #rec.checkpoints ) .. "\n" .. 
 					string.format( language.GetPhrase( "uv.rm.startslots" ), #rec.spawns ),
+					playsfx = "clickopen",
 					func = function()
 						RunConsoleCommand("uvrace_import", rec.filename)
-						UVMenu.CloseCurrentMenu()
-						timer.Simple(0.25, function()
+						UVMenu.CloseCurrentMenu(true)
+						timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
 							UVMenu.OpenMenu(UVMenu.RaceManager)
+							UVMenu.PlaySFX("menuopen") -- This shouldn't be necessary but ah well
 						end)
 					end
 				})
@@ -1176,6 +871,7 @@ if CLIENT then
 			type = "button",
 			text = "#uv.back",
 			sv = true,
+			playsfx = "clickback",
 			func = function(self2)
 				UVMenu.OpenMenu(UVMenu.RaceManager)
 			end
@@ -1274,7 +970,7 @@ if CLIENT then
 						end,
 						cond = function() return maxSlots > 0 end,
 					},
-					{ type = "button", text = "#uv.back", sv   = true,
+					{ type = "button", text = "#uv.back", sv   = true, playsfx = "clickback",
 						func = function()
 							UVMenu.OpenMenu(UVMenu.RaceManager)
 						end

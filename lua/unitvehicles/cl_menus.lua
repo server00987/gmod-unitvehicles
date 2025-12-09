@@ -42,6 +42,20 @@ UV.PNotes = [[
 *Uses Discord formatting - Have fun.*
 ]]
 
+-- Sounds Table
+UVMenu.Sounds = {
+    ["MW"] = {
+        menuopen = "uvui/mw/fe_common_mb [8].wav",
+        menuclose = "uvui/mw/fe_common_mb [9].wav",
+        hover = "uvui/mw/fe_common_mb [1].wav",
+        hovertab = "uvui/mw/fe_common_mb [2].wav",
+        click = "uvui/mw/fe_common_mb [8].wav",
+        clickopen = "uvui/mw/fe_common_mb [3].wav",
+        clickback = "uvui/mw/fe_common_mb [4].wav",
+        confirm = "uvui/mw/fe_common_mb [5].wav"
+    },
+}
+
 -- Main Menu
 UVMenu.Main = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
@@ -69,8 +83,9 @@ UVMenu.Main = function()
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
 				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
-					UVMenu.CloseCurrentMenu()
-					timer.Simple(0.25, function()
+					UVMenu.CloseCurrentMenu(true)
+					UVMenu.PlaySFX("clickopen")
+					timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
 						RunConsoleCommand("uv_spawn_as_unit")
 					end)
 				end
@@ -80,7 +95,7 @@ UVMenu.Main = function()
 				{ type = "info", text = UV.PNotes },
 				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
-			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, func = function()
+			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
 					UVMenu.OpenMenu(UVMenu.RaceManager)
 				end,
 				{ type = "label", text = "#uv.addons.builtin" },
@@ -88,8 +103,9 @@ UVMenu.Main = function()
 			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png",
 				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
 				function(self2)
-					UVMenu.CloseCurrentMenu()
-					timer.Simple(0.25, function()
+					UVMenu.CloseCurrentMenu(true)
+					UVMenu.PlaySFX("clickopen")
+					timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
 						RunConsoleCommand("uv_spawn_as_unit")
 					end)
 				end
@@ -136,7 +152,7 @@ UVMenu.Main = function()
 				{ type = "info", text = UV.FAQ[18] },
 				{ type = "info", text = UV.FAQ[19] },
 			},
-			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", func = function()
+			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
 					UVMenu.OpenMenu(UVMenu.Settings)
 				end,
 				{ type = "label", text = "#uv.addons.builtin" },
@@ -188,6 +204,12 @@ UVMenu.Settings = function()
 						{ "#uv.ui.unitstype.yards", 2 },
 					},
 				},
+
+				{ type = "label", text = "#uv.ui.menu", desc = "uv.ui.menu.desc" },
+				{ type = "bool", text = "#uv.ui.menu.hidedesc", desc = "uv.ui.menu.hidedesc.desc", convar = "uvmenu_hide_description" },
+				{ type = "slider", text = "#uv.ui.menu.openspeed", desc = "uv.ui.menu.openspeed.desc", convar = "uvmenu_open_speed", min = 0, max = 2, decimals = 2 },
+				{ type = "slider", text = "#uv.ui.menu.closespeed", desc = "uv.ui.menu.closespeed.desc", convar = "uvmenu_close_speed", min = 0, max = 2, decimals = 2 },
+				{ type = "button", text = "#uv.ui.menu.custcol", desc = "uv.ui.menu.custcol.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.SettingsCol, true) end },
 			},
 			{ TabName = "#uv.audio.title", Icon = "unitvehicles/icons_settings/audio.png",
 
@@ -195,6 +217,11 @@ UVMenu.Settings = function()
 				{ type = "slider", text = "#uv.audio.volume", desc = "uv.audio.volume.desc", convar = "unitvehicle_pursuitthemevolume", min = 0, max = 2, decimals = 1 },
 				{ type = "slider", text = "#uv.audio.copchatter", desc = "uv.audio.copchatter.desc", convar = "unitvehicle_chattervolume", min = 0, max = 5, decimals = 1 },
 				{ type = "bool", text = "#uv.audio.mutecp", desc = "uv.audio.mutecp.desc", convar = "unitvehicle_mutecheckpointsfx" },
+				{ type = "bool", text = "#uv.audio.menu.sfx", desc = "uv.audio.menu.sfx.desc", convar = "uvmenu_sound_enabled" },
+				{ type = "combo", text = "#uv.audio.menu.sfx.profile", desc = "uv.audio.menu.sfx.profile.desc", convar = "uvmenu_sound_set", requireparentconvar = "uvmenu_sound_enabled", content = {
+						{ "NFS Most Wanted", "MW" },
+					},
+				},
 
 				{ type = "label", text = "#uv.audio.uvtrax" },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
@@ -275,8 +302,7 @@ UVMenu.Settings = function()
 				{ type = "slider", text = "#uv.response.speedlimit", desc = "uv.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
 			},
 			
-			-- { TabName = "#uv.back", Icon = "unitvehicles/icons_settings/options.png", func = function()
-			{ TabName = "#uv.back", func = function()
+			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
 				{ type = "label", text = "#uv.addons.builtin" },
@@ -285,8 +311,52 @@ UVMenu.Settings = function()
 	})
 end
 
+-- Colour Settings
+UVMenu.SettingsCol = function()
+	UVMenu.CurrentMenu = UVMenu:Open({
+		Name = " ",
+		Width = ScrW() * 0.65,
+		Height = ScrH() * 0.7,
+		Description = true,
+		-- ColorPreview = true,
+		UnfocusClose = true,
+		Tabs = {
+			{ TabName = "#uv.ui.menu.custcol",
+				{ type = "button", text = "#uv.back", playsfx = "clickback",
+						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
+				},
+				{ type = "label", text = "#uv.ui.menu.col.bg" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_bg" },
+				
+				{ type = "label", text = "#uv.ui.menu.col.desc" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_desc" },
+				
+				{ type = "label", text = "#uv.ui.menu.col.tabs" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.background", convar = "uvmenu_col_tabs" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_tab_default" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.active", convar = "uvmenu_col_tab_active" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", convar = "uvmenu_col_tab_hover" },
+				
+				{ type = "label", text = "#uv.ui.menu.col.label" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_label" },
+				
+				{ type = "label", text = "#uv.ui.menu.col.bool" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_bool" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.active", convar = "uvmenu_col_bool_active" },
+				
+				{ type = "label", text = "#uv.ui.menu.col.button" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_button" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", convar = "uvmenu_col_button_hover" },
+
+				{ type = "button", text = "#uv.back", playsfx = "clickback",
+						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
+				},
+			},
+		}
+	})
+end
+
 if CLIENT then
-	-- Create the desktop icon entry (clicking it runs console command which opens our menu)
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
 		title = "#uv.unitvehicles",
 		icon  = "unitvehicles/icons/MILESTONE_OUTRUN_PURSUITS_WON.png",
@@ -304,6 +374,7 @@ concommand.Add("unitvehicles_menu", function()
     else
         UVMenu.OpenMenu(UVMenu.Main)
     end
+	UVMenu.PlaySFX("menuopen")
 end)
 
 -- FAQ - Update if need be.
@@ -527,12 +598,75 @@ Author: Adapted from UnitVehicles Settings menu
 -- Store all menus globally
 UVMenu.Menus = UVMenu.Menus or {}
 
--- [[ Start of Color ConVars ]] --
--- Background
--- CreateClientConVar("uvmenu_col_bg_r", 255, true, false)
--- CreateClientConVar("uvmenu_col_bg_g", 255, true, false)
--- CreateClientConVar("uvmenu_col_bg_b", 255, true, false)
--- CreateClientConVar("uvmenu_col_bg_a", 255, true, false)
+-- [[ Start of Menu ConVars ]] --
+	-- Sounds
+	CreateClientConVar("uvmenu_sound_enabled", 1, true, false)
+	CreateClientConVar("uvmenu_sound_set", "MW", true, false)
+
+	-- Background
+	CreateClientConVar("uvmenu_hide_description", 0, true, false)
+
+	CreateClientConVar("uvmenu_open_speed", 0.25, true, false)
+	CreateClientConVar("uvmenu_close_speed", 0.25, true, false)
+
+	-- Background colour
+	CreateClientConVar("uvmenu_col_bg_r", 25, true, false)
+	CreateClientConVar("uvmenu_col_bg_g", 25, true, false)
+	CreateClientConVar("uvmenu_col_bg_b", 25, true, false)
+	CreateClientConVar("uvmenu_col_bg_a", 245, true, false)
+
+	-- Description panel colour
+	CreateClientConVar("uvmenu_col_desc_r", 28, true, false)
+	CreateClientConVar("uvmenu_col_desc_g", 28, true, false)
+	CreateClientConVar("uvmenu_col_desc_b", 28, true, false)
+	CreateClientConVar("uvmenu_col_desc_a", 150, true, false)
+
+	-- Tabs sidebar colour
+	CreateClientConVar("uvmenu_col_tabs_r", 125, true, false)
+	CreateClientConVar("uvmenu_col_tabs_g", 125, true, false)
+	CreateClientConVar("uvmenu_col_tabs_b", 125, true, false)
+	CreateClientConVar("uvmenu_col_tabs_a", 75,  true, false)
+
+	-- Tab button (active/hover/default)
+	CreateClientConVar("uvmenu_col_tab_default_r", 125, true, false)
+	CreateClientConVar("uvmenu_col_tab_default_g", 125, true, false)
+	CreateClientConVar("uvmenu_col_tab_default_b", 125, true, false)
+
+	CreateClientConVar("uvmenu_col_tab_active_r", 255, true, false)
+	CreateClientConVar("uvmenu_col_tab_active_g", 255, true, false)
+	CreateClientConVar("uvmenu_col_tab_active_b", 255, true, false)
+
+	CreateClientConVar("uvmenu_col_tab_hover_r", 255, true, false)
+	CreateClientConVar("uvmenu_col_tab_hover_g", 255, true, false)
+	CreateClientConVar("uvmenu_col_tab_hover_b", 255, true, false)
+
+	-- Label colour
+	CreateClientConVar("uvmenu_col_label_r", 100, true, false)
+	CreateClientConVar("uvmenu_col_label_g", 100, true, false)
+	CreateClientConVar("uvmenu_col_label_b", 100, true, false)
+	CreateClientConVar("uvmenu_col_label_a", 75,  true, false)
+
+	-- Bool colour
+	CreateClientConVar("uvmenu_col_bool_r", 125, true, false)
+	CreateClientConVar("uvmenu_col_bool_g", 125, true, false)
+	CreateClientConVar("uvmenu_col_bool_b", 125, true, false)
+	CreateClientConVar("uvmenu_col_bool_a", 200, true, false)
+
+	CreateClientConVar("uvmenu_col_bool_active_r", 58, true, false)
+	CreateClientConVar("uvmenu_col_bool_active_g", 193, true, false)
+	CreateClientConVar("uvmenu_col_bool_active_b", 0, true, false)
+
+	-- Bool colour
+	CreateClientConVar("uvmenu_col_button_r", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_g", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_b", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_a", 125, true, false)
+
+	CreateClientConVar("uvmenu_col_button_hover_r", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_hover_g", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_hover_b", 125, true, false)
+	CreateClientConVar("uvmenu_col_button_hover_a", 200, true, false)
+
 -- [[ End of Color ConVars ]] --
 
 function UV.PlayerCanSeeSetting(st)
@@ -708,7 +842,9 @@ function UV.BuildSetting(parent, st, descPanel)
 		p:SetTall(36)
 		p:DockMargin(6, 6, 6, 2)
 		p.Paint = function(self, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(100, 100, 100, 75))
+			local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
+			
+			draw.RoundedBox(4, 0, 0, w, h, bg)
 			draw.SimpleText(st.text, "UVFont5UI", w*0.5, h*0.4, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		
@@ -750,12 +886,18 @@ function UV.BuildSetting(parent, st, descPanel)
 			if not cv then return end
 			local new = getBool() and "0" or "1"
 			RunConsoleCommand(st.convar, new)
+			UVMenu.PlaySFX("confirm")
 		end
 
 		wrap.OnCursorEntered = function()
+			-- UVMenu.PlaySFX("hover")
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 
@@ -763,29 +905,51 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
 		wrap.Paint = function(self, w, h)
 			local enabled = getBool()
 			local hovered = self:IsHovered()
-			local bga = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
+
+			local bga = hovered and 
+			GetConVar("uvmenu_col_bool_a"):GetInt() * math.abs(math.sin(RealTime()*4)) 
+			or GetConVar("uvmenu_col_bool_a"):GetInt() * 0.75
 			local bg = Color( 125, 125, 125, bga )
 			
 			if enabled then
 				bg = Color( 58, 193, 0, bga )
 			end
-			
+
+			local default = Color( 
+				GetConVar("uvmenu_col_bool_r"):GetInt(),
+				GetConVar("uvmenu_col_bool_g"):GetInt(),
+				GetConVar("uvmenu_col_bool_b"):GetInt(),
+				bga
+			)
+			local active = Color(
+				GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+				GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+				GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+				bga
+			)
+
+			bg = enabled and active or default
+
 			-- background & text
 			draw.RoundedBox(6, w - 34, 0, 30, h, bg)
 			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			-- icon right
-			if enabled then
-				surface.SetDrawColor(255,255,255, enabled and 255 or 200)
-				surface.SetMaterial(enabled and matTick or matCross)
-				surface.DrawTexturedRect(w - 34, 0, 30, 30)
-			end
+			-- if enabled then
+				-- surface.SetDrawColor(255,255,255, enabled and 255 or 200)
+				-- surface.SetMaterial(enabled and matTick or matCross)
+				-- surface.DrawTexturedRect(w - 34, 0, 30, 30)
+			-- end
 		end
 
 		-- dynamic update when convar changes - simple timer check
@@ -812,12 +976,20 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 		local function PopDesc()
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 		wrap.OnCursorEntered = PushDesc
@@ -899,6 +1071,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			if st.func then pcall(st.func, val) end
 			valBox:SetText(string.format("%."..(st.decimals or 2).."f", val))
 			applyBtn:SetVisible(false)
+			UVMenu.PlaySFX("confirm")
 		end
 
 		valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
@@ -959,6 +1132,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 
@@ -966,6 +1143,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -1012,6 +1193,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 
@@ -1019,6 +1204,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -1034,14 +1223,28 @@ function UV.BuildSetting(parent, st, descPanel)
 		btn:SetText("")
 		btn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
-			local bga = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
-			local bg = Color( 125, 125, 125, bga )
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
+
+			local bg = hovered and hover or default
 
 			-- background & text
 			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
 			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
+		
 		btn.DoClick = function(self)
+			if st.playsfx then UVMenu.PlaySFX(st.playsfx) end
 			if st.func then st.func(self) end
 			if st.convar and not st.func then
 				RunConsoleCommand(st.convar)
@@ -1051,12 +1254,21 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					-- descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 		btn.OnCursorExited = function()
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -1077,8 +1289,20 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		btn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
-			local a = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
-			local bg = Color(125, 125, 125, a)
+			local default = Color( 
+				GetConVar("uvmenu_col_button_default_r"):GetInt(),
+				GetConVar("uvmenu_col_button_default_g"):GetInt(),
+				GetConVar("uvmenu_col_button_default_b"):GetInt(),
+				GetConVar("uvmenu_col_button_default_a"):GetInt()
+				)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
+
+			local bg = hovered and hover or default
 
 			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
 
@@ -1105,6 +1329,11 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					-- descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = st.convar or "?"
+				end
 			end
 		end
 
@@ -1112,6 +1341,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -1122,16 +1355,79 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "color" or st.type == "coloralpha" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:DockMargin(6, 6, 6, 6)
+		p:DockMargin(6, 4, 6, 4)
 		p:SetTall(120)
 
+		-- Check for existence of color convars
+		local base = st.convar
+		local cv_r = GetConVar(base .. "_r")
+		local cv_g = GetConVar(base .. "_g")
+		local cv_b = GetConVar(base .. "_b")
+		local cv_a = GetConVar(base .. "_a") -- optional
+		local invalidtext = " "
+
+		if not cv_r or not cv_g or not cv_b then
+			invalidtext = "INVALID COL. CONVAR"
+		end
+		
+		p.Paint = function(self, w, h)
+			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 0, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			
+			draw.SimpleText(invalidtext, "UVMostWantedLeaderboardFont", w * 0.99, h/2, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		end
+
+		local allowAlpha = st.type == "coloralpha" and cv_a ~= nil
+
+		-- Initial color
+		local initial = Color(cv_r:GetInt(), cv_g:GetInt(), cv_b:GetInt(), allowAlpha and cv_a:GetInt() or 255)
+
 		local mixer = vgui.Create("DColorMixer", p)
-		mixer:Dock(FILL)
-		-- hooking into convars for colors is left as an exercise for your addon specifics
+		mixer:Dock(RIGHT)
+		mixer:SetWide(240)
+		mixer:DockMargin(6, 6, 6, 6)
+		mixer:SetColor(initial)
+		mixer:SetPalette(false)
+		mixer:SetAlphaBar(allowAlpha)
+		mixer:SetWangs(true)
+		mixer:SetConVarR(base .. "_r")
+		mixer:SetConVarG(base .. "_g")
+		mixer:SetConVarB(base .. "_b")
+		if allowAlpha then
+			mixer:SetConVarA(base .. "_a")
+		end
+
+		p.OnCursorEntered = function()
+			-- UVMenu.PlaySFX("hover")
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedConVar = st.convar .. "_r/" .. "_g/" .. "_b/" .. (allowAlpha and "_a/" or "")
+					descPanel.SelectedDefault = cv_r:GetDefault() .. ", " .. cv_g:GetDefault() .. ", " .. cv_b:GetDefault() .. (allowAlpha and ", " .. cv_r:GetDefault() or "")
+				end
+			end
+		end
+
+		p.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedConVar = ""
+					descPanel.SelectedDefault = ""
+				end
+			end
+		end
+
 		mixer.OnCursorEntered = function()
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedConVar = st.convar .. "_r/" .. "_g/" .. "_b/" .. (allowAlpha and "_a/" or "")
+					
+					-- descPanel.SelectedDefault = GetConVar(st.convar):GetDefault()
+				end
 			end
 		end
 
@@ -1139,6 +1435,10 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.convar then
+					descPanel.SelectedConVar = st.convar or "?"
+					descPanel.SelectedDefault = ""
+				end
 			end
 		end
 
@@ -1279,6 +1579,19 @@ function UV_WrapText(text, font, maxwidth)
 	return lines
 end
 
+-- Plays Sound SFX for the menu
+function UVMenu.PlaySFX(name, overrideSet)
+    if not GetConVar("uvmenu_sound_enabled"):GetBool() then return end
+    name = tostring(name or "")
+    local setName = overrideSet or GetConVar("uvmenu_sound_set"):GetString() or "MW"
+    local setTbl = UVMenu.Sounds[setName] or UVMenu.Sounds["MW"]
+    if not setTbl then return end
+    local snd = setTbl[name]
+    if not snd or snd == "" then return end
+	
+    surface.PlaySound(snd)
+end
+
 -- Helper to open menus safely
 function UVMenu.OpenMenu(menuFunc, dontsave)
     if not dontsave and menuFunc then
@@ -1287,13 +1600,14 @@ function UVMenu.OpenMenu(menuFunc, dontsave)
 
     if UVMenu.CurrentMenu and IsValid(UVMenu.CurrentMenu) then
         -- Close current menu first
-        UVMenu.CloseCurrentMenu()
+        UVMenu.CloseCurrentMenu(true)
         -- Delay opening new menu to allow closing animation to start
-        timer.Simple(0.25, function()
+        timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
             if menuFunc then
                 menuFunc()
                 -- Update CurrentMenu to the newly created frame
                 UVMenu.CurrentMenu = UV.SettingsFrame
+				UVMenu.PlaySFX("menuopen")
             end
         end)
         return
@@ -1307,14 +1621,19 @@ function UVMenu.OpenMenu(menuFunc, dontsave)
 end
 
 -- Close the currently open menu with animation
-function UVMenu.CloseCurrentMenu()
+function UVMenu.CloseCurrentMenu(noCloseSound)
     local frame = UVMenu.CurrentMenu or UV.SettingsFrame
     if not IsValid(frame) or frame._closing then return end
 
+    -- Play close sound unless explicitly disabled OR convars disallow
+    if not noCloseSound and GetConVar("uvmenu_sound_enabled"):GetBool() then UVMenu.PlaySFX("menuclose") end
+
     frame._closing = true
     frame._closeStart = CurTime()
-    frame._closeFadeDur = 0.1
-    frame._closeShrinkDur = 0.2
+
+    local closeSpeed = tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2
+    frame._closeFadeDur = closeSpeed * 0.5
+    frame._closeShrinkDur = closeSpeed
     frame._closeShrinkStart = frame._closeStart + frame._closeFadeDur * 0.5
 
     UVMenu.CurrentMenu = nil
@@ -1326,9 +1645,14 @@ function UVMenu:Open(menu)
     local Name = CurrentMenu.Name or "#uv.unitvehicles"
     local Width = CurrentMenu.Width or math.max(800, ScrW() * 0.9)
     local Height = CurrentMenu.Height or math.max(480, ScrH() * 0.66)
-    local ShowDesc = CurrentMenu.Description == true
+    local ShowDesc = CurrentMenu.Description == true and not GetConVar("uvmenu_hide_description"):GetBool()
     local Tabs = CurrentMenu.Tabs or {}
     local UnfocusClose = CurrentMenu.UnfocusClose == true
+	local ShowCPreview = CurrentMenu.ColorPreview == true
+	
+	if CurrentMenu.Description == true and GetConVar("uvmenu_hide_description"):GetBool() then
+		Width = Width * 0.75
+	end
 
     if IsValid(UV.SettingsFrame) then UV.SettingsFrame:Remove() end
     gui.EnableScreenClicker(true)
@@ -1354,7 +1678,7 @@ function UVMenu:Open(menu)
     frame.TargetHeight = fh
 
     local animStart = CurTime()
-    local animDur = 0.2
+    local animDur = tonumber(GetConVar("uvmenu_open_speed"):GetString()) or 0.2
     local primaryFadeStart = animStart + animDur * 0.5
     local primaryFadeDur = animDur * 1.25
     local secondaryFadeStart = animStart + animDur * 0.5
@@ -1378,7 +1702,7 @@ function UVMenu:Open(menu)
         descPanel:SetWide(math.Clamp(fw * 0.25, 220, 380))
         descPanel.Paint = function(self, w, h)
             local a = self:GetAlpha()
-            surface.SetDrawColor(28, 28, 28, math.floor(150 * (a / 255)))
+            surface.SetDrawColor( GetConVar("uvmenu_col_desc_r"):GetInt(), GetConVar("uvmenu_col_desc_g"):GetInt(), GetConVar("uvmenu_col_desc_b"):GetInt(), math.floor(GetConVar("uvmenu_col_desc_a"):GetInt() * (a / 255)) )
             surface.DrawRect(0, 0, w, h)
 
             if self.Text and a > 5 then
@@ -1406,10 +1730,73 @@ function UVMenu:Open(menu)
                     end
                 end
             end
+			if self.SelectedConVar then
+				-- draw.SimpleText("ConVar: " .. self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.95, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.94, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			if self.SelectedDefault then
+				draw.SimpleText("Default: " .. self.SelectedDefault, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			
         end
         descPanel.Text = ""
         descPanel.Desc = ""
+        descPanel.SelectedConVar = ""
+        descPanel.SelectedDefault = ""
         descPanel:SetAlpha(0)
+    end
+
+    -- Right description panel
+    local colpreviewPanel
+    if ShowCPreview then
+        colpreviewPanel = vgui.Create("DPanel", frame)
+        colpreviewPanel:Dock(RIGHT)
+        colpreviewPanel:SetWide(math.Clamp(fw * 0.5, 220, 570))
+        colpreviewPanel.Paint = function(self, w, h)
+			-- Background
+			local bg = Color( GetConVar("uvmenu_col_bg_r"):GetInt(), GetConVar("uvmenu_col_bg_g"):GetInt(), GetConVar("uvmenu_col_bg_b"):GetInt(), GetConVar("uvmenu_col_bg_a"):GetInt() )
+			draw.RoundedBox(0, 0, 0, w, h * 0.5, bg)
+						
+			draw.SimpleText("#uv.unitvehicles", "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.01, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			
+			-- Tabs
+			surface.SetDrawColor(
+				GetConVar("uvmenu_col_tabs_r"):GetInt(),
+				GetConVar("uvmenu_col_tabs_g"):GetInt(),
+				GetConVar("uvmenu_col_tabs_b"):GetInt(),
+				GetConVar("uvmenu_col_tabs_a"):GetInt()
+			)
+			surface.DrawRect(0, h*0.025, w*0.25, h*0.475)
+			
+			local default = Color( GetConVar("uvmenu_col_tab_default_r"):GetInt(), GetConVar("uvmenu_col_tab_default_g"):GetInt(), GetConVar("uvmenu_col_tab_default_b"):GetInt(), 75 )
+			local active = Color( GetConVar("uvmenu_col_tab_active_r"):GetInt(), GetConVar("uvmenu_col_tab_active_g"):GetInt(), GetConVar("uvmenu_col_tab_active_b"):GetInt(), 75 )
+			local hover = Color( GetConVar("uvmenu_col_tab_hover_r"):GetInt(), GetConVar("uvmenu_col_tab_hover_g"):GetInt(), GetConVar("uvmenu_col_tab_hover_b"):GetInt(), 175 )
+
+			local bg = isSelected and active or (hovered and hover or default)
+
+			draw.RoundedBox(5, w*0.01, h * 0.03, w * 0.225, 16, default)
+			draw.SimpleText("Tab", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.04, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+			draw.RoundedBox(5, w*0.01, h * 0.06, w * 0.225, 16, hover)
+			draw.SimpleText("Tab (Hover)", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.07, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+			draw.RoundedBox(5, w*0.01, h * 0.09, w * 0.225, 16, active)
+			draw.SimpleText("Tab (Active)", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.1, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+			-- Center Part
+			
+			draw.SimpleText("Tab", "UVMostWantedLeaderboardFont", w * 0.5, h*0.035, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			-- Labels
+			surface.SetDrawColor(
+				GetConVar("uvmenu_col_label_r"):GetInt(),
+				GetConVar("uvmenu_col_label_g"):GetInt(),
+				GetConVar("uvmenu_col_label_b"):GetInt(),
+				GetConVar("uvmenu_col_label_a"):GetInt()
+			)
+			surface.DrawRect(0, h*0.025, w*0.25, h*0.475)
+			
+        end
+		colpreviewPanel:SetAlpha(0)
     end
 
     -- Center scroll panel
@@ -1424,7 +1811,15 @@ function UVMenu:Open(menu)
         tabsPanel = vgui.Create("DPanel", frame)
         tabsPanel:Dock(LEFT)
         tabsPanel:SetWide(ScrW()*0.15)
-        tabsPanel.Paint = function() end
+        tabsPanel.Paint = function(self, w, h)
+			surface.SetDrawColor(
+				GetConVar("uvmenu_col_tabs_r"):GetInt(),
+				GetConVar("uvmenu_col_tabs_g"):GetInt(),
+				GetConVar("uvmenu_col_tabs_b"):GetInt(),
+				GetConVar("uvmenu_col_tabs_a"):GetInt()
+			)
+			surface.DrawRect(0, 0, w, h)
+		end
         tabsPanel:SetAlpha(0)
     end
 
@@ -1447,6 +1842,7 @@ function UVMenu:Open(menu)
     local secondaryGroup = {center}
     if tabsPanel then table.insert(secondaryGroup, tabsPanel) end
     if descPanel then table.insert(secondaryGroup, descPanel) end
+    if colpreviewPanel then table.insert(secondaryGroup, colpreviewPanel) end
 
     local CURRENT_TAB = 1
 
@@ -1621,7 +2017,9 @@ function UVMenu:Open(menu)
     end
 
     frame.Paint = function(self, w, h)
-        draw.RoundedBox(0, 0, 0, w, h, Color(25, 25, 25, 245))
+		local bg = Color( GetConVar("uvmenu_col_bg_r"):GetInt(), GetConVar("uvmenu_col_bg_g"):GetInt(), GetConVar("uvmenu_col_bg_b"):GetInt(), GetConVar("uvmenu_col_bg_a"):GetInt() )
+		draw.RoundedBox(0, 0, 0, w, h, bg)
+
         local titleColor = Color(255, 255, 255, math.Clamp(math.floor(self.TitleAlpha), 0, 255))
         draw.SimpleText(Name, "UVMostWantedLeaderboardFont", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
@@ -1635,6 +2033,7 @@ function UVMenu:Open(menu)
 
     if tabsPanel then
         tabsPanel:DockPadding(0, TAB_START_OFFSET, 0, 0)
+		local uv_tab_hover_last = uv_tab_hover_last or 0
         for i, tab in ipairs(Tabs) do
             if not UV.PlayerCanSeeSetting(tab) then continue end
 
@@ -1648,7 +2047,13 @@ function UVMenu:Open(menu)
                 local isSelected = (CURRENT_TAB == i)
                 local hovered = self:IsHovered()
                 local bga = hovered and 175 or 75
-                local bg = isSelected and Color(255, 255, 255, bga) or Color(125, 125, 125, bga)
+				
+                local default = Color( GetConVar("uvmenu_col_tab_default_r"):GetInt(), GetConVar("uvmenu_col_tab_default_g"):GetInt(), GetConVar("uvmenu_col_tab_default_b"):GetInt(), bga )
+				local active = Color( GetConVar("uvmenu_col_tab_active_r"):GetInt(), GetConVar("uvmenu_col_tab_active_g"):GetInt(), GetConVar("uvmenu_col_tab_active_b"):GetInt(), bga )
+				local hover = Color( GetConVar("uvmenu_col_tab_hover_r"):GetInt(), GetConVar("uvmenu_col_tab_hover_g"):GetInt(), GetConVar("uvmenu_col_tab_hover_b"):GetInt(), bga )
+
+				local bg = isSelected and active or (hovered and hover or default)
+
                 draw.RoundedBox(TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, bg)
 
                 draw.SimpleText(tab.TabName or "Tab", "UVMostWantedLeaderboardFont", w * 0.21, h*0.5, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -1664,7 +2069,21 @@ function UVMenu:Open(menu)
                 end
             end
 
+			-- btn.OnCursorEntered = function(self)
+				-- if not IsValid(self) then return end
+				-- if not GetConVar("uvmenu_sound_enabled"):GetBool() then return end
+
+				-- local now = CurTime()
+				-- local key = tostring(self) -- unique-ish key per panel
+				-- local last = uv_tab_hover_last or 0
+				-- if now - last >= 0.025 then           -- 120ms debounce; tweak if needed
+					-- uv_tab_hover_last = now
+					-- UVMenu.PlaySFX("hovertab")
+				-- end
+			-- end
+
             btn.DoClick = function()
+				if tab.playsfx then UVMenu.PlaySFX(tab.playsfx) end
 				if tab.func then tab.func(self) return end
                 CURRENT_TAB = i
                 BuildTab(i)

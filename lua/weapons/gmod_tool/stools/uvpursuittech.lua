@@ -393,7 +393,7 @@ if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
 		CPanel:ClearControls()
 		-- CPanel:AddControl("Label", {Text=" "})
-		CPanel:AddControl("Label", {Text="#tool.uvpursuittech.desc"})
+		CPanel:AddControl("Label", {Text="#tool.uvpursuittech.menu.desc"})
 
 		-- ===== Racer slots =====
 		CPanel:AddControl("Label",{Text="#tool.uvpursuittech.slot.racer"})

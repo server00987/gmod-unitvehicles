@@ -4687,7 +4687,7 @@ else -- CLIENT Settings | HUD/Options
 							net.WriteString(cleanLabel)
 							net.SendToServer()
 
-							UVMenu.CloseCurrentMenu()
+							UVMenu.CloseCurrentMenu(true)
 						end
 					})
 				end
@@ -4698,6 +4698,7 @@ else -- CLIENT Settings | HUD/Options
 		table.insert(menuEntries, {
 			type = "button",
 			text = "#uv.back",
+			playsfx = "clickback",
 			func = function()
 				UVMenu.OpenMenu(UVMenu.Main)
 			end
@@ -4760,6 +4761,7 @@ else -- CLIENT Settings | HUD/Options
 		}
 
 		UVMenu.OpenMenu(function()
+			UVMenu.PlaySFX("menuopen")
 			UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 		end, true)
 	end)
