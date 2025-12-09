@@ -588,11 +588,23 @@ function ApplyHeatSettings(heatLevel)
 	uvHelicopterDeployable = GetConVar("unitvehicle_unit_helicopters"..heatLevel):GetInt() == 1
 end
 
+local function CheckVehicleLimit()
+	--return (#ents.FindByClass("npc_uv*") + #UVWreckedVehicles) < UVMaxUnits or #ents.FindByClass("npc_uv*") < 1
+	local activeUnits = ents.FindByClass("npc_uv*")
+	local activeUnitsCount = 0
+	--local wreckedUnits = #UVWreckedVehicles
+
+	for _, unit in pairs(activeUnits) do
+		if unit.v.roadblocking then continue end
+		activeUnitsCount = activeUnitsCount + 1
+	end
+
+	local totalUnits = activeUnitsCount
+	return totalUnits < UVMaxUnits or totalUnits < 1
+end
+
 -- Helper function for vehicle spawning logic
 function HandleVehicleSpawning(Patrolling)
-	local function CheckVehicleLimit()
-		return (#ents.FindByClass("npc_uv*") + #UVWreckedVehicles) < UVMaxUnits or #ents.FindByClass("npc_uv*") < 1
-	end
 	
 	if UVJammerDeployed then return end
 	if not CheckVehicleLimit() then return end
@@ -601,7 +613,7 @@ function HandleVehicleSpawning(Patrolling)
 
 	if not SpawnMainUnits:GetBool() then return end
 
-	local canSpawnRoadblock = next(ents.FindByClass("npc_uv*")) ~= nil and uvRoadblockDeployable
+	local canSpawnRoadblock = next(ents.FindByClass("npc_uv*")) ~= nil and uvRoadblockDeployable and #UVLoadedRoadblocks < UVRBMax:GetInt() 
 	local canSpawnHelicopter = #ents.FindByClass("uvair") < 1 and uvHelicopterDeployable and CurTime() - UVHeliCooldown > 120
 
 	local pool = {
@@ -627,7 +639,7 @@ function HandleVehicleSpawning(Patrolling)
 		['roadblock'] = function()
 			local units = ents.FindByClass("npc_uv*")
 			local unit = units[math.random(#units)]
-			UVDeployRoadblock(unit)
+			if not UVDeployRoadblock(unit) then UVAutoSpawn(nil) end
 		end,
 		['commander'] = function()
 			UVAutoSpawn(nil, nil, nil, nil, UVCommanderRespawning)
@@ -3012,11 +3024,14 @@ function UVGetVehicleMakeAndModel(vehicle, category)
 end
 
 function UVDeployRoadblock(self)
+	local deployed = false
 	if UVAutoLoadRoadblock() then
+		deployed = true
 		if Chatter:GetBool() and IsValid(self.v) then
 			UVChatterRoadblockDeployed(self)
 		end
 	end
+	return deployed
 end
 
 function UVPlayerIsWrecked(vehicle)
@@ -3285,7 +3300,7 @@ function UVGlideDetachWheels(vehicle)
 	
 end
 
-local function UVCFEligibleToUse(NPC)
+function UVCFEligibleToUse(NPC)
 	local vehicle = NPC.v
 	return (vehicle.RacerVehicle and UseNitrousRacer:GetBool()) or (vehicle.UnitVehicle and not vehicle.roadblocking and UseNitrousUnit:GetBool())
 end

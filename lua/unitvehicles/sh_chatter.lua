@@ -415,11 +415,11 @@ if SERVER then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
 			-- end
 			if ChatterLastPlay ~= initTime then return 5 end
-			UVRelayToClients(emergencyFile, parameters, true)
+			UVRelayToClients(emergencyFile, parameters, false)
 			timer.Simple(SoundDuration(emergencyFile or ""), function()
 				if radioOnFile then
 					if ChatterLastPlay ~= initTime then return 5 end
-					UVRelayToClients(radioOnFile, parameters, true)
+					UVRelayToClients(radioOnFile, parameters, false)
 				else
 					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 					local chirpGenericFile
@@ -429,16 +429,16 @@ if SERVER then
 			
 					if chirpGenericFile then
 						if ChatterLastPlay ~= initTime then return 5 end
-						UVRelayToClients(chirpGenericFile, parameters, true)
+						UVRelayToClients(chirpGenericFile, parameters, false)
 					end
 				end
 				timer.Simple(SoundDuration(radioOnFile or ""), function()
 					if ChatterLastPlay ~= initTime then return 5 end
-					UVRelayToClients(soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
+					UVRelayToClients(soundFile, parameters, false, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 					timer.Simple(SoundDuration(soundFile or ""), function()
 						if radioOffFile then
 							if ChatterLastPlay ~= initTime then return 5 end
-							UVRelayToClients(radioOffFile, parameters, true)
+							UVRelayToClients(radioOffFile, parameters, false)
 						end
 					end)
 				end)
@@ -987,7 +987,7 @@ if SERVER then
 			if not brand then brand = 'genericsportscar' end
 
 			local soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
-			if next(soundFiles) == nil then UVChatterDispatchCallUnknownDescription(self, vehicle, vehicleModel) return end
+			if next(soundFiles) == nil then return UVChatterDispatchCallUnknownDescription(self, vehicle, vehicleModel) end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/"..soundFiles[math.random(1, #soundFiles)]
 
 			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
@@ -1914,18 +1914,18 @@ if SERVER then
 			end
 			
 			timer.Simple(timeCheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
 					local timeCheck = 5
 					local randomno = math.random(1,2)
 					if randomno == 1 then
-						timeCheck = UVSoundChatter(self, self.voice, "heat" .. heat .. "acknowledge")
+						timeCheck = UVSoundChatter(self, self.voice, "heat" .. heat .. "acknowledge", 1)
 					elseif next(ents.FindByClass("npc_uvspecial")) ~= nil then
-						timeCheck = UVSoundChatter(self, self.voice, "heat" .. heat .. "argue")
+						timeCheck = UVSoundChatter(self, self.voice, "heat" .. heat .. "argue", 1)
 						timer.Simple(timeCheck, function()
-							if next(ents.FindByClass("npc_uv*")) ~= nil then
+							if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 								local units = ents.FindByClass("npc_uv*")
 								local random_entry = math.random(#units)	
 								local unit = units[random_entry]
@@ -2017,7 +2017,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = UVSoundChatter(self, self.voice, "trafficstopspeeding")
 			timer.Simple(timecheck, function()
-				if IsValid(self) then
+				if IsValid(self) and not UVEnemyBusted then
 					UVChatterDispatchAcknowledgeRequest(self)
 				end
 			end)
@@ -2047,7 +2047,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = UVSoundChatter(self, self.voice, "trafficstoprammed", 3)
 			timer.Simple(timecheck, function()
-				if IsValid(self) then
+				if IsValid(self) and not UVEnemyBusted then
 					UVChatterDispatchAcknowledgeRequest(self)
 				end
 			end)
@@ -2405,7 +2405,7 @@ if SERVER then
 			local timecheck = 5
 			timecheck = UVSoundChatter(self, self.voice, "aggressive")
 			timer.Simple(timecheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
@@ -2417,7 +2417,7 @@ if SERVER then
 		end
 		UVDelayChatter()
 		timer.Simple(math.random(3,5), function()
-			if next(ents.FindByClass("npc_uv*")) ~= nil then
+			if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
@@ -2452,7 +2452,7 @@ if SERVER then
 			local timecheck = 5
 			timecheck = UVSoundChatter(self, self.voice, "passive")
 			timer.Simple(timecheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
@@ -2464,7 +2464,7 @@ if SERVER then
 		end
 		UVDelayChatter()
 		timer.Simple(math.random(3,5), function()
-			if next(ents.FindByClass("npc_uv*")) ~= nil then
+			if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
@@ -3658,7 +3658,7 @@ if SERVER then
 			-- end
 			timecheck = UVSoundChatter(self, self.voice, "backupontheway", 1, "DISPATCH")
 			timer.Simple(timecheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
@@ -3670,7 +3670,7 @@ if SERVER then
 		end
 		local seconds = UVDelayChatter()
 		timer.Simple(math.random(3,5), function()
-			if next(ents.FindByClass("npc_uv*")) ~= nil then
+			if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
@@ -3716,7 +3716,7 @@ if SERVER then
 				timecheck = UVSoundChatter(self, self.voice, "backuponscene", 1, "DISPATCH")
 			end
 			timer.Simple(timecheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
@@ -3728,7 +3728,7 @@ if SERVER then
 		end
 		local seconds = UVDelayChatter()
 		timer.Simple(math.random(3,5), function()
-			if next(ents.FindByClass("npc_uv*")) ~= nil then
+			if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
@@ -4069,7 +4069,7 @@ if SERVER then
 				timecheck = UVSoundChatter(self, self.voice, "requestdisengage")
 			end
 			timer.Simple(timecheck, function()
-				if next(ents.FindByClass("npc_uv*")) ~= nil then
+				if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
@@ -4081,7 +4081,7 @@ if SERVER then
 		end
 		UVDelayChatter()
 		timer.Simple(math.random(3,5), function()
-			if next(ents.FindByClass("npc_uv*")) ~= nil then
+			if next(ents.FindByClass("npc_uv*")) ~= nil and not UVEnemyBusted then
 				local units = ents.FindByClass("npc_uv*")
 				local random_entry = math.random(#units)	
 				local unit = units[random_entry]
@@ -4418,6 +4418,7 @@ if SERVER then
 	function UVChatterVehicleDescription(self, vehicle)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local timecheck = UVSoundChatter(self, self.voice, nil, 10, "", vehicle)
+			if not timecheck then return end
 			timer.Simple(timecheck, function()
 				if IsValid(self) then
 					UVChatterPursuitStartAcknowledge(self)

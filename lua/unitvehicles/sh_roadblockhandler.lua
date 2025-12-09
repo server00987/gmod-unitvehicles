@@ -86,7 +86,6 @@ if SERVER then
 		
 		if not manual then
 			if UVHeatLevel < rbdata.HeatLevel then return end
-			if #UVLoadedRoadblocks >= UVRBMax:GetInt() then return end
 		end
 		
 		local gib
@@ -288,8 +287,7 @@ if SERVER then
 				local vect = distance:GetNormalized()
 				local evectdot = vect:Dot(suspectvelocity)
 				if not (distance:LengthSqr() < 25000000 or distance:LengthSqr() > 100000000 or evectdot > 0) then
-					UVLoadRoadblock(jsonfile)
-					break
+					return UVLoadRoadblock(jsonfile)
 				end
 			end
 		end

@@ -538,7 +538,7 @@ if SERVER then
 	
 	function ENT:PathFindToEnemy(vectors)
 		
-		if not vectors or not isvector(vectors) or self.NavigateBlind or not GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then
+		if not vectors or not isvector(vectors) or not GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then -- or self.NavigateBlind
 			return
 		end
 		
@@ -1763,7 +1763,7 @@ if SERVER then
 						self.AI_ThrottleMul = math.min(self.AI_ThrottleMul + recoverRate, 1)
 					end
 					throttle = throttle * self.AI_ThrottleMul --Glide traction control
-					self.usenitrous = self.AI_ThrottleMul == 1 and true or false
+					self.usenitrous = UVCFEligibleToUse(self) and self.AI_ThrottleMul == 1 and true or false
 					if dist:Length2DSqr() > 250000 and vectdot < 0 and dist:Dot(forward) > 0 and (right.z > 0.75 or right.z < -0.75) and not self.stuck then
 						steer = 0
 						throttle = 1

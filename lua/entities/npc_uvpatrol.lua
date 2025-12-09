@@ -536,7 +536,7 @@ if SERVER then
 
 	function ENT:PathFindToEnemy(vectors)
 
-		if not vectors or not isvector(vectors) or self.NavigateBlind or not GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then
+		if not vectors or not isvector(vectors) or not GetConVar("unitvehicle_pathfinding"):GetBool() or self.NavigateCooldown or self.v.roadblocking then -- or self.NavigateBlind
 			return
 		end
 
@@ -625,7 +625,6 @@ if SERVER then
 	end
 
 	function ENT:Patrol()
-
 		if next(dvd.Waypoints) == nil then
 			return
 		end
@@ -864,13 +863,13 @@ if SERVER then
 					self.stuck = nil
 				end
 			end
-
 			local timeout = 1
 			if timeout and timeout > 0 then
 				if CurTime() > self.moving + timeout and not UVTargeting then --If it has got stuck for enough time.
 					self.invincible = true
 					self.stuck = true
 					self.moving = CurTime()
+
 					timer.Simple(1, function() if IsValid(self.v) then self.invincible = nil end end)
 					timer.Simple(1, function() if IsValid(self.v) then self.stuck = nil self.PatrolWaypoint = nil end end)
 					if not self.respondingtocall then
@@ -1576,7 +1575,7 @@ if SERVER then
 						self.AI_ThrottleMul = math.min(self.AI_ThrottleMul + recoverRate, 1)
 					end
 					throttle = throttle * self.AI_ThrottleMul --Glide traction control
-					self.usenitrous = self.AI_ThrottleMul == 1 and true or false
+					self.usenitrous = UVCFEligibleToUse(self) and self.AI_ThrottleMul == 1 and true or false
 					if dist:Length2DSqr() > 250000 and vectdot < 0 and dist:Dot(forward) > 0 and (right.z > 0.75 or right.z < -0.75) and not self.stuck then
 						steer = 0
 						throttle = 1
