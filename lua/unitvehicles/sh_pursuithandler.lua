@@ -2152,13 +2152,13 @@ if SERVER then
 							timer.Adjust("UVTimeTillNextHeat", (isnumber(timeTillNextHeatNew) and timeTillNextHeatNew or timeTillNextHeatNew:GetInt()), 0)
 
 							-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
-							if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-								local units = ents.FindByClass("npc_uv*")
-								local random_entry = math.random(#units)
-								local unit = units[random_entry]
-								if not UVTargeting then return end
-								UVChatterReportHeat(unit, nextHeat)
-							end
+							-- if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
+							-- 	local units = ents.FindByClass("npc_uv*")
+							-- 	local random_entry = math.random(#units)
+							-- 	local unit = units[random_entry]
+							-- 	if not UVTargeting then return end
+							-- 	UVChatterReportHeat(unit, nextHeat)
+							-- end
 
 							if UVTargeting then
 								--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
