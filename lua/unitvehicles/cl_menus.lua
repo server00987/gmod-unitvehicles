@@ -115,7 +115,7 @@ UVMenu.Main = function()
 				-- { type = "button", text = "#uv.pm.pursuit.toggle", desc = "uv.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.start", desc = "uv.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.stop", desc = "uv.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
-				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", convar = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", command = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
 				
 				{ type = "button", text = "#uv.pm.ai.spawn", convar = "uv_spawnvehicles", sv = true },
 				{ type = "button", text = "#uv.pm.ai.despawn", convar = "uv_despawnvehicles", sv = true },
@@ -978,7 +978,9 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
-					descPanel.SelectedConVar = st.convar or "?"
+					descPanel.SelectedConVar = st.convar or st.command or "?"
+				elseif st.command then
+					descPanel.SelectedConVar = st.command or "?"
 				end
 			end
 		end
@@ -988,6 +990,8 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedDefault = ""
+					descPanel.SelectedConVar = ""
+				elseif st.command then
 					descPanel.SelectedConVar = ""
 				end
 			end
@@ -1067,7 +1071,11 @@ function UV.BuildSetting(parent, st, descPanel)
 		local function ApplyPendingValue()
 			local val = RoundValue(pendingValue)
 			appliedValue = val
-			if st.convar then RunConsoleCommand(st.convar, tostring(val)) end
+			if st.convar and GetConVar(st.convar) then
+				RunConsoleCommand(st.convar, tostring(val))
+			elseif st.command then
+				RunConsoleCommand(st.command, tostring(val)) 
+			end
 			if st.func then pcall(st.func, val) end
 			valBox:SetText(string.format("%."..(st.decimals or 2).."f", val))
 			applyBtn:SetVisible(false)
@@ -1097,7 +1105,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		applyBtn.DoClick = ApplyPendingValue
 
 		if st.convar then
-			local cv = GetConVar(st.convar)
+			local cv = (st.convar and GetConVar(st.convar)) or nil
 			if cv then
 				appliedValue = cv:GetFloat()
 				pendingValue = appliedValue
@@ -1290,10 +1298,10 @@ function UV.BuildSetting(parent, st, descPanel)
 		btn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
 			local default = Color( 
-				GetConVar("uvmenu_col_button_default_r"):GetInt(),
-				GetConVar("uvmenu_col_button_default_g"):GetInt(),
-				GetConVar("uvmenu_col_button_default_b"):GetInt(),
-				GetConVar("uvmenu_col_button_default_a"):GetInt()
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
 				)
 			local hover = Color( 
 				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
@@ -1734,7 +1742,7 @@ function UVMenu:Open(menu)
 				-- draw.SimpleText("ConVar: " .. self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.95, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.94, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
-			if self.SelectedDefault then
+			if self.SelectedDefault and self.SelectedDefault ~= ""then
 				draw.SimpleText("Default: " .. self.SelectedDefault, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			
