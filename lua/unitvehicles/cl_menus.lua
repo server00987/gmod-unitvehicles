@@ -983,6 +983,21 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap.Think = function(self)
 			-- nothing heavy; updates on click via convar toggle
 		end
+		
+		wrap.OnMousePressed = function(self, mc)
+			if mc == MOUSE_MIDDLE and st.convar then
+				local cv = GetConVar(st.convar)
+				if cv then
+					RunConsoleCommand(st.convar, cv:GetDefault())
+					UVMenu.PlaySFX("confirm")
+				end
+				return
+			end
+			-- existing left-click handling:
+			if mc == MOUSE_LEFT then
+				self:DoClick()
+			end
+		end
 
 		return wrap
 	end
@@ -1140,6 +1155,20 @@ function UV.BuildSetting(parent, st, descPanel)
 				valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
 			end
 		end
+		
+		wrap.OnMousePressed = function(self, mc)
+			if mc == MOUSE_MIDDLE and st.convar then
+				local cv = GetConVar(st.convar)
+				if cv then
+					local def = tonumber(cv:GetDefault()) or st.min or 0
+					slider:SetValue(def)
+					valBox:SetText(tostring(def))
+					pendingValue = def
+					applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
+					-- UVMenu.PlaySFX("hover")
+				end
+			end
+		end
 
 		return wrap
 	end
@@ -1242,6 +1271,26 @@ function UV.BuildSetting(parent, st, descPanel)
 				if st.convar then
 					descPanel.SelectedDefault = ""
 					descPanel.SelectedConVar = ""
+				end
+			end
+		end
+		
+		wrap.OnMousePressed = function(self, mc)
+			if mc == MOUSE_MIDDLE and st.convar then
+				local cv = GetConVar(st.convar)
+				if cv then
+					local def = cv:GetDefault()
+
+					-- find matching display text
+					for _, v in ipairs(st.content or {}) do
+						if tostring(v[2]) == tostring(def) then
+							combo:SetText(v[1])
+							UVMenu.PlaySFX("hover")
+							break
+						end
+					end
+
+					RunConsoleCommand(st.convar, def)
 				end
 			end
 		end
@@ -1473,6 +1522,27 @@ function UV.BuildSetting(parent, st, descPanel)
 				if st.convar then
 					descPanel.SelectedConVar = st.convar or "?"
 					descPanel.SelectedDefault = ""
+				end
+			end
+		end
+		
+		p.OnMousePressed = function(self, mc)
+			if mc == MOUSE_MIDDLE then
+				if cv_r and cv_g and cv_b then
+					local r = tonumber(cv_r:GetDefault())
+					local g = tonumber(cv_g:GetDefault())
+					local b = tonumber(cv_b:GetDefault())
+					local a = cv_a and tonumber(cv_a:GetDefault()) or 255
+					
+					mixer:SetColor(Color(r, g, b, a))
+
+					-- Push to convars
+					RunConsoleCommand(base .. "_r", r)
+					RunConsoleCommand(base .. "_g", g)
+					RunConsoleCommand(base .. "_b", b)
+					if cv_a then RunConsoleCommand(base .. "_a", a) end
+
+					UVMenu.PlaySFX("hover")
 				end
 			end
 		end

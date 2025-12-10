@@ -778,7 +778,7 @@ if CLIENT then
 			Tabs = {
 				{ TabName = "#uv.rm.options",
 					{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
-					{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "uvracemanager_dnftimer", min = 0, max = 90, decimals = 0, sv = true },
+					{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "unitvehicle_racednftimer", min = 0, max = 90, decimals = 0, sv = true },
 					{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},
