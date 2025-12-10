@@ -2015,22 +2015,23 @@ if SERVER then
         	    net.Send(ply)
 
         	    ply.isUVFrozen = nil
-				ply:Freeze(false)
+				--ply:Freeze(false)
 
-				if IsValid(ply.UVLastVehicleDriven) then
-					if ply.UVLastVehicleDriven.IsSimfphyscar then
-						ply:EnterVehicle( ply.UVLastVehicleDriven.DriverSeat )
-					elseif ply.UVLastVehicleDriven.IsGlideVehicle then
-						local seat = ply.UVLastVehicleDriven.seats[1]
-						if IsValid(seat) then
-							ply:EnterVehicle(seat)
-						end
-					elseif ply.UVLastVehicleDriven:GetClass() == "prop_vehicle_jeep" then
-						ply:EnterVehicle(ply.UVLastVehicleDriven)
-					end
-				end
+				-- if IsValid(ply.UVLastVehicleDriven) then
+				-- 	if ply.UVLastVehicleDriven.IsSimfphyscar then
+				-- 		ply:EnterVehicle( ply.UVLastVehicleDriven.DriverSeat )
+				-- 	elseif ply.UVLastVehicleDriven.IsGlideVehicle then
+				-- 		local seat = ply.UVLastVehicleDriven.seats[1]
+				-- 		if IsValid(seat) then
+				-- 			ply:EnterVehicle(seat)
+				-- 		end
+				-- 	elseif ply.UVLastVehicleDriven:GetClass() == "prop_vehicle_jeep" then
+				-- 		ply:EnterVehicle(ply.UVLastVehicleDriven)
+				-- 	end
+				-- end
 
         	    game.SetTimeScale(1.0)
+				CF_CanSetTimeScale = true
         	end
 		end
 
@@ -2093,16 +2094,17 @@ if SERVER then
 						ply.isUVFrozen = true
                     	ply.isUVFreezeTime = RealTime() + FREEZE_DURATION
 
-						if IsValid(UVGetVehicle(ply)) then
-							ply.UVLastVehicleDriven = UVGetVehicle(ply)
-							ply:ExitVehicle()
-						end
+						-- if IsValid(UVGetVehicle(ply)) then
+						-- 	ply.UVLastVehicleDriven = UVGetVehicle(ply)
+						-- 	ply:ExitVehicle()
+						-- end
 					
-						ply:Freeze(true)
+						--ply:Freeze(true)
                     	net.Start("UVSpottedFreeze")
                     	net.WriteFloat(FREEZE_DURATION)
                     	net.WriteEntity(closestunit)
                     	net.Send(ply)
+						CF_CanSetTimeScale = false
                     	game.SetTimeScale(0.001) --Source dosen't like it if you set it to 0
 
 
