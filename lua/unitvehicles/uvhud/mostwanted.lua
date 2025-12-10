@@ -261,8 +261,8 @@ UV_UI.racing.mostwanted.events = {
 		hook.Add("HUDPaint", "UV_CENTERNOTI_MW2", function()
 			local now = CurTime()
 			local elapsed = now - notifState.startTime
-			local posY = notifState.endY
-			local alpha = 255
+			local posY = notifState.startY
+			local alpha = 0
 
 			if elapsed < notifState.introDuration then
 				-- Phase 1: fall in + fade in
@@ -290,7 +290,7 @@ UV_UI.racing.mostwanted.events = {
 			end
 
 			-- Draw text
-			mw_noti_draw(ptext, ptextfont, notifState.x, posY, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha))
+			mw_noti_draw(ptext, ptextfont, notifState.x, posY, Color(ptextcol.r, ptextcol.g, ptextcol.b, alpha), Color(0, 0, 0, alpha))
 		end)
 
 	end,

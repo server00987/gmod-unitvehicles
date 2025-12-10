@@ -1,3 +1,45 @@
+<------- December 11 ------->
+[h1]New Features[/h1]
+[b]UV Menu[/b]
+Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or [u]unitvehicles_menu[/u] command:
+[list]
+	[*][b]Welcome Page[/b] - Includes some quick access buttons and variables, and a handy [b]What's New[/b] section, where we will post update notes
+	[*][b]Race Manager[/b] - Moved the Race Manager tool race control variables here
+	[*][b]Pursuit Manager[/b] - Moved all Pursuit Manager buttons here
+	[*][b]Addons[/b] - The one place for both included and third-party UV addons. Moved [b]Circular Functions[/b] variables here
+	[*][b]FAQ[/b] - Need some quick help? The Discord FAQ has been uploaded here!
+	[*][b]Settings[/b] - Want to tweak something? All Client and Server settings are present here
+	
+	[*]Don't like the colours? Then change it! Change the colour of buttons, the background and more in the [b]User Interface[/b] settings tab!
+[/list]
+Note that many options are hidden for Clients.
+
+[h1]Changes[/h1]
+[b]Tools[/b]
+[list]
+	[*]Race Manager - Renamed to Creator: Races
+[/list]
+
+[b]UI[/b]
+[list]
+	[*]MW HUD: Fixed that the "Split Time" notification did not fade out properly
+	[*]Carbon HUD: Fixed that the notifications did not fade out properly
+[/list]
+
+[b]AI[/b]
+[list]
+	[*]Fixed that the AI did not always respect Nitrous settings (Circular Functions)
+[/list]
+
+[b]Pursuit[/b]
+[list]
+	[*]Fixed roadblocks not always spawning properly, and sometimes didn't spawn with any Units
+	[*]Fixed that regular Units sometimes appeared in Rhino-only roadblocks
+	[*]Air Support now gets removed when despawning AI Units
+[/list]
+
+And various other undocumented tweaks
+
 <------- December 5 ------->
 [h1]New Features[/h1]
 [b]Tools[/b]
