@@ -112,6 +112,10 @@ if SERVER then
 		for _, v in pairs(table.Copy(UVRaceCurrentParticipants)) do
 			local driver = v:GetDriver()
 			
+			if cffunctions then 
+				CFtoggleNitrous(v, false)
+				CFtoggleSpeedbreaker(v, false)
+			end
 			local ent = UVMoveToGridSlot(v, not (driver and driver:IsPlayer()))
 			
 			if (ent) then ready_drivers = ready_drivers + 1 
