@@ -946,7 +946,7 @@ function mw_noti_draw(text, font, x, y, color, colorbg)
     end
 end
 
-function carbon_noti_draw(text, font, font2, x, y, color, color2)
+function carbon_noti_draw(text, font, font2, x, y, color, color2, colorbg )
     surface.SetFont(font)
     local lines = string.Explode("\n", text)
     
@@ -972,9 +972,11 @@ function carbon_noti_draw(text, font, font2, x, y, color, color2)
             drawFont = font2
             drawColor = color2
         end
-        
+    
+		if not colorbg then colorbg = Color(0, 0, 0, color.a) end
+	
         local w,h = surface.GetTextSize(line)
-		draw.SimpleTextOutlined(line, font, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, drawColor.alpha ) )
+		draw.SimpleTextOutlined(line, font, x, currentY, drawColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( colorbg.r, colorbg.g, colorbg.b, colorbg.a or color.a ))
         currentY = currentY + h
     end
 end

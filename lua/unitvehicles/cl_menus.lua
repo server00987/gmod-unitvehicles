@@ -36,10 +36,37 @@ end
 
 -- Patch Notes -- Change this whenever a new update is releasing!
 UV.PNotes = [[
-# REPLACEME
-**Patch notes goes here once done**
+# New Features
+**UV Menu**
+Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or __unitvehicles_menu__ command:
+- **Welcome Page** - Includes some quick access buttons and variables, and a handy **What's New** section, where we will post update notes
+- **Race Manager** - Moved the Race Manager tool race control variables here
+- **Pursuit Manager** - Moved all Pursuit Manager buttons here
+- **Addons** - The one place for both included and third-party UV addons. Moved **Circular Functions** variables here
+- **FAQ** - Need some quick help? The Discord FAQ has been uploaded here!
+- **Settings** - Want to tweak something? All Client and Server settings are present here
 
-*Uses Discord formatting - Have fun.*
+Don't like the colours? Then change it! Change the colour of buttons, the background and more in the **User Interface** settings tab!
+
+Note that many options are hidden for Clients.
+
+# Changes
+**Tools**
+- Race Manager - Renamed to **Creator: Races**
+
+**UI**
+- MW HUD: Fixed that the "Split Time" notification did not fade out properly
+- Carbon HUD: Fixed that the notifications did not fade out properly
+
+**AI**
+- Fixed that the AI did not always respect Nitrous settings (Circular Functions)
+
+**Pursuit**
+- Fixed roadblocks not always spawning properly, and sometimes didn't spawn with any Units
+- Fixed that regular Units sometimes appeared in Rhino-only roadblocks
+- Air Support now gets removed when despawning AI Units
+
+And various other undocumented tweaks
 ]]
 
 -- Sounds Table
@@ -207,8 +234,8 @@ UVMenu.Settings = function()
 
 				{ type = "label", text = "#uv.ui.menu", desc = "uv.ui.menu.desc" },
 				{ type = "bool", text = "#uv.ui.menu.hidedesc", desc = "uv.ui.menu.hidedesc.desc", convar = "uvmenu_hide_description" },
-				{ type = "slider", text = "#uv.ui.menu.openspeed", desc = "uv.ui.menu.openspeed.desc", convar = "uvmenu_open_speed", min = 0, max = 2, decimals = 2 },
-				{ type = "slider", text = "#uv.ui.menu.closespeed", desc = "uv.ui.menu.closespeed.desc", convar = "uvmenu_close_speed", min = 0, max = 2, decimals = 2 },
+				{ type = "slider", text = "#uv.ui.menu.openspeed", desc = "uv.ui.menu.openspeed.desc", convar = "uvmenu_open_speed", min = 0.1, max = 1, decimals = 2 },
+				{ type = "slider", text = "#uv.ui.menu.closespeed", desc = "uv.ui.menu.closespeed.desc", convar = "uvmenu_close_speed", min = 0.1, max = 1, decimals = 2 },
 				{ type = "button", text = "#uv.ui.menu.custcol", desc = "uv.ui.menu.custcol.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.SettingsCol, true) end },
 			},
 			{ TabName = "#uv.audio.title", Icon = "unitvehicles/icons_settings/audio.png",
@@ -1739,11 +1766,10 @@ function UVMenu:Open(menu)
                 end
             end
 			if self.SelectedConVar then
-				-- draw.SimpleText("ConVar: " .. self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.95, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.94, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", 10, h * 0.98 - 20, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			if self.SelectedDefault and self.SelectedDefault ~= ""then
-				draw.SimpleText("Default: " .. self.SelectedDefault, "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("Default: " .. self.SelectedDefault, "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			
         end
@@ -2029,7 +2055,7 @@ function UVMenu:Open(menu)
 		draw.RoundedBox(0, 0, 0, w, h, bg)
 
         local titleColor = Color(255, 255, 255, math.Clamp(math.floor(self.TitleAlpha), 0, 255))
-        draw.SimpleText(Name, "UVMostWantedLeaderboardFont", w * 0.01, h * 0.025, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(Name, "UVMostWantedLeaderboardFont", w * 0.01, h * 0.02, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 
     -- Build tabs if more than 1
@@ -2052,6 +2078,7 @@ function UVMenu:Open(menu)
             btn:SetText("")
 
             btn.Paint = function(self, w, h)
+				local a = self:GetAlpha()
                 local isSelected = (CURRENT_TAB == i)
                 local hovered = self:IsHovered()
                 local bga = hovered and 175 or 75
@@ -2064,8 +2091,55 @@ function UVMenu:Open(menu)
 
                 draw.RoundedBox(TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, bg)
 
-                draw.SimpleText(tab.TabName or "Tab", "UVMostWantedLeaderboardFont", w * 0.21, h*0.5, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				if a > 5 then
+					local baseFont = "UVMostWantedLeaderboardFont"
+					local multiFont = baseFont
+					local desc = language.GetPhrase(tab.TabName) or "Tab"
 
+					-- First, pre-wrap all text to count lines
+					local paragraphs = string.Split(desc, "\n")
+					local wrappedLines = {}
+
+					for _, paragraph in ipairs(paragraphs) do
+						if paragraph == "" then
+							table.insert(wrappedLines, "")
+						else
+							local wrapped = UV_WrapText(paragraph, baseFont, w - (w * 0.15) * 2)
+							for _, line in ipairs(wrapped) do
+								table.insert(wrappedLines, line)
+							end
+						end
+					end
+
+					-- Total line count
+					local lineCount = #wrappedLines
+
+					-- Rule 3: If 3+ lines, switch font
+					if lineCount >= 3 then
+						multiFont = "UVMostWantedLeaderboardFont2"
+					end
+
+					surface.SetFont(multiFont)
+					local _, lineHeight = surface.GetTextSize("A")
+
+					local totalHeight = lineHeight * lineCount
+					local centerY = h * 0.5
+					local xPadding = w * 0.21
+
+					-- Center vertically depending on line count
+					local startY = centerY - (totalHeight / 2)
+
+					local color = Color(255, 255, 255, a)
+
+					-- Draw wrapped text
+					local yOffset = startY
+					for _, line in ipairs(wrappedLines) do
+						draw.DrawText(line, multiFont, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
+						yOffset = yOffset + lineHeight
+					end
+				end
+
+				
                 if tab.Icon then
                     local mat = Material(tab.Icon, "smooth")
                     local iconSize = h * 0.75

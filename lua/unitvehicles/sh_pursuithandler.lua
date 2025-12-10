@@ -4707,7 +4707,7 @@ else -- CLIENT Settings | HUD/Options
 		-- Open the menu with fully prebuilt entries
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
-			Width = ScrW() * 0.45,
+			Width = ScrW() * 0.3,
 			Height = ScrH() * 0.65,
 			-- Description = true,
 			UnfocusClose = true,

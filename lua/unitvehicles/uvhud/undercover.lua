@@ -298,23 +298,25 @@ UV_UI.racing.undercover.events = {
             end
             
             -- Combine pos and name for left column text
-            local text = i .. "    " .. name
-            
-            table.insert(racersDisplayData, { text = text, value = UV_FormatRaceEndTime(totalTime), color = LBCol })
+            -- local text = i .. "    " .. name
+			
+            table.insert(racersDisplayData, { pos = i, text = name, value = UV_FormatRaceEndTime(totalTime), color = LBCol })
         end
         
         -- Now assign this to the data your paint function uses:
         debrieflinedata = {}
         
         -- Fill with racer data for existing racers
-        for i = 1, math.min(#racersDisplayData, numTotalRows) do
-            debrieflinedata[i] = racersDisplayData[i]
-        end
+        -- for i = 1, math.min(#racersDisplayData, numTotalRows) do
+            -- debrieflinedata[i] = racersDisplayData[i]
+        -- end
         
         -- Fill remaining rows with empty placeholders
-        for i = #racersDisplayData + 1, numTotalRows do
-            debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
-        end
+        -- for i = #racersDisplayData + 1, numTotalRows do
+            -- debrieflinedata[i] = { text = "", value = "", color = Color(255,255,255) }
+        -- end
+		
+		debrieflinedata = racersDisplayData
         
         local statusString = "#uv.results.lost" -- default fallback
         
@@ -429,7 +431,9 @@ UV_UI.racing.undercover.events = {
                 local labelX = Lerp(ease, labelStartX, labelTargetX)
                 local valueX = Lerp(ease, valueStartX, valueTargetX)
                 
-                draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
+                draw.SimpleText(line.pos, "UVUndercoverAccentFont", labelX, yOffset - (h * 0.0025),
+                Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+                draw.SimpleText(line.text, "UVUndercoverAccentFont", labelX + 40, yOffset - (h * 0.0025),
                 Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
                 draw.SimpleText(tostring(line.value), "UVUndercoverAccentFont", valueX, yOffset - (h * 0.0025),
                 Color(line.color.r, line.color.g, line.color.b, alpha * panelAlpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
