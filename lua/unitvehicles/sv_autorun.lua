@@ -452,13 +452,12 @@ concommand.Add("uv_startpursuit", function(ply)
 				RunConsoleCommand("ai_ignoreplayers", "0")
 				UVLosing = CurTime()
 				UVTargeting = true
-				UVBounty = 100
 
 				-- Random police unit announcement
 				local units = ents.FindByClass("npc_uv*")
 				if #units > 0 then
 					local unit = units[math.random(#units)]
-					UVSoundChatter(unit, unit.voice, "pursuitstartacknowledge", 1)
+					UVChatterPursuitStartAcknowledge(unit)
 				end
 
 				-- Unlock the countdown for other systems
