@@ -274,7 +274,7 @@ function UVGetRandomUnit( heat, modifiers )
 		})
 	end
 
-	return UVGetRandom( selectionPool ), modifiers
+	return { UVGetRandom( selectionPool ), modifiers }
 end
 
 function UVCreateConstraintsFromTable( Constraint, EntityList )
@@ -452,14 +452,16 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	
 	local vehiclebase = UVUVehicleBase:GetInt()
 	local appliedUnits
-	local returnedUnitList
 
-	local returnedUnitList, modifiers = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
+	local result = ((ply and not RandomPlayerUnits:GetBool()) and playercontrolled) or UVGetRandomUnit( nil, {
 		playercontrolled = playercontrolled,
 		posspecified = posspecified,
 		rhinoattack = rhinoattack,
 		commanderrespawn = commanderrespawn
 	} )
+
+	local returnedUnitList = result[1]
+	local modifiers = result[2]
 
 	if modifiers then
 		if modifiers.rhinoattack ~= nil then rhinoattack = modifiers.rhinoattack end
