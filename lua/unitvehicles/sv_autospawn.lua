@@ -1306,7 +1306,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 			return
 		end
 		
-		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
+		uvspawnpointangles.yaw = uvspawnpointangles.yaw - 90
 		uvspawnpointangles.yaw = rhinoattack and not posspecified and uvspawnpointangles.yaw or uvspawnpointangles.yaw + 180
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
@@ -2038,7 +2038,7 @@ function UVAutoSpawnTraffic()
 			return
 		end
 		
-		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
+		uvspawnpointangles.yaw = uvspawnpointangles.yaw - 90
 		uvspawnpointangles.yaw = rhinoattack and not posspecified and uvspawnpointangles.yaw or uvspawnpointangles.yaw + 180
 		
 		local Ent = ents.Create("prop_vehicle_jeep")
@@ -2721,7 +2721,7 @@ function UVAutoSpawnRacer()
 			return
 		end
 		
-		uvspawnpointangles.yaw = uvspawnpointangles.yaw + 90
+		uvspawnpointangles.yaw = uvspawnpointangles.yaw - 90
 		uvspawnpointangles.yaw = rhinoattack and not posspecified and uvspawnpointangles.yaw or uvspawnpointangles.yaw + 180
 		
 		local Ent = ents.Create("prop_vehicle_jeep")

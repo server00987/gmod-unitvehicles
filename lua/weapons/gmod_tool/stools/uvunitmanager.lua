@@ -145,7 +145,7 @@ local defaultvoicetable = {
 	"cop1, cop2, cop3, cop4, cop5", --Interceptor
 	"cop1, cop2, cop3, cop4, cop5", --Special
 	"cop1, cop2, cop3, cop4, cop5", --Commander
-	"cop1", --Rhino
+	"rhino1", --Rhino
 	"air", --Air
 }
 
