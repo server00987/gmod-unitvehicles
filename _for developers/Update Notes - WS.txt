@@ -10,9 +10,17 @@ Say hello to the newly introduced UV Menu, the full replacement for the Spawn Me
 	[*][b]FAQ[/b] - Need some quick help? The Discord FAQ has been uploaded here!
 	[*][b]Settings[/b] - Want to tweak something? All Client and Server settings are present here
 	
+	[*]Additionally, both the [b]Unit Totaled[/b] and [b]Unit Select[/b] now use the same menu system.
+
 	[*]Don't like the colours? Then change it! Change the colour of buttons, the background and more in the [b]User Interface[/b] settings tab!
 [/list]
-Note that many options are hidden for Clients.
+
+[b]Things to note[/b]
+[list]
+	[*]Many options are server only, meaning they will not be displayed to clients.
+	[*]The options present in the menu can still be accessed via their original methods (Spawn Menu > Options > Unit Vehicles) for roughly 3 update cycles of UV before they will be removed.
+	[*]The menu isn't perfect - it will be refined over time.
+[/list]
 
 [h1]Changes[/h1]
 [b]Tools[/b]

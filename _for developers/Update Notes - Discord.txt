@@ -1,7 +1,8 @@
 <------- December 11 ------->
 # New Features
 **UV Menu**
-Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or __unitvehicles_menu__ command:
+Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or **unitvehicles_menu** command:
+
 - **Welcome Page** - Includes some quick access buttons and variables, and a handy **What's New** section, where we will post update notes
 - **Race Manager** - Moved the Race Manager tool race control variables here
 - **Pursuit Manager** - Moved all Pursuit Manager buttons here
@@ -9,9 +10,14 @@ Say hello to the newly introduced UV Menu, the full replacement for the Spawn Me
 - **FAQ** - Need some quick help? The Discord FAQ has been uploaded here!
 - **Settings** - Want to tweak something? All Client and Server settings are present here
 
+Additionally, both the **Unit Totaled** and **Unit Select** now use the same menu system.
+
 Don't like the colours? Then change it! Change the colour of buttons, the background and more in the **User Interface** settings tab!
 
-Note that many options are hidden for Clients.
+**Things to note**
+- Many options are server only, meaning they will not be displayed to clients.
+- The options present in the menu can still be accessed via their original methods (Spawn Menu > Options > Unit Vehicles) for roughly 3 update cycles of UV before they will be removed.
+- The menu isn't perfect - it will be refined over time.
 
 # Changes
 **Tools**

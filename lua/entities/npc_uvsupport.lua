@@ -1,7 +1,7 @@
 list.Set("NPC", "npc_uvsupport", {
 	Name = "#uv.npc.2support",
 	Class = "npc_uvsupport",
-	Category = "#uv.settings.unitvehicles"
+	Category = "#uv.unitvehicles"
 })
 AddCSLuaFile("npc_uvsupport.lua")
 include("entities/uvapi.lua")
