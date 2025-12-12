@@ -460,8 +460,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		commanderrespawn = commanderrespawn
 	} )
 
-	local returnedUnitList = result[1]
+	local returnedUnitList = (playercontrolled and not RandomPlayerUnits:GetBool() and playercontrolled) or result[1]
 	local modifiers = result[2]
+
+	PrintTable(result)
+	PrintTable(returnedUnitList)
 
 	if modifiers then
 		if modifiers.rhinoattack ~= nil then rhinoattack = modifiers.rhinoattack end
@@ -487,6 +490,8 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	else
 		return
 	end
+
+	print(appliedunits, uvnextclasstospawn)
 
 	if commanderrespawn then
 		rhinoattack = nil
@@ -873,16 +878,15 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		for k, v in pairs(saved_vehicles) do
 			local match
-			if (playercontrolled and playercontrolled.unit) then
-				match = playercontrolled.unit == v
-			else
+			-- if (playercontrolled and playercontrolled.unit) then
+			-- 	match = playercontrolled.unit == v
+			-- else
 				for _, string in pairs(appliedUnitsStrings) do
 					if string == v then
 						match = true
 						break
 					end
 				end
-			end
 			if match then
 				table.insert(availableunits, v)
 			end
@@ -1238,16 +1242,15 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		
 		for k, v in pairs(saved_vehicles) do
 			local match
-			if (playercontrolled and playercontrolled.unit) then
-				match = playercontrolled.unit == v
-			else
+			-- if (playercontrolled and playercontrolled.unit) then
+			-- 	match = playercontrolled.unit == v
+			-- else
 				for _, string in pairs(appliedUnitsStrings) do
 					if string == v then
 						match = true
 						break
 					end
 				end
-			end
 			if match then
 				table.insert(availableunits, v)
 			end
