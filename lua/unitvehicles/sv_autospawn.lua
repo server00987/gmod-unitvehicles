@@ -463,9 +463,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	local returnedUnitList = (playercontrolled and not RandomPlayerUnits:GetBool() and playercontrolled) or result[1]
 	local modifiers = result[2]
 
-	PrintTable(result)
-	PrintTable(returnedUnitList)
-
 	if modifiers then
 		if modifiers.rhinoattack ~= nil then rhinoattack = modifiers.rhinoattack end
 		if modifiers.commanderrespawn ~= nil then commanderrespawn = modifiers.commanderrespawn end
@@ -490,8 +487,6 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	else
 		return
 	end
-
-	print(appliedunits, uvnextclasstospawn)
 
 	if commanderrespawn then
 		rhinoattack = nil
