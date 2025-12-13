@@ -360,7 +360,7 @@ if SERVER then
 		net.Broadcast()
 
 		local ptimer = UVRacePursuitStart:GetInt()
-		if ptimer then
+		if ptimer > 0 then
 			timer.Create( "uvrace_startpursuit", ptimer, 1, function()
 				UV_StartPursuit(nil, true)
 			end)
@@ -410,7 +410,7 @@ if SERVER then
 			ent:Remove()
 		end
 		
-		if #UVWantedTableVehicle > 0 and UVRacePursuitStop:GetBool() then
+		if UVTargeting and #UVWantedTableVehicle > 0 and UVRacePursuitStop:GetBool() then
 			UV_StopPursuit()
 			if UVRacePursuitStopDespawn:GetBool() then
 				UV_DespawnVehicles()
