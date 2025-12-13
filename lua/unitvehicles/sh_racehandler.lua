@@ -410,12 +410,12 @@ if SERVER then
 			ent:Remove()
 		end
 		
-		if UVRacePursuitStop:GetBool() then
+		if #UVWantedTableVehicle > 0 and UVRacePursuitStop:GetBool() then
 			UV_StopPursuit()
 			if UVRacePursuitStopDespawn:GetBool() then
 				UV_DespawnVehicles()
 			end
-		end		
+		end
 		
 		if UVRaceClearAI:GetBool() then
 			UV_ClearRacer()
