@@ -530,6 +530,23 @@ elseif CLIENT then
 	end
 	concommand.Add("uvrace_updatevars", UpdateVars)
 	
+	local function QuerySaveProps(txt)
+		Derma_Query(
+			"#tool.uvracemanager.export.props.desc",
+			"#tool.uvracemanager.export.props",
+			"#openurl.yes",
+			function()
+				chat.AddText("Exporting UV Race...")
+				RunConsoleCommand("uvrace_export", txt, "true") 
+			end,
+			"#openurl.nope",
+			function()
+				chat.AddText("Exporting UV Race...")
+				RunConsoleCommand("uvrace_export", txt) 
+			end
+		)
+	end
+
 	local function QueryExport()
 		Derma_StringRequest("#uv.tool.export.settings", "#tool.uvracemanager.export.desc", "", function(txt)
 			QuerySaveProps(txt)
