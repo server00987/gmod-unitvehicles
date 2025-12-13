@@ -20,17 +20,6 @@ if SERVER then
 		ply:SelectWeapon( "gmod_tool" )
 	end)
 
-	local function ClearRacer( ply, cmd, args )
-		if not ply:IsSuperAdmin() then return end
-		for _, v in pairs(ents.FindByClass("npc_racervehicle")) do
-			if IsValid(v.v) then
-				v.v:Remove()
-			end
-			v:Remove()
-		end
-	end
-	concommand.Add("uv_clearracers", ClearRacer)
-
 end
 
 if CLIENT then

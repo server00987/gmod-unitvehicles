@@ -342,8 +342,7 @@ concommand.Add( "uv_setheat", function( ply, cmd, args )
 	UVHeatLevel = math.Clamp( (tonumber(args[1]) or 1), 1, MAX_HEAT_LEVEL )
 end)
 
-concommand.Add("uv_despawnvehicles", function(ply)
-	if not ply:IsSuperAdmin() then return end
+function UV_DespawnVehicles(ply)
 	UVPresenceMode = false
 	
 	-- PrintMessage( HUD_PRINTTALK, "Despawning Unit Vehicle(s)!")
@@ -351,12 +350,16 @@ concommand.Add("uv_despawnvehicles", function(ply)
 	for k, v in pairs(ents.FindByClass("npc_uv*")) do
 		v:Remove()
 	end
-
 	for k, v in pairs(ents.FindByClass("uvair")) do
 		v:Remove()
 	end
 	
 	UVRestoreResourcePoints()
+end
+
+concommand.Add("uv_despawnvehicles", function(ply)
+	if not ply:IsSuperAdmin() then return end
+	UV_DespawnVehicles(ply)
 end)
 
 concommand.Add("uv_resetallsettings", function(ply)
@@ -389,26 +392,21 @@ concommand.Add("uv_resetallsettings", function(ply)
 	RacerTags:Revert()
 end)
 
-concommand.Add("uv_startpursuit", function(ply)
-	if not ply:IsSuperAdmin() then return end
+function UV_StartPursuit(ply, skipCountdown)
+	if UVTargeting or UVCounterActive then return end
+
+	skipCountdown = skipCountdown or false
 	
-	if UVTargeting then 
-		net.Start("uvrace_decline")
-		net.WriteString("uv.chase.start.error.activechase")
-		net.Send(ply)
-	return end
-	
-	if UVCounterActive then
-		net.Start("uvrace_decline")
-		if timer.Exists("uvrace_start") then
-			net.WriteString("uv.chase.start.error.startingrace")
-		else
-			net.WriteString("uv.chase.start.error.startingchase")
-		end
-		net.Send(ply)
+	-- immediate pursuit
+	if skipCountdown then
+		RunConsoleCommand("ai_ignoreplayers", "0")
+		UVLosing = CurTime()
+		UVTargeting = true
+		UVCounterActive = false
 		return
 	end
-	
+
+	-- Normal start
 	net.Start("UVHUDStartPursuitNotification")
 	net.WriteString("uv.hud.chase.starting")
 	net.Broadcast()
@@ -416,61 +414,42 @@ concommand.Add("uv_startpursuit", function(ply)
 	UVApplyHeatLevel()
 	UVRestoreResourcePoints()
 	UVCounterActive = true
-	
-	ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_start.wav", 0, 100, 0.5, CHAN_STATIC)
-	
-	if SpawnMainUnits:GetBool() then
-		UVAutoSpawn(nil)
-		
-		uvIdleSpawning = CurTime()
-		UVPresenceMode = true
-	end
-	local countdownStart = 6
-	for _, plyTarget in ipairs(player.GetAll()) do
-		net.Start("UVHUDStartPursuitCountdown")
-		net.WriteInt(countdownStart, 11)
-		net.Send(plyTarget)
+
+	if IsValid(ply) then
+		ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_start.wav", 0, 100, 0.5, CHAN_STATIC)
 	end
 
-	timer.Create("uv_pursuit_start", 1, countdownStart, function()
+	timer.Create("uv_pursuit_start", 1, 6, function()
 		local time = timer.RepsLeft("uv_pursuit_start")
+
 		for _, plyTarget in ipairs(player.GetAll()) do
 			net.Start("UVHUDStartPursuitCountdown")
 			net.WriteInt(time, 11)
 			net.Send(plyTarget)
 		end
 
-		if IsValid(ply) then
-			if time > 1 then
-				if time <= 4 then
-					ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
-				end
-			else
-				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
-
-				-- Activate pursuit state
-				RunConsoleCommand("ai_ignoreplayers", "0")
-				UVLosing = CurTime()
-				UVTargeting = true
-
-				-- Random police unit announcement
-				local units = ents.FindByClass("npc_uv*")
-				if #units > 0 then
-					local unit = units[math.random(#units)]
-					UVChatterPursuitStartAcknowledge(unit)
-				end
-
-				-- Unlock the countdown for other systems
-				UVCounterActive = false
-			end
+		if time <= 1 then
+			RunConsoleCommand("ai_ignoreplayers", "0")
+			UVLosing = CurTime()
+			UVTargeting = true
+			UVCounterActive = false
 		end
 	end)
+end
+
+concommand.Add("uv_startpursuit", function(ply)
+	if not ply:IsSuperAdmin() then return end
+	UV_StartPursuit(ply)
 end)
+
+function UV_StopPursuit(ply)
+	UVCooldownTimerProgress = 1
+	UVCounterActive = false
+end
 
 concommand.Add("uv_stoppursuit", function(ply)
 	if not ply:IsSuperAdmin() then return end
-	UVCooldownTimerProgress = 1
-	UVCounterActive = false
+	UV_StopPursuit(ply)
 end)
 
 concommand.Add("uv_wantedtable", function(ply)
@@ -541,6 +520,19 @@ function CalculateHeatLevel(bounty, currentHeat)
 	return newHeat
 end
 
+function UV_ClearRacer(ply)
+	for _, v in pairs(ents.FindByClass("npc_racervehicle")) do
+		if IsValid(v.v) then
+			v.v:Remove()
+		end
+		v:Remove()
+	end
+end
+
+concommand.Add("uv_clearracers", function(ply)
+	if not ply:IsSuperAdmin() then return end
+	UV_ClearRacer(ply)
+end)
 
 function TriggerHeatLevelEffects(level)
 	if level < 2 then return end

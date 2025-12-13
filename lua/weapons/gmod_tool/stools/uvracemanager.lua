@@ -789,13 +789,19 @@ if CLIENT then
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
 			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.25,
+			Height = ScrH() * 0.45,
 			Description = true,
 			UnfocusClose = true,
 			Tabs = {
 				{ TabName = "#uv.rm.options",
 					{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
 					{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "unitvehicle_racednftimer", min = 0, max = 90, decimals = 0, sv = true },
+					{ type = "label", text = "#uv.pursuit" },
+					{ type = "slider", text = "#uv.rm.options.pursuitstart", desc = "uv.rm.options.pursuitstart.desc", convar = "unitvehicle_racepursuitstart", min = 0, max = 90, decimals = 0, sv = true },
+					{ type = "bool", text = "#uv.rm.options.pursuitclear", desc = "uv.rm.options.pursuitclear.desc", convar = "unitvehicle_racepursuitstop", sv = true },
+					{ type = "bool", text = "#uv.rm.options.pursuitclear.ai", desc = "uv.rm.options.pursuitclear.ai.desc", convar = "unitvehicle_racepursuitstop_despawn", parentconvar = "unitvehicle_racepursuitstop", sv = true },
+					{ type = "label", text = "#uv.ai.title" },
+					{ type = "bool", text = "#uv.rm.options.clearai", desc = "uv.rm.options.clearai.desc", convar = "unitvehicle_raceclearai", sv = true },
 					{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
 					},

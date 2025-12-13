@@ -17,17 +17,24 @@ UVHUDRaceAnimTriggered = false
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+	
+	UVRacePursuitStart = CreateConVar( "unitvehicle_racepursuitstart", 0, FCVAR_ARCHIVE, "How long, once one race begins, before a pursuit auto-starts." )
 
+	UVRacePursuitStop = CreateConVar( "unitvehicle_racepursuitstop", 0, FCVAR_ARCHIVE, "If a pursuit is active, immediately stop the pursuit when the race ends." )
+	UVRacePursuitStopDespawn = CreateConVar( "unitvehicle_racepursuitstop_despawn", 0, FCVAR_ARCHIVE, "If a pursuit is active, despawn all AI units when the race ends." )
+	
+	UVRaceClearAI = CreateConVar( "unitvehicle_raceclearai", 0, FCVAR_ARCHIVE, "Removes all AI and their vehicles when the race ends." )
+	
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
 	UVRaceStartTime = CurTime()
 	
 	UVRaceInvites = UVRaceInvites or {}
+	UVRaceFirstSplitTriggered = UVRaceFirstSplitTriggered or false
 
 	function UVRaceCheckFinishLine()
 		local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
 		local highestid = 0
-
 
 		for _, checkpoint in pairs( checkpoints ) do
 			local id = checkpoint:GetID() or 0
@@ -352,12 +359,19 @@ if SERVER then
 		net.WriteFloat(UVRaceStartTime)
 		net.Broadcast()
 
+		local ptimer = UVRacePursuitStart:GetInt()
+		if ptimer then
+			timer.Create( "uvrace_startpursuit", ptimer, 1, function()
+				UV_StartPursuit(nil, true)
+			end)
+		end
 	end
 
 	function UVRaceEnd()
 		uvbestlaptime = nil
 		UVRaceInEffect = nil
 		UVRaceInProgress = nil
+		UVRaceFirstSplitTriggered = nil
 		
 		net.Start("UVRace_TrackReady")
 			net.WriteString("?")
@@ -378,6 +392,10 @@ if SERVER then
 			timer.Remove("uvrace_start")
 		end
 
+		if timer.Exists("uvrace_startpursuit") then
+			timer.Remove("uvrace_startpursuit")
+		end
+
 		table.Empty(UVRaceCurrentParticipants)
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
@@ -390,6 +408,17 @@ if SERVER then
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
 			ent:Remove()
+		end
+		
+		if UVRacePursuitStop:GetBool() then
+			UV_StopPursuit()
+			if UVRacePursuitStopDespawn:GetBool() then
+				UV_DespawnVehicles()
+			end
+		end		
+		
+		if UVRaceClearAI:GetBool() then
+			UV_ClearRacer()
 		end
 	end
 
@@ -1628,7 +1657,9 @@ else -- CLIENT stuff
 
 		local label = startTable[time] - 1 or "#uv.race.getready"
 
-		if time == 1 then label = "#uv.race.go" end
+		if time == 1 then
+			label = "#uv.race.go"
+		end
 
 		if time > 4 and not UVRaceCinematicOverlay then
 			UVRaceCinematicOverlay = {
@@ -1656,54 +1687,50 @@ else -- CLIENT stuff
 		-- For the UI
 		hook.Run("UIEventHook", "racing", "onRaceStartTimer", { starttime = time })
 	end)
+	
+	local function DrawTimedBar(startTime, endTime, labelToken)
+		local now = CurTime()
+		local realTime = RealTime()
+		local startTime = startTime or now
+		local animTime = now - startTime
+		local w, h = ScrW(), ScrH()
 
-	hook.Add( "HUDPaint", "UVHUDRace", function() --HUD
-		local w = ScrW()
-		local h = ScrH()
-		local hudyes = GetConVar("cl_drawhud"):GetBool()
-		local hudtype = GetConVar("unitvehicle_hudtype_main"):GetString()
-				
-		-- if hudyes and UVHUDDisplayRacing and UVHUDRaceFinishCountdownStarted then
-		if hudyes and UVHUDRaceFinishCountdownStarted and not UVHUDCopMode then
-			local now = CurTime()
-			local realTime = RealTime()
-			local startTime = UVHUDRaceFinishStartTime or now
-			local animTime = now - startTime
+		-- Phase durations
+		local delay = 0.1
+		local expandDuration = 0.25
+		local whiteFadeInDuration = 0.025
+		local blackFadeOutDuration = 1
 
-			-- Phase durations
-			local delay = 0.1
-			local expandDuration = 0.25
-			local whiteFadeInDuration = 0.025
-			local blackFadeOutDuration = 1
+		local expandStart = delay
+		local whiteStart = expandStart + expandDuration
+		local blackStart = whiteStart + whiteFadeInDuration
+		local endAnim = blackStart + blackFadeOutDuration
 
-			local expandStart = delay
-			local whiteStart = expandStart + expandDuration
-			local blackStart = whiteStart + whiteFadeInDuration
-			local endAnim = blackStart + blackFadeOutDuration
+		-- Compute bar width
+		local barProgress = 0
+		if animTime >= expandStart then
+			barProgress = math.Clamp((animTime - expandStart) / expandDuration, 0, 1)
+		end
 
-			-- Compute bar width
-			local barProgress = 0
-			if animTime >= expandStart then
-				barProgress = math.Clamp((animTime - expandStart) / expandDuration, 0, 1)
-			end
+		local currentWidth = Lerp(barProgress, 0, w)
+		local barHeight = h * 0.1
+		local barX = (w - currentWidth) / 2
+		local barY = h - barHeight
 
-			local currentWidth = Lerp(barProgress, 0, w)
-			local barHeight = h * 0.1
-			local barX = (w - currentWidth) / 2
-			local barY = h - barHeight
+		-- Compute bar color
+		local colorVal = 0
+		if animTime >= whiteStart and animTime < blackStart then
+			-- black → white
+			local p = (animTime - whiteStart) / whiteFadeInDuration
+			colorVal = Lerp(math.Clamp(p, 0, 1), 0, 255)
+		elseif animTime >= blackStart then
+			-- white → black
+			local p = (animTime - blackStart) / blackFadeOutDuration
+			colorVal = Lerp(math.Clamp(p, 0, 1), 255, 0)
+		end
 
-			-- Compute bar color
-			local colorVal = 0
-			if animTime >= whiteStart and animTime < blackStart then
-				-- black → white
-				local p = (animTime - whiteStart) / whiteFadeInDuration
-				colorVal = Lerp(math.Clamp(p, 0, 1), 0, 255)
-			elseif animTime >= blackStart then
-				-- white → black
-				local p = (animTime - blackStart) / blackFadeOutDuration
-				colorVal = Lerp(math.Clamp(p, 0, 1), 255, 0)
-			end
-
+		-- Only draw when HUD is enabled
+		if GetConVar("cl_drawhud"):GetBool() then
 			-- Draw bar
 			surface.SetMaterial(UVMaterials["RACE_COUNTDOWN_BG"])
 			surface.SetDrawColor(Color(colorVal, colorVal, colorVal, 255))
@@ -1711,7 +1738,7 @@ else -- CLIENT stuff
 
 			-- Display text only after bar is white or fading
 			if animTime >= whiteStart then
-				local timeLeft = math.max(0, math.floor(UVHUDRaceFinishEndTime - now + 0.999))
+				local timeLeft = math.max(0, math.floor(endTime - now + 0.999))
 
 				-- Blink red depending on time left
 				local blink = 255 * math.abs(math.sin(realTime * 4))
@@ -1732,9 +1759,20 @@ else -- CLIENT stuff
 				-- Outline alpha fades in as colorVal returns to black
 				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
 
-				draw.SimpleTextOutlined( "#uv.race.endsin", "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( labelToken, "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 				draw.SimpleTextOutlined( timeLeft, "UVFont5", w * 0.5, h * 0.95, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
+		end
+	end
+
+	hook.Add( "HUDPaint", "UVHUDRace", function() --HUD
+		local w = ScrW()
+		local h = ScrH()
+		local hudyes = GetConVar("cl_drawhud"):GetBool()
+		local hudtype = GetConVar("unitvehicle_hudtype_main"):GetString()
+
+		if UVHUDRaceFinishCountdownStarted and not UVHUDCopMode then
+			DrawTimedBar( UVHUDRaceFinishStartTime, UVHUDRaceFinishEndTime, "#uv.race.endsin" )
 		end
 
 		-- RACE COUNTDOWN LOGIC
