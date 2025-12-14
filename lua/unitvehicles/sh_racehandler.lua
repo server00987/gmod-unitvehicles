@@ -1346,22 +1346,13 @@ else -- CLIENT stuff
 
 	net.Receive( "uvrace_end", function()
 		if not UVHUDRace then return end
-		if UVHUDRace and RacingMusic:GetBool() then 
-			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
-			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
-			if #soundfiles > 0 then
-				surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] )
-			end
-		end
+
+		UVHUDRace = false
 
 		for vehicle, array in pairs( UVHUDRaceInfo.Participants ) do
 			if IsValid( vehicle ) and vehicle:GetDriver() == LocalPlayer() then array.LocalPlayer = true end
 		end
 
-		hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', UVFormLeaderboard( UVHUDRaceInfo.Participants ) )
-
-		UVHUDRace = false
-		UVHUDRaceInfo = nil
 		UVRaceCountdown = nil
 		UVRaceCinematicOverlay = nil
 
@@ -1379,6 +1370,18 @@ else -- CLIENT stuff
 		if UVPlayingRace then
 			UVPlayingRace = false
 		end
+
+		if RacingMusic:GetBool() then 
+			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
+			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
+			if #soundfiles > 0 then
+				surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] )
+			end
+		end
+
+		hook.Run( 'UIEventHook', 'racing', 'onRaceEnd', UVFormLeaderboard( UVHUDRaceInfo.Participants ) )
+
+		UVHUDRaceInfo = nil
 	end)
 
 	net.Receive( "uvrace_checkpointcomplete", function()
@@ -1912,7 +1915,7 @@ else -- CLIENT stuff
 			LocalPlayer():ConCommand('uvrace_resetposition')
 		end
 
-		UVHUDRace = true;
+		--UVHUDRace = true;
 		local sorted_table, string_array = UVFormLeaderboard(UVHUDRaceInfo['Participants'])
 
 		UVHUDRaceCurrentParticipants = 0
