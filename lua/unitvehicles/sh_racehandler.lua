@@ -17,6 +17,7 @@ UVHUDRaceAnimTriggered = false
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+	UVRaceVisibleCheckpoints = CreateConVar( "unitvehicle_racevisiblecheckpoints", 1, FCVAR_ARCHIVE, "Whether to show the checkpoints to the players." )
 	
 	UVRacePursuitStart = CreateConVar( "unitvehicle_racepursuitstart", 0, FCVAR_ARCHIVE, "How long, once one race begins, before a pursuit auto-starts." )
 
@@ -272,6 +273,7 @@ if SERVER then
 		UVRaceTable['Participants'] = {}
 		UVRaceTable['Info'] = {
 			['Started'] = false,
+			['VisibleCheckpoints'] = UVRaceVisibleCheckpoints:GetBool(),
 			['Laps'] = laps or UVRaceLaps:GetInt(),
 			['Racers'] = 0,
 			['Time'] = 0
@@ -1928,6 +1930,12 @@ else -- CLIENT stuff
 		UVHUDRaceCurrentCheckpoint = checkpoint_count
 
 		for _, v in pairs( ents.FindByClass("uvrace_checkpoint") ) do
+			if not UVHUDRaceInfo.Info.VisibleCheckpoints then
+				if GMinimap then
+					v.blip.alpha = 0
+				end
+				continue
+			end
 			if v:GetID() == checkpoint_count +1 then
 				_UVCurrentCheckpoint = v
 				if GMinimap then

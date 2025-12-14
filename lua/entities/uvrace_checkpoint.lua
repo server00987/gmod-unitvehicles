@@ -174,6 +174,7 @@ if CLIENT then
 			
 			if not UVHUDDisplayRacing then return end
 			if not UVHUDRaceCurrentCheckpoint then return end
+			if UVHUDRaceInfo and not UVHUDRaceInfo.Info.VisibleCheckpoints then return end
 			--Show current checkpoint and the checkpoint after that
 			local currentcheckpoint = UVHUDRaceCurrentCheckpoint + 1
 			local nextcheckpoint = currentcheckpoint + 1 
