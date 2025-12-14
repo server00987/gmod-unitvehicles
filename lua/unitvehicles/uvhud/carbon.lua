@@ -449,8 +449,8 @@ UV_UI.racing.carbon.events = {
             local startTime = CurTime()
             
             -- Play sounds ONCE at start
-            surface.PlaySound("uvui/carbon/openmenu.wav")
-            surface.PlaySound("uvui/carbon/exitmenu.wav")
+            surface.PlaySound("uvui/carbon/fe_common_mb [5].wav")
+            surface.PlaySound("uvui/carbon/fe_common_mb [6].wav")
             
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)
@@ -1231,8 +1231,8 @@ UV_UI.pursuit.carbon.events = {
             local startTime = CurTime()
             
             -- Play sounds ONCE at start
-            surface.PlaySound("uvui/carbon/openmenu.wav")
-            surface.PlaySound("uvui/carbon/exitmenu.wav")
+            surface.PlaySound("uvui/carbon/fe_common_mb [5].wav")
+            surface.PlaySound("uvui/carbon/fe_common_mb [6].wav")
             
             -- Disable interactivity
             panel:SetMouseInputEnabled(false)

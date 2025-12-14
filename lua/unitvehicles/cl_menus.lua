@@ -34,8 +34,23 @@ if racesfxfolders then
 	end
 end
 
--- Patch Notes -- Change this whenever a new update is releasing!
+-- Patch Notes & Current Version -- Change this whenever a new update is releasing!
+UV.CurVersion = "Pre-Release [2025-12, SU]"
 UV.PNotes = [[
+**[ Secondary Update - December 15th ]**
+# New Features
+- **UV Menu**: Added **Carbon** Menu SFX
+- **Race Manager**: Added new race options:
+	|-- Start a pursuit X seconds after a race begins
+	|-- Stop the pursuit after the race finishes
+	|-- Clear all AI racers and/or Units when the race finishes
+	|-- Visually hide the checkpoint boxes when racing
+
+- **Creator: Races**: Fixed an error when trying to export races
+- **Race Invites** now use the new menu system
+- **Unit Totaled**: Slightly tweaked appearance
+
+**[ Main Update - December 12th ]**
 # New Features
 **UV Menu**
 Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or **unitvehicles_menu** command:
@@ -87,12 +102,22 @@ UVMenu.Sounds = {
         clickback = "uvui/mw/fe_common_mb [4].wav",
         confirm = "uvui/mw/fe_common_mb [5].wav"
     },
+    ["Carbon"] = {
+        menuopen = "uvui/carbon/fe_mb [1].wav",
+        menuclose = "uvui/carbon/fe_common_mb [10].wav",
+        hover = "uvui/carbon/fe_common_mb [1].wav",
+        hovertab = "uvui/carbon/fe_common_mb [2].wav",
+        click = "uvui/carbon/fe_common_mb [8].wav",
+        clickopen = "uvui/carbon/fe_common_mb [5].wav",
+        clickback = "uvui/carbon/fe_common_mb [6].wav",
+        confirm = "uvui/carbon/fe_common_mb [5].wav"
+    },
 }
 
 -- Main Menu
 UVMenu.Main = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
-		Name = "#uv.unitvehicles",
+		Name = language.GetPhrase("uv.unitvehicles") .. " - " .. UV.CurVersion,
 		Width = ScrW() * 0.8,
 		Height = ScrH() * 0.7,
 		Description = true,
@@ -125,7 +150,7 @@ UVMenu.Main = function()
 				},
 				
 				{ type = "label", text = "#uv.menu.pnotes" },
-				{ type = "info", text = UV.PNotes },
+				{ type = "info", text = UV.PNotes, centered = true },
 				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
 			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
@@ -253,6 +278,7 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.audio.menu.sfx", desc = "uv.audio.menu.sfx.desc", convar = "uvmenu_sound_enabled" },
 				{ type = "combo", text = "#uv.audio.menu.sfx.profile", desc = "uv.audio.menu.sfx.profile.desc", convar = "uvmenu_sound_set", requireparentconvar = "uvmenu_sound_enabled", content = {
 						{ "NFS Most Wanted", "MW" },
+						{ "NFS Carbon", "Carbon" },
 					},
 				},
 
@@ -359,27 +385,27 @@ UVMenu.SettingsCol = function()
 						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
 				},
 				{ type = "label", text = "#uv.ui.menu.col.bg" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_bg" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_bg" },
 				
-				{ type = "label", text = "#uv.ui.menu.col.desc" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_desc" },
+				{ type = "label", text = "#uv.ui.menu.col.description" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_desc" },
 				
 				{ type = "label", text = "#uv.ui.menu.col.tabs" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col.background", convar = "uvmenu_col_tabs" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_tab_default" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col.active", convar = "uvmenu_col_tab_active" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", convar = "uvmenu_col_tab_hover" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.background", desc = "uv.ui.menu.col.background.desc", convar = "uvmenu_col_tabs" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_tab_default" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.active", desc = "uv.ui.menu.col.active.desc", convar = "uvmenu_col_tab_active" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", desc = "uv.ui.menu.col.hover.desc", convar = "uvmenu_col_tab_hover" },
 				
 				{ type = "label", text = "#uv.ui.menu.col.label" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_label" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_label" },
 				
 				{ type = "label", text = "#uv.ui.menu.col.bool" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_bool" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col.active", convar = "uvmenu_col_bool_active" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_bool" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.active", desc = "uv.ui.menu.col.active.desc", convar = "uvmenu_col_bool_active" },
 				
 				{ type = "label", text = "#uv.ui.menu.col.button" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col", convar = "uvmenu_col_button" },
-				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", convar = "uvmenu_col_button_hover" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_button" },
+				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", desc = "uv.ui.menu.col.hover.desc", convar = "uvmenu_col_button_hover" },
 
 				{ type = "button", text = "#uv.back", playsfx = "clickback",
 						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
@@ -794,20 +820,24 @@ function UV.BuildSetting(parent, st, descPanel)
 		local rawText = language.GetPhrase(st.text or "") or ""
 		rawText = ConvertDiscordFormatting(rawText)
 
-		local mk = nil
+		local mk
 		local lastWidth = 0
+		local padding = 10
 
-		-- function to rebuild markup when width changes
 		function p:Rebuild()
 			local w = self:GetWide()
 			if w <= 0 then return end
 
-			mk = markup.Parse("<font=UVSettingsFontSmall>" .. rawText .. "</font>", w - 20)
+			local text = rawText
+
+			mk = markup.Parse(
+				"<font=UVSettingsFontSmall>" .. text .. "</font>",
+				w - 20
+			)
 
 			self:SetTall(mk:GetHeight() + 20)
 		end
 
-		-- Called every time the panel is laid out
 		function p:PerformLayout()
 			local w = self:GetWide()
 			if w ~= lastWidth then
@@ -816,7 +846,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
-		p.Paint = function(self, w, h)
+		function p:Paint(w, h)
 			surface.SetDrawColor(28, 28, 28, 150)
 			surface.DrawRect(0, 0, w, h)
 
@@ -827,7 +857,85 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		return p
 	end
-	
+
+	-- if st is a header label
+	if st.type == "infosimple" then
+		local p = vgui.Create("DPanel", parent)
+		p:Dock(TOP)
+		p:SetTall(46)
+		p:DockMargin(6, 6, 6, 2)
+		p.Paint = function(self, w, h)
+            local a = self:GetAlpha()
+			local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
+
+			if a > 5 then
+				local baseFont = "UVMostWantedLeaderboardFont"
+				local multiFont = baseFont
+				local text = language.GetPhrase(st.text) or "???"
+
+				-- First, pre-wrap all text to count lines
+				local paragraphs = string.Split(text, "\n")
+				local wrappedLines = {}
+
+				for _, paragraph in ipairs(paragraphs) do
+					if paragraph == "" then
+						table.insert(wrappedLines, "")
+					else
+						local wrapped = UV_WrapText(paragraph, baseFont, w - (w * 0.15) * 2)
+						for _, line in ipairs(wrapped) do
+							table.insert(wrappedLines, line)
+						end
+					end
+				end
+
+				-- Total line count
+				local lineCount = #wrappedLines
+
+				-- Rule 3: If 3+ lines, switch font
+				if lineCount >= 3 then
+					multiFont = "UVMostWantedLeaderboardFont2"
+				end
+
+				surface.SetFont(multiFont)
+				local _, lineHeight = surface.GetTextSize("A")
+
+				local totalHeight = lineHeight * lineCount
+				local centerY = h * 0.5
+				local xPadding = st.centered and w*0.5 or 0
+
+				-- Center vertically depending on line count
+				local startY = centerY - (totalHeight / 2)
+
+				local color = Color(255, 255, 255, a)
+
+				-- Draw wrapped text
+				local yOffset = startY
+				for _, line in ipairs(wrappedLines) do
+					draw.DrawText(line, multiFont, xPadding, yOffset, color, st.centered and TEXT_ALIGN_CENTER or TEXT_ALIGN_LEFT)
+					yOffset = yOffset + lineHeight
+				end
+			end
+		end
+		
+		if st.desc then
+			p.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = st.text
+					descPanel.Desc = st.desc or ""
+				end
+			end
+
+			p.OnCursorExited = function()
+				if descPanel then
+					descPanel.Text = ""
+					descPanel.Desc = ""
+				end
+			end
+		end
+		
+		return p
+	end
+
 	-- if st is a singular image
 	if st.type == "image" then
 		local p = vgui.Create("DPanel", parent)
@@ -866,7 +974,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 		return p
 	end
-
 
 	-- if st is a header label
 	if st.type == "label" then
@@ -952,11 +1059,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			local bga = hovered and 
 			GetConVar("uvmenu_col_bool_a"):GetInt() * math.abs(math.sin(RealTime()*4)) 
 			or GetConVar("uvmenu_col_bool_a"):GetInt() * 0.75
-			local bg = Color( 125, 125, 125, bga )
-			
-			if enabled then
-				bg = Color( 58, 193, 0, bga )
-			end
+			local bg
 
 			local default = Color( 
 				GetConVar("uvmenu_col_bool_r"):GetInt(),
@@ -1013,11 +1116,69 @@ function UV.BuildSetting(parent, st, descPanel)
 		local wrap = vgui.Create("DPanel", parent)
 		wrap:Dock(TOP)
 		wrap:DockMargin(6, 4, 6, 4)
-		wrap:SetTall(36)
+
+		local function RecalcWrapHeight()
+			if not IsValid(wrap) then return end
+
+			local baseFont = "UVMostWantedLeaderboardFont"
+			local multiFont = baseFont
+			local desc = language.GetPhrase(GetDisplayText()) or "???"
+			local maxTextWidth = wrap:GetWide() - (wrap:GetWide() * 0.25) * 2
+			if maxTextWidth <= 0 then return end
+
+			local paragraphs = string.Split(desc, "\n")
+			local wrappedLines = {}
+			for _, paragraph in ipairs(paragraphs) do
+				if paragraph == "" then
+					table.insert(wrappedLines, "")
+				else
+					for _, line in ipairs(UV_WrapText(paragraph, baseFont, maxTextWidth)) do
+						table.insert(wrappedLines, line)
+					end
+				end
+			end
+
+			if #wrappedLines >= 3 then multiFont = "UVMostWantedLeaderboardFont2" end
+			surface.SetFont(multiFont)
+			local _, lineHeight = surface.GetTextSize("A")
+
+			local newHeight = math.max(36, (#wrappedLines * lineHeight) + 12)
+			if wrap:GetTall() ~= newHeight then wrap:SetTall(newHeight) end
+		end
+
+		wrap.PerformLayout = RecalcWrapHeight
+
 		wrap.Paint = function(self, w, h)
-			-- draw.RoundedBox(6, w*0.675, 0, w*0.325, h, Color(0,0,0,120))
-			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2,
-				color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			local a = self:GetAlpha()
+			if a <= 5 then return end
+
+			local baseFont = "UVMostWantedLeaderboardFont"
+			local multiFont = baseFont
+			local desc = language.GetPhrase(GetDisplayText()) or "???"
+
+			local paragraphs = string.Split(desc, "\n")
+			local wrappedLines = {}
+			for _, paragraph in ipairs(paragraphs) do
+				if paragraph == "" then
+					table.insert(wrappedLines, "")
+				else
+					for _, line in ipairs(UV_WrapText(paragraph, baseFont, w - (w * 0.25) * 2)) do
+						table.insert(wrappedLines, line)
+					end
+				end
+			end
+
+			if #wrappedLines >= 3 then multiFont = "UVMostWantedLeaderboardFont2" end
+			surface.SetFont(multiFont)
+			local _, lineHeight = surface.GetTextSize("A")
+
+			local totalHeight = lineHeight * #wrappedLines
+			local startY = (h - totalHeight) / 2
+			local color = Color(255, 255, 255, a)
+
+			for i, line in ipairs(wrappedLines) do
+				draw.DrawText(line, multiFont, 10, startY + (i-1)*lineHeight, color, TEXT_ALIGN_LEFT)
+			end
 		end
 
 		local function PushDesc()
@@ -1050,7 +1211,8 @@ function UV.BuildSetting(parent, st, descPanel)
 		local slider = vgui.Create("DNumSlider", wrap)
 		slider:Dock(RIGHT)
 		slider:SetWide(220)
-		slider:DockMargin(8, 8, 6, 8)
+		slider:DockMargin(8, 0, 6, 0)
+		slider:SetContentAlignment(5)
 		slider:SetMin(st.min or 0)
 		slider:SetMax(st.max or 100)
 		slider:SetDecimals(st.decimals or 0)
@@ -1063,12 +1225,10 @@ function UV.BuildSetting(parent, st, descPanel)
 		local valPanel = vgui.Create("DPanel", wrap)
 		valPanel:SetWide(84)
 		valPanel:Dock(RIGHT)
-		valPanel:DockMargin(4, 8, 4, 8)
-		valPanel:SetPaintBackground(false)
+		valPanel.Paint = function() end
 
 		local valBox = vgui.Create("DTextEntry", valPanel)
 		valBox:SetWide(60)
-		valBox:SetPos(0,0)
 		valBox:SetFont("UVMostWantedLeaderboardFont")
 		valBox:SetTextColor(color_white)
 		valBox:SetHighlightColor(Color(58,193,0))
@@ -1080,21 +1240,18 @@ function UV.BuildSetting(parent, st, descPanel)
 		valBox.OnCursorEntered = PushDesc
 		valBox.OnCursorExited  = PopDesc
 
-		valBox.OnGetFocus = function()
-			if IsValid(UV.SettingsFrame) then
-				UV.SettingsFrame:SetKeyboardInputEnabled(true)
-			end
-		end
-
-		valBox.OnLoseFocus = function()
-			if IsValid(UV.SettingsFrame) then
-				UV.SettingsFrame:SetKeyboardInputEnabled(false)
+		-- Only validate on enter/apply, allow free typing
+		valBox.OnTextChanged = function(self2)
+			local v = tonumber(self2:GetValue())
+			if v then
+				-- store as pending value but don't overwrite with applied yet
+				pendingValue = v
+				applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
 			end
 		end
 
 		local applyBtn = vgui.Create("DButton", valPanel)
 		applyBtn:SetSize(20, valBox:GetTall())
-		applyBtn:SetPos(valBox:GetWide() + 2,0)
 		applyBtn:SetText("✔")
 		applyBtn:SetVisible(false)
 		applyBtn.Paint = function(self2, w, h)
@@ -1104,12 +1261,20 @@ function UV.BuildSetting(parent, st, descPanel)
 		applyBtn.OnCursorEntered = PushDesc
 		applyBtn.OnCursorExited  = PopDesc
 
-		-- Value tracking
+		-- Vertically center value box and button
+		local function LayoutValPanel()
+			if not (IsValid(valBox) and IsValid(applyBtn)) then return end
+			local offsetY = (wrap:GetTall() - valBox:GetTall()) / 2
+			valBox:SetPos(0, offsetY)
+			applyBtn:SetPos(valBox:GetWide() + 2, offsetY)
+		end
+		wrap.OnSizeChanged = LayoutValPanel
+
 		local appliedValue = st.min or 0
 		local pendingValue = appliedValue
 
 		local function RoundValue(val)
-			if st.decimals ~= nil then
+			if st.decimals then
 				local factor = 10 ^ st.decimals
 				return math.floor(val * factor + 0.5) / factor
 			end
@@ -1122,7 +1287,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			if st.convar and GetConVar(st.convar) then
 				RunConsoleCommand(st.convar, tostring(val))
 			elseif st.command then
-				RunConsoleCommand(st.command, tostring(val)) 
+				RunConsoleCommand(st.command, tostring(val))
 			end
 			if st.func then pcall(st.func, val) end
 			valBox:SetText(string.format("%."..(st.decimals or 2).."f", val))
@@ -1133,12 +1298,39 @@ function UV.BuildSetting(parent, st, descPanel)
 		valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
 		slider:SetValue(appliedValue)
 
+		local typing = false
+
+		valBox.OnGetFocus = function()
+			typing = true
+			if IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(true)
+			end
+		end
+
+		valBox.OnLoseFocus = function()
+			typing = false
+			if IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(false)
+			end
+		end
+
 		slider.OnValueChanged = function(_, val)
 			pendingValue = val
-			if IsValid(valBox) then
+			applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
+
+			if not typing and IsValid(valBox) then
 				valBox:SetText(string.format("%."..slider:GetDecimals().."f", val))
 			end
-			applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
+		end
+
+		valBox.OnEnter = function(self2)
+			local v = tonumber(self2:GetValue()) or st.max
+			if st.min then v = math.max(st.min, v) end
+			if st.max then v = math.min(st.max, v) end
+
+			pendingValue = v
+			slider:SetValue(v)
+			ApplyPendingValue()
 		end
 
 		valBox.OnTextChanged = function(self2)
@@ -1149,11 +1341,18 @@ function UV.BuildSetting(parent, st, descPanel)
 			applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
 		end
 
-		valBox.OnEnter = ApplyPendingValue
-		applyBtn.DoClick = ApplyPendingValue
+		applyBtn.DoClick = function()
+			local v = tonumber(valBox:GetValue()) or st.max
+			if st.min then v = math.max(st.min, v) end
+			if st.max then v = math.min(st.max, v) end
+
+			pendingValue = v
+			slider:SetValue(v)
+			ApplyPendingValue()
+		end
 
 		if st.convar then
-			local cv = (st.convar and GetConVar(st.convar)) or nil
+			local cv = GetConVar(st.convar)
 			if cv then
 				appliedValue = cv:GetFloat()
 				pendingValue = appliedValue
@@ -1161,7 +1360,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				valBox:SetText(string.format("%."..slider:GetDecimals().."f", appliedValue))
 			end
 		end
-		
+
 		wrap.OnMousePressed = function(self, mc)
 			if mc == MOUSE_MIDDLE and st.convar then
 				local cv = GetConVar(st.convar)
@@ -1171,7 +1370,6 @@ function UV.BuildSetting(parent, st, descPanel)
 					valBox:SetText(tostring(def))
 					pendingValue = def
 					applyBtn:SetVisible(math.abs(pendingValue - appliedValue) > 0)
-					-- UVMenu.PlaySFX("hover")
 				end
 			end
 		end
@@ -1326,10 +1524,9 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
 				)
 
-			local bg = hovered and hover or default
-
 			-- background & text
-			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
+			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, default)
+			if hovered then draw.RoundedBox(12, w*0.1, 0, w*0.8, h, hover) end
 			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		
@@ -1392,9 +1589,8 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
 				)
 
-			local bg = hovered and hover or default
-
-			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, bg)
+			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, default)
+			if hovered then draw.RoundedBox(12, w*0.1, 0, w*0.8, h, hover) end
 
 			local display = language.GetPhrase(st.text)
 			if st.text:find("%%s") then
@@ -1972,7 +2168,7 @@ function UVMenu:Open(menu)
         title:SetText("")
         title:Dock(TOP)
         title:DockMargin(6, 6, 6, 12)
-        title:SetTall(36)
+        title:SetTall(24)
 
         title.Paint = function(self, w, h)
             draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5UI", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -2155,18 +2351,42 @@ function UVMenu:Open(menu)
 
             btn.Paint = function(self, w, h)
 				local a = self:GetAlpha()
-                local isSelected = (CURRENT_TAB == i)
-                local hovered = self:IsHovered()
-                local bga = hovered and 175 or 75
+				local isSelected = (CURRENT_TAB == i)
+				local hovered = self:IsHovered()
+
+				local pulse = math.abs(math.sin(RealTime() * 4))
+
+				local baseAlpha  = 75
+				local hoverAlpha = 175 * pulse
+
+				local default = Color(
+					GetConVar("uvmenu_col_tab_default_r"):GetInt(),
+					GetConVar("uvmenu_col_tab_default_g"):GetInt(),
+					GetConVar("uvmenu_col_tab_default_b"):GetInt(),
+					baseAlpha
+				)
+
+				local active = Color(
+					GetConVar("uvmenu_col_tab_active_r"):GetInt(),
+					GetConVar("uvmenu_col_tab_active_g"):GetInt(),
+					GetConVar("uvmenu_col_tab_active_b"):GetInt(),
+					baseAlpha
+				)
+
+				local hoverCol = Color(
+					GetConVar("uvmenu_col_tab_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_tab_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_tab_hover_b"):GetInt(),
+					hoverAlpha
+				)
+				local bg = isSelected and active or default
+
+				draw.RoundedBox( TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, bg )
+
+				if hovered then
+					draw.RoundedBox( TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, hoverCol )
+				end
 				
-                local default = Color( GetConVar("uvmenu_col_tab_default_r"):GetInt(), GetConVar("uvmenu_col_tab_default_g"):GetInt(), GetConVar("uvmenu_col_tab_default_b"):GetInt(), bga )
-				local active = Color( GetConVar("uvmenu_col_tab_active_r"):GetInt(), GetConVar("uvmenu_col_tab_active_g"):GetInt(), GetConVar("uvmenu_col_tab_active_b"):GetInt(), bga )
-				local hover = Color( GetConVar("uvmenu_col_tab_hover_r"):GetInt(), GetConVar("uvmenu_col_tab_hover_g"):GetInt(), GetConVar("uvmenu_col_tab_hover_b"):GetInt(), bga )
-
-				local bg = isSelected and active or (hovered and hover or default)
-
-                draw.RoundedBox(TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, bg)
-
 				if a > 5 then
 					local baseFont = "UVMostWantedLeaderboardFont"
 					local multiFont = baseFont
