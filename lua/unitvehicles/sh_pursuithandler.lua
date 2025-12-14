@@ -5040,20 +5040,18 @@ else -- CLIENT Settings | HUD/Options
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
 			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.25,
+			Height = ScrH() * 0.225,
 			-- Description = true,
 			-- UnfocusClose = true,
 			Tabs = {
 				{ TabName = "#uv.chase.wrecked", Icon = "unitvehicles/icons_settings/display.png",
 
-					-- { type = "info", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2") },
-					{ type = "label", text = "#uv.chase.wrecked.text1" },
-					{ type = "label", text = "#uv.chase.wrecked.text2" },
-					{ type = "button", text = "#uv.chase.wrecked.rejoin", func = 
+					{ type = "infosimple", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2"), centered = true },
+					{ type = "button", text = "#uv.chase.wrecked.rejoin", playsfx = "clickopen", func = 
 					function(self2)
 						net.Start("UVHUDRespawnInUVGetInfo")
 						net.SendToServer()
-						UVMenu.CloseCurrentMenu()
+						-- UVMenu.CloseCurrentMenu()
 					end
 					},
 					{ type = "button", text = "#uv.chase.wrecked.abandon", func = 

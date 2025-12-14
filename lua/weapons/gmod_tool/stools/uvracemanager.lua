@@ -789,7 +789,7 @@ if CLIENT then
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
 			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.45,
+			Height = ScrH() * 0.55,
 			Description = true,
 			UnfocusClose = true,
 			Tabs = {

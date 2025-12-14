@@ -617,7 +617,7 @@ UV_UI.racing.mostwanted.events = {
 					hook.Remove("CreateMove", "JumpKeyCloseResults")
 					if not closing then
 						gui.EnableScreenClicker(false)
-						surface.PlaySound( "uvui/mw/closemenu.wav" )
+						surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 						closing = true
 						closeStartTime = CurTime()
 					end
@@ -639,7 +639,7 @@ UV_UI.racing.mostwanted.events = {
 	end
 
 	function OK:DoClick()
-		surface.PlaySound( "uvui/mw/closemenu.wav" )
+		surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 		if not closing then
 			gui.EnableScreenClicker(false)
 			closing = true
@@ -656,7 +656,7 @@ UV_UI.racing.mostwanted.events = {
 				gui.EnableScreenClicker(false)
 				hook.Remove("CreateMove", "JumpKeyCloseResults")
 					
-				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 				closing = true
 				closeStartTime = CurTime()
 			end
@@ -1182,7 +1182,7 @@ UV_UI.pursuit.mostwanted.events = {
 				if autoCloseRemaining <= 0 then
 					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
-					surface.PlaySound( "uvui/mw/closemenu.wav" )
+					surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 					gui.EnableScreenClicker(false)
 					if not closing then
 						closing = true
@@ -1206,7 +1206,7 @@ UV_UI.pursuit.mostwanted.events = {
 	end
 
 	function OK:DoClick()
-		surface.PlaySound( "uvui/mw/closemenu.wav" )
+		surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 		if not closing then
 			gui.EnableScreenClicker(false)
 			hook.Remove("CreateMove", "JumpKeyCloseDebrief")
@@ -1226,7 +1226,7 @@ UV_UI.pursuit.mostwanted.events = {
 				hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 				hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 
-				surface.PlaySound( "uvui/mw/closemenu.wav" )
+				surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 				closing = true
 				closeStartTime = CurTime()
 			end
@@ -1244,7 +1244,7 @@ UV_UI.pursuit.mostwanted.events = {
 					hook.Remove("CreateMove", "JumpKeyCloseDebrief")
 					hook.Remove("CreateMove", "ReloadKeyCloseDebrief")
 					
-					surface.PlaySound( "uvui/mw/closemenu.wav" )
+					surface.PlaySound( "uvui/mw/FE_COMMON_MB [4].wav" )
 					closing = true
 					closeStartTime = CurTime()
 

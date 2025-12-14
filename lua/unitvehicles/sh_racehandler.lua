@@ -1158,188 +1158,42 @@ else -- CLIENT stuff
             text = string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
 		})
 	end)
+	
+	UVMenu.RaceInvite = function()
+		UVMenu.CurrentMenu = UVMenu:Open({
+			Name = " ",
+			Width = ScrW() * 0.45,
+			Height = ScrH() * 0.275,
+			-- Description = true,
+			-- UnfocusClose = true,
+			Tabs = {
+				{ TabName = "#uv.race.invite", Icon = "unitvehicles/icons_settings/display.png",
 
+					{ type = "infosimple", text = language.GetPhrase("uv.race.invite.desc") .. "\n" .. language.GetPhrase("uv.race.invite.desc2"), centered = true },
+					{ type = "infosimple", text = string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ) .. "\n" .. string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), centered = true },
+					{ type = "button", text = "#uv.race.invite.accept", func = 
+					function(self2)
+						net.Start("uvrace_invite")
+						net.WriteBool(true)
+						net.SendToServer()
+						UVMenu.CloseCurrentMenu()
+					end
+					},
+					{ type = "button", text = "#uv.race.invite.decline", func = 
+					function(self2)
+						net.Start("uvrace_invite")
+						net.WriteBool(false)
+						net.SendToServer()
+						UVMenu.CloseCurrentMenu()
+					end
+					},
+				}
+			}
+		})
+	end
+	
 	net.Receive( "uvrace_invite", function()
-		if IsValid(InvitePanel) then InvitePanel:Remove() end
-        
-		local w = ScrW()
-		local h = ScrH()
-
-		InvitePanel = vgui.Create("DFrame")
-		local Yes = vgui.Create("DButton")
-		local No = vgui.Create("DButton")
-
-		InvitePanel:Add(Yes)
-		InvitePanel:Add(No)
-		InvitePanel:SetSize(w, h)
-		InvitePanel:SetBackgroundBlur(true)
-		InvitePanel:ShowCloseButton(false)
-		InvitePanel:Center()
-		InvitePanel:SetTitle("")
-		InvitePanel:SetDraggable(false)
-		InvitePanel:SetKeyboardInputEnabled(false)
-		gui.EnableScreenClicker(true)
-
-		Yes:SetText("")
-		Yes:SetPos(w*0.33, h*0.475)
-		Yes:SetSize(w - (w * 0.66), h*0.05)
-        Yes.Paint = function() end
-		
-		No:SetText("")
-		No:SetPos(w*0.33, h*0.525)
-		No:SetSize(w - (w * 0.66), h*0.05)
-        No.Paint = function() end
-
-        local timetotal = 10
-		local timestart = CurTime()
-
-		local bgScale, bgAlpha, bgAnimStart = 0, 0, CurTime()
-		local contentAlpha, contentStart = 0, CurTime()
-
-		local closing = false
-		local closeStartTime = 0
-		local playedfadeSound = false
-
-		InvitePanel.Paint = function(self, w, h)
-			local timeremaining = math.ceil(timetotal - (CurTime() - timestart))
-			local curTime = CurTime()
-			local elapsedAnim = curTime - bgAnimStart
-			local effectiveAlpha = contentAlpha
-			local headerAlpha = 0
-
-			-- Opening background animation
-			bgScale = math.Clamp(elapsedAnim / 0.2, 0, 1)
-			bgAlpha = math.Clamp((elapsedAnim - 0.1)/0.3, 0, 1)*255
-
-			local shrinkFactor = 1
-			local baseHeight = h - h*0.75
-			local scaledHeight = baseHeight * bgScale * shrinkFactor
-			local yOffset = (baseHeight - scaledHeight) * 0.5
-
-			-- Closing two-phase logic
-			if closing then
-				gui.EnableScreenClicker(false)
-				Yes:SetEnabled(false)
-				No:SetEnabled(false)
-				
-				local elapsedFade = curTime - closeStartTime
-				local textFadeDuration, bgShrinkDuration = 0.125, 0.15
-
-				-- Phase 1: fade out texts/buttons
-				local textProgress = math.Clamp(elapsedFade / textFadeDuration, 0, 1)
-				effectiveAlpha = contentAlpha * (1 - textProgress)
-				headerAlpha = 255 * (1 - textProgress)
-
-				-- Phase 2: shrink background vertically
-				local bgProgress = math.Clamp((elapsedFade - textFadeDuration) / bgShrinkDuration, 0, 1)
-				shrinkFactor = 1 - bgProgress
-
-				scaledHeight = baseHeight * bgScale * shrinkFactor
-				yOffset = (baseHeight - scaledHeight) * 0.5
-
-				-- if not playedfadeSound and elapsedFade >= 0.05 then
-					-- playedfadeSound = true
-					-- surface.PlaySound("uvui/world/close.wav")
-				-- end
-
-				if elapsedFade >= textFadeDuration + bgShrinkDuration then
-					if IsValid(InvitePanel) then InvitePanel:Close() end
-					return
-				end
-			end
-			
-			if not closing then
-				Yes:SetEnabled(true)
-				No:SetEnabled(true)
-				local revealProgress = math.Clamp((curTime - contentStart) / 0.6, 0, 1)
-				contentAlpha = revealProgress * 255
-			end
-			
-			-- Draw background
-			surface.SetDrawColor( 255, 255, 255, bgAlpha)
-			surface.SetMaterial(UVMaterials["RESULTSBG_WORLD"])
-			surface.DrawTexturedRect( w*0.33, h*0.35 + yOffset, w - w*0.66, scaledHeight )
-
-			-- Header
-			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
-			surface.SetMaterial(UVMaterials["RESULTS_SHEEN_ESCAPED"])
-			surface.DrawTexturedRect(w * 0.33, h * 0.355, w - ( w * 0.66 ), h * 0.1)
-
-			draw.SimpleTextOutlined( "#uv.race.invite", "UVFont5", w * 0.5, h * 0.36, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0, effectiveAlpha) )
-			draw.SimpleTextOutlined( "#uv.race.invite.desc", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.4, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
-			
-			
-			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.425, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
-			
-			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.45, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, effectiveAlpha) )
-
-			-- Yes / Rejoin
-			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
-			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
-			surface.DrawTexturedRect(w * 0.33, h * 0.475, w - ( w * 0.66 ), h * 0.05 )
-			
-			if IsValid(Yes) and Yes:IsHovered() then
-				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
-				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
-				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
-				
-				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
-				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
-				surface.DrawTexturedRect(Yes:GetX(), Yes:GetY(), Yes:GetWide(), Yes:GetTall())
-			end
-
-			draw.SimpleTextOutlined( "#uv.race.invite.accept", "UVMostWantedLeaderboardFont",w * 0.5, h * 0.486, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-			
-			-- No / Abandon
-			surface.SetDrawColor(255, 255, 255, effectiveAlpha)
-			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
-			surface.DrawTexturedRect(w * 0.33, h * 0.525, w - ( w * 0.66 ), h * 0.05 )
-			
-			if IsValid(No) and No:IsHovered() then
-				surface.SetDrawColor(255, 255, 255, effectiveAlpha * math.abs(math.sin(RealTime() * 3)))
-				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
-				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
-				
-				surface.SetDrawColor(255, 255, 255, effectiveAlpha)
-				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
-				surface.DrawTexturedRect(No:GetX(), No:GetY(), No:GetWide(), No:GetTall())
-			end
-
-			draw.SimpleTextOutlined( "#uv.race.invite.decline", "UVMostWantedLeaderboardFont",w * 0.5, h * 0.536, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-
-			-- Auto-Close Timer
-			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining))
-			
-			draw.SimpleTextOutlined( autotext, "UVMostWantedLeaderboardFont",w * 0.5, h * 0.5725, Color( 225, 255, 255, effectiveAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, effectiveAlpha ) )
-
-            if timeremaining < 1 and not closing then
-				net.Start("uvrace_invite")
-				net.WriteBool(false)
-				net.SendToServer()
-				
-                exitStarted = true
-                closing = true
-				closeStartTime = CurTime()
-            end
-		end
-
-		function Yes:DoClick()
-            closing = true
-			closeStartTime = CurTime()
-
-			net.Start("uvrace_invite")
-			net.WriteBool(true)
-			net.SendToServer()
-		end
-		
-		function No:DoClick()
-            closing = true
-			closeStartTime = CurTime()
-
-			net.Start("uvrace_invite")
-			net.WriteBool(false)
-			net.SendToServer()
-		end
+		UVMenu.OpenMenu(UVMenu.RaceInvite, true)
 	end)
 
 	UVRaceStarting = false
