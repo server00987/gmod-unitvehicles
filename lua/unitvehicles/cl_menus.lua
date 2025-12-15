@@ -35,9 +35,9 @@ if racesfxfolders then
 end
 
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "Pre-Release [2025-12, SU]"
+UV.CurVersion = "v0.39.1" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Secondary Update - December 15th ]**
+**[ Patch 1 v0.39.1 - December 15th 2025 ]**
 # New Features
 - **UV Menu**: Added **Carbon** Menu SFX
 - **Race Manager**: Added new race options:
@@ -50,7 +50,7 @@ UV.PNotes = [[
 - **Race Invites** now use the new menu system
 - **Unit Totaled**: Slightly tweaked appearance
 
-**[ Main Update - December 12th ]**
+**[ Main Update v0.39.0 - December 12th 2025 ]**
 # New Features
 **UV Menu**
 Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or **unitvehicles_menu** command:
