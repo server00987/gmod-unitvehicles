@@ -396,6 +396,13 @@ function UV_StartPursuit(ply, skipCountdown)
 	if UVTargeting or UVCounterActive then return end
 
 	skipCountdown = skipCountdown or false
+
+	if SpawnMainUnits:GetBool() then
+		UVAutoSpawn(nil)
+		
+		uvIdleSpawning = CurTime()
+		UVPresenceMode = true
+	end
 	
 	-- immediate pursuit
 	if skipCountdown then
@@ -403,6 +410,13 @@ function UV_StartPursuit(ply, skipCountdown)
 		UVLosing = CurTime()
 		UVTargeting = true
 		UVCounterActive = false
+
+		-- Random police unit announcement
+		local units = ents.FindByClass("npc_uv*")
+		if #units > 0 then
+			local unit = units[math.random(#units)]
+			UVChatterPursuitStartAcknowledge(unit)
+		end
 		return
 	end
 
@@ -428,11 +442,26 @@ function UV_StartPursuit(ply, skipCountdown)
 			net.Send(plyTarget)
 		end
 
-		if time <= 1 then
+		if time > 1 then
+			if time <= 4 and IsValid(ply) then
+				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
+			end
+		else
+			if IsValid(ply) then
+				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
+			end
+
 			RunConsoleCommand("ai_ignoreplayers", "0")
 			UVLosing = CurTime()
 			UVTargeting = true
 			UVCounterActive = false
+
+			-- Random police unit announcement
+			local units = ents.FindByClass("npc_uv*")
+			if #units > 0 then
+				local unit = units[math.random(#units)]
+				UVChatterPursuitStartAcknowledge(unit)
+			end
 		end
 	end)
 end
@@ -577,17 +606,40 @@ function ApplyHeatSettings(heatLevel)
 end
 
 local function CheckVehicleLimit()
-	--return (#ents.FindByClass("npc_uv*") + #UVWreckedVehicles) < UVMaxUnits or #ents.FindByClass("npc_uv*") < 1
 	local activeUnits = ents.FindByClass("npc_uv*")
 	local activeUnitsCount = 0
-	--local wreckedUnits = #UVWreckedVehicles
 
 	for _, unit in pairs(activeUnits) do
 		if unit.v.roadblocking then continue end
 		activeUnitsCount = activeUnitsCount + 1
 	end
 
-	local totalUnits = activeUnitsCount
+	if #UVWreckedVehicles > 0 then
+		for k, car in pairs(UVWreckedVehicles) do
+			if IsValid(car) and #UVWantedTableVehicle > 0 then
+				local closestsuspect
+				local closestdistancetosuspect
+				local suspects = UVWantedTableVehicle
+				local r = math.huge
+				local closestdistancetosuspect, closestsuspect = r^2
+				for i, w in pairs(suspects) do
+					local carpos = car:WorldSpaceCenter()
+					local distance = carpos:DistToSqr(w:WorldSpaceCenter())
+					if distance < closestdistancetosuspect then
+						closestdistancetosuspect, closestsuspect = distance, w
+					end
+				end
+				if closestdistancetosuspect > 25000000 then
+					car:Remove()
+					table.RemoveByValue(UVWreckedVehicles, car)
+				end
+			else
+				table.RemoveByValue(UVWreckedVehicles, car)
+			end
+		end
+	end
+
+	local totalUnits = activeUnitsCount + #UVWreckedVehicles
 	return totalUnits < UVMaxUnits or totalUnits < 1
 end
 

@@ -1777,23 +1777,7 @@ if SERVER then
 		--Wrecked vehicles
 		if next(UVWreckedVehicles) ~= nil then
 			for k, car in pairs(UVWreckedVehicles) do
-				if IsValid(car) and #UVWantedTableVehicle > 0 then
-					local closestsuspect
-					local closestdistancetosuspect
-					local suspects = UVWantedTableVehicle
-					local r = math.huge
-					local closestdistancetosuspect, closestsuspect = r^2
-					for i, w in pairs(suspects) do
-						local carpos = car:WorldSpaceCenter()
-						local distance = carpos:DistToSqr(w:WorldSpaceCenter())
-						if distance < closestdistancetosuspect then
-							closestdistancetosuspect, closestsuspect = distance, w
-						end
-					end
-					if closestdistancetosuspect > 100000000 then
-						car:Remove()
-					end
-				else
+				if not IsValid(car) then
 					table.RemoveByValue(UVWreckedVehicles, car)
 				end
 			end
