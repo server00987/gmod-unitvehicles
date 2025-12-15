@@ -616,7 +616,7 @@ local function CheckVehicleLimit()
 
 	if #UVWreckedVehicles > 0 then
 		for k, car in pairs(UVWreckedVehicles) do
-			if IsValid(car) and #UVWantedTableVehicle > 0 then
+			if #UVWantedTableVehicle > 0 then
 				local closestsuspect
 				local closestdistancetosuspect
 				local suspects = UVWantedTableVehicle
@@ -633,8 +633,6 @@ local function CheckVehicleLimit()
 					car:Remove()
 					table.RemoveByValue(UVWreckedVehicles, car)
 				end
-			else
-				table.RemoveByValue(UVWreckedVehicles, car)
 			end
 		end
 	end
