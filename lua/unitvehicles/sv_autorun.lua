@@ -608,6 +608,7 @@ end
 local function CheckVehicleLimit()
 	local activeUnits = ents.FindByClass("npc_uv*")
 	local activeUnitsCount = 0
+	local wreckedUnitsCount = #UVWreckedVehicles
 
 	for _, unit in pairs(activeUnits) do
 		if unit.v.roadblocking then continue end
@@ -631,13 +632,13 @@ local function CheckVehicleLimit()
 				end
 				if closestdistancetosuspect > 25000000 then
 					car:Remove()
-					table.RemoveByValue(UVWreckedVehicles, car)
+					wreckedUnitsCount = wreckedUnitsCount - 1
 				end
 			end
 		end
 	end
 
-	local totalUnits = activeUnitsCount + #UVWreckedVehicles
+	local totalUnits = activeUnitsCount + wreckedUnitsCount
 	return totalUnits < UVMaxUnits or totalUnits < 1
 end
 
