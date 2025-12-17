@@ -11,7 +11,6 @@ Starting this date, only a quick summary of changes will be done on Steam WS. De
 More detailed patch notes available in-game.
 
 <------- December 11 ------->
-
 [h1]New Features[/h1]
 [b]UV Menu[/b]
 Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or [u]unitvehicles_menu[/u] command:
