@@ -1,4 +1,17 @@
+<------- December 17 ------->
+<-- Note -->
+Starting this date, only a quick summary of changes will be done on Steam WS. Detailed patch notes are present in-game.
+
+<-- The patch notes -->
+- UV Menu: Added Carbon Menu SFX
+- Race Manager: Added 4 new race options
+- Added new Race Invite menu appearance
+- Tweaked Unit Totaled appearance
+
+More detailed patch notes available in-game.
+
 <------- December 11 ------->
+
 [h1]New Features[/h1]
 [b]UV Menu[/b]
 Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or [u]unitvehicles_menu[/u] command:

@@ -37,18 +37,22 @@ end
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
 UV.CurVersion = "v0.39.1" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Patch 1 v0.39.1 - December 15th 2025 ]**
+**[ Patch 1 v0.39.1 - December 17th 2025 ]**
 # New Features
 - **UV Menu**: Added **Carbon** Menu SFX
 - **Race Manager**: Added new race options:
-	|-- Start a pursuit X seconds after a race begins
-	|-- Stop the pursuit after the race finishes
-	|-- Clear all AI racers and/or Units when the race finishes
-	|-- Visually hide the checkpoint boxes when racing
+  |-- Start a pursuit X seconds after a race begins
+  |-- Stop the pursuit after the race finishes
+  |-- Clear all AI racers and/or Units when the race finishes
+  |-- Visually hide the checkpoint boxes when racing
 
-- **Creator: Races**: Fixed an error when trying to export races
 - **Race Invites** now use the new menu system
 - **Unit Totaled**: Slightly tweaked appearance
+
+**Chatter**
+- Added more lines for Cop6
+
+And various other undocumented tweaks
 
 **[ Main Update v0.39.0 - December 12th 2025 ]**
 # New Features

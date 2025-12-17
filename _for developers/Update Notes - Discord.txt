@@ -1,5 +1,22 @@
 <------- December 11 ------->
 # New Features
+- **UV Menu**: Added **Carbon** Menu SFX
+- **Race Manager**: Added new race options:
+> - Start a pursuit X seconds after a race begins
+> - Stop the pursuit after the race finishes
+> - Clear all AI racers and/or Units when the race finishes
+> - Visually hide the checkpoint boxes when racing
+
+- **Race Invites** now use the new menu system
+- **Unit Totaled**: Slightly tweaked appearance
+
+**Chatter**
+- Added more lines for Cop6
+
+And various other undocumented tweaks
+
+<------- December 11 ------->
+# New Features
 **UV Menu**
 Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or **unitvehicles_menu** command:
 
