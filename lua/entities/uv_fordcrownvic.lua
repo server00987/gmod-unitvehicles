@@ -411,6 +411,10 @@ if SERVER then
         end
     end
 
+    function ENT:UVVehicleInitialize()
+        self:SetBodygroup( 1, 1 )
+    end
+
     function ENT:UVPhysicsCollide(data)
 
         local velocityChange = data.OurNewVelocity - data.OurOldVelocity

@@ -639,7 +639,7 @@ local function CheckVehicleLimit()
 	end
 
 	local totalUnits = activeUnitsCount + wreckedUnitsCount
-	return totalUnits < UVMaxUnits or totalUnits < 1
+	return totalUnits < UVMaxUnits or activeUnitsCount < 1
 end
 
 -- Helper function for vehicle spawning logic

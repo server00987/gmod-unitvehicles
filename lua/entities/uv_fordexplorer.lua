@@ -296,31 +296,31 @@ if SERVER then
 		self:SetFastTransmission( false ) 
 
         self:CreateWheel( Vector( 69.0, 37.0, 11.5 ), {
-            model = "models/redcpol_explorer11/redcpol_explorer11_wheel.mdl",
+            model = "models/unitvehiclescars/uv_fordcrownvic/uv_fordcrownvic_wheel.mdl",
             modelAngle = Angle( 0.000000, 90.000000, 0.000000 ),
             steerMultiplier = 1,
             modelScale = Vector( 1, 1, 1 ),
 			radius = 17.0
         } )
         self:CreateWheel( Vector( 69.0, -37.0, 11.5 ), {
-            model = "models/redcpol_explorer11/redcpol_explorer11_wheel.mdl",
+            model = "models/unitvehiclescars/uv_fordcrownvic/uv_fordcrownvic_wheel.mdl",
             modelAngle = Angle( -0.000000, -90.000000, -0.000000 ),
             steerMultiplier = 1,
             modelScale = Vector( 1, 1, 1 ),
 			radius = 17.0
         } )
         self:CreateWheel( Vector( -60, 37.5, 11.5 ), {
-            model = "models/redcpol_explorer11/redcpol_explorer11_wheel.mdl",
+            model = "models/unitvehiclescars/uv_fordcrownvic/uv_fordcrownvic_wheel.mdl",
             modelAngle = Angle( 0.000000, 90.000000, 0.000000 ),
             modelScale = Vector( 1, 1, 1 ),
 			radius = 17.0
         } )
         self:CreateWheel( Vector( -60, -37.5, 11.5 ), {
-            model = "models/redcpol_explorer11/redcpol_explorer11_wheel.mdl",
+            model = "models/unitvehiclescars/uv_fordcrownvic/uv_fordcrownvic_wheel.mdl",
             modelAngle = Angle( -0.000000, -90.000000, -0.000000 ),
             modelScale = Vector( 1, 1, 1 ),
 			radius = 17.0
-            } )
+        } )
 
     end
 
@@ -389,6 +389,10 @@ if SERVER then
                 end
             end)
         end
+    end
+
+    function ENT:UVVehicleInitialize()
+        self:SetBodygroup( 11, 1 )
     end
 
     function ENT:UVPhysicsCollide(data)
