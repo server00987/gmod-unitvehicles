@@ -1281,7 +1281,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 					local ctimeout = 1
 					if object:IsVehicle() then --Hit And Run
 						if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-							UVPreInfractionCount = UVPreInfractionCount + 1
+							UVPreInfractionCount = UVPreInfractionCount + 2
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
 								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1291,7 +1291,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						end
 					else --Damage to Property
 						if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-							UVPreInfractionCount = UVPreInfractionCount + 1
+							UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
 								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1597,7 +1597,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 			local ctimeout = 1
 			if object:IsVehicle() then --Hit And Run
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = UVPreInfractionCount + 2
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1607,7 +1607,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				end
 			else --Damage to Property
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1920,7 +1920,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local ctimeout = 1
 			if object:IsVehicle() then --Hit And Run
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = UVPreInfractionCount + 2
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1930,7 +1930,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 				end
 			else --Damage to Property
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
