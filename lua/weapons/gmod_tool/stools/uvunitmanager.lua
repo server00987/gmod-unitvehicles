@@ -196,8 +196,8 @@ local unitsheat3 = {
 local unitsheat4 = {
 	"", --Patrol
 	"default_explorer.json", --Support
-	"default_corvettec7.json", --Pursuit
-	"", --Interceptor
+	"", --Pursuit
+	"default_corvettec7.json", --Interceptor
 	"", --Special
 	"", --Commander
 	"" --Rhino
@@ -206,8 +206,8 @@ local unitsheat4 = {
 local unitsheat5 = {
 	"", --Patrol
 	"default_explorer.json", --Support
-	"default_corvettec7.json", --Pursuit
-	"", --Interceptor
+	"", --Pursuit
+	"default_corvettec7.json", --Interceptor
 	"", --Special
 	"", --Commander
 	"" --Rhino
@@ -216,8 +216,8 @@ local unitsheat5 = {
 local unitsheat6 = {
 	"", --Patrol
 	"default_explorer.json", --Support
-	"default_corvettec7.json", --Pursuit
-	"", --Interceptor
+	"", --Pursuit
+	"default_corvettec7.json", --Interceptor
 	"", --Special
 	"", --Commander
 	"" --Rhino
