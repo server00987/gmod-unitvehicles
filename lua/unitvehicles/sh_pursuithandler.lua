@@ -1337,7 +1337,7 @@ if SERVER then
 
 		local botimeout = 10
 		if not UVEnemyEscaping and UVBountyTimerProgress >= botimeout then
-			UVBounty = UVBounty+UVBountyTime
+			UVBounty = UVBounty+UVBountyTimer
 			UVBountyTimer = CurTime()
 		end
 
