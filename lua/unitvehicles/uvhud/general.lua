@@ -15,6 +15,7 @@ local function uv_general()
     if not UVHUDPursuitTech then return end
 
     local PT_Replacement_Strings = {
+        ['EMP'] = '#uv.ptech.emp.short',
         ['ESF'] = '#uv.ptech.esf.short',
         ['Killswitch'] = '#uv.ptech.killswitch.short',
         ['Jammer'] = '#uv.ptech.jammer.short',
