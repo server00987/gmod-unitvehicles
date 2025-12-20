@@ -194,9 +194,9 @@ local unitsheat3 = {
 }
 
 local unitsheat4 = {
-	"default_crownvic.json", --Patrol
+	"", --Patrol
 	"default_explorer.json", --Support
-	"", --Pursuit
+	"default_corvettec7.json", --Pursuit
 	"", --Interceptor
 	"", --Special
 	"", --Commander
@@ -204,9 +204,9 @@ local unitsheat4 = {
 }
 
 local unitsheat5 = {
-	"default_crownvic.json", --Patrol
+	"", --Patrol
 	"default_explorer.json", --Support
-	"", --Pursuit
+	"default_corvettec7.json", --Pursuit
 	"", --Interceptor
 	"", --Special
 	"", --Commander
@@ -214,9 +214,9 @@ local unitsheat5 = {
 }
 
 local unitsheat6 = {
-	"default_crownvic.json", --Patrol
+	"", --Patrol
 	"default_explorer.json", --Support
-	"", --Pursuit
+	"default_corvettec7.json", --Pursuit
 	"", --Interceptor
 	"", --Special
 	"", --Commander
