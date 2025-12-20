@@ -398,6 +398,11 @@ function ENT:PhysicsUpdate()
 				v.displaybusting = nil
 			end
 		end
+		
+		if IsValid(self:GetTarget()) then
+			self:SetTarget(nil)
+		end
+
 		return
 	end
 	if not self.Downed and not self.disengaging then
@@ -810,6 +815,10 @@ function ENT:StartCrush()
 		self:EmitSound( "npc/combine_gunship/gunship_crashing1.wav" )
 		UVBounty = (UVBounty+bountyplus)
 		UVComboBounty = UVComboBounty + 1
+		
+		if IsValid(self:GetTarget()) then
+			self:SetTarget(nil)
+		end
 	end
 	
 end

@@ -3063,7 +3063,9 @@ function UVGetVehicleMakeAndModel(vehicle, category)
 end
 
 function UVDeployRoadblock(self)
+	if not UVTargeting then return end
 	local deployed = false
+	
 	if UVAutoLoadRoadblock() then
 		deployed = true
 		if Chatter:GetBool() and IsValid(self.v) then
