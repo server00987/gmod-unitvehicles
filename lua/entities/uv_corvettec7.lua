@@ -406,6 +406,10 @@ if SERVER then
         end
     end
 
+    function ENT:UVVehicleInitialize()
+        self:SetBodygroup( 15, 1 )
+    end
+
     function ENT:UVPhysicsCollide(data)
 
         local velocityChange = data.OurNewVelocity - data.OurOldVelocity
@@ -431,10 +435,6 @@ if SERVER then
         self.reardamaged = self.reardamaged or 0
         self.leftdamaged = self.leftdamaged or 0
         self.rightdamaged = self.rightdamaged or 0
-
-    function ENT:UVVehicleInitialize()
-        self:SetBodygroup( 15, 1 )
-    end
 
         --Tip: You can adjust the speed to make the damage more or less sensitive
         --If you wanna add more damage levels, just add more elseif statements
