@@ -1337,7 +1337,7 @@ if SERVER then
 
 		local botimeout = 10
 		if not UVEnemyEscaping and UVBountyTimerProgress >= botimeout then
-			UVBounty = UVBounty+UVBountyTimer
+			UVBounty = UVBounty+UVBountyTime
 			UVBountyTimer = CurTime()
 		end
 
@@ -2021,9 +2021,6 @@ if SERVER then
 
 		--HUD Triggers
 		if UVTargeting then
-			if UVBounty < 100 and UVUTimeTillNextHeatEnabled:GetInt() ~= 1 then
-				UVBounty = 100
-			end
 
 			if not UVHUDPursuit then
 				UVLosing = CurTime()

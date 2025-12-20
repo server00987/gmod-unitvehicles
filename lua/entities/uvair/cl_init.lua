@@ -99,6 +99,7 @@ function ENT:Initialize()
 	local pos,ang = LocalToWorld(self.SpotlightPos,Angle(),self:GetPos(),self:GetAngles())
 	self.Spotlight:SetPos(pos)
 	self.Spotlight:SetAngles(ang)
+	self.Spotlight:SetEnableShadows(false)
 	self.Spotlight:Update()
 	
 	self:DrawShadow(true)
