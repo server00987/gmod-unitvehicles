@@ -1,4 +1,28 @@
-<------- December 11 ------->
+<------- December 22 ------->
+# New Features
+- Added the **UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser**
+- AI Racers and Units will no longer rotate while mid-air
+  |-- Only applies to Glide vehicles
+- Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
+
+# Changes
+- Updated Chinese localization
+- Pursuit Breakers will now always trigger a call response
+- The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
+- The **Addons** tab was moved to UV Settings
+
+# Fixes
+- Fixed that AI Racers sometimes steered weirdly after entering another lap
+- Fixed that the Air Unit's spotlight wasn't always active
+- Fixed that Units still respawned when the Backup timer was active
+- Fixed that roadblocks sometimes spawned when a call response was triggered
+- Fixed that the EMP Pursuit Tech did not have a localized string on the HUD
+- Fixed that the Busted debrief did not always trigger if multiple racers were busted in a short time
+- Fixed that the Race Options caused errors in Multiplayer
+- Fixed that the Race Invite caused an error when clicking outside of its window, causing it to close prematurely
+- Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
+
+<------- December 17 ------->
 # New Features
 - **UV Menu**: Added **Carbon** Menu SFX
 - **Race Manager**: Added new race options:

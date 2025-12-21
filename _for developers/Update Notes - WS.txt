@@ -1,3 +1,11 @@
+<------- December 22 ------->
+- Added a new UVPD car
+- AI no longer rotate mid-air
+- UV Menu changes and additions
+- Multiple discovered problems have been fixed
+
+More detailed patch notes available in-game.
+
 <------- December 17 ------->
 <-- Note -->
 Starting this date, only a quick summary of changes will be done on Steam WS. Detailed patch notes are present in-game.

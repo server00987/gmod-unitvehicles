@@ -5021,9 +5021,9 @@ else -- CLIENT Settings | HUD/Options
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
 			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.225,
-			-- Description = true,
-			-- UnfocusClose = true,
+			Height = ScrH() * 0.275,
+			UnfocusClose = false,
+			HideCloseButton = true,
 			Tabs = {
 				{ TabName = "#uv.chase.wrecked", Icon = "unitvehicles/icons_settings/display.png",
 
@@ -5032,13 +5032,20 @@ else -- CLIENT Settings | HUD/Options
 					function(self2)
 						net.Start("UVHUDRespawnInUVGetInfo")
 						net.SendToServer()
-						-- UVMenu.CloseCurrentMenu()
 					end
 					},
 					{ type = "button", text = "#uv.chase.wrecked.abandon", func = 
 					function(self2)
 						UVMenu.CloseCurrentMenu()
 					end
+					},
+					{ type = "timer", text = "#uv.results.autoclose", duration = 10, func = 
+						function(self2)
+							net.Start("uvrace_invite")
+							net.WriteBool(false)
+							net.SendToServer()
+							UVMenu.CloseCurrentMenu()
+						end
 					},
 				}
 			}
