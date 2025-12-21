@@ -544,7 +544,7 @@ if SERVER then
 		end
 		
 		self.NavigateCooldown = true
-		timer.Simple(1, function()
+		timer.Simple(2, function()
 			self.NavigateCooldown = nil 
 		end)
 		
@@ -572,44 +572,102 @@ if SERVER then
 	end
 	
 	function ENT:DriveOnPath()
-		
-		if next(self.tableroutetoenemy) == nil then 
+		local waypoints = self.tableroutetoenemy
+		if not waypoints or next(waypoints) == nil then 
 			return self.v:WorldSpaceCenter()
 		end
 		
-		local closestwaypoint
-		local closestdistancetowaypoint
-		local closestwaypointid
-		local waypoints = self.tableroutetoenemy
-		local r = math.huge
-		local closestdistancetowaypoint, closestwaypoint = r^2
+		local unitpos = self.v:WorldSpaceCenter()
+		local reachThreshold = 250000
 		
-		for i, w in pairs(waypoints) do
-			local unitpos = self.v:WorldSpaceCenter()
-			local distance = unitpos:DistToSqr(w)
-			if distance < closestdistancetowaypoint then
-				closestdistancetowaypoint, closestwaypoint = distance, w
-				closestwaypointid = i
+		local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
+		local velocity = self.v:GetVelocity()
+		local velocityNormalized = velocity:GetNormalized()
+		local hasVelocity = velocity:LengthSqr() > 10000
+		
+		for i = #waypoints, 1, -1 do
+			local dist = unitpos:DistToSqr(waypoints[i])
+			if dist < reachThreshold then
+				table.remove(waypoints, i)
 			end
 		end
 		
-		if closestwaypointid == 1 then
-			if (closestdistancetowaypoint < 250000 or (UVTargeting and not UVHiding)) and UVStraightToWaypoint(self.v:WorldSpaceCenter(), closestwaypoint) then
-				self.tableroutetoenemy = {}
+		if next(waypoints) == nil then
+			self.tableroutetoenemy = {}
+			return unitpos
+		end
+		
+		local bestWaypoint = waypoints[1]
+		local bestScore = -math.huge
+		local hasAnyClearPath = false
+		
+		for i = 1, #waypoints do
+			if UVStraightToWaypoint(unitpos, waypoints[i]) then
+				hasAnyClearPath = true
+				break
 			end
-			return closestwaypoint
-		else
-			local closestwaypointinsight
-			for i = 1, closestwaypointid do
-				local waypoint = self.tableroutetoenemy[i]
-				if UVStraightToWaypoint(self.v:WorldSpaceCenter(), waypoint) then
-					closestwaypointinsight = waypoint
-					break
+		end
+		
+		for i = 1, #waypoints do
+			local waypoint = waypoints[i]
+			local toWaypoint = waypoint - unitpos
+			local distSqr = toWaypoint:LengthSqr()
+			local dist = math.sqrt(distSqr)
+			local toWaypointNormalized = toWaypoint:GetNormalized()
+			
+			local hasLineOfSight = UVStraightToWaypoint(unitpos, waypoint)
+			
+			local score = 0
+			
+			if not hasLineOfSight then
+				if hasAnyClearPath then
+					score = score - 1000
+				else
+					score = score - 200 - ( dist / 10 )
+				end
+			else
+				score = score + 300
+			end
+			
+			local forwardDot = toWaypointNormalized:Dot( forward )
+			if forwardDot > 0 then
+				score = score + forwardDot * 100
+			else
+				score = score + forwardDot * 50
+			end
+			
+			if hasVelocity then
+				local velocityDot = toWaypointNormalized:Dot( velocityNormalized )
+				if velocityDot > 0 then
+					score = score + velocityDot * 75
+				else
+					score = score + velocityDot * 25
 				end
 			end
-			return closestwaypointinsight or closestwaypoint
+			
+			local distanceScore = 1 / ( dist + 1 ) * 50
+			if forwardDot > 0 then
+				score = score + distanceScore
+			else
+				score = score + distanceScore * 0.5
+			end
+			
+			local progressBonus = ( i / #waypoints ) * 25
+			if forwardDot > 0.3 then
+				score = score + progressBonus
+			end
+			
+			if dist > 2000 then
+				score = score - ( dist - 2000 ) / 100
+			end
+			
+			if score > bestScore then
+				bestScore = score
+				bestWaypoint = waypoint
+			end
 		end
 		
+		return bestWaypoint
 	end
 	
 	function ENT:FindPatrol()
@@ -1212,7 +1270,7 @@ if SERVER then
 					self.targetpos = (self.e:LocalToWorld(self.formationpoint)+self.e:GetVelocity()) --Drive in formation
 				end
 			else
-				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil then
+				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil and self.NavigateCooldown then
 					local Waypoint = self.tableroutetoenemy[#self.tableroutetoenemy]
 					local Neighbor = self.tableroutetoenemy[(#self.tableroutetoenemy-1)]
 					self.targetpos = self:DriveOnPath()

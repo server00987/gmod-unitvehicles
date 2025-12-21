@@ -3241,8 +3241,8 @@ function UVNavigateDVWaypoint(self, vectors)
 		vectors = dvd.Waypoints[math.random(#dvd.Waypoints)].Target
 	end
 	
-	local FromSelfToEnemy = dvd.GetRouteVector(self.v:WorldSpaceCenter(), vectors)
-	local FromEnemyToSelf = dvd.GetRouteVector(vectors, self.v:WorldSpaceCenter())
+	local FromSelfToEnemy = dvd.GetRouteVector(self.v:GetPos(), vectors)
+	local FromEnemyToSelf = dvd.GetRouteVector(vectors, self.v:GetPos())
 	
 	if not FromSelfToEnemy or not FromEnemyToSelf then
 		self.NavigateBlind = true
@@ -3251,13 +3251,13 @@ function UVNavigateDVWaypoint(self, vectors)
 	
 	if #FromEnemyToSelf >= #FromSelfToEnemy then --Get the shortest route
 		for k, v in pairs(FromSelfToEnemy) do
-			table.insert(self.tableroutetoenemy, v["Target"]+(vector_up * 50))
+			table.insert(self.tableroutetoenemy, v["Target"] + (vector_up * 20))
 		end
 		return self.tableroutetoenemy
 	else
 		local FromEnemyToSelfReversed = table.Reverse(FromEnemyToSelf)
 		for k, v in pairs(FromEnemyToSelfReversed) do
-			table.insert(self.tableroutetoenemy, v["Target"]+(vector_up * 50))
+			table.insert(self.tableroutetoenemy, v["Target"] + (vector_up * 20))
 		end
 		return self.tableroutetoenemy
 	end
