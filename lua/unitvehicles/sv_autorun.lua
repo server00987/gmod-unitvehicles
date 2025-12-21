@@ -2376,7 +2376,7 @@ function UVBustEnemy(self, enemy, finearrest)
 			bustedtable["Deploys"] = UVDeploys
 			bustedtable["Roadblocks"] = UVRoadblocksDodged
 			bustedtable["Spikestrips"] = UVSpikestripsDodged
-			timer.Create('MakeArrest', 3, 1, function()
+			timer.Create('MakeArrest'..driver:EntIndex(), 3, 1, function()
 				if not finearrest then
 					net.Start( "UVHUDBustedDebrief" )
 					net.WriteTable(bustedtable)

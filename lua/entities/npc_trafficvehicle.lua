@@ -673,6 +673,7 @@ if SERVER then
 					v.TrafficVehicle = self
 					v:SetEngineState(2)
 					v.inputThrottleModifierMode = 2
+					v.AirControlForce = vector_origin
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
@@ -755,6 +756,7 @@ if SERVER then
 							v.TrafficVehicle = self
 							v:TurnOn()
 							v.inputThrottleModifierMode = 2
+							v.AirControlForce = vector_origin
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
