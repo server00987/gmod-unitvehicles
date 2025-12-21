@@ -4693,7 +4693,7 @@ else -- CLIENT Settings | HUD/Options
 			Width = ScrW() * 0.3,
 			Height = ScrH() * 0.65,
 			-- Description = true,
-			UnfocusClose = true,
+			UnfocusClose = false,
 
 			Tabs = {
 				{
