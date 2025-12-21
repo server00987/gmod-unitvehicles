@@ -99,6 +99,7 @@ function ENT:Initialize()
 	local pos,ang = LocalToWorld(self.SpotlightPos,Angle(),self:GetPos(),self:GetAngles())
 	self.Spotlight:SetPos(pos)
 	self.Spotlight:SetAngles(ang)
+	self.Spotlight:SetEnableShadows(false)
 	self.Spotlight:Update()
 	
 	self:DrawShadow(true)
@@ -129,7 +130,7 @@ function ENT:Draw()
 	local starboarddist = EyePos():Distance(starboardpos)
 	local sterndist = EyePos():Distance(sternpos)
 	
-	if spotdist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+	if IsValid(self:GetTarget()) and Headlights:GetBool() and spotdist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
@@ -194,7 +195,7 @@ function ENT:Think()
 	self.RotorSound4:ChangePitch(self.RotorSound:GetPitch(),1)
 	
 	self.Spotlight:SetPos(LocalToWorld(self.SpotlightPos*self.Scale,Angle(),self:GetPos(),self:GetAngles()))
-	if (self:GetTarMode() or IsValid(self:GetTarget())) and Headlights:GetBool() then
+	if IsValid(self:GetTarget()) and Headlights:GetBool() then
 		self.Spotlight:SetBrightness(10)
 		self.Spotlight:SetAngles((self:GetTargetPos()-self.Spotlight:GetPos()):Angle())
 	else

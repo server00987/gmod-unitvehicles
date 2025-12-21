@@ -639,7 +639,7 @@ local function CheckVehicleLimit()
 	end
 
 	local totalUnits = activeUnitsCount + wreckedUnitsCount
-	return totalUnits < UVMaxUnits or totalUnits < 1
+	return totalUnits < UVMaxUnits and totalUnits < UVResourcePoints or activeUnitsCount < 1
 end
 
 -- Helper function for vehicle spawning logic
@@ -1281,7 +1281,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 					local ctimeout = 1
 					if object:IsVehicle() then --Hit And Run
 						if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-							UVPreInfractionCount = UVPreInfractionCount + 1
+							UVPreInfractionCount = UVPreInfractionCount + 2
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
 								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1291,7 +1291,7 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 						end
 					else --Damage to Property
 						if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-							UVPreInfractionCount = UVPreInfractionCount + 1
+							UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 							UVPreInfractionCountCooldown = CurTime()
 							if UVPreInfractionCount >= 10 then
 								if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1597,7 +1597,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 			local ctimeout = 1
 			if object:IsVehicle() then --Hit And Run
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = UVPreInfractionCount + 2
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1607,7 +1607,7 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 				end
 			else --Damage to Property
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1920,7 +1920,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local ctimeout = 1
 			if object:IsVehicle() then --Hit And Run
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = UVPreInfractionCount + 2
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -1930,7 +1930,7 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 				end
 			else --Damage to Property
 				if CurTime() > UVPreInfractionCountCooldown + ctimeout then
-					UVPreInfractionCount = UVPreInfractionCount + 1
+					UVPreInfractionCount = object.PursuitBreaker and UVPreInfractionCount + 10 or UVPreInfractionCount + 1
 					UVPreInfractionCountCooldown = CurTime()
 					if UVPreInfractionCount >= 10 then
 						if UVPassConVarFilter(car) and isfunction(UVCallInitiate) then
@@ -2376,7 +2376,7 @@ function UVBustEnemy(self, enemy, finearrest)
 			bustedtable["Deploys"] = UVDeploys
 			bustedtable["Roadblocks"] = UVRoadblocksDodged
 			bustedtable["Spikestrips"] = UVSpikestripsDodged
-			timer.Create('MakeArrest', 3, 1, function()
+			timer.Create('MakeArrest'..driver:EntIndex(), 3, 1, function()
 				if not finearrest then
 					net.Start( "UVHUDBustedDebrief" )
 					net.WriteTable(bustedtable)
@@ -3063,7 +3063,9 @@ function UVGetVehicleMakeAndModel(vehicle, category)
 end
 
 function UVDeployRoadblock(self)
+	if not UVTargeting then return end
 	local deployed = false
+	
 	if UVAutoLoadRoadblock() then
 		deployed = true
 		if Chatter:GetBool() and IsValid(self.v) then

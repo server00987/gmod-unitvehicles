@@ -15,6 +15,7 @@ local function uv_general()
     if not UVHUDPursuitTech then return end
 
     local PT_Replacement_Strings = {
+        ['EMP'] = '#uv.ptech.emp.short',
         ['ESF'] = '#uv.ptech.esf.short',
         ['Killswitch'] = '#uv.ptech.killswitch.short',
         ['Jammer'] = '#uv.ptech.jammer.short',
@@ -247,7 +248,9 @@ UV_UI.general.events = {
 			local animTime = now - startTime
 			local barProgress = 0
 			local currentWidth
-			local subconvar = GetConVar("unitvehicle_subtitles"):GetBool() and UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0)
+			local text = language.GetPhrase(UV_CurrentSubtitle)
+			local hasValidSubtitle = UV_CurrentSubtitle and text ~= "" and text ~= UV_CurrentSubtitle and CurTime() < (UV_SubtitleEnd or 0)
+			local subconvar = GetConVar("unitvehicle_subtitles"):GetBool() and hasValidSubtitle
 
 			if closing then
 				local closeAnimTime = now - closeStartTime

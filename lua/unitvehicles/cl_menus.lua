@@ -35,20 +35,48 @@ if racesfxfolders then
 end
 
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.39.1" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v0.39.2" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Patch 1 v0.39.1 - December 15th 2025 ]**
+**[ Patch 2 v0.39.2 - December 22nd 2025 ]**
+# New Features
+- Added the **UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser**
+- AI Racers and Units will no longer rotate while mid-air
+  |-- Only applies to Glide vehicles
+- Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
+
+# Changes
+- Updated Chinese localization
+- Pursuit Breakers will now always trigger a call response
+- The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
+- The **Addons** tab was moved to UV Settings
+
+# Fixes
+- Fixed that AI Racers sometimes steered weirdly after entering another lap
+- Fixed that the Air Unit's spotlight wasn't always active
+- Fixed that Units still respawned when the Backup timer was active
+- Fixed that roadblocks sometimes spawned when a call response was triggered
+- Fixed that the EMP Pursuit Tech did not have a localized string on the HUD
+- Fixed that the Busted debrief did not always trigger if multiple racers were busted in a short time
+- Fixed that the Race Options caused errors in Multiplayer
+- Fixed that the Race Invite caused an error when clicking outside of its window, causing it to close prematurely
+- Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
+
+**[ Patch 1 v0.39.1 - December 17th 2025 ]**
 # New Features
 - **UV Menu**: Added **Carbon** Menu SFX
 - **Race Manager**: Added new race options:
-	|-- Start a pursuit X seconds after a race begins
-	|-- Stop the pursuit after the race finishes
-	|-- Clear all AI racers and/or Units when the race finishes
-	|-- Visually hide the checkpoint boxes when racing
+  |-- Start a pursuit X seconds after a race begins
+  |-- Stop the pursuit after the race finishes
+  |-- Clear all AI racers and/or Units when the race finishes
+  |-- Visually hide the checkpoint boxes when racing
 
-- **Creator: Races**: Fixed an error when trying to export races
 - **Race Invites** now use the new menu system
 - **Unit Totaled**: Slightly tweaked appearance
+
+**Chatter**
+- Added more lines for Cop6
+
+And various other undocumented tweaks
 
 **[ Main Update v0.39.0 - December 12th 2025 ]**
 # New Features
@@ -182,38 +210,13 @@ UVMenu.Main = function()
 				{ type = "button", text = "#uv.pm.clearbounty", convar = "uv_clearbounty", sv = true },
 				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
 			},
-			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
-				{ type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
-				{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
-				{ type = "label", text = "Circular Functions", sv = true },
-				{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
-				{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
-			},
-			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png",
-				{ type = "info", text = UV.FAQ[1] },
-				{ type = "info", text = UV.FAQ[2] },
-				{ type = "info", text = UV.FAQ[3] },
-				{ type = "info", text = UV.FAQ[4] },
-				{ type = "info", text = UV.FAQ[5] },
-				{ type = "info", text = UV.FAQ[6] },
-				{ type = "info", text = UV.FAQ[7] },
-				{ type = "info", text = UV.FAQ[8] },
-				{ type = "info", text = UV.FAQ[9] },
-				{ type = "info", text = UV.FAQ[10] },
-				{ type = "info", text = UV.FAQ[11] },
-				{ type = "info", text = UV.FAQ[12] },
-				{ type = "info", text = UV.FAQ[13] },
-				{ type = "info", text = UV.FAQ[14] },
-				{ type = "info", text = UV.FAQ[15] },
-				{ type = "info", text = UV.FAQ[16] },
-				{ type = "info", text = UV.FAQ[17] },
-				{ type = "info", text = UV.FAQ[18] },
-				{ type = "info", text = UV.FAQ[19] },
+			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", func = function()
+					UVMenu.OpenMenu(UVMenu.FAQ)
+				end,
 			},
 			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
 					UVMenu.OpenMenu(UVMenu.Settings)
 				end,
-				{ type = "label", text = "#uv.addons.builtin" },
 			},
 		}
 	})
@@ -360,7 +363,14 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.response.enable", desc = "uv.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
 				{ type = "slider", text = "#uv.response.speedlimit", desc = "uv.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
 			},
-			
+			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
+				{ type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
+				{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+				{ type = "label", text = "Circular Functions", sv = true },
+				{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+				{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+			},
+
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
@@ -415,6 +425,55 @@ UVMenu.SettingsCol = function()
 	})
 end
 
+-- Settings
+UVMenu.FAQ = function()
+	UVMenu.CurrentMenu = UVMenu:Open({
+		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.faq"),
+		Width = ScrW() * 0.8,
+		Height = ScrH() * 0.7,
+		UnfocusClose = true,
+		Tabs = {
+			{ TabName = "#uv.faq.intro", Icon = "unitvehicles/icons_settings/info.png",
+				{ type = "info", text = UV.FAQ["Intro"] },
+				{ type = "info", text = UV.FAQ["Requirements"] },
+				{ type = "info", text = UV.FAQ["Github"] },
+				{ type = "info", text = UV.FAQ["ConVars"] },
+				{ type = "info", text = UV.FAQ["Roadmap"] },
+				{ type = "info", text = UV.FAQ["S&Box"] },
+			},
+
+			{ TabName = "#uv.faq.racing", Icon = "unitvehicles/icons/race_events.png",
+				{ type = "info", text = UV.FAQ["StartRace"], sv = true },
+				{ type = "info", text = UV.FAQ["CreateRaces"], sv = true },
+				{ type = "info", text = UV.FAQ["CreateRacesSpeedlimit"], sv = true },
+			},
+
+			{ TabName = "#uv.faq.pursuits", Icon = "unitvehicles/icons/milestone_911.png",
+				{ type = "info", text = UV.FAQ["SpawnAsUnit"] },
+				{ type = "info", text = UV.FAQ["StartPursuit"], sv = true },
+				{ type = "info", text = UV.FAQ["ModifyUnits"], sv = true },
+				{ type = "info", text = UV.FAQ["CreateRoadblocks"], sv = true },
+				{ type = "info", text = UV.FAQ["CreatePursuitBreaker"], sv = true },
+			},
+
+			{ TabName = "#uv.faq.other", Icon = "unitvehicles/icons_settings/info.png",
+				{ type = "info", text = UV.FAQ["PursuitTech"] },
+				{ type = "info", text = UV.FAQ["SpawnTraffic"], sv = true },
+				{ type = "info", text = UV.FAQ["RenameAI"], sv = true },
+				{ type = "info", text = UV.FAQ["Data"] },
+				{ type = "info", text = UV.FAQ["SimfphysWarning"], sv = true },
+				{ type = "info", text = UV.FAQ["Export"], sv = true },
+			},
+
+			{ TabName = "#uv.back", playsfx = "clickback", func = function()
+					UVMenu.OpenMenu(UVMenu.Main)
+				end,
+				{ type = "label", text = "#uv.addons.builtin" },
+			},
+		}
+	})
+end
+
 if CLIENT then
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
 		title = "#uv.unitvehicles",
@@ -438,7 +497,7 @@ end)
 
 -- FAQ - Update if need be.
 UV.FAQ = {
-[1] = [[
+["Intro"] = [[
 # What is this addon all about?
 Unit Vehicles is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police (Units) and thrilling races on any map.
 
@@ -447,35 +506,35 @@ Unit Vehicles is a Sandbox-oriented addon that allows players, in both Multiplay
 - simfphys
 - Glide
 ]],
-[2] = [[
+["Requirements"] = [[
 # Do I have to install other addon(s) for this?
 Yes. Decent Vehicle - Basic AI and Glide // Styled's Vehicle Base is REQUIRED for Unit Vehicles to function properly.
 - Decent Vehicle provides waypoints for AIs to spawn and roam around in.
 - Glide provides the vehicles needed to use with the Default preset.
 ]],
-[3] = [[
+["Github"] = [[
 # Does this addon have a GitHub repository?
 Yes. It is currently private at the moment until official release.
 ]],
-[4] = [[
+["StartPursuit"] = [[
 # How do I start a pursuit?
 Start a pursuit by going to **Pursuit Manager**, then clicking **Force-Start Pursuit**. 
 Alternatively, find a patrolling Unit and get them to chase you; just don't pull over!
 ]],
-[5] = [[
+["StartRace"] = [[
 # How do I start a race?
-Using the **Race Manager** tool:
-- Click 'Import Race'
+Begin a race by going to **Race Manager**:
+- Click 'Load Track'
 - Select any race from the list
 - Invite other racers, or hit 'Start Race'
 - You can immediately start the race, or automatically spawn AI to join your race
 
 **Notes**
 - There must be at least 1 Grid Slot to start the race!
-- You can invite friends/AI Racers by clicking 'Invite Racers' before clicking 'Start Race' as long as the race is imported.
+- You can invite friends/AI Racers by clicking 'Invite Racers' before clicking 'Start Race' as long as a race is loaded.
 - If there are no existing races, you'll have to make your own (or look for any addon on the workshop that contains UV Race data for that particular map).
 ]],
-[6] = [[
+["ModifyUnits"] = [[
 # How do I spawn or modify Units?
 Use the **Manager: Units** tool:
 
@@ -493,17 +552,17 @@ The Manager: Units tool allows for many variables to be adjusted. Tweak the sett
 Click 'Save Changes' button at the very top. Now be prepared to face new enemies!
 Save them as presets so you don't have to worry about doing it all again. You can even export the settings and share it to the community!
 ]],
-[6] = [[
+["SpawnAsUnit"] = [[
 # I want to be a cop. Can I join the Units?
 You can! Assuming there are already assigned Units, head over to **Pursuit Manager** and select **Spawn as a Unit**!
 ]],
-[7] = [[
+["SpawnTraffic"] = [[
 # How do I get traffic to spawn?
 Use the **Manager: Traffic** tool:
 
 Right-click a vehicle and enter the details. It should appear on the database list depending on what vehicle base you have chosen.
 ]],
-[8] = [[
+["CreateRoadblocks"] = [[
 # How do I set up roadblocks?
 Use the **Creator: Roadblocks** Tool:
 
@@ -516,9 +575,9 @@ Switch to the **Weld** tool and ensure that all the pieces are connected to one 
 **Step 3: Saving**
 Once the pieces are welded, you can right-click on any piece to save the roadblock.
 ]],
-[9] = [[
+["CreateRaces"] = [[
 # How do I create races?
-Use the **Race Manager** tool:
+Use the **Creator: Races** tool:
 
 **Step 1: Create Checkpoints**
 Left-click on one corner to start placing the checkpoint, left click again to finish (hold E to increase the height of the checkpoint).
@@ -535,12 +594,12 @@ If you want more racers to join in, place more grid slots!
 **Step 4: Export Race**
 Press the 'Export Race' button and give it a name. Now you can import the race!
 ]],
-[10] = [[
+["CreateRacesSpeedlimit"] = [[
 # AI Racers don't slow down at corners! How can I fix that?
 You can set the speed limit for each checkpoint BEFORE creating a new one.
 You can alternatively edit the last number in the line for each checkpoint within the .txt file.
 ]],
-[11] = [[
+["CreatePursuitBreaker"] = [[
 # How do I set up Pursuit Breakers?
 Using the **Creator: Pursuit Breaker** tool:
 
@@ -555,7 +614,7 @@ TIP: After welding the structure, unfreeze the pillars so your vehicle doesn't t
 Right-click the structure and enter the details.
 TIP: Save the structure as a dupe so you don't have to do Step 1 and 2 when reusing the same structure!
 ]],
-[12] = [[
+["PursuitTech"] = [[
 # What are Pursuit Techs? Are they like power-ups?
 Pursuit Tech are a series of weapons and support devices utilised by both Racers and Units. Up to 2 Pursuit Techs can be equipped to a single vehicle at any point.
 
@@ -570,11 +629,11 @@ Killswitch, Shock Ram & GPS Dart
 
 You can assign Pursuit Tech with the **Pursuit Tech** tool, and learn more about them.
 ]],
-[13] = [[
+["RenameAI"] = [[
 # Can I change the name of the Racers or Units?
 Use the **Name Changer** tool to change the name of Racers and Units!
 ]],
-[14] = [[
+["ConVars"] = [[
 # What console commands are there I can use?
 - uv_spawnvehicles - Spawns patrolling AI Units
 - uv_setheat [x] - Sets the Heat Level
@@ -587,23 +646,23 @@ Use the **Name Changer** tool to change the name of Racers and Units!
 - uv_setbounty [x] - Sets the bounty value
 - uv_spawn_as_unit - Allows you to join as the Unit
 ]],
-[15] = [[
+["Data"] = [[
 # Where can I find and edit UV-related data?
 Find and edit UV-related under in your game's *data* folder, then in *unitvehicles*.
 ]],
-[16] = [[
+["SimfphysWarning"] = [[
 # My game is lagging a lot whenever a new Unit spawns. Is this addon resource-intensive?
 Units using simfphys tends to be more resource-intensive compared to other vehicle bases. Either lower the count of 'Maximum Units' or use other vehicle bases.
 ]],
-[17] = [[
+["Roadmap"] = [[
 # How can I keep up to date with the latest updates? Is there a road map?
 You can follow us on our Trello page, or our Discord server, both of which you can find on our Workshop page.
 ]],
-[18] = [[
+["S&Box"] = [[
 # Source engine limits the true potential of UV, most noticeably with limited map size. Will it expand into other games as an addon anytime soon?
 There are plans to expand UV into s&box, making full use of Source 2 engine, but only time will tell :3
 ]],
-[19] = [[
+["Export"] = [[
 # How can I export UV files/presets as addons?
 
 **Note** - This is slightly dumbed down and does not have a direct download for the preset. Visit our Discord server to find out more!
@@ -1822,6 +1881,88 @@ function UV.BuildSetting(parent, st, descPanel)
 		-- return wrap
 	-- end
 
+	if st.type == "timer" then
+		local p = vgui.Create("DPanel", parent)
+		p:Dock(TOP)
+		p:SetTall(36)
+		p:DockMargin(6, 6, 6, 2)
+
+		local duration = tonumber(st.duration) or 0
+		p._endTime = CurTime() + duration
+		p._fired = false
+
+		p.Paint = function(self, w, h)
+			local bg = Color(
+				GetConVar("uvmenu_col_label_r"):GetInt(),
+				GetConVar("uvmenu_col_label_g"):GetInt(),
+				GetConVar("uvmenu_col_label_b"):GetInt(),
+				GetConVar("uvmenu_col_label_a"):GetInt()
+			)
+
+			draw.RoundedBox(4, 0, 0, w, h, bg)
+
+			local remaining = math.max(0, self._endTime - CurTime())
+
+			-- Optional precision (default = integer)
+			local precision = st.precision or 0
+			local displayTime = precision > 0
+				and string.format("%." .. precision .. "f", remaining)
+				or tostring(math.ceil(remaining))
+
+			-- Allow formatted text
+			local text
+			if st.format then
+				text = string.format(st.format, displayTime)
+			else
+				-- st.text may be localized
+				local base = language.GetPhrase(st.text)
+				text = string.format(base, displayTime)
+			end
+
+			draw.SimpleText(
+				text,
+				"UVMostWantedLeaderboardFont",
+				w * 0.5,
+				h * 0.5,
+				color_white,
+				TEXT_ALIGN_CENTER,
+				TEXT_ALIGN_CENTER
+			)
+		end
+
+		p.Think = function(self)
+			if self._fired then return end
+
+			if CurTime() >= self._endTime then
+				self._fired = true
+
+				if st.func then
+					st.func(self)
+				end
+			end
+		end
+
+		-- Description handling (same as label)
+		if st.desc then
+			p.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = st.text
+					descPanel.Desc = st.desc or ""
+				end
+			end
+
+			p.OnCursorExited = function()
+				if descPanel then
+					descPanel.Text = ""
+					descPanel.Desc = ""
+				end
+			end
+		end
+
+		return p
+	end
+
+
 	-- fallback: do nothing
 	return nil
 end
@@ -1956,6 +2097,7 @@ function UVMenu:Open(menu)
     local Tabs = CurrentMenu.Tabs or {}
     local UnfocusClose = CurrentMenu.UnfocusClose == true
 	local ShowCPreview = CurrentMenu.ColorPreview == true
+	local HideCloseButton = CurrentMenu.HideCloseButton == true
 	
 	if CurrentMenu.Description == true and GetConVar("uvmenu_hide_description"):GetBool() then
 		Width = Width * 0.75
@@ -2133,6 +2275,12 @@ function UVMenu:Open(menu)
     closeBtn:SetSize(20, 20)
     closeBtn:SetText("")
     closeBtn:SetFont("DermaDefaultBold")
+	if HideCloseButton then
+		closeBtn:SetVisible(false)
+		closeBtn:SetMouseInputEnabled(false)
+		closeBtn:SetKeyboardInputEnabled(false)
+	end
+
     closeBtn.DoClick = function()
         UVMenu.CloseCurrentMenu()
     end
@@ -2144,7 +2292,12 @@ function UVMenu:Open(menu)
     end
     closeBtn:SetAlpha(0)
 
-    local primaryGroup = {closeBtn}
+	local primaryGroup = {}
+
+	if not HideCloseButton then
+		table.insert(primaryGroup, closeBtn)
+	end
+
     local secondaryGroup = {center}
     if tabsPanel then table.insert(secondaryGroup, tabsPanel) end
     if descPanel then table.insert(secondaryGroup, descPanel) end
@@ -2168,10 +2321,10 @@ function UVMenu:Open(menu)
         title:SetText("")
         title:Dock(TOP)
         title:DockMargin(6, 6, 6, 12)
-        title:SetTall(24)
+        title:SetTall(48)
 
         title.Paint = function(self, w, h)
-            draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5UI", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
 
         watchedConvars = {} -- reset
@@ -2229,7 +2382,9 @@ function UVMenu:Open(menu)
             self:SetSize(w, h)
             self:SetPos(x, y)
 
-            closeBtn:SetPos(math.max(self:GetWide() - 24, 8), 4)
+            if not HideCloseButton and IsValid(closeBtn) then
+				closeBtn:SetPos(math.max(self:GetWide() - 24, 8), 4)
+			end
 
             local primaryA = 0
             if CurTime() >= self._open_primaryFadeStart then

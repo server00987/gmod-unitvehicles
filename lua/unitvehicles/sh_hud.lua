@@ -392,7 +392,7 @@ if CLIENT then
 
             local t = math.Clamp((RealTime() - transitionStart) / cameraTransitionTime, 0, 1)
 
-            local copPos = copEnt:GetPos()
+            local copPos = copEnt:WorldSpaceCenter() or copEnt:GetPos()
             local plyPos = ply:GetPos()
             local dist = plyPos:Distance(copPos)
             
@@ -405,7 +405,7 @@ if CLIENT then
             camFov = Lerp(normalized_dist, 30, 5)
 
             local currentView = {
-                origin = ply:EyePos(),
+                origin = ply:EyePos() + ply:GetForward() * -300 + Vector(0, 0, 100),
                 angles = ply:EyeAngles(),
                 fov = fov,
             }

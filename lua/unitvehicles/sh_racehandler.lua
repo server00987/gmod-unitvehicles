@@ -13,17 +13,16 @@ UVHUDRaceFinishCountdownStarted = false
 UVHUDRaceFinishEndTime = nil
 UVHUDRaceFinishStartTime = nil
 UVHUDRaceAnimTriggered = false
+UVHUDRacePursuitEndTime = nil
+UVHUDRacePursuitStartTime = nil
 
 if SERVER then
 	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
 	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
 	UVRaceVisibleCheckpoints = CreateConVar( "unitvehicle_racevisiblecheckpoints", 1, FCVAR_ARCHIVE, "Whether to show the checkpoints to the players." )
-	
 	UVRacePursuitStart = CreateConVar( "unitvehicle_racepursuitstart", 0, FCVAR_ARCHIVE, "How long, once one race begins, before a pursuit auto-starts." )
-
 	UVRacePursuitStop = CreateConVar( "unitvehicle_racepursuitstop", 0, FCVAR_ARCHIVE, "If a pursuit is active, immediately stop the pursuit when the race ends." )
 	UVRacePursuitStopDespawn = CreateConVar( "unitvehicle_racepursuitstop_despawn", 0, FCVAR_ARCHIVE, "If a pursuit is active, despawn all AI units when the race ends." )
-	
 	UVRaceClearAI = CreateConVar( "unitvehicle_raceclearai", 0, FCVAR_ARCHIVE, "Removes all AI and their vehicles when the race ends." )
 	
 	UVRaceTable = {}
@@ -363,6 +362,8 @@ if SERVER then
 
 		local ptimer = UVRacePursuitStart:GetInt()
 		if ptimer > 0 then
+			UVHUDRacePursuitStartTime = CurTime()
+			UVHUDRacePursuitEndTime = CurTime() + ptimer
 			timer.Create( "uvrace_startpursuit", ptimer, 1, function()
 				UV_StartPursuit(nil, true)
 			end)
@@ -397,7 +398,10 @@ if SERVER then
 		if timer.Exists("uvrace_startpursuit") then
 			timer.Remove("uvrace_startpursuit")
 		end
-
+		
+		UVHUDRacePursuitStartTime = nil
+		UVHUDRacePursuitEndTime = nil
+			
 		table.Empty(UVRaceCurrentParticipants)
 
 		for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
@@ -560,7 +564,12 @@ else -- CLIENT stuff
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
 	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
 	UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
-
+	UVRaceVisibleCheckpoints = CreateClientConVar( "unitvehicle_racevisiblecheckpoints", 1, true, false, "Whether to show the checkpoints to the players." )
+	UVRacePursuitStart = CreateClientConVar( "unitvehicle_racepursuitstart", 0, true, false, "How long, once one race begins, before a pursuit auto-starts." )
+	UVRacePursuitStop = CreateClientConVar( "unitvehicle_racepursuitstop", 0, true, false, "If a pursuit is active, immediately stop the pursuit when the race ends." )
+	UVRacePursuitStopDespawn = CreateClientConVar( "unitvehicle_racepursuitstop_despawn", 0, true, false, "If a pursuit is active, despawn all AI units when the race ends." )
+	UVRaceClearAI = CreateClientConVar( "unitvehicle_raceclearai", 0, true, false, "Removes all AI and their vehicles when the race ends." )
+	
 	function UVSoundRacingStop()
 		UVPlayingRace = false
 		-- if UVPlayingRace then
@@ -1163,9 +1172,9 @@ else -- CLIENT stuff
 		UVMenu.CurrentMenu = UVMenu:Open({
 			Name = " ",
 			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.275,
-			-- Description = true,
-			-- UnfocusClose = true,
+			Height = ScrH() * 0.31,
+			UnfocusClose = false,
+			HideCloseButton = true,
 			Tabs = {
 				{ TabName = "#uv.race.invite", Icon = "unitvehicles/icons_settings/display.png",
 
@@ -1186,6 +1195,14 @@ else -- CLIENT stuff
 						net.SendToServer()
 						UVMenu.CloseCurrentMenu()
 					end
+					},
+					{ type = "timer", text = "#uv.race.invite.autodecline", duration = 10, func = 
+						function(self2)
+							net.Start("uvrace_invite")
+							net.WriteBool(false)
+							net.SendToServer()
+							UVMenu.CloseCurrentMenu()
+						end
 					},
 				}
 			}
@@ -1632,6 +1649,10 @@ else -- CLIENT stuff
 
 		if UVHUDRaceFinishCountdownStarted and not UVHUDCopMode then
 			DrawTimedBar( UVHUDRaceFinishStartTime, UVHUDRaceFinishEndTime, "#uv.race.endsin" )
+		end
+
+		if timer.Exists("uvrace_startpursuit") and not UVHUDCopMode then
+			DrawTimedBar( UVHUDRacePursuitStartTime, UVHUDRacePursuitEndTime, "#uv.race.endsin" )
 		end
 
 		-- RACE COUNTDOWN LOGIC

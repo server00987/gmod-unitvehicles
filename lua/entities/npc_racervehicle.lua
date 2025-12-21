@@ -287,6 +287,10 @@ if SERVER then
 			local next_checkp = #array.Checkpoints + 2
 			local selected_point = nil
 			local next_point
+
+			if next_checkp >= GetGlobalInt("uvrace_checkpoints") then --Finish line
+				next_checkp = 1
+			end
 			
 			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
 				if v:GetID() == current_checkp then
@@ -774,6 +778,7 @@ if SERVER then
 					v.RacerVehicle = self
 					v:SetEngineState(2)
 					v.inputThrottleModifierMode = 2
+					v.AirControlForce = vector_origin
 					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
@@ -837,6 +842,7 @@ if SERVER then
 							v.RacerVehicle = self
 							v:TurnOn()
 							v.inputThrottleModifierMode = 2
+							v.AirControlForce = vector_origin
 							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
