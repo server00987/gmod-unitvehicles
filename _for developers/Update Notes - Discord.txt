@@ -6,7 +6,7 @@
 - Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
 
 # Changes
-- Updated Chinese localization
+- Updated Chinese and Czech localizations
 - Pursuit Breakers will now always trigger a call response
 - The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
 - The **Addons** tab was moved to UV Settings

@@ -45,7 +45,7 @@ UV.PNotes = [[
 - Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
 
 # Changes
-- Updated Chinese localization
+- Updated Chinese and Czech localizations
 - Pursuit Breakers will now always trigger a call response
 - The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
 - The **Addons** tab was moved to UV Settings
@@ -366,7 +366,7 @@ UVMenu.Settings = function()
 			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
 				{ type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
 				{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
-				{ type = "label", text = "Circular Functions", sv = true },
+				{ type = "label", text = "Glide // Circular Functions", sv = true },
 				{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
 				{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
 			},
