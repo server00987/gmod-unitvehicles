@@ -562,7 +562,7 @@ if SERVER then
 		end
 		
 		self.NavigateCooldown = true
-		timer.Simple(2, function()
+		timer.Simple(1, function()
 			self.NavigateCooldown = nil 
 		end)
 		
@@ -1292,10 +1292,15 @@ if SERVER then
 					self.targetpos = (self.e:LocalToWorld(self.formationpoint)+self.e:GetVelocity()) --Drive in formation
 				end
 			else
-				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil and self.NavigateCooldown then
-					local Waypoint = self.tableroutetoenemy[#self.tableroutetoenemy]
-					local Neighbor = self.tableroutetoenemy[(#self.tableroutetoenemy-1)]
-					self.targetpos = self:DriveOnPath()
+				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil then
+					if not self.NavigateCooldown and not UVEnemyEscaping then
+						self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
+						self.targetpos = self.e:WorldSpaceCenter()
+					else
+						local Waypoint = self.tableroutetoenemy[#self.tableroutetoenemy]
+						local Neighbor = self.tableroutetoenemy[(#self.tableroutetoenemy-1)]
+						self.targetpos = self:DriveOnPath()
+					end
 				else
 					self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
 					self.targetpos = self.e:WorldSpaceCenter()

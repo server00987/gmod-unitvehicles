@@ -113,7 +113,7 @@ Wrecker: Tow truck
 ]]
 
 if SERVER then
-	
+	math.randomseed(os.time() + SysTime()); for i=1, 100 do math.random() end
 	UVClassName = {"POLICE"}
 	
 	file.AsyncRead('data_static/chatter.json', 'GAME', function( _, _, status, data )
@@ -208,6 +208,14 @@ if SERVER then
 			return 5 
 		end
 
+		if not UVLastPlay then
+			UVLastPlay = CurTime()
+		elseif CurTime() - UVLastPlay < 0.5  then
+			return 5
+		end
+
+		print(CurTime(), self, voice, chattertype, parameters, ...)
+
 		local initTime = CurTime()
 		
 		local isDispatch = (select(1, ...) == "DISPATCH")
@@ -258,6 +266,9 @@ if SERVER then
 					end
 				end)
 			end
+
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
 			
 			if radioOnFile then
 				UVRelayToClients(radioOnFile, parameters, true)
@@ -266,8 +277,6 @@ if SERVER then
 					_init()
 				end)
 			else
-				local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-				local chirpGenericFile
 				if next(chirpGenericFiles) ~= nil then
 					chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 				end
@@ -276,8 +285,10 @@ if SERVER then
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(chirpGenericFile, parameters, true)
 				end
-				if ChatterLastPlay ~= initTime then return 5 end
-				_init()
+				timer.Simple(SoundDuration(chirpGenericFile or ""), function()
+					if ChatterLastPlay ~= initTime then return 5 end
+					_init()
+				end)
 			end
 			-- timer.Simple(SoundDuration(radioOnFile or ""), function()
 			-- 	UVRelayToClients(soundFile, parameters, not (is_priority or voice == "dispatch"))
@@ -355,8 +366,6 @@ if SERVER then
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(radioOnFile, parameters, true)
 			else
-				local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-				local chirpGenericFile
 				if next(chirpGenericFiles) ~= nil then
 					chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 				end
@@ -367,7 +376,7 @@ if SERVER then
 				end
 			end
 
-			timer.Simple(SoundDuration(radioOnFile or ""), function()
+			timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(staticFile, parameters, true)
 				timer.Simple(SoundDuration(staticFile or ""), function()
@@ -413,6 +422,9 @@ if SERVER then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
 			
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
+			
 			-- if radioOnFile then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
 			-- end
@@ -423,8 +435,6 @@ if SERVER then
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(radioOnFile, parameters, false)
 				else
-					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-					local chirpGenericFile
 					if next(chirpGenericFiles) ~= nil then
 						chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 					end
@@ -434,7 +444,7 @@ if SERVER then
 						UVRelayToClients(chirpGenericFile, parameters, false)
 					end
 				end
-				timer.Simple(SoundDuration(radioOnFile or ""), function()
+				timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(soundFile, parameters, false, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 					timer.Simple(SoundDuration(soundFile or ""), function()
@@ -504,13 +514,14 @@ if SERVER then
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
+
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
 			
 			if radioOnFile then
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(radioOnFile, parameters, true)
 			else
-				local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-				local chirpGenericFile
 				if next(chirpGenericFiles) ~= nil then
 					chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 				end
@@ -520,7 +531,7 @@ if SERVER then
 					UVRelayToClients(chirpGenericFile, parameters, true)
 				end
 			end
-			timer.Simple(SoundDuration(radioOnFile or ""), function()
+			timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(identifyFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 				timer.Simple(SoundDuration(identifyFile or ""), function()
@@ -603,6 +614,9 @@ if SERVER then
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
+
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
 			
 			-- function PlaySound( i )
 			-- 	if i == 1 then
@@ -651,7 +665,7 @@ if SERVER then
 			local soundDuration_requestFile = SoundDuration(requestFile or "")
 			local soundDuration_radioOffFile = SoundDuration(radioOffFile or "")
 			local soundDuration_radioOnFile = SoundDuration(radioOnFile or "")
-
+			local soundDuration_chirpGenericFile
 			-- if radioOnFile then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
 			-- end
@@ -661,10 +675,9 @@ if SERVER then
 				if radioOnFile then
 					UVRelayToClients(radioOnFile, parameters, false)
 				else
-					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-					local chirpGenericFile
 					if next(chirpGenericFiles) ~= nil then
 						chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
+						soundDuration_chirpGenericFile = SoundDuration(chirpGenericFile or "")
 					end
 	
 					if chirpGenericFile then
@@ -672,7 +685,7 @@ if SERVER then
 						UVRelayToClients(chirpGenericFile, parameters, true)
 					end
 				end
-				timer.Simple(soundDuration_radioOnFile, function()
+				timer.Simple(soundDuration_radioOnFile or soundDuration_chirpGenericFile, function()
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(addressFile or "", parameters, false, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 					timer.Simple(soundDuration_addressFile, function()
@@ -781,6 +794,9 @@ if SERVER then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
 			-- end
 
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
+
 			ChatterLastPlay = initTime
 
 			UVRelayToClients(emergencyFile, parameters, true)
@@ -789,8 +805,6 @@ if SERVER then
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(radioOnFile, parameters, true)
 				else
-					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-					local chirpGenericFile
 					if next(chirpGenericFiles) ~= nil then
 						chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 					end
@@ -800,7 +814,7 @@ if SERVER then
 						UVRelayToClients(chirpGenericFile, parameters, true)
 					end
 				end
-				timer.Simple(SoundDuration(radioOnFile or ""), function()
+				timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 					if ChatterLastPlay ~= initTime then return 5 end
 					if not UVEnemyEscaping then return end
 					if breakawayFile then
@@ -893,6 +907,9 @@ if SERVER then
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
+
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
 			
 			-- if radioOnFile then
 			-- 	UVRelayToClients(radioOnFile, parameters, true)
@@ -903,8 +920,6 @@ if SERVER then
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(radioOnFile, parameters, true)
 				else
-					local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-					local chirpGenericFile
 					if next(chirpGenericFiles) ~= nil then
 						chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
 					end
@@ -914,7 +929,7 @@ if SERVER then
 						UVRelayToClients(chirpGenericFile, parameters, true)
 					end
 				end
-				timer.Simple(SoundDuration(radioOnFile or ""), function()
+				timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 					timer.Simple(SoundDuration(soundFile or ""), function()
@@ -1004,22 +1019,20 @@ if SERVER then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[math.random(1, #radioOffFiles)]
 			end
 
+			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFile
+
 			ChatterLastPlay = initTime
 			
 			if radioOnFile then
 				UVRelayToClients(radioOnFile, parameters, true)
 			else
-				local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
-				local chirpGenericFile
 				if next(chirpGenericFiles) ~= nil then
 					chirpGenericFile = "chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/"..chirpGenericFiles[math.random(1, #chirpGenericFiles)]
-				end
-
-				if chirpGenericFile then
 					UVRelayToClients(chirpGenericFile, parameters, true)
 				end
 			end
-			timer.Simple(SoundDuration(radioOnFile or ""), function()
+			timer.Simple(SoundDuration(radioOnFile or chirpGenericFile or ""), function()
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 				timer.Simple(SoundDuration(soundFile or ""), function()
