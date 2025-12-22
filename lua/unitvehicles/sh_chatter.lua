@@ -214,8 +214,6 @@ if SERVER then
 			return 5
 		end
 
-		print(CurTime(), self, voice, chattertype, parameters, ...)
-
 		local initTime = CurTime()
 		
 		local isDispatch = (select(1, ...) == "DISPATCH")
