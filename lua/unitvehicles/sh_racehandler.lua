@@ -1167,48 +1167,7 @@ else -- CLIENT stuff
             text = string.format( lang("uv.race.resetcountdown"), tostring(time_left) ), 
 		})
 	end)
-	
-	UVMenu.RaceInvite = function()
-		UVMenu.CurrentMenu = UVMenu:Open({
-			Name = " ",
-			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.31,
-			UnfocusClose = false,
-			HideCloseButton = true,
-			Tabs = {
-				{ TabName = "#uv.race.invite", Icon = "unitvehicles/icons_settings/display.png",
 
-					{ type = "infosimple", text = language.GetPhrase("uv.race.invite.desc") .. "\n" .. language.GetPhrase("uv.race.invite.desc2"), centered = true },
-					{ type = "infosimple", text = string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ) .. "\n" .. string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), centered = true },
-					{ type = "button", text = "#uv.race.invite.accept", func = 
-					function(self2)
-						net.Start("uvrace_invite")
-						net.WriteBool(true)
-						net.SendToServer()
-						UVMenu.CloseCurrentMenu()
-					end
-					},
-					{ type = "button", text = "#uv.race.invite.decline", func = 
-					function(self2)
-						net.Start("uvrace_invite")
-						net.WriteBool(false)
-						net.SendToServer()
-						UVMenu.CloseCurrentMenu()
-					end
-					},
-					{ type = "timer", text = "#uv.race.invite.autodecline", duration = 10, func = 
-						function(self2)
-							net.Start("uvrace_invite")
-							net.WriteBool(false)
-							net.SendToServer()
-							UVMenu.CloseCurrentMenu()
-						end
-					},
-				}
-			}
-		})
-	end
-	
 	net.Receive( "uvrace_invite", function()
 		UVMenu.OpenMenu(UVMenu.RaceInvite, true)
 	end)

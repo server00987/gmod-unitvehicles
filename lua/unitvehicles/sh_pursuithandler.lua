@@ -4636,74 +4636,6 @@ else -- CLIENT Settings | HUD/Options
 	
 ]]--
 
-	function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
-		local menuEntries = {}
-
-		for classIndex, unitsString in ipairs(unittable) do
-			-- split units list
-			local available = {}
-			for unitName in string.gmatch(unitsString, "%S+") do
-				table.insert(available, unitName)
-			end
-
-			if #available > 0 then
-				-- Category label
-				table.insert(menuEntries, {
-					type = "label",
-					text = unittablename[classIndex],
-				})
-
-				-- Buttons for each unit
-				for _, unitName in ipairs(available) do
-					table.insert(menuEntries, {
-						type = "button",
-						text = unitName,
-						func = function()
-							local npcClass = unittablenpc[classIndex]
-							local isRhino = (classIndex == 6)
-							local cleanLabel = string.Trim(unittablename[classIndex], "#")
-
-							net.Start("UVHUDRespawnInUV")
-							net.WriteString(unitName)
-							net.WriteString(npcClass)
-							net.WriteBool(isRhino)
-							net.WriteString(cleanLabel)
-							net.SendToServer()
-
-							UVMenu.CloseCurrentMenu(true)
-						end
-					})
-				end
-			end
-		end
-
-		-- Back button
-		table.insert(menuEntries, {
-			type = "button",
-			text = "#uv.back",
-			playsfx = "clickback",
-			func = function()
-				UVMenu.OpenMenu(UVMenu.Main)
-			end
-		})
-
-		-- Open the menu with fully prebuilt entries
-		UVMenu.CurrentMenu = UVMenu:Open({
-			Name = " ",
-			Width = ScrW() * 0.3,
-			Height = ScrH() * 0.65,
-			-- Description = true,
-			UnfocusClose = false,
-
-			Tabs = {
-				{
-					TabName = "#uv.chase.select.menu",
-					unpack(menuEntries),
-				}
-			}
-		})
-	end
-
 	net.Receive("UVHUDRespawnInUVSelect", function()
 		local UnitsPatrol     = net.ReadString()
 		local UnitsSupport    = net.ReadString()
@@ -5017,41 +4949,6 @@ else -- CLIENT Settings | HUD/Options
 		hook.Run( 'UIEventHook', 'pursuit', 'onRacerBusted', racer, cop, lp )
 	end)
 
-	UVMenu.WreckedDebrief = function()
-		UVMenu.CurrentMenu = UVMenu:Open({
-			Name = " ",
-			Width = ScrW() * 0.45,
-			Height = ScrH() * 0.275,
-			UnfocusClose = false,
-			HideCloseButton = true,
-			Tabs = {
-				{ TabName = "#uv.chase.wrecked", Icon = "unitvehicles/icons_settings/display.png",
-
-					{ type = "infosimple", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2"), centered = true },
-					{ type = "button", text = "#uv.chase.wrecked.rejoin", playsfx = "clickopen", func = 
-					function(self2)
-						net.Start("UVHUDRespawnInUVGetInfo")
-						net.SendToServer()
-					end
-					},
-					{ type = "button", text = "#uv.chase.wrecked.abandon", func = 
-					function(self2)
-						UVMenu.CloseCurrentMenu()
-					end
-					},
-					{ type = "timer", text = "#uv.results.autoclose", duration = 10, func = 
-						function(self2)
-							net.Start("uvrace_invite")
-							net.WriteBool(false)
-							net.SendToServer()
-							UVMenu.CloseCurrentMenu()
-						end
-					},
-				}
-			}
-		})
-	end
-	
 	net.Receive("UVHUDWreckedDebrief", function()
 		UVMenu.OpenMenu(UVMenu.WreckedDebrief, true)
 	end)

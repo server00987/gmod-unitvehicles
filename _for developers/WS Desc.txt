@@ -1,4 +1,4 @@
-[h1]!!! THIS ADDON IS CURRENTLY WORK-IN-PROGRESS !!![/h1]
+[h1]/// Any car, any map. Race, chase or escape ///[/h1]
 
 [b]Unit Vehicles[/b] is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police and thrilling races on any map.
 
