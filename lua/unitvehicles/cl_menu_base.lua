@@ -11,12 +11,14 @@ UV.PNotes = [[
 - AI Racers and Units will no longer rotate while mid-air
   |-- Only applies to Glide vehicles
 - Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
+- Added a custom dropdown menu in the UV Menu, used by the **UVTrax Profile** and **HUD Types**
 
 # Changes
 - Updated Chinese and Czech localizations
 - Pursuit Breakers will now always trigger a call response
 - The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
 - The **Addons** tab was moved to UV Settings
+- The **Freeze Cam** option no longer appears in the UV Menu while in a Multiplayer session
 
 # Fixes
 - Fixed that AI Racers sometimes steered weirdly after entering another lap
@@ -28,6 +30,7 @@ UV.PNotes = [[
 - Fixed that the Race Options caused errors in Multiplayer
 - Fixed that the Race Invite caused an error when clicking outside of its window, causing it to close prematurely
 - Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
+- Fixed that clicking on a dropdown option outside the UV Menu, the menu would close if it was set to "Close on Unfocus"
 
 **[ Patch 1 v0.39.1 - December 17th 2025 ]**
 # New Features
@@ -205,11 +208,15 @@ CreateClientConVar("uvmenu_col_button_hover_a", 200, true, false)
 -- [[ End of Color ConVars ]] --
 
 function UV.PlayerCanSeeSetting(st)
+	if st.sp and not game.SinglePlayer() then
+		return false
+	end
+	
 	if st.sv or st.admin then
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return false end
 		if not ply:IsAdmin() and not ply:IsSuperAdmin() then
-		-- if ply:IsAdmin() and ply:IsSuperAdmin() then
+		-- if ply:IsAdmin() and ply:IsSuperAdmin() then -- Reverse for debugging
 			return false
 		end
 	end
@@ -258,6 +265,182 @@ end
 -- small materials for on/off indicators
 local matTick = Material("unitvehicles/icons/generic_check.png", "mips")
 local matCross = Material("unitvehicles/icons/generic_uncheck.png", "mips")
+
+-- Custom Dropdown panel
+local UVDropdown = {}
+
+function UVDropdown:Init()
+	self:SetTall(26)
+	self:SetCursor("hand")
+
+	self.Open = false
+	self.Value = nil
+	self.Choices = {}
+
+	self.Button = vgui.Create("DButton", self)
+	self.Button:Dock(FILL)
+	self.Button:SetText("")
+	self.Button.DoClick = function()
+		self:Toggle()
+	end
+
+	self.Button.Paint = function(btn, w, h)
+		draw.SimpleText( self.Value or "???", "UVMostWantedLeaderboardFont2", 12, h * 0.45, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+		draw.SimpleText( self.Open and "▲" or "▼", "UVMostWantedLeaderboardFont2", w - 14, h * 0.45, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	end
+end
+
+function UVDropdown:AddChoice(text, data)
+	table.insert(self.Choices, {text = text, data = data})
+end
+
+function UVDropdown:SetValue(text, data)
+	self.Value = text
+	self.Data = data
+end
+
+function UVDropdown:Toggle()
+	if self.Open then
+		self:CloseList()
+	else
+		self:OpenList()
+	end
+end
+
+function UVDropdown:OpenList()
+	if IsValid(self.List) then return end
+	self.Open = true
+
+	-- Create dropdown panel
+	self.List = vgui.Create("DPanel", self:GetParent())
+	self.List:SetWide(self:GetWide())
+	self.List:MakePopup()
+	self.List:SetKeyboardInputEnabled(false)
+
+	-- Track globally
+	UVMenu.OpenDropdowns = UVMenu.OpenDropdowns or {}
+	table.insert(UVMenu.OpenDropdowns, self.List)
+
+	self.List.OnRemove = function(pnl)
+		for i, v in ipairs(UVMenu.OpenDropdowns) do
+			if v == pnl then
+				table.remove(UVMenu.OpenDropdowns, i)
+				break
+			end
+		end
+	end
+
+	local x, y = self:LocalToScreen(0, self:GetTall() + 2)
+
+	-- Determine menu boundaries
+	local menu = self:GetParent()
+	while IsValid(menu:GetParent()) do
+		menu = menu:GetParent()
+	end
+	local mx, my = menu:LocalToScreen(0, 0)
+	local mw, mh = menu:GetSize()
+
+	local maxHeight = #self.Choices * 26 + 6
+	local spaceBelow = (my + mh) - y
+	local spaceAbove = y - my
+	local listHeight = math.min(maxHeight, 260)
+
+	-- Flip dropdown if not enough space below
+	if listHeight > spaceBelow and spaceAbove > spaceBelow then
+		listHeight = math.min(listHeight, spaceAbove - 4)
+		y = y - listHeight - 2
+	else
+		listHeight = math.min(listHeight, spaceBelow - 4)
+	end
+
+	self.List:SetSize(self:GetWide(), listHeight)
+	self.List:SetPos(x, y)
+
+	-- Close on click outside dropdown
+	self.List._wasMouseDown = false
+	self.List.Think = function(pnl)
+		if not IsValid(self) then pnl:Remove() return end
+
+		local mouseDown = input.IsMouseDown(MOUSE_LEFT)
+		if pnl._wasMouseDown and not mouseDown then
+			local mx, my = gui.MousePos()
+			local bx, by = self:LocalToScreen(0, 0)
+			local bw, bh = self:GetSize()
+
+			-- Check if inside dropdown
+			local inList = false
+			for _, pnl2 in ipairs(UVMenu.OpenDropdowns or {}) do
+				if IsValid(pnl2) then
+					local px, py = pnl2:LocalToScreen(0, 0)
+					local pw, ph = pnl2:GetSize()
+					if mx >= px and mx <= px + pw and my >= py and my <= py + ph then
+						inList = true
+						break
+					end
+				end
+			end
+
+			local inButton = mx >= bx and mx <= bx + bw and my >= by and my <= by + bh
+
+			if not inList and not inButton then
+				self:CloseList()
+			end
+		end
+
+		pnl._wasMouseDown = mouseDown
+	end
+
+	-- Background
+	self.List.Paint = function(p, w, h)
+		draw.RoundedBox(10, 0, 0, w, h, Color(30, 30, 30, 240))
+	end
+
+	-- Scroll panel
+	local scroll = vgui.Create("DScrollPanel", self.List)
+	scroll:Dock(FILL)
+	scroll:DockMargin(4, 4, 4, 4)
+	scroll.OnMouseWheeled = function(pnl, delta)
+		pnl:GetVBar():AddScroll(-delta * 1)
+		return true
+	end
+
+	-- Options
+	for _, v in ipairs(self.Choices) do
+		local opt = scroll:Add("DButton")
+		opt:SetTall(24)
+		opt:Dock(TOP)
+		opt:DockMargin(0, 0, 0, 2)
+		opt:SetText("")
+
+		opt.Paint = function(btn, w, h)
+			local hovered = btn:IsHovered()
+			draw.RoundedBox(6, 0, 0, w, h, hovered and Color(80, 80, 80, 220) or Color(60, 60, 60, 200))
+			draw.SimpleText(v.text, "UVMostWantedLeaderboardFont2", 10, h * 0.5, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		opt.DoClick = function()
+			self:SetValue(v.text, v.data)
+			if self.OnSelect then
+				self:OnSelect(v.text, v.data)
+			end
+			self:CloseList()
+		end
+	end
+
+	-- Fix default display text if not set
+	if not self.Value and #self.Choices > 0 then
+		self:SetValue(self.Choices[1].text, self.Choices[1].data)
+	end
+end
+
+function UVDropdown:CloseList()
+	self.Open = false
+	if IsValid(self.List) then
+		self.List:Remove()
+	end
+end
+
+vgui.Register("UVCombo", UVDropdown, "DPanel")
 
 -- Build one setting (label / bool / slider / combo / button)
 function UV.BuildSetting(parent, st, descPanel)
@@ -903,58 +1086,89 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
-		local combo = vgui.Create("DComboBox", wrap)
+		local combo = vgui.Create("UVCombo", wrap)
 		combo:Dock(RIGHT)
-		combo:SetWide(220)
+		combo:SetWide(330)
 		combo:DockMargin(6, 6, 6, 6)
+		combo.Paint = function(self, w, h)
+			local hovered = self.Button:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
 
-		-- Add choices first
+			-- background & text
+			draw.RoundedBox(12, 0, 0, w, h, default)
+			if hovered then draw.RoundedBox(12, 0, 0, w, h, hover) end
+		end
+
 		for _, entry in ipairs(st.content or {}) do
 			combo:AddChoice(entry[1], entry[2])
 		end
 
-		-- Set selected value based on convar
+		-- Default value
 		if st.convar then
 			local cv = GetConVar(st.convar)
 			if cv then
-				local cur = cv:GetString()
-				local found = false
+				local val = cv:GetString() -- ConVar value as string
+				local matched = false
+
 				for _, v in ipairs(st.content or {}) do
-					if tostring(v[2]) == tostring(cur) then
-						combo:SetText(v[1])
-						found = true
-						break
+					-- Detect numeric vs string
+					if type(v[2]) == "number" then
+						if tonumber(val) == v[2] then
+							combo:SetValue(v[1], v[2])
+							matched = true
+							break
+						end
+					else
+						if val == tostring(v[2]) then
+							combo:SetValue(v[1], v[2])
+							matched = true
+							break
+						end
 					end
 				end
-				if not found then
-					combo:SetText(st.text)
+
+				if not matched and #st.content > 0 then
+					combo:SetValue(st.content[1][1], st.content[1][2])
 				end
 			end
-		else
-			combo:SetText(st.text)
+		elseif st.text then
+			combo:SetValue(st.text, nil)
 		end
 
-		combo.OnSelect = function(_, _, val, data)
+		combo.OnSelect = function(_, val, data)
 			if st.convar then
-				RunConsoleCommand(st.convar, tostring(data))
-				combo:SetText(val)
+				RunConsoleCommand(st.convar, data)
 			end
-			if st.func then st.func(combo) end
+			if st.func then
+				st.func(combo)
+			end
 		end
 
-		combo.OnCursorEntered = function()
+		combo.Button.OnCursorEntered = function()
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
-					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
-					descPanel.SelectedCurrent = GetConVar(st.convar):GetString() or "?"
+					local cv = GetConVar(st.convar)
+					descPanel.SelectedDefault = cv and cv:GetDefault() or "?"
+					descPanel.SelectedCurrent = cv and cv:GetString() or "?"
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
 		end
 
-		combo.OnCursorExited = function()
+		combo.Button.OnCursorExited = function()
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
@@ -965,24 +1179,31 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 			end
 		end
-		
+
 		wrap.OnMousePressed = function(self, mc)
 			if mc == MOUSE_MIDDLE and st.convar then
 				local cv = GetConVar(st.convar)
-				if cv then
-					local def = cv:GetDefault()
+				if not cv then return end
 
-					-- find matching display text
-					for _, v in ipairs(st.content or {}) do
-						if tostring(v[2]) == tostring(def) then
-							combo:SetText(v[1])
-							UVMenu.PlaySFX("hover")
-							break
-						end
+				local def = cv:GetDefault() -- default value as string
+				local matched = false
+
+				-- find matching display text
+				for _, v in ipairs(st.content or {}) do
+					if tostring(v[2]) == tostring(def) then
+						combo:SetValue(v[1], v[2])   -- set both text and data
+						UVMenu.PlaySFX("hover")
+						matched = true
+						break
 					end
-
-					RunConsoleCommand(st.convar, def)
 				end
+
+				-- fallback if no match found
+				if not matched and #st.content > 0 then
+					combo:SetValue(st.content[1][1], st.content[1][2])
+				end
+
+				RunConsoleCommand(st.convar, def)
 			end
 		end
 
@@ -1607,13 +1828,13 @@ function UVMenu:Open(menu)
 				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 20, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			if self.SelectedDefault and self.SelectedDefault ~= "" then
-				draw.SimpleText( string.format( language.GetPhrase("Default: %s"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText( string.format( language.GetPhrase("uv.settings.default"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 			-- if self.SelectedCurrent and self.SelectedCurrent ~= ""then
 				-- draw.SimpleText("Current: " .. self.SelectedCurrent, "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			-- end
-			
         end
+
         descPanel.Text = ""
         descPanel.Desc = ""
         descPanel.SelectedConVar = ""
@@ -1829,18 +2050,31 @@ function UVMenu:Open(menu)
             SetAlphaRecursive(center, secondaryA)
 
             -- unfocus auto-close
-            if UnfocusClose and input.IsMouseDown(MOUSE_LEFT) then
-                local mx, my = gui.MousePos()
-                if mx and my then
-                    local fx2, fy2 = self:GetPos()
-                    local fw2, fh2 = self:GetSize()
-                    if mx < fx2 or mx > fx2 + fw2 or my < fy2 or my > fy2 + fh2 then
-                        timer.Simple(0, function()
-                            if IsValid(self) then UVMenu.CloseCurrentMenu() end
-                        end)
-                    end
-                end
-            end
+			if UnfocusClose and input.IsMouseDown(MOUSE_LEFT) then
+				local mx, my = gui.MousePos()
+				if mx and my then
+					local fx2, fy2 = self:GetPos()
+					local fw2, fh2 = self:GetSize()
+
+					local clickedInsideDropdown = false
+					for _, pnl in ipairs(UVMenu.OpenDropdowns or {}) do
+						if IsValid(pnl) then
+							local px, py = pnl:LocalToScreen(0, 0)
+							local pw, ph = pnl:GetSize()
+							if mx >= px and mx <= px + pw and my >= py and my <= py + ph then
+								clickedInsideDropdown = true
+								break
+							end
+						end
+					end
+
+					if not clickedInsideDropdown and (mx < fx2 or mx > fx2 + fw2 or my < fy2 or my > fy2 + fh2) then
+						timer.Simple(0, function()
+							if IsValid(self) then UVMenu.CloseCurrentMenu() end
+						end)
+					end
+				end
+			end
 
             local shouldRefresh = false
             for cvName in pairs(watchedConvars) do
