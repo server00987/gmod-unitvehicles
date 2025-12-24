@@ -437,11 +437,6 @@ if CLIENT then
 		end
 		CPanel:AddItem(applysettings)
 
-		CPanel:AddControl("Button", {
-			Text = "#tool.uvtrafficmanager.clear",
-			Command = "uv_cleartraffic"
-		})
-		
 		-- Unified Vehicle Base UI
 		local vehicleBases = {
 			{ id = 1, name = "HL2 Jeep", func = UVTrafficManagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/traffic/", type = "txt" },
@@ -602,32 +597,18 @@ if CLIENT then
 			UVTrafficManagerTool.PopulateVehicleList(baseId)
 		end
 		CPanel:AddItem(DeleteBtn)
-				
-		-- Dropdown for vehicle base selection
-		CPanel:AddControl("Label", { Text = "#tool.uvtrafficmanager.settings.base.title" })
-		CPanel:AddItem(vehicleBaseCombo)
 
-		CPanel:AddControl("Label", { Text = "" }) -- General Heat Settings
-		CPanel:AddControl("Label", { Text = "#tool.uvtrafficmanager.settings.general.title" })
-
-		local spawncondition = vgui.Create("DNumSlider")
-		spawncondition:SetText("#tool.uvtrafficmanager.settings.spawncondition")
-		spawncondition:SetTooltip("#tool.uvtrafficmanager.settings.spawncondition.desc")
-		spawncondition:SetMinMax(1, 3)
-		spawncondition:SetDecimals(0)
-		spawncondition:SetValue(GetConVar("uvtrafficmanager_spawncondition"))
-		spawncondition:SetConVar("uvtrafficmanager_spawncondition")
-		CPanel:AddItem(spawncondition)
-
-		local maxtraffic = vgui.Create("DNumSlider")
-		maxtraffic:SetText("#tool.uvtrafficmanager.settings.maxtraffic")
-		maxtraffic:SetTooltip("#tool.uvtrafficmanager.settings.maxtraffic.desc")
-		maxtraffic:SetMinMax(0, 20)
-		maxtraffic:SetDecimals(0)
-		maxtraffic:SetValue(GetConVar("uvtrafficmanager_maxtraffic"))
-		maxtraffic:SetConVar("uvtrafficmanager_maxtraffic")
-		CPanel:AddItem(maxtraffic)
-		
+		CPanel:AddControl("Label", { Text = "" }) -- General Settings
+		CPanel:AddControl("Label", { Text = "#uv.tweakinmenu" })
+		local OpenMenu = vgui.Create("DButton")
+		OpenMenu:SetText("#uv.tweakinmenu.open")
+		OpenMenu:SetSize(280, 20)
+		OpenMenu.DoClick = function()
+			UVMenu.OpenMenu(UVMenu.Main)
+			UVMenu.PlaySFX("menuopen")
+		end
+		CPanel:AddItem(OpenMenu)
+	
 		-- Sync dropdown and slider
 		vehicleBaseCombo.OnSelect = function(self, index, value, data)
 			local baseId = tonumber(data)

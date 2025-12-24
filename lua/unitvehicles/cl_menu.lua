@@ -52,6 +52,26 @@ if racesfxfolders then
 	end
 end
 
+
+local function SpawnAI(amount, racestart, police)
+	local beginrace = racestart or false
+	local cv = police and "uv_spawnvehicles" or "uvrace_spawnai"
+	
+	for i = 1, amount do
+		RunConsoleCommand(cv)
+	end
+	
+	if beginrace then
+		timer.Simple(0.5, function()
+			RunConsoleCommand("uvrace_startinvite")
+		end)
+
+		timer.Simple(2, function()
+			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+		end)
+	end
+end
+
 ------- [ Main Menu ]-------
 UVMenu.Main = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
@@ -60,8 +80,10 @@ UVMenu.Main = function()
 		Height = ScrH() * 0.7,
 		Description = true,
 		UnfocusClose = true,
+		BindPanel = true,
 		Tabs = {
-			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png",
+		
+			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
 						{ "Crash Time - Undercover", "ctu"} ,
@@ -91,13 +113,14 @@ UVMenu.Main = function()
 				{ type = "info", text = UV.PNotes, centered = true },
 				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
+			
 			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
-					UVMenu.OpenMenu(UVMenu.RaceManager)
+					UVMenu.OpenMenu(UVMenu.RaceManager) -- Race Manager
 				end,
-				{ type = "label", text = "#uv.addons.builtin" },
 			},
-			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png",
-				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
+			
+			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png", -- Pursuit Manager
+				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
 					UVMenu.PlaySFX("clickopen")
@@ -106,26 +129,100 @@ UVMenu.Main = function()
 					end)
 				end
 				},
-
-				{ type = "label", text = "#uv.settings.server", sv = true },
+				{ type  = "buttonsw", text  = language.GetPhrase("uv.pm.spawnai.val"), desc  = "uv.pm.spawnai.val.desc", sv = true, min = 1, max = 20, start = 1,
+					func = function(self2, amount)
+						SpawnAI(amount, nil, true)
+					end,
+				},
+				{ type = "button", text = "#uv.pm.clearai", desc = "uv.pm.clearai", convar = "uv_despawnvehicles", sv = true },
+				
+				{ type = "label", text = "#uv.pursuit", sv = true },
 				-- { type = "button", text = "#uv.pm.pursuit.toggle", desc = "uv.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.start", desc = "uv.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.stop", desc = "uv.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
 				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", command = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-				
-				{ type = "button", text = "#uv.pm.ai.spawn", convar = "uv_spawnvehicles", sv = true },
-				{ type = "button", text = "#uv.pm.ai.despawn", convar = "uv_despawnvehicles", sv = true },
-				
+
 				{ type = "label", text = "#uv.pm.misc", sv = true },
 				{ type = "button", text = "#uv.pm.clearbounty", convar = "uv_clearbounty", sv = true },
 				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
 			},
+			
+			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", -- AI Racer Manager
+				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvracermanager_vehiclebase", sv = true, content = {
+						{ "HL2 Jeep", 1 } ,
+						{ "Simfphys", 2 } ,
+						{ "Glide", 3 } ,
+					},
+				},
+				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvracermanager_spawncondition", sv = true, content = {
+						{ "#uv.tool.spawncondition.never", 1 } ,
+						{ "#uv.tool.spawncondition.driving", 2 } ,
+						{ "#uv.tool.spawncondition.always", 3 } ,
+					},
+				},
+				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvracermanager_maxracer", min = 0, max = 20, decimals = 0, sv = true },
+												
+				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_cleartraffic", sv = true, func = function()
+					local convar_table = {}
+					
+					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
+					convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
+					convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
+
+					net.Start("UVUpdateSettings")
+					net.WriteTable(convar_table)
+					net.SendToServer()
+					
+					notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
+				end },
+				
+				-- { type = "button", text = "#uv.airacer.spawnai", desc = "uv.airacer.spawnai.desc", convar = "uvrace_spawnai", sv = true }, -- Single one - redundant?
+				{ type = "buttonsw", text = language.GetPhrase("uv.airacer.spawnai.val"), desc = "uv.airacer.spawnai.val.desc", convar = "uvrace_spawnai", sv = true, min = 1, max = 20, start = 1, func = function(self2, amount) SpawnAI(amount) end, },
+				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", sv = true },
+				
+				{ type = "bool", text = "#uv.airacer.override", desc = "uv.airacer.override.desc", convar = "uvracermanager_assignracers", sv = true },
+				{ type = "ai_overridelist", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "uvracermanager_racers", sv = true, parentconvar = "uvracermanager_assignracers" },
+			},
+			
+			{ TabName = "#uv.tm", Icon = "unitvehicles/icons_settings/gameplay.png", -- Traffic Manager
+				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvtrafficmanager_vehiclebase", sv = true, content = {
+						{ "HL2 Jeep", 1 } ,
+						{ "Simfphys", 2 } ,
+						{ "Glide", 3 } ,
+					},
+				},
+				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvtrafficmanager_spawncondition", sv = true, content = {
+						{ "#uv.tool.spawncondition.never", 1 } ,
+						{ "#uv.tool.spawncondition.driving", 2 } ,
+						{ "#uv.tool.spawncondition.always", 3 } ,
+					},
+				},
+				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvtrafficmanager_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
+				
+				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_cleartraffic", sv = true, func = function()
+					local convar_table = {}
+					
+					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
+					convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
+					convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
+
+					net.Start("UVUpdateSettings")
+					net.WriteTable(convar_table)
+					net.SendToServer()
+					
+					notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
+				end },
+				
+				{ type = "button", text = "#uv.tm.clear", desc = "uv.tm.clear.desc", convar = "uv_cleartraffic", sv = true },
+			},
+			
 			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", func = function()
-					UVMenu.OpenMenu(UVMenu.FAQ)
+					UVMenu.OpenMenu(UVMenu.FAQ) -- FAQ
 				end,
 			},
+			
 			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
-					UVMenu.OpenMenu(UVMenu.Settings)
+					UVMenu.OpenMenu(UVMenu.Settings) -- Settings Menu
 				end,
 			},
 		}
@@ -770,20 +867,6 @@ UVMenu.RaceManagerStartRace = function()
 		return math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
 	end
 
-	local function SpawnAIRacers(amount)
-		for i = 1, amount do
-			RunConsoleCommand("uvrace_spawnai")
-		end
-
-		timer.Simple(0.5, function()
-			RunConsoleCommand("uvrace_startinvite")
-		end)
-
-		timer.Simple(2, function()
-			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-		end)
-	end
-
 	local function FillGridWithAI()
 		local racerList = UVRace_RacerList or {}
 		local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
@@ -824,9 +907,9 @@ UVMenu.RaceManagerStartRace = function()
 						UVMenu.CloseCurrentMenu()
 					end
 				},
-				{ type  = "buttonsw", text  = language.GetPhrase("uv.rm.startrace.addai"), desc  = "uv.rm.startrace.addai.desc", sv    = true, min   = 1, max   = maxSlots, start = spawnAmountStart,
+				{ type  = "buttonsw", text  = language.GetPhrase("uv.rm.startrace.addai"), desc  = "uv.rm.startrace.addai.desc", sv = true, min = 1, max = maxSlots, start = spawnAmountStart,
 					func = function(self2, amount)
-						SpawnAIRacers(amount)
+						SpawnAI(amount, true)
 						UVMenu.CloseCurrentMenu()
 					end,
 					cond = function() return maxSlots > 0 end,
@@ -995,3 +1078,34 @@ UVMenu.RaceInvite = function()
 		}
 	})
 end
+
+------- [ Traffic Manager ] -------
+-- UVMenu.TrafficManager = function()
+	-- UVMenu.CurrentMenu = UVMenu:Open({
+		-- Name = " ",
+		-- Width = ScrW() * 0.45,
+		-- Height = ScrH() * 0.275,
+		-- Description = true,
+		-- UnfocusClose = true,
+		-- Tabs = {
+			-- { TabName = "#uv.tm",
+				-- { type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvtrafficmanager_vehiclebase", sv = true, content = {
+						-- { "HL2 Jeep", 1 } ,
+						-- { "Simfphys", 2 } ,
+						-- { "Glide", 3 } ,
+					-- },
+				-- },
+				-- { type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvtrafficmanager_spawncondition", sv = true, content = {
+						-- { "Never", 1 } ,
+						-- { "Only while driving", 2 } ,
+						-- { "Always", 3 } ,
+					-- },
+				-- },
+				-- { type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvtrafficmanager_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
+				-- { type = "button", text = "#uv.back", playsfx = "clickback",
+						-- func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
+				-- },
+			-- },
+		-- }
+	-- })
+-- end

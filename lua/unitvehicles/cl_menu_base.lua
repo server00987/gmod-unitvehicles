@@ -5,22 +5,27 @@ UV.SettingsTable = UV.SettingsTable or {}
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
 UV.CurVersion = "v0.39.2" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Patch 2 v0.39.2 - December 22nd 2025 ]**
-# New Features
-- Added the **UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser**
+**[ Patch 2 v0.39.2 - December 25th 2025 ]**
+**New Features**
+- Added the *UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser*
 - AI Racers and Units will no longer rotate while mid-air
   |-- Only applies to Glide vehicles
-- Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
-- Added a custom dropdown menu in the UV Menu, used by the **UVTrax Profile** and **HUD Types**
+  
+**UV Menu**
+- Added new *AI Racer Manager* and *Traffic Manager* tabs
+  |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
+- Added a *Timer* variable in the UV Menu, applied to the *Totaled* and *Race Invite* menus
+- Added a custom dropdown menu in the UV Menu, used by the *UVTrax Profile* and *HUD Types*
 
-# Changes
-- Updated Chinese and Czech localizations
+**Changes**
+- Updated *Chinese* and *Czech* localizations
 - Pursuit Breakers will now always trigger a call response
-- The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
-- The **Addons** tab was moved to UV Settings
-- The **Freeze Cam** option no longer appears in the UV Menu while in a Multiplayer session
+- The *Vehicle Override* feature from the "Manager: AI Racers" tool (now present in the UV Menu) now supports infinite amount of racers
+- UV Menu: The *FAQ* tab now sends you to a separate menu instance with categorized information
+- UV Menu: The *Addons* tab was moved to UV Settings
+- UV Menu: The *Freeze Cam* option no longer appears in the UV Menu while in a Multiplayer session
 
-# Fixes
+**Fixes**
 - Fixed that AI Racers sometimes steered weirdly after entering another lap
 - Fixed that the Air Unit's spotlight wasn't always active
 - Fixed that Units still respawned when the Backup timer was active
@@ -1588,7 +1593,6 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
-		-- Description handling (same as label)
 		if st.desc then
 			p.OnCursorEntered = function()
 				if descPanel then
@@ -1598,6 +1602,307 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 
 			p.OnCursorExited = function()
+				if descPanel then
+					descPanel.Text = ""
+					descPanel.Desc = ""
+				end
+			end
+		end
+
+		return p
+	end
+
+	if st.type == "ai_overridelist" then
+		local p = vgui.Create("DPanel", parent)
+		p:Dock(TOP)
+		p:SetTall(330)
+		p:DockMargin(0, 8, 0, 8)
+
+		p.Paint = function(self, w, h)
+			if st.convar then
+				local cv = GetConVar(st.convar)
+				local convarlength = st.convar .. " " .. (cv:GetString() or "")
+
+				local LIMIT = 5120
+				local WARN_AT = LIMIT * 0.75
+				
+				local vehnum = 0
+				
+				for _, veh in string.gmatch(cv:GetString(), "%S+") do
+					vehnum = vehnum + 1
+				end
+				
+				draw.SimpleText( string.format( language.GetPhrase(st.text), vehnum ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.025, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+				if #convarlength >= WARN_AT then
+					local blink = math.abs(math.sin(RealTime() * 6))
+
+					if #convarlength >= LIMIT then
+						draw.SimpleText( "#uv.warning", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.8, Color(255, 255 * blink, 255 * blink, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.warning.convarlimit.exceeded"), #convarlength, LIMIT ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.875, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					else
+						draw.SimpleText( "#uv.warning", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.8, Color(255, 255 * blink, 255 * blink, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						draw.SimpleText( string.format( language.GetPhrase("uv.warning.convarlimit"), #convarlength, LIMIT ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.875, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					end
+				end
+			else
+				draw.SimpleText( st.text, "UVMostWantedLeaderboardFont", w * 0.5, h * 0.025, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			end
+		end
+
+		-- Vehicle tree belongs to THIS panel
+		local vehicleTree = vgui.Create("DTree", p)
+		vehicleTree:Dock(BOTTOM)
+		vehicleTree:SetTall(220)
+		vehicleTree:DockMargin(160, 4, 160, 80)
+		
+		-- vehicleTree.Paint = function(self, w, h)
+			-- local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
+			
+			-- draw.RoundedBox(4, 0, 0, w, h, bg)
+			-- draw.SimpleText(st.text, "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		-- end
+
+		-- /// Vehicle Override Code /// --
+		local selectedRacers = {}
+		
+		local glideNode
+		local glideDataRequested = false
+		local racerconvar = GetConVar("uvracermanager_racers")
+
+		local function ParseConvar()
+			local t = {}
+			for class in string.gmatch(GetConVar("uvracermanager_racers"):GetString(), "%S+") do
+				t[class] = true
+			end
+			return t
+		end
+
+		local function UpdateRacersConvar()
+			local out = {}
+
+			for class, _ in pairs(selectedRacers) do
+				table.insert(out, class)
+			end
+			table.sort(out)
+
+			local str = table.concat(out, " ")
+			-- RunConsoleCommand("uvracermanager_racers", str)
+			racerconvar:SetString( str )
+		end
+
+		local classToNode = {} -- lookup so textbox edits update icons
+
+		local function RefreshNodeIcons()
+			for class, node in pairs(classToNode) do
+				if IsValid(node) then
+					if selectedRacers[class] then
+						node:SetIcon("icon16/tick.png")
+					else
+						node:SetIcon("icon16/car.png")
+					end
+				end
+			end
+		end
+
+		local function UpdateFolderIcon(folderNode)
+			if not IsValid(folderNode) then return end
+
+			local hasSelectedChild = false
+			for _, child in ipairs(folderNode:GetChildren() or {}) do
+				if child.ClassName and selectedRacers[child.ClassName] then
+					hasSelectedChild = true
+					break
+				end
+				for _, gc in ipairs(child.GetChildren and child:GetChildren() or {}) do
+					if gc.ClassName and selectedRacers[gc.ClassName] then
+						hasSelectedChild = true
+						break
+					end
+				end
+			end
+
+			if folderNode.SetIcon then
+				if hasSelectedChild then
+					folderNode:SetIcon("icon16/folder_add.png")
+				else
+					local expanded = folderNode.Expander and folderNode.Expander.IsExpanded and folderNode.Expander:IsExpanded()
+					if expanded then
+						folderNode:SetIcon("icon16/folder_add.png")
+					else
+						folderNode:SetIcon("icon16/folder.png")
+					end
+				end
+			end
+		end
+
+		-- ADD VEHICLE NODES
+		local function AddVehicleNodes(parentNode, vehicles)
+			table.sort(vehicles, function(a, b) return (a.name or "") < (b.name or "") end)
+
+			selectedRacers = ParseConvar()
+
+			for _, veh in ipairs(vehicles) do
+				local class = veh.class
+				local node = parentNode:AddNode(veh.name or class)
+				node.ClassName = class
+
+				classToNode[class] = node
+
+				if selectedRacers[class] then
+					node:SetIcon("icon16/tick.png")
+				else
+					node:SetIcon("icon16/car.png")
+				end
+
+				node:SetTooltip("#tool.uvracermanager.settings.racers.desc")
+
+				function node:DoRightClick()
+					if selectedRacers[class] then
+						selectedRacers[class] = nil
+						self:SetIcon("icon16/car.png")
+					else
+						selectedRacers[class] = true
+						self:SetIcon("icon16/tick.png")
+					end
+
+					UpdateRacersConvar()
+					UpdateFolderIcon(parentNode)
+				end
+			end
+
+			UpdateFolderIcon(parentNode)
+		end
+
+		local function BuildVehicleTree()
+			vehicleTree:Clear()
+			classToNode = {}
+			selectedRacers = ParseConvar()
+
+			-- HL2 Jeeps
+			local baseVehicles = list.Get("Vehicles") or {}
+			local baseCategories = {}
+			for class, data in pairs(baseVehicles) do
+				local cat = data.Category or "Other"
+				baseCategories[cat] = baseCategories[cat] or {}
+				table.insert(baseCategories[cat], {name = data.PrintName or class, class = class})
+			end
+			for catName, vehs in SortedPairs(baseCategories) do
+				local catNode = vehicleTree:AddNode(catName)
+				AddVehicleNodes(catNode, vehs)
+			end
+
+			-- Simfphys
+			local simfphysVehicles = list.Get("simfphys_vehicles") or {}
+			if next(simfphysVehicles) then
+				local simNode = vehicleTree:AddNode("[simfphys]")
+				local simCategories = {}
+				for class, data in pairs(simfphysVehicles) do
+					local cat = data.Category or "Other"
+					simCategories[cat] = simCategories[cat] or {}
+					table.insert(simCategories[cat], {name = data.Name or class, class = class})
+				end
+				for catName, vehs in SortedPairs(simCategories) do
+					local catNode = simNode:AddNode(catName)
+					AddVehicleNodes(catNode, vehs)
+				end
+			end
+
+			-- Glide placeholder
+			glideNode = vehicleTree:AddNode("Glide - Select to load")
+			glideNode:SetExpanded(false)
+			glideDataRequested = false
+		end
+
+		BuildVehicleTree()
+
+		-- Request server data when Glide node is selected
+		function glideNode:OnNodeSelected()
+			if glideDataRequested then return end
+			glideDataRequested = true
+
+			net.Start("RequestGlideVehicles")
+			net.SendToServer()
+		end
+
+		-- if glideDataRequested then return end
+		glideDataRequested = true
+
+		net.Start("RequestGlideVehicles")
+		net.SendToServer()
+
+		-- Receive Glide vehicle data
+		net.Receive("GlideVehiclesTable", function()
+			local glideVehicles = net.ReadTable()
+			local glideCategories = list.Get("GlideCategories") or {}
+
+			if IsValid(glideNode) then
+				glideNode:SetText("Glide")
+			end
+
+			-- Always show Default first
+			if glideVehicles["Default"] then
+				local defaultNode = glideNode:AddNode("Default")
+				AddVehicleNodes(defaultNode, glideVehicles["Default"])
+			end
+
+			-- Populate Glide categories
+			for catID, catData in SortedPairs(glideCategories) do
+				local vehicles = glideVehicles[catID] or {}
+				if #vehicles > 0 then
+					local catNode = glideNode:AddNode(catData.name or catID)
+					AddVehicleNodes(catNode, vehicles)
+				end
+			end
+		end)
+
+		-- /// End of Vehicle Override Code /// --
+		
+		p.OnMousePressed = function(self, mouse)
+			if mouse == MOUSE_MIDDLE then
+				-- RunConsoleCommand("uvracermanager_racers", "")
+				racerconvar:SetString( "" )
+				
+				selectedRacers = {}
+
+				vehicleTree:Clear()
+				classToNode = {}
+
+				-- Rebuild nodes (call a function instead of duplicating)
+				BuildVehicleTree()
+				
+				glideDataRequested = true
+				net.Start("RequestGlideVehicles")
+				net.SendToServer()
+
+				UVMenu.PlaySFX("confirm")
+				-- notification.AddLegacy("#uv.overrides.cleared", NOTIFY_UNDO, 3)
+			end
+		end
+
+		if st.desc then
+			p.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = st.text
+					descPanel.Desc = st.desc or ""
+				end
+			end
+
+			p.OnCursorExited = function()
+				if descPanel then
+					descPanel.Text = ""
+					descPanel.Desc = ""
+				end
+			end
+			
+			vehicleTree.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = st.text
+					descPanel.Desc = st.desc or ""
+				end
+			end
+
+			vehicleTree.OnCursorExited = function()
 				if descPanel then
 					descPanel.Text = ""
 					descPanel.Desc = ""
@@ -1741,7 +2046,6 @@ function UVMenu:Open(menu)
     local ShowDesc = CurrentMenu.Description == true and not GetConVar("uvmenu_hide_description"):GetBool()
     local Tabs = CurrentMenu.Tabs or {}
     local UnfocusClose = CurrentMenu.UnfocusClose == true
-	local ShowCPreview = CurrentMenu.ColorPreview == true
 	local HideCloseButton = CurrentMenu.HideCloseButton == true
 	
 	if CurrentMenu.Description == true and GetConVar("uvmenu_hide_description"):GetBool() then
@@ -1825,14 +2129,15 @@ function UVMenu:Open(menu)
                 end
             end
 			if self.SelectedConVar then
-				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 20, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			if self.SelectedDefault and self.SelectedDefault ~= "" then
-				draw.SimpleText( string.format( language.GetPhrase("uv.settings.default"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				-- draw.SimpleText( "#uv.settings.resetbind", "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, Color(255, 255, 255, a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText( string.format( language.GetPhrase("uv.settings.default"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98 - 20, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
-			-- if self.SelectedCurrent and self.SelectedCurrent ~= ""then
-				-- draw.SimpleText("Current: " .. self.SelectedCurrent, "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			-- end
+			if self.SelectedCurrent and self.SelectedCurrent ~= ""then
+				draw.SimpleText(string.format( language.GetPhrase("uv.settings.current"), self.SelectedCurrent ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
         end
 
         descPanel.Text = ""
@@ -1841,59 +2146,6 @@ function UVMenu:Open(menu)
         descPanel.SelectedDefault = ""
         descPanel.SelectedCurrent = ""
         descPanel:SetAlpha(0)
-    end
-
-    -- Right description panel
-    local colpreviewPanel
-    if ShowCPreview then
-        colpreviewPanel = vgui.Create("DPanel", frame)
-        colpreviewPanel:Dock(RIGHT)
-        colpreviewPanel:SetWide(math.Clamp(fw * 0.5, 220, 570))
-        colpreviewPanel.Paint = function(self, w, h)
-			-- Background
-			local bg = Color( GetConVar("uvmenu_col_bg_r"):GetInt(), GetConVar("uvmenu_col_bg_g"):GetInt(), GetConVar("uvmenu_col_bg_b"):GetInt(), GetConVar("uvmenu_col_bg_a"):GetInt() )
-			draw.RoundedBox(0, 0, 0, w, h * 0.5, bg)
-						
-			draw.SimpleText("#uv.unitvehicles", "UVMostWantedLeaderboardFont2", w * 0.005, h * 0.01, titleColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			
-			-- Tabs
-			surface.SetDrawColor(
-				GetConVar("uvmenu_col_tabs_r"):GetInt(),
-				GetConVar("uvmenu_col_tabs_g"):GetInt(),
-				GetConVar("uvmenu_col_tabs_b"):GetInt(),
-				GetConVar("uvmenu_col_tabs_a"):GetInt()
-			)
-			surface.DrawRect(0, h*0.025, w*0.25, h*0.475)
-			
-			local default = Color( GetConVar("uvmenu_col_tab_default_r"):GetInt(), GetConVar("uvmenu_col_tab_default_g"):GetInt(), GetConVar("uvmenu_col_tab_default_b"):GetInt(), 75 )
-			local active = Color( GetConVar("uvmenu_col_tab_active_r"):GetInt(), GetConVar("uvmenu_col_tab_active_g"):GetInt(), GetConVar("uvmenu_col_tab_active_b"):GetInt(), 75 )
-			local hover = Color( GetConVar("uvmenu_col_tab_hover_r"):GetInt(), GetConVar("uvmenu_col_tab_hover_g"):GetInt(), GetConVar("uvmenu_col_tab_hover_b"):GetInt(), 175 )
-
-			local bg = isSelected and active or (hovered and hover or default)
-
-			draw.RoundedBox(5, w*0.01, h * 0.03, w * 0.225, 16, default)
-			draw.SimpleText("Tab", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.04, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-			draw.RoundedBox(5, w*0.01, h * 0.06, w * 0.225, 16, hover)
-			draw.SimpleText("Tab (Hover)", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.07, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-			draw.RoundedBox(5, w*0.01, h * 0.09, w * 0.225, 16, active)
-			draw.SimpleText("Tab (Active)", "UVMostWantedLeaderboardFont2", w * 0.01, h*0.1, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-			-- Center Part
-			
-			draw.SimpleText("Tab", "UVMostWantedLeaderboardFont", w * 0.5, h*0.035, Color(255, 255, 255, self:GetAlpha()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			-- Labels
-			surface.SetDrawColor(
-				GetConVar("uvmenu_col_label_r"):GetInt(),
-				GetConVar("uvmenu_col_label_g"):GetInt(),
-				GetConVar("uvmenu_col_label_b"):GetInt(),
-				GetConVar("uvmenu_col_label_a"):GetInt()
-			)
-			surface.DrawRect(0, h*0.025, w*0.25, h*0.475)
-			
-        end
-		colpreviewPanel:SetAlpha(0)
     end
 
     -- Center scroll panel
@@ -1905,7 +2157,7 @@ function UVMenu:Open(menu)
     -- Left tabs panel (only if >1 tab)
     local tabsPanel
     if #Tabs > 1 then
-        tabsPanel = vgui.Create("DPanel", frame)
+        tabsPanel = vgui.Create("DScrollPanel", frame)
         tabsPanel:Dock(LEFT)
         tabsPanel:SetWide(ScrW()*0.15)
         tabsPanel.Paint = function(self, w, h)
@@ -1950,7 +2202,6 @@ function UVMenu:Open(menu)
     local secondaryGroup = {center}
     if tabsPanel then table.insert(secondaryGroup, tabsPanel) end
     if descPanel then table.insert(secondaryGroup, descPanel) end
-    if colpreviewPanel then table.insert(secondaryGroup, colpreviewPanel) end
 
     local CURRENT_TAB = 1
 
