@@ -256,69 +256,98 @@ function UVBindButtonName(var)
 end
 
 if CLIENT then
+	-- Size-related stuff
+	UV.BaseW = 1920
+	UV.BaseH = 1080
+
+	UV.DebugRes = nil
+	-- Uncomment if you want to debug certain screen resolutions. Below are the resolutions for 16:9:
+	-- UV.DebugRes = { w = 1280, h = 720 } -- 16:9 720p
+	-- UV.DebugRes = { w = 640, h = 480 } -- 16:9 480p
+	
+	function UV_GetW()
+		return UV.DebugRes and UV.DebugRes.w or ScrW()
+	end
+
+	function UV_GetH()
+		return UV.DebugRes and UV.DebugRes.h or ScrH()
+	end
+
+	function UV.ScaleW(px)
+		return math.Round(px * (math.min(UV_GetW(), UV.BaseW) / UV.BaseW))
+	end
+
+	function UV.ScaleH(px)
+		return math.Round(px * (math.min(UV_GetH(), UV.BaseH) / UV.BaseH))
+	end
+
+	function UV.Scale(px)
+		return math.Round(px * (math.min(UV_GetH(), UV.BaseH) / UV.BaseH))
+	end
+
 	-- Original HUD & General
-    surface.CreateFont("UVFont", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, italic = true, extended = true, })
-    surface.CreateFont("UVFont-Shadow", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, italic = true, shadow = true, extended = true, })
-    surface.CreateFont("UVFont-Smaller", { font = "Arial", size = (math.Round(ScrH()*0.0425)), weight = 500, italic = true, extended = true, })
-    surface.CreateFont("UVFont-Bolder", { font = "Arial", size = (math.Round(ScrH()*0.0425)), weight = 1000, italic = false, shadow = true, extended = true, })
-    surface.CreateFont("UVFont2", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont2-Smaller", { font = "Arial", size = (math.Round(ScrH()*0.0375)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont3", { font = "Arial", size = (math.Round(ScrH()*0.0462962963)), weight = 500, shadow = true, extended = true, })
-    surface.CreateFont("UVFont3Big", { font = "Arial", size = (math.Round(ScrH()*0.085)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont3Bigger", { font = "Arial", size = (math.Round(ScrH()*0.12)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont4", { font = "Arial", size = (math.Round(ScrH()*0.02314814815)), weight = 1100, shadow = true, extended = true, })
-	
+	surface.CreateFont("UVFont", { font = "Arial", size = UV.ScaleH(50), weight = 500, italic = true, extended = true })
+	surface.CreateFont("UVFont-Shadow", { font = "Arial", size = UV.ScaleH(50), weight = 500, italic = true, shadow = true, extended = true })
+	surface.CreateFont("UVFont-Smaller", { font = "Arial", size = UV.ScaleH(46), weight = 500, italic = true, extended = true })
+	surface.CreateFont("UVFont-Bolder", { font = "Arial", size = UV.ScaleH(46), weight = 1000, italic = false, shadow = true, extended = true })
+	surface.CreateFont("UVFont2", { font = "Arial", size = UV.ScaleH(50), weight = 500, extended = true })
+	surface.CreateFont("UVFont2-Smaller", { font = "Arial", size = UV.ScaleH(40), weight = 500, extended = true })
+	surface.CreateFont("UVFont3", { font = "Arial", size = UV.ScaleH(50), weight = 500, shadow = true, extended = true })
+	surface.CreateFont("UVFont3Big", { font = "Arial", size = UV.ScaleH(92), weight = 500, extended = true })
+	surface.CreateFont("UVFont3Bigger", { font = "Arial", size = UV.ScaleH(130), weight = 500, extended = true })
+	surface.CreateFont("UVFont4", { font = "Arial", size = UV.ScaleH(25), weight = 1100, shadow = true, extended = true })
+
 	-- CTU
-    surface.CreateFont("UVFont4BiggerItalic", { font = "Arial", size = (math.Round(ScrH()*0.025)), weight = 1100, shadow = true, extended = true, italic = true })
-    surface.CreateFont("UVFont4BiggerItalic2", { font = "Arial", size = (math.Round(ScrH()*0.03)), weight = 1100, shadow = true, extended = true, italic = true })
-    surface.CreateFont("UVFont4BiggerItalic3", { font = "Arial", size = (math.Round(ScrH()*0.065)), weight = 1100, shadow = true, extended = true, italic = true })
-    
+	surface.CreateFont("UVFont4BiggerItalic", { font = "Arial", size = UV.ScaleH(27), weight = 1100, shadow = true, extended = true, italic = true })
+	surface.CreateFont("UVFont4BiggerItalic2", { font = "Arial", size = UV.ScaleH(32), weight = 1100, shadow = true, extended = true, italic = true })
+	surface.CreateFont("UVFont4BiggerItalic3", { font = "Arial", size = UV.ScaleH(70), weight = 1100, shadow = true, extended = true, italic = true })
+
 	-- Carbon Fonts
-    surface.CreateFont("UVCarbonFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.043)), shadow = true, weight = 1000, extended = true, })
-    surface.CreateFont("UVCarbonFont-Smaller", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.035)), shadow = true, weight = 1000, extended = true, })
-    
+	surface.CreateFont("UVCarbonFont", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(46), shadow = true, weight = 1000, extended = true })
+	surface.CreateFont("UVCarbonFont-Smaller", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(38), shadow = true, weight = 1000, extended = true })
+
 	-- Undercover Fonts
-    surface.CreateFont("UVUndercoverAccentFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.033)), shadow = true, weight = 1000, extended = true, })
-    surface.CreateFont("UVUndercoverLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.03)), shadow = true, weight = 1000, extended = true, })
-    surface.CreateFont("UVUndercoverWhiteFont", { font = "Aquarius Six", size = (math.Round(ScrH()*0.047)), shadow = true, weight = 1, extended = true, })
-    surface.CreateFont("UVCarbonLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.02314814815)), shadow = true, weight = 1000, extended = true, })
-	
-    -- Most Wanted Fonts
-    surface.CreateFont("UVFont5", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont5UI", { font = "EurostileBold", size = (math.Round(ScrH()*0.035)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont5UI-BottomBar", { font = "EurostileBold", size = (math.Round(ScrH()*0.041)), weight = 500, extended = true, })
-    surface.CreateFont("UVFont5WeightShadow", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, shadow = true, extended = true, })
-    surface.CreateFont("UVFont5Shadow", { font = "EurostileBold", size = (math.Round(ScrH()*0.03)), weight = 350, shadow = true, extended = true, })
-    surface.CreateFont("UVFont5ShadowBig", { font = "EurostileBold", size = (math.Round(ScrH()*0.1)), weight = 500, shadow = true, extended = true, })
-    surface.CreateFont("UVMostWantedLeaderboardFont", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, })
-    surface.CreateFont("UVMostWantedLeaderboardFont2", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, })
+	surface.CreateFont("UVUndercoverAccentFont", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(36), shadow = true, weight = 1000, extended = true })
+	surface.CreateFont("UVUndercoverLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(32), shadow = true, weight = 1000, extended = true })
+	surface.CreateFont("UVUndercoverWhiteFont", { font = "Aquarius Six", size = UV.ScaleH(51), shadow = true, weight = 1, extended = true })
+	surface.CreateFont("UVCarbonLeaderboardFont", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(25), shadow = true, weight = 1000, extended = true })
+
+	-- Most Wanted Fonts
+	surface.CreateFont("UVFont5", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, extended = true })
+	surface.CreateFont("UVFont5UI", { font = "EurostileBold", size = UV.ScaleH(38), weight = 500, extended = true })
+	surface.CreateFont("UVFont5UI-BottomBar", { font = "EurostileBold", size = UV.ScaleH(44), weight = 500, extended = true })
+	surface.CreateFont("UVFont5WeightShadow", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, shadow = true, extended = true })
+	surface.CreateFont("UVFont5Shadow", { font = "EurostileBold", size = UV.ScaleH(32), weight = 350, shadow = true, extended = true })
+	surface.CreateFont("UVFont5ShadowBig", { font = "EurostileBold", size = UV.ScaleH(108), weight = 500, shadow = true, extended = true })
+	surface.CreateFont("UVMostWantedLeaderboardFont", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true })
+	surface.CreateFont("UVMostWantedLeaderboardFont2", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true })
 
 	-- World Fonts
-    surface.CreateFont("UVWorldFont1", { font = "HelveticaNeue LT 57 Cn", size = (math.Round(ScrH()*0.015)), shadow = false, weight = 1000, extended = true, }) -- Main
-    surface.CreateFont("UVWorldFont2", { font = "Reg-B-I", size = (math.Round(ScrH()*0.04)), shadow = false, weight = 1000, extended = true, }) -- Col. Numbers
-    surface.CreateFont("UVWorldFont3", { font = "Reg-B-I", size = (math.Round(ScrH()*0.025)), shadow = false, weight = 1000, extended = true, }) -- Millisecond Value
-    surface.CreateFont("UVWorldFont4", { font = "Reg-B-I", size = (math.Round(ScrH()*0.035)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Smaller
-    surface.CreateFont("UVWorldFont5", { font = "Reg-B-I", size = (math.Round(ScrH()*0.15)), shadow = false, weight = 1000, extended = true, }) -- Coloured Numbers/Values, Much Larger
-    surface.CreateFont("UVWorldFont6", { font = "Reg-B-I", size = (math.Round(ScrH()*0.0225)), shadow = false, weight = 1000, extended = true, }) -- Player Names
-    surface.CreateFont("UVWorldFont7", { font = "Reg-B-I", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, extended = true, }) -- Player Results
+	surface.CreateFont("UVWorldFont1", { font = "HelveticaNeue LT 57 Cn", size = UV.ScaleH(16), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont2", { font = "Reg-B-I", size = UV.ScaleH(43), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont3", { font = "Reg-B-I", size = UV.ScaleH(27), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont4", { font = "Reg-B-I", size = UV.ScaleH(38), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont5", { font = "Reg-B-I", size = UV.ScaleH(162), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont6", { font = "Reg-B-I", size = UV.ScaleH(24), shadow = false, weight = 1000, extended = true })
+	surface.CreateFont("UVWorldFont7", { font = "Reg-B-I", size = UV.ScaleH(19), shadow = false, weight = 1000, extended = true })
 
 	-- World Fonts Backup (for specific languages)
-    surface.CreateFont("UVWorldFont1-Alt", { font = "Arial", size = (math.Round(ScrH()*0.015)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Main
-    surface.CreateFont("UVWorldFont2-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0375)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Col. Numbers
-    surface.CreateFont("UVWorldFont3-Alt", { font = "Arial", size = (math.Round(ScrH()*0.024)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Millisecond Value
-    surface.CreateFont("UVWorldFont4-Alt", { font = "Arial", size = (math.Round(ScrH()*0.035)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Coloured Numbers/Values, Smaller
-    surface.CreateFont("UVWorldFont5-Alt", { font = "Arial", size = (math.Round(ScrH()*0.14)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Coloured Numbers/Values, Much Larger
-    surface.CreateFont("UVWorldFont6-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0225)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Names
-    surface.CreateFont("UVWorldFont7-Alt", { font = "Arial", size = (math.Round(ScrH()*0.0175)), shadow = false, weight = 1000, italic = true, extended = true, }) -- Player Results
-	
-    -- Settings Fonts
-    surface.CreateFont("UVSettingsFont", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, })
-    surface.CreateFont("UVSettingsFont-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.02314814815)), weight = 1000, shadow = true, extended = true, italic = true })
-    surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, })
-    surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.043)), weight = 500, extended = true, italic = true })
-    surface.CreateFont("UVSettingsFontSmall", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, })
-    surface.CreateFont("UVSettingsFontSmall-Italic", { font = "EurostileBold", size = (math.Round(ScrH()*0.017)), weight = 1000, shadow = true, extended = true, italic = true })
-    surface.CreateFont("UVSettingsFontSmall-Bold", { font = "EurostileBold", size = (math.Round(ScrH()*0.02)), weight = 1000, shadow = true, extended = true, })
+	surface.CreateFont("UVWorldFont1-Alt", { font = "Arial", size = UV.ScaleH(16), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont2-Alt", { font = "Arial", size = UV.ScaleH(40), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont3-Alt", { font = "Arial", size = UV.ScaleH(26), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont4-Alt", { font = "Arial", size = UV.ScaleH(38), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont5-Alt", { font = "Arial", size = UV.ScaleH(151), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont6-Alt", { font = "Arial", size = UV.ScaleH(24), shadow = false, weight = 1000, italic = true, extended = true })
+	surface.CreateFont("UVWorldFont7-Alt", { font = "Arial", size = UV.ScaleH(19), shadow = false, weight = 1000, italic = true, extended = true })
+
+	-- Settings Fonts
+	surface.CreateFont("UVSettingsFont", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true })
+	surface.CreateFont("UVSettingsFont-Italic", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true, italic = true })
+	surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, extended = true })
+	surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, extended = true, italic = true })
+	surface.CreateFont("UVSettingsFontSmall", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true })
+	surface.CreateFont("UVSettingsFontSmall-Italic", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true, italic = true })
+	surface.CreateFont("UVSettingsFontSmall-Bold", { font = "EurostileBold", size = UV.ScaleH(22), weight = 1000, shadow = true, extended = true })
 
     local isUVFrozen = false
     local effectDuration = 0
@@ -514,7 +543,7 @@ function DrawIcon(material, x, y, height_ratio, color, args)
         local texW, texH = tex:Width(), tex:Height()
         local aspect = texW / texH
         
-        local desiredHeight = ScrH() * height_ratio
+        local desiredHeight = UV_GetH() * height_ratio
         local desiredWidth = desiredHeight * aspect
         
         -- Center coords for DrawTexturedRectRotated

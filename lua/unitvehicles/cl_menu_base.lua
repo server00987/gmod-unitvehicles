@@ -10,12 +10,15 @@ UV.PNotes = [[
 - Added the *UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser*
 - AI Racers and Units will no longer rotate while mid-air
   |-- Only applies to Glide vehicles
+- The UV Menu and all fonts will now scale properly on all resolutions
   
 **UV Menu**
 - Added new *AI Racer Manager* and *Traffic Manager* tabs
+- Added new *Keybinds* tab inside the Settings instance
   |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
 - Added a *Timer* variable in the UV Menu, applied to the *Totaled* and *Race Invite* menus
 - Added a custom dropdown menu in the UV Menu, used by the *UVTrax Profile* and *HUD Types*
+- Texts on all options will now scale and split properly
 
 **Changes**
 - Updated *Chinese* and *Czech* localizations
@@ -275,7 +278,7 @@ local matCross = Material("unitvehicles/icons/generic_uncheck.png", "mips")
 local UVDropdown = {}
 
 function UVDropdown:Init()
-	self:SetTall(26)
+	self:SetTall(UV.ScaleH(26))
 	self:SetCursor("hand")
 
 	self.Open = false
@@ -412,7 +415,7 @@ function UVDropdown:OpenList()
 	-- Options
 	for _, v in ipairs(self.Choices) do
 		local opt = scroll:Add("DButton")
-		opt:SetTall(24)
+		opt:SetTall(UV.ScaleH(24))
 		opt:Dock(TOP)
 		opt:DockMargin(0, 0, 0, 2)
 		opt:SetText("")
@@ -446,6 +449,52 @@ function UVDropdown:CloseList()
 end
 
 vgui.Register("UVCombo", UVDropdown, "DPanel")
+
+-- Returns a table of lines and the font used based on the text and max width
+function UVTextSplit(text, maxWidth, baseFont, altFont)
+    baseFont = baseFont or "UVMostWantedLeaderboardFont"
+    altFont = altFont or "UVMostWantedLeaderboardFont2"
+    
+    local paragraphs = string.Split(text, "\n")
+    local wrappedLines = {}
+
+    for _, paragraph in ipairs(paragraphs) do
+        if paragraph == "" then
+            table.insert(wrappedLines, "")
+        else
+            for _, line in ipairs(UV_WrapText(paragraph, baseFont, maxWidth)) do
+                table.insert(wrappedLines, line)
+            end
+        end
+    end
+
+    local chosenFont = #wrappedLines >= 3 and altFont or baseFont
+    return wrappedLines, chosenFont
+end
+
+-- Helper to draw wrapped text inside a panel
+local function DrawWrappedText(panel, text, maxWidth, x, y, center, altfont)
+    local wrappedLines, font = UVTextSplit(text, maxWidth, altfont or nil)
+    surface.SetFont(font)
+    local _, lineHeight = surface.GetTextSize("A")
+    local totalHeight = lineHeight * #wrappedLines
+    local startY = y or (panel:GetTall() - totalHeight) / 2
+    local color = Color(255, 255, 255, panel:GetAlpha() or 255)
+	local center = center and TEXT_ALIGN_CENTER or TEXT_ALIGN_LEFT
+
+    for i, line in ipairs(wrappedLines) do
+        draw.DrawText(line, font, x or 10, startY + (i-1)*lineHeight, color, center)
+    end
+end
+
+-- Returns required height for given text and max width
+local function GetDynamicTall(text, maxWidth, baseFont, altFont)
+    local lines, font = UVTextSplit(text, maxWidth, baseFont, altFont)
+    surface.SetFont(font)
+    local _, lineHeight = surface.GetTextSize("A")
+    local padding = 0 -- optional padding
+    return (#lines * lineHeight) + padding
+end
 
 -- Build one setting (label / bool / slider / combo / button)
 function UV.BuildSetting(parent, st, descPanel)
@@ -526,61 +575,13 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "infosimple" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:SetTall(46)
+		p:SetTall(UV.ScaleH(46))
 		p:DockMargin(6, 6, 6, 2)
 		p.Paint = function(self, w, h)
-            local a = self:GetAlpha()
-			local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
-
-			if a > 5 then
-				local baseFont = "UVMostWantedLeaderboardFont"
-				local multiFont = baseFont
-				local text = language.GetPhrase(st.text) or "???"
-
-				-- First, pre-wrap all text to count lines
-				local paragraphs = string.Split(text, "\n")
-				local wrappedLines = {}
-
-				for _, paragraph in ipairs(paragraphs) do
-					if paragraph == "" then
-						table.insert(wrappedLines, "")
-					else
-						local wrapped = UV_WrapText(paragraph, baseFont, w - (w * 0.15) * 2)
-						for _, line in ipairs(wrapped) do
-							table.insert(wrappedLines, line)
-						end
-					end
-				end
-
-				-- Total line count
-				local lineCount = #wrappedLines
-
-				-- Rule 3: If 3+ lines, switch font
-				if lineCount >= 3 then
-					multiFont = "UVMostWantedLeaderboardFont2"
-				end
-
-				surface.SetFont(multiFont)
-				local _, lineHeight = surface.GetTextSize("A")
-
-				local totalHeight = lineHeight * lineCount
-				local centerY = h * 0.5
-				local xPadding = st.centered and w*0.5 or 0
-
-				-- Center vertically depending on line count
-				local startY = centerY - (totalHeight / 2)
-
-				local color = Color(255, 255, 255, a)
-
-				-- Draw wrapped text
-				local yOffset = startY
-				for _, line in ipairs(wrappedLines) do
-					draw.DrawText(line, multiFont, xPadding, yOffset, color, st.centered and TEXT_ALIGN_CENTER or TEXT_ALIGN_LEFT)
-					yOffset = yOffset + lineHeight
-				end
-			end
+			local text = language.GetPhrase(st.text) or "???"
+			DrawWrappedText(self, text, w - 20, w * 0.5, nil, true)
 		end
-		
+
 		if st.desc then
 			p.OnCursorEntered = function()
 				if descPanel then
@@ -643,7 +644,13 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "label" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:SetTall(36)
+		function p:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(36), GetDynamicTall(text, w*0.8))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 		p:DockMargin(6, 6, 6, 2)
 		p.Paint = function(self, w, h)
 			local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
@@ -676,7 +683,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		local wrap = vgui.Create("DButton", parent)
 		wrap:Dock(TOP)
 		wrap:DockMargin(6, 4, 6, 4)
-		wrap:SetTall(30)
+		function wrap:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w - 44))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 		wrap:SetText("")
 		wrap:SetCursor("hand")
 
@@ -747,14 +760,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			-- background & text
 			draw.RoundedBox(6, w - 34, 0, 30, h, bg)
-			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-			-- icon right
-			-- if enabled then
-				-- surface.SetDrawColor(255,255,255, enabled and 255 or 200)
-				-- surface.SetMaterial(enabled and matTick or matCross)
-				-- surface.DrawTexturedRect(w - 34, 0, 30, 30)
-			-- end
+			DrawWrappedText(self, GetDisplayText(), w - 44, 10, nil)
 		end
 
 		-- dynamic update when convar changes - simple timer check
@@ -785,69 +791,16 @@ function UV.BuildSetting(parent, st, descPanel)
 		local wrap = vgui.Create("DPanel", parent)
 		wrap:Dock(TOP)
 		wrap:DockMargin(6, 4, 6, 4)
-
-		local function RecalcWrapHeight()
-			if not IsValid(wrap) then return end
-
-			local baseFont = "UVMostWantedLeaderboardFont"
-			local multiFont = baseFont
-			local desc = language.GetPhrase(GetDisplayText()) or "???"
-			local maxTextWidth = wrap:GetWide() - (wrap:GetWide() * 0.25) * 2
-			if maxTextWidth <= 0 then return end
-
-			local paragraphs = string.Split(desc, "\n")
-			local wrappedLines = {}
-			for _, paragraph in ipairs(paragraphs) do
-				if paragraph == "" then
-					table.insert(wrappedLines, "")
-				else
-					for _, line in ipairs(UV_WrapText(paragraph, baseFont, maxTextWidth)) do
-						table.insert(wrappedLines, line)
-					end
-				end
-			end
-
-			if #wrappedLines >= 3 then multiFont = "UVMostWantedLeaderboardFont2" end
-			surface.SetFont(multiFont)
-			local _, lineHeight = surface.GetTextSize("A")
-
-			local newHeight = math.max(36, (#wrappedLines * lineHeight) + 12)
-			if wrap:GetTall() ~= newHeight then wrap:SetTall(newHeight) end
+		function wrap:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w * 0.4))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
 		end
-
-		wrap.PerformLayout = RecalcWrapHeight
-
 		wrap.Paint = function(self, w, h)
-			local a = self:GetAlpha()
-			if a <= 5 then return end
-
-			local baseFont = "UVMostWantedLeaderboardFont"
-			local multiFont = baseFont
-			local desc = language.GetPhrase(GetDisplayText()) or "???"
-
-			local paragraphs = string.Split(desc, "\n")
-			local wrappedLines = {}
-			for _, paragraph in ipairs(paragraphs) do
-				if paragraph == "" then
-					table.insert(wrappedLines, "")
-				else
-					for _, line in ipairs(UV_WrapText(paragraph, baseFont, w - (w * 0.25) * 2)) do
-						table.insert(wrappedLines, line)
-					end
-				end
-			end
-
-			if #wrappedLines >= 3 then multiFont = "UVMostWantedLeaderboardFont2" end
-			surface.SetFont(multiFont)
-			local _, lineHeight = surface.GetTextSize("A")
-
-			local totalHeight = lineHeight * #wrappedLines
-			local startY = (h - totalHeight) / 2
-			local color = Color(255, 255, 255, a)
-
-			for i, line in ipairs(wrappedLines) do
-				draw.DrawText(line, multiFont, 10, startY + (i-1)*lineHeight, color, TEXT_ALIGN_LEFT)
-			end
+			local text = language.GetPhrase(GetDisplayText()) or "???"
+			DrawWrappedText(self, text, w * 0.4, 10)
 		end
 
 		local function PushDesc()
@@ -881,7 +834,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local slider = vgui.Create("DNumSlider", wrap)
 		slider:Dock(RIGHT)
-		slider:SetWide(220)
+		slider:SetWide(UV.ScaleW(220))
 		slider:DockMargin(8, 0, 6, 0)
 		slider:SetContentAlignment(5)
 		slider:SetMin(st.min or 0)
@@ -894,13 +847,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		slider.OnCursorExited  = PopDesc
 
 		local valPanel = vgui.Create("DPanel", wrap)
-		valPanel:SetWide(84)
+		valPanel:SetWide(UV.ScaleW(84))
 		valPanel:Dock(RIGHT)
 		valPanel.Paint = function() end
 
 		local valBox = vgui.Create("DTextEntry", valPanel)
-		valBox:SetWide(60)
-		valBox:SetFont("UVMostWantedLeaderboardFont")
+		valBox:SetWide(UV.ScaleW(40))
+		valBox:SetFont("UVMostWantedLeaderboardFont2")
 		valBox:SetTextColor(color_white)
 		valBox:SetHighlightColor(Color(58,193,0))
 		valBox:SetCursorColor(Color(58,193,0))
@@ -922,12 +875,12 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 
 		local applyBtn = vgui.Create("DButton", valPanel)
-		applyBtn:SetSize(20, valBox:GetTall())
-		applyBtn:SetText("✔")
+		applyBtn:SetSize(UV.ScaleW(25), UV.ScaleH(25))
+		applyBtn:SetText(" ")
 		applyBtn:SetVisible(false)
 		applyBtn.Paint = function(self2, w, h)
 			draw.RoundedBox(4,0,0,w,h,self2:IsHovered() and Color(60,180,60) or Color(45,140,45))
-			draw.SimpleText("✔", "UVMostWantedLeaderboardFont", w/2,h/2,color_white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("✔", "UVMostWantedLeaderboardFont2", w/2,h/2,color_white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
 		applyBtn.OnCursorEntered = PushDesc
 		applyBtn.OnCursorExited  = PopDesc
@@ -1053,20 +1006,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		local wrap = vgui.Create("DPanel", parent)
 		wrap:Dock(TOP)
 		wrap:DockMargin(6, 4, 6, 4)
-		wrap:SetTall(30)
-		wrap.Paint = function(self, w, h)
-			local hovered = self:IsHovered()
-			local bga = hovered and 200 or 125
-			local bg = Color( 125, 125, 125, 0 )
-			
-			if enabled then
-				bg = Color( 58, 193, 0, bga )
-			end
-			
-			draw.RoundedBox(6, 0, 0, w, h, bg)
-			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		end
-
 		wrap.OnCursorEntered = function()
 			if descPanel then
 				descPanel.Text = st.text
@@ -1093,8 +1032,8 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local combo = vgui.Create("UVCombo", wrap)
 		combo:Dock(RIGHT)
-		combo:SetWide(330)
-		combo:DockMargin(6, 6, 6, 6)
+		combo:SetWide(UV.ScaleW(330))
+		combo:DockMargin(6, 3, 6, 3)
 		combo.Paint = function(self, w, h)
 			local hovered = self.Button:IsHovered()
 			local default = Color( 
@@ -1113,6 +1052,26 @@ function UV.BuildSetting(parent, st, descPanel)
 			-- background & text
 			draw.RoundedBox(12, 0, 0, w, h, default)
 			if hovered then draw.RoundedBox(12, 0, 0, w, h, hover) end
+		end
+		
+		function wrap:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w - combo:GetWide() - 20))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
+		wrap.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local bga = hovered and 200 or 125
+			local bg = Color( 125, 125, 125, 0 )
+			
+			if enabled then
+				bg = Color( 58, 193, 0, bga )
+			end
+			
+			draw.RoundedBox(6, 0, 0, w, h, bg)
+			DrawWrappedText(self, GetDisplayText(), w - combo:GetWide() - 20, 10)
 		end
 
 		for _, entry in ipairs(st.content or {}) do
@@ -1220,7 +1179,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		local btn = vgui.Create("DButton", parent)
 		btn:Dock(TOP)
 		btn:DockMargin(6, 6, 6, 6)
-		btn:SetTall(30)
+		function btn:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w * 0.95))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 		btn:SetText("")
 		btn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
@@ -1238,9 +1203,10 @@ function UV.BuildSetting(parent, st, descPanel)
 				)
 
 			-- background & text
-			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, default)
-			if hovered then draw.RoundedBox(12, w*0.1, 0, w*0.8, h, hover) end
-			draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+			-- draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			DrawWrappedText(self, GetDisplayText(), w * 0.95, w*0.5, nil, true)
 		end
 		
 		btn.DoClick = function(self)
@@ -1281,7 +1247,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		local btn = vgui.Create("DButton", parent)
 		btn:Dock(TOP)
 		btn:DockMargin(6, 6, 6, 6)
-		btn:SetTall(30)
+		function btn:PerformLayout()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local text = st.text:find("%%s") and string.format(GetDisplayText(), val) or GetDisplayText()
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w*0.95))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 		btn:SetText("")
 
 		btn.Paint = function(self, w, h)
@@ -1299,16 +1271,15 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
 				)
 
-			draw.RoundedBox(12, w*0.1, 0, w*0.8, h, default)
-			if hovered then draw.RoundedBox(12, w*0.1, 0, w*0.8, h, hover) end
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
 
 			local display = language.GetPhrase(st.text)
 			if st.text:find("%%s") then
 				display = string.format(GetDisplayText(), val)
 			end
 
-			draw.SimpleText(display, "UVMostWantedLeaderboardFont",
-				w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			DrawWrappedText(self, display, w * 0.95, w*0.5, nil, true)
 		end
 
 		-- Adjust value with mouse wheel
@@ -1349,7 +1320,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
 		p:DockMargin(6, 4, 6, 4)
-		p:SetTall(120)
+		function p:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(120), GetDynamicTall(text, w - UV.ScaleW(440)))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 
 		-- Check for existence of color convars
 		local base = st.convar
@@ -1376,7 +1353,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local mixer = vgui.Create("DColorMixer", p)
 		mixer:Dock(RIGHT)
-		mixer:SetWide(240)
+		mixer:SetWide(UV.ScaleW(440))
 		mixer:DockMargin(6, 6, 6, 6)
 		mixer:SetColor(initial)
 		mixer:SetPalette(false)
@@ -1463,74 +1440,95 @@ function UV.BuildSetting(parent, st, descPanel)
 	end
 
 	---- keybind button ----
-	-- if st.type == "keybind" then
-		-- local wrap = vgui.Create("DButton", parent)
-		-- wrap:Dock(TOP)
-		-- wrap:DockMargin(6, 4, 6, 4)
-		-- wrap:SetTall(30)
-		-- wrap:SetText("")
-		-- wrap:SetCursor("hand")
-		-- wrap:SetKeyboardInputEnabled(true)
-		-- wrap:SetMouseInputEnabled(true)
+	if st.type == "keybind" then
+		local wrap = vgui.Create("DButton", parent)
+		wrap:Dock(TOP)
+		wrap:DockMargin(6, 4, 6, 4)
+		function wrap:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w * 0.5))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 
-		-- local data = KeybindManager.keybinds[st.slot]
-		-- local cv = GetConVar(data.convar)
-		-- wrap.DisplayText = cv and string.upper(input.GetKeyName(cv:GetInt()) or "NONE") or "NONE"
+		wrap:SetText("")
+		wrap:SetCursor("hand")
 
-		-- KeyBindButtons[st.slot] = { data.convar, wrap }
+		local cv = GetConVar(st.convar)
+		local function GetKeyName()
+			if not cv then return "Invalid ConVar!" end
+			return string.upper(input.GetKeyName(cv:GetInt()) or "-")
+		end
 
-		-- wrap.Paint = function(self, w, h)
-			-- local hovered = self:IsHovered()
-			-- local bga = hovered and 200 * math.abs(math.sin(RealTime()*4)) or 125
-			-- local bg = Color(125, 125, 125, bga)
+		-- Register with your existing keybind system
+		KeyBindButtons[st.slot] = { st.convar, wrap }
 
-			-- draw.RoundedBox(6, w*0.955, 0, w*0.045, h, bg)
-			-- draw.SimpleText(st.text, "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			-- draw.SimpleText(self.DisplayText, "UVMostWantedLeaderboardFont", w - 10, h/2, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-		-- end
+		wrap.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
 
-		-- wrap.OnCursorEntered = function()
-			-- if descPanel then
-				-- descPanel.Text = st.text
-				-- descPanel.Desc = st.desc or ""
-			-- end
-		-- end
-		-- wrap.OnCursorExited = function()
-			-- if descPanel then
-				-- descPanel.Text = ""
-				-- descPanel.Desc = ""
-			-- end
-		-- end
+			-- background & text
+			draw.RoundedBox(6, w*0.5, 0, w*0.5, h, default)
+			if hovered then draw.RoundedBox(6, w*0.5, 0, w*0.5, h, hover) end
+			
+			DrawWrappedText(self, GetDisplayText(), w * 0.45, 10, nil)
+			draw.SimpleText( IsSettingKeybind and "#uv.keybinds.anybutton" or GetKeyName(), "UVMostWantedLeaderboardFont", w * 0.75, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		end
 
-		-- wrap.DoClick = function()
-			-- if KeybindManager.waitingForInput then return end
-			-- KeybindManager.waitingForInput = st.slot
-			-- wrap.DisplayText = "PRESS ANY BUTTON"
-			-- wrap:MakePopup()
-		-- end
+		wrap.DoClick = function()
+			if IsSettingKeybind then return end
 
-		-- wrap.OnKeyCodePressed = function(self, key)
-			-- if KeybindManager.waitingForInput ~= st.slot then return end
-			-- self.DisplayText = string.upper(input.GetKeyName(key))
-			-- net.Start("UVPTKeybindRequest")
-			-- net.WriteInt(st.slot, 16)
-			-- net.WriteInt(key, 16)
-			-- net.SendToServer()
-			-- KeybindManager.waitingForInput = false
-		-- end
+			-- Temporarily allow keyboard input just like slider text entry
+			if IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(true)
+			end
 
-		-- wrap.OnMousePressed = function(self, mouseCode)
-			-- if KeybindManager.waitingForInput ~= st.slot then return end
-			-- self.DisplayText = string.upper(input.GetKeyName(mouseCode))
-			-- net.Start("UVPTKeybindRequest")
-			-- net.WriteInt(st.slot, 16)
-			-- net.WriteInt(mouseCode, 16)
-			-- net.SendToServer()
-			-- KeybindManager.waitingForInput = false
-		-- end
+			RunConsoleCommand("uv_keybinds", tostring(st.slot))
+		end
 
-		-- return wrap
-	-- end
+		-- When keybind finishes, keyboard input is released in your existing net.Receive
+		wrap.Think = function()
+			if not IsSettingKeybind and IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(false)
+			end
+		end
+
+		wrap.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+				if cv then
+					descPanel.SelectedDefault = cv:GetDefault()
+					descPanel.SelectedCurrent = GetKeyName()
+					descPanel.SelectedConVar = st.convar
+				end
+			end
+		end
+
+		wrap.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+				descPanel.SelectedDefault = ""
+				descPanel.SelectedCurrent = ""
+				descPanel.SelectedConVar = ""
+			end
+		end
+
+		return wrap
+	end
 
 	if st.type == "timer" then
 		local p = vgui.Create("DPanel", parent)
@@ -1615,46 +1613,24 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "ai_overridelist" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:SetTall(330)
+		p:SetTall(UV.ScaleH(220))
 		p:DockMargin(0, 8, 0, 8)
 
 		p.Paint = function(self, w, h)
-			if st.convar then
-				local cv = GetConVar(st.convar)
-				local convarlength = st.convar .. " " .. (cv:GetString() or "")
-
-				local LIMIT = 5120
-				local WARN_AT = LIMIT * 0.75
-				
-				local vehnum = 0
-				
-				for _, veh in string.gmatch(cv:GetString(), "%S+") do
-					vehnum = vehnum + 1
-				end
-				
-				draw.SimpleText( string.format( language.GetPhrase(st.text), vehnum ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.025, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
-				if #convarlength >= WARN_AT then
-					local blink = math.abs(math.sin(RealTime() * 6))
-
-					if #convarlength >= LIMIT then
-						draw.SimpleText( "#uv.warning", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.8, Color(255, 255 * blink, 255 * blink, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-						draw.SimpleText( string.format( language.GetPhrase("uv.warning.convarlimit.exceeded"), #convarlength, LIMIT ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.875, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-					else
-						draw.SimpleText( "#uv.warning", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.8, Color(255, 255 * blink, 255 * blink, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-						draw.SimpleText( string.format( language.GetPhrase("uv.warning.convarlimit"), #convarlength, LIMIT ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.875, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-					end
-				end
-			else
-				draw.SimpleText( st.text, "UVMostWantedLeaderboardFont", w * 0.5, h * 0.025, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			local cv = GetConVar(st.convar)
+			local vehnum = 0
+			for _, veh in string.gmatch(cv:GetString(), "%S+") do
+				vehnum = vehnum + 1
 			end
+			
+			draw.SimpleText( string.format( language.GetPhrase(st.text), vehnum ), "UVMostWantedLeaderboardFont", w * 0.5, h * 0.05, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 		end
 
 		-- Vehicle tree belongs to THIS panel
 		local vehicleTree = vgui.Create("DTree", p)
 		vehicleTree:Dock(BOTTOM)
-		vehicleTree:SetTall(220)
-		vehicleTree:DockMargin(160, 4, 160, 80)
+		vehicleTree:SetTall(UV.ScaleH(160))
+		vehicleTree:DockMargin(80, 4, 80, 4)
 		
 		-- vehicleTree.Paint = function(self, w, h)
 			-- local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
@@ -1755,7 +1731,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					node:SetIcon("icon16/car.png")
 				end
 
-				node:SetTooltip("#tool.uvracermanager.settings.racers.desc")
+				node:SetTooltip("#uv.airacer.overridelist.hover")
 
 				function node:DoRightClick()
 					if selectedRacers[class] then
@@ -2041,15 +2017,22 @@ end
 function UVMenu:Open(menu)
     local CurrentMenu = menu or {}
     local Name = CurrentMenu.Name or "#uv.unitvehicles"
-    local Width = CurrentMenu.Width or math.max(800, ScrW() * 0.9)
-    local Height = CurrentMenu.Height or math.max(480, ScrH() * 0.66)
+	
+	local BaseMenuW = 1400
+	local BaseMenuH = 900
+	local Width = CurrentMenu.Width or math.min( UV.ScaleW(BaseMenuW), ScrW() * 0.92 )
+	local Height = CurrentMenu.Height or math.min( UV.ScaleH(BaseMenuH), ScrH() * 0.92 )
+
     local ShowDesc = CurrentMenu.Description == true and not GetConVar("uvmenu_hide_description"):GetBool()
     local Tabs = CurrentMenu.Tabs or {}
     local UnfocusClose = CurrentMenu.UnfocusClose == true
 	local HideCloseButton = CurrentMenu.HideCloseButton == true
 	
 	if CurrentMenu.Description == true and GetConVar("uvmenu_hide_description"):GetBool() then
-		Width = Width * 0.75
+		Width = math.max(
+			UV.ScaleW(1000),
+			Width * 0.75
+		)
 	end
 
     if IsValid(UV.SettingsFrame) then UV.SettingsFrame:Remove() end
@@ -2063,6 +2046,7 @@ function UVMenu:Open(menu)
     local frame = vgui.Create("DFrame")
     UV.SettingsFrame = frame
     frame:SetSize(0, 0)
+	frame:Center()
     frame:SetPos(fx + fw * 0.5, fy + fh * 0.5)
     frame:SetTitle("")
     frame:ShowCloseButton(false)
@@ -2097,7 +2081,7 @@ function UVMenu:Open(menu)
     if ShowDesc then
         descPanel = vgui.Create("DPanel", frame)
         descPanel:Dock(RIGHT)
-        descPanel:SetWide(math.Clamp(fw * 0.25, 220, 380))
+        descPanel:SetWide(math.Clamp(fw * 0.25, UV.ScaleW(220), UV.ScaleW(380)))
         descPanel.Paint = function(self, w, h)
             local a = self:GetAlpha()
             surface.SetDrawColor( GetConVar("uvmenu_col_desc_r"):GetInt(), GetConVar("uvmenu_col_desc_g"):GetInt(), GetConVar("uvmenu_col_desc_b"):GetInt(), math.floor(GetConVar("uvmenu_col_desc_a"):GetInt() * (a / 255)) )
@@ -2106,7 +2090,7 @@ function UVMenu:Open(menu)
             if self.Text and a > 5 then
                 local font = "UVMostWantedLeaderboardFont2"
                 local color = Color(255, 255, 255, a)
-                local xPadding, yPadding = 10, 10
+                local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
                 local wrapWidth = w - xPadding * 2
                 local yOffset = yPadding
 
@@ -2159,7 +2143,8 @@ function UVMenu:Open(menu)
     if #Tabs > 1 then
         tabsPanel = vgui.Create("DScrollPanel", frame)
         tabsPanel:Dock(LEFT)
-        tabsPanel:SetWide(ScrW()*0.15)
+        tabsPanel:SetWide(UV.ScaleW(300))
+		tabsPanel:Dock(LEFT)
         tabsPanel.Paint = function(self, w, h)
 			surface.SetDrawColor(
 				GetConVar("uvmenu_col_tabs_r"):GetInt(),
@@ -2221,10 +2206,19 @@ function UVMenu:Open(menu)
         title:SetText("")
         title:Dock(TOP)
         title:DockMargin(6, 6, 6, 12)
-        title:SetTall(48)
+        -- title:SetTall(UV.ScaleH(48))
+		function title:PerformLayout()
+			local text = language.GetPhrase(tab.TabName)
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(48), GetDynamicTall(text, w - 44, "UVFont5"))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 
         title.Paint = function(self, w, h)
-            draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            -- draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+			DrawWrappedText(self, language.GetPhrase(tab.TabName) or ("Tab " .. tostring(tabIndex)), w - 44, w*0.5, nil, true, "UVFont5")
         end
 
         watchedConvars = {} -- reset
@@ -2400,7 +2394,7 @@ function UVMenu:Open(menu)
 
     -- Build tabs if more than 1
     local TAB_START_OFFSET = 15
-    local TAB_BUTTON_HEIGHT = 64
+    local TAB_BUTTON_HEIGHT = UV.ScaleH(64)
     local TAB_BUTTON_PADDING = 0
     local TAB_SIDE_PADDING = 6
     local TAB_CORNER_RADIUS = 4
@@ -2454,6 +2448,16 @@ function UVMenu:Open(menu)
 				if hovered then
 					draw.RoundedBox( TAB_CORNER_RADIUS, TAB_SIDE_PADDING, 4, w - TAB_SIDE_PADDING * 2, h - 8, hoverCol )
 				end
+
+                if tab.Icon then
+                    local mat = Material(tab.Icon, "smooth")
+                    local iconSize = UV.ScaleW(40)
+                    local iconX = TAB_SIDE_PADDING + 2
+                    local iconY = (h - iconSize) / 2
+                    surface.SetDrawColor(255, 255, 255, self:GetAlpha())
+                    surface.SetMaterial(mat)
+                    surface.DrawTexturedRect(iconX, iconY, iconSize, iconSize)
+                end
 				
 				if a > 5 then
 					local baseFont = "UVMostWantedLeaderboardFont"
@@ -2488,7 +2492,7 @@ function UVMenu:Open(menu)
 
 					local totalHeight = lineHeight * lineCount
 					local centerY = h * 0.5
-					local xPadding = w * 0.21
+					local xPadding = tab.Icon and UV.ScaleW(60) or UV.ScaleW(20)
 
 					-- Center vertically depending on line count
 					local startY = centerY - (totalHeight / 2)
@@ -2502,17 +2506,6 @@ function UVMenu:Open(menu)
 						yOffset = yOffset + lineHeight
 					end
 				end
-
-				
-                if tab.Icon then
-                    local mat = Material(tab.Icon, "smooth")
-                    local iconSize = h * 0.75
-                    local iconX = TAB_SIDE_PADDING + 2
-                    local iconY = (h - iconSize) / 2
-                    surface.SetDrawColor(255, 255, 255, self:GetAlpha())
-                    surface.SetMaterial(mat)
-                    surface.DrawTexturedRect(iconX, iconY, iconSize, iconSize)
-                end
             end
 
 			-- btn.OnCursorEntered = function(self)

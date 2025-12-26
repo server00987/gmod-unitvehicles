@@ -444,14 +444,14 @@ if CLIENT then
 			{ id = 3, name = "Glide", func = UVTrafficManagerGetSavesGlide, path = "unitvehicles/glide/traffic/", type = "json" }
 		}
 
-		local vehicleBaseCombo = vgui.Create("DComboBox")
-		vehicleBaseCombo:SetSize(280, 20)
-		vehicleBaseCombo:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
-		local currentBaseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
-		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
-		for _, base in ipairs(vehicleBases) do
-			vehicleBaseCombo:AddChoice(base.name, base.id)
-		end
+		-- local vehicleBaseCombo = vgui.Create("DComboBox")
+		-- vehicleBaseCombo:SetSize(280, 20)
+		-- vehicleBaseCombo:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
+		-- local currentBaseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
+		-- vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
+		-- for _, base in ipairs(vehicleBases) do
+			-- vehicleBaseCombo:AddChoice(base.name, base.id)
+		-- end
 
 		-- Scroll Panel
 		local FrameListPanel = vgui.Create("DFrame")
@@ -610,12 +610,12 @@ if CLIENT then
 		CPanel:AddItem(OpenMenu)
 	
 		-- Sync dropdown and slider
-		vehicleBaseCombo.OnSelect = function(self, index, value, data)
-			local baseId = tonumber(data)
-			if not baseId then return end
-			RunConsoleCommand("uvtrafficmanager_vehiclebase", baseId)
-			UVTrafficManagerTool.PopulateVehicleList(baseId)
-		end
+		-- vehicleBaseCombo.OnSelect = function(self, index, value, data)
+			-- local baseId = tonumber(data)
+			-- if not baseId then return end
+			-- RunConsoleCommand("uvtrafficmanager_vehiclebase", baseId)
+			-- UVTrafficManagerTool.PopulateVehicleList(baseId)
+		-- end
 	end
 end
 

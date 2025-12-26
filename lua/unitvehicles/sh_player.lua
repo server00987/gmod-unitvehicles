@@ -2011,7 +2011,7 @@ if SERVER then
         end
     end
     
-else
+else -- client settings
 
     UVWithESF = {}
     UVWithJuggernaut = {}
@@ -2114,18 +2114,5 @@ else
         if next(UVWithJuggernaut) == nil then return end
         halo.Add( UVWithJuggernaut, Color(255,93,0), 10, 10, 1 )
     end)
-    
-    -- hook.Add( "HUDPaint", "UVNotifications", function()
-    --     if UVCenterNotification then 
-    --         local h = ScrH()/2.7
-    --         local w = ScrW()/2
-            
-    --         --noti_draw (UVCenterNotification, "UVFont5", ScrW() / 2, ScrH() / 2.7, Color(158, 215, 0, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-    --         noti_draw (UVCenterNotification, "UVFont5Shadow", ScrW() / 2, ScrH() / 2.7, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-            
-    --         if UVCenterNotificationIcon then
-    --             DrawIcon( UVMaterials[UVCenterNotificationIcon], ScrW() / 2, ScrH() / 3.2, 0.06, Color(255, 255, 255, 255 - math.abs( math.sin(CurTime() * 3) * 120)))
-    --         end
-    --     end
-    -- end)
+
 end

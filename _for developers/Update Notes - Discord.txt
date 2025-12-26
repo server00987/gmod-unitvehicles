@@ -3,15 +3,23 @@
 - Added the **UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser**
 - AI Racers and Units will no longer rotate while mid-air
   |-- Only applies to Glide vehicles
-- Added a "Timer" variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
+- The UV Menu and all fonts will now scale properly on all resolutions
+  
+# UV Menu
+- Added new **AI Racer Manager** and **Traffic Manager** tabs
+- Added new **Keybinds** tab inside the Settings instance
+  |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
+- Added a **Timer** variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
 - Added a custom dropdown menu in the UV Menu, used by the **UVTrax Profile** and **HUD Types**
+- Texts on all options will now scale and split properly
 
 # Changes
-- Updated Chinese and Czech localizations
+- Updated **Chinese** and **Czech** localizations
 - Pursuit Breakers will now always trigger a call response
-- The **FAQ** tab in the UV Menu now sends you to a separate menu instance with categorized information
-- The **Addons** tab was moved to UV Settings
-- The **Freeze Cam** option no longer appears in the UV Menu while in a Multiplayer session
+- The **Vehicle Override** feature from the "Manager: AI Racers" tool (now present in the UV Menu) now supports infinite amount of racers
+- UV Menu: The **FAQ** tab now sends you to a separate menu instance with categorized information
+- UV Menu: The **Addons** tab was moved to UV Settings
+- UV Menu: The **Freeze Cam** option no longer appears in the UV Menu while in a Multiplayer session
 
 # Fixes
 - Fixed that AI Racers sometimes steered weirdly after entering another lap

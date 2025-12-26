@@ -76,8 +76,8 @@ end
 UVMenu.Main = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " - " .. UV.CurVersion,
-		Width = ScrW() * 0.8,
-		Height = ScrH() * 0.7,
+		Width  = UV.ScaleW(1540),
+		Height = UV.ScaleH(760),
 		Description = true,
 		UnfocusClose = true,
 		BindPanel = true,
@@ -98,8 +98,9 @@ UVMenu.Main = function()
 						{ "#uv.ui.none", "" }
 					},
 				},
-				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent },
-				{ type = "button", text = "#uv.pm.spawnas", convar = "uv_spawn_as_unit", func = 
+				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
+				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
 					UVMenu.PlaySFX("clickopen")
@@ -233,8 +234,8 @@ end
 UVMenu.Settings = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.settings"),
-		Width = ScrW() * 0.8,
-		Height = ScrH() * 0.7,
+		Width  = UV.ScaleW(1540),
+		Height = UV.ScaleH(760),
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -272,6 +273,8 @@ UVMenu.Settings = function()
 						{ "#uv.ui.unitstype.yards", 2 },
 					},
 				},
+				-- { type = "slider", text = "#uv.ui.deadzone", desc = "uv.ui.deadzone.desc", convar = "unitvehicle_hud_deadzone", min = 0, max = 500, decimals = 0 },
+				-- { type = "slider", text = "#uv.ui.scale", desc = "uv.ui.scale.desc", convar = "unitvehicle_hud_scale", min = 0.1, max = 1, decimals = 2 },
 
 				{ type = "label", text = "#uv.ui.menu", desc = "uv.ui.menu.desc" },
 				{ type = "bool", text = "#uv.ui.menu.hidedesc", desc = "uv.ui.menu.hidedesc.desc", convar = "uvmenu_hide_description" },
@@ -313,17 +316,17 @@ UVMenu.Settings = function()
 				{ type = "label", text = "#uv.audio.racing" },
 				{ type = "combo", text = "#uv.audio.racing.sfx", desc = "uv.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
 			},
-			-- { TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
+			{ TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
 
-				-- { type = "label", text = "#uv.keybinds.pt" },
-				-- { type = "keybind", text = "#uv.ptech.slot1", desc = "uv.keybind.skipsong.desc", convar = "UVPTKeybindSlot1", slot = 1 },
-				-- { type = "keybind", text = "#uv.ptech.slot2", desc = "uv.keybind.skipsong.desc", convar = "UVPTKeybindSlot2", slot = 2 },
+				{ type = "label", text = "#uv.keybinds.pt" },
+				{ type = "keybind", text = "#uv.keybind.slot1", desc = "uv.keybind.slot1.desc", convar = "unitvehicle_pursuittech_keybindslot_1", slot = 1 },
+				{ type = "keybind", text = "#uv.keybind.slot2", desc = "uv.keybind.slot2.desc", convar = "unitvehicle_pursuittech_keybindslot_2", slot = 2 },
 				
-				-- { type = "label", text = "#uv.keybinds.races" },
-				-- { type = "keybind", text = "#uv.keybind.skipsong", desc = "uv.keybind.skipsong.desc", convar = "unitvehicle_keybind_skipsong", slot = 3 },
-				-- { type = "keybind", text = "#uv.keybind.resetposition", desc = "uv.keybind.resetposition.desc", convar = "UVKeybindResetPosition", slot = 4 },
-				-- { type = "keybind", text = "#uv.keybind.showresults", desc = "uv.keybind.showresults.desc", convar = "UVKeybindShowRaceResults", slot = 5 },
-			-- },
+				{ type = "label", text = "#uv.keybinds.races" },
+				{ type = "keybind", text = "#uv.keybind.skipsong", desc = "uv.keybind.skipsong.desc", convar = "unitvehicle_keybind_skipsong", slot = 3 },
+				{ type = "keybind", text = "#uv.keybind.resetposition", desc = "uv.keybind.resetposition.desc", convar = "unitvehicle_keybind_resetposition", slot = 4 },
+				{ type = "keybind", text = "#uv.keybind.showresults", desc = "uv.keybind.showresults.desc", convar = "unitvehicle_keybind_raceresults", slot = 5 },
+			},
 			{ TabName = "#uv.pursuit", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
 				{ type = "label", text = "#uv.pursuit.heatlevels", sv = true },
 				{ type = "bool", text = "#uv.pursuit.heatlevels.enable", desc = "uv.pursuit.heatlevels.enable.desc", convar = "unitvehicle_heatlevels", sv = true },
@@ -391,8 +394,8 @@ end
 UVMenu.SettingsCol = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.65,
-		Height = ScrH() * 0.7,
+		Width  = UV.ScaleW(1250),
+		Height = UV.ScaleH(760),
 		Description = true,
 		-- ColorPreview = true,
 		UnfocusClose = true,
@@ -633,8 +636,8 @@ For example:
 UVMenu.FAQ = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.faq"),
-		Width = ScrW() * 0.8,
-		Height = ScrH() * 0.7,
+		Width  = UV.ScaleW(1540),
+		Height = UV.ScaleH(760),
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.faq.intro", Icon = "unitvehicles/icons_settings/info.png",
@@ -682,8 +685,8 @@ end
 UVMenu.RaceManager = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.3,
-		Height = ScrH() * 0.35,
+		Width  = UV.ScaleW(580),
+		Height = UV.ScaleH(380),
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.rm",
@@ -732,8 +735,8 @@ end
 UVMenu.RaceManagerSettings = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.45,
-		Height = ScrH() * 0.55,
+		Width  = UV.ScaleW(900),
+		Height = UV.ScaleH(600),
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -843,8 +846,8 @@ UVMenu.RaceManagerTrackSelect = function()
 
 	UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.3,
-		Height = ScrH() * 0.45,
+		Width  = UV.ScaleW(580),
+		Height = UV.ScaleH(705),
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -894,8 +897,8 @@ UVMenu.RaceManagerStartRace = function()
 
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.5,
-		Height = ScrH() * 0.3,
+		Width  = UV.ScaleW(960),
+		Height = UV.ScaleH(325),
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -987,8 +990,8 @@ function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 	-- Open the menu with fully prebuilt entries
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.3,
-		Height = ScrH() * 0.65,
+		Width  = UV.ScaleW(580),
+		Height = UV.ScaleH(705),
 		-- Description = true,
 		UnfocusClose = false,
 
@@ -1005,8 +1008,8 @@ end
 UVMenu.WreckedDebrief = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.45,
-		Height = ScrH() * 0.275,
+		Width  = UV.ScaleW(870),
+		Height = UV.ScaleH(300),
 		UnfocusClose = false,
 		HideCloseButton = true,
 		Tabs = {
@@ -1041,8 +1044,8 @@ end
 UVMenu.RaceInvite = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width = ScrW() * 0.45,
-		Height = ScrH() * 0.31,
+		Width  = UV.ScaleW(870),
+		Height = UV.ScaleH(335),
 		UnfocusClose = false,
 		HideCloseButton = true,
 		Tabs = {
