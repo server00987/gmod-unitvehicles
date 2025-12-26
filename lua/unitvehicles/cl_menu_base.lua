@@ -1731,7 +1731,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					node:SetIcon("icon16/car.png")
 				end
 
-				node:SetTooltip("#uv.airacer.overridelist.hover")
+				node:SetTooltip("#uv.airacer.overridelist.desc")
 
 				function node:DoRightClick()
 					if selectedRacers[class] then
