@@ -361,14 +361,8 @@ local function underground_racing_main( ... )
     
     -- Timer
     surface.SetDrawColor(0, 0, 0, 200)
-    surface.DrawRect(w * 0.02, h * 0.175, w * 0.175, h * 0.0225)
-    draw.DrawText(
-    "#uv.race.hud.time.ug",
-    "UVFont4",
-    w * 0.022,
-    h * 0.175,
-    Color(255, 255, 255),
-    TEXT_ALIGN_LEFT)
+    surface.DrawRect(UV_UI.X(w * 0.02), h * 0.175, UV_UI.W(w * 0.175), h * 0.0225)
+    draw.DrawText( "#uv.race.hud.time.ug", "UVFont4", UV_UI.X(w * 0.022), h * 0.175, Color(255, 255, 255), TEXT_ALIGN_LEFT )
     
     local current_time = nil 
     
@@ -380,87 +374,34 @@ local function underground_racing_main( ... )
         current_time = UVDisplayTimeRace( CurTime() - my_array.LastLapCurTime )
     end
     
-    draw.DrawText(
-    current_time or UVDisplayTimeRace( 0 ),
-    "UVFont4",
-    w * 0.1925,
-    h * 0.175,
-    Color(255, 255, 255),
-    TEXT_ALIGN_RIGHT)
+    draw.DrawText( current_time or UVDisplayTimeRace( 0 ), "UVFont4", UV_UI.X(w * 0.1925), h * 0.175, Color(255, 255, 255), TEXT_ALIGN_RIGHT )
     
     -- Best Timer
     surface.SetDrawColor(0, 0, 0, 200)
-    surface.DrawRect(w * 0.02, h * 0.2, w * 0.175, h * 0.0225)
-    draw.DrawText(
-    "#uv.race.hud.best.ug",
-    "UVFont4",
-    w * 0.022,
-    h * 0.2,
-    Color(255, 255, 255),
-    TEXT_ALIGN_LEFT)
-    
-    draw.DrawText(
-    UVDisplayTimeRace(my_array.BestLapTime or 0),
-    "UVFont4",
-    w * 0.1925,
-    h * 0.2,
-    Color(255, 255, 255),
-    TEXT_ALIGN_RIGHT)
+    surface.DrawRect(UV_UI.X(w * 0.02), h * 0.2, UV_UI.W(w * 0.175), h * 0.0225)
+	
+    draw.DrawText( "#uv.race.hud.best.ug", "UVFont4", UV_UI.X(w * 0.022), h * 0.2, Color(255, 255, 255), TEXT_ALIGN_LEFT )
+    draw.DrawText( UVDisplayTimeRace(my_array.BestLapTime or 0), "UVFont4", UV_UI.X(w * 0.1925), h * 0.2, Color(255, 255, 255), TEXT_ALIGN_RIGHT )
     
     -- Lap & Checkpoint Counter
     surface.SetDrawColor(0, 0, 0, 200)
-    surface.DrawRect(w * 0.02, h * 0.075, w * 0.175, h * 0.095)
-    
-    draw.DrawText(
-    "#uv.race.hud.lap.ug",
-    "UVFont5",
-    w * 0.1,
-    h * 0.125,
-    Color(125, 125, 255),
-    TEXT_ALIGN_LEFT) -- Lap Counter
-    draw.DrawText(
-    my_array.Lap,
-    "UVFont3Bigger",
-    w * 0.1,
-    h * 0.065,
-    Color(255, 255, 255),
-    TEXT_ALIGN_RIGHT) -- Lap Counter
-    draw.DrawText(
-    "/ " .. UVHUDRaceInfo.Info.Laps,
-    "UVFont3",
-    w * 0.1025,
-    h * 0.08,
-    Color(125, 125, 255),
-    TEXT_ALIGN_LEFT) -- Lap Counter
+    surface.DrawRect(UV_UI.X(w * 0.02), h * 0.075, UV_UI.W(w * 0.175), h * 0.095)
+	
+    -- Lap Counter
+    draw.DrawText( "#uv.race.hud.lap.ug", "UVFont5", UV_UI.X(w * 0.1), h * 0.125, Color(125, 125, 255), TEXT_ALIGN_LEFT ) 
+    draw.DrawText( my_array.Lap, "UVFont3Bigger", UV_UI.X(w * 0.1), h * 0.065, Color(255, 255, 255), TEXT_ALIGN_RIGHT )
+    draw.DrawText( "/ " .. UVHUDRaceInfo.Info.Laps, "UVFont3", UV_UI.X(w * 0.1025), h * 0.08, Color(125, 125, 255), TEXT_ALIGN_LEFT)
     
     local racer_count = #string_array
     local lang = language.GetPhrase
     
     -- Position Counter
     surface.SetDrawColor(0, 0, 0, 200)
-    surface.DrawRect(w * 0.8, h * 0.075, w * 0.175, h * 0.105)
+    surface.DrawRect(UV_UI.X(w * 0.8), h * 0.075, UV_UI.W(w * 0.175), h * 0.105)
     
-    draw.DrawText(
-    UVHUDRaceCurrentPos,
-    "UVFont3Bigger",
-    w * 0.88,
-    h * 0.065,
-    Color(255, 255, 255),
-    TEXT_ALIGN_RIGHT) -- Upper, Your Position
-    draw.DrawText(
-    lang("uv.race.pos." .. UVHUDRaceCurrentPos),
-    "UVFont5",
-    w * 0.8825,
-    h * 0.08,
-    Color(255, 255, 255),
-    TEXT_ALIGN_LEFT) -- Upper, Your Position Suffix
-    draw.DrawText(
-    "/" .. UVHUDRaceCurrentParticipants,
-    "UVFont5",
-    w * 0.88,
-    h * 0.12,
-    Color(125, 125, 255),
-    TEXT_ALIGN_LEFT) -- Lower, Total Positions
+    draw.DrawText( UVHUDRaceCurrentPos, "UVFont3Bigger", UV_UI.X(w * 0.88), h * 0.065, Color(255, 255, 255), TEXT_ALIGN_RIGHT ) -- Upper, Your Position
+    draw.DrawText( "#uv.race.pos." .. UVHUDRaceCurrentPos, "UVFont5", UV_UI.X(w * 0.8825), h * 0.08, Color(255, 255, 255), TEXT_ALIGN_LEFT) -- Upper, Your Position Suffix
+    draw.DrawText( "/" .. UVHUDRaceCurrentParticipants, "UVFont5", UV_UI.X(w * 0.88), h * 0.12, Color(125, 125, 255), TEXT_ALIGN_LEFT) -- Lower, Total Positions
     
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -472,9 +413,7 @@ local function underground_racing_main( ... )
         local is_local_player = entry[2]
         local mode = entry[3]
         local diff = entry[4]
-        -- local racercount = i * (racer_count > 8 and w*0.0135 or w*0.0115)
         local racercount = i * w * 0.0155
-        -- local text = alt and (entry[3] .. "  " .. i) or (entry[2] .. "  " .. i)
         
         local Strings = {
             ["Time"] = "%s",
@@ -497,9 +436,7 @@ local function underground_racing_main( ... )
 					local num = tonumber(entry[4])
 
 					if entry[3] == "Lap" and num then
-						-- choose singular/plural string
 						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						-- rebuild status_string so the format target is correct
 						status_string = lapString
 						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
 					elseif num then
@@ -530,14 +467,14 @@ local function underground_racing_main( ... )
         
         -- surface.SetDrawColor(0, 0, 0, 200)
         draw.NoTexture()
-        surface.DrawRect(w * 0.82, h * 0.16 + racercount, w * 0.155, h * 0.025)
+        surface.DrawRect(UV_UI.X(w * 0.82), h * 0.16 + racercount, UV_UI.W(w * 0.155), h * 0.025)
         
         surface.SetDrawColor(0, 0, 0, 200)
         draw.NoTexture()
-        surface.DrawRect(w * 0.8, h * 0.16 + racercount, w * 0.0175, h * 0.025)
+        surface.DrawRect(UV_UI.X(w * 0.8), h * 0.16 + racercount, UV_UI.W(w * 0.0175), h * 0.025)
         
-        draw.DrawText(i .. ":", "UVFont4", w * 0.808, (h * 0.16) + racercount, color, TEXT_ALIGN_CENTER)
-        draw.DrawText(text, "UVFont4", w * 0.97, (h * 0.16) + racercount, color, TEXT_ALIGN_RIGHT)
+        draw.DrawText(i .. ":", "UVFont4", UV_UI.X(w * 0.808), (h * 0.16) + racercount, color, TEXT_ALIGN_CENTER)
+        draw.DrawText(text, "UVFont4", UV_UI.X(w * 0.97), (h * 0.16) + racercount, color, TEXT_ALIGN_RIGHT)
     end
 end
 

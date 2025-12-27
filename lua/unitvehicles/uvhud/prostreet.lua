@@ -17,7 +17,7 @@ local function prostreet_racing_main( ... )
     
     -- Timer
     surface.SetDrawColor(0, 0, 0, 200)
-    surface.DrawRect(w * 0.425, h * 0.075, w * 0.15, h * 0.05)
+    surface.DrawRect(UV_UI.XScaled(w * 0.425), h * 0.075, UV_UI.W(w * 0.15), h * 0.05)
 
 	draw.SimpleTextOutlined("#uv.race.hud.time.ps", "UVFont5", w * 0.5, h * 0.035, Color( 255, 255, 255, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
 	draw.SimpleTextOutlined(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0), "UVFont5", w * 0.5, h * 0.0775, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
@@ -34,8 +34,8 @@ local function prostreet_racing_main( ... )
 		lapamount = math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%"
     end
     
-	draw.SimpleTextOutlined(lapname, "UVFont5", w * 0.9, h * 0.075, Color( 255, 255, 255, 150 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined(lapamount, "UVFont5", w * 0.97, h * 0.075, Color( 200, 255, 100 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(lapname, "UVFont5", UV_UI.X(w * 0.9), h * 0.075, Color( 255, 255, 255, 150 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(lapamount, "UVFont5", UV_UI.X(w * 0.97), h * 0.075, Color( 200, 255, 100 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
 
     local racer_count = #string_array
     local lang = language.GetPhrase
@@ -102,19 +102,25 @@ local function prostreet_racing_main( ... )
         end
         
         local text = alt and (status_text) or (racer_name)
-        
-		if #text > 20 then
-			text = string.sub(text, 1, 20 - 3) .. "..."
+
+		surface.SetFont("UVFont4")
+		local ymax = UV_UI.W(w * 0.1)
+		textW = surface.GetTextSize(text)
+		if textW > ymax then
+			while surface.GetTextSize(text .. "...") > ymax do
+				text = string.sub(text, 1, -2)
+			end
+			text = text .. "..."
 		end
 
         if not boxyes then
             surface.SetDrawColor(0, 0, 0, 200)
             draw.NoTexture()
-            surface.DrawRect(w * 0.025, h * 0.1, w * 0.15, h * 0.04 + racercountbox)
+            surface.DrawRect(UV_UI.X(w * 0.025), h * 0.1, UV_UI.W(w * 0.15), h * 0.04 + racercountbox)
             boxyes = true
         end
         
-        draw.DrawText(i .. "      " .. text, "UVFont4", w * 0.0275, (h * 0.1) + racercount, color, TEXT_ALIGN_LEFT)
+        draw.DrawText(i .. "      " .. text, "UVFont4", UV_UI.X(w * 0.0275), (h * 0.1) + racercount, color, TEXT_ALIGN_LEFT)
     end
 end
 

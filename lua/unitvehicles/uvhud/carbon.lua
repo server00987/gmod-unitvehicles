@@ -1543,16 +1543,16 @@ local function carbon_racing_main( ... )
     -- Timer
     surface.SetMaterial(UVMaterials["ARROW_CARBON"])
     surface.SetDrawColor(UVColors.Carbon_AccentTransparent)
-    surface.DrawTexturedRect(w * 0.815, h * 0.111, w * 0.025, h * 0.033)
+    surface.DrawTexturedRect(UV_UI.X(w * 0.815), h * 0.111, UV_UI.W(w * 0.025), h * 0.033)
     
-    DrawIcon(UVMaterials["CLOCK_BG"], w * 0.815, h * 0.124, .0625, UVColors.Carbon_Accent) -- Icon
+    DrawIcon(UVMaterials["CLOCK_BG"], UV_UI.X(w * 0.815), h * 0.124, .0625, UVColors.Carbon_Accent) -- Icon
     
-	draw.SimpleTextOutlined(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0), "UVCarbonFont", w * 0.97, h * 0.105, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0), "UVCarbonFont", UV_UI.X(w * 0.97), h * 0.105, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
     -- Lap & Checkpoint Counter
     surface.SetMaterial(UVMaterials["BACKGROUND_CARBON"])
     surface.SetDrawColor(UVColors.Carbon_Accent2Transparent:Unpack())
-    surface.DrawTexturedRect(w * 0.69, h * 0.157, w * 0.2, h * 0.04)
+    surface.DrawTexturedRect(UV_UI.X(w * 0.69), h * 0.157, UV_UI.W(w * 0.2), h * 0.04)
     
     local laptext = "<color=" .. UVColors.Carbon_Accent.r .. ", " .. UVColors.Carbon_Accent.g .. ", " ..UVColors.Carbon_Accent.b ..">" .. my_array.Lap .. ": </color>" .. UVHUDRaceInfo.Info.Laps
     local laptextdark = "<color=0,0,0>" .. my_array.Lap .. ": " .. UVHUDRaceInfo.Info.Laps .. "</color>"
@@ -1566,13 +1566,13 @@ local function carbon_racing_main( ... )
         laptextdark = "<color=0,0,0>" .. laptext .. "</color>"
     end
     
-	draw.SimpleTextOutlined("#" .. lapname, "UVCarbonFont", w * 0.875, h * 0.155, UVColors.Carbon_Accent2Bright, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined("#" .. lapname, "UVCarbonFont", UV_UI.X(w * 0.875), h * 0.155, UVColors.Carbon_Accent2Bright, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 	
-    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 - 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
-    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 - 1,h * 0.155 + 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
-    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
-    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(w * 0.97 + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
-    markup.Parse("<font=UVCarbonFont>" .. laptext):Draw(w * 0.97,h * 0.155,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
+    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(UV_UI.X(w * 0.97) - 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
+    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(UV_UI.X(w * 0.97) - 1,h * 0.155 + 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
+    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(UV_UI.X(w * 0.97) + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
+    markup.Parse("<font=UVCarbonFont>" .. laptextdark):Draw(UV_UI.X(w * 0.97) + 1,h * 0.155 - 1,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
+    markup.Parse("<font=UVCarbonFont>" .. laptext):Draw(UV_UI.X(w * 0.97),h * 0.155,TEXT_ALIGN_RIGHT,TEXT_ALIGN_RIGHT)
 
     -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -1610,9 +1610,7 @@ local function carbon_racing_main( ... )
 					local num = tonumber(entry[4])
 
 					if entry[3] == "Lap" and num then
-						-- choose singular/plural string
 						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
-						-- rebuild status_string so the format target is correct
 						status_string = lapString
 						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
 					elseif num then
@@ -1641,11 +1639,11 @@ local function carbon_racing_main( ... )
         if is_local_player then
             surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_INVERTED"])
             surface.SetDrawColor(89, 255, 255, 100)
-            surface.DrawTexturedRect(w * 0.72, h * 0.185 + racercount, w * 0.255, h * 0.025)
+            surface.DrawTexturedRect(UV_UI.X(w * 0.72), h * 0.185 + racercount, UV_UI.W(w * 0.255), h * 0.025)
         end
 
-		draw.SimpleTextOutlined(i, "UVCarbonLeaderboardFont", w * 0.97, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined(text, "UVCarbonLeaderboardFont", w * 0.9525, (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(i, "UVCarbonLeaderboardFont", UV_UI.X(w * 0.97), (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(text, "UVCarbonLeaderboardFont", UV_UI.X(w * 0.9525), (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     end
 end
 
@@ -1724,20 +1722,20 @@ local function carbon_pursuit_main( ... )
     if not UVHUDDisplayBackupTimer then
         surface.SetMaterial(UVMaterials["ARROW_CARBON"])
         surface.SetDrawColor(UVColors.Carbon_AccentTransparent)
-        surface.DrawTexturedRect(w * 0.8, h * 0.111, w * 0.025, h * 0.033)
+        surface.DrawTexturedRect(UV_UI.X(w * 0.8), h * 0.111, UV_UI.W(w * 0.025), h * 0.033)
     else
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
         surface.SetDrawColor(Color(193, 66, 0))
-        surface.DrawTexturedRect(w * 0.795, h * 0.111, w * 0.085, h * 0.033)
+        surface.DrawTexturedRect(UV_UI.X(w * 0.795), h * 0.111, UV_UI.W(w * 0.085), h * 0.033)
         
         surface.SetMaterial(UVMaterials["ARROW_CARBON"])
-        surface.DrawTexturedRectRotated(w * 0.84, h * 0.1512, w * 0.01, h * 0.02, -90)
+        surface.DrawTexturedRectRotated(UV_UI.X(w * 0.84), h * 0.1512, UV_UI.W(w * 0.01), h * 0.02, -90)
         
-        draw.DrawText(UVBackupTimer,"UVCarbonLeaderboardFont",w * 0.8425,h*0.1125,Color(0,0,0),TEXT_ALIGN_CENTER)
+        draw.DrawText(UVBackupTimer,"UVCarbonLeaderboardFont",UV_UI.X(w * 0.8425),h*0.1125,Color(0,0,0),TEXT_ALIGN_CENTER)
     end
     
-    DrawIcon(UVMaterials["CLOCK_BG"], w * 0.8, h * 0.124, .0625, UVColors.Carbon_Accent) -- Icon
-	draw.SimpleTextOutlined(UVTimer, "UVCarbonFont", w * 0.97, h * 0.105, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["CLOCK_BG"], UV_UI.X(w * 0.8), h * 0.124, .0625, UVColors.Carbon_Accent) -- Icon
+	draw.SimpleTextOutlined(UVTimer, "UVCarbonFont", UV_UI.X(w * 0.97), h * 0.105, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
     local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
     local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
@@ -1750,14 +1748,14 @@ local function carbon_pursuit_main( ... )
     if UVHeatLevel > 9 then hl10 = w * 0.01 end
     if (UVHUDDisplayCooldown and UVHUDCopMode) then hlcm = h * 0.0475 end
     
-    DrawIcon(UVMaterials["HEAT_CARBON"], w * 0.8 - hl10, h * 0.26 - hlcm, .045, UVColors.Carbon_Accent) -- Icon
-    draw.SimpleTextOutlined("x" .. UVHeatLevel, "UVCarbonFont", w * 0.83, h * 0.2375 - hlcm, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["HEAT_CARBON"], UV_UI.X(w * 0.8 - hl10), h * 0.26 - hlcm, .045, UVColors.Carbon_Accent) -- Icon
+    draw.SimpleTextOutlined("x" .. UVHeatLevel, "UVCarbonFont", UV_UI.X(w * 0.83), h * 0.2375 - hlcm, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
     surface.SetDrawColor(Color(0,0,0))
-    surface.DrawRect(w * 0.835 - 4, h * 0.2525 - hlcm - 3, w * 0.145 + 8.5, h * 0.015 + 6)
+    surface.DrawRect(UV_UI.X(w * 0.835) - 4, h * 0.2525 - hlcm - 3, UV_UI.W(w * 0.145) + 8.5, h * 0.015 + 6)
 	
     surface.SetDrawColor(UVColors.Carbon_AccentDarker)
-    surface.DrawRect(w * 0.835, h * 0.2525 - hlcm, w * 0.145, h * 0.015)
+    surface.DrawRect(UV_UI.X(w * 0.835), h * 0.2525 - hlcm, UV_UI.W(w * 0.145), h * 0.015)
 
     local HeatProgress = 0
     if MaxHeatLevel:GetInt() ~= UVHeatLevel then
@@ -1770,29 +1768,29 @@ local function carbon_pursuit_main( ... )
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
         end
     end
-    local B = math.Clamp((HeatProgress) * w * 0.145, 0, w * 0.145)
+    local B = math.Clamp((HeatProgress) * UV_UI.W(w * 0.145), 0, UV_UI.W(w * 0.145))
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
     
     surface.SetDrawColor(UVColors.Carbon_Accent)
     
-    surface.DrawRect(w * 0.835, h * 0.2525 - hlcm, B, h * 0.015)
+    surface.DrawRect(UV_UI.X(w * 0.835), h * 0.2525 - hlcm, B, h * 0.015)
     
     -- General Icons
     surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL_INVERTED"])
     surface.SetDrawColor(Color(255, 255, 255, 50))
-    surface.DrawTexturedRect(w * 0.9, h * 0.16, w * 0.075, h * 0.033)
+    surface.DrawTexturedRect(UV_UI.X(w * 0.9), h * 0.16, UV_UI.W(w * 0.075), h * 0.033)
     
-    DrawIcon(UVMaterials["UNITS_DISABLED_CARBON"], w * 0.97, h * 0.175, .05, UVColors.Carbon_Accent)
-	draw.SimpleTextOutlined(UVWrecks, "UVCarbonFont", w * 0.9125, h * 0.1525, UVColors.Carbon_Accent, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["UNITS_DISABLED_CARBON"], UV_UI.X(w * 0.97), h * 0.175, .05, UVColors.Carbon_Accent)
+	draw.SimpleTextOutlined(UVWrecks, "UVCarbonFont", UV_UI.X(w * 0.9125), h * 0.1525, UVColors.Carbon_Accent, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
     surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SMALL"])
     surface.SetDrawColor(Color(255, 255, 255, 50))
-    surface.DrawTexturedRect(w * 0.79, h * 0.16, w * 0.075, h * 0.033)
+    surface.DrawTexturedRect(UV_UI.X(w * 0.79), h * 0.16, UV_UI.W(w * 0.075), h * 0.033)
     
-    DrawIcon(UVMaterials["UNITS_CARBON"], w * 0.8, h * 0.175, .05, UVColors.Carbon_Accent)
-	draw.SimpleTextOutlined(ResourceText, "UVCarbonFont", w * 0.853, h * 0.1525, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["UNITS_CARBON"], UV_UI.X(w * 0.8), h * 0.175, .05, UVColors.Carbon_Accent)
+	draw.SimpleTextOutlined(ResourceText, "UVCarbonFont", UV_UI.X(w * 0.853), h * 0.1525, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
     -- [[ Commander Stuff ]]
     if UVOneCommanderActive then
@@ -1809,11 +1807,11 @@ local function carbon_pursuit_main( ... )
             end
         end
 
-		draw.SimpleTextOutlined("⛊", "UVCarbonFont", w * 0.7925, h * 0.339, UVColors.Carbon_Accent, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined("⛊", "UVCarbonFont", UV_UI.X(w * 0.7925), h * 0.339, UVColors.Carbon_Accent, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 		
-		draw.SimpleTextOutlined(cname, "UVCarbonFont-Smaller", w * 0.8825, h * 0.3465, UVColors.Carbon_Accent, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(cname, "UVCarbonFont-Smaller", UV_UI.X(w * 0.8825), h * 0.3465, UVColors.Carbon_Accent, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 		
-		draw.SimpleTextOutlined("⛊", "UVCarbonFont", w * 0.975, h * 0.339, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined("⛊", "UVCarbonFont", UV_UI.X(w * 0.975), h * 0.339, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
         
         if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
             UVHUDCommanderLastHealth = 0
@@ -1852,13 +1850,13 @@ local function carbon_pursuit_main( ... )
         end
         if healthratio > 0 then
             surface.SetDrawColor(Color(0,0,0))
-            surface.DrawRect(w * 0.79 - 4, h * 0.385 - 3, w * 0.19 + 8.5, h * 0.015 + 6)
+            surface.DrawRect(UV_UI.X(w * 0.79) - 4, h * 0.385 - 3, UV_UI.W(w * 0.19) + 8.5, h * 0.015 + 6)
             surface.SetDrawColor(UVColors.Carbon_AccentDarker)
-            surface.DrawRect(w * 0.79, h * 0.385, w * 0.19, h * 0.015)
+            surface.DrawRect(UV_UI.X(w * 0.79), h * 0.385, UV_UI.W(w * 0.19), h * 0.015)
             
             surface.SetDrawColor(healthcolor)
-            local T = math.Clamp((healthratio) * (w * 0.19), 0, w * 0.19)
-            surface.DrawRect(w * 0.79, h * 0.385, T, h * 0.015)
+            local T = math.Clamp((healthratio) * (UV_UI.W(w * 0.19)), 0, UV_UI.W(w * 0.19))
+            surface.DrawRect(UV_UI.X(w * 0.79), h * 0.385, T, h * 0.015)
         end
     end
     
@@ -1875,12 +1873,12 @@ local function carbon_pursuit_main( ... )
 		-- Busted Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED"])
         surface.SetDrawColor(Color(193, 66, 0, 255))
-        surface.DrawTexturedRect(w * 0.782, h * 0.195, w * 0.0935, h * 0.032)
+        surface.DrawTexturedRect(UV_UI.X(w * 0.782), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
         
 		-- Evade Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_INVERTED"])
         surface.SetDrawColor(Color(0, 200, 0, 255))
-        surface.DrawTexturedRect(w * 0.895, h * 0.195, w * 0.0935, h * 0.032)
+        surface.DrawTexturedRect(UV_UI.X(w * 0.895), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
 
         -- Evade Box, Busted Meter
         if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
@@ -1911,12 +1909,11 @@ local function carbon_pursuit_main( ... )
                 end
             end
             
-            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.0935), 0, w * 0.0935)
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (UV_UI.W(w * 0.0935)), 0, UV_UI.W(w * 0.0935))
             T = math.floor(T)
 			surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED"])
 			surface.SetDrawColor(Color(255, 0, 0))
-			-- surface.DrawTexturedRect(w * 0.782 + (w * 0.0935 - T), h * 0.195, T, h * 0.032)
-			surface.DrawTexturedRectUV(w * 0.782 + (w * 0.0935 - T), h * 0.195, T, h * 0.032, 1 - (T / (w * 0.0935)), 0, 1, 1)
+			surface.DrawTexturedRectUV(UV_UI.X(w * 0.782) + (UV_UI.W(w * 0.0935) - T), h * 0.195, T, h * 0.032, 1 - (T / (w * 0.0935)), 0, 1, 1)
             middlergb = {
                 r = 175,
                 g = 175,
@@ -1935,12 +1932,11 @@ local function carbon_pursuit_main( ... )
                 UVEvadingProgress = EvadingProgress
             end
             
-            local T = math.Clamp((UVEvadingProgress) * (w * 0.0935), 0, w * 0.0935)
+            local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.0935)), 0, UV_UI.W(w * 0.0935))
 
 			surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_INVERTED"])
 			surface.SetDrawColor(Color(0, 255, 0))
-			-- surface.DrawTexturedRect(w * 0.895, h * 0.195, T, h * 0.032)
-			surface.DrawTexturedRectUV(w * 0.895, h * 0.195, T, h * 0.032, 0, 0, T / (w * 0.0935), 1)
+			surface.DrawTexturedRectUV(UV_UI.X(w * 0.895), h * 0.195, T, h * 0.032, 0, 0, T / (UV_UI.W(w * 0.0935)), 1)
 			
             middlergb = {
                 r = 175,
@@ -1956,10 +1952,10 @@ local function carbon_pursuit_main( ... )
         -- Evade Box, Middle Piece
 		surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_MIDDLE"])
 		surface.SetDrawColor(middlergb.r, middlergb.g, middlergb.b, 255)
-		surface.DrawTexturedRect(w * 0.8745, h * 0.195, w * 0.021, h * 0.032)
+		surface.DrawTexturedRect(UV_UI.X(w * 0.874), h * 0.195, UV_UI.W(w * 0.023), h * 0.032)
 
-		draw.SimpleTextOutlined("#uv.chase.busted", "UVCarbonLeaderboardFont", w * 0.7875, h* 0.2175, states.BustedColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, 50 ) )
-		draw.SimpleTextOutlined("#uv.chase.evade", "UVCarbonLeaderboardFont", w * 0.98, h* 0.2175, states.EvasionColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, 50 ) )
+		draw.SimpleTextOutlined("#uv.chase.busted", "UVCarbonLeaderboardFont", UV_UI.X(w * 0.7875), h* 0.2175, states.BustedColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, 50 ) )
+		draw.SimpleTextOutlined("#uv.chase.evade", "UVCarbonLeaderboardFont", UV_UI.X(w * 0.98), h* 0.2175, states.EvasionColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0, 50 ) )
 		
         -- Lower Box
         local lbtext = "REPLACEME"
@@ -1973,7 +1969,7 @@ local function carbon_pursuit_main( ... )
             uloc = "uv.chase.suspects"
         end
 
-		draw.SimpleTextOutlined(string.format(lang(uloc), utype), "UVCarbonLeaderboardFont", w * 0.98, h * 0.27, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(string.format(lang(uloc), utype), "UVCarbonLeaderboardFont", UV_UI.X(w * 0.98), h * 0.27, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     else
         -- Lower Box
         -- Evade Box, All BG (Moved to inner if clauses)
@@ -1989,25 +1985,24 @@ local function carbon_pursuit_main( ... )
             
             -- Upper Box
             if not UVHUDCopMode then
-                local T = math.Clamp((UVCooldownTimer) * (w * 0.2), 0, w * 0.2)
+                local T = math.Clamp((UVCooldownTimer) * (UV_UI.W(w * 0.2)), 0, UV_UI.W(w * 0.2))
                 T = math.floor(T)
 
 				surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_COOLDOWN"])
 				surface.SetDrawColor(UVColors.Carbon_AccentDarker)
-				surface.DrawTexturedRect(w * 0.782, h * 0.18, w * 0.2, h * 0.064)
+				surface.DrawTexturedRect(UV_UI.X(w * 0.782), h * 0.18, UV_UI.W(w * 0.2), h * 0.064)
 				
 				surface.SetDrawColor(UVColors.Carbon_Accent)
-				surface.DrawTexturedRectUV(w * 0.782 + (w * 0.2 - T), h * 0.18, T, h * 0.064, 1 - (T / (w * 0.2)), 0, 1, 1)
+				surface.DrawTexturedRectUV(UV_UI.X(w * 0.782) + (UV_UI.W(w * 0.2) - T), h * 0.18, T, h * 0.064, 1 - (T / (UV_UI.W(w * 0.2))), 0, 1, 1)
 
-				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", w * 0.98, h * 0.221, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", UV_UI.X(w * 0.98), h * 0.221, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
             else
-				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", w * 0.98, h * 0.225, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+				draw.SimpleTextOutlined("#uv.chase.cooldown", "UVCarbonLeaderboardFont", UV_UI.X(w * 0.98), h * 0.225, UVColors.Carbon_Accent, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
             end
         else
             CooldownProgress = 0
         end
     end
-    --end
 end
 
 UV_UI.pursuit.carbon.main = carbon_pursuit_main

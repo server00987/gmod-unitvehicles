@@ -1191,68 +1191,8 @@ local function world_racing_main( ... )
 		finishedbg = Color( 66, 222, 66, 50 ),
 	}
 
-	-- Debugging
-	-- local alpha = 255
-
-	-- surface.SetDrawColor(0, 0, 0, alpha)
-	-- surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
-	-- surface.DrawTexturedRect(w - w * 0.3, h * 0.05, w * 0.3, h * (0.03 * 3))
-
-	-- draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5UI", w * 0.99, h * 0.065, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-
-	-- draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5Shadow", w * 0.99, h * 0.095, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-	
-	-- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-
-	-- local debuglineamount = 24
-	-- local cardW, cardH = w * 0.15, h * 0.0325
-	-- local cardsPerColumn = 12
-	-- local spacing = 2
-
-	-- for i = 1, math.Clamp(debuglineamount, 1, 36), 1 do
-		-- local statusstr = "#uv.race.invite.status.invited"
-		-- local clr = Color(200,200,200, alpha)
-		-- local racername = "Username"
-		-- local vehname = "#moka.glide.nfsw.car.ford.interceptor"
-		-- local status = "Declined"
-
-		-- vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
-
-		-- if status == "Host" then 
-			-- clr = Color(255,255,0, alpha)
-			-- statusstr = "#uv.race.invite.status.host"
-		-- elseif status == "Accepted" then 
-			-- clr = Color(100,255,100, alpha)
-			-- statusstr = "#uv.race.invite.status.accepted"
-		-- elseif status == "Declined" or status == "Disqualified" then 
-			-- clr = Color(255,100,100, alpha)
-			-- statusstr = "#uv.race.invite.status.declined"
-		-- end
-		
-		-- local col = math.floor((i - 1) / cardsPerColumn)
-		-- local row = (i - 1) % cardsPerColumn
-
-		-- local x = w - (cardW + spacing) * (col + 1)
-		-- local y = h * 0.145 + (cardH + spacing) * row
-
-		-- surface.SetDrawColor(0, 0, 0, 200)
-		-- surface.DrawRect(x, y, cardW, cardH)
-		
-		-- if #racername > 20 then -- If standard racer name is too long, shorten it
-			-- racername = string.sub(racername, 1, 23 - 3) .. "..."
-		-- end
-
-		-- if #vehname > 35 then -- If vehicle name is too long, shorten it
-			-- vehname = string.sub(vehname, 1, 37 - 3) .. "..."
-		-- end
-			
-		-- draw.SimpleText(statusstr, "UVMostWantedLeaderboardFont2", x + (w * 0.145), y, clr, TEXT_ALIGN_RIGHT)
-		-- draw.SimpleText(racername, "UVMostWantedLeaderboardFont2", x + (w * 0.001), y, Color(255,255,255), TEXT_ALIGN_LEFT)
-		-- draw.SimpleText(vehname or "...", "UVMostWantedLeaderboardFont2", x + (w * 0.001), y + 15, Color(200,200,200), TEXT_ALIGN_LEFT)
-	-- end
-
     -- Timer
-	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1", w * 0.83,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	draw.SimpleTextOutlined( "#uv.race.hud.laptime.world", "UVWorldFont1", UV_UI.X(w * 0.83), h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
 	
     local current_time = "--:--.--"
     
@@ -1270,20 +1210,20 @@ local function world_racing_main( ... )
 	end
 
 	-- Draw main part
-	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.8225, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225), h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
 	-- MS Code
 	surface.SetFont("UVWorldFont2")
 	local mainW = surface.GetTextSize(mainTime)
-	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225) + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
     -- Lap & Checkpoint Counter
     if UVHUDRaceInfo.Info.Laps > 1 then
-		draw.SimpleTextOutlined( "#uv.race.hud.lap", "UVWorldFont1",w * 0.93,h * 0.1725, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-		draw.SimpleTextOutlined( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.925,h * 0.1825, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+		draw.SimpleTextOutlined( "#uv.race.hud.lap", "UVWorldFont1", UV_UI.X(w * 0.93), h * 0.1725, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		draw.SimpleTextOutlined( my_array.Lap .. "/" .. UVHUDRaceInfo.Info.Laps,"UVWorldFont4" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.925),h * 0.1825, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 	
 		-- Best Lap Timer
-		draw.SimpleTextOutlined( "#uv.race.hud.besttime.world", "UVWorldFont1",w * 0.83,h * 0.1675,worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		draw.SimpleTextOutlined( "#uv.race.hud.besttime.world", "UVWorldFont1", UV_UI.X(w * 0.83), h * 0.1675, worldcols.reg, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
 		
 		local btt, bttm = "-", ""
 		if my_array.BestLapTime then
@@ -1297,26 +1237,26 @@ local function world_racing_main( ... )
 			end
 
 			-- Draw main part
-			draw.SimpleTextOutlined( mainBestTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.8225, h * 0.175, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( mainBestTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225), h * 0.175, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
 			-- MS Code
 			surface.SetFont("UVWorldFont2" .. GetFontSuffixForLanguage())
 			local bestW = surface.GetTextSize(mainBestTime)
-			draw.SimpleTextOutlined( msBestTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225 + bestW, h * 0.187, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( msBestTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225) + bestW, h * 0.187, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 		else
-			draw.SimpleTextOutlined( btt, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.85, h * 0.175, worldcols.val, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+			draw.SimpleTextOutlined( btt, "UVWorldFont2" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.85), h * 0.175, worldcols.val, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 		end
     else -- Single Lap / Sprint
-		draw.SimpleTextOutlined( "#uv.race.hud.complete", "UVWorldFont1",w * 0.83,h * 0.1675, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2" .. GetFontSuffixForLanguage(),w * 0.8225,h * 0.175, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+		draw.SimpleTextOutlined( "#uv.race.hud.complete", "UVWorldFont1", UV_UI.X(w * 0.83), h * 0.1675, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+		draw.SimpleTextOutlined( math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%","UVWorldFont2" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225), h * 0.175, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     end
 
     local racer_count = #string_array
     
     -- Position Counter
     if racer_count > 1 then
-        draw.SimpleTextOutlined("#uv.results.race.pos.caps", "UVWorldFont1",w * 0.93,h * 0.1225, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
-        draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.925,h * 0.1325, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+        draw.SimpleTextOutlined("#uv.results.race.pos.caps", "UVWorldFont1", UV_UI.X(w * 0.93), h * 0.1225, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+        draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants,"UVWorldFont4" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.925), h * 0.1325, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     end
     
     -- Racer List
@@ -1395,7 +1335,7 @@ local function world_racing_main( ... )
         local text = alt and (status_text) or (racer_name)
 
         if is_local_player then
-			DrawIcon(UVMaterials["RACE_PLAYERMARKER_WORLD"], w * 0.815, (h * 0.2075) + racercount, 0.02, Color(255, 255, 255) )
+			DrawIcon(UVMaterials["RACE_PLAYERMARKER_WORLD"], UV_UI.X(w * 0.815), (h * 0.2075) + racercount, 0.02, Color(255, 255, 255) )
         end
 
         if entry[3] == "Finished" then
@@ -1403,15 +1343,15 @@ local function world_racing_main( ... )
         end
 
         if entry[3] == "Disqualified" then
-			DrawIcon(UVMaterials["RACE_DNFMARKER_WORLD"], w * 0.815, (h * 0.2075) + racercount, 0.02, Color(255, 255, 255) )
+			DrawIcon(UVMaterials["RACE_DNFMARKER_WORLD"], UV_UI.X(w * 0.815), (h * 0.2075) + racercount, 0.02, Color(255, 255, 255) )
         end
 
         if entry[3] == "Busted" then
-			DrawIcon(UVMaterials["RACE_BUSTEDMARKER_WORLD"], w * 0.815, (h * 0.2075) + racercount, 0.03, Color(255, 255, 255) )
+			DrawIcon(UVMaterials["RACE_BUSTEDMARKER_WORLD"], UV_UI.X(w * 0.815), (h * 0.2075) + racercount, 0.03, Color(255, 255, 255) )
         end
 
-        draw.SimpleTextOutlined( i, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8225, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
-        draw.SimpleTextOutlined( racer_name, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.8425, (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
+        draw.SimpleTextOutlined( i, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8225), (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
+        draw.SimpleTextOutlined( racer_name, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8425), (h * 0.1925) + racercount, color,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, bgs, colorbg )
     end
 end
 
@@ -1496,18 +1436,10 @@ local function world_pursuit_main( ... )
     --if not UVHUDRace then
     local ResourceText = UVResourcePoints
     local theme_color = (UVHUDCopMode and table.Copy(UVColors.MW_Cop)) or table.Copy(UVColors.MW_Racer)
-    
-	-- [ Debug Subtitles ] --
-	-- surface.SetMaterial(UVMaterials["PT_BG"])
-    -- surface.SetDrawColor(Color(0, 0, 0, 255))
-    -- surface.DrawTexturedRect(0, h * 0.7, w, h * 0.15)
-	
-	-- draw.SimpleTextOutlined( "#uv.unit.dispatch", "UVMostWantedLeaderboardFont", w * 0.5, h * 0.75, Color( 255, 255, 0 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0 ) )
-	-- draw.SimpleTextOutlined( "#uv.sub.default.dispatch.unitrequest.2", "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.775, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color( 0, 0, 0 ) )
 
     -- [ Upper Right Info Box ] --
     -- Timer
-	draw.SimpleTextOutlined( "#uv.chase.time.world", "UVWorldFont1",w * 0.885,h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+	draw.SimpleTextOutlined( "#uv.chase.time.world", "UVWorldFont1", UV_UI.X(w * 0.885), h * 0.1175, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg )
 	
 	-- Split into main and ms
 	local mainTime, msTime = UVTimer:match("^(.-)(%.%d+)$")
@@ -1518,30 +1450,30 @@ local function world_pursuit_main( ... )
 
 	surface.SetFont("UVWorldFont2" .. GetFontSuffixForLanguage())
 	local mainW = surface.GetTextSize(mainTime)
-	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), w * 0.88, h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
-	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.88 + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( mainTime, "UVWorldFont2" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.88), h * 0.125, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	draw.SimpleTextOutlined( msTime, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.88) + mainW, h * 0.137, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     
 	-- General Icons
-	DrawIcon(UVMaterials["UNIT_WORLD"], w * 0.89, h * 0.19, 0.06, Color(255, 255, 255) ) -- Damaged
-	DrawIcon(UVMaterials["UNIT_DMG_WORLD"], w * 0.899, h * 0.1775, 0.03, Color(255, 255, 255) ) -- Damage Marker
-	draw.SimpleTextOutlined( UVTags, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.9025, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	DrawIcon(UVMaterials["UNIT_WORLD"], UV_UI.X(w * 0.89), h * 0.19, 0.06, Color(255, 255, 255) ) -- Damaged
+	DrawIcon(UVMaterials["UNIT_DMG_WORLD"], UV_UI.X(w * 0.899), h * 0.1775, 0.03, Color(255, 255, 255) ) -- Damage Marker
+	draw.SimpleTextOutlined( UVTags, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.9025), h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 	
-	DrawIcon(UVMaterials["UNIT_WORLD"], w * 0.94, h * 0.19, 0.06, Color(255, 255, 255) ) -- Wrecks
-	DrawIcon(UVMaterials["UNIT_CROSS_WORLD"], w * 0.94, h * 0.19, 0.03, Color(255, 255, 255) ) -- Wrecked Cross
-	draw.SimpleTextOutlined( UVWrecks, "UVWorldFont3" .. GetFontSuffixForLanguage(), w * 0.9525, h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+	DrawIcon(UVMaterials["UNIT_WORLD"], UV_UI.X(w * 0.94), h * 0.19, 0.06, Color(255, 255, 255) ) -- Wrecks
+	DrawIcon(UVMaterials["UNIT_CROSS_WORLD"], UV_UI.X(w * 0.94), h * 0.19, 0.03, Color(255, 255, 255) ) -- Wrecked Cross
+	draw.SimpleTextOutlined( UVWrecks, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.9525), h * 0.176, worldcols.val, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
 
     -- Cost to State
-	draw.SimpleTextOutlined( "#uv.chase.cts.world", "UVWorldFont1",w * 0.885,h * 0.21, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
+	draw.SimpleTextOutlined( "#uv.chase.cts.world", "UVWorldFont1", UV_UI.X(w * 0.885), h * 0.21, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
 	
-    DrawIcon(UVMaterials["CTS_WORLD"], w * 0.8825, h * 0.2425, .06, Color(255, 255, 255)) -- Icon
-	draw.SimpleTextOutlined( "$" .. UVBounty,"UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.8915,h * 0.223, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
+    DrawIcon(UVMaterials["CTS_WORLD"], UV_UI.X(w * 0.8825), h * 0.2425, .06, Color(255, 255, 255)) -- Icon
+	draw.SimpleTextOutlined( "$" .. UVBounty,"UVWorldFont4" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.8915),h * 0.223, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 3, worldcols.valbg )
     
     -- Heat Level
     local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
     local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
     
-	draw.SimpleTextOutlined( "#uv.chase.heatlevel", "UVWorldFont1",w * 0.885,h * 0.265, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
-	draw.SimpleTextOutlined( UVHeatLevel, "UVWorldFont3" .. GetFontSuffixForLanguage(),w * 0.9625,h * 0.279, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg ) -- Bounty Text
+	draw.SimpleTextOutlined( "#uv.chase.heatlevel", "UVWorldFont1", UV_UI.X(w * 0.885), h * 0.265, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
+	draw.SimpleTextOutlined( UVHeatLevel, "UVWorldFont3" .. GetFontSuffixForLanguage(), UV_UI.X(w * 0.9625), h * 0.279, worldcols.val,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.valbg ) -- Bounty Text
 
     UVHeatBountyMin = ( UVHeatMinConVar and UVHeatMinConVar:GetInt() ) or math.huge
     UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
@@ -1565,28 +1497,26 @@ local function world_pursuit_main( ... )
 	surface.SetMaterial(UVMaterials["WARNING_WORLD"])
     if HeatProgress >= 0.6 and HeatProgress < 0.75 then
     -- if HeatProgress < 0.75 then
-		DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.294, .03, Color(255, 255, 255, blink) )
+		DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.294, .03, Color(255, 255, 255, blink) )
     elseif HeatProgress >= 0.75 and HeatProgress < 0.9 then
-		DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.294, .03, Color(255, 255, 255, blink2) )
+		DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.294, .03, Color(255, 255, 255, blink2) )
     elseif HeatProgress >= 0.9 then
-		DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.294, .03, Color(255, 255, 255, blink3) )
+		DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.294, .03, Color(255, 255, 255, blink3) )
     end
 
     surface.SetDrawColor(Color(0, 0, 0, 200))
-    surface.DrawRect(w * 0.885, h * 0.285, w * 0.075, h * 0.0175)
+    surface.DrawRect(UV_UI.X(w * 0.885), h * 0.285, UV_UI.W(w * 0.075), h * 0.0175)
     surface.SetDrawColor(Color(100, 220, 255))
 	
-    local B = math.Clamp((HeatProgress) * w * 0.075, 0, w * 0.075)
-    surface.DrawRect(w * 0.885, h * 0.285, B, h * 0.0175)
+    local B = math.Clamp((HeatProgress) * UV_UI.W(w * 0.075), 0, UV_UI.W(w * 0.075))
+    surface.DrawRect(UV_UI.X(w * 0.885), h * 0.285, B, h * 0.0175)
 
     draw.NoTexture()
 	surface.SetDrawColor(0, 0, 0, 200)
 	
-    -- surface.DrawRect(w * 0.8835, h * 0.285, w * 0.002, h * 0.0175) -- Left
-    surface.DrawRect(w * 0.903, h * 0.285, w * 0.002, h * 0.0175) -- Left Middle
-    surface.DrawRect(w * 0.922, h * 0.285, w * 0.002, h * 0.0175) -- Middle
-    surface.DrawRect(w * 0.941, h * 0.285, w * 0.002, h * 0.0175) -- Right Middle
-    -- surface.DrawRect(w * 0.96, h * 0.285, w * 0.002, h * 0.0175) -- Right
+    surface.DrawRect(UV_UI.X(w * 0.903), h * 0.285, UV_UI.W(w * 0.002), h * 0.0175) -- Left Middle
+    surface.DrawRect(UV_UI.X(w * 0.922), h * 0.285, UV_UI.W(w * 0.002), h * 0.0175) -- Middle
+    surface.DrawRect(UV_UI.X(w * 0.941), h * 0.285, UV_UI.W(w * 0.002), h * 0.0175) -- Right Middle
 
     -- [[ Commander Stuff ]]
     if UVOneCommanderActive then
@@ -1597,14 +1527,12 @@ local function world_pursuit_main( ... )
             local driver = UVHUDCommander:GetDriver()
             if IsValid(driver) and driver:IsPlayer() then
                 cname = driver:Nick()
-				draw.SimpleTextOutlined( cname, "UVWorldFont1",w * 0.92,h * 0.345, worldcols.reg,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
+				draw.SimpleTextOutlined( cname, "UVWorldFont1", UV_UI.X(w * 0.92),h * 0.345, worldcols.reg,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg )
             end
         end
 
-		draw.SimpleTextOutlined( "#uv.unit.commander.caps", "UVWorldFont1",w * 0.885,h * 0.31, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
-		
-		-- draw.SimpleTextOutlined( cname .. " (PLY Name)", "UVWorldFont1",w * 0.92,h * 0.345, worldcols.reg,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Debug
-		
+		draw.SimpleTextOutlined( "#uv.unit.commander.caps", "UVWorldFont1", UV_UI.X(w * 0.885),h * 0.31, worldcols.reg,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.regbg ) -- Bounty Text
+
         if not UVHUDCommanderLastHealth or not UVHUDCommanderLastMaxHealth then
             UVHUDCommanderLastHealth = 0
             UVHUDCommanderLastMaxHealth = 0
@@ -1634,28 +1562,26 @@ local function world_pursuit_main( ... )
         local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
 
 		if healthratio < 0.4 and healthratio > 0.25 then
-			DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.337, .03, Color(255, 255, 255, blink) )
+			DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.337, .03, Color(255, 255, 255, blink) )
 		elseif healthratio < 0.25 and healthratio > 0.1 then
-			DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.337, .03, Color(255, 255, 255, blink2) )
+			DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.337, .03, Color(255, 255, 255, blink2) )
 		elseif healthratio < 0.1 then
-			DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.8775, h * 0.337, .03, Color(255, 255, 255, blink3) )
+			DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.X(w * 0.8775), h * 0.337, .03, Color(255, 255, 255, blink3) )
 		end
 
         if healthratio > 0 then
             surface.SetDrawColor(Color(0, 0, 0, 200))
-			surface.DrawRect(w * 0.885, h * 0.3275, w * 0.075, h * 0.0175)
+			surface.DrawRect(UV_UI.X(w * 0.885), h * 0.3275, UV_UI.W(w * 0.075), h * 0.0175)
             surface.SetDrawColor(Color(100, 220, 255))
-            local T = math.Clamp((healthratio) * (w * 0.075), 0, w * 0.075)
-            surface.DrawRect(w * 0.885, h * 0.3275, T, h * 0.0175)
+            local T = math.Clamp((healthratio) * (UV_UI.W(w * 0.075)), 0, UV_UI.W(w * 0.075))
+            surface.DrawRect(UV_UI.X(w * 0.885), h * 0.3275, T, h * 0.0175)
 
 			draw.NoTexture()
 			surface.SetDrawColor(0, 0, 0, 200)
 
-			-- surface.DrawRect(w * 0.8835, h * 0.3275, w * 0.002, h * 0.0175) -- Left
-			surface.DrawRect(w * 0.903, h * 0.3275, w * 0.002, h * 0.0175) -- Left Middle
-			surface.DrawRect(w * 0.922, h * 0.3275, w * 0.002, h * 0.0175) -- Middle
-			surface.DrawRect(w * 0.941, h * 0.3275, w * 0.002, h * 0.0175) -- Right Middle
-			-- surface.DrawRect(w * 0.96, h * 0.3275, w * 0.002, h * 0.0175) -- Right
+			surface.DrawRect(UV_UI.X(w * 0.903), h * 0.3275, UV_UI.W(w * 0.002), h * 0.0175) -- Left Middle
+			surface.DrawRect(UV_UI.X(w * 0.922), h * 0.3275, UV_UI.W(w * 0.002), h * 0.0175) -- Middle
+			surface.DrawRect(UV_UI.X(w * 0.941), h * 0.3275, UV_UI.W(w * 0.002), h * 0.0175) -- Right Middle
 
         end
     end
@@ -1670,28 +1596,28 @@ local function world_pursuit_main( ... )
     local bottomy = h * 0.89 + bottomyplus
 
 	-- Evade Box, Icons
-	DrawIcon(UVMaterials["CHASEBAR_CAR_WORLD"], w * 0.38, bottomy, .035, Color( 255, 255, 255 )) -- Racer Icon
-	DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], w * 0.62, bottomy, .035, Color( 255, 255, 255 )) -- Cop Icon
+	DrawIcon(UVMaterials["CHASEBAR_CAR_WORLD"], UV_UI.XScaled(w * 0.38), bottomy, .035, Color( 255, 255, 255 )) -- Racer Icon
+	DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], UV_UI.XScaled(w * 0.62), bottomy, .035, Color( 255, 255, 255 )) -- Cop Icon
 	
-	DrawIcon(UVMaterials["CHASEBAR_ARROW_LEFT_WORLD"], w * 0.3675, bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Left Arrow
-	DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.6325, bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Right Arrow
+	DrawIcon(UVMaterials["CHASEBAR_ARROW_LEFT_WORLD"], UV_UI.XScaled(w * 0.3675), bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Left Arrow
+	DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], UV_UI.XScaled(w * 0.6325), bottomy + (h * 0.022), .035, Color( 255, 255, 255 )) -- Right Arrow
 	
 	-- Borders
     draw.NoTexture()
 	surface.SetDrawColor(255, 255, 255, 200)
-	surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.029), w * 0.258, h * 0.004, 0) -- Bottom
-	surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.0225), w * 0.008, h * 0.004, 90) -- Middle
-	surface.DrawTexturedRectRotated(w * 0.372, bottomy + (h*0.0225), w * 0.008, h * 0.004, 90) -- Left
-	surface.DrawTexturedRectRotated(w * 0.628, bottomy + (h*0.0225), w * 0.008, h * 0.004, 90) -- Right
+	surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy + (h*0.029), UV_UI.W(w * 0.258), h * 0.004, 0) -- Bottom
+	surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy + (h*0.0225), UV_UI.W(w * 0.008), h * 0.004, 90) -- Middle
+	surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.372), bottomy + (h*0.0225), UV_UI.W(w * 0.008), h * 0.004, 90) -- Left
+	surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.628), bottomy + (h*0.0225), UV_UI.W(w * 0.008), h * 0.004, 90) -- Right
 	
 	-- Evade Box, BGs
 	surface.SetDrawColor(200, 200, 200, 75)
 	
 	surface.SetMaterial(UVMaterials["CHASEBAR_LEFT_WORLD"]) -- Left
-	surface.DrawTexturedRect(w * (0.5 - 0.125), bottomy + (h*0.00725), w * 0.125, h * 0.03)
+	surface.DrawTexturedRect(UV_UI.XScaled(w * (0.5 - 0.125)), bottomy + (h*0.00725), UV_UI.W(w * 0.125), h * 0.03)
 	
 	surface.SetMaterial(UVMaterials["CHASEBAR_RIGHT_WORLD"]) -- Right
-	surface.DrawTexturedRect(w * 0.5, bottomy + (h*0.00725), w * 0.125, h * 0.03)
+	surface.DrawTexturedRect(UV_UI.XScaled(w * 0.5), bottomy + (h*0.00725), UV_UI.W(w * 0.125), h * 0.03)
 
     if not UVHUDDisplayCooldown then
         -- Evade Meter
@@ -1701,11 +1627,11 @@ local function world_pursuit_main( ... )
                 UVEvadingProgress = EvadingProgress
             end
             
-            local T = math.Clamp((UVEvadingProgress) * (w * 0.125), 0, w * 0.125)
+            local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.125)), 0, UV_UI.W(w * 0.125))
 			T = math.floor(T)
             surface.SetDrawColor(100, 200, 255)
 			surface.SetMaterial(UVMaterials["CHASEBAR_LEFT_WORLD"]) -- Left
-			surface.DrawTexturedRectUV(w * (0.5 - 0.125) + (w * 0.125 - T), bottomy + (h * 0.00725), T, h * 0.03, 1 - (T / (w * 0.125)), 0, 1, 1)
+			surface.DrawTexturedRectUV(UV_UI.XScaled(w * (0.5 - 0.125)) + (UV_UI.W(w * 0.125) - T), bottomy + (h * 0.00725), T, h * 0.03, 1 - (T / (UV_UI.W(w * 0.125))), 0, 1, 1)
         else
             EvadingProgress = 0
         end
@@ -1724,21 +1650,21 @@ local function world_pursuit_main( ... )
 			surface.SetMaterial(UVMaterials["WARNINGBG_WORLD"])
 			
 			if timeLeft >= 2 and timeLeft < 3 then
-				surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h * 0.0), w * 0.2575, h * 0.065, 0)
-                DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.5, bottomy + (h * 0.001), .06, Color(255, 255, 255, blink) )
+				surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.0), UV_UI.W(w * 0.2575), h * 0.065, 0)
+                DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.XScaled(w * 0.5), bottomy + (h * 0.001), .06, Color(255, 255, 255, blink) )
 			elseif timeLeft >= 1 and timeLeft < 2 then
-				surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h * 0.0), w * 0.2575, h * 0.065, 0)
-                DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.5, bottomy + (h * 0.001), .06, Color(255, 255, 255, blink2) )
+				surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.0), UV_UI.W(w * 0.2575), h * 0.065, 0)
+                DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.XScaled(w * 0.5), bottomy + (h * 0.001), .06, Color(255, 255, 255, blink2) )
 			elseif timeLeft < 1 then
-				surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h * 0.0), w * 0.2575, h * 0.065, 0)
-                DrawIcon(UVMaterials["WARNING_WORLD"], w * 0.5, bottomy + (h * 0.001), .06, Color(255, 255, 255, blink3) )
+				surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.0), UV_UI.W(w * 0.2575), h * 0.065, 0)
+                DrawIcon(UVMaterials["WARNING_WORLD"], UV_UI.XScaled(w * 0.5), bottomy + (h * 0.001), .06, Color(255, 255, 255, blink3) )
             end
 
-            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.125), 0, w * 0.125)
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (UV_UI.W(w * 0.125)), 0, UV_UI.W(w * 0.125))
             T = math.floor(T)
             surface.SetDrawColor(255, 0, 0)
 			surface.SetMaterial(UVMaterials["CHASEBAR_RIGHT_WORLD"]) -- Right
-			surface.DrawTexturedRectUV(w * 0.5, bottomy + (h * 0.00725), T, h * 0.03, 0, 0, T / (w * 0.125), 1)
+			surface.DrawTexturedRectUV(UV_UI.XScaled(w * 0.5), bottomy + (h * 0.00725), T, h * 0.03, 0, 0, T / (UV_UI.W(w * 0.125)), 1)
         else
             UVBustedColor = Color(255, 100, 100, 125)
             BustingProgress = 0
@@ -1749,21 +1675,21 @@ local function world_pursuit_main( ... )
 		-- Resource & Backup Timer
 		if UVHUDDisplayBackupTimer then
 			if UVBackupTimerSeconds > 10 then 
-				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255 ))
+				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], UV_UI.XScaled(w * 0.4625), bottomy + (h * 0.05), .035, Color( 255, 255, 255 ))
 			elseif UVBackupTimerSeconds < 10 then
-				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink ))
+				 DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], UV_UI.XScaled(w * 0.4625), bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink ))
 			elseif UVBackupTimerSeconds < 5 then
-				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink2 ))
+				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], UV_UI.XScaled(w * 0.4625), bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink2 ))
 			elseif UVBackupTimerSeconds < 3 then
-				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], w * 0.4625, bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink3 ))
+				DrawIcon(UVMaterials["CHASEBAR_ARROW_RIGHT_WORLD"], UV_UI.XScaled(w * 0.4625), bottomy + (h * 0.05), .035, Color( 255, 255, 255, blink3 ))
 			end
 
-			draw.SimpleTextOutlined( UVBackupTimer, "UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.4675, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+			draw.SimpleTextOutlined( UVBackupTimer, "UVWorldFont4" .. GetFontSuffixForLanguage(), UV_UI.XScaled(w * 0.4675), bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
 			btrm = w * 0.0525
 		end
 		
-		DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], w * 0.495 + btrm, bottomy + (h * 0.05), .035, Color( 255, 255, 255 )) -- Racer Icon
-		draw.SimpleTextOutlined( ResourceText, "UVWorldFont4" .. GetFontSuffixForLanguage(),w * 0.505 + btrm, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
+		DrawIcon(UVMaterials["CHASEBAR_COP_WORLD"], UV_UI.XScaled(w * 0.495) + btrm, bottomy + (h * 0.05), .035, Color( 255, 255, 255 )) -- Racer Icon
+		draw.SimpleTextOutlined( ResourceText, "UVWorldFont4" .. GetFontSuffixForLanguage(), UV_UI.XScaled(w * 0.505) + btrm, bottomy + (h * 0.03), worldcols.busted,TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, worldcols.bustedbg ) -- Bounty Text
 
     else
         -- Cooldown Meter
@@ -1781,27 +1707,27 @@ local function world_pursuit_main( ... )
             
             -- Upper Box
             if not UVHUDCopMode then
-                local T = math.Clamp((UVCooldownTimer) * (w * 0.125), 0, w * 0.125)
+                local T = math.Clamp((UVCooldownTimer) * (UV_UI.W(w * 0.125)), 0, UV_UI.W(w * 0.125))
 				T = math.floor(T)
 				
 				surface.SetDrawColor(255, 255, 255) -- Background
 				surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
-				surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h * 0.005), w * 0.2575, h * 0.08, 0)
-				DrawIcon(UVMaterials["CHASEBAR_COOLDOWN_WORLD"], w * 0.5, bottomy - (h * 0.015), .035, Color(255, 255, 255, blink) )
-				draw.SimpleTextOutlined( "#uv.chase.cooldown", "UVWorldFont1", w * 0.5, bottomy - (h * 0.0015), worldcols.val,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.valbg )
+				surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.005), UV_UI.W(w * 0.2575), h * 0.08, 0)
+				DrawIcon(UVMaterials["CHASEBAR_COOLDOWN_WORLD"], UV_UI.XScaled(w * 0.5), bottomy - (h * 0.015), .035, Color(255, 255, 255, blink) )
+				draw.SimpleTextOutlined( "#uv.chase.cooldown", "UVWorldFont1", UV_UI.XScaled(w * 0.5), bottomy - (h * 0.0015), worldcols.val,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.valbg )
 
                 surface.SetDrawColor(100, 200, 255, 255)
 				surface.SetMaterial(UVMaterials["CHASEBAR_LEFT_WORLD"]) -- Left Bar
-				surface.DrawTexturedRectUV(w * (0.5 - 0.125) + (w * 0.125 - T), bottomy + (h * 0.00725), T, h * 0.03, 1 - (T / (w * 0.125)), 0, 1, 1)
+				surface.DrawTexturedRectUV(UV_UI.XScaled(w * (0.5 - 0.125)) + (UV_UI.W(w * 0.125) - T), bottomy + (h * 0.00725), T, h * 0.03, 1 - (T / (UV_UI.W(w * 0.125))), 0, 1, 1)
 				
 				surface.SetMaterial(UVMaterials["CHASEBAR_RIGHT_WORLD"]) -- Right Bar
-				surface.DrawTexturedRectUV(w * 0.5, bottomy + (h * 0.00725), T, h * 0.03, 0, 0, T / (w * 0.125), 1)
+				surface.DrawTexturedRectUV(UV_UI.XScaled(w * 0.5), bottomy + (h * 0.00725), T, h * 0.03, 0, 0, T / (w * 0.125), 1)
             else
 				surface.SetDrawColor(255, 255, 255) -- Background
 				surface.SetMaterial(UVMaterials["COOLDOWNBG_WORLD"])
-				surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h * 0.005), w * 0.2575, h * 0.08, 0)
-				DrawIcon(UVMaterials["CHASEBAR_COOLDOWN_WORLD"], w * 0.5, bottomy - (h * 0.015), .035, Color(255, 255, 255, blink) )
-				draw.SimpleTextOutlined( "#uv.chase.cooldown", "UVWorldFont1", w * 0.5, bottomy - (h * 0.0015), worldcols.val,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.valbg )
+				surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.005), UV_UI.W(w * 0.2575), h * 0.08, 0)
+				DrawIcon(UVMaterials["CHASEBAR_COOLDOWN_WORLD"], UV_UI.XScaled(w * 0.5), bottomy - (h * 0.015), .035, Color(255, 255, 255, blink) )
+				draw.SimpleTextOutlined( "#uv.chase.cooldown", "UVWorldFont1", UV_UI.XScaled(w * 0.5), bottomy - (h * 0.0015), worldcols.val,TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, worldcols.valbg )
             end
         else
             CooldownProgress = 0

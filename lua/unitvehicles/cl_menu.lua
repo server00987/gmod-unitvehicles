@@ -273,8 +273,8 @@ UVMenu.Settings = function()
 						{ "#uv.ui.unitstype.yards", 2 },
 					},
 				},
-				-- { type = "slider", text = "#uv.ui.deadzone", desc = "uv.ui.deadzone.desc", convar = "unitvehicle_hud_deadzone", min = 0, max = 500, decimals = 0 },
-				-- { type = "slider", text = "#uv.ui.scale", desc = "uv.ui.scale.desc", convar = "unitvehicle_hud_scale", min = 0.1, max = 1, decimals = 2 },
+				{ type = "slider", text = "#uv.ui.deadzone", desc = "uv.ui.deadzone.desc", convar = "unitvehicle_hud_deadzone", min = 0, max = 500, decimals = 0 },
+				{ type = "slider", text = "#uv.ui.scale", desc = "uv.ui.scale.desc", convar = "unitvehicle_hud_scale", min = 0.1, max = 1, decimals = 2 },
 
 				{ type = "label", text = "#uv.ui.menu", desc = "uv.ui.menu.desc" },
 				{ type = "bool", text = "#uv.ui.menu.hidedesc", desc = "uv.ui.menu.hidedesc.desc", convar = "uvmenu_hide_description" },

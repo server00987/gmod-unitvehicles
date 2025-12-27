@@ -531,6 +531,54 @@ end
 
 UV_UI = UV_UI or {}
 
+function UV_UI.GetSide(x, screenW)
+    if x > screenW * 0.55 then return 1 end
+    if x < screenW * 0.45 then return -1 end
+    return 0
+end
+
+function UV_UI.ScaleX(x, scale, screenW)
+    local centerX = screenW * 0.5
+    return centerX + (x - centerX) * scale
+end
+
+function UV_UI.ResolveX(x, scale, deadzone, screenW)
+    local side = UV_UI.GetSide(x, screenW)
+    local scaledX = UV_UI.ScaleX(x, scale, screenW)
+
+    if side == 1 then
+        return scaledX - deadzone
+    elseif side == -1 then
+        return scaledX + deadzone
+    end
+
+    return scaledX
+end
+
+function UV_UI.ScaleW(width, scale)
+    return width * scale
+end
+
+function UV_UI.X(x)
+    local w = ScrW()
+    local scale = math.Clamp(UVHUDXScale:GetFloat(), 0.1, 1)
+    local deadzone = math.Clamp(UVHUDXDeadzone:GetFloat(), 0, 500)
+    return UV_UI.ResolveX(x, scale, deadzone, w)
+end
+
+function UV_UI.XScaled(x) -- For centered elements
+    local w = ScrW()
+    local scale = math.Clamp(UVHUDXScale:GetFloat(), 0.1, 1)
+    local centerX = w * 0.5
+    return centerX + (x - centerX) * scale
+end
+
+function UV_UI.W(width)
+    local scale = math.Clamp(UVHUDXScale:GetFloat(), 0.1, 1)
+    return width * scale
+end
+
+
 for _, v in pairs( {'racing', 'pursuit'} ) do
     UV_UI[v] = UV_UI[v] or {}
 end

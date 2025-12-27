@@ -1122,8 +1122,8 @@ local function undercover_racing_main( ... )
     ------------------------------------
     
     -- Timer
-    draw.SimpleTextOutlined("#uv.race.hud.time", "UVUndercoverAccentFont", w * 0.75, h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),"UVUndercoverWhiteFont", w * 0.75, h * 0.15, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined("#uv.race.hud.time", "UVUndercoverAccentFont", UV_UI.X(w * 0.75), h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined(Carbon_FormatRaceTime((UVHUDRaceInfo.Info.Started and (CurTime() - UVHUDRaceInfo.Info.Time)) or 0),"UVUndercoverWhiteFont", UV_UI.X(w * 0.75), h * 0.15, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 	
 	local laptext = "REPLACEME"
 	local lapamount = "REPLACEME"
@@ -1136,11 +1136,11 @@ local function undercover_racing_main( ... )
 		lapamount = math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%"
     end
 	
-    draw.SimpleTextOutlined(laptext, "UVUndercoverAccentFont", w * 0.94, h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-    draw.SimpleTextOutlined(lapamount, "UVUndercoverWhiteFont", w * 0.94, h * 0.15, UVColors.UVUndercoverWhiteFont, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined(laptext, "UVUndercoverAccentFont", UV_UI.X(w * 0.94), h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    draw.SimpleTextOutlined(lapamount, "UVUndercoverWhiteFont", UV_UI.X(w * 0.94), h * 0.15, UVColors.UVUndercoverWhiteFont, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 	
     surface.SetDrawColor(UVColors.Undercover_Accent2:Unpack())
-    surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005) -- Divider
+    surface.DrawRect(UV_UI.X(w * 0.75), h * 0.195, UV_UI.W(w * 0.19), h * 0.005) -- Divider
     
     -- -- Racer List
     local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -1211,25 +1211,24 @@ local function undercover_racing_main( ... )
         
         local text = alt and (status_text) or (racer_name)
 
-		if #text > 23 then
-			text = string.sub(text, 1, 23 - 3) .. "..."
+		surface.SetFont("UVUndercoverLeaderboardFont")
+		local ymax = UV_UI.W(w * 0.14)
+		textW = surface.GetTextSize(text)
+		if textW > ymax then
+			while surface.GetTextSize(text .. "...") > ymax do
+				text = string.sub(text, 1, -2)
+			end
+			text = text .. "..."
 		end
 
         -- This should only draw on LocalPlayer() but couldn't figure it out
         if is_local_player then
             surface.SetDrawColor(UVColors.Undercover_Accent2Transparent:Unpack())
-            surface.DrawRect(w * 0.75, baseY + racercount, w * 0.19, h * 0.03)
-
-            -- draw.DrawText(text,"UVUndercoverLeaderboardFont",w * 0.76,baseY + racercount,color,TEXT_ALIGN_LEFT)
-            
-            -- draw.DrawText(i,"UVUndercoverLeaderboardFont",w * 0.93,baseY + racercount,color,TEXT_ALIGN_RIGHT)
-        else
-            -- draw.DrawText(text,"UVUndercoverLeaderboardFont",w * 0.76,baseY + racercount,color,TEXT_ALIGN_LEFT)
-            -- draw.DrawText(i,"UVUndercoverLeaderboardFont",w * 0.93,baseY + racercount,color,TEXT_ALIGN_RIGHT)
+            surface.DrawRect(UV_UI.X(w * 0.75), baseY + racercount, UV_UI.W(w * 0.19), h * 0.03)
         end
 
-		draw.SimpleTextOutlined(text, "UVUndercoverLeaderboardFont", w * 0.76, baseY + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined(i, "UVUndercoverLeaderboardFont", w * 0.93, baseY + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(text, "UVUndercoverLeaderboardFont", UV_UI.X(w * 0.76), baseY + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(i, "UVUndercoverLeaderboardFont", UV_UI.X(w * 0.93), baseY + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 			
     end
 end
@@ -1344,25 +1343,18 @@ local function undercover_pursuit_main( ... )
         end
         
         ResourceText = "⛊"
-        local element3 = {
-            {x = w / 3, y = 0},
-            {x = w / 3 + 12 + w / 3, y = 0},
-            {x = w / 3 + 12 + w / 3 - 25, y = h / 20},
-            {x = w / 3 + 25, y = h / 20}
-        }
         surface.SetDrawColor(0, 0, 0, 100)
         draw.NoTexture()
-        -- surface.DrawPoly(element3)
-        surface.DrawRect(w / 3 + 25, 0, w / 3 - 38, h * 0.05)
+        surface.DrawRect(UV_UI.XScaled(w * 0.345), 0, UV_UI.W(w * 0.314), h * 0.05)
         if healthratio > 0 then
             surface.SetDrawColor(Color(109, 109, 109, 200))
-            surface.DrawRect(w / 3 + 25, h / 20, w / 3 - 38, 8)
+            surface.DrawRect(UV_UI.XScaled(w * 0.345), h * 0.05, UV_UI.W(w * 0.314), 8)
             surface.SetDrawColor(healthcolor)
-            local T = math.Clamp((healthratio) * (w / 3 - 38), 0, w / 3 - 38)
-            surface.DrawRect(w / 3 + 25, h / 20, T, 8)
+            local T = math.Clamp((healthratio) * (UV_UI.W(w * 0.314)), 0, UV_UI.W(w * 0.314))
+            surface.DrawRect(UV_UI.XScaled(w * 0.345), h * 0.05, T, 8)
         end
-        draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.35, 0, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT)
-        draw.DrawText("⛊", "UVUndercoverWhiteFont", w * 0.65, 0, UVColors.Undercover_Accent2, TEXT_ALIGN_RIGHT)
+        draw.DrawText("⛊", "UVUndercoverWhiteFont", UV_UI.XScaled(w * 0.35), 0, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT)
+        draw.DrawText("⛊", "UVUndercoverWhiteFont", UV_UI.XScaled(w * 0.65), 0, UVColors.Undercover_Accent2, TEXT_ALIGN_RIGHT)
         
         local cname = "#uv.unit.commander"
         if IsValid(UVHUDCommander) then
@@ -1372,36 +1364,36 @@ local function undercover_pursuit_main( ... )
             end
         end
         
-        draw.DrawText(cname,"UVUndercoverWhiteFont", w / 2, 0, UVColors.Undercover_Accent2,TEXT_ALIGN_CENTER)
+        draw.DrawText(cname,"UVUndercoverWhiteFont", w * 0.5, 0, UVColors.Undercover_Accent2,TEXT_ALIGN_CENTER)
     end
     
     -- [ Upper Right Info Box ] --
     -- Divider
     surface.SetDrawColor(UVColors.Undercover_Accent2:Unpack())
-    surface.DrawRect(w * 0.75, h * 0.195, w * 0.19, h * 0.005)
+    surface.DrawRect(UV_UI.X(w * 0.75), h * 0.195, UV_UI.W(w * 0.19), h * 0.005)
     
     -- Timer
-	draw.SimpleTextOutlined("#uv.race.hud.time", "UVUndercoverAccentFont", w * 0.75, h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined("#uv.race.hud.time", "UVUndercoverAccentFont", UV_UI.X(w * 0.75), h * 0.123, UVColors.Undercover_Accent2, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 	
-	draw.SimpleTextOutlined(UVTimer, "UVUndercoverWhiteFont", w * 0.75, h * 0.15, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(UVTimer, "UVUndercoverWhiteFont", UV_UI.X(w * 0.75), h * 0.15, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
     -- Bounty
-    DrawIcon(UVMaterials["CTS_UC"], w * 0.76, h * 0.235, .06, UVColors.Undercover_Accent1) -- Icon
-	draw.SimpleTextOutlined(UVBounty, "UVUndercoverWhiteFont", w * 0.775, h * 0.21, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["CTS_UC"], UV_UI.X(w * 0.76), h * 0.235, .06, UVColors.Undercover_Accent1) -- Icon
+	draw.SimpleTextOutlined(UVBounty, "UVUndercoverWhiteFont", UV_UI.X(w * 0.775), h * 0.21, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
     -- General Icons
-    DrawIcon(UVMaterials["UNITS"], w * 0.76, h * 0.355, .06, UVColors.Undercover_Accent1)
-    draw.SimpleTextOutlined(ResourceText .. (UVHUDDisplayBackupTimer and "   < " .. UVBackupTimer or ""), "UVUndercoverWhiteFont", w * 0.78, h * 0.3325, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["UNITS"], UV_UI.X(w * 0.76), h * 0.355, .06, UVColors.Undercover_Accent1)
+    draw.SimpleTextOutlined(ResourceText .. (UVHUDDisplayBackupTimer and "   < " .. UVBackupTimer or ""), "UVUndercoverWhiteFont", UV_UI.X(w * 0.78), h * 0.3325, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
-    DrawIcon(UVMaterials["UNITS_DAMAGED"], w * 0.76, h * 0.415, .07, UVColors.Undercover_Accent1)
-    draw.SimpleTextOutlined(UVTags, "UVUndercoverWhiteFont", w * 0.78, h * 0.3925, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["UNITS_DAMAGED"], UV_UI.X(w * 0.76), h * 0.415, .07, UVColors.Undercover_Accent1)
+    draw.SimpleTextOutlined(UVTags, "UVUndercoverWhiteFont", UV_UI.X(w * 0.78), h * 0.3925, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
-    DrawIcon(UVMaterials["UNITS_DISABLED_UC"], w * 0.76, h * 0.475, .07, UVColors.Undercover_Accent1)
-    draw.SimpleTextOutlined(UVWrecks, "UVUndercoverWhiteFont", w * 0.78, h * 0.4525, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["UNITS_DISABLED_UC"], UV_UI.X(w * 0.76), h * 0.475, .07, UVColors.Undercover_Accent1)
+    draw.SimpleTextOutlined(UVWrecks, "UVUndercoverWhiteFont", UV_UI.X(w * 0.78), h * 0.4525, UVColors.Undercover_Accent1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
     
     -- Heat Level
-    DrawIcon(UVMaterials["HEAT"], w * 0.76, h * 0.295, .06, UVColors.Undercover_Accent1) -- Icon
-    draw.SimpleTextOutlined("x" .. UVHeatLevel, "UVUndercoverWhiteFont", w * 0.8, h * 0.275, UVColors.Undercover_Accent1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
+    DrawIcon(UVMaterials["HEAT"], UV_UI.X(w * 0.76), h * 0.295, .06, UVColors.Undercover_Accent1) -- Icon
+    draw.SimpleTextOutlined("x" .. UVHeatLevel, "UVUndercoverWhiteFont", UV_UI.X(w * 0.8), h * 0.275, UVColors.Undercover_Accent1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color( 0, 0, 0 ) )
 
     local UVHeatMinConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel )
     local UVHeatMaxConVar = GetConVar( 'unitvehicle_unit_heatminimumbounty' .. UVHeatLevel + 1 )
@@ -1410,7 +1402,7 @@ local function undercover_pursuit_main( ... )
     UVHeatBountyMax = ( UVHeatMaxConVar and UVHeatMaxConVar:GetInt() ) or math.huge
     
     surface.SetDrawColor(Color(109, 109, 109, 200))
-    surface.DrawRect(w * 0.805, h * 0.2815, w * 0.1375, h * 0.035)
+    surface.DrawRect(UV_UI.X(w * 0.805), h * 0.2815, UV_UI.W(w * 0.1375), h * 0.035)
     surface.SetDrawColor(Color(255, 255, 255))
     local HeatProgress = 0
     if MaxHeatLevel:GetInt() ~= UVHeatLevel then
@@ -1423,7 +1415,7 @@ local function undercover_pursuit_main( ... )
             HeatProgress = ((UVBountyNo - UVHeatBountyMin) / (UVHeatBountyMax - UVHeatBountyMin))
         end
     end
-    local B = math.Clamp((HeatProgress) * w * 0.1375, 0, w * 0.1375)
+    local B = math.Clamp((HeatProgress) * UV_UI.W(w * 0.1375), 0, UV_UI.W(w * 0.1375))
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
@@ -1438,7 +1430,7 @@ local function undercover_pursuit_main( ... )
         surface.SetDrawColor(Color(255, 0, 0))
     end
     
-    surface.DrawRect(w * 0.805, h * 0.2815, B, h * 0.035)
+    surface.DrawRect(UV_UI.X(w * 0.805), h * 0.2815, B, h * 0.035)
     
     -- [ Bottom Info Box ] --
 	local bottomyplus = 0
@@ -1453,29 +1445,25 @@ local function undercover_pursuit_main( ... )
         -- Evade Box, All BG
         draw.NoTexture()
         surface.SetDrawColor(100, 100, 100, 230)
-        surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.013), w * 0.3, h * 0.03, 0)
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy + (h*0.013), UV_UI.W(w * 0.3), h * 0.03, 0)
 
 		-- Borders
         surface.SetDrawColor(255, 255, 255, 255)
-        surface.DrawTexturedRectRotated(w * 0.5, bottomy - (h*0.004), w * 0.304, h * 0.004, 0) -- Top
-        surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.029), w * 0.304, h * 0.004, 0) -- Bottom
-        surface.DrawTexturedRectRotated(w * 0.349, bottomy + (h*0.013), w * 0.018, h * 0.004, 90) -- Left
-        surface.DrawTexturedRectRotated(w * 0.6515, bottomy + (h*0.013), w * 0.018, h * 0.004, 90) -- Right
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy - (h*0.004), UV_UI.W(w * 0.304), h * 0.004, 0) -- Top
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.5), bottomy + (h*0.029), UV_UI.W(w * 0.304), h * 0.004, 0) -- Bottom
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.349), bottomy + (h*0.013), h * 0.037, h * 0.004, 90) -- Left
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.6515), bottomy + (h*0.013), h * 0.037, h * 0.004, 90) -- Right
 
         -- Evade Box, Evade BG
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
         surface.SetDrawColor(50, 214, 255, 100)
-        surface.DrawTexturedRectRotated(w * 0.575, bottomy + (h*0.013), w * 0.15, h * 0.03, 0)
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.575), bottomy + (h*0.013), UV_UI.W(w * 0.15), h * 0.03, 0)
         
         -- Evade Box, Busted BG
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
         surface.SetDrawColor(255, 0, 0, 100)
-        surface.DrawTexturedRectRotated(w * 0.425, bottomy + (h*0.014), w * 0.15, h * 0.03, 0)
+        surface.DrawTexturedRectRotated(UV_UI.XScaled(w * 0.425), bottomy + (h*0.014), UV_UI.W(w * 0.15), h * 0.03, 0)
 
-		-- Evade Box, slightly lightened box
-        -- surface.SetDrawColor(200, 200, 200, 100)
-        -- surface.DrawTexturedRectRotated(w * 0.5, bottomy + (h*0.014), w * 0.3, h * 0.03, 0)
-        
         -- Evade Box, Busted Meter
         if UVHUDDisplayBusting and not UVHUDDisplayCooldown then
             if not BustingProgress or BustingProgress == 0 then
@@ -1492,25 +1480,18 @@ local function undercover_pursuit_main( ... )
             
             if timeLeft >= UVBustTimer * 0.5 then
                 states.BustedColor = Color(255, 100, 100, blink)
-                -- UVSoundBusting()
             elseif timeLeft >= UVBustTimer * 0.2 then
                 states.BustedColor = Color(255, 100, 100, blink2)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
             elseif timeLeft >= 0 then
                 states.BustedColor = Color(255, 100, 100, blink3)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
             else
                 states.BustedColor = Color(255, 100, 100)
             end
             
-            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (w * 0.15), 0, w * 0.15)
+            local T = math.Clamp((UVBustingProgress / UVBustTimer) * (UV_UI.W(w * 0.15)), 0, UV_UI.W(w * 0.15))
             T = math.floor(T)
             surface.SetDrawColor(255, 0, 0)
-            surface.DrawRect(w * 0.35 + (w * 0.15 - T), bottomy - (h * 0.002), T, h * 0.03)
+            surface.DrawRect(UV_UI.XScaled(w * 0.35) + (UV_UI.W(w * 0.15) - T), bottomy - (h * 0.002), T, h * 0.03)
         else
             UVBustedColor = Color(255, 100, 100, 125)
             BustingProgress = 0
@@ -1524,20 +1505,20 @@ local function undercover_pursuit_main( ... )
                 UVEvadingProgress = EvadingProgress
             end
             
-            local T = math.Clamp((UVEvadingProgress) * (w * 0.15), 0, w * 0.15)
+            local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.15)), 0, UV_UI.W(w * 0.15))
             surface.SetDrawColor(50, 173, 255)
-            surface.DrawRect(w * 0.5, bottomy - (h * 0.002), T, h * 0.03)
+            surface.DrawRect(UV_UI.XScaled(w * 0.5), bottomy - (h * 0.002), T, h * 0.03)
             states.EvasionColor = Color(50, 173, 255, blink)
         else
             EvadingProgress = 0
         end
         
         -- Evade Box, Icons
-        DrawIcon(UVMaterials["BUSTED_ICON_UC"], w * 0.33, bottomy + (h*0.012), .06, Color(255,0,0, 255)) -- Icon
-        DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.67, bottomy + (h*0.012), .06, Color(50, 173, 255, 255)) -- Icon
+        DrawIcon(UVMaterials["BUSTED_ICON_UC"], UV_UI.XScaled(w * 0.33), bottomy + (h*0.012), .06, Color(255,0,0, 255)) -- Icon
+        DrawIcon(UVMaterials["EVADE_ICON_UC"], UV_UI.XScaled(w * 0.67), bottomy + (h*0.012), .06, Color(50, 173, 255, 255)) -- Icon
         
-        DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], w * 0.33, bottomy + (h*0.012), .06, states.BustedColor) -- Icon, Glow
-        DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.67, bottomy + (h*0.012), .06, states.EvasionColor) -- Icon, Glow
+        DrawIcon(UVMaterials["BUSTED_ICON_UC_GLOW"], UV_UI.XScaled(w * 0.33), bottomy + (h*0.012), .06, states.BustedColor) -- Icon, Glow
+        DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], UV_UI.XScaled(w * 0.67), bottomy + (h*0.012), .06, states.EvasionColor) -- Icon, Glow
 		
         -- Evade Box, Dividers
 		draw.NoTexture()
@@ -1561,19 +1542,19 @@ local function undercover_pursuit_main( ... )
             
             -- Upper Box
             if not UVHUDCopMode then
-                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
-                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.6925, bottomy + (h*0.015), .05, Color(50, 214, 255, 255)) -- Icon
+                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], UV_UI.XScaled(w * 0.6925), bottomy + (h*0.015), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
+                DrawIcon(UVMaterials["EVADE_ICON_UC"], UV_UI.XScaled(w * 0.6925), bottomy + (h*0.015), .05, Color(50, 214, 255, 255)) -- Icon
                 
                 surface.SetDrawColor(200, 200, 200, 125)
-                surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.03)
+                surface.DrawRect(UV_UI.XScaled(w * 0.333), bottomy, UV_UI.W(w * 0.344), h * 0.03)
                 
-                local T = math.Clamp((UVCooldownTimer) * (w * 0.344), 0, w * 0.344)
+                local T = math.Clamp((UVCooldownTimer) * (UV_UI.W(w * 0.344)), 0, UV_UI.W(w * 0.344))
                 surface.SetDrawColor(50, 173, 255, 255)
                 
-                surface.DrawRect(w * 0.333, bottomy, T, h * 0.03)
+                surface.DrawRect(UV_UI.XScaled(w * 0.333), bottomy, T, h * 0.03)
             else
-                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
-                DrawIcon(UVMaterials["EVADE_ICON_UC"], w * 0.5, bottomy - (h*0.025), .05, Color(50, 214, 255, 125)) -- Icon
+                DrawIcon(UVMaterials["EVADE_ICON_UC_GLOW"], UV_UI.XScaled(w * 0.5), bottomy - (h*0.025), .05, Color(50, 214, 255, blink2)) -- Icon, Glow
+                DrawIcon(UVMaterials["EVADE_ICON_UC"], UV_UI.XScaled(w * 0.5), bottomy - (h*0.025), .05, Color(50, 214, 255, 125)) -- Icon
                 
                 surface.SetDrawColor(50, 214, 255, 50)
                 surface.DrawRect(w * 0.333, bottomy, w * 0.344, h * 0.04)
@@ -1584,7 +1565,6 @@ local function undercover_pursuit_main( ... )
             CooldownProgress = 0
         end
     end
-    --end
 end
 
 UV_UI.pursuit.undercover.main = undercover_pursuit_main
