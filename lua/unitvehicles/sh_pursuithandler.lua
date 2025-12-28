@@ -293,7 +293,8 @@ function UVSoundHeat(heatlevel)
 		local transitionArray = PursuitFilePathsTable[theme].transition and (PursuitFilePathsTable[theme].transition[_lastheatlevel] or PursuitFilePathsTable[theme].transition["default"]) or {}
 
 		if transitionArray and #transitionArray > 0 then
-			local transitionTrack = transitionArray[math.random(1, #transitionArray)]
+			table.Shuffle(transitionArray)
+			local transitionTrack = transitionArray[1]
 
 			if transitionTrack then
 				UVPlaySound(transitionTrack, true)
@@ -317,7 +318,8 @@ function UVSoundHeat(heatlevel)
 		local introArray = (PursuitFilePathsTable[theme].intro and (PursuitFilePathsTable[theme].intro[heatlevel] or PursuitFilePathsTable[theme].intro["default"]))
 
 		if introArray and #introArray > 0 then
-			local introTrack = introArray[math.random(1, #introArray)]
+			table.Shuffle(introArray)
+			local introTrack = introArray[1]
 
 			if introTrack then
 				UVPlaySound(introTrack, true)
@@ -341,7 +343,8 @@ function UVSoundHeat(heatlevel)
 		local heatArray = PursuitFilePathsTable[theme].heat and (PursuitFilePathsTable[theme].heat[heatlevel] or PursuitFilePathsTable[theme].heat["default"]) or {}
 
 		if heatArray and #heatArray > 0 then
-			local heatTrack = heatArray[math.random(1, #heatArray)]
+			table.Shuffle(heatArray)
+			local heatTrack = heatArray[1]
 
 			if heatTrack then
 				-- if PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes" then
@@ -408,7 +411,8 @@ function UVSoundBusting(heatlevel)
 	local bustingArray = PursuitFilePathsTable[theme].busting and (PursuitFilePathsTable[theme].busting[heatlevel] or PursuitFilePathsTable[theme].busting["default"]) or {}
 
 	if bustingArray and #bustingArray > 0 then
-		local bustingTrack = bustingArray[math.random(1, #bustingArray)]
+		table.Shuffle(bustingArray)
+		local bustingTrack = bustingArray[1]
 
 		if bustingTrack then
 			UVHeatPlayIntro = false
@@ -487,7 +491,8 @@ function UVSoundCooldown(heatlevel)
 	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
 
 	if cooldownArray and #cooldownArray > 0 then
-		local cooldownTrack = cooldownArray[math.random(1, #cooldownArray)]
+		table.Shuffle(cooldownArray)
+		local cooldownTrack = cooldownArray[1]
 
 		if cooldownTrack then
 			UVPlaySound(cooldownTrack, true)
@@ -558,7 +563,8 @@ function UVSoundBusted(heatlevel)
 	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["default"]) or {}
 
 	if bustedArray and #bustedArray > 0 then
-		local bustedTrack = bustedArray[math.random(1, #bustedArray)]
+		table.Shuffle(bustedArray)
+		local bustedTrack = bustedArray[1]
 
 		if bustedTrack then
 			UVPlaySound(bustedTrack, false, true, nil, true)
@@ -628,7 +634,8 @@ function UVSoundEscaped(heatlevel)
 	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["default"]) or {}
 
 	if escapedArray and #escapedArray > 0 then
-		local escapedTrack = escapedArray[math.random(1, #escapedArray)]
+		table.Shuffle(escapedArray)
+		local escapedTrack = escapedArray[1]
 
 		if escapedTrack then
 			UVPlaySound(escapedTrack, false)
@@ -4881,9 +4888,10 @@ else -- CLIENT Settings | HUD/Options
 	-- 			source:Play()
 	-- 		end
 	-- 	end)
-	-- end)
+	-- end)	
 
 	net.Receive('UV_Chatter', function()
+		local init_time = net.ReadFloat()
 		local audio_file = "sound/"..net.ReadString()
 		local can_skip = net.ReadBool()
 		local hasCallsign = net.ReadBool()
@@ -4900,10 +4908,11 @@ else -- CLIENT Settings | HUD/Options
 
 		if lastCanSkip == false and IsValid(uvchatterplaying) then
 			local state = uvchatterplaying:GetState()
-			if state ~= GMOD_CHANNEL_STOPPED then return end
+			if state ~= GMOD_CHANNEL_STOPPED and init_time ~= lastInitTime then return end
 		end
 
 		lastCanSkip = can_skip
+		lastInitTime = init_time
 
 		sound.PlayFile(audio_file, "", function(source, err, errname)
 			if IsValid(source) then
@@ -4974,4 +4983,10 @@ else -- CLIENT Settings | HUD/Options
 
 		end)
 	end)
+
+	local theme = PursuitTheme:GetString()
+	if theme then
+		PopulatePursuitFilePaths(theme)
+	end
+
 end

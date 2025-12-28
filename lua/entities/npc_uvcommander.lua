@@ -567,10 +567,43 @@ if SERVER then
 		end)
 		
 		if DVWaypointsPriority:GetBool() then
-			if UVNavigateDVWaypoint(self, vectors) then
-				return
-			elseif UVNavigateNavmesh(self, vectors) then
-				return
+			local enemy_nearest_waypoint = nil
+			local friendly_nearest_waypoint = nil
+
+			if dvd then
+				local friendly_position = self.v:WorldSpaceCenter()
+
+				enemy_nearest_waypoint = dvd.GetNearestWaypoint( vectors )
+				friendly_nearest_waypoint = dvd.GetNearestWaypoint( friendly_position )
+
+				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 20 ) or Vector()
+
+				if enemy_nearest_waypoint then
+					local friendly_waypoint_distance = friendly_nearest_waypoint and friendly_waypoint_position:DistToSqr( friendly_position ) or math.huge
+					local enemy_waypoint_distance = enemy_nearest_waypoint.Target:DistToSqr(vectors)
+					local comparison_value = ( dvd.WaypointSize or 200 ) ^ 4
+
+					local enemyTooFarFromWaypoint = enemy_waypoint_distance > comparison_value
+					local friendlyTooFarFromWaypoint = friendly_waypoint_distance > comparison_value
+					local friendlyCanSeeWaypoint = friendly_nearest_waypoint and UVStraightToWaypoint( friendly_position, friendly_waypoint_position )
+
+					local isInvalid = enemyTooFarFromWaypoint or not friendlyCanSeeWaypoint
+					if isInvalid then enemy_nearest_waypoint = nil end
+				end
+			end
+
+			if enemy_nearest_waypoint then
+				if UVNavigateDVWaypoint(self, vectors) then
+					return
+				elseif UVNavigateNavmesh(self, vectors) then
+					return
+				end
+			else
+				if UVNavigateNavmesh(self, vectors) then
+					return
+				elseif UVNavigateDVWaypoint(self, vectors) then
+					return
+				end
 			end
 		else
 			if UVNavigateNavmesh(self, vectors) then
@@ -1295,16 +1328,12 @@ if SERVER then
 				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil then
 					if not self.NavigateCooldown and not UVEnemyEscaping then
 						self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
-						self.targetpos = self.e:WorldSpaceCenter()
-					else
-						local Waypoint = self.tableroutetoenemy[#self.tableroutetoenemy]
-						local Neighbor = self.tableroutetoenemy[(#self.tableroutetoenemy-1)]
-						self.targetpos = self:DriveOnPath()
 					end
 				else
 					self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
-					self.targetpos = self.e:WorldSpaceCenter()
 				end
+				
+				self.targetpos = self:DriveOnPath()
 			end
 			
 			--Driving techniques

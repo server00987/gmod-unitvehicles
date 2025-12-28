@@ -439,7 +439,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	else
 		uvspawnpointangles = Angle(0,math.random(0,360),0)
 	end
-	
+
 	if helicopter then
 		local heli = ents.Create("uvair")
 		heli:SetPos(uvspawnpoint + (vector_up * 1000))

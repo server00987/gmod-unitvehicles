@@ -3253,13 +3253,33 @@ function UVNavigateDVWaypoint(self, vectors)
 	
 	if #FromEnemyToSelf >= #FromSelfToEnemy then --Get the shortest route
 		for k, v in pairs(FromSelfToEnemy) do
-			table.insert(self.tableroutetoenemy, v["Target"] + (vector_up * 20))
+			local targetVec = v["Target"] + (vector_up * 20)
+			local found = false
+			for _, existingVec in ipairs(self.tableroutetoenemy) do
+				if existingVec == targetVec then
+					found = true
+					break
+				end
+			end
+			if not found then
+				table.insert(self.tableroutetoenemy, targetVec)
+			end
 		end
 		return self.tableroutetoenemy
 	else
 		local FromEnemyToSelfReversed = table.Reverse(FromEnemyToSelf)
 		for k, v in pairs(FromEnemyToSelfReversed) do
-			table.insert(self.tableroutetoenemy, v["Target"] + (vector_up * 20))
+			local targetVec = v["Target"] + (vector_up * 20)
+			local found = false
+			for _, existingVec in ipairs(self.tableroutetoenemy) do
+				if existingVec == targetVec then
+					found = true
+					break
+				end
+			end
+			if not found then
+				table.insert(self.tableroutetoenemy, targetVec)
+			end
 		end
 		return self.tableroutetoenemy
 	end

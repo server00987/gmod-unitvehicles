@@ -584,7 +584,8 @@ else -- CLIENT stuff
 	function UVGetRandomSound(folder)
 		local files = file.Find("sound/" .. folder .. "/*", "GAME")
 		if files and #files > 0 then
-			return folder .. "/" .. files[math.random(1, #files)]
+			table.Shuffle(files)
+			return folder .. "/" .. files[1]
 		end
 		return nil
 	end
@@ -1132,7 +1133,8 @@ else -- CLIENT stuff
 			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/start/*", "GAME" )
 			if #soundfiles > 0 then
-				surface.PlaySound( "uvracesfx/".. theme .."/start/".. soundfiles[math.random(1, #soundfiles)] )
+				table.Shuffle(soundfiles)
+				surface.PlaySound( "uvracesfx/".. theme .."/start/".. soundfiles[1] )
 			end
 		end
 	end)
@@ -1205,7 +1207,8 @@ else -- CLIENT stuff
 			local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 			local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/end/*", "GAME" )
 			if #soundfiles > 0 then
-				surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[math.random(1, #soundfiles)] )
+				table.Shuffle(soundfiles)
+				surface.PlaySound( "uvracesfx/".. theme .."/end/".. soundfiles[1] )
 			end
 		end
 
@@ -1233,7 +1236,8 @@ else -- CLIENT stuff
 				local mutesfx = GetConVar("unitvehicle_mutecheckpointsfx"):GetBool()
 				local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/checkpointpass/*", "GAME" )
 				if not mutesfx and #soundfiles > 0 then
-					surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[math.random(1, #soundfiles)] )
+					table.Shuffle(soundfiles)
+					surface.PlaySound( "uvracesfx/".. theme .."/checkpointpass/".. soundfiles[1] )
 				end
 			end
 		end
@@ -1278,7 +1282,8 @@ else -- CLIENT stuff
 					local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 					local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/*", "GAME" )
 					if soundfiles and #soundfiles > 0 then
-						local audio_path = "uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/".. soundfiles[math.random(1, #soundfiles)]
+						table.Shuffle(soundfiles)
+						local audio_path = "uvracesfx/".. theme .."/"..((place == 1 and "win") or "loss").."/".. soundfiles[1]
 						surface.PlaySound(audio_path)
 					end
 				end
@@ -1322,7 +1327,8 @@ else -- CLIENT stuff
 						local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 						local soundfiles = file.Find( "sound/uvracesfx/".. theme .."/loss/*", "GAME" )
 						if soundfiles and #soundfiles > 0 then
-							local audio_path = "uvracesfx/".. theme .."/loss/".. soundfiles[math.random(1, #soundfiles)]
+							table.Shuffle(soundfiles)
+							local audio_path = "uvracesfx/".. theme .."/loss/".. soundfiles[1]
 							surface.PlaySound(audio_path)
 						end
 					end
@@ -1469,24 +1475,28 @@ else -- CLIENT stuff
 		local sound = nil
 		if time == 1 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/countgo/*", "GAME")
+			table.Shuffle(files)
 			if #files > 0 then
-				sound = "uvracesfx/" .. theme .. "/countgo/" .. files[math.random(#files)]
+				sound = "uvracesfx/" .. theme .. "/countgo/" .. files[1]
 			end
 			UVRaceCinematicOverlay = nil
 		elseif time == 2 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count1/*", "GAME")
+			table.Shuffle(files)
 			if #files > 0 then
-				sound = "uvracesfx/" .. theme .. "/count1/" .. files[math.random(#files)]
+				sound = "uvracesfx/" .. theme .. "/count1/" .. files[1]
 			end
 		elseif time == 3 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count2/*", "GAME")
+			table.Shuffle(files)
 			if #files > 0 then
-				sound = "uvracesfx/" .. theme .. "/count2/" .. files[math.random(#files)]
+				sound = "uvracesfx/" .. theme .. "/count2/" .. files[1]
 			end
 		elseif time == 4 then
 			local files = file.Find("sound/uvracesfx/" .. theme .. "/count3/*", "GAME")
+			table.Shuffle(files)
 			if #files > 0 then
-				sound = "uvracesfx/" .. theme .. "/count3/" .. files[math.random(#files)]
+				sound = "uvracesfx/" .. theme .. "/count3/" .. files[1]
 			end
 		end
 
@@ -1817,7 +1827,8 @@ else -- CLIENT stuff
 							local theme = GetConVar("unitvehicle_sfxtheme"):GetString()
 							local soundfiles = file.Find("sound/uvracesfx/" .. theme .. "/wrongway/*", "GAME")
 							if soundfiles and #soundfiles > 0 then
-								local audio_path = "uvracesfx/" .. theme .. "/wrongway/" .. soundfiles[math.random(1, #soundfiles)]
+								table.Shuffle(soundfiles)
+								local audio_path = "uvracesfx/" .. theme .. "/wrongway/" .. soundfiles[1]
 								surface.PlaySound(audio_path)
 							end
 							if hudyes then UVRaceNotify("#uv.race.wrongway", 1.5) end

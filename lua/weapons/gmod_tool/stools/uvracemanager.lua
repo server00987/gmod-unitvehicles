@@ -412,6 +412,13 @@ elseif CLIENT then
 	//CreateClientConVar("unitvehicle_racelaps", "3")
 	CreateClientConVar("unitvehicle_racetheme", "carbon - bending light")
 	CreateClientConVar("unitvehicle_sfxtheme", "unbound")
+
+	local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
+	if folders ~= nil then
+		if not table.HasValue( folders, GetConVar("unitvehicle_racetheme"):GetString() ) then
+			GetConVar("unitvehicle_racetheme"):SetString("default")
+		end	
+	end
 	
 	
 	CreateClientConVar("uvracemanager_dnftimer", "30", true, false)
