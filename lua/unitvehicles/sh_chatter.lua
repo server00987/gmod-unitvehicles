@@ -1223,7 +1223,7 @@ if SERVER then
 			if randomno == 1 then
 				return UVSoundChatter(self, self.voice, "roadblockdeployed")
 			else
-				return UVSoundChatter(self, self.voice, "roadblockdeployed", 1, selected)
+				return UVSoundChatter(self, self.voice, "roadblockdeployed", selected == 'DISPATCH' and 1 or nil, selected)
 			end
 		end
 		-- UVDelayChatter()
