@@ -601,6 +601,50 @@ function UV.BuildSetting(parent, st, descPanel)
 		return p
 	end
 
+	-- if st is an information panel, but now with flags
+	if st.type == "info_flags" then
+		local p = vgui.Create("DPanel", parent)
+		p:Dock(TOP)
+		p:DockMargin(6, 6, 6, 2)
+		p:SetPaintBackground(false)
+
+		local padding = 10
+		local y = padding
+
+		for _, entry in ipairs(st.entries or {}) do
+			local row = vgui.Create("DPanel", p)
+			row:SetTall(20)
+			row:Dock(TOP)
+			row:DockMargin(padding, 0, padding, 4)
+			row:SetPaintBackground(false)
+
+			local img = vgui.Create("DImage", row)
+			img:SetImage("flags16/" .. entry.flag .. ".png")
+			img:SetSize(16, 8)
+			img:SetPos(0, UV.ScaleW(8))
+			img:SetMouseInputEnabled(true)
+			img:SetTooltip(entry.desc or "Tooltip")
+
+			local lbl = vgui.Create("DLabel", row)
+			lbl:SetFont("UVSettingsFontSmall-Bold")
+			lbl:SetText(entry.name)
+			lbl:SetTextColor(color_white)
+			lbl:SizeToContents()
+			lbl:SetPos(20, 0)
+		end
+
+		function p:PerformLayout()
+			p:SetTall(padding * 2 + (#st.entries * 24))
+		end
+
+		function p:Paint(w, h)
+			surface.SetDrawColor(28, 28, 28, 150)
+			surface.DrawRect(0, 0, w, h)
+		end
+
+		return p
+	end
+
 	-- if st is a singular image
 	if st.type == "image" then
 		local p = vgui.Create("DPanel", parent)

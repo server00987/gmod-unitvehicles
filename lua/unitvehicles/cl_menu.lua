@@ -221,11 +221,17 @@ UVMenu.Main = function()
 					UVMenu.OpenMenu(UVMenu.FAQ) -- FAQ
 				end,
 			},
-			
+
 			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
 					UVMenu.OpenMenu(UVMenu.Settings) -- Settings Menu
 				end,
 			},
+
+			{ TabName = "#uv.credits", Icon = "unitvehicles/icons/milestone_outrun_pursuits_won.png", playsfx = "clickopen", func = function()
+					UVMenu.OpenMenu(UVMenu.Credits, true) -- Credits
+				end,
+			},
+			
 		}
 	})
 end
@@ -675,7 +681,63 @@ UVMenu.FAQ = function()
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
-				{ type = "label", text = "#uv.addons.builtin" },
+			},
+		}
+	})
+end
+
+-- Credits List
+UV.Credits = {
+["UVTeam"] = [[
+**Project Lead: Roboboy**
+**Aux**
+**Moka**
+**TalonSolid**
+**ET7970**
+]],
+["TranslationsRaw"] = [[
+[flag_se] **Moka**
+[flag_el] **TalonSolid**
+[flag_ru] **WladZ**
+[flag_cz] **Despe**
+[flag_es] **Dami**
+[flag_br] **Raiden_Gm**
+[flag_cn] **Pathfinder_FUFU**
+[flag_th] **Takis036**
+[flag_ua] **Mr.Negative & Renegade_Glitch**
+[flag_pl] **TheSilent1**
+]],
+["Translations"] = {
+		{ flag = "se", desc = "Svenska - Swedish", name = "Moka" },
+		{ flag = "gr", desc = "Ελληνικά - Greek", name = "TalonSolid" },
+		{ flag = "ru", desc = "Русский - Russian", name = "WladZ" },
+		{ flag = "cz", desc = "Čeština - Czech", name = "Despe" },
+		{ flag = "es", desc = "Español - Spanish", name = "Dami" },
+		{ flag = "br", desc = "Português Brasileiro - Brazilian Portuguese", name = "Raiden_Gm" },
+		{ flag = "cn", desc = "简体中文 - Simplified Chinese", name = "Pathfinder_FUFU" },
+		{ flag = "th", desc = "แบบไทย - Thai", name = "Takis036" },
+		{ flag = "ua", desc = "Українська - Ukrainian", name = "Mr.Negative & Renegade_Glitch" },
+		{ flag = "pl", desc = "Polski - Polish", name = "TheSilent1" },
+	},
+}
+
+-- Credits Menu
+UVMenu.Credits = function()
+	UVMenu.CurrentMenu = UVMenu:Open({
+		Name = " ",
+		Width  = UV.ScaleW(500),
+		Height = UV.ScaleH(700),
+		UnfocusClose = true,
+		Tabs = {
+			{ TabName = "#uv.credits", Icon = "unitvehicles/icons_settings/info.png",
+				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
+					func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
+				},
+				{ type = "label", text = "#uv.credits.uvteam" },
+				{ type = "info", text = UV.Credits["UVTeam"] },
+				{ type = "label", text = "#uv.credits.translations" },
+				-- { type = "info", text = UV.Credits["Translations"] },
+				{ type = "info_flags", entries = UV.Credits["Translations"] },
 			},
 		}
 	})

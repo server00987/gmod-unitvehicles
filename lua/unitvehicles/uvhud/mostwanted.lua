@@ -1407,46 +1407,75 @@ local function mw_racing_main( ... )
         if racer_count == 1 then return end
 
         local entry = string_array[i]
-        local racercount = i * (h * 0.025)
+        
+        local racer_name = entry[1]
+        local is_local_player = entry[2]
+        local mode = entry[3]
+        local diff = entry[4]
 
+        local racercount = i * (h * 0.025)
+        
+        local Strings = {
+            ["Time"] = "%s",
+            ["Lap"] = lang("uv.race.suffix.lap"),
+            ["Laps"] = lang("uv.race.suffix.laps"),
+            ["Finished"] = lang("uv.race.suffix.finished"),
+            ["Disqualified"] = lang("uv.race.suffix.dnf"),
+            ["Busted"] = lang("uv.race.suffix.busted"),
+        }
+        
+        local status_text = "- - - - -"
+        
+		if entry[3] then
+			local status_string = Strings[entry[3]]
+
+			if status_string then
+				local args = {}
+
+				if entry[4] then
+					local num = tonumber(entry[4])
+
+					if entry[3] == "Lap" and num then
+						-- choose singular/plural string
+						local lapString = (math.abs(num) > 1) and Strings["Laps"] or Strings["Lap"]
+						-- rebuild status_string so the format target is correct
+						status_string = lapString
+						num = ((num > 0 and "+ ") or "- ") .. tostring(math.abs(num))
+					elseif num then
+						num = ((num > 0 and "+ ") or "- ") .. string.format("%.2f", math.abs(num))
+					end
+
+					table.insert(args, num)
+				end
+
+				status_text = (#args <= 0) and status_string or string.format(status_string, unpack(args))
+			end
+		end
+        
+        local color = Color(0, 0, 0)
+        
         surface.SetDrawColor(125, 125, 125, 100)
         if entry[2] then
             surface.SetDrawColor(223, 184, 127, 175)
         end
 
         draw.NoTexture()
-        surface.DrawRect(
-            UV_UI.X(w * 0.7275),
-            h * 0.185 + racercount,
-            UV_UI.W(w * 0.2475),
-            h * 0.025
-        )
+        surface.DrawRect( UV_UI.X(w * 0.7275), h * 0.185 + racercount, UV_UI.W(w * 0.2475), h * 0.025 )
 
-        local text = alt and (entry[3] or "") or entry[1]
+        local text = alt and (status_text) or (racer_name)
 
-        draw.SimpleTextOutlined(
-            i,
-            "UVMostWantedLeaderboardFont",
-            UV_UI.X(w * 0.73),
-            h * 0.185 + racercount,
-            Color(0,0,0),
-            TEXT_ALIGN_LEFT,
-            TEXT_ALIGN_TOP,
-            0.75,
-            Color(0,0,0,75)
-        )
+		surface.SetFont("UVMostWantedLeaderboardFont")
+		local ymax = UV_UI.W(w * 0.2)
+		textW = surface.GetTextSize(text)
+		if textW > ymax then
+			while surface.GetTextSize(text .. "...") > ymax do
+				text = string.sub(text, 1, -2)
+			end
+			text = text .. "..."
+		end
 
-        draw.SimpleTextOutlined(
-            text,
-            "UVMostWantedLeaderboardFont",
-            UV_UI.X(w * 0.97),
-            h * 0.185 + racercount,
-            Color(0,0,0),
-            TEXT_ALIGN_RIGHT,
-            TEXT_ALIGN_TOP,
-            0.75,
-            Color(0,0,0,75)
-        )
+		draw.SimpleTextOutlined( i, "UVMostWantedLeaderboardFont", UV_UI.X(w * 0.73), (h * 0.185) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 0.75, Color(0, 0, 0, 75) )
+		draw.SimpleTextOutlined( text, "UVMostWantedLeaderboardFont", UV_UI.X(w * 0.97), (h * 0.185) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 0.75, Color(0, 0, 0, 75) )
     end
 end
 
