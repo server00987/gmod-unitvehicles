@@ -635,7 +635,8 @@ if SERVER then
 		local hasAnyClearPath = false
 		
 		for i = 1, #waypoints do
-			if UVStraightToWaypoint(unitpos, waypoints[i]) then
+			local waypointpos = waypoints[i] + (vector_up * 50)
+			if UVStraightToWaypoint(unitpos, waypointpos) then
 				hasAnyClearPath = true
 				break
 			end
@@ -643,12 +644,13 @@ if SERVER then
 		
 		for i = 1, #waypoints do
 			local waypoint = waypoints[i]
+			local waypointpos = waypoint + (vector_up * 50)
 			local toWaypoint = waypoint - unitpos
 			local distSqr = toWaypoint:LengthSqr()
 			local dist = math.sqrt(distSqr)
 			local toWaypointNormalized = toWaypoint:GetNormalized()
 			
-			local hasLineOfSight = UVStraightToWaypoint(unitpos, waypoint)
+			local hasLineOfSight = UVStraightToWaypoint(unitpos, waypointpos)
 			
 			local score = 0
 			
