@@ -111,8 +111,8 @@ UVMenu.Main = function()
 				},
 				
 				{ type = "label", text = "#uv.menu.pnotes" },
+				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
 				{ type = "info", text = UV.PNotes, centered = true },
-				{ type = "image", image = "unitvehicles/icons_settings/latestpatch.png" },
 			},
 			
 			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
@@ -216,14 +216,14 @@ UVMenu.Main = function()
 				
 				{ type = "button", text = "#uv.tm.clear", desc = "uv.tm.clear.desc", convar = "uv_cleartraffic", sv = true },
 			},
-			
-			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", func = function()
-					UVMenu.OpenMenu(UVMenu.FAQ) -- FAQ
-				end,
-			},
 
 			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
 					UVMenu.OpenMenu(UVMenu.Settings) -- Settings Menu
+				end,
+			},
+
+			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", func = function()
+					UVMenu.OpenMenu(UVMenu.FAQ) -- FAQ
 				end,
 			},
 
@@ -443,198 +443,226 @@ end
 
 -- FAQ Data List
 UV.FAQ = {
+-- Introduction
 ["Intro"] = [[
-# What is this addon all about?
+# -- What is this addon?
+
 Unit Vehicles is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police (Units) and thrilling races on any map.
 
 **Here are the currently supported vehicle bases:**
-- prop_vehicle_jeep (default vehicle base)
-- simfphys
-- Glide
+ |-- prop_vehicle_jeep (default vehicle base)
+ |-- simfphys
+ |-- Glide (required and highly recommended)
 ]],
 ["Requirements"] = [[
-# Do I have to install other addon(s) for this?
-Yes. Decent Vehicle - Basic AI and Glide // Styled's Vehicle Base is REQUIRED for Unit Vehicles to function properly.
-- Decent Vehicle provides waypoints for AIs to spawn and roam around in.
-- Glide provides the vehicles needed to use with the Default preset.
+# -- Do I have to install other addon(s) for this?
+
+Yes. *Decent Vehicle - Basic AI* and *Glide // Styled's Vehicle Base* is REQUIRED for Unit Vehicles to function properly.
+ |-- Decent Vehicle provides waypoints for AIs to spawn and roam around in.
+ |-- Glide provides the vehicles needed to use with the Default preset.
 ]],
 ["Github"] = [[
-# Does this addon have a GitHub repository?
+# -- Does this addon have a GitHub repository?
+
 Yes. It is currently private at the moment until official release.
 ]],
-["StartPursuit"] = [[
-# How do I start a pursuit?
-Start a pursuit by going to **Pursuit Manager**, then clicking **Force-Start Pursuit**. 
-Alternatively, find a patrolling Unit and get them to chase you; just don't pull over!
-]],
-["StartRace"] = [[
-# How do I start a race?
-Begin a race by going to **Race Manager**:
-- Click 'Load Track'
-- Select any race from the list
-- Invite other racers, or hit 'Start Race'
-- You can immediately start the race, or automatically spawn AI to join your race
-
-**Notes**
-- There must be at least 1 Grid Slot to start the race!
-- You can invite friends/AI Racers by clicking 'Invite Racers' before clicking 'Start Race' as long as a race is loaded.
-- If there are no existing races, you'll have to make your own (or look for any addon on the workshop that contains UV Race data for that particular map).
-]],
-["ModifyUnits"] = [[
-# How do I spawn or modify Units?
-Use the **Manager: Units** tool:
-
-**Step 1: Save a Unit**
-Right-click a vehicle and enter the details. It should appear on the database list depending on what vehicle base you have chosen. Do this for other vehicles you would like to chase you.
-
-**Step 2: Assign a Unit**
-Choose a Heat Level, then select the Unit you want for this vehicle to appear as. Click on the vehicle to assign/select it.
-For all Heat Levels from Min to Max, there must be at least one assigned Unit!
-
-**Step 3: Adjust other settings**
-The Manager: Units tool allows for many variables to be adjusted. Tweak the settings as you see fit.
-
-**Step 4: Save Changes**
-Click 'Save Changes' button at the very top. Now be prepared to face new enemies!
-Save them as presets so you don't have to worry about doing it all again. You can even export the settings and share it to the community!
-]],
-["SpawnAsUnit"] = [[
-# I want to be a cop. Can I join the Units?
-You can! Assuming there are already assigned Units, head over to **Pursuit Manager** and select **Spawn as a Unit**!
-]],
-["SpawnTraffic"] = [[
-# How do I get traffic to spawn?
-Use the **Manager: Traffic** tool:
-
-Right-click a vehicle and enter the details. It should appear on the database list depending on what vehicle base you have chosen.
-]],
-["CreateRoadblocks"] = [[
-# How do I set up roadblocks?
-Use the **Creator: Roadblocks** Tool:
-
-**Step 1: Creation**
-Using the tool, create the props and pieces necessary for the roadblock.
-
-**Step 2: Welding it (very important)**
-Switch to the **Weld** tool and ensure that all the pieces are connected to one another.
-
-**Step 3: Saving**
-Once the pieces are welded, you can right-click on any piece to save the roadblock.
-]],
-["CreateRaces"] = [[
-# How do I create races?
-Use the **Creator: Races** tool:
-
-**Step 1: Create Checkpoints**
-Left-click on one corner to start placing the checkpoint, left click again to finish (hold E to increase the height of the checkpoint).
-Leave some space between the checkpoints to ensure easier detection when racing.
-
-**Step 2: Set the Checkpoints in order**
-Right-click an existing checkpoint to set a new ID, beginning with 1. Must be in sequential order; use the same ID for branching checkpoints.
-For branching checkpoints, the AI will ALWAYS take the MOST RECENT checkpoint created.
-
-**Step 3: Create Grid Slots**
-Press your Reload key to place grid slots at your crosshair. The numbers represent the starting order.
-If you want more racers to join in, place more grid slots!
-
-**Step 4: Export Race**
-Press the 'Export Race' button and give it a name. Now you can import the race!
-]],
-["CreateRacesSpeedlimit"] = [[
-# AI Racers don't slow down at corners! How can I fix that?
-You can set the speed limit for each checkpoint BEFORE creating a new one.
-You can alternatively edit the last number in the line for each checkpoint within the .txt file.
-]],
-["CreatePursuitBreaker"] = [[
-# How do I set up Pursuit Breakers?
-Using the **Creator: Pursuit Breaker** tool:
-
-**Step 1: Build a simple structure**
-Build a structure, be it a scaffolding or a gas station. Get creative! Don't use too many props or else the game might lag!
-
-**Step 2: Weld the structure**
-Weld the structure. For easier welding process, try using addons such as **Smart Weld** and **OptiWeld**.
-TIP: After welding the structure, unfreeze the pillars so your vehicle doesn't take damage when ramming through!
-
-**Step 3: Save the structure**
-Right-click the structure and enter the details.
-TIP: Save the structure as a dupe so you don't have to do Step 1 and 2 when reusing the same structure!
-]],
-["PursuitTech"] = [[
-# What are Pursuit Techs? Are they like power-ups?
-Pursuit Tech are a series of weapons and support devices utilised by both Racers and Units. Up to 2 Pursuit Techs can be equipped to a single vehicle at any point.
-
-**Shared Pursuit Tech**
-EMP, ESF, Repair Kit & Spike Strips
-
-**Racer Pursuit Tech**
-Power Play, Juggernaut, Jammer, Shockwave & Stun Mine
-
-**Unit Pursuit Tech**
-Killswitch, Shock Ram & GPS Dart
-
-You can assign Pursuit Tech with the **Pursuit Tech** tool, and learn more about them.
-]],
-["RenameAI"] = [[
-# Can I change the name of the Racers or Units?
-Use the **Name Changer** tool to change the name of Racers and Units!
-]],
-["ConVars"] = [[
-# What console commands are there I can use?
-- uv_spawnvehicles - Spawns patrolling AI Units
-- uv_setheat [x] - Sets the Heat Level
-- uv_despawnvehicles - Despawns Patrolling AI Units
-- uv_resetallsettings - Resets all server settings to their default values
-- uv_startpursuit - Starts a countdown before beginning a pursuit
-- uv_stoppursuit - Stops a pursuit with AI Units assuming you've escaped
-- uv_wantedtable - Prints a list of wanted suspects to the console
-- uv_clearbounty - Sets the bounty value to 0
-- uv_setbounty [x] - Sets the bounty value
-- uv_spawn_as_unit - Allows you to join as the Unit
-]],
-["Data"] = [[
-# Where can I find and edit UV-related data?
-Find and edit UV-related under in your game's *data* folder, then in *unitvehicles*.
-]],
-["SimfphysWarning"] = [[
-# My game is lagging a lot whenever a new Unit spawns. Is this addon resource-intensive?
-Units using simfphys tends to be more resource-intensive compared to other vehicle bases. Either lower the count of 'Maximum Units' or use other vehicle bases.
-]],
 ["Roadmap"] = [[
-# How can I keep up to date with the latest updates? Is there a road map?
+# -- How can I keep up to date with the latest updates? Is there a road map?
+
 You can follow us on our Trello page, or our Discord server, both of which you can find on our Workshop page.
 ]],
-["S&Box"] = [[
-# Source engine limits the true potential of UV, most noticeably with limited map size. Will it expand into other games as an addon anytime soon?
-There are plans to expand UV into s&box, making full use of Source 2 engine, but only time will tell :3
+["ConVars"] = [[
+# -- What console commands are there I can use?
+
+ |-- uv_spawnvehicles - Spawns patrolling AI Units
+ |-- uv_setheat [x] - Sets the Heat Level
+ |-- uv_despawnvehicles - Despawns Patrolling AI Units
+ |-- uv_resetallsettings - Resets all server settings to their default values
+ |-- uv_startpursuit - Starts a countdown before beginning a pursuit
+ |-- uv_stoppursuit - Stops a pursuit with AI Units assuming you've escaped
+ |-- uv_wantedtable - Prints a list of wanted suspects to the console
+ |-- uv_clearbounty - Sets the bounty value to 0
+ |-- uv_setbounty [x] - Sets the bounty value
+ |-- uv_spawn_as_unit - Allows you to join as the Unit
 ]],
-["Export"] = [[
-# How can I export UV files/presets as addons?
 
-**Note** - This is slightly dumbed down and does not have a direct download for the preset. Visit our Discord server to find out more!
+-- Racing
+["Racing.Joining"] = [[
+# -- How do I join races?
 
-With the recent update for Unit Vehicles, we have introduced a import/export system which will allow users to upload their Unit presets as Workshop addons, as well as any other UV related data (such as races, roadblocks, racer names, etc.).
+If someone has prepared a race, and they send an invite, you'll receive an on-screen notification inviting you to it, assuming that you are in a vehicle and no pursuit is ongoing.
+]],
 
-You can now find a new button inside of Unit Manager and Pursuit Tech STool panel right under the preset dropdown menu, Export Settings. This will export your currently loaded preset into a file which can later be used inside of our addon template for "UV data packs", using which you can upload that preset as well as any other UV files of your choosing onto the Workshop. This allows you to easily distribute & share your cool configs :)
+["Racing.Resetting"] = [[
+# -- I'm stuck! How do I reset?
 
-**How does it work?**
-After exporting a preset, the path of it will be located inside garrysmod/data/unitvehicles/preset_export/. Inside of that folder you will be able to find another folder which corresponds to the tool from which you exported the preset (e.g. exporting a Unit Manager preset will save it inside a "uvunitmanager" folder). We will take the contents of preset_export and use it for our UV data pack
+ |-- Press [key:unitvehicle_keybind_resetposition] to reset your car
+ |-- Wait 3 seconds
+ |-- You're back at the last checkpoint you passed!
+ 
+**Notes**
+ |-- You cannot reset when being busted
+ |-- You cannot reset while already moving
+]],
 
-Essentially, what you're looking for is a file structure like this: **data_static/uv_import/presetnamehere**
-Inside this folder, you'll have the following file structures:
-**uvdata** - Place any UV-related folders here, such as **glide**, **simfphys** or **races**. 
-**uvdvwaypoints** - You can dump any DV Waypoint .txt files in here.
+["Racing.Starting"] = [[
+# -- How do I start racing?
 
-Now that you've included all the relevant files you wish to include with your addon, it's time to add your exported STool presets. You'd want to create a new folder inside of uvdata named preset_import. Once you've done this, simply copy the folders from garrysmod/data/unitvehicles/preset_export/ inside of the newly created folder.
+Begin a race by going to **Race Manager** in the UV Menu:
+ |-- Click 'Load Track'
+ |-- Select any race from the list
+ |-- Invite other racers, or hit 'Start Race'
+ |-- You can immediately start the race, or automatically spawn AI to join your race
 
-That's all! You can now upload your data pack to Workshop and share it without having users go through the hassle of manually placing your files!
 
-IMPORTANT
-You must not include dots while naming the 'presetnamehere' folder, otherwise the presets will fail to load!
+*Notes*
+ |-- There must be at least 1 Grid Slot to start the race!
+ |-- You can invite friends/AI Racers by clicking 'Invite Racers' before clicking 'Start Race' as long as a race is loaded.
+ |-- If there are no existing races, you'll have to make your own
+ |-- Alternatively, find some on the Workshop!
+]],
 
-For example:
-"my preset 1.0" - ❌ This will not work
-"my preset" - ✅ Will work 
+["Racing.Create"] = [[
+# -- How do I create races?
+Use the *Creator: Races* tool:
+
+
+*-- Step 1: Create Checkpoints*
+ |-- Press [+attack] in one corner to start placing a checkpoint.
+ |-- Press [+attack] in another to finish placing it.
+ |-- Tip: Hold [+use] to increase checkpoint height automatically.
+ 
+
+*-- Step 2: Set the Checkpoints in order*
+ |-- Press [+attack2] on the checkpoint.
+ |-- Type in the **Checkpoint ID**
+ |-- Make sure the ID is in sequentual order
+ |-- Branching checkpoints use a matching ID
+ |-- AI will always use the last placed checkpoint ID
+ 
+
+*-- Step 3: Create Grid Slots*
+ |-- Press [+reload] to place Grid Slots
+ |-- The numbers on the slots represent starting order
+ |-- Want more racers? Place more slots!
+ 
+
+*-- Step 4: Export Race*
+ |-- Done with the race? Open the Spawnmenu and hit 'Export Race'
+ |-- Give it a name
+ |-- It will now appear as a race you can import and race on!
+]],
+["Racing.Create.Speedlimit"] = [[
+# -- The AI Racers are going too fast around the track!
+
+When placing checkpoints, you'll have to define the speed in which the AI will take it.
+If the AI is going too fast, you'll have to alter the speedlimit value found in the **Creator: Races** settings.
+If you have a race already loaded, you can Right-Click to edit the checkpoint and apply the updated speedlimit.
+Alternatively, you can edit the last number in the race data file.
+]],
+
+-- Pursuits
+["Pursuit.Starting"] = [[
+# -- How do I start a pursuit?
+
+ |-- Go to *Pursuit Manager*
+ |-- Click *Force-Start*
+ |-- Alternatively, drive into or drive recklessly near a Unit
+ |-- Away you go!
+]],
+
+["Pursuit.JoinAsUnit"] = [[
+# -- Can I join the Pursuit as a Unit?
+
+Yes you can! And it's simple:
+ |-- Go to *Pursuit Manager* or *Welcome Page*
+ |-- Click *Spawn as a Unit*
+ |-- Pick the vehicle you want to drive
+ |-- Away you go!
+]],
+["Pursuit.Respawn"] = [[
+# -- I'm stuck or too far from the suspect(s)! How do I reset?
+
+ |-- Press [key:unitvehicle_keybind_resetposition] to open the *Unit Select* menu
+ |-- Pick the vehicle you want to reset as
+ |-- Away you go!
+ 
+**Notes**
+ |-- If you reset once, you'll have to wait a moment before doing so again
+]],
+["Pursuit.CreateUnits"] = [[
+# -- I want to create Units. What do I do?
+
+Here's what you do:
+ |-- 1. Pull out the *Creator: Units* tool
+ |-- 2. Spawn any vehicle
+ |-- 3. Press [+attack2] on the vehicle
+ |-- 4. Give the Unit a unique name
+ |-- 5. (Optional) Select the Heat Level the Unit appears in
+ |-- 6. (Optional) Tweak other values as you see fit
+ |-- 7. Click 'Create'
+ 
+Now apply the Unit via the *Manager: Units* tool, and you'll either face the Unit you made, or be allowed to play as the Unit against the fleeing suspects.
+]],
+["Pursuit.Roadblocks"] = [[
+# -- I want to create Roadblocks. What do I do?
+
+You use the *Creator: Roadblocks* tool:
+ |-- 1. Using the tool, create the props and pieces necessary for the roadblock
+ |-- 2.  Using the *Weld* tool (or any alternative), weld all the pieces together
+ |-- 3. Once welded, press [+attack2] on any piece of the roadblock
+ |-- 4. Tweak the settings to your liking, then click 'Create Roadblock'
+ 
+The roadblock will now appear randomly when a Pursuit is active.
+]],
+["Pursuit.Pursuitbreaker"] = [[
+# -- I want to create Pursuit Breakers. What do I do?
+
+You use the *Creator: Pursuit Breaker* tool:
+ |-- 1. Create the props and pieces necessary for the Pursuit Breaker
+ |-- 2.  Using the *Weld* tool (or any alternative), weld all the pieces together
+ |-- 3. Once welded, press [+attack2] on any piece of the Pursuit Breaker
+ |-- 4. Tweak the settings to your liking, then click 'Create Pursuit Breaker'
+]],
+
+["Other.CreateTraffic"] = [[
+# -- How do I spawn traffic?
+
+Here's what you do:
+ |-- 1. Pull out the *Creator: Traffic* tool
+ |-- 2. Spawn any vehicle
+ |-- 3. Press [+attack2] on the vehicle
+ |-- 4. Give the vehicle a unique name
+ |-- 5. (Optional) Tweak the values as you see fit
+ |-- 6. Click 'Create'
+ 
+You can then tweak general settings in the *Traffic Manager* tab in the UV Menu.
+]],
+["Other.PursuitTech"] = [[
+# -- What are Pursuit Tech?
+
+Pursuit Tech are a series of weapons and support devices utilized by both Racers and Units.
+You can apply up to 2 Pursuit Techs to your vehicle to either fight the opponents or defend yourself.
+
+Here's how  to apply and use them:
+ |-- 1. Pull out the *Pursuit Tech* tool
+ |-- 2. Select the Pursuit Tech you want to use as a Racer or Unit
+ |-- 3. Press [+attack] on your vehicle or Unit
+ 
+You can now press [key:unitvehicle_pursuittech_keybindslot_1] and [key:unitvehicle_pursuittech_keybindslot_2] to activate your Pursuit Tech while driving!
+]],
+["Other.RenameAI"] = [[
+# -- Can I rename AI Racers and Units?
+
+Yes you can. And it's simple:
+ |-- 1. Pull out the *Name Changer* tool
+ |-- 2. Type out the name you want the AI to have
+ |-- 3. Press [+attack] on the AI Racer or Unit
+]],
+["Other.DataFolder"] = [[
+# -- Where is my UV data stored?
+
+You can find your UV-related data stored in your game's *data/unitvehicles* directory:
 ]],
 }
 
@@ -652,30 +680,34 @@ UVMenu.FAQ = function()
 				{ type = "info", text = UV.FAQ["Github"] },
 				{ type = "info", text = UV.FAQ["ConVars"] },
 				{ type = "info", text = UV.FAQ["Roadmap"] },
-				{ type = "info", text = UV.FAQ["S&Box"] },
 			},
 
 			{ TabName = "#uv.faq.racing", Icon = "unitvehicles/icons/race_events.png",
-				{ type = "info", text = UV.FAQ["StartRace"], sv = true },
-				{ type = "info", text = UV.FAQ["CreateRaces"], sv = true },
-				{ type = "info", text = UV.FAQ["CreateRacesSpeedlimit"], sv = true },
+				{ type = "info", text = UV.FAQ["Racing.Joining"] },
+				{ type = "info", text = UV.FAQ["Racing.Resetting"] },
+				
+				{ type = "info", text = UV.FAQ["Racing.Starting"], sv = true },
+				{ type = "info", text = UV.FAQ["Racing.Create"], sv = true },
+				{ type = "info", text = UV.FAQ["Racing.Create.Speedlimit"], sv = true },
 			},
 
 			{ TabName = "#uv.faq.pursuits", Icon = "unitvehicles/icons/milestone_911.png",
-				{ type = "info", text = UV.FAQ["SpawnAsUnit"] },
-				{ type = "info", text = UV.FAQ["StartPursuit"], sv = true },
-				{ type = "info", text = UV.FAQ["ModifyUnits"], sv = true },
-				{ type = "info", text = UV.FAQ["CreateRoadblocks"], sv = true },
-				{ type = "info", text = UV.FAQ["CreatePursuitBreaker"], sv = true },
+				{ type = "info", text = UV.FAQ["Pursuit.Starting"], sv = true },
+				
+				{ type = "info", text = UV.FAQ["Pursuit.JoinAsUnit"] },
+				{ type = "info", text = UV.FAQ["Pursuit.Respawn"] },
+
+				{ type = "info", text = UV.FAQ["Pursuit.CreateUnits"], sv = true },
+				{ type = "info", text = UV.FAQ["Pursuit.Roadblocks"], sv = true },
+				{ type = "info", text = UV.FAQ["Pursuit.Pursuitbreaker"], sv = true },
 			},
 
 			{ TabName = "#uv.faq.other", Icon = "unitvehicles/icons_settings/info.png",
-				{ type = "info", text = UV.FAQ["PursuitTech"] },
-				{ type = "info", text = UV.FAQ["SpawnTraffic"], sv = true },
-				{ type = "info", text = UV.FAQ["RenameAI"], sv = true },
-				{ type = "info", text = UV.FAQ["Data"] },
-				{ type = "info", text = UV.FAQ["SimfphysWarning"], sv = true },
-				{ type = "info", text = UV.FAQ["Export"], sv = true },
+				{ type = "info", text = UV.FAQ["Other.CreateTraffic"], sv = true },
+				{ type = "info", text = UV.FAQ["Other.PursuitTech"] },
+				
+				{ type = "info", text = UV.FAQ["Other.RenameAI"], sv = true },
+				{ type = "info", text = UV.FAQ["Other.DataFolder"], sv = true },
 			},
 
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()

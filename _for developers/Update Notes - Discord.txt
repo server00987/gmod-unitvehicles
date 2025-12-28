@@ -6,20 +6,21 @@
 - The UV Menu and all fonts will now scale properly on all resolutions
   
 # UV Menu
-- Added new **AI Racer Manager** and **Traffic Manager** tabs
-- Added new **Keybinds** tab inside the Settings instance
+- Added new **AI Racer Manager**, **Traffic Manager** and **Credits** tabs
   |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
+- Added new **Keybinds** tab inside the Settings instance
 - Added a **Timer** variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
 - Added a custom dropdown menu in the UV Menu, used by the **UVTrax Profile** and **HUD Types**
 - Texts on all options will now scale and split properly
+- Rewrote the entire **FAQ** section
 
 # Changes
-- Updated **Chinese** and **Czech** localizations
 - Pursuit Breakers will now always trigger a call response
 - The **Vehicle Override** feature from the "Manager: AI Racers" tool (now present in the UV Menu) now supports infinite amount of racers
 - UV Menu: The **FAQ** tab now sends you to a separate menu instance with categorized information
 - UV Menu: The **Addons** tab was moved to UV Settings
 - UV Menu: The **Freeze Cam** option no longer appears in the UV Menu while in a Multiplayer session
+- Updated localizations
 
 # Fixes
 - Fixed that AI Racers sometimes steered weirdly after entering another lap
@@ -32,6 +33,7 @@
 - Fixed that the Race Invite caused an error when clicking outside of its window, causing it to close prematurely
 - Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
 - Fixed that clicking on a dropdown option outside the UV Menu, the menu would close if it was set to "Close on Unfocus"
+- Fixed a lag spike when pursuit music plays for the first time
 
 <------- December 17 ------->
 # New Features

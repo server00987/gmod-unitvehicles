@@ -343,8 +343,8 @@ if CLIENT then
 	-- Settings Fonts
 	surface.CreateFont("UVSettingsFont", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true })
 	surface.CreateFont("UVSettingsFont-Italic", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true, italic = true })
-	surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, extended = true })
-	surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = UV.ScaleH(46), weight = 500, extended = true, italic = true })
+	surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = UV.ScaleH(35), weight = 500, extended = true })
+	surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = UV.ScaleH(35), weight = 500, extended = true, italic = true })
 	surface.CreateFont("UVSettingsFontSmall", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true })
 	surface.CreateFont("UVSettingsFontSmall-Italic", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true, italic = true })
 	surface.CreateFont("UVSettingsFontSmall-Bold", { font = "EurostileBold", size = UV.ScaleH(22), weight = 1000, shadow = true, extended = true })

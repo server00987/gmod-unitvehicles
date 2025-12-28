@@ -5,7 +5,10 @@ UV.SettingsTable = UV.SettingsTable or {}
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
 UV.CurVersion = "v0.39.2" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Patch 2 v0.39.2 - December 25th 2025 ]**
+**[ Patch 2 v0.39.2 - December 28th 2025 ]**
+**The final stretch!**
+We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still, and we hope to keep receiving feedback until then.
+
 **New Features**
 - Added the *UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser*
 - AI Racers and Units will no longer rotate while mid-air
@@ -13,20 +16,21 @@ UV.PNotes = [[
 - The UV Menu and all fonts will now scale properly on all resolutions
   
 **UV Menu**
-- Added new *AI Racer Manager* and *Traffic Manager* tabs
-- Added new *Keybinds* tab inside the Settings instance
+- Added new *AI Racer Manager*, *Traffic Manager* and *Credits* tabs
   |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
+- Added new *Keybinds* tab inside the Settings instance
 - Added a *Timer* variable in the UV Menu, applied to the *Totaled* and *Race Invite* menus
 - Added a custom dropdown menu in the UV Menu, used by the *UVTrax Profile* and *HUD Types*
 - Texts on all options will now scale and split properly
+- Rewrote the entire *FAQ* section
 
 **Changes**
-- Updated *Chinese* and *Czech* localizations
 - Pursuit Breakers will now always trigger a call response
 - The *Vehicle Override* feature from the "Manager: AI Racers" tool (now present in the UV Menu) now supports infinite amount of racers
 - UV Menu: The *FAQ* tab now sends you to a separate menu instance with categorized information
 - UV Menu: The *Addons* tab was moved to UV Settings
 - UV Menu: The *Freeze Cam* option no longer appears in the UV Menu while in a Multiplayer session
+- Updated localizations
 
 **Fixes**
 - Fixed that AI Racers sometimes steered weirdly after entering another lap
@@ -39,6 +43,7 @@ UV.PNotes = [[
 - Fixed that the Race Invite caused an error when clicking outside of its window, causing it to close prematurely
 - Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
 - Fixed that clicking on a dropdown option outside the UV Menu, the menu would close if it was set to "Close on Unfocus"
+- Fixed a lag spike when pursuit music plays for the first time
 
 **[ Patch 1 v0.39.1 - December 17th 2025 ]**
 # New Features
@@ -515,6 +520,32 @@ function UV.BuildSetting(parent, st, descPanel)
 		
 	-- if st is an information panel
 	if st.type == "info" then
+		local function ResolveKeybind(token)
+			if token:sub(1, 1) == "+" then
+				local key = input.LookupBinding(token, true)
+				return key and string.upper(key) or "???"
+			end
+
+			local cv = GetConVar(token)
+			if cv then
+				return string.upper(input.GetKeyName(cv:GetInt()) or "???")
+			end
+
+			return "???"
+		end
+
+		local function ReplaceKeybinds(str)
+			str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
+				return "<color=255,255,0>" .. ResolveKeybind(cmd) .. "</color>"
+			end)
+
+			str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
+				return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
+			end)
+
+			return str
+		end
+
 		local function ConvertDiscordFormatting(str)
 			str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
 			str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
@@ -531,6 +562,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		p:SetPaintBackground(false)
 
 		local rawText = language.GetPhrase(st.text or "") or ""
+		rawText = ReplaceKeybinds(rawText)
 		rawText = ConvertDiscordFormatting(rawText)
 
 		local mk
@@ -649,7 +681,16 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "image" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:DockMargin(6, 6, 6, 2)
+		p:DockMargin(60, 6, 60, 2)
+
+		local mat = Material(st.image or "", "smooth")
+
+		if not mat or mat:IsError() then
+			p.Paint = function(self, w, h)
+				draw.SimpleText("/// Missing image /// ", "UVSettingsFontSmall", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			return p
+		end
 
 		-- Force 16:9 height based on available width
 		p.PerformLayout = function(self, w, h)
@@ -657,16 +698,9 @@ function UV.BuildSetting(parent, st, descPanel)
 			self:SetTall(newH)
 		end
 
-		local mat = Material(st.image or "", "smooth")
-
 		p.Paint = function(self, w, h)
 			surface.SetDrawColor(0, 0, 0, 200)
 			surface.DrawRect(0, 0, w, h)
-
-			if not mat or mat:IsError() then
-				draw.SimpleText("Missing image", "DermaLarge", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				return
-			end
 
 			-- Draw image fully scaled to panel (letterboxed)
 			local iw, ih = mat:Width(), mat:Height()
@@ -1505,6 +1539,11 @@ function UV.BuildSetting(parent, st, descPanel)
 			return string.upper(input.GetKeyName(cv:GetInt()) or "-")
 		end
 
+		local function GetDefaultKeyName()
+			if not cv then return "Invalid ConVar!" end
+			return string.upper(input.GetKeyName(cv:GetDefault()) or "-")
+		end
+
 		-- Register with your existing keybind system
 		KeyBindButtons[st.slot] = { st.convar, wrap }
 
@@ -1554,7 +1593,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if cv then
-					descPanel.SelectedDefault = cv:GetDefault()
+					descPanel.SelectedDefault = GetDefaultKeyName()
 					descPanel.SelectedCurrent = GetKeyName()
 					descPanel.SelectedConVar = st.convar
 				end
