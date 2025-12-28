@@ -146,6 +146,9 @@ UVMenu.Main = function()
 				{ type = "label", text = "#uv.pm.misc", sv = true },
 				{ type = "button", text = "#uv.pm.clearbounty", convar = "uv_clearbounty", sv = true },
 				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
+				
+				-- { type = "label", text = "#uv.pm.misc", sv = true },
+				-- { type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end },
 			},
 			
 			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", -- AI Racer Manager
@@ -390,7 +393,6 @@ UVMenu.Settings = function()
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
-				{ type = "label", text = "#uv.addons.builtin" },
 			},
 		}
 	})
@@ -1176,33 +1178,44 @@ UVMenu.RaceInvite = function()
 	})
 end
 
-------- [ Traffic Manager ] -------
--- UVMenu.TrafficManager = function()
-	-- UVMenu.CurrentMenu = UVMenu:Open({
-		-- Name = " ",
-		-- Width = ScrW() * 0.45,
-		-- Height = ScrH() * 0.275,
-		-- Description = true,
-		-- UnfocusClose = true,
-		-- Tabs = {
-			-- { TabName = "#uv.tm",
-				-- { type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvtrafficmanager_vehiclebase", sv = true, content = {
-						-- { "HL2 Jeep", 1 } ,
-						-- { "Simfphys", 2 } ,
-						-- { "Glide", 3 } ,
-					-- },
-				-- },
-				-- { type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvtrafficmanager_spawncondition", sv = true, content = {
-						-- { "Never", 1 } ,
-						-- { "Only while driving", 2 } ,
-						-- { "Always", 3 } ,
-					-- },
-				-- },
-				-- { type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvtrafficmanager_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
-				-- { type = "button", text = "#uv.back", playsfx = "clickback",
-						-- func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
-				-- },
-			-- },
-		-- }
-	-- })
--- end
+------- [ Heat Manager ] -------
+UVMenu.HeatManager = function()
+	UVMenu.CurrentMenu = UVMenu:Open({
+		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.hm"),
+		Width  = UV.ScaleW(1540),
+		Height = UV.ScaleH(760),
+		Description = true,
+		UnfocusClose = true,
+		Tabs = {
+			{ TabName = "#uv.settings.general",
+				{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "uvunitmanager_timetillnextheatenabled", sv = true },
+				{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "uvunitmanager_minheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "uvunitmanager_maxheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 1 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 2 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 3 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 4 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 5 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 6 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 7 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 8 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 9 ),
+			},
+			{ TabName = string.format( language.GetPhrase("uv.hm.lvl"), 10 ),
+			},
+			{ TabName = "#uv.back", playsfx = "clickback", func = function()
+					UVMenu.OpenMenu(UVMenu.Main)
+				end,
+			},
+		}
+	})
+end
