@@ -562,7 +562,7 @@ if SERVER then
 		end
 		
 		self.NavigateCooldown = true
-		timer.Create("NavigateCooldown_Entity"..self:EntIndex(), 1, 1, function()
+		timer.Create(self._cooldownString, 1, 1, function()
 			self.NavigateCooldown = nil 
 		end)
 		
@@ -1315,7 +1315,7 @@ if SERVER then
 				end
 				if self.NavigateCooldown then
 					self.NavigateCooldown = nil
-					timer.Remove("NavigateCooldown_Entity"..self:EntIndex())
+					timer.Remove(self._cooldownString)
 				end
 				if (not self.formationpoint or enemyvelocity <= UVBustSpeed) 
 				or not self:StraightToTarget(self.e, true) or UVCalm or UVEnemyEscaping or 
@@ -2012,6 +2012,7 @@ if SERVER then
 			table.insert( ya, string.Trim( v ) )
 		end
 
+		self._cooldownString = "NavigateCooldown_Entity"..self:EntIndex()
 		self.voice = ya[math.random(1, #ya)]
 
 		UVCalm = nil
