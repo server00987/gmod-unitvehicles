@@ -544,7 +544,7 @@ if SERVER then
 		end
 		
 		self.NavigateCooldown = true
-		timer.Simple(1, function()
+		timer.Create("NavigateCooldown_Entity"..self:EntIndex(), 1, 1, function()
 			self.NavigateCooldown = nil 
 		end)
 				
@@ -1293,6 +1293,10 @@ if SERVER then
 				self.tableroutetoenemy = {}
 				if self.NavigateBlind then 
 					self.NavigateBlind = nil 
+				end
+				if self.NavigateCooldown then
+					self.NavigateCooldown = nil
+					timer.Remove("NavigateCooldown_Entity"..self:EntIndex())
 				end
 				if (not self.formationpoint or enemyvelocity <= UVBustSpeed) 
 				or not self:StraightToTarget(self.e, true) or UVCalm or UVEnemyEscaping or 

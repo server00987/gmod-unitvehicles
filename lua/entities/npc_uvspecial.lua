@@ -1299,6 +1299,10 @@ if SERVER then
 				if self.NavigateBlind then 
 					self.NavigateBlind = nil 
 				end
+				if self.NavigateCooldown then
+					self.NavigateCooldown = nil
+					timer.Remove("NavigateCooldown_Entity"..self:EntIndex())
+				end
 				if (not self.formationpoint or enemyvelocity <= UVBustSpeed) 
 				or not self:StraightToTarget(self.e, true) or UVCalm or UVEnemyEscaping or 
 				self:ObstaclesNearbySide() or self.v.rhino then
