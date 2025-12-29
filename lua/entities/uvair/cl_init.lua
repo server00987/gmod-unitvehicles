@@ -202,6 +202,38 @@ function ENT:Think()
 		self.Spotlight:SetBrightness(0)
 	end
 	self.Spotlight:Update()
+
+	if not self.NextGroundFX then self.NextGroundFX = 0 end
+
+	local pos = self:GetPos()
+	local floor = util.TraceLine({
+		start = pos,
+		endpos = pos - Vector(0,0,1000),
+		filter = self,
+		mask = MASK_ALL
+	})
+
+	if floor.Hit then
+		local height = pos.z - floor.HitPos.z
+
+		if height < 600 and CurTime() > self.NextGroundFX then
+			local strength = math.Clamp(1 - (height / 600), 0, 1)
+
+			local effectdata = EffectData()
+			effectdata:SetOrigin( floor.HitPos )
+			effectdata:SetScale( strength * 1000 )
+			effectdata:SetEntity( self )
+			util.Effect( "ThumperDust", effectdata )
+
+			local watereffectdata = EffectData()
+			watereffectdata:SetOrigin( floor.HitPos )
+			watereffectdata:SetScale( strength * 100 )
+			watereffectdata:SetEntity( self )
+			util.Effect( "waterripple", watereffectdata )
+
+			self.NextGroundFX = CurTime() + Lerp(strength, 0.15, 0.06)
+		end
+	end	
 end
 
 function ENT:OnRemove()
