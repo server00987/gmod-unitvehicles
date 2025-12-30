@@ -5,7 +5,8 @@ UV.SettingsTable = UV.SettingsTable or {}
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
 UV.CurVersion = "v0.39.2" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-**[ Patch 2 v0.39.2 - December 28th 2025 ]**
+# -- [ Update v0.39.2 ] --
+
 **The final stretch!**
 We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still, and we hope to keep receiving feedback until then.
 
@@ -51,62 +52,6 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 - Fixed that clicking on a dropdown option outside the UV Menu, the menu would close if it was set to "Close on Unfocus"
 - Fixed a lag spike when pursuit music plays for the first time
 - Fixed that Pursuit Breakers sometimes did not wreck Units
-
-**[ Patch 1 v0.39.1 - December 17th 2025 ]**
-# New Features
-- **UV Menu**: Added **Carbon** Menu SFX
-- **Race Manager**: Added new race options:
-  |-- Start a pursuit X seconds after a race begins
-  |-- Stop the pursuit after the race finishes
-  |-- Clear all AI racers and/or Units when the race finishes
-  |-- Visually hide the checkpoint boxes when racing
-
-- **Race Invites** now use the new menu system
-- **Unit Totaled**: Slightly tweaked appearance
-
-**Chatter**
-- Added more lines for Cop6
-
-And various other undocumented tweaks
-
-**[ Main Update v0.39.0 - December 12th 2025 ]**
-# New Features
-**UV Menu**
-Say hello to the newly introduced UV Menu, the full replacement for the Spawn Menu options and more. Accessed via the Context Menu or **unitvehicles_menu** command:
-
-- **Welcome Page** - Includes some quick access buttons and variables, and a handy **What's New** section, where we will post update notes
-- **Race Manager** - Moved the Race Manager tool race control variables here
-- **Pursuit Manager** - Moved all Pursuit Manager buttons here
-- **Addons** - The one place for both included and third-party UV addons. Moved **Circular Functions** variables here
-- **FAQ** - Need some quick help? The Discord FAQ has been uploaded here!
-- **Settings** - Want to tweak something? All Client and Server settings are present here
-
-Additionally, both the **Unit Totaled** and **Unit Select** now use the same menu system.
-
-Don't like the colours? Then change it! Change the colour of buttons, the background and more in the **User Interface** settings tab!
-
-**Things to note**
-- Many options are server only, meaning they will not be displayed to clients.
-- The options present in the menu can still be accessed via their original methods (Spawn Menu > Options > Unit Vehicles) for roughly 3 update cycles of UV before they will be removed.
-- The menu isn't perfect - it will be refined over time.
-
-# Changes
-**Tools**
-- Race Manager - Renamed to **Creator: Races**
-
-**UI**
-- MW HUD: Fixed that the "Split Time" notification did not fade out properly
-- Carbon HUD: Fixed that the notifications did not fade out properly
-
-**AI**
-- Fixed that the AI did not always respect Nitrous settings (Circular Functions)
-
-**Pursuit**
-- Fixed roadblocks not always spawning properly, and sometimes didn't spawn with any Units
-- Fixed that regular Units sometimes appeared in Rhino-only roadblocks
-- Air Support now gets removed when despawning AI Units
-
-And various other undocumented tweaks
 ]]
 
 -- Sounds Table
