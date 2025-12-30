@@ -76,9 +76,6 @@ end
 local function BuildHUDComboLists()
     local mainHUDs = {}
     local backupHUDs = {}
-	
-	print("[UV HUD] Registry contents:")
-	PrintTable(UV.HUDRegistry)
 
     for _, hud in pairs(UV.HUDRegistry or {}) do
 		table.insert(mainHUDs, {
