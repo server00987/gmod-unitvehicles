@@ -1,3 +1,5 @@
+UV.RegisterHUD( "ctu", "Crash Time - Undercover" )
+
 UV_UI.racing.ctu = UV_UI.racing.ctu or {}
 -- UV_UI.pursuit.ctu = UV_UI.pursuit.ctu or {}
 

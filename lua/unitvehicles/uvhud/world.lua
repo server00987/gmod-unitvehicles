@@ -1,3 +1,5 @@
+UV.RegisterHUD( "world", "NFS: World", true )
+
 local altFontLanguages = {
 	["cs"] = true, -- Czech
 	["el"] = true, -- Greek

@@ -52,7 +52,7 @@ if racesfxfolders then
 	end
 end
 
-
+-- AI Spawner helper
 local function SpawnAI(amount, racestart, police)
 	local beginrace = racestart or false
 	local cv = police and "uv_spawnvehicles" or "uvrace_spawnai"
@@ -72,8 +72,45 @@ local function SpawnAI(amount, racestart, police)
 	end
 end
 
+-- HUD Type helper
+local function BuildHUDComboLists()
+    local mainHUDs = {}
+    local backupHUDs = {}
+	
+	print("[UV HUD] Registry contents:")
+	PrintTable(UV.HUDRegistry)
+
+    for _, hud in pairs(UV.HUDRegistry or {}) do
+		table.insert(mainHUDs, {
+			hud.name,       -- display text
+			hud.codename    -- convar value
+		})
+
+        if hud.backup then
+            table.insert(backupHUDs, {
+                hud.name,
+                hud.codename
+            })
+        end
+    end
+
+    table.sort(mainHUDs, function(a, b)
+        return a[1] < b[1]
+    end)
+
+    table.sort(backupHUDs, function(a, b)
+        return a[1] < b[1]
+    end)
+
+    return mainHUDs, backupHUDs
+end
+
+local mainHUDList, backupHUDList = BuildHUDComboLists()
+
 ------- [ Main Menu ]-------
 UVMenu.Main = function()
+	local mainHUDList, backupHUDList = BuildHUDComboLists()
+	
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " - " .. UV.CurVersion,
 		Width  = UV.ScaleW(1540),
@@ -85,19 +122,20 @@ UVMenu.Main = function()
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
-				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
-						{ "Crash Time - Undercover", "ctu"} ,
-						{ "NFS Most Wanted", "mostwanted"} ,
-						{ "NFS Carbon", "carbon"} ,
-						{ "NFS Underground", "underground"} ,
-						{ "NFS Underground 2", "underground2"} ,
-						{ "NFS Undercover", "undercover"} ,
-						{ "NFS ProStreet", "prostreet"} ,
-						{ "NFS World", "world"} ,
-						{ "#uv.ui.original", "original"} ,
-						{ "#uv.ui.none", "" }
-					},
-				},
+				-- { type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
+						-- { "Crash Time - Undercover", "ctu"} ,
+						-- { "NFS Most Wanted", "mostwanted"} ,
+						-- { "NFS Carbon", "carbon"} ,
+						-- { "NFS Underground", "underground"} ,
+						-- { "NFS Underground 2", "underground2"} ,
+						-- { "NFS Undercover", "undercover"} ,
+						-- { "NFS ProStreet", "prostreet"} ,
+						-- { "NFS World", "world"} ,
+						-- { "#uv.ui.original", "original"} ,
+						-- { "#uv.ui.none", "" }
+					-- },
+				-- },
+				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
@@ -251,27 +289,8 @@ UVMenu.Settings = function()
 			{ TabName = "#uv.ui.title", Icon = "unitvehicles/icons_settings/display.png",
 
 				{ type = "label", text = "#uv.settings.general" },
-				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
-						{ "Crash Time - Undercover", "ctu"} ,
-						{ "NFS Most Wanted", "mostwanted"} ,
-						{ "NFS Carbon", "carbon"} ,
-						{ "NFS Underground", "underground"} ,
-						{ "NFS Underground 2", "underground2"} ,
-						{ "NFS Undercover", "undercover"} ,
-						{ "NFS ProStreet", "prostreet"} ,
-						{ "NFS World", "world"} ,
-						{ "#uv.ui.original", "original"} ,
-						{ "#uv.ui.none", "" }
-					},
-				},
-				{ type = "combo", text = "#uv.ui.backup", desc = "uv.ui.backup.desc", convar = "unitvehicle_hudtype_backup", content = {
-							{ "NFS Most Wanted", "mostwanted" },
-							{ "NFS Carbon", "carbon" },
-							{ "NFS Undercover", "undercover" },
-							{ "NFS World", "world" },
-							{ "#uv.ui.original", "original" }
-					},
-				},
+				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
+				{ type = "combo", text = "#uv.ui.backup", desc = "uv.ui.backup.desc", convar = "unitvehicle_hudtype_backup", content = backupHUDList },
 				{ type = "bool", text = "#uv.ui.racertags", desc = "uv.ui.racertags.desc", convar = "unitvehicle_racertags" },
 				{ type = "bool", text = "#uv.ui.preracepopup", desc = "uv.ui.preracepopup.desc", convar = "unitvehicle_preraceinfo" },
 				{ type = "bool", text = "#uv.ui.subtitles", desc = "uv.ui.subtitles.desc", convar = "unitvehicle_subtitles" },

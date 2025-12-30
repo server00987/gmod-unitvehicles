@@ -1,3 +1,5 @@
+UV.RegisterHUD( "mostwanted", "NFS: Most Wanted", true )
+
 local _last_backup_pulse_second = 0
 
 UV_UI.racing.mostwanted = UV_UI.racing.mostwanted or {}

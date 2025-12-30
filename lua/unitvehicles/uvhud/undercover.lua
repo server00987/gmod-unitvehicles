@@ -1,3 +1,5 @@
+UV.RegisterHUD( "undercover", "NFS: Undercover", true )
+
 local function DrawScaledCenteredTextLines(text, font, x, y, color, scale)
     surface.SetFont(font)
     local lines = string.Explode("\n", text)

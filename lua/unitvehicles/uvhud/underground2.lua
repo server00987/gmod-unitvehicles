@@ -1,3 +1,5 @@
+UV.RegisterHUD( "underground2", "NFS: Underground 2" )
+
 UV_UI.racing.underground2 = UV_UI.racing.underground2 or {}
 
 UV_UI.racing.underground2.states = {

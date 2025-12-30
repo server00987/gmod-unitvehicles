@@ -1,3 +1,5 @@
+UV.RegisterHUD( "prostreet", "NFS: ProStreet" )
+
 UV_UI.racing.prostreet = UV_UI.racing.prostreet or {}
 
 local function prostreet_racing_main( ... )

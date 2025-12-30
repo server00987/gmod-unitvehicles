@@ -1,3 +1,5 @@
+UV.RegisterHUD( "carbon", "NFS: Carbon", true )
+
 UV_UI.racing.carbon = UV_UI.racing.carbon or {}
 UV_UI.pursuit.carbon = UV_UI.pursuit.carbon or {}
 

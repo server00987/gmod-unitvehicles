@@ -1,3 +1,5 @@
+UV = UV or {}
+
 UVColors = {
     -- Original HUD
     ["Original_LocalPlayer"] = Color(255, 217, 0),
@@ -501,7 +503,6 @@ if CLIENT then
     end
 	
 	local HUDCountdownTick = nil
-
 end
 
 function Carbon_FormatRaceTime(curTime)
@@ -1123,3 +1124,15 @@ local function onEvent(type, eventName, ...)
 end
 
 hook.Add( "UIEventHook", "UI_Event", onEvent )
+
+UV.HUDRegistry = UV.HUDRegistry or {}
+
+function UV.RegisterHUD(codename, displayname, isBackup)
+	if not codename or not displayname then return end
+
+	UV.HUDRegistry[codename] = {
+		codename = codename,
+		name = displayname,
+		backup = isBackup or false
+	}
+end

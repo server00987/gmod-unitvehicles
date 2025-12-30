@@ -1,3 +1,5 @@
+UV.RegisterHUD( "original", "Original", true )
+
 UV_UI.racing.original = UV_UI.racing.original or {}
 UV_UI.pursuit.original = UV_UI.pursuit.original or {}
 
