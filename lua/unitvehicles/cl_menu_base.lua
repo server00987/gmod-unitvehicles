@@ -11,9 +11,12 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 
 **New Features**
 - Added the *UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser*
+- Added the ability to reset in freeroam and in pursuits
 - AI Racers and Units will no longer rotate while mid-air
   |-- Only applies to Glide vehicles
 - The UV Menu and all fonts will now scale properly on all resolutions
+- Added the ability for the community to create custom HUDs
+ |-- These are automatically added to the UV Menu Settings
   
 **UV Menu**
 - Added new *AI Racer Manager*, *Traffic Manager* and *Credits* tabs
@@ -27,9 +30,12 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 **Changes**
 - Pursuit Breakers will now always trigger a call response
 - The *Vehicle Override* feature from the "Manager: AI Racers" tool (now present in the UV Menu) now supports infinite amount of racers
+- The Air Unit will now create dust effects depending on what surface it hovers over
+- Relentless AI Units will no longer know player hiding spots
 - UV Menu: The *FAQ* tab now sends you to a separate menu instance with categorized information
 - UV Menu: The *Addons* tab was moved to UV Settings
 - UV Menu: The *Freeze Cam* option no longer appears in the UV Menu while in a Multiplayer session
+- Updated various default Cop Chatter lines
 - Updated localizations
 
 **Fixes**
@@ -44,6 +50,7 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 - Fixed that invalid Subtitles sent the Pursuit Tech notification upwards
 - Fixed that clicking on a dropdown option outside the UV Menu, the menu would close if it was set to "Close on Unfocus"
 - Fixed a lag spike when pursuit music plays for the first time
+- Fixed that Pursuit Breakers sometimes did not wreck Units
 
 **[ Patch 1 v0.39.1 - December 17th 2025 ]**
 # New Features
