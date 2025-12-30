@@ -521,50 +521,72 @@ if SERVER then
     
     function UVResetPosition( vehicle )
         -- Check if vehicle is a race participant
-        if not table.HasValue( UVRaceCurrentParticipants, vehicle ) then return end
-        if not UVRaceInProgress then return end
+       -- if not table.HasValue( UVRaceCurrentParticipants, vehicle ) then return end
+       -- if not UVRaceInProgress then return end
         
-        local entry = UVRaceTable.Participants [vehicle]
-        if not entry then return end
+        -- local entry = UVRaceTable.Participants [vehicle]
+        -- if not entry then return end
         
         if vehicle.hasreset then return end
         
         local vehicle_class = vehicle:GetClass()
         
-        local look_up_needle = # entry.Checkpoints
         local checkpoint = nil
         local next_checkpoint = nil
+        local pos = nil
+        local dir = nil
+        local ang = angle_zero
         
         -- Get last passed checkpoint
-        for _, v in pairs(ents.FindByClass("uvrace_checkpoint")) do
-            local id = v:GetID()
+        if not UVRaceInProgress or not table.HasValue( UVRaceCurrentParticipants, vehicle ) then
+            if not dvd then return end
+            local waypoint = dvd.GetNearestWaypoint( vehicle:GetPos() )
+
+            pos = waypoint.Target + ( vector_up * 20 )
+            ang = waypoint.Neighbors[1] and ( dvd.Waypoints[waypoint.Neighbors[1]].Target - waypoint.Target ):GetNormalized():Angle() or Angle(0)
+        else
+            local entry = UVRaceTable.Participants [vehicle]
+            if not entry then return end
+
+            local look_up_needle = # entry.Checkpoints
+
+            for _, v in pairs(ents.FindByClass("uvrace_checkpoint")) do
+                local id = v:GetID()
+                
+                if id == look_up_needle then
+                    checkpoint = v
+                elseif id == look_up_needle +1 then
+                    next_checkpoint = v
+                end
+            end
+
+            if not checkpoint then return end
+
+            pos = checkpoint:GetPos() + checkpoint:OBBCenter()
             
-            if id == look_up_needle then
-                checkpoint = v
-            elseif id == look_up_needle +1 then
-                next_checkpoint = v
+            if next_checkpoint then
+                local next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
+                ang = (next_pos - pos):GetNormalized():Angle()
             end
         end
         
-        if not checkpoint then return end
+        --if not checkpoint then return end
         
         -- Teleport to the checkpoint
         --PrintMessage( HUD_PRINTTALK, "Resetting position..." )
         
-        local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
-        local ground_trace = util.TraceLine({start = pos, endpos = pos +- (checkpoint:GetUp() * 1000), mask = MASK_NPCWORLDSTATIC, filter = {checkpoint}})
+        --local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
+        local ground_trace = util.TraceLine({start = pos, endpos = pos +- ((checkpoint and checkpoint:GetUp() or vector_origin) * 1000), mask = MASK_NPCWORLDSTATIC, filter = {checkpoint}})
         
         local next_pos = nil
         local next_dir = nil
         
-        local ang = Angle(0, 0, 0) 
-        
-        if next_checkpoint then
-            next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
-            next_dir = (next_pos - pos):GetNormalized()
+        -- if next_checkpoint then
+        --     next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
+        --     next_dir = (next_pos - pos):GetNormalized()
             
-            ang = next_dir:Angle()
-        end
+        --     ang = next_dir:Angle()
+        -- end
         
         if vehicle_class == "gmod_sent_vehicle_fphysics_base" then
             vehicle = UVTeleportSimfphysVehicle( vehicle, (ground_trace.Hit and ground_trace.HitPos) or pos, ang )
@@ -603,8 +625,8 @@ if SERVER then
                 return
             end
             
-            if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
-            if not UVRaceInProgress then return end
+           -- if not table.HasValue( UVRaceCurrentParticipants, car ) then return end
+           -- if not UVRaceInProgress then return end
             
             local key = "VehicleReset_"..car:EntIndex()
             if timer.Exists( key ) then return end

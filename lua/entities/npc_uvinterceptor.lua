@@ -558,7 +558,8 @@ if SERVER then
 				enemy_nearest_waypoint = dvd.GetNearestWaypoint( vectors )
 				friendly_nearest_waypoint = dvd.GetNearestWaypoint( friendly_position )
 
-				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 20 ) or Vector()
+				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
+				local enemy_waypoint_position = enemy_nearest_waypoint and enemy_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
 
 				if enemy_nearest_waypoint then
 					local friendly_waypoint_distance = friendly_nearest_waypoint and friendly_waypoint_position:DistToSqr( friendly_position ) or math.huge
@@ -566,10 +567,11 @@ if SERVER then
 					local comparison_value = ( dvd.WaypointSize or 200 ) ^ 4
 
 					local enemyTooFarFromWaypoint = enemy_waypoint_distance > comparison_value
+					local enemyCanSeeWaypoint = enemy_nearest_waypoint and UVStraightToWaypoint( vectors, enemy_waypoint_position )
 					local friendlyTooFarFromWaypoint = friendly_waypoint_distance > comparison_value
 					local friendlyCanSeeWaypoint = friendly_nearest_waypoint and UVStraightToWaypoint( friendly_position, friendly_waypoint_position )
 
-					local isInvalid = enemyTooFarFromWaypoint or not friendlyCanSeeWaypoint
+					local isInvalid = enemyTooFarFromWaypoint or not enemyCanSeeWaypoint or not friendlyCanSeeWaypoint
 					if isInvalid then enemy_nearest_waypoint = nil end
 				end
 			end
@@ -1532,7 +1534,7 @@ if SERVER then
 						if dist:LengthSqr() > fedist:LengthSqr() then
 							if fvectdot > 0 then
 								if UVCalm and fdist:LengthSqr() < 100000 then
-									throttle = 0
+									throttle = -1
 								elseif fdist:LengthSqr() < 100000 and enemyvelocity > 200000 and not self.formationpoint then
 									if selfvelocity > f.v:GetVelocity():LengthSqr() and fdist:Dot(forward) > 0 then
 										steer = steer * 0
