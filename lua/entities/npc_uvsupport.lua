@@ -1866,7 +1866,7 @@ if SERVER then
 		--Pick up a vehicle in the given sphere.
 		if self.vehicle then
 			local v = self.vehicle
-			if v.UnitVehicle then return end
+			if v.UnitVehicle and v.UnitVehicle:IsNPC() then return end
 			if v.IsScar then --If it's a SCAR.
 				if not v:HasDriver() then --If driver's seat is empty.
 					self.v = v
@@ -1917,52 +1917,52 @@ if SERVER then
 		else
 			local distance = DetectionRange:GetFloat()
 			for k, v in pairs(ents.FindInSphere(self:GetPos(), distance)) do
-				if v:GetClass() ~= 'prop_vehicle_prisoner_pod' and not v.UnitVehicle then
-					if v:IsVehicle() then
-						if v.IsScar then --If it's a SCAR.
-							if not v:HasDriver() then --If driver's seat is empty.
-								self.v = v
-								v.UVSupport = self
-								v.UnitVehicle = self
-								v.HasDriver = function() return true end --SCAR script assumes there's a driver.
-								v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
-								v:StartCar()
+				if v:GetClass() == 'prop_vehicle_prisoner_pod' then continue end
+				if v.UnitVehicle and v.UnitVehicle:IsNPC() then continue end
+				if v:IsVehicle() then
+					if v.IsScar then --If it's a SCAR.
+						if not v:HasDriver() then --If driver's seat is empty.
+							self.v = v
+							v.UVSupport = self
+							v.UnitVehicle = self
+							v.HasDriver = function() return true end --SCAR script assumes there's a driver.
+							v.SpecialThink = function() end --Tanks or something sometimes make errors so disable thinking.
+							v:StartCar()
+						end
+					elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
+						if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
+							self.v = v
+							v.UVSupport = self
+							v.UnitVehicle = self
+							v:SetActive(true)
+							v:StartEngine()
+							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+								v:SetLightsEnabled(true)
 							end
-						elseif v.IsSimfphyscar and v:IsInitialized() then --If it's a Simfphys Vehicle.
-							if not IsValid(v:GetDriver()) then --Fortunately, Simfphys Vehicles can use GetDriver()
-								self.v = v
-								v.UVSupport = self
-								v.UnitVehicle = self
-								v:SetActive(true)
-								v:StartEngine()
-								if GetConVar("unitvehicle_enableheadlights"):GetBool() then
-									v:SetLightsEnabled(true)
-								end
-								v:SetBulletProofTires(true)
+							v:SetBulletProofTires(true)
+						end
+					elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
+						if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
+							self.v = v
+							v.UVSupport = self
+							v.UnitVehicle = self
+							v:EnableEngine(true)
+							v:StartEngine(true)
+						end
+					elseif v.IsGlideVehicle then --Glide
+						if not IsValid(v:GetDriver()) then
+							self.v = v
+							v.UVSupport = self
+							v.UnitVehicle = self
+							v:TurnOn()
+							v.inputThrottleModifierMode = 2
+							v.AirControlForce = vector_origin
+							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+								v:SetHeadlightState(1)
 							end
-						elseif isfunction(v.EnableEngine) and isfunction(v.StartEngine) and not v.IsGlideVehicle then --Normal vehicles should use these functions. (SCAR and Simfphys cannot.)
-							if isfunction(v.GetWheelCount) and v:GetWheelCount() and not IsValid(v:GetDriver()) then
-								self.v = v
-								v.UVSupport = self
-								v.UnitVehicle = self
-								v:EnableEngine(true)
-								v:StartEngine(true)
-							end
-						elseif v.IsGlideVehicle then --Glide
-							if not IsValid(v:GetDriver()) then
-								self.v = v
-								v.UVSupport = self
-								v.UnitVehicle = self
-								v:TurnOn()
-								v.inputThrottleModifierMode = 2
-								v.AirControlForce = vector_origin
-								if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
-									v:SetHeadlightState(1)
-								end
-								for k, v in pairs(v.wheels) do
-									if v.params then
-										v.params.isBulletProof = true
-									end
+							for k, v in pairs(v.wheels) do
+								if v.params then
+									v.params.isBulletProof = true
 								end
 							end
 						end
