@@ -2697,6 +2697,7 @@ else -- CLIENT Settings | HUD/Options
 	UVSelectedHeatTrack = 1
 	UVLastHeatChange = -math.huge
 
+	UVHeatLevel = 1
 	UVHUDWantedSuspects = {}
 
 	PursuitTable = {
