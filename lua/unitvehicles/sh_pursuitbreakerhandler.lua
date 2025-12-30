@@ -175,17 +175,18 @@ if SERVER then
                         car = object
                     end
                     
-                    --if not IsValid(car) then return end
+                    --On first hit
+                    if not IsValid(car) then return end
 
-                    -- local driver = car.UnitVehicle or car.TrafficVehicle
-                    
-                    -- if driver then
-                    --     if driver:IsNPC() then
-                    --         driver:Wreck()
-                    --     else
-                    --         UVPlayerWreck(car)
-                    --     end
-                    -- end
+                    local driver = car.UnitVehicle or car.TrafficVehicle
+                
+                    if driver then
+                        if driver:IsNPC() then
+                            driver:Wreck()
+                        else
+                            UVPlayerWreck(car)
+                        end
+                    end
                     
                 end
             end)
