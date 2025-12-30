@@ -1350,6 +1350,15 @@ if SERVER then
 
 		local ltimeout = (UVCooldownTimer+5)
 
+		--Wrecked vehicles
+		if next(UVWreckedVehicles) ~= nil then
+			for k, car in pairs(UVWreckedVehicles) do
+				if not IsValid(car) then
+					table.RemoveByValue(UVWreckedVehicles, car)
+				end
+			end
+		end
+
 		--Idle presence
 		if not UVTargeting and (UVPresenceMode) and uvIdleSpawning - CurTime() + 5 <= 0 then
 			HandleVehicleSpawning(true)
@@ -1777,15 +1786,6 @@ if SERVER then
 						net.WriteBool(v.inunitview)
 						net.Broadcast()
 					end
-				end
-			end
-		end
-
-		--Wrecked vehicles
-		if next(UVWreckedVehicles) ~= nil then
-			for k, car in pairs(UVWreckedVehicles) do
-				if not IsValid(car) then
-					table.RemoveByValue(UVWreckedVehicles, car)
 				end
 			end
 		end
