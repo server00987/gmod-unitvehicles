@@ -3,14 +3,15 @@
 - Added the **UVPD Chevrolet Corvette Grand Sport (C7) Police Cruiser**
 - Added the ability to reset in freeroam and in pursuits
 - AI Racers and Units will no longer rotate while mid-air
-  |-- Only applies to Glide vehicles
+> - Only applies to Glide vehicles
 - The UV Menu and all fonts will now scale properly on all resolutions
 - Added the ability for the community to create custom HUDs
- |-- These are automatically added to the UV Menu Settings
-  
+> - These are automatically added to the UV Menu Settings
+- Added Polish translations
+
 # UV Menu
 - Added new **AI Racer Manager**, **Traffic Manager** and **Credits** tabs
-  |-- Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
+> - Moved all of the "Manager: AI Racers" and "Manager: Traffic" settings to these tabs
 - Added new **Keybinds** tab inside the Settings instance
 - Added a **Timer** variable in the UV Menu, applied to the **Totaled** and **Race Invite** menus
 - Added a custom dropdown menu in the UV Menu, used by the **UVTrax Profile** and **HUD Types**

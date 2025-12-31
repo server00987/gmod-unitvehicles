@@ -18,6 +18,7 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 - The UV Menu and all fonts will now scale properly on all resolutions
 - Added the ability for the community to create custom HUDs
  |-- These are automatically added to the UV Menu Settings
+- Added Polish translations
   
 **UV Menu**
 - Added new *AI Racer Manager*, *Traffic Manager* and *Credits* tabs
