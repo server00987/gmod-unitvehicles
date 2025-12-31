@@ -1,5 +1,20 @@
 local files, _ = file.Find("unitvehicles/*.lua", "LUA")
 
+UV = UV or {}
+UV.HUDRegistry = UV.HUDRegistry or {}
+
+if CLIENT then
+	function UV.RegisterHUD(codename, displayname, isBackup)
+		if not codename or not displayname then return end
+
+		UV.HUDRegistry[codename] = {
+			codename = codename,
+			name = displayname,
+			backup = isBackup or false
+		}
+	end
+end
+
 for _, f in ipairs(files) do
     local path = "unitvehicles/" .. f
 

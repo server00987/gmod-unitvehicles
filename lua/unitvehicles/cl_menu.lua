@@ -77,6 +77,8 @@ local function BuildHUDComboLists()
     local mainHUDs = {}
     local backupHUDs = {}
 
+	-- PrintTable(UV.HUDRegistry)
+
     for _, hud in pairs(UV.HUDRegistry or {}) do
 		table.insert(mainHUDs, {
 			hud.name,       -- display text
@@ -119,19 +121,6 @@ UVMenu.Main = function()
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
-				-- { type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = {
-						-- { "Crash Time - Undercover", "ctu"} ,
-						-- { "NFS Most Wanted", "mostwanted"} ,
-						-- { "NFS Carbon", "carbon"} ,
-						-- { "NFS Underground", "underground"} ,
-						-- { "NFS Underground 2", "underground2"} ,
-						-- { "NFS Undercover", "undercover"} ,
-						-- { "NFS ProStreet", "prostreet"} ,
-						-- { "NFS World", "world"} ,
-						-- { "#uv.ui.original", "original"} ,
-						-- { "#uv.ui.none", "" }
-					-- },
-				-- },
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
@@ -276,6 +265,8 @@ end
 
 -- Settings
 UVMenu.Settings = function()
+	local mainHUDList, backupHUDList = BuildHUDComboLists()
+
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.settings"),
 		Width  = UV.ScaleW(1540),

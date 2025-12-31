@@ -1124,15 +1124,3 @@ local function onEvent(type, eventName, ...)
 end
 
 hook.Add( "UIEventHook", "UI_Event", onEvent )
-
-UV.HUDRegistry = UV.HUDRegistry or {}
-
-function UV.RegisterHUD(codename, displayname, isBackup)
-	if not codename or not displayname then return end
-
-	UV.HUDRegistry[codename] = {
-		codename = codename,
-		name = displayname,
-		backup = isBackup or false
-	}
-end
