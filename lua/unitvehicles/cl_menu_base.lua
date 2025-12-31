@@ -3,9 +3,9 @@ UVMenu = UVMenu or {}
 UV.SettingsTable = UV.SettingsTable or {}
 
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.39.2" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v0.40.0" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
-# -- [ Update v0.39.2 ] --
+# -- [ Update v0.40.0 ] --
 
 **The final stretch!**
 We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still, and we hope to keep receiving feedback until then.
