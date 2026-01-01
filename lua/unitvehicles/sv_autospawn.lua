@@ -790,7 +790,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
-				if UVUPursuitTech_RepairKit:GetBool() then
+				if UVUPursuitTech_RepairKit:GetBool() and Ent.uvclasstospawnon ~= "npc_uvcommander" then
 					table.insert(pool, "Repair Kit")
 				end
 				if UVUPursuitTech_ShockRam:GetBool() then
@@ -1146,7 +1146,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
-				if UVUPursuitTech_RepairKit:GetBool() then
+				if UVUPursuitTech_RepairKit:GetBool() and Ent.uvclasstospawnon ~= "npc_uvcommander" then
 					table.insert(pool, "Repair Kit")
 				end
 				if UVUPursuitTech_ShockRam:GetBool() then
@@ -1378,7 +1378,7 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 				if UVUPursuitTech_Killswitch:GetBool() then
 					table.insert(pool, "Killswitch")
 				end
-				if UVUPursuitTech_RepairKit:GetBool() then
+				if UVUPursuitTech_RepairKit:GetBool() and Ent.uvclasstospawnon ~= "npc_uvcommander" then
 					table.insert(pool, "Repair Kit")
 				end
 				if UVUPursuitTech_ShockRam:GetBool() then
