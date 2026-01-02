@@ -1,6 +1,7 @@
 AddCSLuaFile()
 
-local dvd = DecentVehicleDestination
+include "autorun/uvws.lua"
+local uvws = UnitVehiclesWaypointsSystem
 
 local temp_keybinds = {
     [KEY_T] = 1,
@@ -393,10 +394,21 @@ if SERVER then
         local uvspawnpointwaypoint
         local uvspawnpointangles
         
-	    if next(dvd.Waypoints) == nil then
-	    	PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+	    if next(uvws.Waypoints) == nil then
+		local dir = "unitvehicles/waypoints/"
+    	local path = dir .. game.GetMap()
+    	UVLoadWaypoints(path)
+	    	timer.Simple(1, function()
+	    		if next(uvws.Waypoints) == nil then
+	    			if not UVNoUVWaypointsNotify then
+	    				UVNoUVWaypointsNotify = true
+	    				PrintMessage( HUD_PRINTTALK, "There's no UV waypoints to spawn vehicles! Place some UV waypoints!")
+	    			end
+	    		end
+	    	end)
 	    	return
 	    end
+	    UVNoUVWaypointsNotify = nil
     
 	    if next(UVWantedTableVehicle) ~= nil then
 	    	local suspects = UVWantedTableVehicle
@@ -406,18 +418,18 @@ if SERVER then
 	    	enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 	    	suspectvelocity = suspect:GetVelocity()
 	    elseif not playercontrolled then
-	    	enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
+	    	enemylocation = uvws.Waypoints[math.random(#uvws.Waypoints)]["Target"] + Vector(0, 0, 50)
 	    else
 	    	enemylocation = ply:GetPos() + Vector(0, 0, 50)
 	    end
     
-	    local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
+	    local enemywaypoint = uvws.GetNearestWaypoint(enemylocation)
 	    local enemywaypointgroup = enemywaypoint["Group"]
 	    local waypointtable = {}
 	    local prioritywaypointtable = {}
 	    local prioritywaypointtable2 = {}
 	    local prioritywaypointtable3 = {}
-	    for k, v in ipairs(dvd.Waypoints) do
+	    for k, v in ipairs(uvws.Waypoints) do
 	    	local Waypoint = v["Target"]
 	    	local distance = enemylocation - Waypoint
 	    	local vect = distance:GetNormalized()
@@ -452,11 +464,11 @@ if SERVER then
 	    	uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
 	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
 	    else
-	    	uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
+	    	uvspawnpointwaypoint = uvws.Waypoints[math.random(#uvws.Waypoints)]
 	    	uvspawnpoint = uvspawnpointwaypoint["Target"]
 	    end
 
-	    local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+	    local neighbor = uvws.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
 
 	    if neighbor then
 	    	local neighborpoint = neighbor["Target"]
@@ -539,11 +551,11 @@ if SERVER then
         
         -- Get last passed checkpoint
         if not UVRaceInProgress or not table.HasValue( UVRaceCurrentParticipants, vehicle ) then
-            if not dvd then return end
-            local waypoint = dvd.GetNearestWaypoint( vehicle:GetPos() )
+            if not uvws then return end
+            local waypoint = uvws.GetNearestWaypoint( vehicle:GetPos() )
 
             pos = waypoint.Target + ( vector_up * 20 )
-            ang = waypoint.Neighbors[1] and ( dvd.Waypoints[waypoint.Neighbors[1]].Target - waypoint.Target ):GetNormalized():Angle() or Angle(0)
+            ang = waypoint.Neighbors[1] and ( uvws.Waypoints[waypoint.Neighbors[1]].Target - waypoint.Target ):GetNormalized():Angle() or Angle(0)
         else
             local entry = UVRaceTable.Participants [vehicle]
             if not entry then return end

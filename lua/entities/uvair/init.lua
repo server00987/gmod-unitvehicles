@@ -9,7 +9,8 @@ local Relentless = GetConVar("unitvehicle_relentless")
 local Barrels = GetConVar("unitvehicle_unit_helicopterbarrels")
 local SpikeStrips = GetConVar("unitvehicle_unit_helicopterspikestrip")
 
-local dvd = DecentVehicleDestination
+include "autorun/uvws.lua"
+local uvws = UnitVehiclesWaypointsSystem
 
 local isenemyt = {
 	["npc_combine_s"] = true,
@@ -192,19 +193,19 @@ function ENT:OnRemove()
 end
 
 function ENT:FindPatrol()
-	if next(dvd.Waypoints) == nil then
+	if next(uvws.Waypoints) == nil then
 		return
 	end
 	
-	local Waypoint = dvd.GetNearestWaypoint(self:WorldSpaceCenter())
+	local Waypoint = uvws.GetNearestWaypoint(self:WorldSpaceCenter())
 	if Waypoint.Neighbors then
 		local WaypointTable = {}
 		for k, v in pairs(Waypoint.Neighbors) do
-			if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+			if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= uvws.Waypoints[v]["Target"] then
 				table.insert(WaypointTable, v)
 			end
 		end --Don't turn around
-		self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+		self.PatrolWaypoint = uvws.Waypoints[WaypointTable[math.random(#WaypointTable)]]
 	else
 		self.PatrolWaypoint = Waypoint
 	end
@@ -522,12 +523,12 @@ function ENT:PhysicsUpdate()
 					if self.PatrolWaypoint.Neighbors then
 						local WaypointTable = {}
 						for k, v in pairs(self.PatrolWaypoint.Neighbors) do
-							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= uvws.Waypoints[v]["Target"] then
 								table.insert(WaypointTable, v)
 							end
 						end --Don't turn around
 						self.PreviousPatrolWaypoint = self.PatrolWaypoint
-						self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+						self.PatrolWaypoint = uvws.Waypoints[WaypointTable[math.random(#WaypointTable)]]
 					else
 						self.PatrolWaypoint = nil
 					end

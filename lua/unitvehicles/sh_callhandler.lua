@@ -11,7 +11,8 @@ Type 4 = Street Racing
 • Commiting either of the crimes above with multiple potential suspects
 ]]
 
-local dvd = DecentVehicleDestination
+include "autorun/uvws.lua"
+local uvws = UnitVehiclesWaypointsSystem
 
 if SERVER then
 
@@ -100,7 +101,7 @@ if SERVER then
     end)
     
     function UVCheckForSpeeders()
-        if next(UVPotentialSuspects) == nil or next(dvd.Waypoints) == nil then return end
+        if next(UVPotentialSuspects) == nil or next(uvws.Waypoints) == nil then return end
         
         local SpeedTable = {}
         
@@ -113,8 +114,8 @@ if SERVER then
         local suspect = UVPotentialSuspects[fastestSpeeder]
         local speed = SpeedTable[fastestSpeeder]
         
-        if next(dvd.Waypoints) == nil then
-            local Waypoint = dvd.GetNearestWaypoint(suspect:WorldSpaceCenter())
+        if next(uvws.Waypoints) == nil then
+            local Waypoint = uvws.GetNearestWaypoint(suspect:WorldSpaceCenter())
             local speedLimitMph = Waypoint["SpeedLimit"]
             SpeedLimit = speedLimitMph^2
         else

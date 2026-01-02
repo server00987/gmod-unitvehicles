@@ -49,12 +49,12 @@ local function ImportData(folder)
         end
     end
     
-    -- DECENT VEHICLE WAYPOINTS --
-    local dvfiles, dvfolders = file.Find("data_static/uv_import/"..folder.."/uvdvwaypoints/*", "GAME")
+    -- UNIT VEHICLES WAYPOINTS --
+    local files, folders = file.Find("data_static/uv_import/"..folder.."/uvwaypoints/*", "GAME")
     
-    for _, filename in ipairs(dvfiles) do
-        local source = "data_static/uvdvwaypoints/" .. filename
-        local destination = "decentvehicle/" .. filename
+    for _, filename in ipairs(files) do
+        local source = "data_static/uvwaypoints/" .. filename
+        local destination = "unitvehicles/waypoints/" .. filename
         
         if !file.IsDir("decentvehicle", "DATA") then
             file.CreateDir("decentvehicle")

@@ -69,7 +69,8 @@ local UVUHelicopterBusting = GetConVar("unitvehicle_unit_helicopterbusting")
 -- local UVURoadblocks6 = GetConVar("unitvehicle_unit_roadblocks6")
 -- local UVUHelicopters6 = GetConVar("unitvehicle_unit_helicopters6")
 
-local dvd = DecentVehicleDestination
+include "autorun/uvws.lua"
+local uvws = UnitVehiclesWaypointsSystem
 
 NETWORK_STRINGS = {
 	-- Pursuit Tech
@@ -276,7 +277,7 @@ file.AsyncRead('unitvehicles/names/Names.json', 'DATA', function( _, _, status, 
 end, true)
 
 timer.Simple(5, function()
-	if not DecentVehicleDestination then
+	if not UnitVehiclesWaypointsSystem then
 		PrintMessage( HUD_PRINTTALK, "#uv.system.dvnotinstalled")
 	end
 	if not Glide then
@@ -3240,11 +3241,11 @@ end
 function UVNavigateDVWaypoint(self, vectors)
 	
 	if UVEnemyEscaping then
-		vectors = dvd.Waypoints[math.random(#dvd.Waypoints)].Target
+		vectors = uvws.Waypoints[math.random(#uvws.Waypoints)].Target
 	end
 	
-	local FromSelfToEnemy = dvd.GetRouteVector(self.v:GetPos(), vectors)
-	local FromEnemyToSelf = dvd.GetRouteVector(vectors, self.v:GetPos())
+	local FromSelfToEnemy = uvws.GetRouteVector(self.v:GetPos(), vectors)
+	local FromEnemyToSelf = uvws.GetRouteVector(vectors, self.v:GetPos())
 	
 	if not FromSelfToEnemy or not FromEnemyToSelf then
 		self.NavigateBlind = true

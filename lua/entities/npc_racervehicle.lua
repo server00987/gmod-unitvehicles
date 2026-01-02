@@ -17,7 +17,8 @@ ENT.Instruction = "Spawn on/under the vehicle until it shows a spawn effect."
 ENT.Spawnable = false
 ENT.Modelname = "models/props_lab/huladoll.mdl"
 
-local dvd = DecentVehicleDestination
+include "autorun/uvws.lua"
+local uvws = UnitVehiclesWaypointsSystem
 
 if SERVER then	
 	--Setting ConVars.
@@ -328,7 +329,7 @@ if SERVER then
 				)--GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
 				--local cansee = self:CanSeeGoal(target_pos)
 				
-				--local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+				--local nearest_waypoint = uvws.GetNearestWaypoint(self.v:WorldSpaceCenter())
 				
 				local velocity = self.v:GetVelocity()
 				--print(velocity:LengthSqr())
@@ -392,7 +393,7 @@ if SERVER then
 				-- 	}
 				-- else
 				-- 	-- Must utilize dvs
-				-- 	local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
+				-- 	local waypoints = uvws.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
 				
 				-- 	if waypoints and #waypoints > 0 then
 				-- 		self.PatrolWaypoint = waypoints[2]
@@ -404,26 +405,26 @@ if SERVER then
 			
 			
 		else
-			if next(dvd.Waypoints) == nil then
+			if next(uvws.Waypoints) == nil then
 				self.PatrolWaypoint = nil
 				return
 			end
 			
-			local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+			local Waypoint = uvws.GetNearestWaypoint(self.v:WorldSpaceCenter())
 			if Waypoint.Neighbors then --Keep going straight
-				self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+				self.PatrolWaypoint = uvws.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
 			else
 				self.PatrolWaypoint = Waypoint
 			end
 		end
 		
-		-- if next(dvd.Waypoints) == nil then
+		-- if next(uvws.Waypoints) == nil then
 		-- 	return
 		-- end
 		
-		-- local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		-- local Waypoint = uvws.GetNearestWaypoint(self.v:WorldSpaceCenter())
 		-- if Waypoint.Neighbors then --Keep going straight
-		-- 	self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+		-- 	self.PatrolWaypoint = uvws.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
 		-- else
 		-- 	self.PatrolWaypoint = Waypoint
 		-- end
@@ -438,7 +439,7 @@ if SERVER then
 		
 		self:FindRace()
 		
-		-- if next(dvd.Waypoints) == nil then
+		-- if next(uvws.Waypoints) == nil then
 		-- 	return
 		-- end
 		
