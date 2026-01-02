@@ -277,9 +277,6 @@ file.AsyncRead('unitvehicles/names/Names.json', 'DATA', function( _, _, status, 
 end, true)
 
 timer.Simple(5, function()
-	if not UnitVehiclesWaypointsSystem then
-		PrintMessage( HUD_PRINTTALK, "#uv.system.dvnotinstalled")
-	end
 	if not Glide then
 		PrintMessage( HUD_PRINTTALK, "#uv.system.glidenotinstalled")
 	end
