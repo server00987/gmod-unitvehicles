@@ -104,6 +104,33 @@ function ENT:Initialize()
 	
 	self:DrawShadow(true)
 	self.Scale = Vector(1,1,1)
+
+	self.canusespotlight = false
+
+	timer.Create("UVAirSpotlight" .. self:EntIndex(), 1, 0, function()
+		if not IsValid(self) then
+			return
+		end
+
+		if Headlights:GetInt() == 0 then
+			self.canusespotlight = false
+			return
+		elseif Headlights:GetInt() == 2 then
+			self.canusespotlight = true
+			return
+		end
+
+	    if not IsValid(self:GetTarget()) then 
+			self.canusespotlight = false
+			return 
+		end
+
+	    local c = render.ComputeLighting( self:GetTarget():GetPos(), Vector( 0, 0, 1 ) )
+	    local avg = ( c[1] * 0.2126 ) + ( c[2] * 0.7152 ) + ( c[3] * 0.0722 ) -- Luminosity method
+	    local shouldBeOn = Either( self.canusespotlight, avg < 1.3, avg < 0.2 )
+
+	    self.canusespotlight = shouldBeOn
+	end)
 end
 
 function ENT:Draw()
@@ -130,7 +157,7 @@ function ENT:Draw()
 	local starboarddist = EyePos():Distance(starboardpos)
 	local sterndist = EyePos():Distance(sternpos)
 	
-	if IsValid(self:GetTarget()) and Headlights:GetBool() and spotdist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
+	if IsValid(self:GetTarget()) and self.canusespotlight and spotdist<10000 and util.TraceLine({start = EyePos(),endpos = spotpos,filter = LocalPlayer(),mask = MASK_OPAQUE}).Fraction==1 then
 		mat:SetInt("$ignorez",0)
 		
 			render.SetMaterial(mat)
@@ -195,7 +222,7 @@ function ENT:Think()
 	self.RotorSound4:ChangePitch(self.RotorSound:GetPitch(),1)
 	
 	self.Spotlight:SetPos(LocalToWorld(self.SpotlightPos*self.Scale,Angle(),self:GetPos(),self:GetAngles()))
-	if IsValid(self:GetTarget()) and Headlights:GetBool() then
+	if IsValid(self:GetTarget()) and self.canusespotlight then
 		self.Spotlight:SetBrightness(10)
 		self.Spotlight:SetAngles((self:GetTargetPos()-self.Spotlight:GetPos()):Angle())
 	else
