@@ -2,6 +2,8 @@ AddCSLuaFile()
 
 MAX_HEAT_LEVEL = 10 -- You could theoretically change this :)
 
+local dvd = DecentVehicleDestination
+
 -- wait a few seconds :^)
 timer.Simple(5, function()
 	physenv.SetPerformanceSettings(
@@ -797,7 +799,7 @@ LOCAL_CONVARS = {
 	["unitvehicle_enableheadlights"] = 'integer',
 	["unitvehicle_relentless"] = 'integer',
 	["unitvehicle_spawnmainunits"] = 'integer',
-	["unitvehicle_waypointspriority"] = 'integer',
+	["unitvehicle_dvwaypointspriority"] = 'integer',
 	--["unitvehicle_pursuitthemeplayrandomheat"] = 'integer',
 	["unitvehicle_repaircooldown"] = 'integer',
 	["unitvehicle_repairrange"] = 'integer',
@@ -1036,7 +1038,7 @@ if SERVER then
 	MinHeatLevel = CreateConVar("unitvehicle_minheatlevel", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
 	MaxHeatLevel = CreateConVar("unitvehicle_maxheatlevel", 6, {FCVAR_ARCHIVE}, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
 	SpikeStripDuration = CreateConVar("unitvehicle_spikestripduration", 20, {FCVAR_ARCHIVE}, "Unit Vehicle: Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
-	Pathfinding = CreateConVar("unitvehicle_pathfinding", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units uses A* pathfinding algorithm on navmesh/UV Waypoints to navigate. Impacts computer performance.")
+	Pathfinding = CreateConVar("unitvehicle_pathfinding", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units uses A* pathfinding algorithm on navmesh/Decent Vehicle Waypoints to navigate. Impacts computer performance.")
 	VCModELSPriority = CreateConVar("unitvehicle_vcmodelspriority", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units using base HL2 vehicles will attempt to use VCMod ELS over Photon if both are installed.")
 	CallResponse = CreateConVar("unitvehicle_callresponse", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will spawn and respond to the location regarding various calls.")
 	ChatterText = CreateConVar("unitvehicle_chattertext", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units' radio chatter will be displayed in the chatbox instead.")
@@ -1046,7 +1048,7 @@ if SERVER then
 	UseNitrousUnit = CreateConVar("unitvehicle_usenitrousunit", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
 	CustomizeRacer = CreateConVar("unitvehicle_customizeracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: Randomizes color/skin/bodygroups when spawning AI Racers")
 	SpawnMainUnits = CreateConVar("unitvehicle_spawnmainunits", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
-	WaypointsPriority = CreateConVar("unitvehicle_waypointspriority", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will attempt to navigate on UV Waypoints FIRST instead of navmesh (if both are installed).")
+	DVWaypointsPriority = CreateConVar("unitvehicle_dvwaypointspriority", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	RepairCooldown = CreateConVar("unitvehicle_repaircooldown", 60, {FCVAR_ARCHIVE}, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateConVar("unitvehicle_repairrange", 100, {FCVAR_ARCHIVE}, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
 	RacerTags = CreateConVar("unitvehicle_racertags", 1, {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
@@ -2600,7 +2602,7 @@ else -- CLIENT Settings | HUD/Options
 	UseNitrousUnit = CreateClientConVar("unitvehicle_usenitrousunit", 0, true, false, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
 	CustomizeRacer = CreateClientConVar("unitvehicle_customizeracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: Randomizes color/skin/bodygroups when spawning AI Racers")
 	SpawnMainUnits = CreateClientConVar("unitvehicle_spawnmainunits", 1, true, false, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
-	WaypointsPriority = CreateClientConVar("unitvehicle_waypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
+	DVWaypointsPriority = CreateClientConVar("unitvehicle_dvwaypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
 	RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
 	RepairRange = CreateClientConVar("unitvehicle_repairrange", 100, true, false, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
 	RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")

@@ -17,8 +17,7 @@ ENT.Instruction = "Spawn on/under the vehicle until it shows a spawn effect."
 ENT.Spawnable = false
 ENT.Modelname = "models/props_lab/huladoll.mdl"
 
-include "autorun/uvws.lua"
-local uvws = UnitVehiclesWaypointsSystem
+local dvd = DecentVehicleDestination
 
 if SERVER then	
 	--Setting ConVars.
@@ -35,7 +34,7 @@ if SERVER then
 	local HeatLevels = GetConVar("unitvehicle_heatlevels")
 	local Relentless = GetConVar("unitvehicle_relentless")
 	local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
-	local WaypointsPriority = GetConVar("unitvehicle_waypointspriority")
+	local DVWaypointsPriority = GetConVar("unitvehicle_dvwaypointspriority")
 	local OptimizeRespawn = GetConVar("unitvehicle_optimizerespawn") 
 	
 	function ENT:OnRemove()
@@ -576,15 +575,15 @@ if SERVER then
 			self.NavigateCooldown = nil 
 		end)
 		
-		if WaypointsPriority:GetBool() then
+		if DVWaypointsPriority:GetBool() then
 			local enemy_nearest_waypoint = nil
 			local friendly_nearest_waypoint = nil
 
-			if uvws then
+			if dvd then
 				local friendly_position = self.v:WorldSpaceCenter()
 
-				enemy_nearest_waypoint = uvws.GetNearestWaypoint( vectors )
-				friendly_nearest_waypoint = uvws.GetNearestWaypoint( friendly_position )
+				enemy_nearest_waypoint = dvd.GetNearestWaypoint( vectors )
+				friendly_nearest_waypoint = dvd.GetNearestWaypoint( friendly_position )
 
 				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
 				local enemy_waypoint_position = enemy_nearest_waypoint and enemy_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
@@ -592,7 +591,7 @@ if SERVER then
 				if enemy_nearest_waypoint then
 					local friendly_waypoint_distance = friendly_nearest_waypoint and friendly_waypoint_position:DistToSqr( friendly_position ) or math.huge
 					local enemy_waypoint_distance = enemy_nearest_waypoint.Target:DistToSqr(vectors)
-					local comparison_value = ( uvws.WaypointSize or 200 ) ^ 4
+					local comparison_value = ( dvd.WaypointSize or 200 ) ^ 4
 
 					local enemyTooFarFromWaypoint = enemy_waypoint_distance > comparison_value
 					local enemyCanSeeWaypoint = enemy_nearest_waypoint and UVStraightToWaypoint( vectors, enemy_waypoint_position )
@@ -737,13 +736,13 @@ if SERVER then
 		
 	function ENT:FindPatrol()
 		
-		if next(uvws.Waypoints) == nil then
+		if next(dvd.Waypoints) == nil then
 			return
 		end
 		
-		local Waypoint = uvws.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 		if UVTargeting and Waypoint.Neighbors then --Keep going straight whilst in pursuit
-			self.PatrolWaypoint = uvws.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
+			self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
 		else
 			self.PatrolWaypoint = Waypoint
 		end
@@ -752,7 +751,7 @@ if SERVER then
 	
 	function ENT:Patrol()
 		
-		if next(uvws.Waypoints) == nil then
+		if next(dvd.Waypoints) == nil then
 			return
 		end
 		
@@ -920,12 +919,12 @@ if SERVER then
 					if self.PatrolWaypoint.Neighbors then
 						local WaypointTable = {}
 						for k, v in pairs(self.PatrolWaypoint.Neighbors) do
-							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= uvws.Waypoints[v]["Target"] then
+							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
 								table.insert(WaypointTable, v)
 							end
 						end --Don't turn around
 						self.PreviousPatrolWaypoint = self.PatrolWaypoint
-						self.PatrolWaypoint = uvws.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+						self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
 					else
 						self.PatrolWaypoint = nil
 					end

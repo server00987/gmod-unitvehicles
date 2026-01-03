@@ -1,5 +1,14 @@
 AddCSLuaFile()
 
+local dvd = DecentVehicleDestination
+local TurnOnLights = dvd.CVars.TurnOnLights
+local LIGHTLEVEL = {
+	NONE = 0,
+	RUNNING = 1,
+	HEADLIGHTS = 2,
+	ALL = 3,
+}
+
 local function GetPhoton2Siren(vehicle)
 	local pc = vehicle:GetPhotonControllerFromAncestor()
     if IsValid(pc) and pc.CurrentProfile.Siren then
@@ -223,6 +232,44 @@ function ENT:GetEngineStarted(v)
 	end
 end
 
+function ENT:SetRunningLights(on)
+	local lightlevel = TurnOnLights:GetInt()
+	on = on and lightlevel ~= LIGHTLEVEL.NONE
+	if on == self:GetRunningLights() then return end
+	if self.v.IsScar then
+	elseif self.v.IsSimfphyscar then
+		self.SimfphysRunningLights = on
+		self.v:SetFogLightsEnabled(not on)
+		numpad.Activate(self, KEY_V, false)
+		self.keystate = nil
+	elseif vcmod_main
+	and isfunction(self.v.VC_setRunningLights) then
+		self.v:VC_setRunningLights(on)
+	elseif Photon2
+    and isfunction(self.v.GetPhotonControllerFromAncestor) then
+        local pc = self.v:GetPhotonControllerFromAncestor()
+        if IsValid(pc) and on then
+            pc:SetChannelMode("Vehicle.Lights", "AUTO")
+        end
+	end
+end
+
+function ENT:SetFogLights(on)
+	local lightlevel = TurnOnLights:GetInt()
+	on = on and lightlevel == LIGHTLEVEL.ALL
+	if on == self:GetFogLights() then return end
+	if self.v.IsScar then
+	elseif self.v.IsSimfphyscar then
+		self.SimfphysFogLights = on
+		self.v:SetFogLightsEnabled(not on)
+		numpad.Activate(self, KEY_V, false)
+		self.keystate = nil
+	elseif vcmod_main
+	and isfunction(self.v.VC_setFogLights) then
+		self.v:VC_setFogLights(on)
+	end
+end
+
 local function SCAREmulateKey(self, key, state, func, ...)
 	local dummy = player.GetByID(1)
 	local dummyinput = dummy.ScarSpecialKeyInput
@@ -232,6 +279,57 @@ local function SCAREmulateKey(self, key, state, func, ...)
 	if isfunction(func) then func(self.v, ...) end
 	self.v.AIController = controller
 	dummy.ScarSpecialKeyInput = dummyinput
+end
+
+function ENT:SetLights(on, highbeams)
+	local lightlevel = TurnOnLights:GetInt()
+	on = on and lightlevel >= LIGHTLEVEL.HEADLIGHTS
+	if self.v.IsScar then
+		if on == self:GetLights() then return end
+		self.v.IncreaseFrontLightCol = not on
+		SCAREmulateKey(self, "ToggleHeadlights", 3, self.v.UpdateLights)
+	elseif self.v.IsSimfphyscar then
+		local LightsActivated = self:GetLights()
+		if on ~= LightsActivated then
+			self.v.LightsActivated = not on
+			self.v.KeyPressedTime = CurTime() - .23
+			numpad.Deactivate(self, KEY_F, false)
+		end
+		
+		if on and highbeams ~= self:GetLights(true) then
+			self.v.LampsActivated = not highbeams
+			self.v.KeyPressedTime = CurTime()
+			if LightsActivated then
+				numpad.Deactivate(self, KEY_F, false)
+			else
+				timer.Simple(.05, function()
+					if not (IsValid(self) and IsValid(self.v)) then return end
+					numpad.Deactivate(self, KEY_F, false)
+				end)
+			end
+		end
+		
+		self.keystate = nil
+	elseif vcmod_main
+	and isfunction(self.v.VC_setHighBeams)
+	and isfunction(self.v.VC_setLowBeams) then
+		if on == self:GetLights(highbeams) then return end
+		if highbeams then
+			self.v:VC_setHighBeams(on)
+		else
+			self.v:VC_setLowBeams(on)
+		end
+	elseif Photon
+	and isfunction(self.v.ELS_IllumOn)
+	and isfunction(self.v.ELS_IllumOff)
+	and isfunction(self.v.ELS_Illuminate) then
+		if on == self:GetLights(highbeams) then return end
+		if on then
+			self.v:ELS_IllumOn()
+		else
+			self.v:ELS_IllumOff()
+		end
+	end
 end
 
 local SIMFPHYS = {OFF = 0, HAZARD = 1, LEFT = 2, RIGHT = 3}

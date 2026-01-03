@@ -1,5 +1,4 @@
-include "autorun/uvws.lua"
-local uvws = UnitVehiclesWaypointsSystem
+local dvd = DecentVehicleDestination
 
 --SIMFPHYS ONLY--
 
@@ -364,19 +363,14 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 	-- 	enemylocation = (suspect:GetPos()+ (vector_up * 50))
 	-- end
 	
-	if next(uvws.Waypoints) == nil then
-		UVLoadWaypoints("unitvehicles/waypoints/" .. game.GetMap())
-		timer.Simple(1, function()
-			if next(uvws.Waypoints) == nil then
-				if not UVNoUVWaypointsNotify then
-					UVNoUVWaypointsNotify = true
-					PrintMessage( HUD_PRINTTALK, "There's no UV waypoints to spawn vehicles! Place some UV waypoints!")
-				end
-			end
-		end)
+	if next(dvd.Waypoints) == nil then
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	end
-	UVNoUVWaypointsNotify = nil
+	UVNoDVWaypointsNotify = nil
 	
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
@@ -386,18 +380,18 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 		suspectvelocity = suspect:GetVelocity()
 	elseif not playercontrolled then
-		enemylocation = uvws.Waypoints[math.random(#uvws.Waypoints)]["Target"] + Vector(0, 0, 50)
+		enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
 	else
 		enemylocation = ply:GetPos() + Vector(0, 0, 50)
 	end
 	
-	local enemywaypoint = uvws.GetNearestWaypoint(enemylocation)
+	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
 	local enemywaypointgroup = enemywaypoint["Group"]
 	local waypointtable = {}
 	local prioritywaypointtable = {}
 	local prioritywaypointtable2 = {}
 	local prioritywaypointtable3 = {}
-	for k, v in ipairs(uvws.Waypoints) do
+	for k, v in ipairs(dvd.Waypoints) do
 		local Waypoint = v["Target"]
 		local distance = enemylocation - Waypoint
 		local vect = distance:GetNormalized()
@@ -432,11 +426,11 @@ function UVAutoSpawn(ply, rhinoattack, helicopter, playercontrolled, commanderre
 		uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	else
-		uvspawnpointwaypoint = uvws.Waypoints[math.random(#uvws.Waypoints)]
+		uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	end
 
-	local neighbor = uvws.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+	local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
 
 	if neighbor then
 		local neighborpoint = neighbor["Target"]
@@ -1477,19 +1471,14 @@ function UVAutoSpawnTraffic()
 	local suspect
 	local suspectvelocity = Vector(0,0,0)
 	
-	if next(uvws.Waypoints) == nil then
-		UVLoadWaypoints("unitvehicles/waypoints/" .. game.GetMap())
-		timer.Simple(1, function()
-			if next(uvws.Waypoints) == nil then
-				if not UVNoUVWaypointsNotify then
-					UVNoUVWaypointsNotify = true
-					PrintMessage( HUD_PRINTTALK, "There's no UV waypoints to spawn vehicles! Place some UV waypoints!")
-				end
-			end
-		end)
+	if next(dvd.Waypoints) == nil then
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	end
-	UVNoUVWaypointsNotify = nil
+	UVNoDVWaypointsNotify = nil
 	
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
@@ -1499,14 +1488,14 @@ function UVAutoSpawnTraffic()
 		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 		suspectvelocity = suspect:GetVelocity()
 	elseif not playercontrolled then
-		enemylocation = uvws.Waypoints[math.random(#uvws.Waypoints)]["Target"] + Vector(0, 0, 50)
+		enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
 	else
 		enemylocation = ply:GetPos() + Vector(0, 0, 50)
 	end
 	
-	local enemywaypoint = uvws.GetNearestWaypoint(enemylocation)
+	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
 	local waypointtable = {}
-	for k, v in ipairs(uvws.Waypoints) do
+	for k, v in ipairs(dvd.Waypoints) do
 		local Waypoint = v["Target"]
 		local distance = enemylocation - Waypoint
 		local vect = distance:GetNormalized()
@@ -1520,11 +1509,11 @@ function UVAutoSpawnTraffic()
 		uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	else
-		uvspawnpointwaypoint = uvws.Waypoints[math.random(#uvws.Waypoints)]
+		uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	end
 
-	local neighbor = uvws.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+	local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
 
 	if neighbor then
 		local neighborpoint = neighbor["Target"]
@@ -2118,19 +2107,14 @@ function UVAutoSpawnRacer()
 	local suspect
 	local suspectvelocity = Vector(0,0,0)
 	
-	if next(uvws.Waypoints) == nil then
-		UVLoadWaypoints("unitvehicles/waypoints/" .. game.GetMap())
-		timer.Simple(1, function()
-			if next(uvws.Waypoints) == nil then
-				if not UVNoUVWaypointsNotify then
-					UVNoUVWaypointsNotify = true
-					PrintMessage( HUD_PRINTTALK, "There's no UV waypoints to spawn vehicles! Place some UV waypoints!")
-				end
-			end
-		end)
+	if next(dvd.Waypoints) == nil then
+		if not UVNoDVWaypointsNotify then
+			UVNoDVWaypointsNotify = true
+			PrintMessage( HUD_PRINTTALK, "There's no Decent Vehicle waypoints to spawn vehicles! Download Decent Vehicle (if you haven't) and place some waypoints!")
+		end
 		return
 	end
-	UVNoUVWaypointsNotify = nil
+	UVNoDVWaypointsNotify = nil
 	
 	if next(UVWantedTableVehicle) ~= nil then
 		local suspects = UVWantedTableVehicle
@@ -2140,14 +2124,14 @@ function UVAutoSpawnRacer()
 		enemylocation = (suspect:GetPos() + Vector(0, 0, 50))
 		suspectvelocity = suspect:GetVelocity()
 	elseif not playercontrolled then
-		enemylocation = uvws.Waypoints[math.random(#uvws.Waypoints)]["Target"] + Vector(0, 0, 50)
+		enemylocation = dvd.Waypoints[math.random(#dvd.Waypoints)]["Target"] + Vector(0, 0, 50)
 	else
 		enemylocation = ply:GetPos() + Vector(0, 0, 50)
 	end
 	
-	local enemywaypoint = uvws.GetNearestWaypoint(enemylocation)
+	local enemywaypoint = dvd.GetNearestWaypoint(enemylocation)
 	local waypointtable = {}
-	for k, v in ipairs(uvws.Waypoints) do
+	for k, v in ipairs(dvd.Waypoints) do
 		local Waypoint = v["Target"]
 		local distance = enemylocation - Waypoint
 		local vect = distance:GetNormalized()
@@ -2161,11 +2145,11 @@ function UVAutoSpawnRacer()
 		uvspawnpointwaypoint = waypointtable[math.random(#waypointtable)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	else
-		uvspawnpointwaypoint = uvws.Waypoints[math.random(#uvws.Waypoints)]
+		uvspawnpointwaypoint = dvd.Waypoints[math.random(#dvd.Waypoints)]
 		uvspawnpoint = uvspawnpointwaypoint["Target"]
 	end
 
-	local neighbor = uvws.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
+	local neighbor = dvd.Waypoints[uvspawnpointwaypoint.Neighbors[math.random(#uvspawnpointwaypoint.Neighbors)]]
 
 	if neighbor then
 		local neighborpoint = neighbor["Target"]

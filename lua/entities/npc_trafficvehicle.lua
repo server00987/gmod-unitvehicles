@@ -17,8 +17,7 @@ ENT.Instruction = "Spawn on/under the vehicle until it shows a spawn effect."
 ENT.Spawnable = false
 ENT.Modelname = "models/props_lab/huladoll.mdl"
 
-include "autorun/uvws.lua"
-local uvws = UnitVehiclesWaypointsSystem
+local dvd = DecentVehicleDestination
 
 if SERVER then	
 	--Setting ConVars.
@@ -26,7 +25,7 @@ if SERVER then
 	local CanWreck = GetConVar("unitvehicle_canwreck")
 	local OptimizeRespawn = GetConVar("unitvehicle_optimizerespawn")
 	local SpeedLimit = GetConVar("unitvehicle_speedlimit")
-	local WaypointsPriority = GetConVar("unitvehicle_waypointspriority")
+	local DVWaypointsPriority = GetConVar("unitvehicle_dvwaypointspriority")
 	local OptimizeRespawn = GetConVar("unitvehicle_optimizerespawn") 
 	
 	function ENT:OnRemove()
@@ -316,19 +315,19 @@ if SERVER then
 
 	function ENT:FindPatrol()
 
-		if next(uvws.Waypoints) == nil then
+		if next(dvd.Waypoints) == nil then
 			return
 		end
 
-		local Waypoint = uvws.GetNearestWaypoint(self.v:WorldSpaceCenter())
+		local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
 		if Waypoint.Neighbors then
 			local WaypointTable = {}
 			for k, v in pairs(Waypoint.Neighbors) do
-				if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= uvws.Waypoints[v]["Target"] then
+				if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
 					table.insert(WaypointTable, v)
 				end
 			end --Don't turn around
-			self.PatrolWaypoint = uvws.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+			self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
 		else
 			self.PatrolWaypoint = Waypoint
 		end
@@ -337,7 +336,7 @@ if SERVER then
 
 	function ENT:Patrol()
 
-		if next(uvws.Waypoints) == nil then
+		if next(dvd.Waypoints) == nil then
 			return
 		end
 
@@ -468,12 +467,12 @@ if SERVER then
 				if self.PatrolWaypoint.Neighbors then
 					local WaypointTable = {}
 					for k, v in pairs(self.PatrolWaypoint.Neighbors) do
-						if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= uvws.Waypoints[v]["Target"] then
+						if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
 							table.insert(WaypointTable, v)
 						end
 					end --Don't turn around
 					self.PreviousPatrolWaypoint = self.PatrolWaypoint
-					self.PatrolWaypoint = uvws.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+					self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
 				else
 					self.PatrolWaypoint = nil
 				end
