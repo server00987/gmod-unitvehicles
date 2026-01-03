@@ -1264,6 +1264,7 @@ if SERVER then
 	UVSpikestripsDodged = 0
 	UVComboBounty = 1
 	UVBountyTimer = CurTime()
+	UVBountyTime = 0
 	UVBountyTimerProgress = 0
 	UVBusting = CurTime()
 	UVBustingProgress = CurTime()
