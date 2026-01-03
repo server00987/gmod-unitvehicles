@@ -265,6 +265,9 @@ NETWORK_STRINGS = {
 	"UVRace_StopEndCountdown",
 	"UVSpottedFreeze",
 	"UVSpottedUnfreeze",
+
+	-- Headlights
+	"UVToggleHeadlights",
 }
 
 for _, v in pairs( NETWORK_STRINGS ) do
@@ -3422,3 +3425,28 @@ function UVCFInitialize(NPC)
 	end)
 
 end
+
+net.Receive("UVToggleHeadlights", function(len, ply)
+	local NPC = net.ReadEntity()
+	local bool = net.ReadBool()
+
+	if not NPC.v then return end
+	
+	if bool then
+		if NPC.v.IsGlideVehicle then
+            NPC.v:SetHeadlightState( 1 )
+		elseif v.IsSimfphyscar and v:IsInitialized() then
+			v:SetLightsEnabled(true)
+        elseif vcmod_main and NPC.v:GetClass() == "prop_vehicle_jeep" then
+            NPC.v:VC_setRunningLights( true )
+        end
+	else
+		if NPC.v.IsGlideVehicle then
+            NPC.v:SetHeadlightState( 0 )
+		elseif v.IsSimfphyscar and v:IsInitialized() then
+			v:SetLightsEnabled(false)
+        elseif vcmod_main and NPC.v:GetClass() == "prop_vehicle_jeep" then
+            NPC.v:VC_setRunningLights( false )
+        end
+	end
+end)

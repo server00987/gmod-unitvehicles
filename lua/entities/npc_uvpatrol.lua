@@ -1824,7 +1824,7 @@ if SERVER then
 			if IsValid(self.v) then 
 				timer.Simple(2, function()
 					if IsValid(self.v) then
-						if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetBool() then 
+						if vcmod_main and self.v:GetClass() == "prop_vehicle_jeep" and GetConVar("unitvehicle_enableheadlights"):GetInt() == 2 then 
 							self.v:VC_setRunningLights(true)
 						end
 					end
@@ -1853,7 +1853,7 @@ if SERVER then
 					v.UnitVehicle = self
 					v:SetActive(true)
 					v:StartEngine()
-					if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+					if GetConVar("unitvehicle_enableheadlights"):GetInt() == 2 then
 						v:SetLightsEnabled(true)
 					end
 					v:SetBulletProofTires(true)
@@ -1874,7 +1874,7 @@ if SERVER then
 					v:SetEngineState(2)
 					v.inputThrottleModifierMode = 2
 					v.AirControlForce = vector_origin
-					if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+					if GetConVar("unitvehicle_enableheadlights"):GetInt() == 2 and v.CanSwitchHeadlights then
 						v:SetHeadlightState(1)
 					end
 					for k, v in pairs(v.wheels) do
@@ -1906,7 +1906,7 @@ if SERVER then
 							v.UnitVehicle = self
 							v:SetActive(true)
 							v:StartEngine()
-							if GetConVar("unitvehicle_enableheadlights"):GetBool() then
+							if GetConVar("unitvehicle_enableheadlights"):GetInt() == 2 then
 								v:SetLightsEnabled(true)
 							end
 							v:SetBulletProofTires(true)
@@ -1927,7 +1927,7 @@ if SERVER then
 							v:TurnOn()
 							v.inputThrottleModifierMode = 2
 							v.AirControlForce = vector_origin
-							if GetConVar("unitvehicle_enableheadlights"):GetBool() and v.CanSwitchHeadlights then
+							if GetConVar("unitvehicle_enableheadlights"):GetInt() == 2 and v.CanSwitchHeadlights then
 								v:SetHeadlightState(1)
 							end
 							for k, v in pairs(v.wheels) do
