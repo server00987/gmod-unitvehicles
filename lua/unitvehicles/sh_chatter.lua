@@ -423,7 +423,6 @@ if SERVER then
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 			
-			if ChatterLastPlay ~= initTime then return 5 end
 			UVRelayToClients(initTime, emergencyFile, parameters, false)
 			timer.Simple(SoundDuration(emergencyFile or ""), function()
 				if radioOnFile then
@@ -779,6 +778,7 @@ if SERVER then
 					if ChatterLastPlay ~= initTime then return 5 end
 					UVRelayToClients(initTime, soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 					timer.Simple(SoundDuration(soundFile or ""), function()
+						if ChatterLastPlay ~= initTime then return 5 end
 						if radioOffFile then
 							UVRelayToClients(initTime, radioOffFile, parameters, true)
 						end
@@ -877,8 +877,8 @@ if SERVER then
 				if ChatterLastPlay ~= initTime then return 5 end
 				UVRelayToClients(initTime, soundFile, parameters, true, nil, (voice == "dispatch" and "uv.unit.dispatch") or (self and self.callsign))
 				timer.Simple(SoundDuration(soundFile or ""), function()
+					if ChatterLastPlay ~= initTime then return 5 end
 					if radioOffFile then
-						if ChatterLastPlay ~= initTime then return 5 end
 						UVRelayToClients(initTime, radioOffFile, parameters, true)
 					end
 				end)
