@@ -1531,6 +1531,11 @@ if SERVER then
 
     net.Receive("RequestGlideVehicles", function(len, ply)
         if not ply:IsSuperAdmin() then return end
+		if not GlideRequestCooldown or CurTime() - GlideRequestCooldown > 1 then
+			GlideRequestCooldown = CurTime()
+		else
+			return
+		end
 
         local glideVehicles = {}
 
@@ -1547,8 +1552,10 @@ if SERVER then
 
         local totalCategories = table.Count(glideVehicles)
 
-        net.Start("GlideVehiclesTable")
-        net.WriteTable(glideVehicles)
-        net.Send(ply)
+		for category, vehicles in pairs(glideVehicles) do
+			net.Start("GlideVehiclesTable")
+			net.WriteTable({ [category] = vehicles })
+			net.Send(ply)
+		end
     end)
 end
