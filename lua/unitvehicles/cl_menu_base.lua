@@ -496,6 +496,10 @@ function UV.BuildSetting(parent, st, descPanel)
 				return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
 			end)
 
+			str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+				return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
+			end)
+
 			return str
 		end
 
