@@ -1,4 +1,4 @@
-[h1]/// Any car, any map. Race, chase or escape ///[/h1]
+[h1]/// RACE /// CHASE /// ESCAPE ///[/h1]
 
 [b]Unit Vehicles[/b] is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police and thrilling races on any map.
 
@@ -109,5 +109,6 @@ And [b]so much more[/b]!
 [*][b]Tak036[/b] - Thai
 [/list]
 
-[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556][img]https://i.imgur.com/NzLh8Zm.jpeg[/img][/url]
-[url=https://discord.gg/kQuzmjZaPQ][img]https://i.imgur.com/RPca3Yd.jpeg[/img][/url]
+[url=https://discord.gg/kQuzmjZaPQ][img]https://i.imgur.com/YuahXWO.png[/img][/url]
+[url=https://github.com/Roboboy260/gmod-unitvehicles][img]https://i.imgur.com/kF6Y9Za.jpeg[/img][/url]
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556][img]https://i.imgur.com/IXEbyKe.jpeg[/img][/url]
