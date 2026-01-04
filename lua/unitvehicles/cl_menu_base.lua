@@ -1828,8 +1828,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		BuildVehicleTree()
 
-		print(parent, st, descPanel)
-
 		-- Request server data when Glide node is selected
 		function glideNode:OnNodeSelected()
 			if glideDataRequested then return end
