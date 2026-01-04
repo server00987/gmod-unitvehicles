@@ -277,6 +277,45 @@ function UVGetRandomUnit( heat, modifiers )
 	return { UVGetRandom( selectionPool ), modifiers }
 end
 
+function UVCreateEntitiesFromTable( EntityTable )
+	local Entities = {}
+
+	for entityId, entityArray in pairs( EntityTable ) do
+		local Ent = ents.Create( entityArray.Class )
+		duplicator.DoGeneric( Ent, entityArray )
+
+		Ent:Spawn()
+		Ent:Activate()
+
+		duplicator.DoGenericPhysics( Ent, nil, entityArray )
+
+		table.Merge( Ent:GetTable(), entityArray )
+		
+		if ( Ent.RestoreNetworkVars ) then
+			Ent:RestoreNetworkVars( entityArray.DT )
+		end
+		
+		if ( Ent.OnDuplicated ) then
+			Ent:OnDuplicated( entityArray )
+		end
+		
+		Entities[entityId] = Ent
+		
+		if Entities[entityId] then
+			Entities[entityId].BoneMods = table.Copy( entityArray.BoneMods )
+			Entities[entityId].EntityMods = table.Copy( entityArray.EntityMods )
+			Entities[entityId].PhysicsObjects = table.Copy( entityArray.PhysicsObjects )
+		end
+	end
+
+	for entityId, Ent in pairs( Entities ) do
+		duplicator.ApplyEntityModifiers( nil, Ent )
+		duplicator.ApplyBoneModifiers( nil, Ent )
+	end
+
+	return Entities
+end
+
 function UVCreateConstraintsFromTable( Constraint, EntityList )
 
 	local Factory = duplicator.ConstraintType[ Constraint.Type ]
@@ -323,18 +362,6 @@ function UVCreateConstraintsFromTable( Constraint, EntityList )
 	local function IsRopeConstraint( ent ) return ent and ent:GetClass() == "keyframe_rope" end
 	local isRope = IsRopeConstraint( const1 ) || IsRopeConstraint( const2 ) || IsRopeConstraint( const3 ) || IsRopeConstraint( const4 )
 	local constraintType = isRope and "ropeconstraints" or "constraints"
-
-	-- If in Sandbox, keep track of this.
-	-- if ( ply and ply.AddCleanup and IsValid( const1 ) ) then
-	-- 	ply:AddCount( constraintType, const1 )
-
-	-- 	-- Hack: special case for nocollide
-	-- 	if ( const1:GetClass() == "logic_collision_pair" ) then constraintType = "nocollide" end
-	-- 	ply:AddCleanup( constraintType, const1 )
-	-- 	ply:AddCleanup( constraintType, const2 )
-	-- 	ply:AddCleanup( constraintType, const3 )
-	-- 	ply:AddCleanup( constraintType, const4 )
-	-- end
 
 	return const1, const2, const3, const4
 

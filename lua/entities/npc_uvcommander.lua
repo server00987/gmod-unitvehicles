@@ -910,12 +910,13 @@ if SERVER then
 					if self.PatrolWaypoint.Neighbors then
 						local WaypointTable = {}
 						for k, v in pairs(self.PatrolWaypoint.Neighbors) do
+							if not dvd.Waypoints[v] then continue end
 							if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
 								table.insert(WaypointTable, v)
 							end
 						end --Don't turn around
 						self.PreviousPatrolWaypoint = self.PatrolWaypoint
-						self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+						self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]] or nil
 					else
 						self.PatrolWaypoint = nil
 					end

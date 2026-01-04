@@ -14,6 +14,8 @@ local pos1, selectedCP
 local secondClick = false
 
 if SERVER then
+
+	local dvd = DecentVehicleDestination
 	
 	local function KillCheckpoints(ply)
 		if not ply:IsSuperAdmin() then return end
@@ -222,15 +224,118 @@ if SERVER then
 			ply:ChatPrint(str)
 		end
 	end
+
+	UVRace_LoadedEntities = {}
+	UVRace_LoadedConstraints = {}
+
+	function UVLoadRace( jsonString )
+		if type( jsonString ) ~= "string" then return end
+
+		local startchar = string.find( jsonString, '' )
+		if ( startchar != nil ) then
+			jsonString = string.sub( jsonString, startchar )
+		end
+
+		jsonString = jsonString:reverse()
+		local startchar = string.find( jsonString, '' )
+		if ( startchar != nil ) then
+			jsonString = string.sub( jsonString, startchar )
+		end
+		jsonString = jsonString:reverse()
+
+		local saveArray = util.JSONToTable( jsonString )
+		if not saveArray then return end
+
+		if saveArray.Waypoints then
+			UVRace_LoadedWaypoints = true
+			dvd.Waypoints = table.Copy( saveArray.Waypoints )
+			net.Start("Decent Vehicle: Clear waypoints")
+			net.Broadcast()
+			net.Start("Decent Vehicle: Retrive waypoints")
+			dvd.WriteWaypoint(1)
+			net.Broadcast()
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedEntities[entityId] = nil
+		end
+ 
+		for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedConstraints[entityId] = nil
+		end
+
+		local Entities = table.Copy( saveArray.Entities )
+		local Constraints = table.Copy( saveArray.Constraints )
+
+		UVRace_LoadedEntities = UVCreateEntitiesFromTable( Entities )
+
+		for _k, Constraint in pairs( Constraints ) do
+			local constraintEnt = nil
+
+			ProtectedCall(function()
+				constraintEnt = UVCreateConstraintsFromTable( Constraint, UVRace_LoadedEntities )
+			end)
+
+			if IsValid( constraintEnt ) then
+				table.insert( UVRace_LoadedConstraints, constraintEnt )
+			end
+		end
+	end
+
+	function UVSaveRace( saveProps, saveDV )
+		local AllowedEntities = ents.GetAll()
+
+		for index, entity in ipairs( AllowedEntities ) do
+			local shouldBeSaved = gmsave.ShouldSaveEntity( entity, entity:GetSaveTable() )
+			local createdByMap = entity:CreatedByMap()
+			local isConstraint = entity:IsConstraint()
+			local isPursuitBreaker = entity.PursuitBreaker
+			local isRoadblock = entity.UVRoadblock
+			local isInvalid = not shouldBeSaved or createdByMap or isConstraint or isPursuitBreaker or isRoadblock or not saveProps
+
+			if isInvalid then AllowedEntities[index] = nil end
+		end
+
+		table.insert( AllowedEntities, game.GetWorld() )
+
+		local saveArray = duplicator.CopyEnts( AllowedEntities )
+		if not saveArray then return end
+		--print(saveDV, dvd)
+		if saveDV and dvd then
+			saveArray.Waypoints = table.Copy( dvd.Waypoints )
+		end
+
+		duplicator.FigureOutRequiredAddons( saveArray )
+		return util.TableToJSON( saveArray, true )
+	end
 	
 	local function Import(ply, cmd, args)
 		if not ply:IsSuperAdmin() then return end
 		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1]
 		if not file.Exists(filename, "DATA") then return end
 
+		if UVRace_LoadedWaypoints then
+			--dvd.Waypoints = {}
+			--concommand.Run("dv_route_load")
+			dvd.LoadWaypoints( 'decentvehicle/' .. game.GetMap() )
+			UVRace_LoadedWaypoints = false
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedEntities[entityId] = nil
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedConstraints[entityId] = nil
+		end
+
 		local jsonfilename = string.Replace( "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1], ".txt", ".json" )
 		if file.Exists(jsonfilename, "DATA") then 
-			gmsave.LoadMap( file.Read(jsonfilename) )
+			UVLoadRace( file.Read(jsonfilename) )
 		end
 		
 		timer.Simple(0.2, function() --wait for gmsave.LoadMap to finish executing(0.1 seconds)
@@ -312,14 +417,30 @@ if SERVER then
 					undo.AddEntity(spawn)
 					ply:AddCleanup("uvrace_ents", spawn)
 				end
-				
-				undo.AddFunction(function(undoTable, ent)
-					net.Start("UVRace_TrackReady")
-						net.WriteString("?")
-						net.WriteString("?")
-					net.Broadcast()
-				end)
 			end
+
+			undo.AddFunction(function(undoTable, ent)
+				if UVRace_LoadedWaypoints then
+					--concommand.Run()
+					dvd.LoadWaypoints( 'decentvehicle/' .. game.GetMap() )
+					UVRace_LoadedWaypoints = false
+				end
+
+				for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+					if IsValid( entityObject ) then entityObject:Remove() end
+					UVRace_LoadedEntities[entityId] = nil
+				end
+		
+				for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+					if IsValid( entityObject ) then entityObject:Remove() end
+					UVRace_LoadedConstraints[entityId] = nil
+				end
+
+				net.Start("UVRace_TrackReady")
+					net.WriteString("?")
+					net.WriteString("?")
+				net.Broadcast()
+			end)
 
 			undo.Finish()
 
@@ -370,12 +491,12 @@ if SERVER then
 		file.CreateDir("unitvehicles/races/" .. game.GetMap())
 		file.Write(filename, str)
 
-		if args[2] then --Save props option
-			local jsonfilename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".json"
-			local jsonstr = gmsave.SaveMap( ply )
+		--if args[2] then --Save props option
+		local jsonfilename = "unitvehicles/races/" .. game.GetMap() .. "/" .. nick .. "." .. name .. ".json"
+		local jsonstr = UVSaveRace( args[2] == "true", args[3] == "true" )
 
-			file.Write(jsonfilename, jsonstr)
-		end
+		file.Write(jsonfilename, jsonstr)
+		--end
 		
 		ImportExportText(name, true, ply)
 	end
@@ -537,26 +658,32 @@ elseif CLIENT then
 	end
 	concommand.Add("uvrace_updatevars", UpdateVars)
 	
-	local function QuerySaveProps(txt)
+	local function QuerySaveProps(txt, exportDv)
 		Derma_Query(
 			"#tool.uvracemanager.export.props.desc",
 			"#tool.uvracemanager.export.props",
 			"#openurl.yes",
 			function()
 				chat.AddText("Exporting UV Race...")
-				RunConsoleCommand("uvrace_export", txt, "true") 
+				print(txt, "true", exportDv)
+				RunConsoleCommand("uvrace_export", txt, "true", exportDv) 
 			end,
 			"#openurl.nope",
 			function()
 				chat.AddText("Exporting UV Race...")
-				RunConsoleCommand("uvrace_export", txt) 
+				print(txt, "false", exportDv)
+				RunConsoleCommand("uvrace_export", txt, "false", exportDv) 
 			end
 		)
 	end
 
 	local function QueryExport()
 		Derma_StringRequest("#uv.tool.export.settings", "#tool.uvracemanager.export.desc", "", function(txt)
-			QuerySaveProps(txt)
+			Derma_Query("#tool.uvracemanager.export.dv.desc", "#tool.uvracemanager.export.dv", "#openurl.yes", function()
+				QuerySaveProps(txt, "true")
+			end, "#openurl.nope", function()
+				QuerySaveProps(txt, "false")
+			end)
 		end, nil, "#addons.confirm", "#addons.cancel")
 	end
 	concommand.Add("uvrace_queryexport", QueryExport)

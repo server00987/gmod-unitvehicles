@@ -32,6 +32,8 @@ if SERVER then
 	UVRaceInvites = UVRaceInvites or {}
 	UVRaceFirstSplitTriggered = UVRaceFirstSplitTriggered or false
 
+	local dvd = DecentVehicleDestination
+
 	function UVRaceCheckFinishLine()
 		local checkpoints = ents.FindByClass( "uvrace_checkpoint" )
 		local highestid = 0
@@ -415,6 +417,23 @@ if SERVER then
 		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
 			ent:Remove()
 		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedEntities[entityId] = nil
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedConstraints[entityId] = nil
+		end
+
+		if UVRace_LoadedWaypoints then
+			--dvd.Waypoints = {}
+			--concommand.Run(ply. "dv_route_load")
+			dvd.LoadWaypoints( 'decentvehicle/' .. game.GetMap() )
+			UVRace_LoadedWaypoints = false
+		end
 		
 		if UVTargeting and #UVWantedTableVehicle > 0 and UVRacePursuitStop:GetBool() then
 			UV_StopPursuit()
@@ -564,6 +583,106 @@ if SERVER then
 
 		UVBroadcastRacerList()
 	end)
+
+	-- Decent Vehicle Waypoints fuckery, please expose the methods next time
+
+	if not dvd then return end
+
+	local function WriteWaypoint(id) -- ty dv lmao, plz expose the methods next time
+		local waypoint = dvd.Waypoints[id]
+		net.WriteUInt(id, 24)
+		net.WriteVector(waypoint.Target)
+		if waypoint.Chunk and dvd.IsInfMap then
+			net.WriteVector(waypoint.Chunk or Vector(0,0,0)) -- InfMap, this is however a separate addon that is upcoming :3
+		end
+		net.WriteEntity(waypoint.TrafficLight or NULL)
+		net.WriteBool(waypoint.FuelStation)
+		net.WriteBool(waypoint.UseTurnLights)
+		net.WriteFloat(waypoint.WaitUntilNext)
+		net.WriteFloat(waypoint.SpeedLimit)
+		net.WriteInt(waypoint.Group, 8)
+		net.WriteUInt(#waypoint.Neighbors, 14)
+		for i, n in ipairs(waypoint.Neighbors) do
+			net.WriteUInt(n, 24)
+		end
+	end
+
+	local function OverwriteWaypoints(source)
+		local Exceptions = {Target = true, TrafficLight = true}
+		if source == dvd then return end
+		dvd.CVars.ForceHeadlights:SetInt(source.ForceHeadlights and 1 or 0) -- Added from version 1.0.7
+		dvd.CVars.DriveSide:SetInt(source.DriveSide or 0)
+		dvd.DriveSide = source.DriveSide or 0
+		--ClearUndoList()
+		table.Empty(dvd.Waypoints)
+	
+		if player.GetCount() > 0 then
+			net.Start "Decent Vehicle: Sync CVar"
+			net.Broadcast()
+			net.Start "Decent Vehicle: Clear waypoints"
+			net.Broadcast()
+		end
+	
+		for i, t in ipairs(ents.GetAll()) do
+			if t.IsDVTrafficLight then t:Remove() end
+		end
+	
+		for i, w in ipairs(source) do
+			local new = dvd.AddWaypoint(w.Target)
+			for key, value in pairs(w) do
+				if Exceptions[key] then continue end
+				new[key] = value
+			end
+		end
+	
+		for _, t in ipairs(source.TrafficLights) do
+			local traffic = ents.Create(t.ClassName)
+			if not IsValid(traffic) then continue end
+			traffic:SetPos(t.Pos)
+			traffic:SetAngles(t.Ang)
+			traffic:Spawn()
+			traffic:SetPattern(t.Pattern)
+			traffic.Waypoints = t.Waypoints
+			for _, id in ipairs(t.Waypoints) do
+				if not dvd.Waypoints[id] then continue end
+				dvd.Waypoints[id].TrafficLight = traffic
+			end
+	
+			local p = traffic:GetPhysicsObject()
+			if IsValid(p) then p:Sleep() end
+		end
+	
+		hook.Run("Decent Vehicle: OnLoadWaypoints", source)
+	
+		if #dvd.Waypoints * player.GetCount() == 0 then return end
+		net.Start "Decent Vehicle: Retrive waypoints"
+		dvd.WriteWaypoint(1)
+		net.Broadcast()
+	end
+	
+	local function LoadWaypoints(path)
+		local pngpath = string.format("data/%s.png", path)
+		local txtpath = string.format("data/%s.txt", path)
+		local scriptpath = string.format("scripts/vehicles/%s.txt", path)
+		local p
+		if file.Exists(txtpath, "GAME") then
+			p = txtpath
+		elseif file.Exists(scriptpath, "GAME") then
+			p = scriptpath
+		elseif file.Exists(pngpath, "GAME") then
+			p = pngpath
+		end
+	
+		if p then
+			local t = util.JSONToTable(util.Decompress(file.Read(p, "GAME") or "") or "")
+			OverwriteWaypoints(t)
+		end
+	end
+
+	dvd.LoadWaypoints = LoadWaypoints
+	dvd.OverwriteWaypoints = OverwriteWaypoints
+	dvd.WriteWaypoint = WriteWaypoint
+
 else -- CLIENT stuff
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
