@@ -2538,7 +2538,7 @@ if SERVER then
 else -- CLIENT Settings | HUD/Options
 
 	local displaying_busted = false 
-	local IsSettingKeybind = false
+	UVSettingKeybind = false
 
 	local UVHUDPursuitRespawnNoticeStarted = false
 	local UVHUDPursuitRespawnNoticeTriggered = false
@@ -2879,7 +2879,7 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive('UVGetNewKeybind', function()
-		--if IsSettingKeybind then return end
+		--if UVSettingKeybind then return end
 		local slot = net.ReadInt(16)
 		local key = net.ReadInt(16)
 
@@ -2896,7 +2896,7 @@ else -- CLIENT Settings | HUD/Options
 			warn("Invalid slot key; if you run into this please report it to a developer!")
 		end
 
-		IsSettingKeybind = false
+		UVSettingKeybind = false
 	end)
 
 	net.Receive("UV_SendPursuitTech", function()
@@ -2973,7 +2973,7 @@ else -- CLIENT Settings | HUD/Options
 	local UVHUDBlipSound = "ui/pursuit/spotting_blip.wav"
 
 	concommand.Add("uv_keybinds", function( ply, cmd, slot )
-		if IsSettingKeybind then
+		if UVSettingKeybind then
 			notification.AddLegacy( "You are already setting a keybind!", NOTIFY_ERROR, 5 )
 			return
 		end
@@ -2984,7 +2984,7 @@ else -- CLIENT Settings | HUD/Options
 		net.WriteInt(slot, 16)
 		net.SendToServer()
 
-		IsSettingKeybind = slot
+		UVSettingKeybind = slot
 		-- KeyBindButtons[tonumber(slot)][2]:SetText('PRESS A KEY NOW!')
 	end)
 

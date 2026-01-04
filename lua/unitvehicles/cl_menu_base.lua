@@ -496,6 +496,10 @@ function UV.BuildSetting(parent, st, descPanel)
 				return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
 			end)
 
+			str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+				return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
+			end)
+
 			return str
 		end
 
@@ -1502,6 +1506,8 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		wrap.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
+			local isActive = tonumber(UVSettingKeybind) == st.slot
+			
 			local default = Color( 
 				GetConVar("uvmenu_col_button_r"):GetInt(),
 				GetConVar("uvmenu_col_button_g"):GetInt(),
@@ -1517,14 +1523,15 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			-- background & text
 			draw.RoundedBox(6, w*0.5, 0, w*0.5, h, default)
+			if isActive then draw.RoundedBox( 6, w*0.5, 0, w*0.5, h, Color(255, 180, 0, 80 + math.sin(RealTime()*6)*40) ) end
 			if hovered then draw.RoundedBox(6, w*0.5, 0, w*0.5, h, hover) end
-			
+
 			DrawWrappedText(self, GetDisplayText(), w * 0.45, 10, nil)
-			draw.SimpleText( IsSettingKeybind and "#uv.keybinds.anybutton" or GetKeyName(), "UVMostWantedLeaderboardFont", w * 0.75, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			draw.SimpleText( isActive and "#uv.keybinds.anybutton" or GetKeyName(), "UVMostWantedLeaderboardFont", w * 0.75, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 		end
 
 		wrap.DoClick = function()
-			if IsSettingKeybind then return end
+			if UVSettingKeybind then return end
 
 			-- Temporarily allow keyboard input just like slider text entry
 			if IsValid(UV.SettingsFrame) then
@@ -1535,8 +1542,12 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 
 		-- When keybind finishes, keyboard input is released in your existing net.Receive
-		wrap.Think = function()
-			if not IsSettingKeybind and IsValid(UV.SettingsFrame) then
+		wrap.Think = function(self)
+			if UVSettingKeybind == st.slot then
+				self:InvalidateLayout(true)
+			end
+
+			if not UVSettingKeybind and IsValid(UV.SettingsFrame) then
 				UV.SettingsFrame:SetKeyboardInputEnabled(false)
 			end
 		end
