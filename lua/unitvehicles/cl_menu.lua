@@ -641,6 +641,21 @@ UVMenu.RaceManagerSettings = function()
 	})
 end
 
+local function extractFullRaceName( headerSplit )
+	local raceName = ''
+	local splitCopy = table.Copy(headerSplit)
+
+	table.remove(splitCopy, 1)
+
+	for _, v in ipairs(splitCopy) do
+		if string.sub(v, 1, 1) == "'" then break end
+		raceName = raceName .. v .. " "
+	end
+
+	return raceName
+end
+
+
 local function ParseRaceFile(path)
 	local content = file.Read(path, "DATA")
 	if not content then return nil end
@@ -648,7 +663,7 @@ local function ParseRaceFile(path)
 	local lines = string.Split(content, "\n")
 	local header = lines[1] or ""
 	local params = string.Split(header, " ")
-	local raceName = params[2] or "Unknown"
+	local raceName = extractFullRaceName( params ) or "Unknown"
 	local author = header:match("'(.-)'") or "Unknown"
 
 	local checkpoints = {}

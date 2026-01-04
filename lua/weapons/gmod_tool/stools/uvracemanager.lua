@@ -308,7 +308,7 @@ if SERVER then
 		end
 
 		duplicator.FigureOutRequiredAddons( saveArray )
-		return util.TableToJSON( saveArray, true )
+		return util.TableToJSON( saveArray )
 	end
 	
 	local function Import(ply, cmd, args)
