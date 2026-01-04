@@ -15,7 +15,7 @@ function UVGetFAQText(key)
 	if base and UV.FAQ[base] and UV.FAQ[base][key] then
 		return UV.FAQ[base][key]
 	end
-
+	
 	-- English fallback
 	if UV.FAQ.en and UV.FAQ.en[key] then
 		return UV.FAQ.en[key]
