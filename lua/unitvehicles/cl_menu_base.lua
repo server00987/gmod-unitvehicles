@@ -3,9 +3,25 @@ UVMenu = UVMenu or {}
 UV.SettingsTable = UV.SettingsTable or {}
 
 -- Patch Notes & Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.40.0" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v0.40.1" --MAJOR.MINOR.PATCH
 UV.PNotes = [[
+# -- [ Patch v0.40.1 ] --
+**January 5th, 2026**
+**New Features**
+- Added the *UVPD Chevrolet Colorado ZR2 2017 Police Cruiser*
+
+**Changes**
+- "Enable Headlights" AI Settings option now allows an "Automatic" setting, where AI enable their headlights in dark areas
+- When exporting races, you can now choose if you want to export DV Waypoints or not
+- Vehicles and hand-spawned entities will no longer be removed when loading a race with props
+- Updated translations
+
+**Fixes**
+- Fixed that the "Glide" category within the AI Racer Manager's "Vehicle Override" was duplicated, and caused errors if too many Glide vehicles were installed
+- Fixed that Keybinds never displayed their "Press any button" prompt
+
 # -- [ Update v0.40.0 ] --
+**December 31st, 2025**
 
 **The final stretch!**
 We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still, and we hope to keep receiving feedback until then.

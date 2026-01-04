@@ -1,3 +1,11 @@
+<------- January 5 ------->
+- Added a new UVPD car
+- Auto headlights
+- Glide list fix
+
+More detailed patch notes available in-game.
+
+<------- [ 2025 ] ------->
 <------- December 22 ------->
 - Added a new UVPD car
 - AI no longer rotate mid-air
