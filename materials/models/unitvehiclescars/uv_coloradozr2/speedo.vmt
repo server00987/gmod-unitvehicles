@@ -1,0 +1,19 @@
+VertexLitGeneric
+{
+	$basetexture		"models\unitvehiclescars\uv_coloradozr2\speedo.vtf"
+
+	"$selfillum" "1"
+	$halflambert		1
+	$nodecal			1
+
+	$color2				"[1 1 1]"
+
+	Proxies
+	{
+		Equals
+		{
+			srcVar1		$color2
+			resultVar	$color
+		}
+	}
+}
