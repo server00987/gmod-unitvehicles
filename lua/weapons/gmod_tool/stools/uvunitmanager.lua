@@ -205,20 +205,20 @@ local unitsheat4 = {
 
 local unitsheat5 = {
 	"", --Patrol
-	"default_explorer.json", --Support
+	"", --Support
 	"", --Pursuit
 	"default_corvettec7.json", --Interceptor
-	"", --Special
+	"default_coloradozr2.json", --Special
 	"", --Commander
 	"" --Rhino
 }
 
 local unitsheat6 = {
 	"", --Patrol
-	"default_explorer.json", --Support
+	"", --Support
 	"", --Pursuit
 	"default_corvettec7.json", --Interceptor
-	"", --Special
+	"default_coloradozr2.json", --Special
 	"", --Commander
 	"" --Rhino
 }
