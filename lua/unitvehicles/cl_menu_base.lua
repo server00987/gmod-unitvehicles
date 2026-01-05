@@ -753,7 +753,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap.DoClick = function()
 			if not cv then return end
 			local new = getBool() and "0" or "1"
-			RunConsoleCommand(st.convar, new)
+			if st.sv and string.match(st.convar, 'unitvehicle_') then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [st.convar] = new })
+				net.SendToServer()
+			else
+				RunConsoleCommand(st.convar, new)
+			end
 			UVMenu.PlaySFX("confirm")
 			if descPanel and st.convar then
 				descPanel.SelectedCurrent = new
@@ -823,7 +829,13 @@ function UV.BuildSetting(parent, st, descPanel)
 			if mc == MOUSE_MIDDLE and st.convar then
 				local cv = GetConVar(st.convar)
 				if cv then
-					RunConsoleCommand(st.convar, cv:GetDefault())
+					if st.sv and string.match(st.convar, 'unitvehicle_') then
+						net.Start("UVUpdateSettings")
+						net.WriteTable({ [st.convar] = cv:GetDefault() })
+						net.SendToServer()
+					else
+						RunConsoleCommand(st.convar, cv:GetDefault())
+					end
 					UVMenu.PlaySFX("confirm")
 				end
 				return
@@ -960,7 +972,13 @@ function UV.BuildSetting(parent, st, descPanel)
 			local val = RoundValue(pendingValue)
 			appliedValue = val
 			if st.convar and GetConVar(st.convar) then
-				RunConsoleCommand(st.convar, tostring(val))
+				if st.sv and string.match(st.convar, 'unitvehicle_') then
+					net.Start("UVUpdateSettings")
+					net.WriteTable({ [st.convar] = val })
+					net.SendToServer()
+				else
+					RunConsoleCommand(st.convar, tostring(val))
+				end
 			elseif st.command then
 				RunConsoleCommand(st.command, tostring(val))
 			end
@@ -1163,7 +1181,13 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		combo.OnSelect = function(_, val, data)
 			if st.convar then
-				RunConsoleCommand(st.convar, data)
+				if st.sv and string.match(st.convar, 'unitvehicle_') then
+					net.Start("UVUpdateSettings")
+					net.WriteTable({ [st.convar] = data })
+					net.SendToServer()
+				else
+					RunConsoleCommand(st.convar, data)
+				end
 			end
 			if st.func then
 				st.func(combo)
@@ -1218,7 +1242,13 @@ function UV.BuildSetting(parent, st, descPanel)
 					combo:SetValue(st.content[1][1], st.content[1][2])
 				end
 
-				RunConsoleCommand(st.convar, def)
+				if st.sv and string.match(st.convar, 'unitvehicle_') then
+					net.Start("UVUpdateSettings")
+					net.WriteTable({ [st.convar] = def })
+					net.SendToServer()
+				else
+					RunConsoleCommand(st.convar, def)
+				end
 			end
 		end
 
@@ -1367,6 +1397,7 @@ function UV.BuildSetting(parent, st, descPanel)
 	end
 
 	---- color remains as basic DColorMixer or DColorButton (user requested keep as-is) ----
+	---- TODO: right now, this has an issue with applying server color rgbs ----
 	if st.type == "color" or st.type == "coloralpha" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
@@ -1477,10 +1508,21 @@ function UV.BuildSetting(parent, st, descPanel)
 					mixer:SetColor(Color(r, g, b, a))
 
 					-- Push to convars
-					RunConsoleCommand(base .. "_r", r)
-					RunConsoleCommand(base .. "_g", g)
-					RunConsoleCommand(base .. "_b", b)
-					if cv_a then RunConsoleCommand(base .. "_a", a) end
+					if st.sv and string.match(base, 'unitvehicle_') then
+						net.Start("UVUpdateSettings")
+						net.WriteTable({
+							[base .. "_r"] = r,
+							[base .. "_g"] = g,
+							[base .. "_b"] = b,
+							[base .. "_a"] = cv_a and a or nil
+						})
+						net.SendToServer()
+					else
+						RunConsoleCommand(base .. "_r", r)
+						RunConsoleCommand(base .. "_g", g)
+						RunConsoleCommand(base .. "_b", b)
+						if cv_a then RunConsoleCommand(base .. "_a", a) end
+					end
 
 					UVMenu.PlaySFX("hover")
 				end
