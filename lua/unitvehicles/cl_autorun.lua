@@ -27,6 +27,8 @@ local UVUHelicopterBusting = GetConVar("unitvehicle_unit_helicopterbusting")
 
 local dvd = DecentVehicleDestination
 
+if not game.SinglePlayer() then return end
+
 hook.Add("OnEntityCreated", "UVHeadlights", function(NPC)
 	local uvclasses = {
 		["npc_racervehicle"] = true,

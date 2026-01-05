@@ -16,15 +16,15 @@ UVHUDRaceAnimTriggered = false
 UVHUDRacePursuitEndTime = nil
 UVHUDRacePursuitStartTime = nil
 
-if SERVER then
-	UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, FCVAR_ARCHIVE, "Number of laps to complete. Set to 1 to have sprint races." )
-	UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, FCVAR_ARCHIVE, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
-	UVRaceVisibleCheckpoints = CreateConVar( "unitvehicle_racevisiblecheckpoints", 1, FCVAR_ARCHIVE, "Whether to show the checkpoints to the players." )
-	UVRacePursuitStart = CreateConVar( "unitvehicle_racepursuitstart", 0, FCVAR_ARCHIVE, "How long, once one race begins, before a pursuit auto-starts." )
-	UVRacePursuitStop = CreateConVar( "unitvehicle_racepursuitstop", 0, FCVAR_ARCHIVE, "If a pursuit is active, immediately stop the pursuit when the race ends." )
-	UVRacePursuitStopDespawn = CreateConVar( "unitvehicle_racepursuitstop_despawn", 0, FCVAR_ARCHIVE, "If a pursuit is active, despawn all AI units when the race ends." )
-	UVRaceClearAI = CreateConVar( "unitvehicle_raceclearai", 0, FCVAR_ARCHIVE, "Removes all AI and their vehicles when the race ends." )
-	
+UVRaceLaps = CreateConVar( "unitvehicle_racelaps", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Number of laps to complete. Set to 1 to have sprint races." )
+UVRaceDNFTimer = CreateConVar( "unitvehicle_racednftimer", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+UVRaceVisibleCheckpoints = CreateConVar( "unitvehicle_racevisiblecheckpoints", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Whether to show the checkpoints to the players." )
+UVRacePursuitStart = CreateConVar( "unitvehicle_racepursuitstart", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "How long, once one race begins, before a pursuit auto-starts." )
+UVRacePursuitStop = CreateConVar( "unitvehicle_racepursuitstop", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If a pursuit is active, immediately stop the pursuit when the race ends." )
+UVRacePursuitStopDespawn = CreateConVar( "unitvehicle_racepursuitstop_despawn", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If a pursuit is active, despawn all AI units when the race ends." )
+UVRaceClearAI = CreateConVar( "unitvehicle_raceclearai", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Removes all AI and their vehicles when the race ends." )
+
+if SERVER then	
 	UVRaceTable = {}
 	UVRaceCurrentParticipants = {}
 	UVRaceStartTime = CurTime()
@@ -687,12 +687,12 @@ else -- CLIENT stuff
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
 	UVPreRaceInfo = CreateClientConVar( "unitvehicle_preraceinfo", 0, true, false, "Set to 1 to have a cinematic-like race details list when a race begins." )
-	UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
-	UVRaceVisibleCheckpoints = CreateClientConVar( "unitvehicle_racevisiblecheckpoints", 1, true, false, "Whether to show the checkpoints to the players." )
-	UVRacePursuitStart = CreateClientConVar( "unitvehicle_racepursuitstart", 0, true, false, "How long, once one race begins, before a pursuit auto-starts." )
-	UVRacePursuitStop = CreateClientConVar( "unitvehicle_racepursuitstop", 0, true, false, "If a pursuit is active, immediately stop the pursuit when the race ends." )
-	UVRacePursuitStopDespawn = CreateClientConVar( "unitvehicle_racepursuitstop_despawn", 0, true, false, "If a pursuit is active, despawn all AI units when the race ends." )
-	UVRaceClearAI = CreateClientConVar( "unitvehicle_raceclearai", 0, true, false, "Removes all AI and their vehicles when the race ends." )
+	--UVRaceDNFTimer = CreateClientConVar( "unitvehicle_racednftimer", 30, true, false, "How long, once one racer crosses the line, the rest have to finish before DNF'ing." )
+	--UVRaceVisibleCheckpoints = CreateClientConVar( "unitvehicle_racevisiblecheckpoints", 1, true, false, "Whether to show the checkpoints to the players." )
+	--UVRacePursuitStart = CreateClientConVar( "unitvehicle_racepursuitstart", 0, true, false, "How long, once one race begins, before a pursuit auto-starts." )
+	--UVRacePursuitStop = CreateClientConVar( "unitvehicle_racepursuitstop", 0, true, false, "If a pursuit is active, immediately stop the pursuit when the race ends." )
+	--UVRacePursuitStopDespawn = CreateClientConVar( "unitvehicle_racepursuitstop_despawn", 0, true, false, "If a pursuit is active, despawn all AI units when the race ends." )
+	--UVRaceClearAI = CreateClientConVar( "unitvehicle_raceclearai", 0, true, false, "Removes all AI and their vehicles when the race ends." )
 	
 	function UVSoundRacingStop()
 		UVPlayingRace = false
