@@ -70,21 +70,21 @@ if CLIENT then
     }
     
     ENT.LightSprites = {
-        { type = "headlight", offset = Vector(82.13,30.39,23.2), size = 30, color = Color(215,240,255,155),ifBodygroupId = 12, ifSubModelId = 0, dir = Vector( 1, 0, 0 ), spriteMaterial = Material("models/talonshared/nfsunboundshared/flarehorizon") },
-        { type = "headlight", offset = Vector(82.13,-30.39,23.2), size = 30, color = Color(215,240,255,155),ifBodygroupId = 12, ifSubModelId = 0, dir = Vector( 1, 0, 0 ), spriteMaterial = Material("models/talonshared/nfsunboundshared/flarehorizon") },
+        { type = "headlight", offset = Vector(82.13,30.39,23.2), size = 30, color = Color(215,240,255,155),ifBodygroupId = 12, ifSubModelId = 0, dir = Vector( 1, 0, 0 ), },
+        { type = "headlight", offset = Vector(82.13,-30.39,23.2), size = 30, color = Color(215,240,255,155),ifBodygroupId = 12, ifSubModelId = 0, dir = Vector( 1, 0, 0 ), },
 
-        { type = "taillight", offset = Vector(-93.69,27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "taillight", offset = Vector(-93.69,-27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "taillight", offset = Vector(-96.23,17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "taillight", offset = Vector(-96.23,-17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
+        { type = "taillight", offset = Vector(-93.69,27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "taillight", offset = Vector(-93.69,-27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "taillight", offset = Vector(-96.23,17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "taillight", offset = Vector(-96.23,-17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
 
-        { type = "brake", offset = Vector(-93.69,27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "brake", offset = Vector(-93.69,-27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "brake", offset = Vector(-96.23,17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
-        { type = "brake", offset = Vector(-96.23,-17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("models/nfsuc/headlightglow") },
+        { type = "brake", offset = Vector(-93.69,27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "brake", offset = Vector(-93.69,-27.14,32.45), size = 35, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "brake", offset = Vector(-96.23,17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "brake", offset = Vector(-96.23,-17.32,31.97), size = 30, color = Color(255,0,0,50),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
 
-        { type = "reverse", offset = Vector(-95.64,18,33.83), size = 30, color = Color(255,255,255),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("sprites/light_ignorez") },
-        { type = "reverse", offset = Vector(-95.64,-18,33.83), size = 30, color = Color(255,255,255),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), spriteMaterial = Material("sprites/light_ignorez") }, 
+        { type = "reverse", offset = Vector(-95.64,18,33.83), size = 30, color = Color(255,255,255),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), },
+        { type = "reverse", offset = Vector(-95.64,-18,33.83), size = 30, color = Color(255,255,255),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), }, 
         
     }
 
