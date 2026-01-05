@@ -1031,6 +1031,12 @@ if SERVER then
             end
             
             UVDeployGPSDart(car)
+
+            timer.Simple( .5, function()
+                if IsValid(car) and pursuit_tech.Upgraded and (not UVJammerDeployed or car.exemptfromjammer) then
+                    UVDeployGPSDart(car)
+                end
+            end)
             
             used = true
             pursuit_tech.LastUsed = CurTime()
@@ -1223,6 +1229,12 @@ if SERVER then
                 local damage = ( isUnit and UVUnitPTEMPDamage:GetFloat() ) or UVPTEMPDamage:GetFloat()
                 local force = ( isUnit and UVUnitPTEMPForce:GetInt() ) or UVPTEMPForce:GetInt()
                 local lastHeadlightState = UVGetHeadlight( target )
+
+                local pursuit_tech = car.PursuitTech[slot]
+				if pursuit_tech and pursuit_tech.Upgraded then
+					damage = damage * 2
+					force = force * 2
+				end
                 
                 UVDamage( 
                     target, 
@@ -1488,6 +1500,11 @@ if SERVER then
                             local enemyVehicle = car.uvkillswitchingtarget
                             local enemyCallsign = enemyVehicle.racer or "Racer "..enemyVehicle:EntIndex()
                             local enemyDriver = UVGetDriver(enemyVehicle)
+
+                            local pursuit_tech = car.PursuitTech[slot]
+				            if pursuit_tech and pursuit_tech.Upgraded then
+				            	kstime = kstime * 2
+				            end
                             
                             if enemyDriver and enemyDriver:IsPlayer() then
                                 enemyCallsign = enemyDriver:GetName()
@@ -1894,6 +1911,13 @@ if SERVER then
                 local angle = vectorDifference:Angle()
                 local power = UVUnitPTShockRamPower:GetFloat()
                 local damage = UVUnitPTShockRamDamage:GetFloat()
+
+                local pursuit_tech = car.PursuitTech[slot]
+				if pursuit_tech and pursuit_tech.Upgraded then
+					power = power * 2
+                    damage = damage * 2
+				end
+
                 local force = power * (1 - (vectorDifference:Length()/1000))
 
                 objectphys:ApplyForceCenter(angle:Forward()*force)

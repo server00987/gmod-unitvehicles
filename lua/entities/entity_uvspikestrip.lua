@@ -213,7 +213,6 @@ else
 
 		self:DrawModel()
 
-		self:DrawModel() 
 		if model ~= "models/unitvehiclesprops/policespikes/police_spike.mdl" then
 			self.YellowLightPos1 = Vector(87,0,1)
 			self.YellowLightPos2 = Vector(-87,0,1)

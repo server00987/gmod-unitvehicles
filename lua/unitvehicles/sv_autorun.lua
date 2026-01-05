@@ -1068,9 +1068,14 @@ hook.Add("OnEntityCreated", "UVCollisionGlide", function(glidevehicle) --Overrid
 				local enemyDriver = UVGetDriver(enemyVehicle)
 				local power
 				local damage
+				local pursuit_tech = car.PursuitTech[slot]
 				if car.UnitVehicle then
 					power = UVUnitPTESFPower:GetInt()
 					damage = UVUnitPTESFDamage:GetFloat()
+					if pursuit_tech and pursuit_tech.Upgraded then
+						power = power * 2
+						damage = damage * 2
+					end
 				else
 					power = UVPTESFPower:GetInt()
 					damage = UVPTESFDamage:GetFloat()
@@ -1387,9 +1392,14 @@ hook.Add("simfphysPhysicsCollide", "UVCollisionSimfphys", function(car, coldata,
 		local power
 		local damage
 
+		local pursuit_tech = car.PursuitTech[slot]
 		if car.UnitVehicle then
 			power = UVUnitPTESFPower:GetInt()
 			damage = UVUnitPTESFDamage:GetFloat()
+			if pursuit_tech and pursuit_tech.Upgraded then
+				power = power * 2
+				damage = damage * 2
+			end
 		else
 			power = UVPTESFPower:GetInt()
 			damage = UVPTESFDamage:GetFloat()
@@ -1751,9 +1761,14 @@ hook.Add("OnEntityCreated", "UVCollisionJeep", function(vehicle)
 			local enemyDriver = UVGetDriver(enemyVehicle)
 			local power
 			local damage
+			local pursuit_tech = car.PursuitTech[slot]
 			if car.UnitVehicle then
 				power = UVUnitPTESFPower:GetInt()
 				damage = UVUnitPTESFDamage:GetFloat()
+				if pursuit_tech and pursuit_tech.Upgraded then
+					power = power * 2
+					damage = damage * 2
+				end
 			else
 				power = UVPTESFPower:GetInt()
 				damage = UVPTESFDamage:GetFloat()
