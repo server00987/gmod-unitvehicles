@@ -390,15 +390,15 @@ if SERVER then
 		
 		local targetPos = target:WorldSpaceCenter()
 		if considerVelocity then
-			local targetVel = Vector(0, 0, 0)
+			local targetVel = vector_origin
 			local physObj = target:GetPhysicsObject()
 
 			if IsValid(physObj) then
 				local vel = physObj:GetVelocity()
-				targetVel = vel * 2
+				targetVel = vel * 5
 			else
 				local vel = target:GetVelocity()
-				targetVel = vel * 2
+				targetVel = vel * 5
 			end
 
 			targetPos = targetPos + targetVel
