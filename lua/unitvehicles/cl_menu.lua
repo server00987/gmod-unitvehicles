@@ -1,6 +1,9 @@
 UV = UV or {}
 UVMenu = UVMenu or {}
 
+-- Current Version -- Change this whenever a new update is releasing!
+UV.CurVersion = "v0.41.0" --MAJOR.MINOR.PATCH
+
 if CLIENT then
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
 		title = "#uv.unitvehicles",
@@ -136,7 +139,9 @@ UVMenu.Main = function()
 				
 				{ type = "label", text = "#uv.menu.pnotes" },
 				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
-				{ type = "info", text = UV.PNotes, centered = true },
+				
+				{ type = "info", text = UV.PNotes[UV.CurVersion].Text, centered = true },
+				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
 			},
 			
 			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
@@ -978,6 +983,47 @@ UVMenu.RaceInvite = function()
 			}
 		}
 	})
+end
+
+------- [ Update History ] -------
+local function BuildPatchNoteTabs()
+    local tabs = {}
+    local versions = {}
+
+    -- Collect version keys
+    for version in pairs(UV.PNotes) do
+        table.insert(versions, version)
+    end
+
+    -- Sort versions (newest first)
+    table.sort(versions, function(a, b)
+        return a > b
+    end)
+
+    -- Build tabs
+    for _, version in ipairs(versions) do
+        local note = UV.PNotes[version]
+
+        table.insert(tabs, {
+            TabName = version,
+            { type = "button", text = "#uv.back", playsfx = "clickback", func = function() UVMenu.OpenMenu(UVMenu.Main) end },
+            { type = "label", text = note.Date },
+            { type = "info", text = note.Text, centered = true },
+        })
+    end
+
+    return tabs
+end
+
+UVMenu.UpdateHistory = function()
+    UVMenu.CurrentMenu = UVMenu:Open({
+        Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.menu.updatehistory"),
+        Width  = UV.ScaleW(1200),
+        Height = UV.ScaleH(760),
+        Description = false,
+        UnfocusClose = true,
+        Tabs = BuildPatchNoteTabs()
+    })
 end
 
 ------- [ Heat Manager ] -------
