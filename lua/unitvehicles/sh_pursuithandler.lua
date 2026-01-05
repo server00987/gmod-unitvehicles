@@ -778,44 +778,6 @@ function UVDisplayTime(time)
 	return formattedtime
 end
 
-LOCAL_CONVARS = {
-	["unitvehicle_heatlevels"] = 'integer',
-	--["unitvehicle_pursuittheme"] = 'string',
-	["unitvehicle_detectionrange"] = 'integer',
-	--["unitvehicle_playmusic"] = 'integer',
-	["unitvehicle_neverevade"] = 'integer',
-	["unitvehicle_bustedtimer"] = 'integer',
-	["unitvehicle_canwreck"] = 'integer',
-	["unitvehicle_chatter"] = 'integer',
-	["unitvehicle_speedlimit"] = 'integer',
-	["unitvehicle_autohealth"] = 'integer',
-	["unitvehicle_minheatlevel"] = 'integer',
-	["unitvehicle_maxheatlevel"] = 'integer',
-	["unitvehicle_spikestripduration"] = 'integer',
-	["unitvehicle_pathfinding"] = 'integer',
-	["unitvehicle_vcmodelspriority"] = 'integer',
-	["unitvehicle_callresponse"] = 'integer',
-	["unitvehicle_chattertext"] = 'integer',
-	["unitvehicle_enableheadlights"] = 'integer',
-	["unitvehicle_relentless"] = 'integer',
-	["unitvehicle_spawnmainunits"] = 'integer',
-	["unitvehicle_dvwaypointspriority"] = 'integer',
-	--["unitvehicle_pursuitthemeplayrandomheat"] = 'integer',
-	["unitvehicle_repaircooldown"] = 'integer',
-	["unitvehicle_repairrange"] = 'integer',
-	["unitvehicle_racertags"] = 'integer',
-	["unitvehicle_racerpursuittech"] = 'integer',
-	["unitvehicle_racerfriendlyfire"] = 'integer',
-	["unitvehicle_spikestriproadblockfriendlyfire"] = 'integer',
-	['unitvehicle_spawncooldown'] = 'integer',
-	["unitvehicle_usenitrousracer"] = 'integer',
-	["unitvehicle_usenitrousunit"] = 'integer',
-	["unitvehicle_customizeracer"] = 'integer',
-	["unitvehicle_autohealthracer"] = 'integer',
-	["unitvehicle_randomplayerunits"] = 'integer',
-	["unitvehicle_tractioncontrol"] = 'integer',
-}
-
 HEAT_SETTINGS = {
 	'bountytime',
 	'timetillnextheat',
@@ -2482,52 +2444,14 @@ if SERVER then
 				local convar = GetConVar(key)
 
 				if convar then
+					--[[
+						So for some fucking reason unbeknownst to me, RunConsoleCommand convars refuse to work for certain strings, 
+						yet it works if you set it using the ConVar::SetX functions, bullshit.
+					]]
 					convar:SetString(value)
-					-- if convarType == 'boolean' then
-					-- 	--RunConsoleCommand(key, tostring(value))
-					-- elseif convarType == 'number' then
-					-- 	--RunConsoleCommand(key, tostring(value))
-					-- elseif convarType == 'string' then
-					-- 	--RunConsoleCommand(key, value)
-					-- end
 				end
 			end
-		--[[
-		So for some fucking reason unbeknownst to me, RunConsoleCommand convars refuse to work for certain strings, 
-		yet it works if you set it using the ConVar::SetX functions, bullshit.
-		]]
-
-			--print(key, value)
-			--RunConsoleCommand(key, value)
-			--GetConVar( key ):SetString( value )
 		end
-
-		local convarTable = {}
-
-		for convarName, convarType in pairs(LOCAL_CONVARS) do
-			local convar = GetConVar(convarName)
-			local value = nil
-
-			if convar then
-				if convarType == 'boolean' then
-					value = convar:GetBool()
-				elseif convarType == 'integer' then
-					value = convar:GetInt()
-				elseif convarType == 'string' then
-					value = convar:GetString()
-				end
-			end
-
-			if value ~= nil then
-				convarTable[convarName] = value
-			end
-
-			--convar_name = string.gsub(convar_name, "_local", "")
-		end
-
-		net.Start("UVGetSettings_Local")
-		net.WriteTable(array)
-		net.Broadcast()
 	end)
 
 	concommand.Add( "uv_setbounty", function( ply, cmd, args )
