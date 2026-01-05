@@ -359,7 +359,7 @@ if SERVER then
         return IsValid(Leader) and Leader
     end
 
-    function UVOptimizeRespawn( vehicle, rhino )
+    function UVOptimizeRespawn( vehicle, rhino, commander )
         if UVOptimizeRespawnDelayed then return end
 
         UVOptimizeRespawnDelayed = true
@@ -481,7 +481,9 @@ if SERVER then
             local pos = uvspawnpoint+(vector_up * 50)
 		    local ang = uvspawnpointangles
 
-            UVRepair(vehicle, true)
+            if not commander then
+                UVRepair(vehicle, true)
+            end
 
             vehicle:SetPos( pos )
             vehicle:SetAngles( ang )
@@ -499,7 +501,9 @@ if SERVER then
             vehicle:SetAngles( ang )
             vehicle:SetVelocity(Vector(0,0,0))
 
-            UVRepair(vehicle, true)
+            if not commander then
+                UVRepair(vehicle, true)
+            end
             
             timer.Simple(.5, function()
                 physObj:EnableMotion(true)

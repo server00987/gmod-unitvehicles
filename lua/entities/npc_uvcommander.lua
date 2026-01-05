@@ -1140,7 +1140,7 @@ if SERVER then
 				if not OptimizeRespawn:GetBool() or (UVResourcePoints <= (#ents.FindByClass("npc_uv*")) and #ents.FindByClass("npc_uv*") ~= 1) then
 					SafeRemoveEntity(self)
 				else
-					UVOptimizeRespawn(self.v)
+					UVOptimizeRespawn(self.v, nil, true)
 				end
 				if Chatter:GetBool() and IsValid(self.v) and not UVEnemyEscaping and not self.invincible and not UVEnemyBusted then
 					UVChatterLeftPursuit(self) 
