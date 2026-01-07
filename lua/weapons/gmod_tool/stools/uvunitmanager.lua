@@ -139,12 +139,12 @@ TOOL.ClientConVar["bountyrhino"] = 50000
 
 
 local defaultvoicetable = {
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Patrol
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Support
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Pursuit
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Interceptor
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Special
-	"cop1, cop2, cop3, cop4, cop5, cop6", --Commander
+	"cop1, cop2, cop3, cop4", --Patrol
+	"cop1, cop2, cop3, cop4", --Support
+	"cop1, cop2, cop3, cop4", --Pursuit
+	"cop1, cop2, cop3, cop4", --Interceptor
+	"cop1, cop2, cop3, cop4", --Special
+	"commander1", --Commander
 	"rhino1", --Rhino
 	"air", --Air
 }
