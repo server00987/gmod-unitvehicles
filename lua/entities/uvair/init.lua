@@ -5,7 +5,6 @@ local CanWreck = GetConVar("unitvehicle_canwreck")
 local Chatter = GetConVar("unitvehicle_chatter")
 local ChatterText = GetConVar("unitvehicle_chattertext")
 local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
-local Relentless = GetConVar("unitvehicle_relentless")
 local Barrels = GetConVar("unitvehicle_unit_helicopterbarrels")
 local SpikeStrips = GetConVar("unitvehicle_unit_helicopterspikestrip")
 
@@ -423,10 +422,13 @@ function ENT:PhysicsUpdate()
 			local MathAggressive = math.random(1,10) 
 			if MathAggressive == 1 then
 				if not self.aggressive and UVTargeting then
-					if Relentless:GetBool() then
+					self.aggressive = true
+
+					local engagingchance = math.random(1,2)
+					if engagingchance == 1 then
 						self.engaging = true
 					end
-					self.aggressive = true
+
 					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
 						UVChatterAggressive(self) 
 					end

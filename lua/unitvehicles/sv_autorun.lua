@@ -18,7 +18,6 @@ local VCModELSPriority = GetConVar("unitvehicle_vcmodelspriority")
 local CallResponse = GetConVar("unitvehicle_callresponse")
 local ChatterText = GetConVar("unitvehicle_chattertext")
 local Headlights = GetConVar("unitvehicle_enableheadlights")
-local Relentless = GetConVar("unitvehicle_relentless")
 local SpawnMainUnits = GetConVar("unitvehicle_spawnmainunits")
 local RepairCooldown = GetConVar("unitvehicle_repaircooldown")
 local RepairRange = GetConVar("unitvehicle_repairrange")
@@ -388,7 +387,6 @@ concommand.Add("uv_resetallsettings", function(ply)
 	CallResponse:Revert()
 	ChatterText:Revert()
 	Headlights:Revert()
-	Relentless:Revert()
 	SpawnMainUnits:Revert()
 	RepairCooldown:Revert()
 	RepairRange:Revert()
@@ -2131,7 +2129,7 @@ function UVChangeTactics(tactic)
 	
 	if tactic == 0 then --No formation
 		return
-	elseif #UVUnitsChasing == 1 and not Relentless:GetBool() then --One unit remaining
+	elseif #UVUnitsChasing == 1 then --One unit remaining
 		FormationPoints = {
 			Vector(0,-300,0), --Rear
 		}

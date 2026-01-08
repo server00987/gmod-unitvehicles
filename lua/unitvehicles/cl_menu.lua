@@ -374,7 +374,6 @@ UVMenu.Settings = function()
 			{ TabName = "#uv.ai.title", Icon = "unitvehicles/icons/cops_icon.png", sv = true,
 				{ type = "label", text = "#uv.ailogic", sv = true },
 				{ type = "bool", text = "#uv.ailogic.optimizerespawn", desc = "uv.ailogic.optimizerespawn.desc", convar = "unitvehicle_optimizerespawn", sv = true },
-				{ type = "bool", text = "#uv.ailogic.relentless", desc = "uv.ailogic.relentless.desc", convar = "unitvehicle_relentless", sv = true },
 				{ type = "bool", text = "#uv.ailogic.wrecking", desc = "uv.ailogic.wrecking.desc", convar = "unitvehicle_canwreck", sv = true },
 				{ type = "slider", text = "#uv.ailogic.detectionrange", desc = "uv.ailogic.detectionrange.desc", convar = "unitvehicle_detectionrange", min = 1, max = 100, decimals = 0, sv = true },
 				{ type = "combo", text = "#uv.ailogic.headlights", desc = "uv.ailogic.headlights.desc", convar = "unitvehicle_enableheadlights", sv = true, content = {

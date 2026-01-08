@@ -32,7 +32,6 @@ if SERVER then
 	local MinHeatLevel = GetConVar("unitvehicle_minheatlevel")
 	local MaxHeatLevel = GetConVar("unitvehicle_maxheatlevel")
 	local HeatLevels = GetConVar("unitvehicle_heatlevels")
-	local Relentless = GetConVar("unitvehicle_relentless")
 	local PursuitTech = GetConVar("unitvehicle_unit_pursuittech")
 	local DVWaypointsPriority = GetConVar("unitvehicle_dvwaypointspriority")
 	local OptimizeRespawn = GetConVar("unitvehicle_optimizerespawn") 
@@ -1448,7 +1447,7 @@ if SERVER then
 					end
 				end --Slow down when enemy's stopped
 				if evectdot < 0 and enemyvelocity > 100000 and dist:Dot(forward) > 0 and throttle > 0 and (self:StraightToTarget(self.e, true) or not self.aggressive) then
-					if not Relentless:GetBool() or (selfvelocity+enemyvelocity) > eedist:Length2DSqr() then
+					if not self.aggressive or (selfvelocity+enemyvelocity) > eedist:Length2DSqr() then
 						if selfvelocity > 123904 then throttle = 0 end
 						if dist:Dot(eforward) < 0 then
 							if eright.z < 0 then steer = 1 else steer = -1 end
@@ -1467,11 +1466,9 @@ if SERVER then
 				if UVCalm and edist:Length2DSqr() < 250000 then
 					throttle = 0
 				end --No ramming
-				if self.v.IsSimfphyscar or self.v.IsGlideVehicle and not Relentless:GetBool() then
-					if not self.formationpoint and eedist:LengthSqr() < 6250000 and (selfvelocity/2) > enemyvelocity and enemyvelocity > 100000 then
-						throttle = -1
-					end --Slow down when enemy slows down
-				end
+				if self.v.IsSimfphyscar or self.v.IsGlideVehicle and not self.aggressive and eedist:LengthSqr() < 6250000 and (selfvelocity/2) > enemyvelocity and enemyvelocity > 100000 then
+					throttle = -1
+				end --Slow down when enemy slows down
 				
 				--If the vehicle is too close to the enemy...  
 				if (edist:Length2DSqr() < 100000 and eevectdot < 0 and enemyvelocity > 100000 and eeevectdot < 0) and not self.formationpoint and not self:ObstaclesNearbySide() then 
