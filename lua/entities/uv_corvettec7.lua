@@ -60,11 +60,11 @@ if CLIENT then
     
     ENT.Headlights = {
         {
-            offset = Vector(86,30.39,23.2),
+            offset = Vector(86,30.39,23.2),ifBodygroupId = 12, ifSubModelId = 0,
             color = Color(160,205,255)
         },
         {
-            offset = Vector(86,-30.39,23.2),
+            offset = Vector(86,-30.39,23.2),ifBodygroupId = 12, ifSubModelId = 0,
             color = Color(160,205,255)
         },
     }

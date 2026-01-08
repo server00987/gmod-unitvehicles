@@ -9,6 +9,7 @@ ENT.PrintName = "Chevrolet Colorado ZR2 2017 Police Cruiser"
 ENT.GlideCategory = "unitvehiclesglide"
 ENT.ChassisModel = "models/unitvehiclescars/uv_coloradozr2/uv_coloradozr2.mdl"
 ENT.CanSwitchSiren = true
+ENT.UVVehicleModel = "policecar"
 
 DEFINE_BASECLASS( "base_glide_car" )
 
