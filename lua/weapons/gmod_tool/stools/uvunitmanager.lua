@@ -210,7 +210,7 @@ local unitsheat5 = {
 	"default_corvettec7.json", --Interceptor
 	"default_coloradozr2.json", --Special
 	"", --Commander
-	"" --Rhino
+	"default_rhinotruck.json" --Rhino
 }
 
 local unitsheat6 = {
@@ -220,7 +220,7 @@ local unitsheat6 = {
 	"default_corvettec7.json", --Interceptor
 	"default_coloradozr2.json", --Special
 	"", --Commander
-	"" --Rhino
+	"default_rhinotruck.json" --Rhino
 }
 
 for i = 1, MAX_HEAT_LEVEL do
