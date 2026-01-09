@@ -232,8 +232,8 @@ if SERVER then
 					if not ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
 				
 					local mass = vehicle:GetPhysicsObject():GetMass()
-					vehicle:SetMaxHealth(mass)
-					vehicle:SetHealth(mass)
+					vehicle:SetMaxHealth((AutoHealth:GetBool() and math.huge) or (mass))
+					vehicle:SetHealth((AutoHealth:GetBool() and math.huge) or (mass))
 					vehicle:StopParticles()
 				end
 			end
@@ -282,6 +282,11 @@ if SERVER then
 				
 				if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
 				vehicle:Repair()
+
+                if AutoHealth:GetBool() then
+                    vehicle:SetChassisHealth(math.huge)
+				    vehicle:SetEngineHealth(math.huge)
+                end
 				
 				if cffunctions then
 					CFRefillNitrous(vehicle)
