@@ -1,15 +1,32 @@
 UV = UV or {}
 
---[[
+-- ["VERSIONNUMBER"] = {
+-- Date = "RELEASEDATE",
+-- Text = [[
 
-["VERSIONNUMBER"] = {
-Date = "RELEASEDATE",
-Text = "ADDTEXTHERE",
-},
-
-]]--
+-- ]],
+-- },
 
 UV.PNotes = {
+["v0.42.0"] = {
+Date = "January 10th, 2025",
+Text = [[
+**New Features**
+- Added the *UVPD Rhino Truck*
+
+**Changes**
+- Removed "Relentless" AI option and replaced it with a dynamic behaviour system
+ |-- Patrol and Support Units are never relentless
+ |-- Pursuit, Interceptor and Air Units have a random chance to become relentless
+ |-- Special, Commander and Rhino Units are always relentless
+- Improved AI Unit pursuit tactics
+- Removed some default cop chatter and updated others
+
+**Fixes**
+- Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
+]],
+},
+
 ["v0.41.0"] = {
 Date = "January 5, 2025",
 Text = [[

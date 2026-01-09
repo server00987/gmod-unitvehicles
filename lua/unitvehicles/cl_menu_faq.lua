@@ -249,7 +249,7 @@ You can find your UV-related data stored in your game's *data/unitvehicles* dire
 ]],
 }
 
--- Swedish
+-- Svenska (Swedish) sv-se
 UV.FAQ["sv-se"] = {
 -- Introduction
 ["Intro"] = [[
@@ -470,5 +470,230 @@ Ja, det kan du. Och simpelt är det:
 # -- Vart finns min UV-data?
 
 Du kan hitta all din UV-data i spelets *data/unitvehicles*-mapp.
+]],
+}
+
+-- Español (Spanish) es-es
+UV.FAQ["es-es"] = {
+-- Introducción
+["Intro"] = [[
+# -- ¿De qué trata esta extensión?
+
+Unit Vehicles es una extensión orientada al mundo abierto que permite, en ambos multijugador con demás personas o un solo jugador con la IA, sumergirte en persecuciones de alta velocidad como o en contra de la policía (Unidades) y carreras emocionantes en cualquier mapa.
+
+**Estas son las bases de vehículos soportadas actualmente**
+ |-- prop_vehicle_jeep (base por defecto)
+ |-- simfphys
+ |-- Glide (requerida y altamente recomendada)
+]],
+["Requirements"] = [[
+# -- ¿Necesito instalar otras extensión(es) para esto?
+
+Sí. *Decent Vehicle - Basic AI* y *Glide // Styled's Vehicle Base* son REQUERIDAS para que Unit Vehicles funcione adecuadamente.
+ |-- Decent Vehicle provee nodos para que la IA pueda aparecer y moverse en ellos.
+ |-- Glide provee los vehículos necesarios para usar con el preajuste por defecto.
+]],
+["Github"] = [[
+# -- ¿Tiene esta extensión un repositorio en Github?
+
+Sí. Por el momento se encuentra privado hasta el lanzamiento oficial.
+]],
+["Roadmap"] = [[
+# -- ¿Cómo puedo mantenerme al tanto con las últimas actualizaciones? ¿Hay alguna hoja de ruta?
+
+Puedes seguirnos en nuestra página de Trello, o en nuestro servidor de Discord, ambos los puedes encontrar en nuestra página de la Workshop.
+]],
+["ConVars"] = [[
+# -- ¿Qué comandos de consola hay para usar?
+
+ |-- uv_spawnvehicles - Aparece unidades IA que patrullan.
+ |-- uv_setheat [x] - Establece el nivel de persecución.
+ |-- uv_despawnvehicles - Desaparece unidades IA que patrullan.
+ |-- uv_resetallsettings - Reestablece todos ajustes del servidor a sus valores por defecto.
+ |-- uv_startpursuit - Comienza un conteo antes de comenzar una persecución.
+ |-- uv_stoppursuit - Detiene la persecución con unidades IA las cuales asumen que escapaste.
+ |-- uv_wantedtable - Muestra una lista de sospechosos buscados en la consola.
+ |-- uv_clearbounty - Establece el valor de la bolsa a 0.
+ |-- uv_setbounty [x] - Establece el valor de la bolsa.
+ |-- uv_spawn_as_unit - Te permite unirte como unidad policial.
+]],
+
+-- Carreras
+["Racing.Joining"] = [[
+# -- ¿Cómo me uno a las carreras?
+
+Si alguien ya preparó una carrera, y te envian una invitación, recibirás una notificación en pantalla en la que te invitan a ella, asumiendo que estás en un vehículo y no hay ninguna persecución en curso.
+]],
+
+["Racing.Resetting"] = [[
+# -- ¡Me atasqué! ¿Cómo reaparezco?
+
+ |-- Presiona [key:unitvehicle_keybind_resetposition] para restablecer el vehículo
+ |-- Espera 3 segundos
+ |-- ¡Estás de vuelta en el último punto de control por el que pasaste!
+ 
+**A tener en cuenta**
+ |-- No puedes restablecer mientras estás siendo arrestado.
+ |-- No puedes restablecer cuando ya te estás moviendo.
+]],
+
+["Racing.Starting"] = [[
+# -- ¿Cómo comienzo a correr?
+
+Comienza una carrera yendo a [string:uv.rm] en el menú de UV:
+ |-- Haz click en [string:uv.rm.loadrace]
+ |-- Elige una carrera de la lista
+ |-- Invita a otros corredores, o presiona [string:uv.rm.startrace]
+ Puedes comenzar la carrera inmediatamente, o automáticamente aparecer IA para que se unan a tu carrera.
+
+
+*A tener en cuenta*
+ |-- ¡Tiene que haber por lo menos 1 espacio en la grilla para comenzar la carrera!
+ |-- Puedes invitar amigos/corredores IA haciendo click en [string:uv.rm.sendinvite] antes de hacer click en [string:uv.rm.startrace] siempre y cuando la carrera esté cargada.
+ |-- Si no hay carreras existentes, tendrás que crear una.
+ |-- ¡Como alternativa, busca si hay en la workshop!
+]],
+
+["Racing.Create"] = [[
+# -- ¿Cómo creo carreras?
+Usa la herramienta [string:tool.uvracemanager.name]:
+
+
+*-- Paso 1: Crea puntos de control*
+ |-- Presiona [+attack] en una esquina para empezar a colocar un punto de control
+ |-- Presiona  [+attack] en otra esquina para terminar de colocarlo
+ |-- Consejo: Mantén [+use] para incrementar la altura del punto de control automáticamente
+ 
+
+*-- Paso 2: pon los puntos de control en orden*
+ |-- Presiona [+attack2] en el punto de control.
+ |-- Escribe la ID del punto de control
+ |-- Asegúrate de que la ID esté en orden secuencial
+ |-- Los puntos de control unidos usan la misma ID
+ |-- La IA siempre pasará por el último punto de control puesto 
+ 
+
+*-- Paso 3: Crea espacios en la grilla*
+ |-- Presiona [+reload] para poner espacios en la grilla
+ |-- Los números en los espacios representan el orden de las posiciones
+ |-- ¿Quieres más corredores? ¡Pon más espacios!
+ 
+
+*-- Paso 4: Exportar la carrera*
+ |-- ¿Terminaste de crear tu carrera? Abre el menú de objetos y dale a [string:tool.uvracemanager.settings.saverace]
+ |-- Ponle un nombre
+ |-- ¡Ahora aparecerá como una carrera que puedes importar y usar!
+]],
+["Racing.Create.Speedlimit"] = [[
+# -- ¡Los corredores IA van a ir rápido por la pista!
+
+Al poner puntos de control, tendrás que definir la velocidad que la IA tomará.
+Si la IA va muy rápido, tendrás que cambiar el límite de velocidad que encontrarás en los ajustes de [string:tool.uvracemanager.name].
+Si tienes una carrera ya cargada, puedes presionar [+attack2] en el punto de control para editarlo y aplicar el límite de velocidad actualizado.
+Alternativamente, puedes editar el ultimo numero en el archivo "race data".
+]],
+
+-- Persecuciones
+["Pursuit.Starting"] = [[
+# -- ¿Cómo empiezo una persecución?
+
+ |-- Ve a [string:uv.pm]
+ |-- Haz click en [string:uv.pm.pursuit.start]
+ |-- Alternativamente, conduce agresivamente o colisiona con una unidad policial
+ |-- ¡Y allí vas!
+]],
+
+["Pursuit.JoinAsUnit"] = [[
+# -- ¿Puedo unirme a la persecución como unidad policial?
+
+¡Sí que puedes! y es simple:
+ |-- Ve a [string:uv.pm] o a [string:uv.menu.welcome]
+ |-- Haz click en [string:uv.pm.spawnas]
+ |-- Elige el vehículo que quieras conducir
+ |-- ¡Y allí vas!
+]],
+["Pursuit.Respawn"] = [[
+# -- ¡Estoy atascado o muy lejos de el/los sospechoso(s)! ¿Cómo reaparezco?
+
+ |-- Presiona [key:unitvehicle_keybind_resetposition] para abrir el menú [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Elige el vehículo con el que quieras reaparecer
+ |-- ¡Y allí vas!
+ 
+**A tener en cuenta**
+ |-- Si reapareces una vez, tendrás que esperar un momento antes de que lo vuelvas a hacer.
+]],
+["Pursuit.CreateUnits"] = [[
+# -- Quiero crear unidades ¿Qué hago?
+
+Esto es lo que harás:
+ |-- 1. Saca la herramienta [string:tool.uvunitmanager.name]
+ |-- 2. Aparece cualquier vehículo
+ |-- 3. Presiona [+attack2] en el vehículo
+ |-- 4. Dale un nombre único a la unidad
+ |-- 5. (Opcional) selecciona el nivel de persecución en el cual la unidad aparecerá
+ |-- 6. (Opcional) ajusta otros valores como creas que encajen mejor
+ |-- 7. Haz click en [string:uv.tool.create]
+ 
+Ahora aplica la unidad a través de la herramienta [string:tool.uvunitmanager.name]. Ahora podrás enfrentar a esa unidad o usarla para atrapar sospechosos.
+]],
+["Pursuit.Roadblocks"] = [[
+# -- Quiero crear bloqueos. ¿Qué hago?
+
+Tienes que usar la herramienta [string:tool.uvroadblock.name]:
+ |-- 1. Usando la herramienta, crea los objetos y piezas necesarias para el bloqueo.
+ |-- 2. Usando la herramienta [string:tool.weld.name] (o cualquier alternativa), suelda todos los objetos y piezas juntos.
+ |-- 3. Una vez soldados, presiona [+attack2] en cualquier objeto del bloqueo.
+ |-- 4. Cambia los ajustes a cómo te parezcan mejor, después haz click en [string:uv.tool.create]
+ 
+El bloqueo ahora aparecerá aleatoriamente cuando una persecución se encuentre activa.
+]],
+["Pursuit.Pursuitbreaker"] = [[
+# -- Quiero crear pausas de persecución. ¿Qué hago?
+
+Usa la herramienta [string:tool.uvpursuitbreaker.name]:
+ |-- 1. Crea los objetos y piezas necesarias para la pausa de persecución.
+ |-- 2. Usando la herramienta [string:tool.weld.name] (o cualquier alternativa), suelda todos los objetos y piezas juntos.
+ |-- 3. Una vez soldados, presiona [+attack2] en cualquier objeto de la pausa de persecución.
+ |-- 4. Cambia los ajustes a cómo te parezcan mejor, después haz click en [string:uv.tool.create]
+]],
+
+["Other.CreateTraffic"] = [[
+# -- ¿Cómo aparezco tráfico?
+
+Esto es lo que harás:
+ |-- 1. Saca la herramienta [string:tool.uvtrafficmanager.name] 
+ |-- 2. Aparece cualquier vehículo
+ |-- 3. Presiona [+attack2] en el vehículo
+ |-- 4. Dale un nombre único al vehículo
+ |-- 5. (Opcional) ajusta otros valores como creas que encajen mejor
+ |-- 6. Haz click en [string:uv.tool.create]
+ 
+Puedes cambiar los ajustes generales en la tabla [string:uv.tm] en el menú de UV.
+]],
+["Other.PursuitTech"] = [[
+# -- ¿Que son las tecnologías de persecución?
+
+Las tecnologías de persecución son una serie de armas y dispositivos de apoyo utilizados por corredores y las unidades policiales.
+Puedes aplicar hasta 2 tecnologías de persecución a tu vehículo para luchar contra tus oponentes o defenderte de ellos.
+
+Así es como se aplican y usan:
+ |-- 1. Saca la herramienta [string:tool.uvpursuittech.name]
+ |-- 2. Elige la tecnología de persecución que quieres usar como corredor o como unidad policial.
+ |-- 3. Presiona [+attack] en tu vehículo o unidad
+ 
+Ahora puedes presionar [key:unitvehicle_pursuittech_keybindslot_1] y [key:unitvehicle_pursuittech_keybindslot_2] para activar tus tecnologías de persecución mientras manejas!
+]],
+["Other.RenameAI"] = [[
+# -- ¿Puedo renombrar los corredores IA y las unidades?
+
+Si puedes. Y es simple:
+ |-- 1. Saca la herramienta [string:tool.uvnamechanger.name]
+ |-- 2. Escribe el nombre que quieres que la IA tenga
+ |-- 3. Presiona [+attack] en el corredor IA o unidad
+]],
+["Other.DataFolder"] = [[
+# -- ¿Donde se guardan mis datos de UV?
+
+Puedes encontrar tus datos relacionados con UV guardados en el directorio *data/unitvehicles* de tu juego.
 ]],
 }

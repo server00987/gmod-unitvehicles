@@ -1,7 +1,15 @@
+<------- January 10 ------->
+- Added a new UVPD vehicle
+- Some other stuff
+
+More detailed patch notes available in-game.
+
 <------- January 5 ------->
-- Added a new UVPD car
+- Added a new UVPD vehicle
 - Auto headlights
 - Glide list fix
+- Update history in the UV Menu
+- Some other stuff
 
 More detailed patch notes available in-game.
 

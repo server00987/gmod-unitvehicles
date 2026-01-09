@@ -1,5 +1,20 @@
 <------- January 5 ------->
 # New Features
+- Added the *UVPD Rhino Truck*
+
+# Changes
+- Removed "Relentless" AI option and replaced it with a dynamic behaviour system
+> - Patrol and Support Units are never relentless
+> - Pursuit, Interceptor and Air Units have a random chance to become relentless
+> - Special, Commander and Rhino Units are always relentless
+- Improved AI Unit pursuit tactics
+- Removed some default cop chatter and updated others
+
+# Fixes
+- Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
+
+<------- January 5 ------->
+# New Features
 - Added the **UVPD Chevrolet Colorado ZR2 2017 Police Cruiser**
 - Added a new **Update History** section in the UV Menu - accessed via the **Welcome Page**
 
