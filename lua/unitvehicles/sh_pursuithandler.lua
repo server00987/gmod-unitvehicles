@@ -1785,23 +1785,9 @@ if SERVER then
 		local ltimeout = (UVCooldownTimer+5)
 
 		if UVHUDPursuit then
-			if #UVUnitsChasing <= 0 and not ((not UVUCommanderEvade:GetBool()) and UVOneCommanderActive) then
-				if (not uvevadingprogress) or uvevadingprogress == 0 then
-					uvevadingprogress = CurTime()
-				end
-				net.Start("UVHUDEvading")
-				net.WriteBool(true)
-				net.WriteString(math.Clamp((CurTime() - uvevadingprogress) / 5, 0, 1))
-				net.Broadcast()
-				--UpdatePursuitTable('IsEvading', true)
-			else
-				uvevadingprogress = 0
-				net.Start("UVHUDEvading")
-				net.WriteBool(false)
-				net.WriteString(0)
-				net.Broadcast()
-				--UpdatePursuitTable('IsEvading', false)
-			end
+			net.Start("UVHUDEvading")
+			net.WriteString(math.Clamp((CurTime() - UVLosing) / 5, 0, 1))
+			net.Broadcast()
 		end
 
 		if not UVEnemyEscaped and UVTargeting and UVLosing ~= CurTime() and (UVLosing - CurTime() + ltimeout) < (ltimeout - 5) and #UVWantedTableVehicle > 0 then
@@ -1993,7 +1979,6 @@ if SERVER then
 
 			if not UVHUDPursuit then
 				UVLosing = CurTime()
-				uvevadingprogress = CurTime()
 				UVRestoreResourcePoints()
 				for _, ent in ents.Iterator() do
 					if UVPassConVarFilter(ent) then
@@ -3262,7 +3247,6 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive("UVHUDEvading", function()
-		UVHUDDisplayEvading = net.ReadBool()
 		UVEvadingProgress = net.ReadString()
 	end)
 

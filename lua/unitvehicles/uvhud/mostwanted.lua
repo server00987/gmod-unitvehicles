@@ -1632,6 +1632,10 @@ local function mw_pursuit_main( ... )
     local blink = 255 * math.abs(math.sin(RealTime() * 4))
     local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
     local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
+
+    local function blinkcolorinstant(min, max)
+        return math.floor(RealTime()*6)==math.Round(RealTime()*6) and min or max
+    end
     
     if HeatProgress >= 0.6 and HeatProgress < 0.75 then
         surface.SetDrawColor(Color(255, blink, blink))
@@ -1689,9 +1693,6 @@ local function mw_pursuit_main( ... )
         end
         local healthratio = UVHUDCommanderLastHealth / UVHUDCommanderLastMaxHealth
         local healthcolor
-        local blink = 255 * math.abs(math.sin(RealTime() * 4))
-        local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-        local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
         
         if healthratio >= 0.5 then
             healthcolor = Color(255, 255, 255, 200)
@@ -1746,40 +1747,21 @@ local function mw_pursuit_main( ... )
                 BustingProgress = CurTime()
             end
             
-            local blink = 255 * math.abs(math.sin(RealTime() * 4))
-            local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-            local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-            
             local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
             
             local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
             
-            if timeLeft >= UVBustTimer * 0.5 then
-                states.BustedColor = Color(255, 0, 0, blink)
-                -- UVSoundBusting()
-            elseif timeLeft >= UVBustTimer * 0.2 then
-                states.BustedColor = Color(255, 0, 0, blink2)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
-            elseif timeLeft >= 0 then
-                states.BustedColor = Color(255, 0, 0, blink3)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
-            else
-                states.BustedColor = Color(255, 0, 0)
-            end
+            states.BustedColor = Color(255, blinkcolorinstant(0, 255), blinkcolorinstant(0, 255))
             
             local T = math.Clamp((UVBustingProgress / UVBustTimer) * (UV_UI.W(w * 0.1515)), 0, UV_UI.W(w * 0.1515))
             T = math.floor(T)
-			surface.SetDrawColor(255, 0, 0)
+			surface.SetDrawColor(255, 0, 0, blinkcolorinstant(230, 255))
             surface.DrawRect(UV_UI.XScaled(w * 0.333) + (UV_UI.W(w * 0.1515) - T), bottomy + h * 0.1, T, h * 0.01)
             middlergb = {
                 r = 255,
-                g = 0,
-                b = 0,
-                a = 255
+                g = 255,
+                b = 255,
+                a = 128
             }
         else
             UVBustedColor = Color(255, 255, 255, 50)
@@ -1787,24 +1769,24 @@ local function mw_pursuit_main( ... )
         end
         
         -- Evade Box, Evade Meter
-        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 and BustingProgress == 0 then
             --UVSoundHeat(UVHeatLevel)
-            if not EvadingProgress or EvadingProgress == 0 then
-                EvadingProgress = CurTime()
+            if not EvadingProgress then
+                EvadingProgress = 0
                 UVEvadingProgress = EvadingProgress
             end
             
             local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.16225)), 0, UV_UI.W(w * 0.16225))
-            surface.SetDrawColor(155, 207, 0)
+            surface.SetDrawColor(155, 207, 0, blinkcolorinstant(230, 255))
             surface.DrawRect(UV_UI.XScaled(w * 0.51), bottomy + h * 0.1, T, h * 0.01)
             middlergb = {
-                r = 155,
-                g = 207,
-                b = 0,
-                a = 255
+                r = 255,
+                g = 255,
+                b = 255,
+                a = 128
             }
             
-            states.EvasionColor = Color(blink, 255, blink)
+            states.EvasionColor = Color(blinkcolorinstant(155, 255), blinkcolorinstant(207, 255), blinkcolorinstant(0, 255))
         else
             EvadingProgress = 0
         end

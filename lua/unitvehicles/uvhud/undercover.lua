@@ -1500,10 +1500,10 @@ local function undercover_pursuit_main( ... )
         end
         
         -- Evade Box, Evade Meter
-        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 and BustingProgress == 0 then
             --UVSoundHeat(UVHeatLevel)
-            if not EvadingProgress or EvadingProgress == 0 then
-                EvadingProgress = CurTime()
+            if not EvadingProgress then
+                EvadingProgress = 0
                 UVEvadingProgress = EvadingProgress
             end
             

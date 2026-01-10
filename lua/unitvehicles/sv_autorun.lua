@@ -2909,7 +2909,7 @@ function UVCheckIfBeingBusted(enemy)
 	local enemyAnglesVelo = enemyph:GetAngleVelocity()
 	
 	--Stunt jump
-	if not (UVEnemyEscaping or uvevadingprogress ~= 0) and UVTargeting then
+	if not UVEnemyEscaping and UVTargeting then
 		if not enemy.UVStuntJump then
 			local onground = util.QuickTrace(enemy:WorldSpaceCenter(), -vector_up * 500, {enemy})
 			

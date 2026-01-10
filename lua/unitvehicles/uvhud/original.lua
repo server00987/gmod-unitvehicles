@@ -931,7 +931,7 @@ local function original_pursuit_main( ... )
         end
         
         if not UVHUDDisplayNotification then
-            if (UnitsChasing > 0 or NeverEvade:GetBool()) and not UVHUDDisplayCooldown then
+            if (UnitsChasing ~= 0 or NeverEvade:GetBool()) and not UVHUDDisplayCooldown or BustingProgress ~= 0 then
                 EvadingProgress = 0
                 local busttime = math.Round((BustedTimer:GetFloat()-UVBustingProgress),3)
                 
@@ -970,8 +970,8 @@ local function original_pursuit_main( ... )
                 end
                 --UVSoundHeat(UVHeatLevel)
             elseif not UVHUDDisplayCooldown then
-                if not EvadingProgress or EvadingProgress == 0 then
-                    EvadingProgress = CurTime()
+                if not EvadingProgress then
+                    EvadingProgress = 0
                     UVEvadingProgress = EvadingProgress
                 end
                 

@@ -1623,9 +1623,9 @@ local function world_pursuit_main( ... )
 
     if not UVHUDDisplayCooldown then
         -- Evade Meter
-        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 then
-            if not EvadingProgress or EvadingProgress == 0 then
-                EvadingProgress = CurTime()
+        if not UVHUDDisplayNotification and not UVHUDDisplayCooldown and UnitsChasing == 0 and BustingProgress == 0 then
+            if not EvadingProgress then
+                EvadingProgress = 0
                 UVEvadingProgress = EvadingProgress
             end
             
