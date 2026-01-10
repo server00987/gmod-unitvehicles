@@ -697,3 +697,458 @@ Si puedes. Y es simple:
 Puedes encontrar tus datos relacionados con UV guardados en el directorio *data/unitvehicles* de tu juego.
 ]],
 }
+
+-- Русский (Russian) ru
+UV.FAQ["ru"] = {
+-- Introduction
+["Intro"] = [[
+# -- О чём этот аддон?
+
+Unit Vehicles - это аддон, ориентированный на песочницу, который позволяет игрокам в Мультиплеере с другими или Синглплеере с ИИ учавствовать в высокоскоростных погонях за или против полиции (Юнитов), а также в захватывающих гонках на любой карте. 
+
+**Поддерживаемые базы машин на данный момент:**
+ |-- prop_vehicle_jeep (стандартная база машин)
+ |-- simfphys
+ |-- Glide (требуется и настоятельно рекомендуется)
+]],
+["Requirements"] = [[
+# -- Требуется ли мне устанавливать другие аддоны?
+
+Да. *Decent Vehicle - Basic AI* и *Glide // Styled's Vehicle Base* требуется для Unit Vehicles для правильного функционирования.
+ |-- Decent Vehicle предоставляет точки для ИИ для их размещения и езды по карте.
+ |-- Glide предоставляет машины, нужные для использования стандартного пресета.
+]],
+["Github"] = [[
+# -- Есть ли у этого аддона репозиторий на GitHub?
+
+Да. В данный момент он приватный до официального релиза. 
+]],
+["Roadmap"] = [[
+# -- Как я могу быть в курсе последних обновлений? Есть ли дорожная карта?
+
+Ты можешь отслеживать нас на нашей странице в Trello или на нашем Discord сервере, которые можно найти на нашей странице в Мастерской.
+]],
+["ConVars"] = [[
+# -- Какие есть консольные команды, которые я могу использовать?
+
+ |-- uv_spawnvehicles - Размещает патрулирующих ИИ Юнитов
+ |-- uv_setheat [x] - Устанавливает Уровень Жары
+ |-- uv_despawnvehicles - Удаляет патрулирующих ИИ Юнитов
+ |-- uv_resetallsettings - Сбрасивает все серверные настройки до их изначальных значений
+ |-- uv_startpursuit - Начинает отсчёт до начала погони
+ |-- uv_stoppursuit - Останавливает погоню с ИИ Юнитами, предполагая ваш побег
+ |-- uv_wantedtable - Выводит список разыскиваемых подозреваемых в консоль
+ |-- uv_clearbounty - Устанавливает значение награды на 0
+ |-- uv_setbounty [x] - Устанавливает значение награды
+ |-- uv_spawn_as_unit - Позволяет вам присоединиться в качестве Юнита
+]],
+
+-- Racing
+["Racing.Joining"] = [[
+# -- Как мне присоединяться к гонкам?
+
+Если кто-то приготовил гонку, а затем отправил приглашение, у тебя появится уведомление на экране, предполагая, что ты в машине и не в погоне.
+]],
+
+["Racing.Resetting"] = [[
+# -- Я застрял! Как мне вернуться?
+
+ |-- Нажми [key:unitvehicle_keybind_resetposition] чтобы вернуть свою машину
+ |-- Подожди 3 секунды
+ |-- Ты вернулся на последнюю пройденную контрольную точку!
+ 
+**Примечания**
+ |-- Ты не сможешь вернуться во время ареста
+ |-- Ты не сможешь вернуться во время движения
+]],
+
+["Racing.Starting"] = [[
+# -- Как мне начать гонку?
+
+Начать гонку, переходя в [string:uv.rm] в UV Меню:
+ |-- Нажми [string:uv.rm.loadrace]
+ |-- Выбери любую гонку из списка
+ |-- Пригласи других гонщиков или нажми [string:uv.rm.startrace]
+ |-- Ты можешь сразу начать гонку или автоматически разместить ИИ, чтобы они присоединились к гонке
+
+
+*Примечания*
+ |-- Должно быть хотя бы 1 Место Старта, чтобы начать гонку!
+ |-- Ты можешь пригласить друзей/ИИ Гонщиков нажатием [string:uv.rm.sendinvite] до нажатия [string:uv.rm.startrace] до тех пор, пока гонка загружена
+ |-- Если нет имеющихся гонок, ты можешь создать свою
+ |-- Или же ты можешь найти некоторые в Мастерской!
+]],
+
+["Racing.Create"] = [[
+# -- Как мне создавать гонки?
+Use the [string:tool.uvracemanager.name] tool:
+
+
+*-- Шаг 1: Создай Контрольные Точки*
+ |-- Нажми [+attack] в одном месте, чтобы начать установку контрольной точки
+ |-- Нажми [+attack] по другому месту, чтобы закончить установку
+ |-- Совет: Нажми [+use] чтобы повысить высоту контрольной точки автоматически
+ 
+
+*-- Шаг 2: Размести Контрольные Точки по порядку*
+ |-- Нажми [+attack2] по контрольной точке.
+ |-- Введи ID для Контрольной Точки
+ |-- Убедись, что ID в правильной последовательности
+ |-- Для разветвляющихся контрольных точек используй совпадающие ID
+ |-- ИИ всегда будет использовать последний установленный ID контрольной точки
+ 
+
+*-- Шаг 3: Создай Места Старта*
+ |-- Нажми [+reload] чтобы разместить Места Старта
+ |-- Номера на местах отображают порядок старта
+ |-- Хочешь больше гонщиков? Размести больше мест!
+ 
+
+*-- Шаг 4: Экспортируй Гонку*
+ |-- Закончил с гонкой? Открой Спавнменю и нажми [string:tool.uvracemanager.settings.saverace]
+ |-- Назови её
+ |-- Она отобразится как гонка, которую ты можешь импортировать, а затем начать гонку!
+]],
+["Racing.Create.Speedlimit"] = [[
+# -- ИИ Гонщики слишком быстро ездят по трассе!
+
+Во время размещения контрольных точек, тебе нужно решить, с какой скоростью ИИ будет ездить.
+Если ИИ ездит слишком быстро, тебе нужно изменить значение ограничения скорости, найденное в [string:tool.uvracemanager.name] настройках.
+Если у тебя есть уже загруженная гонка, ты можешь нажать [+attack2] по Контрольной Точке, чтобы изменить её и принять обновлённое ограничение скорости.
+Или же ты можешь изменить последний номер в файле данных гонки.
+]],
+
+-- Pursuits
+["Pursuit.Starting"] = [[
+# -- Как мне начать погоню?
+
+ |-- Отправляйся в [string:uv.pm]
+ |-- Нажми [string:uv.pm.pursuit.start]
+ |-- Или же превышай скорость или врежься в Юнита
+ |-- Уходи скорей!
+]],
+
+["Pursuit.JoinAsUnit"] = [[
+# -- Могу ли я присоединиться к Погоне в качестве Юнита?
+Да, ты можешь! И это просто:
+ |-- Отправляйся в [string:uv.pm] или [string:uv.menu.welcome]
+ |-- Нажми [string:uv.pm.spawnas]
+ |-- Выбери машину, на которой хочешь ехать
+ |-- Поезжай!
+]],
+["Pursuit.Respawn"] = [[
+# -- Я застрял или слишком далеко от подозреваемого(мых)! Как мне вернуться?
+
+ |-- Нажми [key:unitvehicle_keybind_resetposition] чтобы открыть меню [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Выбери машину, на которой ты хочешь вернуться
+ |-- Поезжай!
+ 
+**Примечания**
+ |-- Если ты вернулся один раз, тебе нужно подождать немного времени, чтобы сделать это снова
+]],
+["Pursuit.CreateUnits"] = [[
+# -- Я хочу создать Юнитво. Что мне нужно сделать?
+
+Вот что тебе нужно сделать:
+ |-- 1. Используй инструмент [string:tool.uvunitmanager.name]
+ |-- 2. Поставь любую машину
+ |-- 3. Нажми [+attack2] по машине
+ |-- 4. Выбери уникальное имя Юниту
+ |-- 5. (Необязательно) Выбери Уровень Жары, на котором Юнит появляется
+ |-- 6. (Необязательно) Сделай изменения, которые могут быть уместны
+ |-- 7. Нажми [string:uv.tool.create]
+ 
+Теперь прими Юнита с помощью инструмента [string:tool.uvunitmanager.name] и либо ты встретишься с Юнитом, которого ты создал, либо тебе позволят играть за Юнита против сбегающих подозреваемых.
+]],
+["Pursuit.Roadblocks"] = [[
+# -- Я хочу создать Заграждения. Что мне нужно сделать?
+
+Ты используешь инструмент [string:tool.uvroadblock.name]:
+ |-- 1. Используя его, размести пропы и части, нужные для Заграждения
+ |-- 2. Используя инструмент [string:tool.weld.name] (или любую другую альтернативу), свари все части вместе
+ |-- 3. Как только всё сварено, нажми [+attack2] по любой части Заграждения
+ |-- 4. Измени настройки на свой вкус, затем нажми [string:uv.tool.create]
+ 
+Заграждения будет появляться случайно во время погони.
+]],
+["Pursuit.Pursuitbreaker"] = [[
+# -- Я хочу создать Погонеломы. Что мне нужно сделать?
+
+You use the [string:tool.uvpursuitbreaker.name] tool:
+ |-- 1. Размести пропы и части, нужные для Погонелома
+ |-- 2. Используя инструмент [string:tool.weld.name] (или любую другую альтернативу), свари все части вместе
+ |-- 3. Как только всё сварено, нажми [+attack2] по любой части Погонелома
+ |-- 4. Измени настройки на свой вкус, затем нажми [string:uv.tool.create]
+]],
+
+["Other.CreateTraffic"] = [[
+# -- Как мне разместить трафик?
+
+Вот что тебе нужно сделать?:
+ |-- 1. Используй инструмент [string:tool.uvtrafficmanager.name]
+ |-- 2. Поставь любую машину
+ |-- 3. Нажми [+attack2] по машине
+ |-- 4. Выбери уникальное имя
+ |-- 5. (Необязательно) Сделай изменения, которые могут быть уместны
+ |-- 6. Нажми [string:uv.tool.create]
+ 
+Ты можешь изменить общие настройки во вкладке [string:uv.tm] UV Меню.
+]],
+["Other.PursuitTech"] = [[
+# -- Что такое Технология Погони?
+Технология погони - это серия оружий и устройств поддержки, исползуемые как Гонщиками, так и Юнитами.
+Ты можешь применить только 2 Технологии Погони на свой автомобиль, чтобы сражаться с соперниками или защитить себя.
+
+Вот как можно применить и использовать их:
+ |-- 1. Используй инструмент [string:tool.uvpursuittech.name]
+ |-- 2. Выбери Технологию Погони, которую ты хочешь использовать за Гонщика или Юнита
+ |-- 3. Нажми [+attack] по своей машине или Юниту
+ 
+Теперь ты можешь нажать [key:unitvehicle_pursuittech_keybindslot_1] и [key:unitvehicle_pursuittech_keybindslot_2] чтобы активировать Технологию Погони во время вождения!
+]],
+["Other.RenameAI"] = [[
+# -- Могу ли я переименовать ИИ Гонщиков и Юнитов?
+
+Да, ты можешь. И это просто:
+ |-- 1. Используй инструмент [string:tool.uvnamechanger.name]
+ |-- 2. Введи имя, которые ты хочешь применить для ИИ
+ |-- 3. Нажми [+attack] по ИИ Гонщику или Юниту
+]],
+["Other.DataFolder"] = [[
+# -- Где храняться данные UV?
+
+Ты можешь найти данные, связанные с UV, хранящиеся в директории *data/unitvehicles* игры.
+]],
+}
+
+-- Polska (Polish) pl
+UV.FAQ["pl"] = {
+-- Introduction
+["Intro"] = [[
+# -- Czym jest ten dodatek?
+
+Unit Vehicles to dodatek stworzony z myślą o trybie Piaskownicy, który pozwala graczom ścigać się z Policją (Jednostkami) niezależnie od ilości osób. Gracze mogą wcielić się zarówno w Poszukiwanego lub Jednostkę, oraz tworzyć i uczestniczyć w wyścigach na określonej trasie.
+
+**Lista wspieranych baz pojazdów:**
+ |-- prop_vehicle_jeep (podstawowy Jeep z HL2)
+ |-- simfphys
+ |-- Glide (wymagane i zalecane)
+]],
+["Requirements"] = [[
+# -- Czy potrzebuję innych dodatków aby ten działał?
+
+Tak. *Decent Vehicle - Basic AI* i *Glide // Styled's Vehicle Base* są WYMAGANE do poprawnego działania Unit Vehicles.
+ |-- Decent Vehicle odpowiedzialne jest za punkty nawigacyjne dla pojazdów kontrolowanych przez SI.
+ |-- Glide dodaje pojazdy używane w domyślnych ustawieniach.
+]],
+["Github"] = [[
+# -- Czy ten dodatek posiada Repozytorium na Githubie?
+
+Tak, aczkolwiek do momentu oficjalnego wydania dodatku będzie ono prywatne.
+]],
+["Roadmap"] = [[
+# -- Gdzie mogę przeczytać najnowsze zmiany? Jest jakiś plan działania?
+
+Możesz obserwować naszą stronę na Trello lub dołączyć na Discorda. Oba linki znajdziesz na stronie dodatku na Warsztacie Steam.
+]],
+["ConVars"] = [[
+# -- Jakich komend mogę użyć?
+
+ |-- uv_spawnvehicles - Pojawia patrolujące jednostki SI
+ |-- uv_setheat [x] - Ustawia Poziom Obławy
+ |-- uv_despawnvehicles - Usuwa patrolujące Jednostki SI
+ |-- uv_resetallsettings - Resetuje wszystkie ustawienia do domyślnych wartości
+ |-- uv_startpursuit - Rozpoczyna pościg po odliczeniu
+ |-- uv_stoppursuit - Zatrzymuje pościg zakładając że zakończył się ucieczką
+ |-- uv_wantedtable - Drukuje listę poszukiwanych w konsoli
+ |-- uv_clearbounty - Ustawia notowania na 0
+ |-- uv_setbounty [x] - Ustawia notowania na wpisaną liczbę
+ |-- uv_spawn_as_unit - Pojawia Cię jako Jednostka
+]],
+
+-- Racing
+["Racing.Joining"] = [[
+# -- Jak dołączyć do Wyścigu?
+
+Jak gracz przygotuje Wyścig i Cię zaprosi, dostaniesz powiadomienie na ekranie pod warunkiem że znajdujesz się w pojeździe i nie goni Cię policja.
+]],
+
+["Racing.Resetting"] = [[
+# -- Samochód utknął! Co robić?
+
+ |-- Wciśnij [key:unitvehicle_keybind_resetposition] aby zresetować pozycję pojazdu
+ |-- Poczekaj 3 sekundy
+ |-- Twój samochód pojawi się na ostatnim przejechanym pkcie kontrolnym!
+ 
+**Uwagi**
+ |-- Nie można zresetować podczas aresztowania
+ |-- Nie można zresetować podczas jazdy
+]],
+
+
+["Racing.Starting"] = [[
+# -- Jak rozpocząć Wyścig?
+
+Rozpocząć Wyścig można w [string:uv.rm] w oknie UV:
+ |-- Wciśnij [string:uv.rm.loadrace]
+ |-- Wybierz trasę z listy
+ |-- Zaproś innych graczy lub wciśnij [string:uv.rm.startrace]
+ |-- Możesz od razu rozpocząć Wyścig, lub pojawić SI które do niego dołączą
+
+
+*Uwagi*
+ |-- Potrzebne jest co najmniej 1 miejsce startowe do rozpoczęcia!
+ |-- Możesz zaprosić graczy/SI wciskając [string:uv.rm.sendinvite] a następnie [string:uv.rm.startrace] o ile Wyścig jest wczytany
+ |-- Jeśli nie istnieje gotowa trasa, musisz stworzyć nową
+ |-- Ewentualnie możesz przeszukać Warsztat Steam!
+]],
+
+
+["Racing.Create"] = [[
+# -- Jak stworzyć Wyścig?
+Przy użyciu narzędzia [string:tool.uvracemanager.name]:
+
+
+*-- Krok 1: Utwórz pkt kontrolne*
+ |-- Wciśnij [+attack] w pierwszym rogu by zacząć kłaść pkt kontrolny
+ |-- Wciśnij [+attack] w drugim aby postawić pkt kontrolny
+ |-- Wskazówka: Przytrzymaj [+use] by automatycznie zwiększyć wysokość pkt kontrolnych.
+
+
+*-- Krok 2: Ustaw dobrą kolejność pkt kontrolnych*
+ |-- Wciśnij [+attack2] na danym pkcie.
+ |-- Wpisz ID pktu
+ |-- Upewnij się że ID pktów są w ciągu
+ |-- Rozgałęzione pkty używają tego samego ID
+ |-- SI zawsze będą używać ostatniego położonego ID pktu
+
+
+*-- Krok 3: Utwórz miejsca startowe*
+ |-- Wciśnij [+reload] aby położyć miejsce startowe
+ |-- Numery na slotach pokazują kolej startowania
+ |-- Chcesz więcej zawodników? Połóż więcej miejsc startowych!
+
+
+*-- Krok 4: Eksportuj Wyścig*
+ |-- Wyścig gotowy? Otwórz Spawnmenu i wciśnij [string:tool.uvracemanager.settings.saverace]
+ |-- Nadaj trasie nazwę
+ |-- Od teraz trasa będzie pokazywać się jako Wyścig do zaimportowania i rozpoczęcia!
+]],
+["Racing.Create.Speedlimit"] = [[
+# -- Zawodnicy SI osiągają zbyt duże prędkości!
+
+
+Przy tworzeniu pkt kontrolnych, musisz ustalić prędkość z jaką SI będzie starało się przez niego przejechać.
+Jeśli SI jedzie zbyt szybko, będzie trzeba zmienić wartość limitu prędkości w ustawieniach [string:tool.uvracemanager.name].
+Jeśli wyścig jest już wczytany, możesz wcisnąć [+attack2] na pkt kontrolny żeby go edytować i ustawić wybraną wartość limitu prędkości.
+Zamiast tego możesz też zmienić ostatnią liczbę w pliku danych wyścigu.
+]],
+
+
+-- Pursuits
+["Pursuit.Starting"] = [[
+# -- Jak rozpocząć Pościg?
+
+ |-- Otwórz [string:uv.pm]
+ |-- Kliknij [string:uv.pm.pursuit.start]
+ |-- Ewentualnie uderz w Jednostkę lub jeździj nieostrożnie w jej pobliżu.
+ |-- Gaz do dechy!
+]],
+
+
+["Pursuit.JoinAsUnit"] = [[
+# -- Mogę dołączyć do Pościgu jako Jednostka?
+
+Tak! To dość proste:
+ |-- Otwórz [string:uv.pm] lub [string:uv.menu.welcome]
+ |-- Kliknij [string:uv.pm.spawnas]
+ |-- Wybierz pojazd do którego chcesz wsiąść
+ |-- Powodzenia!
+]],
+["Pursuit.Respawn"] = [[
+# -- Auto utknęło lub jestem zbyt daleko od akcji! Jak je zresetować?
+
+ |-- Wciśnij [key:unitvehicle_keybind_resetposition] aby otworzyć okno [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Wybierz pojazd w którym chcesz się zresetować
+ |-- Miłych gonitw!
+ 
+**Uwagi**
+ |-- Po zresetowaniu musisz odczekać chwilę
+]],
+["Pursuit.CreateUnits"] = [[
+# -- Chcę stworzyć Jednostki. Jak to zrobić?
+
+W ten sposób:
+ |-- 1. Wyciągnij narzędzie [string:tool.uvunitmanager.name]
+ |-- 2. Pojaw jakikolwiek pojazd
+ |-- 3. Naciśnij [+attack2] na pojazd
+ |-- 4. Daj Jednostce unikatowe imię
+ |-- 5. (Opcjonalnie) Wybierz Poziom Obławy na którym Jednostka będzie się pojawiać
+ |-- 6. (Opcjonalnie) Przestaw inne wartości według uznania
+ |-- 7. Wciśnij [string:uv.tool.create]
+ 
+Potwierdź zmiany używając narzędzia [string:tool.uvunitmanager.name], i Jednostka pojawi się przed tobą. Ewentualnie możesz pojawić się jako ta Jednostka.
+]],
+["Pursuit.Roadblocks"] = [[
+# -- Chcę stworzyć blokady. Jak?
+
+Użyj narzędzia [string:tool.uvroadblock.name]:
+ |-- 1. Używając narzędzia, postaw obiekty i części niezbędne dla blokady
+ |-- 2. Zespawaj wszystkie części używając narzędzia [string:tool.weld.name] (lub alternatyw) 
+ |-- 3. Po zespawaniu, wciśnij [+attack2] na którykolwiek obiekt blokady
+ |-- 4. Zmień ustawienia według uznania, następnie wciśnij [string:uv.tool.create]
+ 
+Blokada będzie pojawiać się losowo podczas Pościgów.
+]],
+["Pursuit.Pursuitbreaker"] = [[
+# -- Chcę stworzyć Spowalniacz Pościgu. Jak?
+
+Używając narzędzia [string:tool.uvpursuitbreaker.name]:
+ |-- 1. Pojaw obiekty i części z których będzie składać się Spowalniacz
+ |-- 2. Zespawaj wszystkie części używając narzędzia [string:tool.weld.name] (lub alternatyw)
+ |-- 3. Po zespawaniu, wciśnij [+attack2] na którykolwiek obiekt Spowalniacza
+ |-- 4. Zmień ustawienia według uznania, następnie wciśnij [string:uv.tool.create]
+]],
+
+
+["Other.CreateTraffic"] = [[
+# -- Jak pojawić Ruch Drogowy?
+
+W następujący sposób:
+ |-- 1. Wyciągnij narzędzie [string:tool.uvtrafficmanager.name]
+ |-- 2. Pojaw dowolny pojazd
+ |-- 3. Naciśnij [+attack2] na pojazd
+ |-- 4. Nadaj mu unikatowe imię
+ |-- 5. (Opcjonalnie) Dostosuj ustawienia według uznania
+ |-- 6. Wciśnij [string:uv.tool.create]
+ 
+Możesz zmienić ustawienia ogólne w zakładce [string:uv.tm] w oknie UV.
+]],
+["Other.PursuitTech"] = [[
+# -- Czym są Narzędzia Pościgu?
+
+Narzędzia Pościgu to zbiór broni i narzędzi używanych zarówno przez Jednostki jak i Podejrzanych.
+Możesz nałożyć maksymalnie 2 Narzędzia na swój pojazd aby łatwiej aresztować Podejrzanych lub łatwiej uciec.
+
+
+Tak się je nakłada i używa:
+ |-- 1. Wyciągnij narzędzie [string:tool.uvpursuittech.name]
+ |-- 2. Wybierz Narzędzia Pościgu jakie chcesz posiadać jako Jednostka lub Podejrzany
+ |-- 3. Wciśnij [+attack] w swoim pojeździe
+ 
+Możesz wcisnąć [key:unitvehicle_pursuittech_keybindslot_1] i [key:unitvehicle_pursuittech_keybindslot_2] aby użyć Narzędzi podczas Pościgu!
+]],
+["Other.RenameAI"] = [[
+# -- Mogę zmienić imię Zawodnikom lub Jednostkom SI?
+
+Tak, i całkiem to proste:
+ |-- 1. Wyciągnij narzędzie [string:tool.uvnamechanger.name]
+ |-- 2. Wpisz nowe imię dla SI
+ |-- 3. Wciśnij [+attack] na SI
+]],
+["Other.DataFolder"] = [[
+# -- Gdzie przechowywane są dane UV?
+
+Dane związane z UV znajdziesz w folderze *data/unitvehicles*.
+]],
+}

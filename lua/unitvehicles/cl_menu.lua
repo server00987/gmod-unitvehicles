@@ -514,7 +514,7 @@ end
 -- Credits List
 UV.Credits = {
 ["UVTeam"] = [[
-**Project Lead: Roboboy**
+**Roboboy**
 **Aux**
 **Moka**
 **TalonSolid**

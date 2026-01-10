@@ -549,7 +549,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		for _, entry in ipairs(st.entries or {}) do
 			local row = vgui.Create("DPanel", p)
-			row:SetTall(20)
+			row:SetTall(22.5)
 			row:Dock(TOP)
 			row:DockMargin(padding, 0, padding, 4)
 			row:SetPaintBackground(false)

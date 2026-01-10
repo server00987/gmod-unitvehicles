@@ -9,7 +9,7 @@ UV = UV or {}
 
 UV.PNotes = {
 ["v0.42.0"] = {
-Date = "January 10th, 2025",
+Date = "2026/01/11",
 Text = [[
 **New Features**
 - Added the *UVPD Rhino Truck*
@@ -21,14 +21,16 @@ Text = [[
  |-- Special, Commander and Rhino Units are always relentless
 - Improved AI Unit pursuit tactics
 - Removed some default cop chatter and updated others
+- Air Unit's wreck callout will now have priority over all others
 
 **Fixes**
 - Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
+- Fixed that "Evade" and "Busted" meters could fill up at the same time on rare instances
 ]],
 },
 
 ["v0.41.0"] = {
-Date = "January 5, 2025",
+Date = "2026/01/05",
 Text = [[
 **New Features**
 - Added the *UVPD Chevrolet Colorado ZR2 2017 Police Cruiser*
@@ -50,7 +52,7 @@ Text = [[
 },
 
 ["v0.40.0"] = {
-Date = "December 31, 2025",
+Date = "2025/12/31",
 Text = [[
 **The final stretch!**
 We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still, and we hope to keep receiving feedback until then.
@@ -102,7 +104,7 @@ We're now preparing Unit Vehicles for its v1.0 release. There's lots to do still
 },
 
 ["v0.39.1"] = {
-Date = "December 17, 2025",
+Date = "2025/12/17",
 Text = [[
 # New Features
 - **UV Menu**: Added **Carbon** Menu SFX
@@ -123,7 +125,7 @@ And various other undocumented tweaks
 },
 
 ["v0.39.0"] = {
-Date = "December 11, 2025",
+Date = "2025/12/11",
 Text = [[
 # New Features
 **UV Menu**
