@@ -1103,7 +1103,7 @@ if SERVER then
 	end
 	
 	function UVChatterWreck(self)
-		if UVChatterDelayed or not UVTargeting then return end
+		if self:GetClass() ~= "uvair" and UVChatterDelayed or not UVTargeting then return end --Air Unit gets priority
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "wreck", 3)
 		end
