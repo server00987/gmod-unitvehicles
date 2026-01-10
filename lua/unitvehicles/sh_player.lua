@@ -232,8 +232,8 @@ if SERVER then
 					if not ptrefilled and vehicle:GetMaxHealth() == vehicle:Health() then return end
 				
 					local mass = vehicle:GetPhysicsObject():GetMass()
-					vehicle:SetMaxHealth((AutoHealth:GetBool() and math.huge) or (mass))
-					vehicle:SetHealth((AutoHealth:GetBool() and math.huge) or (mass))
+					vehicle:SetMaxHealth((AutoHealth:GetBool() and vehicle.UVWanted and math.huge) or (mass))
+					vehicle:SetHealth((AutoHealth:GetBool() and vehicle.UVWanted and math.huge) or (mass))
 					vehicle:StopParticles()
 				end
 			end
@@ -253,7 +253,7 @@ if SERVER then
 				if not ptrefilled and not repaired_tires and vehicle:GetCurHealth() == vehicle:GetMaxHealth() then return end
 				
 				--vehicle.simfphysoldhealth = vehicle:GetMaxHealth()
-				vehicle:SetCurHealth((AutoHealth:GetBool() and math.huge) or (vehicle.simfphysoldhealth or vehicle:GetMaxHealth()))
+				vehicle:SetCurHealth((AutoHealth:GetBool() and vehicle.UVWanted and math.huge) or (vehicle.simfphysoldhealth or vehicle:GetMaxHealth()))
 				vehicle:SetOnFire( false )
 				vehicle:SetOnSmoke( false )
 				
@@ -283,9 +283,10 @@ if SERVER then
 				if not ptrefilled and not repaired and vehicle:GetChassisHealth() >= vehicle.MaxChassisHealth then return end
 				vehicle:Repair()
 
-                if AutoHealth:GetBool() then
+                if AutoHealth:GetBool() and vehicle.UVWanted then
                     vehicle:SetChassisHealth(math.huge)
 				    vehicle:SetEngineHealth(math.huge)
+                    vehicle:UpdateHealthOutputs()
                 end
 				
 				if cffunctions then
