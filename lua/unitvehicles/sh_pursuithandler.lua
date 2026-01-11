@@ -3713,6 +3713,7 @@ else -- CLIENT Settings | HUD/Options
 			-- elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
 			-- 	UVStopSound()
 			-- end
+			end
 		end
 	end)
 	
