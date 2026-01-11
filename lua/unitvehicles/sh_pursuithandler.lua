@@ -488,7 +488,7 @@ function UVSoundCooldown(heatlevel)
 	-- 	return
 	-- end
 	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["default"])
-	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or {}
+	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or (cooldownArray and cooldownArray['default'] or {})
 
 	if cooldownArray and #cooldownArray > 0 then
 		table.Shuffle(cooldownArray)
@@ -499,7 +499,7 @@ function UVSoundCooldown(heatlevel)
 		else
 			UVSoundHeat( UVHeatLevel )
 			return
-		end
+		endz
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
