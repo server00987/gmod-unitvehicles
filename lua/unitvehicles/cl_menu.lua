@@ -195,17 +195,19 @@ UVMenu.Main = function()
 				},
 				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvracermanager_maxracer", min = 0, max = 20, decimals = 0, sv = true },
 												
-				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_clearracers", sv = true, func = function()
+				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", sv = true, func = function()
 					local convar_table = {}
 					
-					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
-					convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
-					convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
+					convar_table['unitvehicle_racer_vehiclebase'] = GetConVar('uvracermanager_vehiclebase'):GetInt()
+					convar_table['unitvehicle_racer_assignracers'] = GetConVar('uvracermanager_assignracers'):GetInt()
+					convar_table['unitvehicle_racer_racers'] = GetConVar('uvracermanager_racers'):GetString()
+					convar_table['unitvehicle_racer_spawncondition'] = GetConVar('uvracermanager_spawncondition'):GetInt()
+					convar_table['unitvehicle_racer_maxracer'] = GetConVar('uvracermanager_maxracer'):GetInt()
 
 					net.Start("UVUpdateSettings")
 					net.WriteTable(convar_table)
 					net.SendToServer()
-					
+
 					notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
 				end },
 				
@@ -232,7 +234,7 @@ UVMenu.Main = function()
 				},
 				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvtrafficmanager_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
 				
-				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_cleartraffic", sv = true, func = function()
+				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", sv = true, func = function()
 					local convar_table = {}
 					
 					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
