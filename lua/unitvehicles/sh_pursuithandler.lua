@@ -499,7 +499,7 @@ function UVSoundCooldown(heatlevel)
 		else
 			UVSoundHeat( UVHeatLevel )
 			return
-		endz
+		end
 	else
 		UVSoundHeat( UVHeatLevel )
 		return
