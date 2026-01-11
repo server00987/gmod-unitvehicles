@@ -135,6 +135,7 @@ UVMaterials = {
     ["RESULTS_PS_WING"] = Material("unitvehicles/icons_prostreet/flixfx_wing.png"),
     ["RESULTS_PS_WING_INV"] = Material("unitvehicles/icons_prostreet/flixfx_wing_inv.png"),
     ["RESULTS_PS_SP8"] = Material("unitvehicles/icons_prostreet/flixfx_sp8.png"),
+    ["RACE_FLAG_PS"] = Material("unitvehicles/icons_prostreet/flag.png"),
     
 	-- World
 	["RACE_CDBG_LEFT_WORLD"] = Material("unitvehicles/hud_world/race_starter_bg_left.png"),

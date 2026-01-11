@@ -1954,7 +1954,15 @@ else -- CLIENT stuff
 								local audio_path = "uvracesfx/" .. theme .. "/wrongway/" .. soundfiles[1]
 								surface.PlaySound(audio_path)
 							end
-							if hudyes then UVRaceNotify("#uv.race.wrongway", 1.5) end
+							if hudyes then 
+								UVRaceNotify("#uv.race.wrongway", 1.5)
+
+								-- UV_UI.racing.carbon.events.CenterNotification({
+									-- text = "#uv.race.wrongway",
+									-- noIcon = true,
+									-- immediate = true,
+								-- })
+							end
 						end
 					end
 				else

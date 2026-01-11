@@ -22,11 +22,11 @@ local function ctu_racing_main( ... )
 	-- Background
     surface.SetDrawColor(255, 255, 255)
 	surface.SetMaterial(UVMaterials["HUD_CTU_RIGHT_BG"])
-    surface.DrawTexturedRect(w - (w * 0.3), h * 0.0775, w * 0.3, h * 0.0425)
+    surface.DrawTexturedRect(w - (UV_UI.X(w * 0.3)), h * 0.0775, UV_UI.X(w * 0.3), h * 0.0425)
 
     surface.SetDrawColor(0, 0, 0, 200)
 	surface.SetMaterial(UVMaterials["HUD_CTU_RIGHT"])
-    surface.DrawTexturedRect(w - (w * 0.3), h * 0.0775, w * 0.3, h * 0.0425)
+    surface.DrawTexturedRect(w - (UV_UI.X(w * 0.3)), h * 0.0775, UV_UI.X(w * 0.3), h * 0.0425)
 
     -- Lap & Checkpoint Counter
 	local lapname = "REPLACEME"
@@ -40,8 +40,8 @@ local function ctu_racing_main( ... )
 		lapamount = math.floor(((checkpoint_count / GetGlobalInt("uvrace_checkpoints")) * 100)) .. "%"
     end
     
-	draw.SimpleTextOutlined(lapname, "UVFont4BiggerItalic2", w * 0.72, h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined(lapamount, "UVFont4BiggerItalic2", w * 0.96, h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(lapname, "UVFont4BiggerItalic2", UV_UI.X(w * 0.72), h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(lapamount, "UVFont4BiggerItalic2", UV_UI.X(w * 0.96), h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
 
     -- Timer
     local current_time = "--:--.--"
@@ -52,8 +52,8 @@ local function ctu_racing_main( ... )
         current_time = UVDisplayTimeRaceWorld( CurTime() - my_array.LastLapCurTime )
     end
 
-	draw.SimpleTextOutlined("#uv.race.hud.laptime", "UVFont4BiggerItalic", w * 0.7175, h * 0.125, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-	draw.SimpleTextOutlined(current_time, "UVFont4BiggerItalic", w * 0.96, h * 0.125, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined("#uv.race.hud.laptime", "UVFont4BiggerItalic", UV_UI.X(w * 0.7175), h * 0.125, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+	draw.SimpleTextOutlined(current_time, "UVFont4BiggerItalic", UV_UI.X(w * 0.96), h * 0.125, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 
     -- Record Time
 	if UVHUDRaceInfo.Info.Laps > 1 then
@@ -63,9 +63,9 @@ local function ctu_racing_main( ... )
 			besttime = UVDisplayTimeRaceWorld(my_array.BestLapTime)
 		end
 
-		draw.SimpleTextOutlined("#uv.race.hud.besttime.world", "UVFont4BiggerItalic", w * 0.715, h * 0.155, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined("#uv.race.hud.besttime.world", "UVFont4BiggerItalic", UV_UI.X(w * 0.715), h * 0.155, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 		
-		draw.SimpleTextOutlined(besttime, "UVFont4BiggerItalic", w * 0.955, h * 0.155, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(besttime, "UVFont4BiggerItalic", UV_UI.X(w * 0.955), h * 0.155, Color( 255, 255, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
 	end
 
     local racer_count = #string_array
@@ -77,15 +77,15 @@ local function ctu_racing_main( ... )
 		-- Background
 		surface.SetDrawColor(255, 255, 255)
 		surface.SetMaterial(UVMaterials["HUD_CTU_LEFT_BG"])
-		surface.DrawTexturedRect(0, h * 0.0775, w * 0.3, h * 0.0425)
+		surface.DrawTexturedRect(0, h * 0.0775, UV_UI.X(w * 0.3), h * 0.0425)
 
 		surface.SetDrawColor(0, 0, 0, 200)
 		surface.SetMaterial(UVMaterials["HUD_CTU_LEFT"])
-		surface.DrawTexturedRect(0, h * 0.0775, w * 0.3, h * 0.0425)
+		surface.DrawTexturedRect(0, h * 0.0775, UV_UI.X(w * 0.3), h * 0.0425)
 	    
 		-- Position Counter
-        draw.SimpleTextOutlined("#uv.results.race.pos.caps", "UVFont4BiggerItalic2",w * 0.28,h * 0.082, Color( 255, 255, 255 ),TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
-		draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants, "UVFont4BiggerItalic2", w * 0.0525, h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
+        draw.SimpleTextOutlined("#uv.results.race.pos.caps", "UVFont4BiggerItalic2", UV_UI.X(w * 0.28),h * 0.082, Color( 255, 255, 255 ),TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+		draw.SimpleTextOutlined(UVHUDRaceCurrentPos .. "/" .. UVHUDRaceCurrentParticipants, "UVFont4BiggerItalic2", UV_UI.X(w * 0.0525), h * 0.082, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.5, Color( 0, 0, 0 ) )
 
 		-- Racer List
 		local alt = math.floor(CurTime() / 5) % 2 == 1 -- toggles every 5 seconds
@@ -144,9 +144,9 @@ local function ctu_racing_main( ... )
 				colorbg = Color( 0, 0, 0, 100 )
 			end
 
-			draw.SimpleTextOutlined(i, "UVFont4BiggerItalic2",w * 0.058 - racercountw, (h * 0.1) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, colorbg )
-			draw.SimpleTextOutlined(racer_name, "UVFont4BiggerItalic",w * 0.2085 - racercountw, (h * 0.1025) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, colorbg )
-			draw.SimpleTextOutlined(status_text, "UVFont4BiggerItalic",w * 0.075 - racercountw, (h * 0.1025) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, colorbg )
+			draw.SimpleTextOutlined(i, "UVFont4BiggerItalic2",UV_UI.X(w * 0.058) - racercountw, (h * 0.1) + racercount, color, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1, colorbg )
+			draw.SimpleTextOutlined(racer_name, "UVFont4BiggerItalic",UV_UI.X(w * 0.2085) - racercountw, (h * 0.1025) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, colorbg )
+			draw.SimpleTextOutlined(status_text, "UVFont4BiggerItalic",UV_UI.X(w * 0.075) - racercountw, (h * 0.1025) + racercount, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, colorbg )
 		end
     end
 end

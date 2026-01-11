@@ -652,4 +652,179 @@ UV_UI.racing.prostreet.events = {
 		})
 	end,
 
+onRaceStartTimer = function(data)
+	local starttime = data.starttime
+	local now = CurTime()
+	
+	local function EaseOutCubic(t)
+		return 1 - math.pow(1 - t, 3)
+	end
+
+	local function EaseInCubic(t)
+		return t * t * t
+	end
+
+	local map = {
+		[4] = "3",
+		[3] = "2",
+		[2] = "1",
+		[1] = "#uv.race.go"
+	}
+
+	local value = map[starttime]
+	if not value then return end
+
+	-- LOCAL state
+	local HUDCountdownTick = {
+		mode = starttime == 1 and "GO" or "COUNTDOWN",
+		startTime = now
+	}
+
+	local alive = true
+
+	local text = {
+		value = value,
+		scale = starttime == 1 and 3.4 or 2.4,
+		alpha = 255,
+		color = starttime == 1 and Color(0,255,0) or Color(255,220,0)
+	}
+
+	local plate, startL, startR
+
+	if starttime == 1 then
+		plate = {
+			alpha = 0,
+			size = 0.4,
+			start = now + 0.04
+		}
+
+		startL = {
+			x = -220,
+			alpha = 0,
+			start = now + 0.10
+		}
+
+		startR = {
+			x = 220,
+			alpha = 0,
+			start = now + 0.10
+		}
+	end
+
+	local hookID = "UV_RaceCountdown_ProStreet_" .. tostring(now)
+
+	hook.Add("HUDPaint", hookID, function()
+		if not alive then return end
+
+		local now = CurTime()
+		local t = now - HUDCountdownTick.startTime
+		local cx, cy = ScrW() * 0.5, ScrH() * 0.4
+	
+		-- "START" ghost text
+		local function drawStartGhost(st, invert, now, cy)
+			if not st or now < st.start then return end
+			local dt = now - st.start
+
+			-- X slide: start far → near center
+			local slideDuration = 1.1
+			local p = math.Clamp(dt / slideDuration, 0, 1)
+			st.x = Lerp(EaseOutCubic(p), invert and 220 or -220, invert and -22 or 22)
+
+			-- Alpha: fade in quickly, then fade out after 0.7s
+			local alpha = 0
+			if dt < 0.4 then
+				alpha = Lerp(EaseOutCubic(dt / 0.4), 0, 150)
+			elseif dt < 0.6 then
+				alpha = Lerp(EaseOutCubic((dt - 0.6)/0.20), 150, 0)
+			else
+				return
+			end
+
+			draw.SimpleText( "#uv.race.start", "UVFont5ShadowBig", cx + st.x, cy, Color(255, 255, 255, alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		end
+
+		if HUDCountdownTick.mode == "COUNTDOWN" then
+			if t < 0.06 then
+				text.scale = 1.45
+				text.alpha = 255
+
+			elseif t < 0.16 then
+				local p = (t - 0.06) / 0.10
+				text.scale = Lerp(p, 1.45, 1.75)
+
+			elseif t < 0.28 then
+				local p = (t - 0.16) / 0.12
+				text.scale = Lerp(p, 1.75, 1.35)
+
+			elseif t < 0.62 then
+				text.scale = 1.35
+
+			elseif t < 0.78 then
+				local p = (t - 0.62) / 0.16
+				text.scale = Lerp(p, 1.35, 2.9)
+				text.alpha = Lerp(p, 255, 0)
+			else
+				alive = false
+				hook.Remove("HUDPaint", hookID)
+				return
+			end
+		end
+
+		if HUDCountdownTick.mode == "GO" then
+			drawStartGhost(startL, false, now, cy)
+			drawStartGhost(startR, true, now, cy)
+			
+			if t < 0.01 then
+				text.scale = 3.6
+				text.alpha = 0
+
+			elseif t < 0.08 then
+				local p = (t - 0.01) / 0.07
+				text.scale = Lerp(p, 3.6, 1.55)
+				text.alpha = Lerp(p, 0, 255)
+
+			elseif t < 0.38 then
+				local p = (t - 0.08) / 0.30
+				text.scale = Lerp(p, 1.55, 1.45)
+
+			elseif t < 0.95 then
+				text.scale = 1.45
+
+			elseif t < 1.15 then
+				local p = (t - 0.95) / 0.20
+				text.scale = Lerp(p, 1.45, 2.4)
+				text.alpha = Lerp(p, 255, 0)
+			else
+				alive = false
+				hook.Remove("HUDPaint", hookID)
+				return
+			end
+		end
+
+		if HUDCountdownTick.mode == "GO" and plate and now >= plate.start then
+			local pt = now - plate.start
+
+			if pt < 0.10 then
+				plate.alpha = Lerp(pt / 0.10, 0, 125)
+			elseif pt < 0.5 then
+				plate.alpha = 125
+			elseif pt < 0.75 then
+				plate.alpha = Lerp((pt - 0.75) / 0.20, 125, 0)
+			end
+
+			DrawIcon( UVMaterials["RACE_FLAG_PS"], cx - plate.size * 0.5, cy - plate.size * 0.25, plate.size, Color(255, 255, 255, plate.alpha) )
+		end
+
+		local m = Matrix()
+		m:Translate(Vector(cx, cy, 0))
+		m:Scale(Vector(text.scale, text.scale, 1))
+		m:Translate(Vector(-cx, -cy, 0))
+
+		cam.PushModelMatrix(m)
+		draw.SimpleTextOutlined( text.value, "UVFont5ShadowBig", cx, cy, Color(text.color.r, text.color.g, text.color.b, text.alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0,0,0,text.alpha) )
+		cam.PopModelMatrix()
+	end)
+end
+
+
 }
