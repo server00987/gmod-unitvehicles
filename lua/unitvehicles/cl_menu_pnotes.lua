@@ -26,6 +26,8 @@ Text = [[
 **Fixes**
 - Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
 - Fixed that "Evade" and "Busted" meters could fill up at the same time on rare instances
+- Fixed that the "Apply Settings" buttons in the AI Manager and Traffic Manager UV Menu tabs both cleared traffic
+- Fixed that the "Apply Settings" button in the AI Manager UV Menu tab applied Traffic Manager settings
 ]],
 },
 
