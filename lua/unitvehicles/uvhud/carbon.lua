@@ -1874,12 +1874,12 @@ local function carbon_pursuit_main( ... )
         -- Evade Box, Backgrounds
 		-- Busted Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED"])
-        surface.SetDrawColor(Color(193, 66, 0, 255))
+        surface.SetDrawColor(Color(109, 38, 0))
         surface.DrawTexturedRect(UV_UI.X(w * 0.782), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
         
 		-- Evade Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_INVERTED"])
-        surface.SetDrawColor(Color(0, 200, 0, 255))
+        surface.SetDrawColor(Color(0, 105, 0))
         surface.DrawTexturedRect(UV_UI.X(w * 0.895), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
 
         -- Evade Box, Busted Meter
@@ -1931,7 +1931,7 @@ local function carbon_pursuit_main( ... )
             --UVSoundHeat(UVHeatLevel)
             if not EvadingProgress then
                 EvadingProgress = 0
-                UVEvadingProgress = EvadingProgress
+                UVEvadingProgress = EvadingProgress 
             end
             
             local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.0935)), 0, UV_UI.W(w * 0.0935))

@@ -195,7 +195,7 @@ UVMenu.Main = function()
 				},
 				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvracermanager_maxracer", min = 0, max = 20, decimals = 0, sv = true },
 												
-				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_cleartraffic", sv = true, func = function()
+				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", convar = "uv_clearracers", sv = true, func = function()
 					local convar_table = {}
 					
 					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
