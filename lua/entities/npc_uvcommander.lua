@@ -588,7 +588,10 @@ if SERVER then
 					local friendlyTooFarFromWaypoint = friendly_waypoint_distance > comparison_value
 					local friendlyCanSeeWaypoint = friendly_nearest_waypoint and UVStraightToWaypoint( friendly_position, friendly_waypoint_position )
 
-					local isInvalid = enemyTooFarFromWaypoint or not enemyCanSeeWaypoint or not friendlyCanSeeWaypoint
+					local friedlyEnemyDistance = friendly_position:DistToSqr(vectors)
+					local isFriendlyEnemyTooClose = friedlyEnemyDistance < 500000
+
+					local isInvalid = enemyTooFarFromWaypoint or not enemyCanSeeWaypoint or not friendlyCanSeeWaypoint or isFriendlyEnemyTooClose
 					if isInvalid then enemy_nearest_waypoint = nil end
 				end
 			end
@@ -624,23 +627,42 @@ if SERVER then
 	end
 	
 	function ENT:DriveOnPath()
-		local waypoints = self.tableroutetoenemy
+		local waypoints = table.Copy( self.tableroutetoenemy )
 		if not waypoints or next(waypoints) == nil then 
 			return self.v:WorldSpaceCenter()
 		end
 		
 		local unitpos = self.v:WorldSpaceCenter()
 		local reachThreshold = 250000
+		local passedThreshold = 16000000
 		
 		local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
 		local velocity = self.v:GetVelocity()
 		local velocityNormalized = velocity:GetNormalized()
 		local hasVelocity = velocity:LengthSqr() > 10000
+
+		if waypoints[1] then
+			local firstWaypoint = waypoints[1]
+			local midPoint = unitpos + (firstWaypoint - unitpos) * 0.5
+			table.insert(waypoints, 1, midPoint)
+		end
 		
 		for i = #waypoints, 1, -1 do
-			local dist = unitpos:DistToSqr(waypoints[i])
-			if dist < reachThreshold then
+			local waypoint = waypoints[i]
+			local toWaypoint = waypoint - unitpos
+			local distSqr = toWaypoint:LengthSqr()
+			
+			if distSqr < reachThreshold then
 				table.remove(waypoints, i)
+			else
+				local toWaypointNormalized = toWaypoint:GetNormalized()
+				local forwardDot = toWaypointNormalized:Dot(forward)
+				
+				if forwardDot < -0.3 and distSqr > 62500 then -- 250 units squared minimum
+					table.remove(waypoints, i)
+				elseif distSqr > passedThreshold and forwardDot < 0 then
+					table.remove(waypoints, i)
+				end
 			end
 		end
 		
@@ -1333,14 +1355,14 @@ if SERVER then
 					self.targetpos = (self.e:LocalToWorld(self.formationpoint)+self.e:GetVelocity()) --Drive in formation
 				end
 			else
-				if self.tableroutetoenemy and next(self.tableroutetoenemy) ~= nil then
-					if not self.NavigateCooldown and not UVEnemyEscaping then
-						self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
-					end
+				self.tableroutetoenemy = self.tableroutetoenemy or {}
+				if next(self.tableroutetoenemy) ~= nil and #self.tableroutetoenemy > 1 then
+					-- if not self.NavigateCooldown and not UVEnemyEscaping then
+					-- 	self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
+					-- end
 				else
 					self:PathFindToEnemy(self.e:WorldSpaceCenter()) --Find the enemy
 				end
-				
 				self.targetpos = self:DriveOnPath()
 			end
 			
