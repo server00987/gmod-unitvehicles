@@ -3612,7 +3612,7 @@ else -- CLIENT Settings | HUD/Options
 			if not UVHUDRace and (RacingMusic:GetBool() and UVTraxFreeroam:GetBool()) and vehicle ~= NULL then
 				UVSoundRacing()
 			else
-				--UVStopSound()
+				UVStopSound()
 
 				UVHUDDisplayBackupTimer = nil
 				UVLoadedSounds = nil
