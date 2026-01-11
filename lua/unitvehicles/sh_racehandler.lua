@@ -837,8 +837,7 @@ else -- CLIENT stuff
 		end
 
 		if UVHUDDisplayRacing and not RacingMusic:GetBool() then return end
-
-		if UVPlayingRace or UVSoundDelayed then return end
+		if UVPlayingRace or UVPlayingEscaped or UVSoundDelayed then return end
 
 		if timer.Exists("UVRaceMusicTransition") then
 			timer.Remove("UVRaceMusicTransition")

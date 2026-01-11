@@ -3612,7 +3612,7 @@ else -- CLIENT Settings | HUD/Options
 			if not UVHUDRace and (RacingMusic:GetBool() and UVTraxFreeroam:GetBool()) and vehicle ~= NULL then
 				UVSoundRacing()
 			else
-				UVStopSound()
+				--UVStopSound()
 
 				UVHUDDisplayBackupTimer = nil
 				UVLoadedSounds = nil
@@ -3668,6 +3668,7 @@ else -- CLIENT Settings | HUD/Options
 			UVHeatLevelIncrease = false
 			UVHeatPlayTransition = false
 			UVLastHeatChange = CurTime()
+			UVHUDDisplayBackupTimer = nil
 			-- UVHeatPlayTransition = false 
 			-- UVHeatPlayMusic = false
 		end
@@ -3709,9 +3710,9 @@ else -- CLIENT Settings | HUD/Options
 						end
 					end
 				end
-			elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
-				UVStopSound()
-			end
+			-- elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
+			-- 	UVStopSound()
+			-- end
 		end
 	end)
 	
