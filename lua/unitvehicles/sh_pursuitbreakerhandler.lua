@@ -32,16 +32,17 @@ if SERVER then
         local dontunweldprops = pbdata.DontUnweldProps or nil
         
         if checkdistance then
-            local ply = Entity(1)
+            local ply = ents.FindByClass('player')[1]
             local enemylocation
             local suspect = ply
+            local suspectlocation = suspect and suspect:GetPos() or vector_origin
             if next(UVWantedTableVehicle) ~= nil then
                 local suspects = UVWantedTableVehicle
                 local random_entry = math.random(#suspects)	
                 suspect = suspects[random_entry]
                 enemylocation = (suspect:GetPos()+(vector_up * 50))
             else
-                enemylocation = (suspect:GetPos()+(vector_up * 50))
+                enemylocation = (suspectlocation+(vector_up * 50))
             end
             local distance = enemylocation:DistToSqr(location)
             if distance < 25000000 then
