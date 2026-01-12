@@ -10,6 +10,7 @@
 - Improved AI Unit pursuit tactics
 - Removed some default cop chatter and updated others
 - Air Unit's wreck callout will now have priority over all others
+- Added a Race Countdown to the NFS: ProStreet HUD
 
 # Fixes
 - Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled

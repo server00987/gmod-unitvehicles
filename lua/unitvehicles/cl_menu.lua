@@ -2,7 +2,7 @@ UV = UV or {}
 UVMenu = UVMenu or {}
 
 -- Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.41.0" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v0.42.0" --MAJOR.MINOR.PATCH
 
 if CLIENT then
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
@@ -1009,6 +1009,8 @@ local function BuildPatchNoteTabs()
             TabName = version,
             { type = "button", text = "#uv.back", playsfx = "clickback", func = function() UVMenu.OpenMenu(UVMenu.Main) end },
             { type = "label", text = note.Date },
+			
+			{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. version .. ".png" },
             { type = "info", text = note.Text, centered = true },
         })
     end
