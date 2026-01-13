@@ -70,7 +70,7 @@ local function SpawnAI(amount, racestart, police)
 		end)
 
 		timer.Simple(2, function()
-			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+			RunConsoleCommand("uvrace_startrace", GetConVar("unitvehicle_racelaps"):GetString())
 		end)
 	end
 end
@@ -154,6 +154,12 @@ UVMenu.Main = function()
 			},
 			
 			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png", -- Pursuit Manager
+				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "unitvehicle_unit_vehiclebase", sv = true, content = {
+						{ "HL2 Jeep", 1 } ,
+						{ "Simfphys", 2 } ,
+						{ "Glide", 3 } ,
+					},
+				},
 				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
@@ -168,12 +174,12 @@ UVMenu.Main = function()
 						SpawnAI(amount, nil, true)
 					end,
 				},
-				{ type = "button", text = "#uv.pm.clearai", desc = "uv.pm.clearai", convar = "uv_despawnvehicles", sv = true },
+				{ type = "button", text = "#uv.pm.clearai", desc = "uv.pm.clearai.desc", convar = "uv_despawnvehicles", sv = true },
 				
 				{ type = "label", text = "#uv.pursuit", sv = true },
 				-- { type = "button", text = "#uv.pm.pursuit.toggle", desc = "uv.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
-				{ type = "button", text = "#uv.pm.pursuit.start", desc = "uv.pm.pursuit.start.desc", convar = "uv_startpursuit", sv = true },
-				{ type = "button", text = "#uv.pm.pursuit.stop", desc = "uv.pm.pursuit.stop.desc", convar = "uv_stoppursuit", sv = true },
+				{ type = "button", text = "#uv.pm.pursuit.start", convar = "uv_startpursuit", sv = true },
+				{ type = "button", text = "#uv.pm.pursuit.stop", convar = "uv_stoppursuit", sv = true },
 				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", command = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
 
 				{ type = "label", text = "#uv.pm.misc", sv = true },
@@ -181,74 +187,44 @@ UVMenu.Main = function()
 				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
 			},
 			
-			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", -- AI Racer Manager
-				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvracermanager_vehiclebase", sv = true, content = {
+			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", sv = true, -- AI Racer Manager
+				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "unitvehicle_racer_vehiclebase", sv = true, content = {
 						{ "HL2 Jeep", 1 } ,
 						{ "Simfphys", 2 } ,
 						{ "Glide", 3 } ,
 					},
 				},
-				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvracermanager_spawncondition", sv = true, content = {
+				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "unitvehicle_racer_spawncondition", sv = true, content = {
 						{ "#uv.tool.spawncondition.never", 1 } ,
 						{ "#uv.tool.spawncondition.driving", 2 } ,
 						{ "#uv.tool.spawncondition.always", 3 } ,
 					},
 				},
-				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvracermanager_maxracer", min = 0, max = 20, decimals = 0, sv = true },
-												
-				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", sv = true, func = function()
-					local convar_table = {}
-					
-					convar_table['unitvehicle_racer_vehiclebase'] = GetConVar('uvracermanager_vehiclebase'):GetInt()
-					convar_table['unitvehicle_racer_assignracers'] = GetConVar('uvracermanager_assignracers'):GetInt()
-					convar_table['unitvehicle_racer_racers'] = GetConVar('uvracermanager_racers'):GetString()
-					convar_table['unitvehicle_racer_spawncondition'] = GetConVar('uvracermanager_spawncondition'):GetInt()
-					convar_table['unitvehicle_racer_maxracer'] = GetConVar('uvracermanager_maxracer'):GetInt()
+				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "unitvehicle_racer_maxracer", min = 0, max = 20, decimals = 0, sv = true },
 
-					net.Start("UVUpdateSettings")
-					net.WriteTable(convar_table)
-					net.SendToServer()
-
-					notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-				end },
-				
 				-- { type = "button", text = "#uv.airacer.spawnai", desc = "uv.airacer.spawnai.desc", convar = "uvrace_spawnai", sv = true }, -- Single one - redundant?
 				{ type = "buttonsw", text = language.GetPhrase("uv.airacer.spawnai.val"), desc = "uv.airacer.spawnai.val.desc", convar = "uvrace_spawnai", sv = true, min = 1, max = 20, start = 1, func = function(self2, amount) SpawnAI(amount) end, },
 				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", sv = true },
 				
-				{ type = "bool", text = "#uv.airacer.override", desc = "uv.airacer.override.desc", convar = "uvracermanager_assignracers", sv = true },
-				{ type = "ai_overridelist", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "uvracermanager_racers", sv = true, parentconvar = "uvracermanager_assignracers" },
+				{ type = "bool", text = "#uv.airacer.override", desc = "uv.airacer.override.desc", convar = "unitvehicle_racer_assignracers", sv = true },
+				{ type = "ai_overridelist", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "uvracermanager_racers", sv = true, parentconvar = "unitvehicle_racer_assignracers" },
 			},
 			
-			{ TabName = "#uv.tm", Icon = "unitvehicles/icons_settings/gameplay.png", -- Traffic Manager
-				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "uvtrafficmanager_vehiclebase", sv = true, content = {
+			{ TabName = "#uv.tm", Icon = "unitvehicles/icons_settings/gameplay.png", sv = true, -- Traffic Manager
+				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "unitvehicle_traffic_vehiclebase", sv = true, content = {
 						{ "HL2 Jeep", 1 } ,
 						{ "Simfphys", 2 } ,
 						{ "Glide", 3 } ,
 					},
 				},
-				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "uvtrafficmanager_spawncondition", sv = true, content = {
+				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.desc", convar = "unitvehicle_traffic_spawncondition", sv = true, content = {
 						{ "#uv.tool.spawncondition.never", 1 } ,
 						{ "#uv.tool.spawncondition.driving", 2 } ,
 						{ "#uv.tool.spawncondition.always", 3 } ,
 					},
 				},
-				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "uvtrafficmanager_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
-				
-				{ type = "button", text = "#uv.applysett", desc = "uv.applysett.desc", sv = true, func = function()
-					local convar_table = {}
-					
-					convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
-					convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
-					convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
+				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "unitvehicle_traffic_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
 
-					net.Start("UVUpdateSettings")
-					net.WriteTable(convar_table)
-					net.SendToServer()
-					
-					notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-				end },
-				
 				{ type = "button", text = "#uv.tm.clear", desc = "uv.tm.clear.desc", convar = "uv_cleartraffic", sv = true },
 			},
 
@@ -558,7 +534,7 @@ UVMenu.Credits = function()
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.credits", Icon = "unitvehicles/icons_settings/info.png",
-				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
+				{ type = "button", text = "#uv.back", playsfx = "clickback",
 					func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
 				},
 				{ type = "label", text = "#uv.credits.uvteam" },
@@ -631,7 +607,7 @@ UVMenu.RaceManagerSettings = function()
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.rm.options",
-				{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "uvracemanager_laps", min = 1, max = 99, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.rm.options.laps", desc = "uv.rm.options.laps.desc", convar = "unitvehicle_racelaps", min = 1, max = 99, decimals = 0, sv = true },
 				{ type = "slider", text = "#uv.rm.options.dnftimer", desc = "uv.rm.options.dnftimer.desc", convar = "unitvehicle_racednftimer", min = 0, max = 90, decimals = 0, sv = true },
 				{ type = "bool", text = "#uv.rm.options.visiblecheckpoints", desc = "uv.rm.options.visiblecheckpoints.desc", convar = "unitvehicle_racevisiblecheckpoints", sv = true },
 				{ type = "label", text = "#uv.pursuit" },
@@ -793,7 +769,7 @@ UVMenu.RaceManagerStartRace = function()
 		end)
 
 		timer.Simple(2, function()
-			RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+			RunConsoleCommand("uvrace_startrace", GetConVar("unitvehicle_racelaps"):GetString())
 		end)
 	end
 
@@ -811,7 +787,7 @@ UVMenu.RaceManagerStartRace = function()
 				TabName = "#uv.rm",
 				{ type = "button", text = "#uv.rm.startrace", desc = "uv.rm.startrace.desc", sv = true,
 					func = function()
-						RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
+						RunConsoleCommand("uvrace_startrace", GetConVar("unitvehicle_racelaps"):GetString())
 						UVMenu.CloseCurrentMenu()
 					end
 				},
@@ -950,7 +926,7 @@ UVMenu.RaceInvite = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
 		Width  = UV.ScaleW(870),
-		Height = UV.ScaleH(335),
+		Height = UV.ScaleH(360),
 		UnfocusClose = false,
 		HideCloseButton = true,
 		Tabs = {
@@ -1063,19 +1039,22 @@ UVMenu.HeatManager = function()
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
+			{ TabName = "#uv.hm.presets", 
+				{ type = "presets", preset = "units" }
+			},
 			{ TabName = "#uv.settings.general",
 				{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "uvunitmanager_timetillnextheatenabled", sv = true },
-				{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "uvunitmanager_minheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-				{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "uvunitmanager_maxheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "unitvehicle_minheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+				{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "unitvehicle_maxheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
 
 				{ type = "label", text = "#uv.hm.commander" },
-				{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "uvunitmanager_onecommander", sv = true },
-				{ type = "bool", text = "#uv.hm.commander.evade", desc = "uv.hm.commander.evade.desc", convar = "uvunitmanager_onecommanderevading", requireparentconvar = "uvunitmanager_onecommander", sv = true },
-				{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "uvunitmanager_commanderrepair", requireparentconvar = "uvunitmanager_onecommander", sv = true },
-				{ type = "slider", text = "#uv.hm.commander.health", desc = "uv.hm.commander.health.desc", convar = "uvunitmanager_onecommanderhealth", requireparentconvar = "uvunitmanager_onecommander", min = 1000, max = 10000, sv = true },
+				{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "unitvehicle_unit_onecommander", sv = true },
+				{ type = "bool", text = "#uv.hm.commander.evade", desc = "uv.hm.commander.evade.desc", convar = "unitvehicle_unit_onecommanderevading", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
+				{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "unitvehicle_unit_commanderrepair", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
+				{ type = "slider", text = "#uv.hm.commander.health", desc = "uv.hm.commander.health.desc", convar = "unitvehicle_unit_onecommanderhealth", requireparentconvar = "unitvehicle_unit_onecommander", min = 1000, max = 10000, sv = true },
 				
 				{ type = "label", text = "#uv.hm.air" },
-				{ type = "combo", text = "#uv.hm.air.model", desc = "uv.hm.air.model.desc", convar = "uvunitmanager_helicoptermodel", sv = true, content = {
+				{ type = "combo", text = "#uv.hm.air.model", desc = "uv.hm.air.model.desc", convar = "unitvehicle_unit_helicoptermodel", sv = true, content = {
 						{ "Default", "Default" },
 						{ "NFS Hot Pursuit 2", "NFS Hot Pursuit 2" },
 						{ "NFS Most Wanted", "NFS Most Wanted" },
@@ -1087,35 +1066,36 @@ UVMenu.HeatManager = function()
 						{ "The Crew", "The Crew" }
 					},
 				},
-				{ type = "bool", text = "#uv.hm.air.canbust", desc = "uv.hm.air.canbust.desc", convar = "uvunitmanager_helicopterbusting", sv = true },
-				{ type = "bool", text = "#uv.hm.air.pt.exp", desc = "uv.hm.air.pt.desc", convar = "uvunitmanager_helicopterbarrels", sv = true },
-				{ type = "bool", text = "#uv.hm.air.pt.spikes", desc = "uv.hm.air.pt.desc", convar = "uvunitmanager_helicopterspikestrip", sv = true },
+				{ type = "bool", text = "#uv.hm.air.canbust", desc = "uv.hm.air.canbust.desc", convar = "unitvehicle_unit_helicopterbusting", sv = true },
+				{ type = "bool", text = "#uv.hm.air.pt.exp", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterbarrels", sv = true },
+				{ type = "bool", text = "#uv.hm.air.pt.spikes", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterspikestrip", sv = true },
 								
 				{ type = "label", text = "#uv.ptech" },
-				{ type = "bool", text = "#uv.hm.enablept", desc = "uv.hm.enablept.desc", convar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.esf", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_esf", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.emp", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_emp", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.spikes", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_spikestrip", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.killswitch", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_killswitch", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.repairkit", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_repairkit", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.shockram", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_shockram", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.gpsdart", desc = "uv.hm.pt.spawnwith.desc", convar = "uvunitmanager_pursuittech_gpsdart", requireparentconvar = "uvunitmanager_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.hm.enablept", desc = "uv.hm.enablept.desc", convar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.esf", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_esf", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.emp", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_emp", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.spikes", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_spikestrip", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.killswitch", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_killswitch", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.repairkit", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_repairkit", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.shockram", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_shockram", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+				{ type = "bool", text = "#uv.ptech.gpsdart", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_gpsdart", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
 				
 			},
 			{ TabName = "#uv.hm.vp", 
-				{ type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "uvunitmanager_dispatch_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "uvunitmanager_misc_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "unitvehicle_unit_dispatch_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "unitvehicle_unit_misc_voiceprofile", sv = true },
 				
-				{ type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_patrol_voice", profilevar = "uvunitmanager_patrol_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_support_voice", profilevar = "uvunitmanager_support_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_pursuit_voice", profilevar = "uvunitmanager_pursuit_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_interceptor_voice", profilevar = "uvunitmanager_interceptor_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_special_voice", profilevar = "uvunitmanager_special_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_commander_voice", profilevar = "uvunitmanager_commander_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_rhino_voice", profilevar = "uvunitmanager_rhino_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_air_voice", profilevar = "uvunitmanager_air_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_patrol_voice", profilevar = "unitvehicle_unit_patrol_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_support_voice", profilevar = "unitvehicle_unit_support_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_pursuit_voice", profilevar = "unitvehicle_unit_pursuit_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_interceptor_voice", profilevar = "unitvehicle_unit_interceptor_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_special_voice", profilevar = "unitvehicle_unit_special_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_commander_voice", profilevar = "unitvehicle_unit_commander_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_rhino_voice", profilevar = "unitvehicle_unit_rhino_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_air_voice", profilevar = "unitvehicle_unit_air_voiceprofile", sv = true },
 			},
 			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 1 ),
+				-- { type = "unitselect", text = "#uv.unit.patrol", convar = "uvunitmanager_unitspatrol1", chanceconvar = true, sv = true },
 			-- },
 			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 2 ),
 			-- },
@@ -1135,9 +1115,6 @@ UVMenu.HeatManager = function()
 			-- },
 			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 10 ),
 			-- },
-			{ TabName = "#uv.hm.presets", 
-				{ type = "presets", preset = "units" }
-			},
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,

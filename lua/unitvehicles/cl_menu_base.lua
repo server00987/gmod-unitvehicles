@@ -689,7 +689,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				net.WriteTable({ [st.convar] = new })
 				net.SendToServer()
 			else
-				RunConsoleCommand(st.convar, new)
+				cv:SetString( new )
 			end
 			UVMenu.PlaySFX("confirm")
 			if descPanel and st.convar then
@@ -704,7 +704,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
-					descPanel.SelectedCurrent = GetConVar(st.convar):GetInt() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.convar):GetBool() and "1" or "0"
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
@@ -765,7 +765,7 @@ function UV.BuildSetting(parent, st, descPanel)
 						net.WriteTable({ [st.convar] = cv:GetDefault() })
 						net.SendToServer()
 					else
-						RunConsoleCommand(st.convar, cv:GetDefault())
+						cv:SetString( cv:GetDefault() )
 					end
 					UVMenu.PlaySFX("confirm")
 				end
@@ -908,7 +908,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					net.WriteTable({ [st.convar] = val })
 					net.SendToServer()
 				else
-					RunConsoleCommand(st.convar, tostring(val))
+					GetConVar(st.convar):SetInt( tostring(val) )
 				end
 			elseif st.command then
 				RunConsoleCommand(st.command, tostring(val))
@@ -1117,7 +1117,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					net.WriteTable({ [st.convar] = data })
 					net.SendToServer()
 				else
-					RunConsoleCommand(st.convar, data)
+					GetConVar(st.convar):SetString( data )
 				end
 			end
 			if st.func then
@@ -1178,7 +1178,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					net.WriteTable({ [st.convar] = def })
 					net.SendToServer()
 				else
-					RunConsoleCommand(st.convar, def)
+					GetConVar(st.convar):SetString( def )
 				end
 			end
 		end
@@ -1449,10 +1449,10 @@ function UV.BuildSetting(parent, st, descPanel)
 						})
 						net.SendToServer()
 					else
-						RunConsoleCommand(base .. "_r", r)
-						RunConsoleCommand(base .. "_g", g)
-						RunConsoleCommand(base .. "_b", b)
-						if cv_a then RunConsoleCommand(base .. "_a", a) end
+						GetConVar(base .. "_r"):SetInt( r )
+						GetConVar(base .. "_g"):SetInt( g )
+						GetConVar(base .. "_b"):SetInt( b )
+						if cv_a then GetConVar(base .. "_a"):SetInt( a ) end
 					end
 
 					UVMenu.PlaySFX("hover")
@@ -1929,29 +1929,26 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(st.voicevar and 240 or 100)
-
-		panel.Paint = function(self, w, h)
-			-- local text = language.GetPhrase(GetDisplayText()) or "???"
-			-- DrawWrappedText(self, text, w * 0.25, 10, 2.5)
-		end
+		panel:SetTall(st.voicevar and UV.ScaleH(240) or UV.ScaleH(70))
+		panel.Paint = nil
 
 		local voiceCVar = st.voicevar and GetConVar(st.voicevar)
 		local profileCVar = st.profilevar and GetConVar(st.profilevar)
 
-		UV.BuildSetting( panel, { type = "label", text = st.text } )
-
 		-- Left
-		-- local left = vgui.Create("DPanel", panel)
-		-- left:Dock(FILL)
-		-- left:SetWide(UV.ScaleW(440))
-		-- left:DockMargin(6, 6, 6, 6)
-		-- left.Paint = nil
+		local left = vgui.Create("DPanel", panel)
+		left:Dock(TOP)
+		left:SetWide(UV.ScaleW(300))
+		left:DockMargin(3, 3, 3, 3)
+		left.Paint = function(self, w, h)
+			local text = language.GetPhrase(GetDisplayText()) or "???"
+			DrawWrappedText(self, text, w * 0.95, w * 0.5, w * 0 - 5, true, "UVSettingsFontBig")
+		end
 
 		-- Right
 		local right = vgui.Create("DPanel", panel)
 		right:Dock(FILL)
-		right:DockMargin(0, 6, 6, 6)
+		right:DockMargin(6, 6, 6, 6)
 		right.Paint = nil
 
 		-- Profile combo
@@ -2076,13 +2073,38 @@ function UV.BuildSetting(parent, st, descPanel)
 							net.WriteTable({ [st.voicevar] = table.concat(newList, ",") })
 							net.SendToServer()
 						else
-							RunConsoleCommand(st.voicevar, table.concat(newList, ","))
+							GetConVar(st.voicevar):SetString( table.concat(newList, ",") )
+						end
+					end
+
+					btn.OnCursorEntered = function()
+						if descPanel then
+							descPanel.Text = st.text
+							descPanel.Desc = st.desc or ""
+							
+							if st.voicevar then
+								descPanel.SelectedDefault = GetConVar(st.voicevar):GetDefault() or "?"
+								descPanel.SelectedCurrent = GetConVar(st.voicevar):GetString() or "?"
+								descPanel.SelectedConVar = st.voicevar or "?"
+							end
+						end
+					end
+
+					btn.OnCursorExited = function()
+						if descPanel then
+							descPanel.Text = ""
+							descPanel.Desc = ""
+							if st.voicevar then
+								descPanel.SelectedDefault = ""
+								descPanel.SelectedCurrent = ""
+								descPanel.SelectedConVar = ""
+							end
 						end
 					end
 				end
 			end
 		end
-				
+
 		if voiceCVar then
 			scroll = vgui.Create("DScrollPanel", right)
 			scroll:Dock(FILL)
@@ -2110,7 +2132,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				refreshList(profileCombo.Value)
 			end
 
-			UV.BuildSetting( parent, { type = "button", text = "Clear", func = clear } )
+			-- UV.BuildSetting( panel, { type = "button", text = "Clear" } )
 		end
 
 		-- Profile select
@@ -2123,30 +2145,47 @@ function UV.BuildSetting(parent, st, descPanel)
 				net.WriteTable({ [st.profilevar] = data })
 				net.SendToServer()
 			else
-				RunConsoleCommand(st.profilevar, data)
+				GetConVar(st.profilevar):SetString( data )
 			end
 
 			refreshList(data)
 		end
 
-		-- left.OnCursorEntered = function()
-		-- 	if descPanel then
-		-- 		descPanel.Text = st.text
-		-- 		descPanel.Desc = st.desc or ""
-		-- 	end
-		-- end
+		left.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+				
+				if st.profilevar then
+					descPanel.SelectedDefault = GetConVar(st.profilevar):GetDefault() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.profilevar):GetString() or "?"
+					descPanel.SelectedConVar = st.profilevar or "?"
+				end
+			end
+		end
 
-		-- left.OnCursorExited = function()
-		-- 	if descPanel then
-		-- 		descPanel.Text = ""
-		-- 		descPanel.Desc = ""
-		-- 	end
-		-- end
+		left.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+				if st.profilevar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedCurrent = ""
+					descPanel.SelectedConVar = ""
+				end
+			end
+		end
 
 		right.OnCursorEntered = function()
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				
+				if st.profilevar then
+					descPanel.SelectedDefault = GetConVar(st.profilevar):GetDefault() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.profilevar):GetString() or "?"
+					descPanel.SelectedConVar = st.profilevar or "?"
+				end
 			end
 		end
 
@@ -2154,6 +2193,11 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				if st.profilevar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedCurrent = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -2161,6 +2205,12 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
+				
+				if st.profilevar then
+					descPanel.SelectedDefault = GetConVar(st.profilevar):GetDefault() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.profilevar):GetString() or "?"
+					descPanel.SelectedConVar = st.profilevar or "?"
+				end
 			end
 		end
 
@@ -2168,6 +2218,12 @@ function UV.BuildSetting(parent, st, descPanel)
 			if descPanel then
 				descPanel.Text = ""
 				descPanel.Desc = ""
+				
+				if st.profilevar then
+					descPanel.SelectedDefault = ""
+					descPanel.SelectedCurrent = ""
+					descPanel.SelectedConVar = ""
+				end
 			end
 		end
 
@@ -2181,7 +2237,8 @@ function UV.BuildSetting(parent, st, descPanel)
 			else
 				for name in pairs(profiles) do
 					profileCombo:SetValue(name)
-					RunConsoleCommand(profileCVar:GetName(), name)
+					-- RunConsoleCommand(profileCVar:GetName(), name)
+					profileCVar:SetString( name )
 					refreshList(name)
 					break
 				end
@@ -2189,7 +2246,9 @@ function UV.BuildSetting(parent, st, descPanel)
 		end)
 
 		return panel
-	elseif st.type == "presets" then
+	end
+	
+	if st.type == "presets" then
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		--panel:DockMargin(8, 4, 8, 4)
@@ -2252,6 +2311,196 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 			end
 		end
+
+		return panel
+	end
+	
+	if st.type == "unitselect" then
+		local panel = vgui.Create("DPanel", parent)
+		panel:Dock(TOP)
+		panel:DockMargin(8, 4, 8, 4)
+		panel:SetTall(180)
+		panel.Paint = nil
+
+		local title = vgui.Create("DLabel", panel)
+		title:Dock(TOP)
+		title:SetTall(24)
+		title:SetText("")
+		title:SetContentAlignment(5)
+		title.Paint = function(self, w, h)
+			local text = language.GetPhrase(GetDisplayText()) or "???"
+			DrawWrappedText(self, text, w * 0.95, w * 0.5, 2.5, true)
+		end
+
+		local body = vgui.Create("DPanel", panel)
+		body:Dock(FILL)
+		body:DockMargin(0, 4, 0, 4)
+		body.Paint = nil
+
+		local left = vgui.Create("DScrollPanel", body)
+		left:Dock(LEFT)
+		left:SetWide(UV.ScaleW(440))
+		left:DockMargin(6, 0, 3, 0)
+		left.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+
+		local right = vgui.Create("DScrollPanel", body)
+		right:Dock(FILL)
+		right:DockMargin(3, 0, 6, 0)
+		right.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115))
+			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+
+		local chanceCVar = GetConVar(st.convar .. "_chance")
+
+		local slider = vgui.Create("DNumSlider", panel)
+		slider:Dock(BOTTOM)
+		slider:DockMargin(6, 0, 6, 4)
+		slider:SetTall(40)
+		slider:SetText("Spawn Chance")
+		slider:SetMin(0)
+		slider:SetMax(100)
+		slider:SetDecimals(0)
+		slider:SetValue(chanceCVar and chanceCVar:GetInt() or 0)
+
+		slider.OnValueChanged = function(_, val)
+			if not chanceCVar then return end
+			val = math.Round(val)
+
+			if st.sv then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [chanceCVar:GetName()] = val })
+				net.SendToServer()
+			else
+				chanceCVar:SetInt( val )
+			end
+		end
+
+		local vehicleBases = {
+			{ id = 1, name = "HL2",      path = "unitvehicles/prop_vehicle_jeep/units/", type = "txt"  },
+			{ id = 2, name = "Simfphys", path = "unitvehicles/simfphys/units/",           type = "txt"  },
+			{ id = 3, name = "Glide",    path = "unitvehicles/glide/units/",               type = "json" }
+		}
+
+		local function getUnitTable()
+			local cvar = GetConVar(st.convar)
+			if not cvar then return {} end
+
+			local tbl = {}
+			for entry in string.gmatch(cvar:GetString() or "", "([^,]+)") do
+				tbl[string.Trim(entry)] = true
+			end
+			return tbl
+		end
+
+		local function setUnitTable(tbl)
+			local list = {}
+			for k, v in pairs(tbl) do
+				if v then table.insert(list, k) end
+			end
+
+			local str = table.concat(list, ",")
+
+			if st.sv then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [st.convar] = str })
+				net.SendToServer()
+			else
+				GetConVar(st.convar):SetString( str )
+			end
+		end
+
+		local function getAvailableUnits()
+			local entries = {}
+
+			for _, base in ipairs(vehicleBases) do
+				local files = file.Find(base.path .. "*." .. base.type, "DATA") or {}
+				for _, filename in ipairs(files) do
+					table.insert(entries, {
+						filename = filename, -- stored value
+						base  = base.name,
+						display  = filename,
+						baseId   = base.id
+					})
+				end
+			end
+
+			return entries
+		end
+
+		local function refreshLists()
+			left:Clear()
+			right:Clear()
+
+			local selected = getUnitTable()
+			local baseCVar = st.baseconvar and GetConVar(st.baseconvar)
+			local activeBaseId = baseCVar and baseCVar:GetInt() or 1
+
+			for _, entry in ipairs(getAvailableUnits()) do
+				local isSelected  = selected[entry.filename]
+				local isWrongBase = entry.baseId ~= activeBaseId
+				local parentList = isSelected and right or left
+
+				local btn = parentList:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(24)
+				btn:SetText("")
+				btn.Selected = isSelected
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local active = Color(
+						GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4))
+					)
+
+					local mismatch = isWrongBase and Color(160, 120, 60, 220) or nil
+					local col = self.Selected and active or default
+					if mismatch then col = mismatch end
+
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+					end
+
+					DrawWrappedText(self, entry.base, w * 0.4, w * 0.05, 0, nil, "UVSettingsFontSmall")
+					DrawWrappedText(self, entry.display, w * 0.4, w * 0.35, 0, nil, "UVSettingsFontSmall")
+				end
+
+				btn.DoClick = function()
+					selected[entry.filename] = not selected[entry.filename]
+					setUnitTable(selected)
+					refreshLists()
+				end
+			end
+		end
+
+		timer.Simple(0, function()
+			if IsValid(panel) then
+				refreshLists()
+			end
+		end)
 
 		return panel
 	end
