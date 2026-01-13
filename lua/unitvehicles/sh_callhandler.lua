@@ -17,7 +17,6 @@ if SERVER then
 
     UVTimeToCheckForPotentialSuspects = CurTime()
     
-    --hook.Add("Think", "UVCheckForCalls", function()
     timer.Create("UVCheckForCalls", 2, 0, function()
         for _, ent in ents.Iterator() do
             if UVPassConVarFilter(ent) and not table.HasValue(UVPotentialSuspects, ent) then

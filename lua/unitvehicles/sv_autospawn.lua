@@ -2199,8 +2199,8 @@ function UVAutoSpawnRacer()
 	local MEMORY = {}
 	
 	-- Override mode
-	local OverrideEnabled = GetConVar("uvracermanager_assignracers"):GetBool()
-	local OverrideList = string.Trim(GetConVar("uvracermanager_racers"):GetString())
+	local OverrideEnabled = GetConVar("unitvehicle_racer_assignracers"):GetBool()
+	local OverrideList = string.Trim(GetConVar("unitvehicle_racer_racers"):GetString())
 	local OverrideVehicles = string.Explode(" ", OverrideList)
 
 	if OverrideEnabled and #OverrideVehicles > 0 then

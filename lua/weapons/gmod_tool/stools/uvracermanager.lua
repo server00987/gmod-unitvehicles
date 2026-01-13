@@ -440,15 +440,6 @@ if CLIENT then
 			{ id = 2, name = "Simfphys", func = uvracermanagerGetSaves, path = "unitvehicles/simfphys/racers/", type = "txt" },
 			{ id = 3, name = "Glide", func = uvracermanagerGetSavesGlide, path = "unitvehicles/glide/racers/", type = "json" }
 		}
-
-		-- local vehicleBaseCombo = vgui.Create("DComboBox")
-		-- vehicleBaseCombo:SetSize(280, 20)
-		-- vehicleBaseCombo:SetTooltip("#uv.tool.base.desc")
-		-- local currentBaseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
-		-- vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
-		-- for _, base in ipairs(vehicleBases) do
-			-- vehicleBaseCombo:AddChoice(base.name, base.id)
-		-- end
 		
 		-- Scroll Panel
 		local FrameListPanel = vgui.Create("DFrame")

@@ -579,25 +579,13 @@ if SERVER then
                 ang = (next_pos - pos):GetNormalized():Angle()
             end
         end
-        
-        --if not checkpoint then return end
-        
+                
         -- Teleport to the checkpoint
-        --PrintMessage( HUD_PRINTTALK, "Resetting position..." )
-        
-        --local pos = checkpoint:GetPos() + checkpoint:OBBCenter()
         local ground_trace = util.TraceLine({start = pos, endpos = pos +- ((checkpoint and checkpoint:GetUp() or vector_origin) * 1000), mask = MASK_NPCWORLDSTATIC, filter = {checkpoint}})
         
         local next_pos = nil
         local next_dir = nil
-        
-        -- if next_checkpoint then
-        --     next_pos = next_checkpoint:GetPos() + next_checkpoint:OBBCenter()
-        --     next_dir = (next_pos - pos):GetNormalized()
-            
-        --     ang = next_dir:Angle()
-        -- end
-        
+                
         if vehicle_class == "gmod_sent_vehicle_fphysics_base" then
             vehicle = UVTeleportSimfphysVehicle( vehicle, (ground_trace.Hit and ground_trace.HitPos) or pos, ang )
         elseif vehicle.IsGlideVehicle then
@@ -1660,19 +1648,6 @@ if SERVER then
         local carPos = car:WorldSpaceCenter()
         local objects = ents.FindInSphere(carPos, 1000)
 
-        -- local attacker = UVGetDriver(car)
-        -- local attackerName = UVGetDriverName(car)
-
-        -- local playersToSendTo = {}
-        -- local args = {
-        --     ['User'] = attackerName,
-        --     ['Hit'] = {}
-        -- }
-
-        -- if attacker then
-        --     table.insert( playersToSendTo, attacker )
-        -- end
-
         local affectedTargets = {}
 
         for k, object in pairs(objects) do
@@ -1689,15 +1664,6 @@ if SERVER then
 
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 UVRamVehicle(object)
-
-                --local victim = UVGetDriver(object)
-                --local victimName = UVGetDriverName(object)
-
-                --table.insert( args.Hit, victimName )
-
-                -- if victim then
-                --     table.insert( playersToSendTo, victim )
-                -- end
                 
                 local attachVictim = false
                 --if object.UnitVehicle then
@@ -1722,11 +1688,8 @@ if SERVER then
                     elseif object:GetClass() == "prop_vehicle_jeep" then
                         attachVictim = true
                     end
-                --end
 
                 if attachVictim then
-                    -- local victimName = UVGetDriverName(object)
-                    -- table.insert( args.Hit, victimName )
                     table.insert( affectedTargets, object )
                 end
             end
@@ -1932,15 +1895,6 @@ if SERVER then
 
                 objectphys:ApplyForceCenter(angle:Forward()*force)
                 UVRamVehicle(object)
-
-                --local victim = UVGetDriver(object)
-                --local victimName = UVGetDriverName(object)
-
-                --table.insert( args.Hit, victimName )
-
-                -- if victim then
-                --     table.insert( playersToSendTo, victim )
-                -- end
                 
                 local attachVictim = false
                 --if object.UnitVehicle then

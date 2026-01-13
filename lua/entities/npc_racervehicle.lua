@@ -24,41 +24,6 @@ if SERVER then
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
 	local RacerPursuitTech = GetConVar("unitvehicle_racerpursuittech")
 	
-	-- function GetClosestPoint(ent, pos)
-	-- 	local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
-	-- 	local localPos = ent:WorldToLocal(pos)
-	
-	-- 	-- Clamp each coordinate
-	-- 	local clamped = Vector(
-	-- 		math.Clamp(localPos.x, mins.x, maxs.x),
-	-- 		math.Clamp(localPos.y, mins.y, maxs.y),
-	-- 		math.Clamp(localPos.z, mins.z, maxs.z)
-	-- 	)
-	
-	-- 	return ent:LocalToWorld(clamped)
-	-- end
-	-- function GetClosestPoint(ent, pos, margin)
-	-- 	if not IsValid(ent) then return nil end
-	
-	-- 	margin = margin or 1 -- How far to stay away from the edge (in source units)
-	
-	-- 	local mins, maxs = ent:OBBMins(), ent:OBBMaxs()
-	-- 	local localPos = ent:WorldToLocal(pos)
-	
-	-- 	-- Shrink bounds inward by margin
-	-- 	local paddedMins = Vector(mins.x + margin, mins.y + margin, mins.z + margin)
-	-- 	local paddedMaxs = Vector(maxs.x - margin, maxs.y - margin, maxs.z - margin)
-	
-	-- 	-- Clamp to the smaller, inset box
-	-- 	local clamped = Vector(
-	-- 		math.Clamp(localPos.x, paddedMins.x, paddedMaxs.x),
-	-- 		math.Clamp(localPos.y, paddedMins.y, paddedMaxs.y),
-	-- 		math.Clamp(localPos.z, paddedMins.z, paddedMaxs.z)
-	-- 	)
-	
-	-- 	return ent:LocalToWorld(clamped)
-	-- end
-	
 	function GetClosestPoint(ent, pos, margin, safeDistance)
 		if not IsValid(ent) then return nil end
 		
@@ -295,10 +260,6 @@ if SERVER then
 			for _, v in ipairs(ents.FindByClass('uvrace_brush*')) do
 				if v:GetID() == current_checkp then
 					selected_point = v
-					-- self.PatrolWaypoint = {
-					-- 	['Target'] = (v:GetPos1()+v:GetPos2())/2,
-					-- 	['SpeedLimit'] = math.huge
-					-- }
 				end
 				if v:GetID() == next_checkp then
 					next_point = v
@@ -306,14 +267,6 @@ if SERVER then
 			end
 			
 			if selected_point then
-				-- local pos1 = selected_point:GetPos1()
-				-- local pos2 = selected_point:GetPos2()
-				
-				-- local lowest_y = math.min(pos1.y, pos2.y)
-				
-				-- local target = (Vector(pos1.x, lowest_y, pos1.z) + Vector(pos2.x, lowest_y, pos2.z)) / 2
-				-- Moved to brushpoint init function for better optimization, as creating Vector objects in a loop seems inefficient
-				--local target = selected_point.target_point
 				local target = selected_point
 				local pos1, pos2 = nil, nil
 
@@ -325,10 +278,7 @@ if SERVER then
 					pos1, 
 					pos2, 
 					200
-				)--GetClosestPoint(selected_point, self.v:WorldSpaceCenter(), 300)
-				--local cansee = self:CanSeeGoal(target_pos)
-				
-				--local nearest_waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
+				)
 				
 				local velocity = self.v:GetVelocity()
 				--print(velocity:LengthSqr())
@@ -345,8 +295,6 @@ if SERVER then
 					local dist = self.v:WorldSpaceCenter():Distance(target_pos)
 					
 					if dist < tolerance and velocity:LengthSqr() > 100000 then --dot > dotThreshold
-						--local closest = GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
-						--if self:CanSeeGoal(next_point.target_point) then
 						target = next_point
 
 						pos1 = (InfMap and InfMap.unlocalize_vector( target:GetPos1(), target:GetChunk() )) or target:GetPos1()
@@ -357,7 +305,7 @@ if SERVER then
 							pos1, 
 							pos2, 
 							200
-						)--GetClosestPoint(next_point, self.v:WorldSpaceCenter(), 300)
+						)
 						--end
 					end
 				end
@@ -376,30 +324,11 @@ if SERVER then
 				if size < 200000 then
 					target_pos = target.target_point
 				end
-				
-				--print(self.v:WorldSpaceCenter():Distance(target_pos))
-				
-				-- Here we can either go full-DV, or just go straight towards checkpoint if there is nothing infront of the car.
-				-- Further tests may be needed to determine which one is better
+
 				self.PatrolWaypoint = {
 					['Target'] = target_pos,
 					['SpeedLimit'] = ((target:GetSpeedLimit() == 0 and math.huge) or target:GetSpeedLimit())
 				}
-				-- if cansee then
-				-- 	self.PatrolWaypoint = {
-				-- 		['Target'] = target_pos,
-				-- 		['SpeedLimit'] = target:GetSpeedLimit() or 0
-				-- 	}
-				-- else
-				-- 	-- Must utilize dvs
-				-- 	local waypoints = dvd.GetRouteVector(self.v:WorldSpaceCenter(), target_pos)
-				
-				-- 	if waypoints and #waypoints > 0 then
-				-- 		self.PatrolWaypoint = waypoints[2]
-				-- 	else
-				-- 		self.PatrolWaypoint = nearest_waypoint
-				-- 	end
-				-- end
 			end
 			
 			
@@ -415,32 +344,13 @@ if SERVER then
 			else
 				self.PatrolWaypoint = Waypoint
 			end
-		end
-		
-		-- if next(dvd.Waypoints) == nil then
-		-- 	return
-		-- end
-		
-		-- local Waypoint = dvd.GetNearestWaypoint(self.v:WorldSpaceCenter())
-		-- if Waypoint.Neighbors then --Keep going straight
-		-- 	self.PatrolWaypoint = dvd.Waypoints[Waypoint.Neighbors[math.random(#Waypoint.Neighbors)]]
-		-- else
-		-- 	self.PatrolWaypoint = Waypoint
-		-- end
-		
-		-- self.PatrolWaypoint = {}
-		-- self.PatrolWaypoint["Target"] = Entity(1):GetPos()
-		-- self.PatrolWaypoint["SpeedLimit"] = math.huge
-		
+		end		
 	end
 	
 	function ENT:Race()
 		
 		self:FindRace()
 		
-		-- if next(dvd.Waypoints) == nil then
-		-- 	return
-		-- end
 		
 		if self.PatrolWaypoint then
 			
@@ -475,41 +385,6 @@ if SERVER then
 			local speedlimitmph = self.PatrolWaypoint["SpeedLimit"]
 			self.Speeding = speedlimitmph^2
 			
-			--Unique racing techniques
-			
-			-- if self.v.uvraceparticipant then
-			-- 	local velocity = self.v:GetVelocity():GetNormalized()
-			
-			-- 	local vect_sanitized = vect --* Vector(1, 0, 1)
-			-- 	local velo_sanitized = velocity --* Vector(1, 0, 1)
-			
-			-- 	local angle_diff = math.deg(math.acos(math.Clamp(velo_sanitized:Dot(vect_sanitized), -1, 1)))
-			
-			-- 	local maxDist = 750
-			-- 	local distSqr = dist:LengthSqr()
-			-- 	local distanceFactor = math.Clamp(distSqr / (maxDist * maxDist), 0, 1)
-			
-			-- 	angle_diff = angle_diff * distanceFactor
-			
-			-- 	local misalignment = math.Clamp(angle_diff / 90, -1, 1)
-			-- 	throttle = throttle * (1 - 0.5 * misalignment) -- 1 - 0.5 * misalignment
-			
-			-- 	if angle_diff < 10 then
-			-- 		throttle = 1
-			-- 	end
-			
-			-- 	-- if math.abs(steer) > .9 and selfvelocity > 200000 then
-			-- 	-- 	throttle = -1
-			-- 	-- end
-			-- 	-- if angle_diff > 25 then
-			-- 	-- 	throttle = throttle * 0.5
-			-- 	-- end
-			-- 	//local dist_len = dist:LengthSqr()
-			-- 	-- print("Distance:",dist_len)
-			-- 	-- print("Angle Difference:",angle_diff)	
-			-- end
-			-- print(self.Speeding)
-			-- print(selfvelocity, self.Speeding*300)
 			if selfvelocity > self.Speeding*350 and self.v.uvraceparticipant then 
 				throttle = -1
 			elseif selfvelocity > self.Speeding*300 then
@@ -524,13 +399,6 @@ if SERVER then
 			if self:ObstaclesNearby() and not self.v.uvraceparticipant and not (self.v.UVWanted and UVTargeting) then
 				throttle = throttle * -1
 			end --Slow down when free roaming
-			
-			-- -- slow it down for tight corners if we are going too fast
-			-- if (selfvelocity > 200000 and angle_diff >= 25 and distSqr < 250000) then
-			-- 	throttle = -1
-			-- end
-			
-			-- print("Velocity:",selfvelocity)
 			
 			if GetConVar("unitvehicle_tractioncontrol"):GetBool() and selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then 

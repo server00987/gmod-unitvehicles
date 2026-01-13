@@ -5,9 +5,6 @@ local UVRacePlayMusic = false
 local UVRacePlayTransition = false
 
 local showhud = GetConVar("cl_drawhud")
-local UVRace_CurrentTrackName = UVRace_CurrentTrackName or nil
-local UVRace_CurrentTrackAuthor = UVRace_CurrentTrackAuthor or nil
-local UVRace_CurrentTrackHost = UVRace_CurrentTrackHost or nil
 
 UVHUDRaceFinishCountdownStarted = false
 UVHUDRaceFinishEndTime = nil
@@ -2074,10 +2071,12 @@ else -- CLIENT stuff
 		local hostedby = net.ReadString()
 
 		if name == "?" and author == "?" then
+			print("Resetting track info")
 			UVRace_CurrentTrackName = nil
 			UVRace_CurrentTrackAuthor = nil
 			UVRace_CurrentTrackHost = nil
 		else
+			print(name, author, hostedby)
 			UVRace_CurrentTrackName = name
 			UVRace_CurrentTrackAuthor = author
 			UVRace_CurrentTrackHost = hostedby

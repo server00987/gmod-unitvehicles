@@ -326,7 +326,7 @@ for _, folder in ipairs(datafolders) do
 end
 
 concommand.Add("uv_spawnvehicles", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	
 	PrintMessage( HUD_PRINTTALK, "Spawning Unit Vehicle(s)...")
 	
@@ -340,7 +340,7 @@ concommand.Add("uv_spawnvehicles", function(ply)
 end)
 
 concommand.Add( "uv_setheat", function( ply, cmd, args )
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	UVHeatLevel = math.Clamp( (tonumber(args[1]) or 1), 1, MAX_HEAT_LEVEL )
 end)
 
@@ -360,12 +360,12 @@ function UV_DespawnVehicles(ply)
 end
 
 concommand.Add("uv_despawnvehicles", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	UV_DespawnVehicles(ply)
 end)
 
 concommand.Add("uv_resetallsettings", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	
 	ply:EmitSound("buttons/button15.wav", 0, 100, 0.5, CHAN_STATIC)
 	
@@ -468,7 +468,7 @@ function UV_StartPursuit(ply, skipCountdown)
 end
 
 concommand.Add("uv_startpursuit", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	UV_StartPursuit(ply)
 end)
 
@@ -478,7 +478,7 @@ function UV_StopPursuit(ply)
 end
 
 concommand.Add("uv_stoppursuit", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	UV_StopPursuit(ply)
 end)
 
@@ -493,7 +493,7 @@ concommand.Add("uv_wantedtable", function(ply)
 end)
 
 concommand.Add("uv_clearbounty", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	PrintMessage( HUD_PRINTTALK, "Bounty cleared" )
 	
 	UVBounty = 0
@@ -560,7 +560,7 @@ function UV_ClearRacer(ply)
 end
 
 concommand.Add("uv_clearracers", function(ply)
-	if not ply:IsSuperAdmin() then return end
+	if ply and not ply:IsSuperAdmin() then return end
 	UV_ClearRacer(ply)
 end)
 

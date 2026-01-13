@@ -446,12 +446,6 @@ function UVSoundCooldown(heatlevel)
 	end
 
 	local theme = PursuitTheme:GetString()
-	-- local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/cooldown/*", "GAME")
-
-	-- if not soundtable or #soundtable == 0 then UVSoundHeat( UVHeatLevel ) return end
-
-	-- UVPlaySound("uvpursuitmusic/" .. theme .. "/cooldown/" .. soundtable[math.random(1, #soundtable)], true)
-
 	heatlevel = heatlevel or 1
 
 	if not PursuitFilePathsTable[theme] then
@@ -480,13 +474,6 @@ function UVSoundCooldown(heatlevel)
 
 	appendingString = (physObj and physObj:GetVelocity():LengthSqr() > 500000) and "high" or "low"
 
-	-- local cooldownSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/" .. heatlevel .. appendingString ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/cooldown/5" .. appendingString )
-	-- if cooldownSound then
-	-- 	UVPlaySound(cooldownSound, true)
-	-- else
-	-- 	UVSoundHeat( UVHeatLevel )
-	-- 	return
-	-- end
 	local cooldownArray = PursuitFilePathsTable[theme].cooldown and (PursuitFilePathsTable[theme].cooldown[heatlevel] or PursuitFilePathsTable[theme].cooldown["default"])
 	cooldownArray = cooldownArray and cooldownArray[appendingString or 'low'] or (cooldownArray and cooldownArray['default'] or {})
 
@@ -529,12 +516,6 @@ function UVSoundBusted(heatlevel)
 	end
 
 	local theme = PursuitTheme:GetString()
-	-- local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/busted/*", "GAME")
-
-	-- if not soundtable or #soundtable == 0 then return end
-
-	-- UVPlaySound("uvpursuitmusic/" .. theme .. "/busted/" .. soundtable[math.random(1, #soundtable)], false, true)
-
 	heatlevel = heatlevel or 1
 
 	if PursuitThemePlayRandomHeat:GetBool() then
@@ -552,14 +533,6 @@ function UVSoundBusted(heatlevel)
 		UVResetRandomHeatTrack()
 	end
 
-	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/busted/1" )
-	-- if escapedSound then
-	-- 	UVPlaySound(escapedSound, false, true)
-	-- else
-	-- 	UVSoundHeat( UVHeatLevel )
-	-- 	return
-	-- end
-
 	local bustedArray = PursuitFilePathsTable[theme].busted and (PursuitFilePathsTable[theme].busted[heatlevel] or PursuitFilePathsTable[theme].busted["default"]) or {}
 
 	if bustedArray and #bustedArray > 0 then
@@ -573,7 +546,6 @@ function UVSoundBusted(heatlevel)
 			return
 		end
 	else
-		--UVSoundHeat( UVHeatLevel )
 		return
 	end
 
@@ -601,11 +573,6 @@ function UVSoundEscaped(heatlevel)
 	end
 
 	local theme = PursuitTheme:GetString()
-	-- local soundtable = file.Find("sound/uvpursuitmusic/" .. theme .. "/escaped/*", "GAME")
-
-	-- if not soundtable or #soundtable == 0 then return end
-
-	-- UVPlaySound("uvpursuitmusic/" .. theme .. "/escaped/" .. soundtable[math.random(1, #soundtable)], false)
 	heatlevel = heatlevel or 1
 
 	if PursuitThemePlayRandomHeat:GetBool() then
@@ -622,14 +589,6 @@ function UVSoundEscaped(heatlevel)
 		PopulatePursuitFilePaths(theme)
 		UVResetRandomHeatTrack()
 	end
-
-	-- local escapedSound = UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/" .. heatlevel ) or UVGetRandomSound( PURSUIT_MUSIC_FILEPATH .. "/" .. theme .. "/escaped/1" )
-	-- if escapedSound then
-	-- 	UVPlaySound(escapedSound, false)
-	-- else
-	-- 	UVSoundHeat( UVHeatLevel )
-	-- 	return
-	-- end
 
 	local escapedArray = PursuitFilePathsTable[theme].escaped and (PursuitFilePathsTable[theme].escaped[heatlevel] or PursuitFilePathsTable[theme].escaped["default"]) or {}
 
@@ -709,7 +668,6 @@ function UVPlaySound( FileName, Loop, StopLoop, Timeout, applyMusicVolume )
 		end
 	end 
 
-	-- print(FileName)
 	local expectedEndTime
 
 	UVDelaySound()
@@ -719,41 +677,6 @@ function UVPlaySound( FileName, Loop, StopLoop, Timeout, applyMusicVolume )
 			UVInitSound(source, Loop, StopLoop, Timeout, applyMusicVolume)
 		end)
 	end
-
-	-- local source = (Loop and UVSoundLoop) or UVSoundSource
-
-	-- if source then
-	-- 	expectedEndTime = expectedEndTime or RealTime() + source:GetLength() + (Timeout or 0)
-	-- 	print(expectedEndTime)
-	-- end
-
-	-- UVLoadedSounds = FileName
-
-	-- UVDelaySound()
-	-- hook.Remove("Think", "CheckSoundFinished")
-
-	-- hook.Add("Think", "CheckSoundFinished", function()
-	-- 	if expectedEndTime then
-	-- 		if RealTime() >= expectedEndTime then
-	-- 			hook.Remove("Think", "CheckSoundFinished")
-
-	-- 			-- if UVHUDDisplayBusting then
-	-- 			-- 	UVSoundBusting(UVHeatLevel)
-	-- 			-- 	return
-	-- 			-- end
-
-	-- 			UVStopSound()
-	-- 		end
-	-- 	end
-	-- end)
-
-	-- timer.Create("UVPursuitThemeReplay", duration, 1, function()
-	-- 	if UVHUDDisplayBusting then
-	-- 		UVSoundBusting()
-	-- 		return
-	-- 	end
-	-- 	UVStopSound()
-	-- end)
 end
 
 function UVStopSound()
@@ -2090,24 +2013,6 @@ if SERVER then
 
 							UVUpdateHeatLevel(nextHeat)
 							TriggerHeatLevelEffects(nextHeat)
-
-							-- PrintMessage( HUD_PRINTCENTER, string.format( lang("uv.hud.heatlvl"), 2 ) )
-							-- if next(ents.FindByClass("npc_uv*")) ~= nil and Chatter:GetBool() then
-							-- 	local units = ents.FindByClass("npc_uv*")
-							-- 	local random_entry = math.random(#units)
-							-- 	local unit = units[random_entry]
-							-- 	if not UVTargeting then return end
-							-- 	UVChatterReportHeat(unit, nextHeat)
-							-- end
-
-							-- if UVTargeting then
-							-- 	--Entity(1):EmitSound("ui/pursuit/heatlevelrise.wav", 0, 100, 0.5)
-							-- 	UVRelaySoundToClients("ui/pursuit/heatlevelrise.wav", false)
-							-- end
-
-							-- net.Start("UVHUDHeatLevelIncrease")
-							-- net.Broadcast()
-							-- UVUpdateHeatLevel()
 						end
 					end )
 				end
@@ -2476,59 +2381,7 @@ else -- CLIENT Settings | HUD/Options
 		[3] = Color( 255, 255, 255 )
 	}
 
-	--hook.Run('HUDArrest')
-
-	-- PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "", true, false, "Unit Vehicles: Pursuit Theme (string).")
-	-- HeatLevels = CreateClientConVar("unitvehicle_heatlevels", 1, true, false, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit.")
-	-- DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
-	-- PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
-	-- PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits every 10 minutes.")
-	-- PursuitThemePlayRandomHeatMinutes = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheatminutes", 10, true, false, "Unit Vehicles: If set to 'Every X minutes', all Heat Level songs will play during pursuits every X minutes.")
-	-- PursuitThemePlayRandomHeatType = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheattype", "Sequential", true, false, "Unit Vehicles: If set to 'Sequential', random Heat Level songs will play after another. If set to 'Every 10 minutes', all Heat Level songs will play during pursuits every 10 minutes.")
-	-- RacingMusic = CreateClientConVar("unitvehicle_racingmusic", 1, true, false, "Unit Vehicles: If set to 1, Racing music will play.")
-	-- RacingMusicPriority = CreateClientConVar("unitvehicle_racingmusicpriority", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits while racing.")
-	-- RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
-	-- PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
-	-- ChatterVolume = CreateClientConVar("unitvehicle_chattervolume", 1, true, false, "Unit Vehicles: Determines volume of the Unit Vehicles' radio chatter.")
-	-- NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
-	-- BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
-	-- SpawnCooldown = CreateClientConVar("unitvehicle_spawncooldown", 30, true, false, "Unit Vehicles: Time in seconds before player units can spawn again. Set this to 0 to disable.")
-	-- CanWreck = CreateClientConVar("unitvehicle_canwreck", 1, true, false, "Unit Vehicles: If set to 1, Unit Vehicles can crash out. Set this to 0 to disable.")
-	-- Chatter = CreateClientConVar("unitvehicle_chatter", 1, true, false, "Unit Vehicles: If set to 1, Units' radio chatter can be heard.")
-	-- SpeedLimit = CreateClientConVar("unitvehicle_speedlimit", 60, true, false, "Unit Vehicles: Speed limit in MPH for idle Units to enforce. Patrolling Units still enforces speed limits set on DV Waypoints. Set this to 0 to disable.")
-	-- AutoHealth = CreateClientConVar("unitvehicle_autohealth", 0, true, false, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health.")
-	-- WheelsDetaching = CreateClientConVar("unitvehicle_wheelsdetaching", 1, true, false, "Unit Vehicles: If set to 1, wrecked vehicles will have their wheels detached.")
-	-- MinHeatLevel = CreateClientConVar("unitvehicle_minheatlevel", 1, true, false, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
-	-- MaxHeatLevel = CreateClientConVar("unitvehicle_maxheatlevel", 6, true, false, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
-	-- SpikeStripDuration = CreateClientConVar("unitvehicle_spikestripduration", 20, true, false, "Unit Vehicle: Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
-	-- Pathfinding = CreateClientConVar("unitvehicle_pathfinding", 1, true, false, "Unit Vehicles: If set to 1, Units uses A* pathfinding algorithm on navmesh/Decent Vehicle Waypoints to navigate. Impacts computer performance.")
-	-- VCModELSPriority = CreateClientConVar("unitvehicle_vcmodelspriority", 0, true, false, "Unit Vehicles: If set to 1, Units using base HL2 vehicles will attempt to use VCMod ELS over Photon if both are installed.")
-	-- CallResponse = CreateClientConVar("unitvehicle_callresponse", 0, true, false, "Unit Vehicles: If set to 1, Units will spawn and respond to the location regarding various calls.")
-	-- ChatterText = CreateClientConVar("unitvehicle_chattertext", 0, true, false, "Unit Vehicles: If set to 1, Units' radio chatter will be displayed in the chatbox instead.")
-	-- Headlights = CreateClientConVar("unitvehicle_enableheadlights", 1, true, false, "Unit Vehicles: AI Vehicles will shine their headlights. 0 = Off, 1 = Automatic, 2 = Always on")
-	-- UseNitrousRacer = CreateClientConVar("unitvehicle_usenitrousracer", 0, true, false, "Unit Vehicles: If set to 1, Racer vehicles will use nitrous.")
-	-- UseNitrousUnit = CreateClientConVar("unitvehicle_usenitrousunit", 0, true, false, "Unit Vehicles: If set to 1, Unit vehicles will use nitrous.")
-	-- CustomizeRacer = CreateClientConVar("unitvehicle_customizeracer", 0, {FCVAR_ARCHIVE}, "Unit Vehicles: Randomizes color/skin/bodygroups when spawning AI Racers")
-	-- SpawnMainUnits = CreateClientConVar("unitvehicle_spawnmainunits", 1, true, false, "Unit Vehicles: If set to 1, main AI Units (Patrol, Support, etc.) will spawn to patrol/chase.")
-	-- DVWaypointsPriority = CreateClientConVar("unitvehicle_dvwaypointspriority", 0, true, false, "Unit Vehicles: If set to 1, Units will attempt to navigate on Decent Vehicle Waypoints FIRST instead of navmesh (if both are installed).")
-	-- RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
-	-- RepairRange = CreateClientConVar("unitvehicle_repairrange", 100, true, false, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
-	-- RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
-	-- RacerPursuitTech = CreateClientConVar("unitvehicle_racerpursuittech", 1, true, false, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
-	-- RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
-	-- MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
-	-- UVTraxFreeroam = CreateClientConVar("unitvehicle_uvtraxinfreeroam", 0, true, false, "Unit Vehicles: If set to 1, UV TRAX™ will play in Freeroam whenever you're in a vehicle.")
-	-- OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, true, false, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
-	-- UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, true, false, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
-	-- UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, true, false, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
-	-- UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, true, false, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
-	-- RandomPlayerUnits = CreateClientConVar("unitvehicle_randomplayerunits", 0, true, false, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
-	-- AutoHealthRacer = CreateClientConVar("unitvehicle_autohealthracer", 0, true, false, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
-	-- TractionControl = CreateClientConVar("unitvehicle_tractioncontrol", 1, true, false, "Unit Vehicles: If set to 1, Units and Racer Vehicles will apply reduced throttle when wheel spinning.")
-
 	PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "", true, false, "Unit Vehicles: Pursuit Theme (string).")
-	--HeatLevels = CreateClientConVar("unitvehicle_heatlevels", 1, true, false, "If set to 1, Heat Levels will increase from its minimum value to its maximum value during a pursuit.")
-	--DetectionRange = CreateClientConVar("unitvehicle_detectionrange", 30, true, false, "Unit Vehicles: Minimum spawning distance to the vehicle in studs when manually spawning Units. Use greater values if you have trouble spawning Units.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
 	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits every 10 minutes.")
 	PursuitThemePlayRandomHeatMinutes = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheatminutes", 10, true, false, "Unit Vehicles: If set to 'Every X minutes', all Heat Level songs will play during pursuits every X minutes.")
@@ -2538,25 +2391,13 @@ else -- CLIENT Settings | HUD/Options
 	RacingThemeOutsideRace = CreateClientConVar("unitvehicle_racingmusicoutsideraces", 0, true, false, "Unit Vehicles: If set to 1, Racing music will play during pursuits even while not racing.")
 	PursuitVolume = CreateClientConVar("unitvehicle_pursuitthemevolume", 1, true, false, "Unit Vehicles: Determines volume of the pursuit theme.")
 	ChatterVolume = CreateClientConVar("unitvehicle_chattervolume", 1, true, false, "Unit Vehicles: Determines volume of the Unit Vehicles' radio chatter.")
-	--NeverEvade = CreateClientConVar("unitvehicle_neverevade", 0, true, false, "Unit Vehicles: If set to 1, you won't be able to evade the Unit Vehicles. Good luck.")
-	--BustedTimer = CreateClientConVar("unitvehicle_bustedtimer", 5, true, false, "Unit Vehicles: Time in seconds before the enemy gets busted. Set this to 0 to disable.")
-	--RepairCooldown = CreateClientConVar("unitvehicle_repaircooldown", 60, true, false, "Unit Vehicle: Time in seconds between each repair. Set this to 0 to make all repair shops a one-time use.")
-	--RepairRange = CreateClientConVar("unitvehicle_repairrange", 100, true, false, "Unit Vehicle: Distance in studs between the repair shop and the vehicle to repair.")
-	--RacerTags = CreateClientConVar("unitvehicle_racertags", 1, true, false, "Unit Vehicles: If set to 1, Racers and Commander Units will have name tags above their vehicles.")
-	--RacerPursuitTech = CreateClientConVar("unitvehicle_racerpursuittech", 1, true, false, "Unit Vehicles: If set to 1, Racers will spawn with pursuit tech (spike strips, ESF, etc.).")
-	--RacerFriendlyFire = CreateClientConVar("unitvehicle_racerfriendlyfire", 1, true, false, "Unit Vehicles: If set to 1, Racers will be able to attack eachother with Pursuit Tech.")
 	MuteCheckpointSFX = CreateClientConVar("unitvehicle_mutecheckpointsfx", 0, true, false, "Unit Vehicles: If set to 1, the SFX that plays when passing checkpoints will be silent.")
 	UVTraxFreeroam = CreateClientConVar("unitvehicle_uvtraxinfreeroam", 0, true, false, "Unit Vehicles: If set to 1, UV TRAX™ will play in Freeroam whenever you're in a vehicle.")
-	--OptimizeRespawn = CreateClientConVar("unitvehicle_optimizerespawn", 1, true, false, "Unit Vehicles: If set to 1, Units will be teleported ahead of the suspect instead of despawning (does not work with simfphys).")
 	UVSubtitles = CreateClientConVar("unitvehicle_subtitles", 1, true, false, "Unit Vehicles: If set to 1, display subtitles when Cop Chatter is active. Only works for Default Chatter, and only in English.")
 	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, true, false, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
 	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, true, false, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
-	--RandomPlayerUnits = CreateClientConVar("unitvehicle_randomplayerunits", 0, true, false, "Unit Vehicles: If set to 1, player-controlled Units will be chosen randomly from the available units.")
-	--AutoHealthRacer = CreateClientConVar("unitvehicle_autohealthracer", 0, true, false, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
-	--TractionControl = CreateClientConVar("unitvehicle_tractioncontrol", 1, true, false, "Unit Vehicles: If set to 1, Units and Racer Vehicles will apply reduced throttle when wheel spinning.")
 
 	-- unit convars
-	--UVUVehicleBase = CreateClientConVar("unitvehicle_unit_vehiclebase", 1, true, false, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 	UVUOneCommander = CreateClientConVar("unitvehicle_unit_onecommander", 0, true, false)
 	UVUOneCommanderHealth = CreateClientConVar("unitvehicle_unit_onecommanderhealth", 1, true, false)
 	UVUCommanderEvade = CreateClientConVar("unitvehicle_unit_onecommanderevading", 0, true, false, "If enabled, will allow racers to escape while commander is on scene.")
@@ -2593,29 +2434,6 @@ else -- CLIENT Settings | HUD/Options
 	UVKeybindShowRaceResults = CreateClientConVar("unitvehicle_keybind_raceresults", KEY_N, true, false)
 
 	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
-
-	-- UVPTPTDuration = CreateClientConVar("unitvehicle_pursuittech_ptduration", 60, true, false)
-	-- UVPTESFDuration = CreateClientConVar("unitvehicle_pursuittech_esfduration", 10, true, false)
-	-- UVPTESFPower = CreateClientConVar("unitvehicle_pursuittech_esfpower", 1000000, true, false)
-	-- UVPTESFDamage = CreateClientConVar("unitvehicle_pursuittech_esfdamage", 0.2, true, false)
-	-- UVPTESFCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_esfcommanderdamage", 0.2, true, false)
-
-	-- UVPTJammerDuration = CreateClientConVar("unitvehicle_pursuittech_jammerduration", 10, true, false)
-	-- UVPTShockwavePower = CreateClientConVar("unitvehicle_pursuittech_shockwavepower", 1000000, true, false)
-	-- UVPTShockwaveDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavedamage", 0.1, true, false)
-	-- UVPTShockwaveCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_shockwavecommanderdamage", 0.1, true, false)
-	-- UVPTSpikeStripDuration = CreateClientConVar("unitvehicle_pursuittech_spikestripduration", 60, true, false)
-	-- UVPTStunMinePower = CreateClientConVar("unitvehicle_pursuittech_stunminepower", 1000000, true, false)
-	-- UVPTStunMineDamage = CreateClientConVar("unitvehicle_pursuittech_stunminedamage", 0.1, true, false)
-	-- UVPTStunMineCommanderDamage = CreateClientConVar("unitvehicle_pursuittech_stunminecommanderdamage", 0.1, true, false)
-
-	-- UVUnitPTDuration = CreateClientConVar("unitvehicle_unitpursuittech_ptduration", 20, true, false)
-	-- UVUnitPTESFDuration = CreateClientConVar("unitvehicle_unitpursuittech_esfduration", 10, true, false)
-	-- UVUnitPTESFPower = CreateClientConVar("unitvehicle_unitpursuittech_esfpower", 1000000, true, false)
-	-- UVUnitPTESFDamage = CreateClientConVar("unitvehicle_unitpursuittech_esfdamage", 0.2, true, false)
-	-- UVUnitPTSpikeStripDuration = CreateClientConVar("unitvehicle_unitpursuittech_spikestripduration", 60, true, false)
-	-- UVUnitPTKillSwitchLockOnTime = CreateClientConVar("unitvehicle_unitpursuittech_killswitchlockontime", 3, true, false)
-	-- UVUnitPTSpikeStripRoadblockFriendlyFire = CreateClientConVar("unitvehicle_spikestriproadblockfriendlyfire", 0, true, false)
 
 	UVPBMax = CreateClientConVar("unitvehicle_pursuitbreaker_maxpb", 2, true, false)
 	UVPBCooldown = CreateClientConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, true, false)
@@ -2985,49 +2803,11 @@ else -- CLIENT Settings | HUD/Options
 		local ResourcePoints = net.ReadString()
 		local rp_num = tonumber(ResourcePoints)
 
-		-- if rp_num ~= UVResourcePoints then
-		-- 	hook.Remove("Think", "UVRPColorPulse")
-		-- 	UVUnitsColor = (rp_num < (UVResourcePoints or 0) and Color(255,50,50, 150)) or Color(50,255,50, 150)
-		-- 	--UVResourcePointsColor = (rp_num < UVResourcePoints and Color(255,50,50)) or Color(50,255,50)
-
-		-- 	local clrs = {}
-
-		-- 	for _, v in pairs( { 'r', 'g', 'b' } ) do
-		-- 		if UVUnitsColor[v] ~= 255 then table.insert(clrs, v) end
-		-- 	end 
-
-		-- 	-- if timer.Exists("UVWrecksColor") then
-		-- 	-- 	timer.Remove("UVWrecksColor")
-		-- 	-- end
-		-- 	local val = 50
-
-		-- 	hook.Add("Think", "UVRPColorPulse", function()
-		-- 		val = val + 200 * RealFrameTime()
-		-- 		-- UVResourcePointsColor.b = val
-		-- 		-- UVResourcePointsColor.g = val
-		-- 		for _, v in pairs( clrs ) do
-		-- 			UVUnitsColor[v] = val
-		-- 		end
-
-		-- 		if val >= 255 then hook.Remove("Think", "UVRPColorPulse") end
-		-- 	end)
-		-- end
 		if rp_num ~= UVResourcePoints then
 			hook.Run( 'UIEventHook', 'pursuit', 'onResourceChange', rp_num, UVResourcePoints )
 		end
 
 		UVResourcePoints = tonumber(ResourcePoints)
-		-- UVResourcePointsColor = Color( 255, 255, 255, 200)
-
-		-- if UVHUDDisplayBackupTimer then
-		-- 	if UVBackupTimerSeconds > 10 then
-		-- 		UVResourcePointsColor = Color( 255, 255, 255, 200)
-		-- 	elseif math.floor(UVBackupTimerSeconds)==math.Round(UVBackupTimerSeconds) then
-		-- 		UVResourcePointsColor = Color( 255, 255, 255, 200)
-		-- 	else
-		-- 		UVResourcePointsColor = Color( 255, 255, 0, 200)
-		-- 	end
-		-- end
 
 	end)
 
@@ -3074,29 +2854,6 @@ else -- CLIENT Settings | HUD/Options
 	net.Receive("UVHUDWrecks", function()
 
 		local wrecks = net.ReadString()
-
-		-- if wrecks ~= UVWrecks then
-		-- 	hook.Remove("Think", "UVWrecksColorPulse")
-		-- 	if timer.Exists("UVWrecksColorPulseDelay") then timer.Remove("UVWrecksColorPulseDelay") end
-		-- 	UVWrecksColor = Color(255,255,0, 150)
-
-		-- 	-- if timer.Exists("UVWrecksColor") then
-		-- 	-- 	timer.Remove("UVWrecksColor")
-		-- 	-- end
-
-		-- 	timer.Create("UVWrecksColorPulseDelay", 1, 1, function()
-		-- 		hook.Add("Think", "UVWrecksColorPulse", function()
-		-- 			UVWrecksColor.b = UVWrecksColor.b + 600 * RealFrameTime()
-		-- 			if UVWrecksColor.b >= 255 then hook.Remove("Think", "UVWrecksColorPulse") end
-		-- 		end)
-		-- 	end)
-
-		-- 	-- timer.Create("UVWrecksColor", .3, 1, function()
-		-- 	-- 	UVWrecksColor = Colors['White']
-		-- 	-- end)
-		-- 	-- else
-		-- 	-- 	UVTagsColor = Colors['White']
-		-- end
 
 		if wrecks ~= UVWrecks then
 			hook.Run( 'UIEventHook', 'pursuit', 'onUnitWreck', wrecks, UVWrecks )
@@ -3162,9 +2919,6 @@ else -- CLIENT Settings | HUD/Options
 
 	net.Receive("UVHUDStopPursuit", function()
 
-		-- net.Start("UVHUDTimeStopped")
-		-- net.WriteString(UVTimerProgress)
-		-- net.SendToServer()
 		UVHUDDisplayPursuit = nil
 		UVTimerWhenFroze = 0
 		UVCooldownProgress = 0
@@ -3280,19 +3034,6 @@ else -- CLIENT Settings | HUD/Options
 
 	end)
 
-	-- net.Receive("UVHUDWantedSuspects", function()
-
-	-- 	-- UVHUDWantedSuspects = net.ReadTable() or {}
-	-- 	-- UVHUDWantedSuspectsNumber = #UVHUDWantedSuspects
-
-	-- 	-- if UVHUDWantedSuspectsNumber > 1 then
-	-- 	-- 	if not UVHUDRaceInProgress then
-	-- 	-- 		UVHUDRaceInProgress = true
-	-- 	-- 	end
-	-- 	-- end
-
-	-- end)
-
 	net.Receive("UVHUDCopMode", function()
 		UVHUDCopMode = true
 	end)
@@ -3375,124 +3116,6 @@ else -- CLIENT Settings | HUD/Options
 			creationId = creationId,
 			entType = net.ReadString()
 		} )
-		-- EntityQueue[entIndex] = {
-		-- 	creationId,
-		-- 	net.ReadString()
-		-- }
-		-- local unitindex = net.ReadInt(32)
-		-- local typestring = net.ReadString()
-		-- local unit = Entity(unitindex)
-
-		-- if not GMinimap then return end
-
-		-- if not IsValid(unit) then
-		-- 	net.Start("UVHUDReAddUV")
-		-- 	net.WriteInt(unitindex, 32)
-		-- 	net.WriteString(typestring)
-		-- 	net.SendToServer()
-		-- 	return
-		-- end
-
-		-- if typestring == "unit" then
-		-- 	local blip, id = GMinimap:AddBlip( {
-		-- 		id = "UVBlip"..unit:EntIndex(),
-		-- 		parent = unit,
-		-- 		icon = "unitvehicles/icons/MINIMAP_ICON_CAR.png",
-		-- 		scale = 1.4,
-		-- 		color = Color( 150, 0, 0),
-		-- 		alpha = 0
-		-- 	} )
-		-- 	if unit:GetClass() == "prop_vehicle_jeep" then
-		-- 		blip.icon = "unitvehicles/icons/MINIMAP_ICON_CAR_JEEP.png" -- Icon points the other way
-		-- 	end
-
-		-- 	table.insert( UnitTable, unit )
-
-		-- 	local created = false
-		-- 	local flashwhite = false
-		-- 	timer.Simple(0.1, function()
-		-- 		blip.alpha = 255
-		-- 		timer.Create( "flashingblip"..id, 0.05, 0, function()
-		-- 			if flashwhite and UVHUDDisplayPursuit or blip.disabled then
-		-- 				blip.color = Color( 255, 255, 255)
-		-- 				flashwhite = false
-		-- 			elseif created and UVHUDDisplayPursuit and not blip.disabled then
-		-- 				blip.color = Color( 0, 0, 255)
-		-- 				created = false
-		-- 				flashwhite = true
-		-- 			else
-		-- 				blip.color = Color( 150, 0, 0)
-		-- 				created = true
-		-- 				if UVHUDDisplayPursuit then
-		-- 					flashwhite = true
-		-- 				end
-		-- 			end
-		-- 			if not IsValid(blip.parent) then
-		-- 				timer.Remove("flashingblip"..id)
-		-- 			end
-		-- 		end )
-		-- 	end)
-		-- elseif typestring == "air" then
-		-- 	local blip, id = GMinimap:AddBlip( {
-		-- 		id = "UVBlip"..unit:EntIndex(),
-		-- 		parent = unit,
-		-- 		icon = "unitvehicles/icons/HELICOPTER_MINIMAP_ICON.png",
-		-- 		scale = 2,
-		-- 		color = Color( 150, 0, 0),
-		-- 		alpha = 0
-		-- 	} )
-		-- 	local created = false
-		-- 	local flashwhite = false
-		-- 	blip.alpha = 255
-		-- 	timer.Simple(0.1, function()
-		-- 		blip.alpha = 255
-		-- 		timer.Create( "flashingblip"..id, 0.05, 0, function()
-		-- 			if flashwhite and UVHUDDisplayPursuit then
-		-- 				blip.color = Color( 255, 255, 255)
-		-- 				flashwhite = false
-		-- 			elseif created and UVHUDDisplayPursuit then
-		-- 				blip.color = Color( 0, 0, 255)
-		-- 				created = false
-		-- 				flashwhite = true
-		-- 			else
-		-- 				blip.color = Color( 150, 0, 0)
-		-- 				created = true
-		-- 				if UVHUDDisplayPursuit then
-		-- 					flashwhite = true
-		-- 				end
-		-- 			end
-		-- 			if not IsValid(blip.parent) then
-		-- 				timer.Remove("flashingblip"..id)
-		-- 			end
-		-- 		end )
-		-- 	end)
-		-- elseif typestring == "roadblock" then
-		-- 	local blip, id = GMinimap:AddBlip( {
-		-- 		id = "UVBlip"..unit:EntIndex(),
-		-- 		parent = unit,
-		-- 		icon = "unitvehicles/icons/MINIMAP_ICON_ROADBLOCK.png",
-		-- 		scale = 1.4,
-		-- 		color = Color( 255, 255, 0),
-		-- 		alpha = 0
-		-- 	} )
-		-- 	timer.Simple(0.1, function()
-		-- 		blip.alpha = 255
-		-- 	end)
-		-- elseif typestring == "repairshop" then
-		-- 	local blip, id = GMinimap:AddBlip( {
-		-- 		id = "UVBlip"..unit:EntIndex(),
-		-- 		parent = unit,
-		-- 		icon = "unitvehicles/icons/repairshop.png",
-		-- 		scale = 2,
-		-- 		color = Color( 0, 255, 0),
-		-- 		alpha = 0,
-		-- 		lockIconAng = true
-		-- 	} )
-		-- 	timer.Simple(0.1, function()
-		-- 		blip.alpha = 255
-		-- 	end)
-		-- end
-
 	end)
 
 	net.Receive("UVHUDRemoveUV", function()
@@ -3669,8 +3292,6 @@ else -- CLIENT Settings | HUD/Options
 			UVHeatPlayTransition = false
 			UVLastHeatChange = CurTime()
 			UVHUDDisplayBackupTimer = nil
-			-- UVHeatPlayTransition = false 
-			-- UVHeatPlayMusic = false
 		end
 
 		UVHUDWantedSuspectsNumber = #UVHUDWantedSuspects
@@ -3710,9 +3331,6 @@ else -- CLIENT Settings | HUD/Options
 						end
 					end
 				end
-			-- elseif UVPlayingEvading or UVPlayingHiding or UVPlayingCooldown then
-			-- 	UVStopSound()
-			-- end
 			end
 		end
 	end)
@@ -3822,20 +3440,6 @@ else -- CLIENT Settings | HUD/Options
 
 			surface.SetFont(font)
 			if text == "" or text == UV_CurrentSubtitle then -- invalid or missing localization; Active for debugging purposes
-				-- if devMode then
-					-- local lineHeight = select(2, surface.GetTextSize("A")) * 1.2
-					-- local totalHeight = 1 * lineHeight
-
-					-- local bgX = w * 0.5 - maxWidth * 0.5 - bgPadding
-					-- local bgY = h * 0.755 - bgPadding
-					-- local bgW = maxWidth + bgPadding * 2
-					-- local bgH = totalHeight + bgPadding * 2
-
-					-- draw.RoundedBox(12, bgX, bgY, bgW, bgH, Color(0, 0, 0, 150))
-					
-					-- draw.SimpleTextOutlined( "MISSING LOC: " .. textcs, font, w * 0.5, h * 0.725, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-					-- draw.SimpleTextOutlined( UV_CurrentSubtitle, font, w * 0.5, h * 0.755, Color(255, 100, 100), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-				-- end
 			else
 				local lines = {}
 				local currentLine = ""
@@ -3912,19 +3516,6 @@ else -- CLIENT Settings | HUD/Options
 		local entities = ents.GetAll()
 		local box_color = Color(0, 255, 0)
 
-		-- if localPlayer.uvspawningunit and localPlayer.uvspawningunit.vehicle then
-			-- local elapsed = CurTime() - localPlayer.uvspawningunit.startTime
-			-- local remaining = math.max(0, localPlayer.uvspawningunit.cooldown - elapsed)
-			-- local carn = lang(localPlayer.uvspawningunit.vehicle)
-			-- local timel = string.format("%.0f", remaining)
-
-			-- surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"])
-			-- surface.SetDrawColor(0,0,0)
-			-- surface.DrawTexturedRect(0, h * 0.5, w * 0.25, h * 0.05)
-
-			-- local text = string.format( lang("uv.chase.select.spawning.cooldown.cancel"), carn, timel, "<color=255,100,100>" .. UVBindButtonName(UVKeybindResetPosition:GetInt()) .. "</color>" )
-			-- markup.Parse("<font=UVCarbonLeaderboardFont>" .. text):Draw( w * 0.01, h * 0.5, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
-		-- end
 		
 		if UVHUDPursuitRespawnNoticeStarted and not UVHUDPursuitRespawnNoticeTriggered then
 			UVHUDPursuitRespawnNoticeTriggered = true
@@ -4466,125 +4057,6 @@ else -- CLIENT Settings | HUD/Options
 		end
 	end)
 
---[[
-	net.Receive( "UVHUDRespawnInUVSelect", function()
-		if UVHUDRespawnInUVSelectOpen then return end
-
-		local UnitsPatrol = net.ReadString()
-		local UnitsSupport = net.ReadString()
-		local UnitsPursuit = net.ReadString()
-		local UnitsInterceptor = net.ReadString()
-		local UnitsSpecial = net.ReadString()
-		local UnitsRhino = net.ReadString()
-		local UnitsCommander = net.ReadString()
-
-		local unittable = {
-			UnitsPatrol,
-			UnitsSupport,
-			UnitsPursuit,
-			UnitsInterceptor,
-			UnitsSpecial,
-			UnitsRhino,
-			UnitsCommander
-		}
-
-		local unittablename = {
-			"#uv.unit.patrol",
-			"#uv.unit.support",
-			"#uv.unit.pursuit",
-			"#uv.unit.interceptor",
-			"#uv.unit.special",
-			"#uv.unit.rhino",
-			"#uv.unit.commander"
-		}
-
-		local unittablenpc = {
-			"npc_uvpatrol",
-			"npc_uvsupport",
-			"npc_uvpursuit",
-			"npc_uvinterceptor",
-			"npc_uvspecial",
-			"npc_uvspecial", --Rhino
-			"npc_uvcommander"
-		}
-
-		local unitnpc
-		local isrhino
-		
-		local w = ScrW()
-		local h = ScrH()
-		
-		local cooldown = SpawnCooldownTable[self] and math.Round(SpawnCooldown:GetInt() - (CurTime() - SpawnCooldownTable[self])) or 0
-
-		local dframe = vgui.Create("DFrame")
-		dframe:SetSize(w / 8, h / 2)
-		dframe:SetPos((w / 2) - ((w / 8) / 2), (h / 2) - ((h / 2) / 2))
-		dframe:SetTitle("#uv.chase.select.menu")
-    	dframe:ShowCloseButton(true)
-		dframe:MakePopup()
-		
-		local dlist = vgui.Create("DScrollPanel", dframe)
-		dlist:Dock(FILL)
-		
-		for unitclass, units in pairs(unittable) do
-			local availableunitstable = {}
-
-			for unit in string.gmatch(units, "%S+") do
-			    table.insert(availableunitstable, unit)
-			end
-
-			if next(availableunitstable) ~= nil then
-				local label = unittablename[unitclass]
-				local labelname = string.Trim(label, "#")
-				local titleLabel = dlist:Add("DLabel")
-				titleLabel:SetText(label)
-				titleLabel:SetFont("DermaLarge")
-				titleLabel:SetTextColor(Color(255, 255, 255))
-				titleLabel:SetTall(30)
-				titleLabel:Dock(TOP)
-							
-				local separator = dlist:Add("DPanel")
-				separator:SetTall(2)
-				separator:Dock(TOP)
-				function separator:Paint(w, h)
-				    surface.SetDrawColor(50, 50, 50, 255)
-				    surface.DrawRect(0, 0, w, h)
-				end
-
-				for _, unit in pairs(availableunitstable) do
-					local dbutton = dlist:Add("DButton")
-
-					dbutton:SetText(unit)
-					dbutton:Dock(TOP)
-					dbutton:DockMargin(0, 0, 0, 5)
-
-					function dbutton:DoClick()
-						dframe:Close()
-
-						unitnpc = unittablenpc[unitclass]
-						if unitclass == 6 then
-							isrhino = true
-						end
-
-						net.Start("UVHUDRespawnInUV")
-						net.WriteString(unit)
-						net.WriteString(unitnpc)
-						net.WriteBool(isrhino)
-						net.WriteString(labelname)
-						net.SendToServer()
-					end
-				end
-			end
-		end
-
-		UVHUDRespawnInUVSelectOpen = true
-		function dframe:OnClose()
-			UVHUDRespawnInUVSelectOpen = nil
-		end
-	end)
-	
-]]--
-
 	net.Receive("UVHUDRespawnInUVSelect", function()
 		local UnitsPatrol     = net.ReadString()
 		local UnitsSupport    = net.ReadString()
@@ -4811,23 +4283,6 @@ else -- CLIENT Settings | HUD/Options
 		end)
 	end)
 	
-	-- net.Receive('UV_Chatter', function()
-	-- 	local array = net.ReadTable()
-		
-	-- 	local audio_file = "sound/"..array.FileName
-	-- 	local can_skip = array.CanSkip
-		
-	-- 	if can_skip and IsValid(uvchatterplaying) and parameters != 2 then
-	-- 		uvchatterplaying:Stop()
-	-- 	end
-		
-	-- 	sound.PlayFile(audio_file, "", function(source, err, errname)
-	-- 		if IsValid(source) then
-	-- 			uvchatterplaying = source
-	-- 			source:Play()
-	-- 		end
-	-- 	end)
-	-- end)	
 
 	net.Receive('UV_Chatter', function()
 		local init_time = net.ReadFloat()

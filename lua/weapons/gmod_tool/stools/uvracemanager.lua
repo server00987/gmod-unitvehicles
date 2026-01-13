@@ -52,20 +52,6 @@ if SERVER then
 	end
 	concommand.Add("uvrace_stop", StopRace)
 	
-	local function AddHooks()
-		
-	end
-	
-	-- local function StartRaceSolo(ply, cmd, args)
-	
-	-- 	if not IsValid( UVMoveToGridSlot( ply ) ) then return end
-	
-	-- 	UVRaceMakeCheckpoints()
-	
-	-- 	AddHooks()
-	-- end
-	-- concommand.Add("uvrace_startsolo", StartRaceSolo)
-	
 	local function StartRace(ply, cmd, args)
 		if not ply:IsSuperAdmin() then return end
 		-- if not IsValid( UVMoveToGridSlot( ply ) ) then return end
@@ -85,7 +71,6 @@ if SERVER then
 			return
 		end
 
-		//RunConsoleCommand("uv_stoppursuit")
 		RunConsoleCommand("uv_despawnvehicles")
 		
 		for _, v in ents.Iterator() do
@@ -97,13 +82,6 @@ if SERVER then
 					if is_player and driver == ply then
 						UVRaceAddParticipant(v, nil, true)
 					end
-					
-					-- local id = v:EntIndex()
-					-- if (is_player and driver == ply) or v.RacerVehicle then
-						-- if not UVRaceInvites[id] or UVRaceInvites[id].status ~= "Accepted" then
-							-- UVRaceAddParticipant(v, driver, true)
-						-- end
-					-- end
 				end
 			end
 		end
@@ -135,11 +113,9 @@ if SERVER then
 		net.Broadcast()
 
 		timer.Simple(2, function()
-			//UVRaceMakeCheckpoints()
 			UVRacePrep = false
 		end)
 		
-		--UVRacePrep = false
 	end
 	concommand.Add("uvrace_startrace", StartRace)
 	
@@ -164,16 +140,8 @@ if SERVER then
 					local is_player = IsValid(driver) and driver:IsPlayer()
 					
 					if not v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
-						-- PrintMessage(HUD_PRINTTALK, "Sent race invite to "..((is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex())))
 						
 						table.insert(invited_racers, (is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex()))
-						
-						-- if is_player then
-						-- 	v.racer = driver
-						-- else
-						-- 	v.racer = nil
-						-- end
-						
 						v.raceinvited = true
 						v.lastraceinv = CurTime()
 						
@@ -187,11 +155,6 @@ if SERVER then
 						end
 						
 						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10.25, 1, function()
-							-- if UVRaceInvites[v:EntIndex()] and UVRaceInvites[v:EntIndex()].status == "Invited" then
-								-- UVRaceInvites[v:EntIndex()].status = "Declined"
-								-- UVBroadcastRacerList()
-							-- end
-							-- v.racer = nil
 							v.raceinvited = false
 						end)
 					end
@@ -338,7 +301,7 @@ if SERVER then
 			UVLoadRace( file.Read(jsonfilename) )
 		end
 		
-		timer.Simple(0.2, function() --wait for gmsave.LoadMap to finish executing(0.1 seconds)
+		timer.Simple(0.2, function()
 			local entList = file.Read(filename, "DATA"):Split("\n")
 
 			local metaLine = entList[1]
@@ -452,9 +415,6 @@ if SERVER then
 			net.WriteString(ply:Nick())
 			net.Broadcast()
 			
-			-- local hostID = ply:EntIndex()
-			-- UVRaceInvites[hostID] = { ent = ply:GetVehicle(), name = ply:Nick(), status = "Host" }
-
 			ImportExportText(tname, false, ply)
 		end)
 	end
@@ -816,14 +776,9 @@ function TOOL:Reload( trace )
 end
 
 function TOOL.BuildCPanel(panel)
-	-- panel:AddControl("Header", { Text = "tool.uvracemanager.name", Description = "#tool.uvracemanager.desc"})
 	panel:AddControl("Header", { Text = "tool.uvracemanager.name"})
 	
 	panel:AddControl("Label", {Text = "#uv.rm.startrace", Description = "Race"})
-	-- panel:AddControl("Button", {Label = "#uv.rm.startrace", Command = "uvrace_startrace"})
-	-- panel:Button("#uv.rm.startrace").DoClick = function()
-		-- RunConsoleCommand("uvrace_startrace", GetConVar("uvracemanager_laps"):GetString())
-	-- end
 	panel:AddControl("Button", {Label = "#uv.rm.startrace", Command = "uvrace_racemenu"})
 	panel:AddControl("Button", {Label = "#uv.rm.stoprace", Command = "uvrace_stop"})
 	panel:AddControl("Button", {Label = "#uv.rm.sendinvite", Command = "uvrace_startinvite"})
