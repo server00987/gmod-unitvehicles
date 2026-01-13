@@ -1925,6 +1925,243 @@ function UV.BuildSetting(parent, st, descPanel)
 		return p
 	end
 
+	if st.type == "voiceprofile" then
+		local panel = vgui.Create("DPanel", parent)
+		panel:Dock(TOP)
+		panel:DockMargin(8, 4, 8, 4)
+		panel:SetTall(st.voicevar and 160 or 60)
+
+		panel.Paint = function(self, w, h)
+			local text = language.GetPhrase(GetDisplayText()) or "???"
+			DrawWrappedText(self, text, w * 0.25, 10, 2.5)
+		end
+
+		local voiceCVar = st.voicevar and GetConVar(st.voicevar)
+		local profileCVar = st.profilevar and GetConVar(st.profilevar)
+
+		-- Left
+		local left = vgui.Create("DPanel", panel)
+		left:Dock(LEFT)
+		left:SetWide(UV.ScaleW(440))
+		left:DockMargin(6, 6, 6, 6)
+		left.Paint = nil
+
+		-- Right
+		local right = vgui.Create("DPanel", panel)
+		right:Dock(FILL)
+		right:DockMargin(0, 6, 6, 6)
+		right.Paint = nil
+
+		-- Profile combo
+		local profileCombo = vgui.Create("UVCombo", right)
+		profileCombo:Dock(TOP)
+		profileCombo:SetTall(22)
+		profileCombo.Paint = function(self, w, h)
+			local hovered = self.Button:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
+
+			-- background & text
+			draw.RoundedBox(12, 0, 0, w, h, default)
+			if hovered then draw.RoundedBox(12, 0, 0, w, h, hover) end
+		end
+
+		-- Populate profiles (1:1 with uvunitmanager)
+		local profiles = {}
+		local _, folders = file.Find("sound/chatter2/*", "GAME")
+		if folders then
+			for _, v in ipairs(folders) do
+				profileCombo:AddChoice(v, v)
+				profiles[v] = true
+			end
+		end
+
+		-- Voice list (optional)
+		local scroll
+		if voiceCVar then
+			scroll = vgui.Create("DScrollPanel", right)
+			scroll:Dock(FILL)
+			scroll:DockMargin(0, 6, 0, 0)
+			scroll.Paint = function(self, w, h)
+				draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+				draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+			end
+		end
+
+		-- Helpers
+		local function getVoiceTable()
+			if not voiceCVar then return {} end
+			local str = voiceCVar:GetString() or ""
+			local tbl = {}
+			for entry in string.gmatch(str, "([^,]+)") do
+				tbl[string.Trim(entry)] = true
+			end
+			return tbl
+		end
+
+		local function setVoiceTable(tbl)
+			if not voiceCVar then return end
+			local list = {}
+			for k, v in pairs(tbl) do
+				if v then table.insert(list, k) end
+			end
+			voiceCVar:SetString(table.concat(list, ","))
+		end
+
+		local function refreshList(profile)
+			if not scroll then return end
+			scroll:Clear()
+
+			local _, folders = file.Find("sound/chatter2/" .. profile .. "/*", "GAME")
+			if not folders then return end
+
+			local selected = getVoiceTable()
+
+			for _, folder in ipairs(folders) do
+				if folder ~= "dispatch" and folder ~= "misc" then
+					local btn = scroll:Add("DButton")
+					btn:Dock(TOP)
+					btn:DockMargin(0, 0, 0, 4)
+					btn:SetTall(24)
+					btn:SetText("")
+
+					btn.Selected = selected[folder]
+
+					btn.Paint = function(self, w, h)
+						local hovered = self:IsHovered()
+						
+						local default = Color( 
+							GetConVar("uvmenu_col_button_r"):GetInt(),
+							GetConVar("uvmenu_col_button_g"):GetInt(),
+							GetConVar("uvmenu_col_button_b"):GetInt(),
+							GetConVar("uvmenu_col_button_a"):GetInt()
+						)
+
+						local active = Color(
+							GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+							GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+							GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+							GetConVar("uvmenu_col_button_a"):GetInt()
+						)
+
+						local hover = Color( 
+							GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+							GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+							GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+							GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+						)
+
+						local col = self.Selected and active or default
+
+						-- background & text
+						draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, col)
+						if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+						DrawWrappedText(self, folder, w * 0.95, w*0.5, 0, true, "UVSettingsFontSmall")
+					end
+
+					btn.DoClick = function(self)
+						self.Selected = not self.Selected
+						selected[folder] = self.Selected
+
+						local newList = {}
+						for k, v in pairs(selected) do
+							if v then table.insert(newList, k) end
+						end
+
+						RunConsoleCommand(st.voicevar, table.concat(newList, ","))
+					end
+				end
+			end
+		end
+
+		-- Profile select
+		profileCombo.OnSelect = function(_, val, data)
+			if not data or data == "" then return end
+			profileCombo:SetValue(data)
+
+			if st.sv and string.match(st.profilevar, "unitvehicle_") then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [st.profilevar] = data })
+				net.SendToServer()
+			else
+				RunConsoleCommand(st.profilevar, data)
+			end
+
+			refreshList(data)
+		end
+
+		left.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+			end
+		end
+
+		left.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+			end
+		end
+
+		right.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+			end
+		end
+
+		right.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+			end
+		end
+
+		profileCombo.Button.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = st.text
+				descPanel.Desc = st.desc or ""
+			end
+		end
+
+		profileCombo.Button.OnCursorExited = function()
+			if descPanel then
+				descPanel.Text = ""
+				descPanel.Desc = ""
+			end
+		end
+
+		-- Init
+		timer.Simple(0, function()
+			if not IsValid(profileCombo) then return end
+			local profile = profileCVar and profileCVar:GetString()
+			if profile and profile ~= "" and profiles[profile] then
+				profileCombo:SetValue(profile)
+				refreshList(profile)
+			else
+				for name in pairs(profiles) do
+					profileCombo:SetValue(name)
+					RunConsoleCommand(profileCVar:GetName(), name)
+					refreshList(name)
+					break
+				end
+			end
+		end)
+
+		return panel
+	end
+
 	-- fallback: do nothing
 	return nil
 end
