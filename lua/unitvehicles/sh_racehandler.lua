@@ -2071,12 +2071,10 @@ else -- CLIENT stuff
 		local hostedby = net.ReadString()
 
 		if name == "?" and author == "?" then
-			print("Resetting track info")
 			UVRace_CurrentTrackName = nil
 			UVRace_CurrentTrackAuthor = nil
 			UVRace_CurrentTrackHost = nil
 		else
-			print(name, author, hostedby)
 			UVRace_CurrentTrackName = name
 			UVRace_CurrentTrackAuthor = author
 			UVRace_CurrentTrackHost = hostedby
