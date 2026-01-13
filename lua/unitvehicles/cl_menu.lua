@@ -1030,6 +1030,30 @@ UVMenu.UpdateHistory = function()
     })
 end
 
+local PresetLoadingFunctions = {
+	["units"] = function(name, data)
+		UVUnitManagerLoadPreset(name, data)
+	end,
+}
+
+local function LoadPreset(name, presetType, data)
+	if PresetLoadingFunctions[presetType] then
+		PresetLoadingFunctions[presetType](name, data)
+	else
+		error("No preset loading function found for preset type: " .. presetType)
+	end
+end
+
+local function BuildPresetTabs(preset)
+	local tabs = {}
+	
+	for name, data in ipairs( presets.GetTable(preset) ) do
+		table.insert(tabs, { type = "button", text = name, func = function() LoadPreset(name, preset, data) end })
+	end
+
+	return tabs
+end
+
 ------- [ Heat Manager ] -------
 UVMenu.HeatManager = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
@@ -1047,7 +1071,7 @@ UVMenu.HeatManager = function()
 				{ type = "label", text = "#uv.hm.commander" },
 				{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "uvunitmanager_onecommander", sv = true },
 				{ type = "bool", text = "#uv.hm.commander.evade", desc = "uv.hm.commander.evade.desc", convar = "uvunitmanager_onecommanderevading", requireparentconvar = "uvunitmanager_onecommander", sv = true },
-				{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "unitvehicle_unit_commanderrepair", requireparentconvar = "uvunitmanager_onecommander", sv = true },
+				{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "uvunitmanager_commanderrepair", requireparentconvar = "uvunitmanager_onecommander", sv = true },
 				{ type = "slider", text = "#uv.hm.commander.health", desc = "uv.hm.commander.health.desc", convar = "uvunitmanager_onecommanderhealth", requireparentconvar = "uvunitmanager_onecommander", min = 1000, max = 10000, sv = true },
 				
 				{ type = "label", text = "#uv.hm.air" },
@@ -1079,17 +1103,17 @@ UVMenu.HeatManager = function()
 				
 			},
 			{ TabName = "#uv.hm.vp", 
-				{ type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "unitvehicle_unit_dispatch_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "unitvehicle_unit_misc_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "uvunitmanager_dispatch_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "uvunitmanager_misc_voiceprofile", sv = true },
 				
-				{ type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_patrol_voice", profilevar = "unitvehicle_unit_patrol_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_support_voice", profilevar = "unitvehicle_unit_support_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_pursuit_voice", profilevar = "unitvehicle_unit_pursuit_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_interceptor_voice", profilevar = "unitvehicle_unit_interceptor_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_special_voice", profilevar = "unitvehicle_unit_special_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_commander_voice", profilevar = "unitvehicle_unit_commander_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_rhino_voice", profilevar = "unitvehicle_unit_rhino_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_air_voice", profilevar = "unitvehicle_unit_air_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_patrol_voice", profilevar = "uvunitmanager_patrol_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_support_voice", profilevar = "uvunitmanager_support_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_pursuit_voice", profilevar = "uvunitmanager_pursuit_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_interceptor_voice", profilevar = "uvunitmanager_interceptor_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_special_voice", profilevar = "uvunitmanager_special_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_commander_voice", profilevar = "uvunitmanager_commander_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_rhino_voice", profilevar = "uvunitmanager_rhino_voiceprofile", sv = true },
+				{ type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "uvunitmanager_air_voice", profilevar = "uvunitmanager_air_voiceprofile", sv = true },
 			},
 			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 1 ),
 			-- },
@@ -1111,6 +1135,9 @@ UVMenu.HeatManager = function()
 			-- },
 			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 10 ),
 			-- },
+			{ TabName = "#uv.hm.presets", 
+				{ type = "presets", preset = "units" }
+			},
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,

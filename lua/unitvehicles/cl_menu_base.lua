@@ -1929,22 +1929,24 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(st.voicevar and 160 or 60)
+		panel:SetTall(st.voicevar and 240 or 100)
 
 		panel.Paint = function(self, w, h)
-			local text = language.GetPhrase(GetDisplayText()) or "???"
-			DrawWrappedText(self, text, w * 0.25, 10, 2.5)
+			-- local text = language.GetPhrase(GetDisplayText()) or "???"
+			-- DrawWrappedText(self, text, w * 0.25, 10, 2.5)
 		end
 
 		local voiceCVar = st.voicevar and GetConVar(st.voicevar)
 		local profileCVar = st.profilevar and GetConVar(st.profilevar)
 
+		UV.BuildSetting( panel, { type = "label", text = st.text } )
+
 		-- Left
-		local left = vgui.Create("DPanel", panel)
-		left:Dock(LEFT)
-		left:SetWide(UV.ScaleW(440))
-		left:DockMargin(6, 6, 6, 6)
-		left.Paint = nil
+		-- local left = vgui.Create("DPanel", panel)
+		-- left:Dock(FILL)
+		-- left:SetWide(UV.ScaleW(440))
+		-- left:DockMargin(6, 6, 6, 6)
+		-- left.Paint = nil
 
 		-- Right
 		local right = vgui.Create("DPanel", panel)
@@ -1986,18 +1988,8 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
-		-- Voice list (optional)
 		local scroll
-		if voiceCVar then
-			scroll = vgui.Create("DScrollPanel", right)
-			scroll:Dock(FILL)
-			scroll:DockMargin(0, 6, 0, 0)
-			scroll.Paint = function(self, w, h)
-				draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
-				draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
-			end
-		end
-
+		
 		-- Helpers
 		local function getVoiceTable()
 			if not voiceCVar then return {} end
@@ -2017,6 +2009,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 			voiceCVar:SetString(table.concat(list, ","))
 		end
+
 
 		local function refreshList(profile)
 			if not scroll then return end
@@ -2078,10 +2071,46 @@ function UV.BuildSetting(parent, st, descPanel)
 							if v then table.insert(newList, k) end
 						end
 
-						RunConsoleCommand(st.voicevar, table.concat(newList, ","))
+						if st.sv and string.match(st.voicevar, "unitvehicle_") then
+							net.Start("UVUpdateSettings")
+							net.WriteTable({ [st.voicevar] = table.concat(newList, ",") })
+							net.SendToServer()
+						else
+							RunConsoleCommand(st.voicevar, table.concat(newList, ","))
+						end
 					end
 				end
 			end
+		end
+				
+		if voiceCVar then
+			scroll = vgui.Create("DScrollPanel", right)
+			scroll:Dock(FILL)
+			scroll:DockMargin(0, 6, 0, 0)
+			scroll.Paint = function(self, w, h)
+				draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+				draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+			end
+
+			local function clear()
+				if st.sv and string.match(st.voicevar, "unitvehicle_") then
+					net.Start("UVUpdateSettings")
+					net.WriteTable({ [st.voicevar] = " " })
+					net.SendToServer()
+				else
+					-- For some UNKNOWN REASON, convar is not set immediately using RunConsoleCommand before running refreshList
+					local convar = GetConVar(st.voicevar)
+					if convar then
+						convar:SetString("")
+					else
+						RunConsoleCommand(st.voicevar, "")
+					end
+				end
+
+				refreshList(profileCombo.Value)
+			end
+
+			UV.BuildSetting( parent, { type = "button", text = "Clear", func = clear } )
 		end
 
 		-- Profile select
@@ -2100,19 +2129,19 @@ function UV.BuildSetting(parent, st, descPanel)
 			refreshList(data)
 		end
 
-		left.OnCursorEntered = function()
-			if descPanel then
-				descPanel.Text = st.text
-				descPanel.Desc = st.desc or ""
-			end
-		end
+		-- left.OnCursorEntered = function()
+		-- 	if descPanel then
+		-- 		descPanel.Text = st.text
+		-- 		descPanel.Desc = st.desc or ""
+		-- 	end
+		-- end
 
-		left.OnCursorExited = function()
-			if descPanel then
-				descPanel.Text = ""
-				descPanel.Desc = ""
-			end
-		end
+		-- left.OnCursorExited = function()
+		-- 	if descPanel then
+		-- 		descPanel.Text = ""
+		-- 		descPanel.Desc = ""
+		-- 	end
+		-- end
 
 		right.OnCursorEntered = function()
 			if descPanel then
@@ -2158,6 +2187,71 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 			end
 		end)
+
+		return panel
+	elseif st.type == "presets" then
+		local panel = vgui.Create("DPanel", parent)
+		panel:Dock(TOP)
+		--panel:DockMargin(8, 4, 8, 4)
+		panel:SetTall(500)
+
+		panel.Paint = function(self, w, h)
+			local a = self:GetAlpha()
+			surface.SetDrawColor( GetConVar("uvmenu_col_desc_r"):GetInt(), GetConVar("uvmenu_col_desc_g"):GetInt(), GetConVar("uvmenu_col_desc_b"):GetInt(), math.floor(GetConVar("uvmenu_col_desc_a"):GetInt() * (a / 255)) )
+			surface.DrawRect(0, 0, w, h)
+		end
+
+		local scroll = vgui.Create("DScrollPanel", panel)
+		scroll:Dock(FILL)
+		scroll:DockMargin(0, 6, 0, 0)
+		scroll.Paint = function(self, w, h)
+			-- draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
+			-- draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+		end
+
+		local presetArray = presets.GetTable(st.preset)
+
+		local buttonNames = {}
+		for name, _ in pairs(presetArray) do
+			table.insert(buttonNames, name)
+		end
+		table.sort(buttonNames, function(a, b)
+			return tostring(a):lower() < tostring(b):lower()
+		end)
+
+		for _, name in ipairs(buttonNames) do
+			local preset = presetArray[name]
+			local btn = scroll:Add("DButton")
+			btn:Dock(TOP)
+			btn:DockMargin(0, 0, 0, 4)
+			btn:SetTall(40)
+			btn:SetText("")
+
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+				local default = Color( 
+					GetConVar("uvmenu_col_button_r"):GetInt(),
+					GetConVar("uvmenu_col_button_g"):GetInt(),
+					GetConVar("uvmenu_col_button_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+				local hover = Color( 
+					GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				)
+				draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+				if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+				DrawWrappedText(self, name, w * 0.95, w*0.5, nil, true)
+			end
+
+			btn.DoClick = function(self)
+				if st.preset == 'units' then
+					UVUnitManagerLoadPreset(name, preset)
+				end
+			end
+		end
 
 		return panel
 	end

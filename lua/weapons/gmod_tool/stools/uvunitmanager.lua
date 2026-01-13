@@ -108,6 +108,7 @@ TOOL.ClientConVar["selected_heat"] = 1
 
 TOOL.ClientConVar["vehiclebase"] = 3
 TOOL.ClientConVar["onecommander"] = 1
+TOOL.ClientConVar["commanderrepair"] = 1
 TOOL.ClientConVar["onecommanderevading"] = 0
 TOOL.ClientConVar["onecommanderhealth"] = 5000
 TOOL.ClientConVar["helicoptermodel"] = "Default"
@@ -262,7 +263,6 @@ for i = 1, MAX_HEAT_LEVEL do
 end
 
 local conVarsDefault = TOOL:BuildConVarList()
-
 local conVarList = table.GetKeys(conVarsDefault)
 
 local LEGACY_CONVARS = {
@@ -816,6 +816,55 @@ if CLIENT then
 			highlight = not highlight
 		end
 	end
+
+	function UVUnitManagerLoadPreset(name, data)
+		--print(#data)
+		local warned = false
+		local count = 0
+		local count1 = 0
+
+		for _, newCV in pairs(conVarList) do
+			if string.match(newCV, "_chance") and not data[newCV] then 
+				_setConVar( newCV, 100 )
+				continue
+			end -- Backwards compatibility, a little hacky but it works
+			if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
+		end
+
+		for incomingCV, incomingValue in pairs(data) do
+			count1 = count1 + 1
+			--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
+
+			local cvNoNumber = nil
+			local number = nil
+
+			local _incomingCV = incomingCV
+
+			while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
+				number = _incomingCV:sub( -1 )
+				cvNoNumber = _incomingCV:sub( 1, -2 )
+				_incomingCV = cvNoNumber
+			end
+
+			local numberIterator = 0
+
+			if LEGACY_CONVARS[_incomingCV] then
+				if not warned then
+					warned = true
+					local warning = string.format( language.GetPhrase "tool.uvunitmanager.presets.legacy.warning", name )
+					notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
+				end
+
+				if LEGACY_CONVARS[_incomingCV].HasNumber then
+					_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
+				else
+					_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
+				end
+			elseif not PROTECTED_CONVARS[incomingCV] then
+				_setConVar( incomingCV, incomingValue )
+			end
+		end
+	end
 	
 	function TOOL.BuildCPanel(CPanel)
 		local lang = language.GetPhrase
@@ -845,52 +894,7 @@ if CLIENT then
 		})
 
 		function presetComboBox:OnSelect(index, value, data)
-			--print(#data)
-			local warned = false
-			local count = 0
-			local count1 = 0
-
-			for _, newCV in pairs(conVarList) do
-				if string.match(newCV, "_chance") and not data[newCV] then 
-					_setConVar( newCV, 100 )
-					continue
-				end -- Backwards compatibility, a little hacky but it works
-				if not data[newCV] and GetConVar(newCV) and not PROTECTED_CONVARS[newCV] then _setConVar( newCV, DEFAULTS[newCV] or "" ) end--RunConsoleCommand(newCV, DEFAULTS[newCV] or "") end
-			end
-
-			for incomingCV, incomingValue in pairs(data) do
-				count1 = count1 + 1
-				--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
-
-				local cvNoNumber = nil
-				local number = nil
-
-				local _incomingCV = incomingCV
-
-				while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
-					number = _incomingCV:sub( -1 )
-					cvNoNumber = _incomingCV:sub( 1, -2 )
-					_incomingCV = cvNoNumber
-				end
-
-				local numberIterator = 0
-
-				if LEGACY_CONVARS[_incomingCV] then
-					if not warned then
-						warned = true
-						local warning = string.format( lang "tool.uvunitmanager.presets.legacy.warning", value )
-						notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
-					end
-
-					if LEGACY_CONVARS[_incomingCV].HasNumber then
-						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
-					else
-						_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
-					end
-				elseif not PROTECTED_CONVARS[incomingCV] then
-					_setConVar( incomingCV, incomingValue )
-				end
-			end
+			UVUnitManagerLoadPreset(value, data)
 		end
 
 		local applysettings = vgui.Create("DButton") -- Apply Button
@@ -919,6 +923,7 @@ if CLIENT then
 			convar_table['unitvehicle_unit_onecommander'] = GetConVar('uvunitmanager_onecommander'):GetInt()
 			convar_table['unitvehicle_unit_onecommanderhealth'] = GetConVar('uvunitmanager_onecommanderhealth'):GetInt()
 			convar_table['unitvehicle_unit_onecommanderevading'] = GetConVar('uvunitmanager_onecommanderevading'):GetInt()
+			convar_table['unitvehicle_unit_commanderrepair'] = GetConVar('uvunitmanager_commanderrepair'):GetInt()
 			
 			convar_table['unitvehicle_unit_pursuittech'] = GetConVar('uvunitmanager_pursuittech'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_esf'] = GetConVar('uvunitmanager_pursuittech_esf'):GetInt()
@@ -1153,7 +1158,7 @@ if CLIENT then
 		-- Initialize
 		UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
 
-		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
+		--if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
 		
 		-- Refresh Button
 		local RefreshBtn = vgui.Create("DButton")
@@ -1782,9 +1787,9 @@ if CLIENT then
 				
 		local commanderrepair = vgui.Create("DCheckBoxLabel")
 		commanderrepair:SetText("#tool.uvunitmanager.settings.commander.norepair")
-		commanderrepair:SetConVar("unitvehicle_unit_commanderrepair")
+		commanderrepair:SetConVar("uvunitmanager_commanderrepair")
 		commanderrepair:SetTooltip("#tool.uvunitmanager.settings.commander.norepair.desc")
-		commanderrepair:SetValue(GetConVar("unitvehicle_unit_commanderrepair"):GetInt())
+		commanderrepair:SetValue(GetConVar("uvunitmanager_commanderrepair"):GetInt())
 		commanderrepair:SetTextColor(Color(0,0,0))
 		CPanel:AddItem(commanderrepair)
 		
