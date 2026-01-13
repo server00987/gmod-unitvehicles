@@ -1001,13 +1001,13 @@ if SERVER then
 
 	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 		local lowercaseUnit = string.lower( v )
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", defaultvoicetable[index], {FCVAR_ARCHIVE})
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "default", {FCVAR_ARCHIVE})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", defaultvoicetable[index], {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "default", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	end
 
 	for _, v in pairs( {'Misc', 'Dispatch'} ) do
 		local lowercaseType = string.lower( v )
-		CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE})
+		CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	end
 
 	for i = 1, MAX_HEAT_LEVEL do
