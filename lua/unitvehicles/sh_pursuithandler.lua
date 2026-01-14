@@ -1022,7 +1022,7 @@ if SERVER then
 
 			-------------------------------------------
 
-			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE}) -- Mfer list mfer
+			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 			CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_chance", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 		end
 

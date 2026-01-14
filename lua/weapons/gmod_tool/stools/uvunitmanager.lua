@@ -1158,8 +1158,6 @@ if CLIENT then
 		-- Initialize
 		UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
 
-		--if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
-		
 		-- Refresh Button
 		local RefreshBtn = vgui.Create("DButton")
 		RefreshBtn:SetText("#refresh")
@@ -1258,12 +1256,6 @@ if CLIENT then
 		end
 
 		-- Unit Dropdown
-		-- local unitLabel = vgui.Create("DLabel", CPanel)
-		-- unitLabel:SetText(language.GetPhrase("#tool.uvunitmanager.settings.assunits.title"))
-		-- unitLabel:SetTextColor(Color(0,0,0))
-		-- unitLabel:SetVisible(false)
-		-- CPanel:AddItem(unitLabel)
-
 		local unitDesc = vgui.Create("DLabel", CPanel)
 		unitDesc:SetText(language.GetPhrase("#tool.uvunitmanager.settings.assunits.desc"))
 		unitDesc:SetTextColor(Color(0,0,0))

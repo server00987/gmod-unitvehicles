@@ -794,7 +794,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 		wrap.Paint = function(self, w, h)
 			local text = language.GetPhrase(GetDisplayText()) or "???"
-			DrawWrappedText(self, text, w * 0.4, 10)
+			DrawWrappedText(self, text, w * 0.75, 10)
 		end
 
 		local function PushDesc()
@@ -828,8 +828,8 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local slider = vgui.Create("DNumSlider", wrap)
 		slider:Dock(RIGHT)
-		slider:SetWide(UV.ScaleW(220))
-		slider:DockMargin(8, 0, 6, 0)
+		slider:SetWide(UV.ScaleW(350))
+		slider:DockMargin(26, 0, 6, 0)
 		slider:SetContentAlignment(5)
 		slider:SetMin(st.min or 0)
 		slider:SetMax(st.max or 100)
@@ -846,8 +846,8 @@ function UV.BuildSetting(parent, st, descPanel)
 		valPanel.Paint = function() end
 
 		local valBox = vgui.Create("DTextEntry", valPanel)
-		valBox:SetWide(UV.ScaleW(40))
-		valBox:SetFont("UVMostWantedLeaderboardFont2")
+		valBox:SetWide(UV.ScaleW(80))
+		valBox:SetFont("UVSettingsFontSmall")
 		valBox:SetTextColor(color_white)
 		valBox:SetHighlightColor(Color(58,193,0))
 		valBox:SetCursorColor(Color(58,193,0))
@@ -868,7 +868,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
-		local applyBtn = vgui.Create("DButton", valPanel)
+		local applyBtn = vgui.Create("DButton", wrap)
 		applyBtn:SetSize(UV.ScaleW(25), UV.ScaleH(25))
 		applyBtn:SetText(" ")
 		applyBtn:SetVisible(false)
@@ -882,10 +882,14 @@ function UV.BuildSetting(parent, st, descPanel)
 		-- Vertically center value box and button
 		local function LayoutValPanel()
 			if not (IsValid(valBox) and IsValid(applyBtn)) then return end
+
 			local offsetY = (wrap:GetTall() - valBox:GetTall()) / 2
 			valBox:SetPos(0, offsetY)
-			applyBtn:SetPos(valBox:GetWide() + 2, offsetY)
+
+			local btnX = valBox:GetWide() + 4
+			applyBtn:SetPos(valPanel:GetX() + btnX, offsetY)
 		end
+
 		wrap.OnSizeChanged = LayoutValPanel
 
 		local appliedValue = st.min or 0
@@ -1646,7 +1650,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		return p
 	end
 
-	if st.type == "ai_overridelist" then
+	if st.type == "vehicleoverride" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
 		p:SetTall(UV.ScaleH(220))
@@ -1667,24 +1671,17 @@ function UV.BuildSetting(parent, st, descPanel)
 		vehicleTree:Dock(BOTTOM)
 		vehicleTree:SetTall(UV.ScaleH(160))
 		vehicleTree:DockMargin(80, 4, 80, 4)
-		
-		-- vehicleTree.Paint = function(self, w, h)
-			-- local bg = Color( GetConVar("uvmenu_col_label_r"):GetInt(), GetConVar("uvmenu_col_label_g"):GetInt(), GetConVar("uvmenu_col_label_b"):GetInt(), GetConVar("uvmenu_col_label_a"):GetInt() )
-			
-			-- draw.RoundedBox(4, 0, 0, w, h, bg)
-			-- draw.SimpleText(st.text, "UVMostWantedLeaderboardFont", 10, h/2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		-- end
 
 		-- /// Vehicle Override Code /// --
 		local selectedRacers = {}
 		
 		local glideNode
 		local glideDataRequested = false
-		local racerconvar = GetConVar("uvracermanager_racers")
+		local racerconvar = GetConVar(st.convar)
 
 		local function ParseConvar()
 			local t = {}
-			for class in string.gmatch(GetConVar("uvracermanager_racers"):GetString(), "%S+") do
+			for class in string.gmatch(GetConVar(st.convar):GetString(), "%S+") do
 				t[class] = true
 			end
 			return t
@@ -1699,7 +1696,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			table.sort(out)
 
 			local str = table.concat(out, " ")
-			-- RunConsoleCommand("uvracermanager_racers", str)
+			-- RunConsoleCommand(st.convar, str)
 			racerconvar:SetString( str )
 		end
 
@@ -1872,7 +1869,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		
 		p.OnMousePressed = function(self, mouse)
 			if mouse == MOUSE_MIDDLE then
-				-- RunConsoleCommand("uvracermanager_racers", "")
+				-- RunConsoleCommand(st.convar, "")
 				racerconvar:SetString( "" )
 				
 				selectedRacers = {}
@@ -1997,16 +1994,6 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 			return tbl
 		end
-
-		local function setVoiceTable(tbl)
-			if not voiceCVar then return end
-			local list = {}
-			for k, v in pairs(tbl) do
-				if v then table.insert(list, k) end
-			end
-			voiceCVar:SetString(table.concat(list, ","))
-		end
-
 
 		local function refreshList(profile)
 			if not scroll then return end
@@ -2263,10 +2250,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local scroll = vgui.Create("DScrollPanel", panel)
 		scroll:Dock(FILL)
 		scroll:DockMargin(0, 6, 0, 0)
-		scroll.Paint = function(self, w, h)
-			-- draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
-			-- draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
-		end
+		scroll.Paint = nil
 
 		local presetArray = presets.GetTable(st.preset)
 
@@ -2319,17 +2303,17 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(180)
+		panel:SetTall(UV.ScaleH(300))
 		panel.Paint = nil
 
 		local title = vgui.Create("DLabel", panel)
 		title:Dock(TOP)
-		title:SetTall(24)
+		title:SetTall(UV.ScaleH(40))
 		title:SetText("")
 		title:SetContentAlignment(5)
 		title.Paint = function(self, w, h)
 			local text = language.GetPhrase(GetDisplayText()) or "???"
-			DrawWrappedText(self, text, w * 0.95, w * 0.5, 2.5, true)
+			DrawWrappedText(self, text, w * 0.95, w * 0.5, 2.5, true, "UVSettingsFontBig")
 		end
 
 		local body = vgui.Create("DPanel", panel)
@@ -2356,61 +2340,88 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local chanceCVar = GetConVar(st.convar .. "_chance")
 
-		local slider = vgui.Create("DNumSlider", panel)
-		slider:Dock(BOTTOM)
-		slider:DockMargin(6, 0, 6, 4)
-		slider:SetTall(40)
-		slider:SetText("Spawn Chance")
-		slider:SetMin(0)
-		slider:SetMax(100)
-		slider:SetDecimals(0)
-		slider:SetValue(chanceCVar and chanceCVar:GetInt() or 0)
-
-		slider.OnValueChanged = function(_, val)
-			if not chanceCVar then return end
-			val = math.Round(val)
-
-			if st.sv then
-				net.Start("UVUpdateSettings")
-				net.WriteTable({ [chanceCVar:GetName()] = val })
-				net.SendToServer()
-			else
-				chanceCVar:SetInt( val )
-			end
-		end
+		UV.BuildSetting( panel, { type = "slider", text = "#uv.hm.units.spawnchance", desc = "uv.hm.units.spawnchance.desc", convar = st.convar .. "_chance", min = 0, max = 100, decimals = 0, sv = true } )
 
 		local vehicleBases = {
 			{ id = 1, name = "HL2",      path = "unitvehicles/prop_vehicle_jeep/units/", type = "txt"  },
 			{ id = 2, name = "Simfphys", path = "unitvehicles/simfphys/units/",           type = "txt"  },
 			{ id = 3, name = "Glide",    path = "unitvehicles/glide/units/",               type = "json" }
 		}
+		
+		local activeFilterBaseId = 0 -- 0 = show all
+		
+		local filterBar = vgui.Create("DPanel", body)
+		filterBar:Dock(TOP)
+		filterBar:SetTall(15)
+		filterBar:DockMargin(6, 0, 6, 6)
+		filterBar.Paint = nil
+		
+		-- Bottom warning panel
+		local warningPanel = vgui.Create("DLabel", panel)
+		warningPanel:Dock(TOP)
+		warningPanel:SetTall(0) -- start hidden
+		warningPanel:SetText("")
+		warningPanel:SetTextColor(Color(255, 100, 100))
+		warningPanel:SetContentAlignment(5)
+		warningPanel.Paint = nil
 
-		local function getUnitTable()
-			local cvar = GetConVar(st.convar)
-			if not cvar then return {} end
+		local originalTall = panel:GetTall()
 
-			local tbl = {}
-			for entry in string.gmatch(cvar:GetString() or "", "([^,]+)") do
-				tbl[string.Trim(entry)] = true
+		local function updateWarning(tbl)
+			local list = {}
+			for k, v in pairs(tbl) do
+				if v then table.insert(list, k) end
 			end
-			return tbl
+			local str = table.concat(list, " ")
+
+			if #str > 256 then
+				warningPanel:SetText("/// Too many units selected! ///")
+				warningPanel:SetTall(UV.ScaleH(20))
+				panel:SetTall(originalTall + UV.ScaleH(20))
+				return true
+			else
+				warningPanel:SetText("")
+				warningPanel:SetTall(0)
+				panel:SetTall(originalTall)
+				return false
+			end
 		end
 
+		-- Adjusted setUnitTable
 		local function setUnitTable(tbl)
 			local list = {}
 			for k, v in pairs(tbl) do
 				if v then table.insert(list, k) end
 			end
 
-			local str = table.concat(list, ",")
+			local str = table.concat(list, " ")
+
+			-- Update the warning panel dynamically
+			local overLimit = updateWarning(tbl)
 
 			if st.sv then
 				net.Start("UVUpdateSettings")
 				net.WriteTable({ [st.convar] = str })
 				net.SendToServer()
 			else
-				GetConVar(st.convar):SetString( str )
+				local cvar = GetConVar(st.convar)
+				if cvar then
+					cvar:SetString(str)
+				end
 			end
+
+			return overLimit
+		end
+
+		local function getUnitTable()
+			local cvar = GetConVar(st.convar)
+			if not cvar then return {} end
+
+			local tbl = {}
+			for entry in string.gmatch(cvar:GetString() or "", "([^%s]+)") do
+				tbl[string.Trim(entry)] = true
+			end
+			return tbl
 		end
 
 		local function getAvailableUnits()
@@ -2431,17 +2442,18 @@ function UV.BuildSetting(parent, st, descPanel)
 			return entries
 		end
 
+		local selected = getUnitTable()
+
 		local function refreshLists()
 			left:Clear()
 			right:Clear()
 
-			local selected = getUnitTable()
-			local baseCVar = st.baseconvar and GetConVar(st.baseconvar)
-			local activeBaseId = baseCVar and baseCVar:GetInt() or 1
-
 			for _, entry in ipairs(getAvailableUnits()) do
-				local isSelected  = selected[entry.filename]
-				local isWrongBase = entry.baseId ~= activeBaseId
+				if activeFilterBaseId ~= 0 and entry.baseId ~= activeFilterBaseId then
+					continue
+				end
+
+				local isSelected = selected[entry.filename]
 				local parentList = isSelected and right or left
 
 				local btn = parentList:Add("DButton")
@@ -2472,29 +2484,52 @@ function UV.BuildSetting(parent, st, descPanel)
 						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
 						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
 						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
-						GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4))
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
 					)
 
-					local mismatch = isWrongBase and Color(160, 120, 60, 220) or nil
 					local col = self.Selected and active or default
-					if mismatch then col = mismatch end
-
 					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
 					if hovered then
 						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
 					end
 
 					DrawWrappedText(self, entry.base, w * 0.4, w * 0.05, 0, nil, "UVSettingsFontSmall")
-					DrawWrappedText(self, entry.display, w * 0.4, w * 0.35, 0, nil, "UVSettingsFontSmall")
+					DrawWrappedText(self, "|", w * 0.1, w * 0.25, 0, nil, "UVSettingsFontSmall")
+					DrawWrappedText(self, entry.display, w * 0.75, w * 0.275, 0, nil, "UVSettingsFontSmall")
 				end
 
 				btn.DoClick = function()
-					selected[entry.filename] = not selected[entry.filename]
-					setUnitTable(selected)
+					local tmpSelected = table.Copy(selected)
+					tmpSelected[entry.filename] = not tmpSelected[entry.filename]
+
+					local overLimit = setUnitTable(tmpSelected)
+					if overLimit then return end
+
+					selected[entry.filename] = tmpSelected[entry.filename]
+					btn.Selected = selected[entry.filename]
 					refreshLists()
 				end
 			end
 		end
+
+		local function addFilterButton(text, baseId)
+			local btn = vgui.Create("DButton", filterBar)
+			btn:Dock(LEFT)
+			btn:DockMargin(0, 0, 6, 0)
+			btn:SetWide(UV.ScaleW(80))
+			btn:SetText(text)
+
+			btn.DoClick = function()
+				activeFilterBaseId = baseId
+				refreshLists()
+			end
+		end
+
+		addFilterButton("#all", 0)
+		addFilterButton("HL2", 1)
+		addFilterButton("Simfphys", 2)
+		addFilterButton("Glide", 3)
 
 		timer.Simple(0, function()
 			if IsValid(panel) then
@@ -3024,7 +3059,7 @@ function UVMenu:Open(menu)
             local btn = vgui.Create("DButton", tabsPanel)
             btn:Dock(TOP)
             btn:DockMargin(0, 0, 0, TAB_BUTTON_PADDING)
-            btn:SetTall(TAB_BUTTON_HEIGHT)
+            btn:SetTall(tab.Icon and UV.ScaleH(64) or UV.ScaleH(48))
             btn:SetText("")
 
             btn.Paint = function(self, w, h)

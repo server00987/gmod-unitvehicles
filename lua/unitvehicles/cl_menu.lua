@@ -154,6 +154,8 @@ UVMenu.Main = function()
 			},
 			
 			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png", -- Pursuit Manager
+				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
+				
 				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "unitvehicle_unit_vehiclebase", sv = true, content = {
 						{ "HL2 Jeep", 1 } ,
 						{ "Simfphys", 2 } ,
@@ -207,7 +209,7 @@ UVMenu.Main = function()
 				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", sv = true },
 				
 				{ type = "bool", text = "#uv.airacer.override", desc = "uv.airacer.override.desc", convar = "unitvehicle_racer_assignracers", sv = true },
-				{ type = "ai_overridelist", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "uvracermanager_racers", sv = true, parentconvar = "unitvehicle_racer_assignracers" },
+				{ type = "vehicleoverride", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "uvracermanager_racers", sv = true, parentconvar = "unitvehicle_racer_assignracers" },
 			},
 			
 			{ TabName = "#uv.tm", Icon = "unitvehicles/icons_settings/gameplay.png", sv = true, -- Traffic Manager
@@ -1032,93 +1034,126 @@ end
 
 ------- [ Heat Manager ] -------
 UVMenu.HeatManager = function()
-	UVMenu.CurrentMenu = UVMenu:Open({
-		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.hm"),
-		Width  = UV.ScaleW(1540),
-		Height = UV.ScaleH(760),
-		Description = true,
-		UnfocusClose = true,
-		Tabs = {
-			{ TabName = "#uv.hm.presets", 
-				{ type = "presets", preset = "units" }
-			},
-			{ TabName = "#uv.settings.general",
-				{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "uvunitmanager_timetillnextheatenabled", sv = true },
-				{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "unitvehicle_minheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-				{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "unitvehicle_maxheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+    local tabs = {}
 
-				{ type = "label", text = "#uv.hm.commander" },
-				{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "unitvehicle_unit_onecommander", sv = true },
-				{ type = "bool", text = "#uv.hm.commander.evade", desc = "uv.hm.commander.evade.desc", convar = "unitvehicle_unit_onecommanderevading", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
-				{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "unitvehicle_unit_commanderrepair", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
-				{ type = "slider", text = "#uv.hm.commander.health", desc = "uv.hm.commander.health.desc", convar = "unitvehicle_unit_onecommanderhealth", requireparentconvar = "unitvehicle_unit_onecommander", min = 1000, max = 10000, sv = true },
-				
-				{ type = "label", text = "#uv.hm.air" },
-				{ type = "combo", text = "#uv.hm.air.model", desc = "uv.hm.air.model.desc", convar = "unitvehicle_unit_helicoptermodel", sv = true, content = {
-						{ "Default", "Default" },
-						{ "NFS Hot Pursuit 2", "NFS Hot Pursuit 2" },
-						{ "NFS Most Wanted", "NFS Most Wanted" },
-						{ "NFS Undercover", "NFS Undercover" },
-						{ "NFS Hot Pursuit 2010", "NFS Hot Pursuit 2010" },
-						{ "NFS No Limits", "NFS No Limits" },
-						{ "NFS Rivals, Payback & Heat", "NFS Rivals, Payback & Heat" },
-						{ "NFS Unbound", "NFS Unbound" },
-						{ "The Crew", "The Crew" }
-					},
-				},
-				{ type = "bool", text = "#uv.hm.air.canbust", desc = "uv.hm.air.canbust.desc", convar = "unitvehicle_unit_helicopterbusting", sv = true },
-				{ type = "bool", text = "#uv.hm.air.pt.exp", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterbarrels", sv = true },
-				{ type = "bool", text = "#uv.hm.air.pt.spikes", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterspikestrip", sv = true },
-								
-				{ type = "label", text = "#uv.ptech" },
-				{ type = "bool", text = "#uv.hm.enablept", desc = "uv.hm.enablept.desc", convar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.esf", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_esf", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.emp", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_emp", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.spikes", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_spikestrip", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.killswitch", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_killswitch", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.repairkit", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_repairkit", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.shockram", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_shockram", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				{ type = "bool", text = "#uv.ptech.gpsdart", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_gpsdart", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
-				
+    -- Presets tab -- Uncomment once it works
+    -- table.insert(tabs, {
+        -- TabName = "#uv.hm.presets",
+        -- { type = "presets", preset = "units" }
+    -- })
+
+    -- General settings tab
+    table.insert(tabs, {
+        TabName = "#uv.settings.general",
+		{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "uvunitmanager_timetillnextheatenabled", sv = true },
+		{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "unitvehicle_minheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "unitvehicle_maxheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+
+		{ type = "label", text = "#uv.hm.commander" },
+		{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "unitvehicle_unit_onecommander", sv = true },
+		{ type = "bool", text = "#uv.hm.commander.evade", desc = "uv.hm.commander.evade.desc", convar = "unitvehicle_unit_onecommanderevading", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
+		{ type = "bool", text = "#uv.hm.commander.norepair", desc = "uv.hm.commander.norepair.desc", convar = "unitvehicle_unit_commanderrepair", requireparentconvar = "unitvehicle_unit_onecommander", sv = true },
+		{ type = "slider", text = "#uv.hm.commander.health", desc = "uv.hm.commander.health.desc", convar = "unitvehicle_unit_onecommanderhealth", requireparentconvar = "unitvehicle_unit_onecommander", min = 1000, max = 10000, sv = true },
+		
+		{ type = "label", text = "#uv.hm.air" },
+		{ type = "combo", text = "#uv.hm.air.model", desc = "uv.hm.air.model.desc", convar = "unitvehicle_unit_helicoptermodel", sv = true, content = {
+				{ "Default", "Default" },
+				{ "NFS Hot Pursuit 2", "NFS Hot Pursuit 2" },
+				{ "NFS Most Wanted", "NFS Most Wanted" },
+				{ "NFS Undercover", "NFS Undercover" },
+				{ "NFS Hot Pursuit 2010", "NFS Hot Pursuit 2010" },
+				{ "NFS No Limits", "NFS No Limits" },
+				{ "NFS Rivals, Payback & Heat", "NFS Rivals, Payback & Heat" },
+				{ "NFS Unbound", "NFS Unbound" },
+				{ "The Crew", "The Crew" }
 			},
-			{ TabName = "#uv.hm.vp", 
-				{ type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "unitvehicle_unit_dispatch_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "unitvehicle_unit_misc_voiceprofile", sv = true },
-				
-				{ type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_patrol_voice", profilevar = "unitvehicle_unit_patrol_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_support_voice", profilevar = "unitvehicle_unit_support_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_pursuit_voice", profilevar = "unitvehicle_unit_pursuit_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_interceptor_voice", profilevar = "unitvehicle_unit_interceptor_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_special_voice", profilevar = "unitvehicle_unit_special_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_commander_voice", profilevar = "unitvehicle_unit_commander_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_rhino_voice", profilevar = "unitvehicle_unit_rhino_voiceprofile", sv = true },
-				{ type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_air_voice", profilevar = "unitvehicle_unit_air_voiceprofile", sv = true },
-			},
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 1 ),
-				-- { type = "unitselect", text = "#uv.unit.patrol", convar = "uvunitmanager_unitspatrol1", chanceconvar = true, sv = true },
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 2 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 3 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 4 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 5 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 6 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 7 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 8 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 9 ),
-			-- },
-			-- { TabName = string.format( language.GetPhrase("uv.hm.lvl"), 10 ),
-			-- },
-			{ TabName = "#uv.back", playsfx = "clickback", func = function()
-					UVMenu.OpenMenu(UVMenu.Main)
-				end,
-			},
+		},
+		{ type = "bool", text = "#uv.hm.air.canbust", desc = "uv.hm.air.canbust.desc", convar = "unitvehicle_unit_helicopterbusting", sv = true },
+		{ type = "bool", text = "#uv.hm.air.pt.exp", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterbarrels", sv = true },
+		{ type = "bool", text = "#uv.hm.air.pt.spikes", desc = "uv.hm.air.pt.desc", convar = "unitvehicle_unit_helicopterspikestrip", sv = true },
+						
+		{ type = "label", text = "#uv.ptech" },
+		{ type = "bool", text = "#uv.hm.enablept", desc = "uv.hm.enablept.desc", convar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.esf", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_esf", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.emp", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_emp", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.spikes", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_spikestrip", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.killswitch", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_killswitch", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.repairkit", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_repairkit", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.shockram", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_shockram", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		{ type = "bool", text = "#uv.ptech.gpsdart", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_gpsdart", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
+		
+		{ type = "label", text = "#uv.hm.disablebounty" },
+		{ type = "slider", text = "#uv.unit.patrol", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypatrol", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.support", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountysupport", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.pursuit", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypursuit", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.interceptor", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyinterceptor", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.special", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyspecial", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.commander", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountycommander", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.rhino", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyrhino", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.helicopter", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyair", min = 1, max = 999999, decimals = 0, sv = true },
+    })
+
+    -- Voice profile tab
+    table.insert(tabs, {
+        TabName = "#uv.hm.vp",
+        { type = "voiceprofile", text = "#uv.unit.dispatch", desc = "uv.hm.vp.dispatch.desc", profilevar = "unitvehicle_unit_dispatch_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.misc", desc = "uv.hm.vp.misc.desc", profilevar = "unitvehicle_unit_misc_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.patrol", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_patrol_voice", profilevar = "unitvehicle_unit_patrol_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.support", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_support_voice", profilevar = "unitvehicle_unit_support_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.pursuit", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_pursuit_voice", profilevar = "unitvehicle_unit_pursuit_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.interceptor", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_interceptor_voice", profilevar = "unitvehicle_unit_interceptor_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.special", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_special_voice", profilevar = "unitvehicle_unit_special_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.commander", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_commander_voice", profilevar = "unitvehicle_unit_commander_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.rhino", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_rhino_voice", profilevar = "unitvehicle_unit_rhino_voiceprofile", sv = true },
+        { type = "voiceprofile", text = "#uv.unit.helicopter", desc = "uv.hm.vp.desc", voicevar = "unitvehicle_unit_air_voice", profilevar = "unitvehicle_unit_air_voiceprofile", sv = true },
+    })
+
+    -- Dynamic heat level tabs
+	for i = 1, MAX_HEAT_LEVEL do
+		local heatTab = {
+			TabName = string.format(language.GetPhrase("uv.hm.lvl"), i),
+			{ type = "label", text = "#uv.hm.heat" },
+			{ type = "slider", text = "#uv.hm.heat.bounty.10s", desc = "uv.hm.heat.bounty.10s.desc", convar = "unitvehicle_unit_bountytime" .. i, min = 0, max = 9999999, decimals = 0, sv = true },
 		}
-	})
+
+		if i <= 9 then
+			table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.heatlvl.time", desc = "uv.hm.heat.heatlvl.time.desc", convar = "unitvehicle_unit_timetillnextheat" .. i, min = 20, max = 600, decimals = 0, sv = true })
+		end
+
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.minbounty", desc = "uv.hm.heat.minbounty.desc", convar = "unitvehicle_unit_heatminimumbounty" .. i, min = 1, max = 9999999, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.maxunits", desc = "uv.hm.heat.maxunits.desc", convar = "unitvehicle_unit_maxunits" .. i, min = 1, max = 20, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.avaunits", desc = "uv.hm.heat.avaunits.desc", convar = "unitvehicle_unit_unitsavailable" .. i, min = 1, max = 150, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.backuptime", desc = "uv.hm.heat.backuptime.desc", convar = "unitvehicle_unit_backuptimer" .. i, min = 1, max = 600, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.bustspeed", desc = "uv.hm.heat.bustspeed.desc", convar = "unitvehicle_unit_bustspeed" .. i, min = 1, max = 100, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.cooldowntime", desc = "uv.hm.heat.cooldowntime.desc", convar = "unitvehicle_unit_cooldowntimer" .. i, min = 1, max = 600, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "bool", text = "#uv.hm.heat.roadblocks", desc = "uv.hm.heat.roadblocks.desc", convar = "unitvehicle_unit_roadblocks" .. i, sv = true })
+		table.insert(heatTab, { type = "bool", text = "#uv.hm.heat.helicopter", desc = "uv.hm.heat.helicopter.desc", convar = "unitvehicle_unit_helicopters" .. i, sv = true })
+
+		table.insert(heatTab, { type = "label", text = "#uv.hm.units" })
+
+		local units = { "Patrol", "Support", "Pursuit", "Interceptor", "Special", "Commander", "Rhino" }
+		for _, unit in ipairs(units) do
+			local lower = string.lower(unit)
+			table.insert(heatTab, { type = "unitselect", text = "#uv.unit." .. lower, convar = "unitvehicle_unit_units" .. lower .. i, chanceconvar = true, sv = true })
+		end
+
+		table.insert(tabs, heatTab)
+	end
+
+    table.insert(tabs, {
+        TabName = "#uv.back",
+        playsfx = "clickback",
+        func = function()
+            UVMenu.OpenMenu(UVMenu.Main)
+        end,
+    })
+
+    UVMenu.CurrentMenu = UVMenu:Open({
+        Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.hm"),
+        Width  = UV.ScaleW(1540),
+        Height = UV.ScaleH(760),
+        Description = true,
+        UnfocusClose = true,
+        Tabs = tabs
+    })
 end

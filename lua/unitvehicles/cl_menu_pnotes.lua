@@ -9,10 +9,16 @@ UV = UV or {}
 
 UV.PNotes = {
 ["v0.42.0"] = {
-Date = "2026/01/11",
+Date = "2026/01/16",
 Text = [[
+**Almost there!**
+Unit Vehicles is getting closer and closer to its v1.0 release on *January 29th*!
+Mark your calendars, it's almost time to **Race, Chase or Escape**!
+
 **New Features**
 - Added the *UVPD Rhino Truck*
+- Added the *Heat Level Manager* to the *Pursuit Manager* UV Menu Tab
+ |-- This replaces the *Manager: Units* settings.
 
 **Changes**
 - Removed "Relentless" AI option and replaced it with a dynamic behaviour system
@@ -23,6 +29,7 @@ Text = [[
 - Removed some default cop chatter and updated others
 - Air Unit's wreck callout will now have priority over all others
 - Added a Race Countdown to the NFS: ProStreet HUD
+- Renamed the "Manager: Units" tool to "Creator: Units"
 
 **Fixes**
 - Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
