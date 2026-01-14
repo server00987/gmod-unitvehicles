@@ -2321,7 +2321,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			btn.DoClick = function(self)
 				if st.preset == 'units' then
-					--UVUnitManagerLoadPresetV2(name, preset)
 					--UVMenu.CloseCurrentMenu()
 					UVMenu.CurrentMenu = UVMenu:Open({
 						Name = " ",
@@ -2334,12 +2333,13 @@ function UV.BuildSetting(parent, st, descPanel)
 								{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ), centered = true },
 								{ type = "button", text = "#openurl.yes", func = 
 								function(self2)
-									UVMenu.OpenMenu(UVMenu.HeatManager)
+									UVUnitManagerLoadPresetV2(name, preset)
+									UVMenu.OpenMenu(UVMenu.HeatManager, true)
 								end
 								},
 								{ type = "button", text = "#openurl.nope", func = 
 								function(self2)
-									UVMenu.OpenMenu(UVMenu.HeatManager)
+									UVMenu.OpenMenu(UVMenu.HeatManager, true)
 								end
 								},
 							}
