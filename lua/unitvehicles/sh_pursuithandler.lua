@@ -917,8 +917,8 @@ SpeedLimit = CreateConVar("unitvehicle_speedlimit", 60, {FCVAR_ARCHIVE, FCVAR_RE
 AutoHealthRacer = CreateConVar("unitvehicle_autohealthracer", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, all racers will have unlimited vehicle health and your health as a racer will be set according to your vehicle's mass.")
 AutoHealth = CreateConVar("unitvehicle_autohealth", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, all suspects will have unlimited vehicle health and your health as a suspect will be set according to your vehicle's mass.")
 WheelsDetaching = CreateConVar("unitvehicle_wheelsdetaching", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, wrecked vehicles will have their wheels detached.")
-MinHeatLevel = CreateConVar("unitvehicle_minheatlevel", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
-MaxHeatLevel = CreateConVar("unitvehicle_maxheatlevel", 6, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
+MinHeatLevel = CreateConVar("unitvehicle_unit_minheat", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Sets the minimum Heat Level achievable during pursuits (1-6). Use high Heat Levels for more aggressive Units on your tail and vice versa.")
+MaxHeatLevel = CreateConVar("unitvehicle_unit_maxheat", 6, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Sets the maximum Heat Level achievable during pursuits (1-6). Use low Heat Levels for less aggressive Units on your tail and vice versa.")
 SpikeStripDuration = CreateConVar("unitvehicle_spikestripduration", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicle: Time in seconds before the tires gets reinflated after hitting the spikes. Set this to 0 to disable reinflating tires.")
 Pathfinding = CreateConVar("unitvehicle_pathfinding", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Units uses A* pathfinding algorithm on navmesh/Decent Vehicle Waypoints to navigate. Impacts computer performance.")
 VCModELSPriority = CreateConVar("unitvehicle_vcmodelspriority", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Units using base HL2 vehicles will attempt to use VCMod ELS over Photon if both are installed.")
@@ -945,96 +945,106 @@ UVUOneCommander = CreateConVar("unitvehicle_unit_onecommander", 0, {FCVAR_ARCHIV
 UVUOneCommanderHealth = CreateConVar("unitvehicle_unit_onecommanderhealth", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 UVUCommanderRepair = CreateConVar("unitvehicle_unit_commanderrepair", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED},"Unit Vehicles: If set to 1, Commander Units can utilize the Repair Shop to repair themselves.")
 
+UVUTimeTillNextHeatEnabled = CreateConVar("unitvehicle_unit_timetillnextheatenabled", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Heat Levels will progress automatically based on the time until the next heat level.")
+
+UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+UVTSpawnCondition = CreateConVar("unitvehicle_traffic_spawncondition", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
+UVTMaxTraffic = CreateConVar("unitvehicle_traffic_maxtraffic", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Traffic Vehicles roaming.")
+
+--racer convars
+UVRVehicleBase = CreateConVar("unitvehicle_racer_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+UVRAssignRacers = CreateConVar("unitvehicle_racer_assignracers", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Spawns Racer Vehicles only from the list. Otherwise, spawns a random Racer Vehicle from the database.")
+UVRRacers = CreateConVar("unitvehicle_racer_racers", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Assigned Racer Vehicles")
+UVRSpawnCondition = CreateConVar("unitvehicle_racer_spawncondition", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
+UVRMaxRacer = CreateConVar("unitvehicle_racer_maxracer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Racer Vehicles roaming.")
+
+--unit convars
+UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+
+UVUPursuitTech = CreateConVar("unitvehicle_unit_pursuittech", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
+UVUPursuitTech_ESF = CreateConVar("unitvehicle_unit_pursuittech_esf", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
+UVUPursuitTech_EMP = CreateConVar("unitvehicle_unit_pursuittech_emp", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with EMP.")
+UVUPursuitTech_Spikestrip = CreateConVar("unitvehicle_unit_pursuittech_spikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
+UVUPursuitTech_Killswitch = CreateConVar("unitvehicle_unit_pursuittech_killswitch", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
+UVUPursuitTech_RepairKit = CreateConVar("unitvehicle_unit_pursuittech_repairkit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
+UVUPursuitTech_ShockRam = CreateConVar("unitvehicle_unit_pursuittech_shockram", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with shock rams.")
+UVUPursuitTech_GPSDart = CreateConVar("unitvehicle_unit_pursuittech_gpsdart", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with gps darts.")
+
+UVUHelicopterModel = CreateConVar("unitvehicle_unit_helicoptermodel", "Default", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Helicopter model to use with Air Unit.")
+UVUHelicopterBarrels = CreateConVar("unitvehicle_unit_helicopterbarrels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Barrels\n0 = No Barrels")
+UVUHelicopterSpikeStrip = CreateConVar("unitvehicle_unit_helicopterspikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Spike Strips\n0 = No Spike Strips")
+UVUHelicopterBusting = CreateConVar("unitvehicle_unit_helicopterbusting", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Helicopter can bust racers\n0 = Helicopter cannot bust racers")
+
+UVUBountyPatrol = CreateConVar("unitvehicle_unit_bountypatrol", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountySupport = CreateConVar("unitvehicle_unit_bountysupport", 5000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountyPursuit = CreateConVar("unitvehicle_unit_bountypursuit", 10000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountyInterceptor = CreateConVar("unitvehicle_unit_bountyinterceptor", 20000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountyAir = CreateConVar("unitvehicle_unit_bountyair", 75000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountySpecial = CreateConVar("unitvehicle_unit_bountyspecial", 25000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountyCommander = CreateConVar("unitvehicle_unit_bountycommander", 100000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+UVUBountyRhino = CreateConVar("unitvehicle_unit_bountyrhino", 50000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	
+local defaultvoicetable = {
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Patrol
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Support
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Pursuit
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Interceptor
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Special
+	"cop1, cop2, cop3, cop4, cop5, cop6", --Commander
+	"rhino1", --Rhino
+	"air", --Air
+}
+
+local ReplicatedVars = {}
+
+for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
+	local lowercaseUnit = string.lower( v )
+	CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", defaultvoicetable[index], {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "default", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+end
+
+for _, v in pairs( {'Misc', 'Dispatch'} ) do
+	local lowercaseType = string.lower( v )
+	CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+end
+
+local ShouldArchive = (SERVER or game.SinglePlayer()) and FCVAR_ARCHIVE or nil
+
+for i = 1, MAX_HEAT_LEVEL do
+	local prevIterator = i - 1
+
+	local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
+
+	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+		local lowercaseUnit = string.lower( v )
+		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
+
+		-------------------------------------------
+
+		table.insert(ReplicatedVars, "unitvehicle_unit_" .. conVarKey)
+
+		CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {ShouldArchive})
+		CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_chance", 100, {})
+	end
+
+	for _, conVar in pairs( HEAT_SETTINGS ) do
+		local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
+		local check = (conVar == "timetillnextheat")
+
+		CreateConVar( "unitvehicle_unit_" .. conVarKey, HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	end
+end
 
 if SERVER then
 
 	--convars--
 	--traffic convars
-	UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
-	UVTSpawnCondition = CreateConVar("unitvehicle_traffic_spawncondition", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
-	UVTMaxTraffic = CreateConVar("unitvehicle_traffic_maxtraffic", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Traffic Vehicles roaming.")
-
-	--racer convars
-	UVRVehicleBase = CreateConVar("unitvehicle_racer_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
-	UVRAssignRacers = CreateConVar("unitvehicle_racer_assignracers", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Spawns Racer Vehicles only from the list. Otherwise, spawns a random Racer Vehicle from the database.")
-	UVRRacers = CreateConVar("unitvehicle_racer_racers", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Assigned Racer Vehicles")
-	UVRSpawnCondition = CreateConVar("unitvehicle_racer_spawncondition", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
-	UVRMaxRacer = CreateConVar("unitvehicle_racer_maxracer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Racer Vehicles roaming.")
-
-	--unit convars
-	UVUVehicleBase = CreateConVar("unitvehicle_unit_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
-
-	UVUPursuitTech = CreateConVar("unitvehicle_unit_pursuittech", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can use weapons (spike strips, ESF, EMP, etc.).")
-	UVUPursuitTech_ESF = CreateConVar("unitvehicle_unit_pursuittech_esf", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with ESF.")
-	UVUPursuitTech_EMP = CreateConVar("unitvehicle_unit_pursuittech_emp", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with EMP.")
-	UVUPursuitTech_Spikestrip = CreateConVar("unitvehicle_unit_pursuittech_spikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with spike strips.")
-	UVUPursuitTech_Killswitch = CreateConVar("unitvehicle_unit_pursuittech_killswitch", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with killswitch.")
-	UVUPursuitTech_RepairKit = CreateConVar("unitvehicle_unit_pursuittech_repairkit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with repair kits.")
-	UVUPursuitTech_ShockRam = CreateConVar("unitvehicle_unit_pursuittech_shockram", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with shock rams.")
-	UVUPursuitTech_GPSDart = CreateConVar("unitvehicle_unit_pursuittech_gpsdart", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, AI and player-controlled Unit Vehicles can spawn with gps darts.")
-
-	UVUHelicopterModel = CreateConVar("unitvehicle_unit_helicoptermodel", "Default", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: Helicopter model to use with Air Unit.")
-	UVUHelicopterBarrels = CreateConVar("unitvehicle_unit_helicopterbarrels", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Barrels\n0 = No Barrels")
-	UVUHelicopterSpikeStrip = CreateConVar("unitvehicle_unit_helicopterspikestrip", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Spike Strips\n0 = No Spike Strips")
-	UVUHelicopterBusting = CreateConVar("unitvehicle_unit_helicopterbusting", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "1 = Helicopter can bust racers\n0 = Helicopter cannot bust racers")
-
-	UVUBountyPatrol = CreateConVar("unitvehicle_unit_bountypatrol", 1000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountySupport = CreateConVar("unitvehicle_unit_bountysupport", 5000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountyPursuit = CreateConVar("unitvehicle_unit_bountypursuit", 10000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountyInterceptor = CreateConVar("unitvehicle_unit_bountyinterceptor", 20000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountyAir = CreateConVar("unitvehicle_unit_bountyair", 75000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountySpecial = CreateConVar("unitvehicle_unit_bountyspecial", 25000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountyCommander = CreateConVar("unitvehicle_unit_bountycommander", 100000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	UVUBountyRhino = CreateConVar("unitvehicle_unit_bountyrhino", 50000, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 	--UVUVoiceProfile = CreateConVar("unitvehicle_unit_voiceprofile", "nfsmw", {FCVAR_ARCHIVE}, "Unit Vehicles: If set to 1, Units will use the voice profile assigned to them. If set to 0, Units will use a random voice profile.")
+
 	
-	local defaultvoicetable = {
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Patrol
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Support
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Pursuit
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Interceptor
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Special
-		"cop1, cop2, cop3, cop4, cop5, cop6", --Commander
-		"rhino1", --Rhino
-		"air", --Air
-	}
 
-	for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
-		local lowercaseUnit = string.lower( v )
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voice", defaultvoicetable[index], {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-		CreateConVar( "unitvehicle_unit_" .. lowercaseUnit .. "_voiceprofile", "default", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	end
-
-	for _, v in pairs( {'Misc', 'Dispatch'} ) do
-		local lowercaseType = string.lower( v )
-		CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-	end
-
-	for i = 1, MAX_HEAT_LEVEL do
-		local prevIterator = i - 1
-
-		local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
-
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
-			local lowercaseUnit = string.lower( v )
-			local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
-
-			-------------------------------------------
-
-			CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-			CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_chance", 100, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-		end
-
-		for _, conVar in pairs( HEAT_SETTINGS ) do
-			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
-			local check = (conVar == "timetillnextheat")
-
-			CreateConVar( "unitvehicle_unit_" .. conVarKey, HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
-		end
-	end
-
-	UVUTimeTillNextHeatEnabled = GetConVar('unitvehicle_unit_timetillnextheatenabled')
+	--UVUTimeTillNextHeatEnabled = GetConVar('unitvehicle_unit_timetillnextheatenabled')
 
 	UVPBMax = CreateConVar("unitvehicle_pursuitbreaker_maxpb", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 	UVPBSpawnCondition = CreateConVar("unitvehicle_pursuitbreaker_spawncondition", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
@@ -2322,6 +2332,13 @@ if SERVER then
 			net.Send( ply )
 		end
 
+		for _, v in pairs(ReplicatedVars) do
+			net.Start( "UVGetSettings_Local" )
+			net.WriteString(v)
+			net.WriteString(GetConVar(v):GetString())
+			net.Send(ply)
+		end
+
 	end )	
 
 	net.Receive("UVUpdateSettings", function(len, ply)
@@ -2339,6 +2356,13 @@ if SERVER then
 						yet it works if you set it using the ConVar::SetX functions, bullshit.
 					]]
 					convar:SetString(value)
+
+					if table.HasValue(ReplicatedVars, key) then
+						net.Start( "UVGetSettings_Local" )
+						net.WriteString(key)
+						net.WriteString(value)
+						net.Broadcast(ply)
+					end
 				end
 			end
 		end
@@ -2398,29 +2422,29 @@ else -- CLIENT Settings | HUD/Options
 	UVVehicleNameTakedown = CreateClientConVar("unitvehicle_vehiclenametakedown", 0, true, false, "Unit Vehicles: If set to 1, Unit takedowns use the vehicle name instead of the unit name.")
 	UVDisplayUnits = CreateClientConVar("unitvehicle_unitstype", 0, true, false, "Unit Vehicles: If set to 0 (or an invalid value), displays units in meters. If set to 1, displays units in feet. If set to 2, displays units in yards.")
 
-	for i = 1, MAX_HEAT_LEVEL do
-		local prevIterator = i - 1
+	-- for i = 1, MAX_HEAT_LEVEL do
+	-- 	local prevIterator = i - 1
 
-		local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
+	-- 	local timeTillNextHeatId = ((prevIterator == 0 and 'enabled') or prevIterator)
 
-		for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
-			local lowercaseUnit = string.lower( v )
-			local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
+	-- 	for _, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino'} ) do
+	-- 		local lowercaseUnit = string.lower( v )
+	-- 		local conVarKey = string.format( 'units%s%s', lowercaseUnit, i )
 
-			-------------------------------------------
+	-- 		-------------------------------------------
 
-			CreateClientConVar( "unitvehicle_unit_" .. conVarKey, "", true, false)
-		end
+	-- 		CreateClientConVar( "unitvehicle_unit_" .. conVarKey, "", true, false)
+	-- 	end
 
-		for _, conVar in pairs( HEAT_SETTINGS ) do
-			local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
-			local check = (conVar == "timetillnextheat")
+	-- 	for _, conVar in pairs( HEAT_SETTINGS ) do
+	-- 		local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
+	-- 		local check = (conVar == "timetillnextheat")
 
-			CreateClientConVar( "unitvehicle_unit_" .. conVarKey, HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, true, false)
-		end
-	end
+	-- 		CreateClientConVar( "unitvehicle_unit_" .. conVarKey, HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0, true, false)
+	-- 	end
+	-- end
 
-	UVUTimeTillNextHeatEnabled = CreateClientConVar("unitvehicle_unit_timetillnextheatenabled", 0, true, false)
+	--UVUTimeTillNextHeatEnabled = CreateClientConVar("unitvehicle_unit_timetillnextheatenabled", 0, true, false)
 
 	UVPTKeybindSlot1 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_1", KEY_T, true, false)
 	UVPTKeybindSlot2 = CreateClientConVar("unitvehicle_pursuittech_keybindslot_2", KEY_P, true, false)
@@ -2700,13 +2724,12 @@ else -- CLIENT Settings | HUD/Options
 	end)
 
 	net.Receive('UVGetSettings_Local', function()
-		local array = net.ReadTable()
+		local key = net.ReadString()
+		local value = net.ReadString()
 
-		for key, value in pairs(array) do
-			local valid = string.match(key, 'unitvehicle_')
-			if valid then
-				RunConsoleCommand(key, value)
-			end
+		local convar = GetConVar(key)
+		if convar and string.match(key, 'unitvehicle_') then
+			convar:SetString(value)
 		end
 	end)
 

@@ -103,41 +103,40 @@ local UnitSettings = {
 }
 
 local UIElements = {}
+local conVarList = {}
 
-TOOL.ClientConVar["selected_heat"] = 1
+conVarList["selected_heat"] = 1
 
-TOOL.ClientConVar["vehiclebase"] = 3
-TOOL.ClientConVar["onecommander"] = 1
-TOOL.ClientConVar["commanderrepair"] = 1
-TOOL.ClientConVar["onecommanderevading"] = 0
-TOOL.ClientConVar["onecommanderhealth"] = 5000
-TOOL.ClientConVar["helicoptermodel"] = "Default"
-TOOL.ClientConVar["helicopterbarrels"] = 1
-TOOL.ClientConVar["helicopterspikestrip"] = 1
-TOOL.ClientConVar["helicopterbusting"] = 1
+conVarList["vehiclebase"] = 3
+conVarList["onecommander"] = 1
+conVarList["commanderrepair"] = 1
+conVarList["onecommanderevading"] = 0
+conVarList["onecommanderhealth"] = 5000
+conVarList["helicoptermodel"] = "Default"
+conVarList["helicopterbarrels"] = 1
+conVarList["helicopterspikestrip"] = 1
+conVarList["helicopterbusting"] = 1
 
-TOOL.ClientConVar["pursuittech"] = 1
-TOOL.ClientConVar["pursuittech_esf"] = 1
-TOOL.ClientConVar["pursuittech_emp"] = 1
-TOOL.ClientConVar["pursuittech_spikestrip"] = 1
-TOOL.ClientConVar["pursuittech_killswitch"] = 1
-TOOL.ClientConVar["pursuittech_repairkit"] = 1
-TOOL.ClientConVar["pursuittech_shockram"] = 1
-TOOL.ClientConVar["pursuittech_gpsdart"] = 1
+conVarList["pursuittech"] = 1
+conVarList["pursuittech_esf"] = 1
+conVarList["pursuittech_emp"] = 1
+conVarList["pursuittech_spikestrip"] = 1
+conVarList["pursuittech_killswitch"] = 1
+conVarList["pursuittech_repairkit"] = 1
+conVarList["pursuittech_shockram"] = 1
+conVarList["pursuittech_gpsdart"] = 1
 
-TOOL.ClientConVar["minheat"] = 1
-TOOL.ClientConVar["maxheat"] = 6
+conVarList["minheat"] = 1
+conVarList["maxheat"] = 6
 
-TOOL.ClientConVar["bountypatrol"] = 1000
-TOOL.ClientConVar["bountysupport"] = 5000
-TOOL.ClientConVar["bountypursuit"] = 10000
-TOOL.ClientConVar["bountyinterceptor"] = 20000
-TOOL.ClientConVar["bountyair"] = 75000
-TOOL.ClientConVar["bountyspecial"] = 25000
-TOOL.ClientConVar["bountycommander"] = 100000
-TOOL.ClientConVar["bountyrhino"] = 50000
-
-
+conVarList["bountypatrol"] = 1000
+conVarList["bountysupport"] = 5000
+conVarList["bountypursuit"] = 10000
+conVarList["bountyinterceptor"] = 20000
+conVarList["bountyair"] = 75000
+conVarList["bountyspecial"] = 25000
+conVarList["bountycommander"] = 100000
+conVarList["bountyrhino"] = 50000
 
 local defaultvoicetable = {
 	"cop1, cop2, cop3, cop4", --Patrol
@@ -154,14 +153,14 @@ for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special'
 	local lowercaseUnit = string.lower( v )
 	local conVarKey = string.format( '%s_voice', lowercaseUnit )
 	local conVarKeyVoiceProfile = string.format( '%s_voiceprofile', lowercaseUnit )
-	TOOL.ClientConVar[conVarKey] = defaultvoicetable[index]
-	TOOL.ClientConVar[conVarKeyVoiceProfile] = "default"
+	conVarList[conVarKey] = defaultvoicetable[index]
+	conVarList[conVarKeyVoiceProfile] = "default"
 end
 
 for _, v in pairs( {'Misc', 'Dispatch'} ) do
 	local lowercaseType = string.lower( v )
 	local conVarKey = string.format( '%s_voiceprofile', lowercaseType )
-	TOOL.ClientConVar[conVarKey] = "default"
+	conVarList[conVarKey] = "default"
 end
 
 local unitsheat1 = {
@@ -236,61 +235,61 @@ for i = 1, MAX_HEAT_LEVEL do
 		
 		-------------------------------------------
 		if i == 1 then
-			TOOL.ClientConVar[conVarKey] = unitsheat1[index]
+			conVarList[conVarKey] = unitsheat1[index]
 		elseif i == 2 then
-			TOOL.ClientConVar[conVarKey] = unitsheat2[index]
+			conVarList[conVarKey] = unitsheat2[index]
 		elseif i == 3 then
-			TOOL.ClientConVar[conVarKey] = unitsheat3[index]
+			conVarList[conVarKey] = unitsheat3[index]
 		elseif i == 4 then
-			TOOL.ClientConVar[conVarKey] = unitsheat4[index]
+			conVarList[conVarKey] = unitsheat4[index]
 		elseif i == 5 then
-			TOOL.ClientConVar[conVarKey] = unitsheat5[index]
+			conVarList[conVarKey] = unitsheat5[index]
 		elseif i == 6 then
-			TOOL.ClientConVar[conVarKey] = unitsheat6[index]
+			conVarList[conVarKey] = unitsheat6[index]
 		else
-			TOOL.ClientConVar[conVarKey] = ""
+			conVarList[conVarKey] = ""
 		end
 
-		TOOL.ClientConVar[chanceConVarKey] = 100
+		conVarList[chanceConVarKey] = 100
 	end
 	
 	for _, conVar in pairs( HEAT_SETTINGS ) do
 		local conVarKey = conVar .. ((conVar == 'timetillnextheat' and timeTillNextHeatId) or i)
 		local check = (conVar == "timetillnextheat")
 		
-		TOOL.ClientConVar[conVarKey] = HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
+		conVarList[conVarKey] = HEAT_DEFAULTS[conVar][tostring( ( check and timeTillNextHeatId ) or i )] or 0
 	end
 end
 
-local conVarsDefault = TOOL:BuildConVarList()
-local conVarList = table.GetKeys(conVarsDefault)
-
 local LEGACY_CONVARS = {
-	["uvunitmanager_rhinos"] = {
-		Replacement = "uvunitmanager_unitsrhino",
+	["rhinos"] = {
+		Replacement = "unitsrhino",
 		HasNumber = true,
 	},
 }
 
 local PROTECTED_CONVARS = {
-	['uvunitmanager_selected_heat'] = true,
+	['selected_heat'] = true,
 }
 
 local DEFAULTS = {
-	['uvunitmanager_selected_heat'] = 1,
-	['uvunitmanager_minheat'] = 1,
-	['uvunitmanager_maxheat'] = 6
+	['selected_heat'] = 1,
+	['minheat'] = 1,
+	['maxheat'] = 6
 }
 
 local function _setConVar( cvar, value )
-	local valueType = type( value )
-	local cvarClass = GetConVar( cvar )
+	-- local valueType = type( value )
+	-- local cvarClass = GetConVar( cvar )
 
-	if valueType == 'number' then
-		cvarClass:SetFloat( value )
-	else
-		cvarClass:SetString( value )
-	end
+	-- if valueType == 'number' then
+	-- 	cvarClass:SetFloat( value )
+	-- else
+	-- 	cvarClass:SetString( value )
+	-- end
+	net.Start("UVUpdateSettings")
+	net.WriteTable({ ["unitvehicle_unit_" .. cvar] = value })
+	net.SendToServer()
 end
 
 UVUnitManagerTool = UVUnitManagerTool or {}
@@ -817,6 +816,71 @@ if CLIENT then
 		end
 	end
 
+	-- local NonUnitConVars = {
+	-- 	"maxheat",
+	-- 	"minheat",
+	-- }
+
+	--[[
+		- data is a table of convar names and values
+	]]
+	function UVUnitManagerLoadPresetV2(name, data)
+		local warned = false
+		local count = 0
+		local count1 = 0
+
+		for key, value in pairs(conVarList) do
+			local incomingData = data[key] or data["unitvehicle_unit_" .. key] or data["uvunitmanager_" .. key]
+
+			if string.match(key, "_chance") and not incomingData then
+				_setConVar( key, 100 ) -- MUST BE FIXED TO USE UVUPDATESETTINGS
+				continue 
+			end
+
+			if not incomingData and GetConVar(key) and not PROTECTED_CONVARS[key] then
+				_setConVar( key, DEFAULTS[key] or "" )
+			end
+		end
+
+		for incomingCV, incomingValue in pairs(data) do
+			-- local isOldFormat = string.match( incomingCV, "uvunitmanager_" )
+			-- incomingCV = isOldFormat and string.Split( incomingCV, "uvunitmanager_" )[2] or incomingCV
+			local variable = string.Split( incomingCV, "unitvehicle_unit_" )[2] or string.Split( incomingCV, "uvunitmanager_" )[2]
+
+			count1 = count1 + 1
+			--local cvNoNumber = string.sub( incomingCV, 1, string.len(incomingCV) - 1 )
+
+			local cvNoNumber = nil
+			local number = nil
+
+			local _incomingCV = variable
+
+			while string.match( _incomingCV:sub(-1), "%d" ) and _incomingCV ~= "" do
+				number = _incomingCV:sub( -1 )
+				cvNoNumber = _incomingCV:sub( 1, -2 )
+				_incomingCV = cvNoNumber
+			end
+
+			local numberIterator = 0
+
+			if LEGACY_CONVARS[_incomingCV] then
+				if not warned then
+					warned = true
+					local warning = string.format( language.GetPhrase "tool.uvunitmanager.presets.legacy.warning", name )
+					notification.AddLegacy( warning, NOTIFY_UNDO, 5 )
+				end
+
+				if LEGACY_CONVARS[_incomingCV].HasNumber then
+					_setConVar( LEGACY_CONVARS[_incomingCV].Replacement .. number, incomingValue  )
+				else
+					_setConVar( LEGACY_CONVARS[_incomingCV].Replacement, incomingValue )
+				end
+			elseif not PROTECTED_CONVARS[variable] then
+				_setConVar( variable, incomingValue )
+			end
+		end
+	end
+
 	function UVUnitManagerLoadPreset(name, data)
 		--print(#data)
 		local warned = false
@@ -934,8 +998,8 @@ if CLIENT then
 			convar_table['unitvehicle_unit_pursuittech_shockram'] = GetConVar('uvunitmanager_pursuittech_shockram'):GetInt()
 			convar_table['unitvehicle_unit_pursuittech_gpsdart'] = GetConVar('uvunitmanager_pursuittech_gpsdart'):GetInt()
 			
-			convar_table['unitvehicle_minheatlevel'] = GetConVar('uvunitmanager_minheat'):GetInt()
-			convar_table['unitvehicle_maxheatlevel'] = GetConVar('uvunitmanager_maxheat'):GetInt()
+			convar_table['unitvehicle_unit_minheat'] = GetConVar('uvunitmanager_minheat'):GetInt()
+			convar_table['unitvehicle_unit_maxheat'] = GetConVar('uvunitmanager_maxheat'):GetInt()
 			
 			convar_table['unitvehicle_unit_helicoptermodel'] = GetConVar('uvunitmanager_helicoptermodel'):GetString()
 			convar_table['unitvehicle_unit_helicopterspikestrip'] = GetConVar('uvunitmanager_helicopterspikestrip'):GetInt()

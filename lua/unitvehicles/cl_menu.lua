@@ -124,7 +124,7 @@ UVMenu.Main = function()
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
 				{ type = "label", text = "/// DEBUGGING ///", sv = true },
-				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end },
+				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
 				{ type = "info", text = " \n \n \n", sv = true },
 				
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
@@ -1036,18 +1036,18 @@ end
 UVMenu.HeatManager = function()
     local tabs = {}
 
-    -- Presets tab -- Uncomment once it works
-    -- table.insert(tabs, {
-        -- TabName = "#uv.hm.presets",
-        -- { type = "presets", preset = "units" }
-    -- })
+    -- Uncomment once it works
+    table.insert(tabs, {
+        TabName = "#uv.hm.presets",
+        { type = "presets", preset = "units" }
+    })
 
     -- General settings tab
     table.insert(tabs, {
         TabName = "#uv.settings.general",
-		{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "uvunitmanager_timetillnextheatenabled", sv = true },
-		{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "unitvehicle_minheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "unitvehicle_maxheatlevel", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+		{ type = "bool", text = "#uv.hm.timedhl", desc = "uv.hm.timedhl.desc", convar = "unitvehicle_unit_timetillnextheatenabled", sv = true },
+		{ type = "slider", text = "#uv.hm.minhl", desc = "uv.hm.minhl.desc", convar = "unitvehicle_unit_minheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.hm.maxhl", desc = "uv.hm.maxhl.desc", convar = "unitvehicle_unit_maxheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
 
 		{ type = "label", text = "#uv.hm.commander" },
 		{ type = "bool", text = "#uv.hm.commander.solo", desc = "uv.hm.commander.solo.desc", convar = "unitvehicle_unit_onecommander", sv = true },

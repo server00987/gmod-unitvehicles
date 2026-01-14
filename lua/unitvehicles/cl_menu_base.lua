@@ -2062,6 +2062,19 @@ function UV.BuildSetting(parent, st, descPanel)
 						else
 							GetConVar(st.voicevar):SetString( table.concat(newList, ",") )
 						end
+
+						if self.Selected then
+							if folder == "cross" and profile == "nfs most wanted 2005" then
+								surface.PlaySound("ui/uvcross.mp3")
+							else
+								local files = file.Find("sound/chatter2/" .. profile .. "/" .. folder .. "/onscene/*", "GAME")
+								table.Shuffle(files)
+
+								if next(files) then
+									surface.PlaySound("chatter2/" .. profile .. "/" .. folder .. "/onscene/" .. files[1])
+								end
+							end
+						end
 					end
 
 					btn.OnCursorEntered = function()
@@ -2125,6 +2138,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		-- Profile select
 		profileCombo.OnSelect = function(_, val, data)
 			if not data or data == "" then return end
+			if scroll then scroll:Clear() end
 			profileCombo:SetValue(data)
 
 			if st.sv and string.match(st.profilevar, "unitvehicle_") then
@@ -2135,7 +2149,17 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar(st.profilevar):SetString( data )
 			end
 
-			refreshList(data)
+			if st.voicevar and string.match(st.voicevar, "unitvehicle_") and st.sv then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [st.voicevar] = "" })
+				net.SendToServer()
+			else
+				GetConVar(st.voicevar):SetString( "" )
+			end
+			
+			timer.Simple(0.1, function()
+				refreshList(data)
+			end)
 		end
 
 		left.OnCursorEntered = function()
@@ -2218,17 +2242,23 @@ function UV.BuildSetting(parent, st, descPanel)
 		timer.Simple(0, function()
 			if not IsValid(profileCombo) then return end
 			local profile = profileCVar and profileCVar:GetString()
-			if profile and profile ~= "" and profiles[profile] then
+			if profile and profile ~= "" then
 				profileCombo:SetValue(profile)
 				refreshList(profile)
-			else
-				for name in pairs(profiles) do
-					profileCombo:SetValue(name)
-					-- RunConsoleCommand(profileCVar:GetName(), name)
-					profileCVar:SetString( name )
-					refreshList(name)
-					break
-				end
+			-- else
+			-- 	for name in pairs(profiles) do
+			-- 		profileCombo:SetValue(name)
+			-- 		-- RunConsoleCommand(profileCVar:GetName(), name)
+			-- 		if st.sv and string.match(st.profilevar, "unitvehicle_") then
+			-- 			net.Start("UVUpdateSettings")
+			-- 			net.WriteTable({ [st.profilevar] = name })
+			-- 			net.SendToServer()
+			-- 		else
+			-- 			profileCVar:SetString( name )
+			-- 		end
+			-- 		refreshList(name)
+			-- 		break
+			-- 	end
 			end
 		end)
 
@@ -2291,7 +2321,31 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			btn.DoClick = function(self)
 				if st.preset == 'units' then
-					UVUnitManagerLoadPreset(name, preset)
+					--UVUnitManagerLoadPresetV2(name, preset)
+					--UVMenu.CloseCurrentMenu()
+					UVMenu.CurrentMenu = UVMenu:Open({
+						Name = " ",
+						Width  = UV.ScaleW(870),
+						Height = UV.ScaleH(260),
+						HideCloseButton = true,
+						UnfocusClose = false,
+						Tabs = {
+							{ TabName = "#uv.hm.presets.warning", 
+								{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ), centered = true },
+								{ type = "button", text = "#openurl.yes", func = 
+								function(self2)
+									UVMenu.OpenMenu(UVMenu.HeatManager)
+								end
+								},
+								{ type = "button", text = "#openurl.nope", func = 
+								function(self2)
+									UVMenu.OpenMenu(UVMenu.HeatManager)
+								end
+								},
+							}
+
+						}
+					})
 				end
 			end
 		end
@@ -2374,7 +2428,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 			local str = table.concat(list, " ")
 
-			if #str > 256 then
+			if #str > 1000 then -- used to be 256, you can set this to higher although you probably shouldn't
 				warningPanel:SetText("/// Too many units selected! ///")
 				warningPanel:SetTall(UV.ScaleH(20))
 				panel:SetTall(originalTall + UV.ScaleH(20))
