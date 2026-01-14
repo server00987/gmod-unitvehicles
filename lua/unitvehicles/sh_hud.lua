@@ -265,8 +265,8 @@ if CLIENT then
 
 	UV.DebugRes = nil
 	-- Uncomment if you want to debug certain screen resolutions. Below are the resolutions for 16:9:
-	-- UV.DebugRes = { w = 1280, h = 720 } -- 16:9 720p
-	-- UV.DebugRes = { w = 640, h = 480 } -- 16:9 480p
+	-- UV.DebugRes = { w = 1280, h = 720 } -- 16:9 720p (!! Bare Minimum !!)
+	-- UV.DebugRes = { w = 640, h = 480 } -- 16:9 480p (For testing - never work with this as a baseline)
 	
 	function UV_GetW()
 		return UV.DebugRes and UV.DebugRes.w or ScrW()

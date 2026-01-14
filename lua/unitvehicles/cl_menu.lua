@@ -119,7 +119,6 @@ UVMenu.Main = function()
 		Height = UV.ScaleH(760),
 		Description = true,
 		UnfocusClose = true,
-		BindPanel = true,
 		Tabs = {
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
@@ -144,7 +143,7 @@ UVMenu.Main = function()
 				{ type = "label", text = "#uv.menu.pnotes" },
 				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
 				
-				{ type = "info", text = UV.PNotes[UV.CurVersion].Text, centered = true },
+				{ type = "info", text = UV.PNotes[UV.CurVersion].Text },
 				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
 			},
 			
@@ -533,6 +532,7 @@ UVMenu.Credits = function()
 		Name = " ",
 		Width  = UV.ScaleW(500),
 		Height = UV.ScaleH(700),
+		DynamicHeight = true,
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.credits", Icon = "unitvehicles/icons_settings/info.png",
@@ -555,6 +555,7 @@ UVMenu.RaceManager = function()
 		Name = " ",
 		Width  = UV.ScaleW(580),
 		Height = UV.ScaleH(380),
+		DynamicHeight = true,
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.rm",
@@ -605,6 +606,7 @@ UVMenu.RaceManagerSettings = function()
 		Name = " ",
 		Width  = UV.ScaleW(900),
 		Height = UV.ScaleH(600),
+		DynamicHeight = true,
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -639,7 +641,6 @@ local function extractFullRaceName( headerSplit )
 
 	return raceName
 end
-
 
 local function ParseRaceFile(path)
 	local content = file.Read(path, "DATA")
@@ -729,8 +730,9 @@ UVMenu.RaceManagerTrackSelect = function()
 
 	UVMenu:Open({
 		Name = " ",
-		Width  = UV.ScaleW(580),
+		Width  = UV.ScaleW(690),
 		Height = UV.ScaleH(705),
+		DynamicHeight = true,
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -782,6 +784,7 @@ UVMenu.RaceManagerStartRace = function()
 		Name = " ",
 		Width  = UV.ScaleW(960),
 		Height = UV.ScaleH(325),
+		DynamicHeight = true,
 		Description = true,
 		UnfocusClose = true,
 		Tabs = {
@@ -875,6 +878,7 @@ function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 		Name = " ",
 		Width  = UV.ScaleW(580),
 		Height = UV.ScaleH(705),
+		DynamicHeight = true,
 		-- Description = true,
 		UnfocusClose = false,
 
@@ -891,14 +895,15 @@ end
 UVMenu.WreckedDebrief = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
-		Width  = UV.ScaleW(870),
+		Width  = UV.ScaleW(580),
 		Height = UV.ScaleH(300),
+		DynamicHeight = true,
 		UnfocusClose = false,
 		HideCloseButton = true,
 		Tabs = {
 			{ TabName = "#uv.chase.wrecked", Icon = "unitvehicles/icons_settings/display.png",
 
-				{ type = "infosimple", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2"), centered = true },
+				{ type = "infosimple", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2") },
 				{ type = "button", text = "#uv.chase.wrecked.rejoin", playsfx = "clickopen", func = 
 				function(self2)
 					net.Start("UVHUDRespawnInUVGetInfo")
@@ -929,13 +934,14 @@ UVMenu.RaceInvite = function()
 		Name = " ",
 		Width  = UV.ScaleW(870),
 		Height = UV.ScaleH(360),
+		DynamicHeight = true,
 		UnfocusClose = false,
 		HideCloseButton = true,
 		Tabs = {
 			{ TabName = "#uv.race.invite", Icon = "unitvehicles/icons_settings/display.png",
 
-				{ type = "infosimple", text = language.GetPhrase("uv.race.invite.desc") .. "\n" .. language.GetPhrase("uv.race.invite.desc2"), centered = true },
-				{ type = "infosimple", text = string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ) .. "\n" .. string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), centered = true },
+				{ type = "infosimple", text = language.GetPhrase("uv.race.invite.desc") .. "\n" .. language.GetPhrase("uv.race.invite.desc2") },
+				{ type = "infosimple", text = string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ) .. "\n" .. string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ) },
 				{ type = "button", text = "#uv.race.invite.accept", func = 
 				function(self2)
 					net.Start("uvrace_invite")
@@ -990,7 +996,7 @@ local function BuildPatchNoteTabs()
             { type = "label", text = note.Date },
 			
 			{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. version .. ".png" },
-            { type = "info", text = note.Text, centered = true },
+            { type = "info", text = note.Text },
         })
     end
 
