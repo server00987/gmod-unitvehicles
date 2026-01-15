@@ -2282,17 +2282,12 @@ function UV.BuildSetting(parent, st, descPanel)
 		scroll:DockMargin(0, 6, 0, 0)
 		scroll.Paint = nil
 
+		local presetName = ""
+		local textbox = nil
+
 		local presetArray = presets.GetTable(st.preset)
 
-		local buttonNames = {}
-		for name, _ in pairs(presetArray) do
-			table.insert(buttonNames, name)
-		end
-		table.sort(buttonNames, function(a, b)
-			return tostring(a):lower() < tostring(b):lower()
-		end)
-
-		for _, name in ipairs(buttonNames) do
+		local function addButton(name)
 			local preset = presetArray[name]
 			local btn = scroll:Add("DButton")
 			btn:Dock(TOP)
@@ -2301,6 +2296,9 @@ function UV.BuildSetting(parent, st, descPanel)
 			btn:SetText("")
 
 			btn.Paint = function(self, w, h)
+				--btn:SetVisible(string.Trim(presetName) == "" or string.match(name:lower(), presetName:lower()))
+				if not presetArray[name] then btn:Remove() return end
+
 				local hovered = self:IsHovered()
 				local default = Color( 
 					GetConVar("uvmenu_col_button_r"):GetInt(),
@@ -2348,6 +2346,217 @@ function UV.BuildSetting(parent, st, descPanel)
 					})
 				end
 			end
+
+			btn.DoRightClick = function(self)
+				textbox:SetValue(name)
+				presetName = name
+			end
+		end
+
+		local function refreshButtons()
+			scroll:Clear()
+
+			local buttonNames = {}
+			for name, _ in pairs(presetArray) do
+				table.insert(buttonNames, name)
+			end
+			table.sort(buttonNames, function(a, b)
+				return tostring(a):lower() < tostring(b):lower()
+			end)
+	
+			for _, name in ipairs(buttonNames) do
+				addButton( name )
+			end
+		end
+
+		refreshButtons()
+
+		local exportPanel = vgui.Create("DButton", panel)
+		exportPanel:Dock(BOTTOM)
+		exportPanel:DockMargin(6, 6, 6, 6)
+		exportPanel:SetWide(UV.ScaleW(450))
+		exportPanel:SetText(" ")
+		function exportPanel:PerformLayout()
+			local text = language.GetPhrase("uv.hm.presets.export")
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w * 0.95))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
+		exportPanel.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+			)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+			)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.export"), w * 0.95, w*0.5, nil, true)
+		end
+
+		exportPanel.DoClick = function(self)
+			if string.Trim(presetName) ~= "" then
+				UVUnitManagerExportPreset(presetName)
+			else
+				notification.AddLegacy("Preset name is required!", NOTIFY_UNDO, 5)
+			end
+		end
+
+		--
+
+		local panelBottom = vgui.Create("DPanel", panel)
+		panelBottom:Dock(BOTTOM)
+		panelBottom:DockMargin(6, 6, 6, 6)
+		panelBottom:SetTall(UV.ScaleH(100))
+		panelBottom.Paint = function(self, w, h)
+			--draw.RoundedBox(4, 0, 0, w, h, Color(119,119,119,200))
+		end
+
+		--
+
+		textbox = vgui.Create("DTextEntry", panelBottom)
+		textbox:Dock(TOP)
+		textbox:DockMargin(6, 6, 6, 6)
+		textbox:SetWide(UV.ScaleW(250))
+		textbox:SetTall(UV.ScaleH(35))
+		textbox:SetFont("UVSettingsFont")
+		textbox:SetTextColor(color_white)
+		textbox:SetHighlightColor(Color(58,193,0))
+		textbox:SetCursorColor(Color(58,193,0))
+		textbox:SetPlaceholderColor( Color(174, 174, 174) )
+		textbox.Paint = function(self2, w, h)
+			draw.RoundedBox(4, 0, 0, w, h, Color(119,119,119,200))
+			self2:DrawTextEntryText(color_white, Color(58,193,0), color_white)
+			if not self2:IsEditing() and self2:GetText() == "" then
+				draw.SimpleText(
+					"#uv.hm.presets.presetname",
+					self2:GetFont(),
+					8,
+					h / 2,
+					self2:GetPlaceholderColor(),
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_CENTER
+				)
+			end
+		end
+
+		textbox.OnTextChanged = function(self)
+			presetName = self:GetValue()
+		end
+
+		local typing = false
+
+		textbox.OnGetFocus = function()
+			typing = true
+			if IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(true)
+			end
+		end
+
+		textbox.OnLoseFocus = function()
+			typing = false
+			if IsValid(UV.SettingsFrame) then
+				UV.SettingsFrame:SetKeyboardInputEnabled(false)
+			end
+		end
+
+		--
+
+		local saveBtn = vgui.Create("DButton", panelBottom)
+		saveBtn:Dock(RIGHT)
+		saveBtn:DockMargin(6, 6, 6, 6)
+		saveBtn:SetWide(UV.ScaleW(300))
+		saveBtn:SetTall(UV.ScaleH(35))
+		saveBtn:SetText(" ")
+
+		saveBtn.DoClick = function(self)
+			presetName = textbox:GetValue()
+			
+			if st.preset == 'units' then
+				local data = {}
+
+				for key, value in pairs(UVUnitsConVars) do
+					local newKey = 'unitvehicle_unit_' .. key
+					local convar = GetConVar(newKey)
+					if convar then
+						data[newKey] = convar:GetString()
+					end
+				end
+
+				if string.Trim(presetName) ~= "" then
+					presets.Add(st.preset, presetName, data)
+					presetArray[presetName] = data
+					refreshButtons()
+					notification.AddLegacy("Preset saved successfully!", NOTIFY_UNDO, 5)
+				else
+					notification.AddLegacy("Preset name is required!", NOTIFY_UNDO, 5)
+				end
+			end
+		end
+
+		saveBtn.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+			)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+			)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.save"), w * 0.95, w*0.5, nil, true)
+		end
+
+		--
+
+		local deleteBtn = vgui.Create("DButton", panelBottom)
+		deleteBtn:Dock(LEFT)
+		deleteBtn:DockMargin(6, 6, 6, 6)
+		deleteBtn:SetWide(UV.ScaleW(300))
+		deleteBtn:SetTall(UV.ScaleH(35))
+		deleteBtn:SetText(" ")
+
+		deleteBtn.DoClick = function(self)
+			if string.Trim(presetName) ~= "" then
+				if presets.Exists(st.preset, presetName) then 
+					presets.Remove(st.preset, presetName)
+					presetArray[presetName] = nil
+					notification.AddLegacy("Preset deleted successfully!", NOTIFY_UNDO, 5)
+				end			
+			end
+		end
+
+		deleteBtn.Paint = function(self, w, h)
+			local hovered = self:IsHovered()
+			local default = Color( 
+				GetConVar("uvmenu_col_button_r"):GetInt(),
+				GetConVar("uvmenu_col_button_g"):GetInt(),
+				GetConVar("uvmenu_col_button_b"):GetInt(),
+				GetConVar("uvmenu_col_button_a"):GetInt()
+			)
+			local hover = Color( 
+				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+			)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
+			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.delete"), w * 0.95, w*0.5, nil, true)
 		end
 
 		return panel
@@ -2590,6 +2799,20 @@ function UV.BuildSetting(parent, st, descPanel)
 				refreshLists()
 			end
 		end)
+
+		return panel
+	end
+
+	if st.type == "textbox" then
+		local panel = vgui.Create("DTextEntry", parent)
+		panel:Dock(TOP)
+		panel:DockMargin(6, 6, 6, 6)
+		panel:SetTall(UV.ScaleH(40))
+		panel:SetText(GetConVar(st.convar):GetString())
+
+		panel.OnTextChanged = function(self)
+			GetConVar(st.convar):SetString(self:GetValue())
+		end
 
 		return panel
 	end

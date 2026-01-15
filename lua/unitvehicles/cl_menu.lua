@@ -123,9 +123,9 @@ UVMenu.Main = function()
 		Tabs = {
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
-				{ type = "label", text = "/// DEBUGGING ///", sv = true },
-				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
-				{ type = "info", text = " \n \n \n", sv = true },
+				-- { type = "label", text = "/// DEBUGGING ///", sv = true },
+				-- { type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
+				-- { type = "info", text = " \n \n \n", sv = true },
 				
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
@@ -1039,7 +1039,7 @@ UVMenu.HeatManager = function()
     -- Uncomment once it works
     table.insert(tabs, {
         TabName = "#uv.hm.presets",
-        { type = "presets", preset = "units" }
+        { type = "presets", preset = "units" },
     })
 
     -- General settings tab

@@ -2498,6 +2498,7 @@ else -- CLIENT Settings | HUD/Options
 	}
 
 	local conVarList = {}
+	UVUnitsConVars = conVarList
 	
 	conVarList["selected_heat"] = 1
 	
@@ -2745,6 +2746,70 @@ else -- CLIENT Settings | HUD/Options
 			end
 		end
 	end
+
+	function UVUnitManagerExportPreset( name )
+		local jsonArray = {
+			['Name'] = name,
+			['Data'] = {}
+		}
+
+		for cVarKey, _ in pairs( conVarList ) do
+			if table.HasValue( PROTECTED_CONVARS, cVarKey ) then continue end
+
+			local newKey = 'unitvehicle_unit_' .. cVarKey
+			local cVar = GetConVar( newKey )
+			if cVar then
+				jsonArray.Data[newKey] = cVar:GetString()
+			end
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export' )
+		end
+
+		if not file.IsDir( 'unitvehicles/preset_export/uvunitmanager', 'DATA' ) then
+			file.CreateDir( 'unitvehicles/preset_export/uvunitmanager' )
+		end
+
+		file.Write( 'unitvehicles/preset_export/uvunitmanager/' .. name .. '.json', util.TableToJSON( jsonArray ) )
+		chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/uvunitmanager/" .. name .. ".json" )
+	end
+
+	if not file.IsDir( 'data/unitvehicles/preset_import', 'GAME' ) then
+		file.CreateDir( 'unitvehicles/preset_import' )
+	end
+
+	if not file.IsDir( 'data/unitvehicles/preset_import/uvunitmanager', 'GAME' ) then
+		file.CreateDir( 'unitvehicles/preset_import/uvunitmanager' )
+	end
+
+	timer.Simple(3, function()
+		local importFiles, _ = file.Find( 'data/unitvehicles/preset_import/uvunitmanager/*', 'GAME' )
+		
+		for _, impFile in pairs( importFiles ) do
+			local success = ProtectedCall(function()
+				local data = util.JSONToTable( file.Read( 'data/unitvehicles/preset_import/uvunitmanager/' .. impFile, 'GAME' ) )
+				
+				if type(data) == 'table' and (data.Name and data.Data) then
+					presets.Add( 
+						'units', 
+						data.Name, 
+						data.Data 
+					)
+				else
+					error('Malformed JSON data!')
+				end
+				
+				file.Delete( 'unitvehicles/preset_import/uvunitmanager/' .. impFile, 'DATA' )
+			end)
+
+			if success then
+				MsgC( Color(0, 255, 0), "[Unit Vehicles (uvunitmanager)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!\n" )
+			else
+				MsgC( Color(255, 0, 0), "[Unit Vehicles (uvunitmanager)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!\n" )
+			end
+		end
+	end)
 
 	local function InitEntity( entIndex, creationId, entType )
 		local entity = Entity( entIndex )
