@@ -147,12 +147,12 @@ if CLIENT then
 				net.SendToServer() --Create Roadblock
 				
 				UVRoadblocksScrollPanel:Clear() 
-				UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
+				if RefreshRoadblockList then RefreshRoadblockList() end
 				RoadblocksAdjust:Close()
 				surface.PlaySound( "buttons/button15.wav" )
 
 			else
-				RoadblocksNameEntry:SetPlaceholderText( "#tool.uvpursuitbreaker.create.name.fill" )
+				RoadblocksNameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
@@ -161,7 +161,7 @@ if CLIENT then
 
 	net.Receive("UVRoadblocksRefresh", function( length )
 		UVRoadblocksScrollPanel:Clear()
-		UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
+		if RefreshRoadblockList then RefreshRoadblockList() end
 	end)
 
 	function UVRoadblocksGetSaves( panel )
@@ -231,24 +231,94 @@ if CLIENT then
 			Text = "#tool.uvroadblock.settings.roadblocks",
 		})
 
-		local Frame = vgui.Create( "DFrame" )
-		Frame:SetSize( 280, 320 )
-		Frame:SetTitle( "" )
-		Frame:SetVisible( true )
-		Frame:ShowCloseButton( false )
-		Frame:SetDraggable( false )
-		Frame.Paint = function( self, w, h )
-			draw.RoundedBox( 5, 0, 0, w, h, Color( 115, 115, 115, 255 ) )
-			draw.RoundedBox( 5, 1, 1, w - 2, h - 2, Color( 0, 0, 0) )
+		local selecteditem = nil
+
+		local Frame = vgui.Create("DPanel")
+		Frame:SetTall(320)
+		Frame.Paint = function(self, w, h)
+			draw.RoundedBox(5, 0, 0, w, h, Color(115,115,115))
+			draw.RoundedBox(5, 1, 1, w-2, h-2, Color(0,0,0))
 		end
 		CPanel:AddItem(Frame)
 
-		UVRoadblocksScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVRoadblocksScrollPanel:SetSize( 280, 320 )
-		UVRoadblocksScrollPanel:SetPos( 0, 0 )
+		UVRoadblocksScrollPanel = vgui.Create("DScrollPanel", Frame)
+		UVRoadblocksScrollPanel:Dock(FILL)
+		UVRoadblocksScrollPanel:DockMargin(4, 4, 4, 4)
 		
-		UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
+		local function RefreshRoadblockList()
+			UVRoadblocksScrollPanel:Clear()
+			selecteditem = nil
 
+			local files = file.Find("unitvehicles/roadblocks/"..game.GetMap().."/*.json", "DATA")
+
+			if #files == 0 then
+				local empty = vgui.Create("DLabel", UVRoadblocksScrollPanel)
+				empty:SetText("#uv.tool.novehicle")
+				empty:SetTextColor(Color(200,200,200))
+				empty:SetContentAlignment(5)
+				empty:Dock(TOP)
+				empty:SetTall(24)
+				return
+			end
+
+			for _, filename in ipairs(files) do
+				local btn = UVRoadblocksScrollPanel:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(24)
+				btn:SetText("")
+				btn.printname = filename
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
+					)
+
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, default)
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+					end
+
+					draw.SimpleText(filename, "UVSettingsFontSmall",
+						w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
+
+				btn.DoClick = function()
+					selecteditem = filename
+					SetClipboardText(filename)
+
+					if not LocalPlayer():IsSuperAdmin() then
+						notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
+						surface.PlaySound( "buttons/button10.wav" )
+						return
+					end
+
+					SetClipboardText(selecteditem)
+
+					net.Start("UVRoadblocksLoad")
+					net.WriteString(selecteditem)
+					net.SendToServer()
+					notification.AddLegacy( string.format( language.GetPhrase("tool.uvroadblock.loaded"), selecteditem ), NOTIFY_UNDO, 5 )
+					surface.PlaySound( "buttons/button15.wav" )
+				end
+			end
+		end
+
+		timer.Simple(0, RefreshRoadblockList)
+		
 		local MarkAll = vgui.Create( "DButton", CPanel )
 		MarkAll:SetText( "#tool.uvroadblock.markall" )
 		MarkAll:SetSize( 280, 20 )
@@ -259,21 +329,21 @@ if CLIENT then
 		end
 		CPanel:AddItem(MarkAll)
 
-		local LoadAll = vgui.Create( "DButton", CPanel )
-		LoadAll:SetText( "#tool.uvroadblock.load.all" )
-		LoadAll:SetSize( 280, 20 )
-		LoadAll.DoClick = function( self )
-			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#uv.superadmin", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
-				return
-			end
-			net.Start("UVRoadblocksLoadAll")
-			net.SendToServer()
-			notification.AddLegacy( "#uv.tool.loaded.all", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-		end
-		CPanel:AddItem(LoadAll)
+		-- local LoadAll = vgui.Create( "DButton", CPanel )
+		-- LoadAll:SetText( "#tool.uvroadblock.load.all" )
+		-- LoadAll:SetSize( 280, 20 )
+		-- LoadAll.DoClick = function( self )
+			-- if not LocalPlayer():IsSuperAdmin() then
+				-- notification.AddLegacy( "#uv.superadmin", NOTIFY_ERROR, 5 )
+				-- surface.PlaySound( "buttons/button10.wav" )
+				-- return
+			-- end
+			-- net.Start("UVRoadblocksLoadAll")
+			-- net.SendToServer()
+			-- notification.AddLegacy( "#uv.tool.loaded.all", NOTIFY_UNDO, 5 )
+			-- surface.PlaySound( "buttons/button15.wav" )
+		-- end
+		-- CPanel:AddItem(LoadAll)
 
 		local Refresh = vgui.Create( "DButton", CPanel )
 		Refresh:SetText( "#refresh" )
@@ -281,8 +351,7 @@ if CLIENT then
 		Refresh.DoClick = function( self )
 			UVRoadblocksScrollPanel:Clear()
 			selecteditem = nil
-			UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
-			-- notification.AddLegacy( "#tool.uvroadblock.refreshed", NOTIFY_UNDO, 5 )
+			RefreshRoadblockList()
 			surface.PlaySound( "buttons/button15.wav" )
 		end
 		CPanel:AddItem(Refresh)
@@ -296,12 +365,11 @@ if CLIENT then
 				file.Delete( "unitvehicles/roadblocks/"..game.GetMap().."/"..selecteditem )
 				notification.AddLegacy( string.format( language.GetPhrase("uv.tool.deleted"), selecteditem ), NOTIFY_UNDO, 5 )
 				surface.PlaySound( "buttons/button15.wav" )
-				-- Msg( "Roadblock "..selecteditem.." has been deleted!\n" )
 			end
 			
 			UVRoadblocksScrollPanel:Clear()
 			selecteditem = nil
-			UVRoadblocksGetSaves( UVRoadblocksScrollPanel )
+			RefreshRoadblockList()
 		end
 		CPanel:AddItem(Delete)
 

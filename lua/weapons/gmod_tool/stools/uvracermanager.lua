@@ -153,232 +153,21 @@ if CLIENT then
 					file.Write("unitvehicles/prop_vehicle_jeep/racers/"..Name..".txt", string.Implode("",shit) )
 				end
 
-				local baseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
-				if IsValid(UVRacerManagerTool.ScrollPanel) and UVRacerManagerTool.PopulateVehicleList then
-					UVRacerManagerTool.PopulateVehicleList(baseId)
+				if IsValid(UVRacerManagerTool.ScrollPanel) and UVRacerManagerTool.RefreshList then
+					UVRacerManagerTool.RefreshList()
 				end
 				RacerAdjust:Close()
 				
 				notification.AddLegacy( string.format( lang("uv.tool.saved"), Name ), NOTIFY_UNDO, 5 )
-				-- Msg( "Saved "..Name.." as a Racer!\n" )
-				
 				surface.PlaySound( "buttons/button15.wav" )
-				
 			else
-				RacerNameEntry:SetPlaceholderText( "!!! FILL ME UP !!!" )
+				RacerNameEntry:SetPlaceholderText( "#uv.tool.fillme" )
 				surface.PlaySound( "buttons/button10.wav" )
 			end
 			
 		end
 	end)
-	
-	function UVRacerManagerGetSaves( panel )
-		local saved_vehicles = file.Find("unitvehicles/simfphys/racers/*.txt", "DATA")
-		local index = 0
-		local highlight = false
-		local offset = 22
-		
-		for k,v in pairs(saved_vehicles) do
-			local printname = v
-			
-			if not selecteditem then
-				selecteditem = printname
-			end
-			
-			local Button = vgui.Create( "DButton", panel )
-			Button:SetText( printname )
-			Button:SetTextColor( Color( 255, 255, 255 ) )
-			Button:SetPos( 0,index * offset)
-			Button:SetSize( 280, offset )
-			Button.highlight = highlight
-			Button.printname = printname
-			Button.Paint = function( self, w, h )
-				
-				local c_selected = Color( 128, 185, 128, 255 )
-				local c_normal = self.highlight and Color( 108, 111, 114, 200 ) or Color( 77, 80, 82, 200 )
-				local c_hovered = Color( 41, 128, 185, 255 )
-				local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
-				
-				draw.RoundedBox( 5, 1, 1, w - 2, h - 1, c_ )
-			end
-			Button.DoClick = function( self )
-				selecteditem = self.printname
-				if isstring(selecteditem) then
-					
-					SetClipboardText(selecteditem)
-					
-					local DataString = file.Read( "unitvehicles/simfphys/racers/"..selecteditem, "DATA" )
-					
-					local words = string.Explode( "", DataString )
-					local shit = {}
-					
-					for k, v in pairs( words ) do
-						shit[k] =  string.char( string.byte( v ) - 20 )
-					end
-					
-					local Data = string.Explode( "#", string.Implode("",shit) )
-					
-					table.Empty( UVRacerTOOLMemory )
-					
-					for _,v in pairs(Data) do
-						local Var = string.Explode( "=", v )
-						local name = Var[1]
-						local variable = Var[2]
-						
-						if name and variable then
-							if name == "SubMaterials" then
-								UVRacerTOOLMemory[name] = {}
-								
-								local submats = string.Explode( ",", variable )
-								for i = 0, (table.Count( submats ) - 1) do
-									UVRacerTOOLMemory[name][i] = submats[i+1]
-								end
-							else
-								UVRacerTOOLMemory[name] = variable
-							end
-						end
-					end
-					
-					net.Start("UVRacerManagerGetRacerInfo")
-					net.WriteTable( UVRacerTOOLMemory )
-					net.SendToServer()
-				end
-			end
-			
-			index = index + 1
-			highlight = not highlight
-		end
-	end
-	
-	function UVRacerManagerGetSavesGlide( panel )
-		local saved_vehicles = file.Find("unitvehicles/glide/racers/*.json", "DATA")
-		local index = 0
-		local highlight = false
-		local offset = 22
-		
-		for k,v in pairs(saved_vehicles) do
-			local printname = v
-			
-			if not selecteditem then
-				selecteditem = printname
-			end
-			
-			local Button = vgui.Create( "DButton", panel )
-			Button:SetText( printname )
-			Button:SetTextColor( Color( 255, 255, 255 ) )
-			Button:SetPos( 0,index * offset)
-			Button:SetSize( 280, offset )
-			Button.highlight = highlight
-			Button.printname = printname
-			Button.Paint = function( self, w, h )
-				
-				local c_selected = Color( 128, 185, 128, 255 )
-				local c_normal = self.highlight and Color( 108, 111, 114, 200 ) or Color( 77, 80, 82, 200 )
-				local c_hovered = Color( 41, 128, 185, 255 )
-				local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
-				
-				draw.RoundedBox( 5, 1, 1, w - 2, h - 1, c_ )
-			end
-			Button.DoClick = function( self )
-				selecteditem = self.printname
-				if isstring(selecteditem) then
-					
-					SetClipboardText(selecteditem)
-					
-					local JSONData = file.Read( "unitvehicles/glide/racers/"..selecteditem, "DATA" )
-					if not JSONData then return end
-					
-					UVRacerTOOLMemory = util.JSONToTable(JSONData, true)
-					
-					net.Start("UVRacerManagerGetRacerInfo")
-					net.WriteTable( UVRacerTOOLMemory )
-					net.SendToServer()
-				end
-			end
-			
-			index = index + 1
-			highlight = not highlight
-		end
-	end
-	
-	function UVRacerManagerGetSavesJeep( panel )
-		local saved_vehicles = file.Find("unitvehicles/prop_vehicle_jeep/racers/*.txt", "DATA")
-		local index = 0
-		local highlight = false
-		local offset = 22
-		
-		for k,v in pairs(saved_vehicles) do
-			local printname = v
-			
-			if not selecteditem then
-				selecteditem = printname
-			end
-			
-			local Button = vgui.Create( "DButton", panel )
-			Button:SetText( printname )
-			Button:SetTextColor( Color( 255, 255, 255 ) )
-			Button:SetPos( 0,index * offset)
-			Button:SetSize( 280, offset )
-			Button.highlight = highlight
-			Button.printname = printname
-			Button.Paint = function( self, w, h )
-				
-				local c_selected = Color( 128, 185, 128, 255 )
-				local c_normal = self.highlight and Color( 108, 111, 114, 200 ) or Color( 77, 80, 82, 200 )
-				local c_hovered = Color( 41, 128, 185, 255 )
-				local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
-				
-				draw.RoundedBox( 5, 1, 1, w - 2, h - 1, c_ )
-			end
-			Button.DoClick = function( self )
-				selecteditem = self.printname
-				if isstring(selecteditem) then
-					
-					SetClipboardText(selecteditem)
-					
-					local DataString = file.Read( "unitvehicles/prop_vehicle_jeep/racers/"..selecteditem, "DATA" )
-					
-					local words = string.Explode( "", DataString )
-					local shit = {}
-					
-					for k, v in pairs( words ) do
-						shit[k] =  string.char( string.byte( v ) - 20 )
-					end
-					
-					local Data = string.Explode( "#", string.Implode("",shit) )
-					
-					table.Empty( UVRacerTOOLMemory )
-					
-					for _,v in pairs(Data) do
-						local Var = string.Explode( "=", v )
-						local name = Var[1]
-						local variable = Var[2]
-						
-						if name and variable then
-							if name == "SubMaterials" then
-								UVRacerTOOLMemory[name] = {}
-								
-								local submats = string.Explode( ",", variable )
-								for i = 0, (table.Count( submats ) - 1) do
-									UVRacerTOOLMemory[name][i] = submats[i+1]
-								end
-							else
-								UVRacerTOOLMemory[name] = variable
-							end
-						end
-					end
-					
-					net.Start("UVRacerManagerGetRacerInfo")
-					net.WriteTable( UVRacerTOOLMemory )
-					net.SendToServer()
-				end
-			end
-			
-			index = index + 1
-			highlight = not highlight
-		end
-	end
-	
+
 	function TOOL.BuildCPanel(CPanel)
 		local lang = language.GetPhrase
 		
@@ -397,159 +186,255 @@ if CLIENT then
 			print("Created a Default Vehicle Base data file for the Racer Vehicles!")
 		end
 
-		-- Unified Vehicle Base UI
+		-- Unified Racer Base UI
 		local vehicleBases = {
-			{ id = 1, name = "HL2 Jeep", func = uvracermanagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/racers/", type = "txt" },
-			{ id = 2, name = "Simfphys", func = uvracermanagerGetSaves, path = "unitvehicles/simfphys/racers/", type = "txt" },
-			{ id = 3, name = "Glide", func = uvracermanagerGetSavesGlide, path = "unitvehicles/glide/racers/", type = "json" }
+			{ id = 1, name = "HL2", path = "unitvehicles/prop_vehicle_jeep/racers/", type = "txt"  },
+			{ id = 2, name = "Simfphys", path = "unitvehicles/simfphys/racers/", type = "txt"  },
+			{ id = 3, name = "Glide", path = "unitvehicles/glide/racers/", type = "json" }
 		}
-		
+
+		local activeFilterBaseId = 0
+		local selecteditem = nil
+
 		CPanel:AddControl("Label", { Text = "#tool.uvracermanager.settings.desc" })
 
-		-- Scroll Panel
-		local FrameListPanel = vgui.Create("DFrame")
-		FrameListPanel:SetSize(280, 200)
-		FrameListPanel:SetTitle("")
-		FrameListPanel:SetVisible(true)
-		FrameListPanel:ShowCloseButton(false)
-		FrameListPanel:SetDraggable(false)
+		local FilterBar = vgui.Create("DPanel")
+		FilterBar:Dock(TOP)
+		FilterBar:SetTall(24)
+		FilterBar.Paint = nil
+
+		FilterBar.OnSizeChanged = function(self, w)
+			local btnWidth = w / 4
+			for _, child in ipairs(self:GetChildren()) do
+				if IsValid(child) then
+					child:SetWide(btnWidth)
+				end
+			end
+		end
+
+		CPanel:AddItem(FilterBar)
+
+		local function AddFilterButton(text, baseId)
+			local btn = vgui.Create("DButton", FilterBar)
+			btn:Dock(LEFT)
+			btn:SetText(" ")
+
+			btn.Paint = function(self, w, h)
+				local selected = (activeFilterBaseId == baseId)
+				local hovered  = self:IsHovered()
+
+				local default = Color(
+					GetConVar("uvmenu_col_button_r"):GetInt(),
+					GetConVar("uvmenu_col_button_g"):GetInt(),
+					GetConVar("uvmenu_col_button_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local active = Color(
+					GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local hover = Color(
+					GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_a"):GetInt()
+						* math.abs(math.sin(RealTime() * 4))
+				)
+
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, selected and active or default)
+				if hovered then
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+				end
+
+				draw.SimpleText(text, "UVSettingsFontSmall", w * 0.5, h * 0.5,
+					color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			btn.DoClick = function()
+				activeFilterBaseId = baseId
+				UVRacerManagerTool.RefreshList()
+			end
+		end
+
+		AddFilterButton("#all", 0)
+		AddFilterButton("HL2", 1)
+		AddFilterButton("Simfphys", 2)
+		AddFilterButton("Glide", 3)
+
+		local FrameListPanel = vgui.Create("DPanel")
+		FrameListPanel:SetTall(220)
 		FrameListPanel.Paint = function(self, w, h)
-			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
-			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+			draw.RoundedBox(5, 0, 0, w, h, Color(115,115,115))
+			draw.RoundedBox(5, 1, 1, w-2, h-2, Color(0,0,0))
 		end
 		CPanel:AddItem(FrameListPanel)
 
 		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
-		ScrollPanel:DockMargin(0, -25, 0, 0)
 		ScrollPanel:Dock(FILL)
+		ScrollPanel:DockMargin(4, 4, 4, 4)
 
-		-- Save this for later access by net.Receive
 		UVRacerManagerTool.ScrollPanel = ScrollPanel
 
-		-- Also store the population function, so we can call it from net.Receive
-		UVRacerManagerTool.PopulateVehicleList = function(baseId)
-			ScrollPanel:Clear()
-			selecteditem = nil
+		local function getAvailableRacers()
+			local entries = {}
 
 			for _, base in ipairs(vehicleBases) do
-				if base.id == baseId then
-					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
-					local index, highlight, offset = 0, false, 22
+				local files = file.Find(base.path .. "*." .. base.type, "DATA") or {}
+				for _, filename in ipairs(files) do
+					entries[#entries + 1] = {
+						filename = filename,
+						base     = base,
+						baseId   = base.id,
+						display  = "[ " .. base.name .. " ] " .. filename
+					}
+				end
+			end
 
-					if #savedVehicles == 0 then
-						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#uv.tool.novehicle")
-						emptyLabel:SetTextColor(Color(200, 200, 200))
-						emptyLabel:SetFont("DermaDefaultBold")
-						emptyLabel:SetContentAlignment(5)
-						emptyLabel:Dock(TOP)
-						emptyLabel:SetTall(offset)
-						return
+			return entries
+		end
+
+		function UVRacerManagerTool.RefreshList()
+			ScrollPanel:Clear()
+
+			local entries = getAvailableRacers()
+			if #entries == 0 then
+				local empty = vgui.Create("DLabel", ScrollPanel)
+				empty:SetText("#uv.tool.novehicle")
+				empty:SetTextColor(Color(200,200,200))
+				empty:SetContentAlignment(5)
+				empty:Dock(TOP)
+				empty:SetTall(24)
+				return
+			end
+
+			for _, entry in ipairs(entries) do
+				if activeFilterBaseId ~= 0 and entry.baseId ~= activeFilterBaseId then
+					continue
+				end
+
+				if not selecteditem then
+					selecteditem = entry.filename
+				end
+
+				local btn = ScrollPanel:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(24)
+				btn:SetText("")
+				btn.printname = entry.filename
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local active = Color(
+						GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
+					)
+
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h,
+						(selecteditem == self.printname) and active or default)
+
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
 					end
 
-					for _, v in ipairs(savedVehicles) do
-						local printname = v
-						if not selecteditem then selecteditem = v end
+					draw.SimpleText(entry.display, "UVSettingsFontSmall",
+						w * 0.05, h * 0.5, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
 
-						local Button = vgui.Create("DButton", ScrollPanel)
-						Button:SetText(printname)
-						Button:SetTextColor(Color(255, 255, 255))
-						Button:Dock(TOP)
-						Button:SetTall(offset)
-						Button:DockMargin(0, 0, 0, 2)
+				btn.DoClick = function()
+					selecteditem = entry.filename
+					SetClipboardText(selecteditem)
 
-						Button.highlight = highlight
-						Button.printname = v
+					if entry.base.type == "json" then
+						UVTOOLMemory = util.JSONToTable(
+							file.Read(entry.base.path .. selecteditem, "DATA"), true
+						)
+					else
+						local DataString = file.Read(entry.base.path .. selecteditem, "DATA")
+						local decoded = {}
 
-						Button.Paint = function(self, w, h)
-							local c_selected = Color(128, 185, 128, 255)
-							local c_normal = self.highlight and Color(108, 111, 114, 200) or Color(77, 80, 82, 200)
-							local c_hovered = Color(41, 128, 185, 255)
-							local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
-							draw.RoundedBox(5, 1, 1, w - 2, h - 1, c_)
+						for k, v in ipairs(string.Explode("", DataString)) do
+							decoded[k] = string.char(string.byte(v) - 20)
 						end
 
-						Button.DoClick = function(self)
-							selecteditem = self.printname
-							SetClipboardText(selecteditem)
-
-							if base.type == "json" then
-								UVTOOLMemory = util.JSONToTable(file.Read(base.path .. selecteditem, "DATA"), true)
-							else
-								local DataString = file.Read(base.path .. selecteditem, "DATA")
-								local words, decoded = string.Explode("", DataString), {}
-								for k, v in pairs(words) do decoded[k] = string.char(string.byte(v) - 20) end
-								local Data = string.Explode("#", string.Implode("", decoded))
-								table.Empty(UVTOOLMemory)
-								for _, v in pairs(Data) do
-									local Var = string.Explode("=", v)
-									local name, variable = Var[1], Var[2]
-									if name and variable then
-										if name == "SubMaterials" then
-											UVTOOLMemory[name] = {}
-											local submats = string.Explode(",", variable)
-											for i = 0, (table.Count(submats) - 1) do
-												UVTOOLMemory[name][i] = submats[i + 1]
-											end
-										else
-											UVTOOLMemory[name] = variable
-										end
-									end
-								end
+						table.Empty(UVTOOLMemory)
+						for _, v in ipairs(string.Explode("#", table.concat(decoded))) do
+							local name, variable = unpack(string.Explode("=", v))
+							if name and variable then
+								UVTOOLMemory[name] = variable
 							end
-
-							net.Start("UVRacerManagerGetRacerInfo")
-							net.WriteTable(UVTOOLMemory)
-							net.SendToServer()
 						end
-
-						index = index + 1
-						highlight = not highlight
 					end
-					break
+
+					net.Start("UVRacerManagerGetRacerInfo")
+					net.WriteTable(UVTOOLMemory)
+					net.SendToServer()
 				end
 			end
 		end
 
-		-- Initialize
-		UVRacerManagerTool.PopulateVehicleList(GetConVar("uvracermanager_vehiclebase"):GetInt())
+		timer.Simple(0, function()
+			if IsValid(ScrollPanel) then
+				UVRacerManagerTool.RefreshList()
+			end
+		end)
 
-		if not LocalPlayer():IsSuperAdmin() then return end -- Show settings only if you have permissions.
-		
-		-- Refresh Button
 		local RefreshBtn = vgui.Create("DButton")
 		RefreshBtn:SetText("#refresh")
 		RefreshBtn:SetSize(280, 20)
 		RefreshBtn.DoClick = function()
-			UVRacerManagerTool.PopulateVehicleList(GetConVar("uvracermanager_vehiclebase"):GetInt())
-			notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
+			UVRacerManagerTool.RefreshList()
 			surface.PlaySound("buttons/button15.wav")
 		end
 		CPanel:AddItem(RefreshBtn)
 
-		-- Delete Button
 		local DeleteBtn = vgui.Create("DButton")
 		DeleteBtn:SetText("#spawnmenu.menu.delete")
 		DeleteBtn:SetSize(280, 20)
 		DeleteBtn.DoClick = function()
-			local baseId = GetConVar("uvracermanager_vehiclebase"):GetInt()
-			local basePath, baseType
+			if not isstring(selecteditem) then return end
+
 			for _, base in ipairs(vehicleBases) do
-				if base.id == baseId then
-					basePath, baseType = base.path, base.type
-					break
+				if activeFilterBaseId == 0 or base.id == activeFilterBaseId then
+					if file.Exists(base.path .. selecteditem, "DATA") then
+						file.Delete(base.path .. selecteditem)
+						notification.AddLegacy(
+							string.format(language.GetPhrase("uv.tool.deleted"), selecteditem),
+							NOTIFY_UNDO, 5
+						)
+						surface.PlaySound("buttons/button15.wav")
+						break
+					end
 				end
 			end
-			if isstring(selecteditem) and basePath then
-				if file.Delete(basePath .. selecteditem) then
-					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.deleted"), selecteditem), NOTIFY_UNDO, 5)
-					surface.PlaySound("buttons/button15.wav")
-					-- Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
-				end
-			end
-			UVRacerManagerTool.PopulateVehicleList(baseId)
+
+			selecteditem = nil
+			UVRacerManagerTool.RefreshList()
 		end
 		CPanel:AddItem(DeleteBtn)
+
 
 		CPanel:AddControl("Label", { Text = "" }) -- General Settings
 		CPanel:AddControl("Label", { Text = "#uv.tweakinmenu" })

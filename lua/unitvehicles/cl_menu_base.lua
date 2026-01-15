@@ -2757,7 +2757,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					table.insert(entries, {
 						filename = filename, -- stored value
 						base  = base.name,
-						display  = filename,
+						display  = "[ " .. base.name .. " ] " .. filename,
 						baseId   = base.id
 					})
 				end
@@ -2818,9 +2818,7 @@ function UV.BuildSetting(parent, st, descPanel)
 						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
 					end
 
-					DrawWrappedText(self, entry.base, w * 0.4, w * 0.05, 0, nil, "UVSettingsFontSmall")
-					DrawWrappedText(self, "|", w * 0.1, w * 0.25, 0, nil, "UVSettingsFontSmall")
-					DrawWrappedText(self, entry.display, w * 0.75, w * 0.275, 0, nil, "UVSettingsFontSmall")
+					DrawWrappedText(self, entry.display, w * 0.95, w * 0.05, 0, nil, "UVSettingsFontSmall")
 				end
 
 				btn.DoClick = function()

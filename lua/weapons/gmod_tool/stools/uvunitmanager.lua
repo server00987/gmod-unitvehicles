@@ -22,86 +22,6 @@ local roadblocks = {}
 local helicopters = {}
 local bustspeed = {}
 
--- -- For ConVars, append the heat to the end of the ConVar string
--- local UnitSettings = {
--- 	['bountytime'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 10000000},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_bountytime',
--- 		ToolText = '#tool.uvunitmanager.settings.bounty.10s',
--- 		ToolTip = '#tool.uvunitmanager.settings.bounty.10s.desc'
--- 	},
--- 	['heatminimumbounty'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 10000000},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_heatminimumbounty',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.minbounty',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.minbounty.desc'
--- 	},
--- 	['maxunits'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 20},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_maxunits',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.maxunits',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.maxunits.desc'
--- 	},
--- 	['timetillnextheat'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {20, 600},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_timetillnextheat',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlvl.timed',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlvl.timed.desc'
--- 	},
--- 	['unitsavailable'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 150},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_unitsavailable',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.avaunits',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.avaunits.desc'
--- 	},
--- 	['bustspeed'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 100},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_bustspeed',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.bustspeed',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.bustspeed.desc'
--- 	},
--- 	['backuptimer'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 600},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_backuptimer',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.backuptime',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.backuptime.desc'
--- 	},
--- 	['cooldowntimer'] = {
--- 		Class = 'DNumSlider',
--- 		MinMax = {1, 600},
--- 		Decimals = 0,
--- 		ConVar = 'uvunitmanager_cooldowntimer',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.cooldowntime',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.cooldowntime.desc'
--- 	},
--- 	['roadblocks'] = {
--- 		Class = 'DCheckBoxLabel',
--- 		ConVar = 'uvunitmanager_roadblocks',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.roadblocks',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.roadblocks.desc'
--- 	},
--- 	['helicopters'] = {
--- 		Class = 'DCheckBoxLabel',
--- 		ConVar = 'uvunitmanager_helicopters',
--- 		ToolText = '#tool.uvunitmanager.settings.heatlevel.helicopter',
--- 		ToolTip = '#tool.uvunitmanager.settings.heatlevel.helicopter.desc'
--- 	}
--- }
-
 TOOL.ClientConVar['vehiclebase'] = 1
 
 local UIElements = {}
@@ -118,70 +38,6 @@ if SERVER then
 end
 
 if CLIENT then
-
-	-- local function Export( name )
-	-- 	local jsonArray = {
-	-- 		['Name'] = name,
-	-- 		['Data'] = {}
-	-- 	}
-
-	-- 	for _, cVarKey in pairs( conVarList ) do
-	-- 		if table.HasValue( PROTECTED_CONVARS, cVarKey ) then continue end
-
-	-- 		local cVar = GetConVar( cVarKey )
-	-- 		if cVar then
-	-- 			jsonArray.Data[cVarKey] = cVar:GetString()
-	-- 		end
-	-- 	end
-
-	-- 	if not file.IsDir( 'unitvehicles/preset_export', 'DATA' ) then
-	-- 		file.CreateDir( 'unitvehicles/preset_export' )
-	-- 	end
-
-	-- 	if not file.IsDir( 'unitvehicles/preset_export/uvunitmanager', 'DATA' ) then
-	-- 		file.CreateDir( 'unitvehicles/preset_export/uvunitmanager' )
-	-- 	end
-
-	-- 	file.Write( 'unitvehicles/preset_export/uvunitmanager/' .. name .. '.json', util.TableToJSON( jsonArray ) )
-	-- 	chat.AddText( Color( 0, 150, 0 ), "Your preset has been exported!\nDestination: data/unitvehicles/preset_export/uvunitmanager/" .. name .. ".json" )
-	-- end
-
-	-- if not file.IsDir( 'data/unitvehicles/preset_import', 'GAME' ) then
-	-- 	file.CreateDir( 'unitvehicles/preset_import' )
-	-- end
-
-	-- if not file.IsDir( 'data/unitvehicles/preset_import/uvunitmanager', 'GAME' ) then
-	-- 	file.CreateDir( 'unitvehicles/preset_import/uvunitmanager' )
-	-- end
-
-	-- timer.Simple(1, function()
-	-- 	local importFiles, _ = file.Find( 'data/unitvehicles/preset_import/uvunitmanager/*', 'GAME' )
-		
-	-- 	for _, impFile in pairs( importFiles ) do
-	-- 		local success = ProtectedCall(function()
-	-- 			local data = util.JSONToTable( file.Read( 'data/unitvehicles/preset_import/uvunitmanager/' .. impFile, 'GAME' ) )
-				
-	-- 			if type(data) == 'table' and (data.Name and data.Data) then
-	-- 				presets.Add( 
-	-- 					'units', 
-	-- 					data.Name, 
-	-- 					data.Data 
-	-- 				)
-	-- 			else
-	-- 				error('Malformed JSON data!')
-	-- 			end
-				
-	-- 			file.Delete( 'unitvehicles/preset_import/uvunitmanager/' .. impFile, 'DATA' )
-	-- 		end)
-
-	-- 		if success then
-	-- 			MsgC( Color(0, 255, 0), "[Unit Vehicles (uvunitmanager)]: Added \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!\n" )
-	-- 		else
-	-- 			MsgC( Color(255, 0, 0), "[Unit Vehicles (uvunitmanager)]: Failed to add \"" .. string.Split( impFile, '.json' )[1] .. "\" to the presets!\n" )
-	-- 		end
-	-- 	end
-	-- end)
-	
 	TOOL.Information = {
 		{ name = "info"},
 		{ name = "left" },
@@ -347,9 +203,8 @@ if CLIENT then
 					file.Write("unitvehicles/prop_vehicle_jeep/units/"..Name..".txt", string.Implode("",shit) )
 				end
 
-				local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
-				if IsValid(UVUnitManagerTool.ScrollPanel) and UVUnitManagerTool.PopulateVehicleList then
-					UVUnitManagerTool.PopulateVehicleList(baseId)
+				if IsValid(UVUnitManagerTool.ScrollPanel) and UVUnitManagerTool.RefreshList then
+					UVUnitManagerTool.RefreshList()
 				end
 				UnitAdjust:Close()
 				
@@ -697,167 +552,264 @@ if CLIENT then
 			print("Created a Default Vehicle Base data file for the Unit Vehicles!")
 		end
 
-		-- Unified Vehicle Base UI
 		local vehicleBases = {
-			{ id = 1, name = "HL2 Jeep", func = UVUnitManagerGetSavesJeep, path = "unitvehicles/prop_vehicle_jeep/units/", type = "txt" },
-			{ id = 2, name = "Simfphys", func = UVUnitManagerGetSaves, path = "unitvehicles/simfphys/units/", type = "txt" },
-			{ id = 3, name = "Glide", func = UVUnitManagerGetSavesGlide, path = "unitvehicles/glide/units/", type = "json" }
+			{ id = 1, name = "HL2",      path = "unitvehicles/prop_vehicle_jeep/units/", type = "txt"  },
+			{ id = 2, name = "Simfphys", path = "unitvehicles/simfphys/units/",           type = "txt"  },
+			{ id = 3, name = "Glide",    path = "unitvehicles/glide/units/",               type = "json" }
 		}
 
-		local vehicleBaseCombo = vgui.Create("DComboBox")
-		vehicleBaseCombo:SetSize(280, 20)
-		vehicleBaseCombo:SetTooltip("#uv.tool.base.desc")
-		local currentBaseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
-		vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
-		for _, base in ipairs(vehicleBases) do
-			vehicleBaseCombo:AddChoice(base.name, base.id)
-		end
+		local activeFilterBaseId = 0
+		local selecteditem = nil
 
 		CPanel:AddControl("Label", { Text = "#tool.uvunitmanager.settings.desc" })
 
-		-- CPanel:AddControl("Label", { Text = "#uv.tool.base.title" })
-		-- CPanel:AddItem(vehicleBaseCombo)
-		
-		-- Scroll Panel
-		local FrameListPanel = vgui.Create("DFrame")
-		FrameListPanel:SetSize(280, 200)
-		FrameListPanel:SetTitle("")
-		FrameListPanel:SetVisible(true)
-		FrameListPanel:ShowCloseButton(false)
-		FrameListPanel:SetDraggable(false)
+		local FilterBar = vgui.Create("DPanel")
+		FilterBar:Dock(TOP)
+		FilterBar:SetTall(24)
+		FilterBar:DockMargin(0, 0, 0, 0)
+		FilterBar.Paint = nil
+
+		FilterBar.OnSizeChanged = function(self, w, h)
+			local btnWidth = w / 4 -- Nr. of filters
+
+			for _, child in ipairs(self:GetChildren()) do
+				if IsValid(child) then
+					child:SetWide(btnWidth)
+				end
+			end
+		end
+
+		CPanel:AddItem(FilterBar)
+
+		local function AddFilterButton(text, baseId)
+			local btn = vgui.Create("DButton", FilterBar)
+			btn:Dock(LEFT)
+			btn:DockMargin(0, 0, 0, 0)
+			btn:SetWide(80)
+			btn:SetText(" ")
+
+			btn.Paint = function(self, w, h)
+				local selected = (activeFilterBaseId == baseId)
+				local hovered = self:IsHovered()
+
+				local default = Color(
+					GetConVar("uvmenu_col_button_r"):GetInt(),
+					GetConVar("uvmenu_col_button_g"):GetInt(),
+					GetConVar("uvmenu_col_button_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local active = Color(
+					GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local hover = Color(
+					GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4))
+				)
+
+				local col = selected and active or default
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+				end
+
+				draw.SimpleText( text, "UVSettingsFontSmall", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			end
+
+			btn.DoClick = function()
+				activeFilterBaseId = baseId
+				UVUnitManagerTool.RefreshList()
+			end
+		end
+
+		local FrameListPanel = vgui.Create("DPanel")
+		FrameListPanel:SetSize(280, 220)
 		FrameListPanel.Paint = function(self, w, h)
-			draw.RoundedBox(5, 0, 0, w, h, Color(115, 115, 115, 255))
-			draw.RoundedBox(5, 1, 1, w - 2, h - 2, Color(0, 0, 0))
+			draw.RoundedBox(5, 0, 0, w, h, Color(115,115,115))
+			draw.RoundedBox(5, 1, 1, w-2, h-2, Color(0,0,0))
 		end
 		CPanel:AddItem(FrameListPanel)
 
 		local ScrollPanel = vgui.Create("DScrollPanel", FrameListPanel)
-		ScrollPanel:DockMargin(0, -25, 0, 0)
 		ScrollPanel:Dock(FILL)
+		ScrollPanel:DockMargin(4, 4, 4, 4)
 
-		-- Save this for later access by net.Receive
 		UVUnitManagerTool.ScrollPanel = ScrollPanel
 
-		-- Also store the population function, so we can call it from net.Receive
-		UVUnitManagerTool.PopulateVehicleList = function(baseId)
-			ScrollPanel:Clear()
-			selecteditem = nil
+		AddFilterButton("#all", 0)
+		AddFilterButton("HL2", 1)
+		AddFilterButton("Simfphys", 2)
+		AddFilterButton("Glide", 3)
+
+		local function getAvailableUnits()
+			local entries = {}
 
 			for _, base in ipairs(vehicleBases) do
-				if base.id == baseId then
-					local savedVehicles = file.Find(base.path .. "*." .. base.type, "DATA")
-					local index, highlight, offset = 0, false, 22
+				local files = file.Find(base.path .. "*." .. base.type, "DATA") or {}
+				for _, filename in ipairs(files) do
+					entries[#entries + 1] = {
+						filename = filename,
+						base     = base,
+						baseId   = base.id,
+						display  = "[ " .. base.name .. " ] " .. filename
+					}
+				end
+			end
 
-					if #savedVehicles == 0 then
-						local emptyLabel = vgui.Create("DLabel", ScrollPanel)
-						emptyLabel:SetText("#uv.tool.novehicle")
-						emptyLabel:SetTextColor(Color(200, 200, 200))
-						emptyLabel:SetFont("DermaDefaultBold")
-						emptyLabel:SetContentAlignment(5)
-						emptyLabel:Dock(TOP)
-						emptyLabel:SetTall(offset)
-						return
+			return entries
+		end
+
+		function UVUnitManagerTool.RefreshList()
+			ScrollPanel:Clear()
+
+			local entries = getAvailableUnits()
+			if #entries == 0 then
+				local empty = vgui.Create("DLabel", ScrollPanel)
+				empty:SetText("#uv.tool.novehicle")
+				empty:SetTextColor(Color(200,200,200))
+				empty:SetContentAlignment(5)
+				empty:Dock(TOP)
+				empty:SetTall(24)
+				return
+			end
+
+			for _, entry in ipairs(entries) do
+				if activeFilterBaseId ~= 0 and entry.baseId ~= activeFilterBaseId then
+					continue
+				end
+
+				if not selecteditem then
+					selecteditem = entry.filename
+				end
+
+				local btn = ScrollPanel:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(24)
+				btn:SetText("")
+				btn.printname = entry.filename
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local active = Color(
+						GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
+					)
+
+					local col = (selecteditem == self.printname) and active or default
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
 					end
 
-					for _, v in ipairs(savedVehicles) do
-						local printname = v
-						if not selecteditem then selecteditem = v end
+					draw.SimpleText( entry.display, "UVSettingsFontSmall", w * 0.05, h * 0.5, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+				end
 
-						local Button = vgui.Create("DButton", ScrollPanel)
-						Button:SetText(printname)
-						Button:SetTextColor(Color(255, 255, 255))
-						Button:Dock(TOP)
-						Button:SetTall(offset)
-						Button:DockMargin(0, 0, 0, 2)
+				btn.DoClick = function()
+					selecteditem = entry.filename
+					SetClipboardText(selecteditem)
 
-						Button.highlight = highlight
-						Button.printname = v
+					if entry.base.type == "json" then
+						UVTOOLMemory = util.JSONToTable(
+							file.Read(entry.base.path .. selecteditem, "DATA"), true
+						)
+					else
+						local DataString = file.Read(entry.base.path .. selecteditem, "DATA")
+						local words, decoded = string.Explode("", DataString), {}
 
-						Button.Paint = function(self, w, h)
-							local c_selected = Color(128, 185, 128, 255)
-							local c_normal = self.highlight and Color(108, 111, 114, 200) or Color(77, 80, 82, 200)
-							local c_hovered = Color(41, 128, 185, 255)
-							local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
-							draw.RoundedBox(5, 1, 1, w - 2, h - 1, c_)
+						for k, v in pairs(words) do
+							decoded[k] = string.char(string.byte(v) - 20)
 						end
 
-						Button.DoClick = function(self)
-							selecteditem = self.printname
-							SetClipboardText(selecteditem)
+						local Data = string.Explode("#", string.Implode("", decoded))
+						table.Empty(UVTOOLMemory)
 
-							if base.type == "json" then
-								UVTOOLMemory = util.JSONToTable(file.Read(base.path .. selecteditem, "DATA"), true)
-							else
-								local DataString = file.Read(base.path .. selecteditem, "DATA")
-								local words, decoded = string.Explode("", DataString), {}
-								for k, v in pairs(words) do decoded[k] = string.char(string.byte(v) - 20) end
-								local Data = string.Explode("#", string.Implode("", decoded))
-								table.Empty(UVTOOLMemory)
-								for _, v in pairs(Data) do
-									local Var = string.Explode("=", v)
-									local name, variable = Var[1], Var[2]
-									if name and variable then
-										if name == "SubMaterials" then
-											UVTOOLMemory[name] = {}
-											local submats = string.Explode(",", variable)
-											for i = 0, (table.Count(submats) - 1) do
-												UVTOOLMemory[name][i] = submats[i + 1]
-											end
-										else
-											UVTOOLMemory[name] = variable
-										end
+						for _, v in pairs(Data) do
+							local Var = string.Explode("=", v)
+							local name, variable = Var[1], Var[2]
+
+							if name and variable then
+								if name == "SubMaterials" then
+									UVTOOLMemory[name] = {}
+									local submats = string.Explode(",", variable)
+									for i = 0, table.Count(submats) - 1 do
+										UVTOOLMemory[name][i] = submats[i + 1]
 									end
+								else
+									UVTOOLMemory[name] = variable
 								end
 							end
-
-							net.Start("UVUnitManagerGetUnitInfo")
-							net.WriteTable(UVTOOLMemory)
-							net.SendToServer()
 						end
-
-						index = index + 1
-						highlight = not highlight
 					end
-					break
+
+					net.Start("UVUnitManagerGetUnitInfo")
+					net.WriteTable(UVTOOLMemory)
+					net.SendToServer()
 				end
 			end
 		end
 
-		-- Initialize
-		UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
+		timer.Simple(0, function()
+			if IsValid(ScrollPanel) then
+				UVUnitManagerTool.RefreshList()
+			end
+		end)
 
-		-- Refresh Button
 		local RefreshBtn = vgui.Create("DButton")
 		RefreshBtn:SetText("#refresh")
 		RefreshBtn:SetSize(280, 20)
 		RefreshBtn.DoClick = function()
-			UVUnitManagerTool.PopulateVehicleList(GetConVar("uvunitmanager_vehiclebase"):GetInt())
-			-- notification.AddLegacy("#tool.uvunitmanager.refreshed", NOTIFY_UNDO, 5)
+			UVUnitManagerTool.RefreshList()
 			surface.PlaySound("buttons/button15.wav")
 		end
 		CPanel:AddItem(RefreshBtn)
 
-		-- Delete Button
 		local DeleteBtn = vgui.Create("DButton")
 		DeleteBtn:SetText("#spawnmenu.menu.delete")
 		DeleteBtn:SetSize(280, 20)
 		DeleteBtn.DoClick = function()
-			local baseId = GetConVar("uvunitmanager_vehiclebase"):GetInt()
-			local basePath, baseType
+			if not isstring(selecteditem) then return end
+
 			for _, base in ipairs(vehicleBases) do
-				if base.id == baseId then
-					basePath, baseType = base.path, base.type
-					break
+				if activeFilterBaseId == 0 or base.id == activeFilterBaseId then
+					if file.Exists(base.path .. selecteditem, "DATA") then
+						file.Delete(base.path .. selecteditem)
+						notification.AddLegacy(
+							string.format(language.GetPhrase("uv.tool.deleted"), selecteditem),
+							NOTIFY_UNDO, 5
+						)
+						surface.PlaySound("buttons/button15.wav")
+						break
+					end
 				end
 			end
-			if isstring(selecteditem) and basePath then
-				if file.Delete(basePath .. selecteditem) then
-					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.deleted"), selecteditem), NOTIFY_UNDO, 5)
-					surface.PlaySound("buttons/button15.wav")
-					-- Msg(string.format(language.GetPhrase("tool.uvunitmanager.deleted"), selecteditem))
-				end
-			end
-			UVUnitManagerTool.PopulateVehicleList(baseId)
+
+			selecteditem = nil
+			UVUnitManagerTool.RefreshList()
 		end
 		CPanel:AddItem(DeleteBtn)
 
@@ -871,15 +823,6 @@ if CLIENT then
 			UVMenu.PlaySFX("menuopen")
 		end
 		CPanel:AddItem(OpenMenu)
-
-		-- Sync dropdown and slider
-		vehicleBaseCombo.OnSelect = function(self, index, value, data)
-			local baseId = tonumber(data)
-			if not baseId then return end
-			RunConsoleCommand("uvunitmanager_vehiclebase", baseId)
-			UVUnitManagerTool.PopulateVehicleList(baseId)
-			--PopulateVehicleListHeatLvl(baseId, selectedUnit, selectedHeat)
-		end
 	end
 end
 

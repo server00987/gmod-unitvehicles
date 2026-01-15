@@ -20,6 +20,8 @@ Mark your calendars, it's almost time to **Race, Chase or Escape**!
 - Added the *Heat Level Manager* to the *Pursuit Manager* UV Menu Tab
  |-- This replaces the *Manager: Units* settings.
 - Added a Race Countdown to the NFS: ProStreet HUD
+- Added a new, updated list appearance to the AI Racers, Pursuit Breaker, Roadblocks, Traffic & Units tools
+ |-- AI Racers, Traffic and Units also have new base sorting to only list vehicles from a particular base
 
 **Changes**
 - UV Menu: All convars in the menu now control their correct server convars
