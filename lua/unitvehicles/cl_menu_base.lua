@@ -378,8 +378,8 @@ function UVTextSplit(text, maxWidth, baseFont, altFont)
 end
 
 -- Helper to draw wrapped text inside a panel
-local function DrawWrappedText(panel, text, maxWidth, x, y, center, altfont)
-    local wrappedLines, font = UVTextSplit(text, maxWidth, altfont or nil)
+local function DrawWrappedText(panel, text, maxWidth, x, y, center, altfont, altsmallfont)
+    local wrappedLines, font = UVTextSplit(text, maxWidth, altfont or nil, altsmallfont or nil)
     surface.SetFont(font)
     local _, lineHeight = surface.GetTextSize("A")
     local totalHeight = lineHeight * #wrappedLines
@@ -511,11 +511,17 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "infosimple" then
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
-		p:SetTall(UV.ScaleH(46))
+		function p:PerformLayout()
+			local text = GetDisplayText()
+			local w = self:GetWide()
+			if w <= 0 then return end
+			local newTall = math.max(UV.ScaleH(32), GetDynamicTall(text, w, "UVMostWantedLeaderboardFont", "UVMostWantedLeaderboardFont"))
+			if self:GetTall() ~= newTall then self:SetTall(newTall) end
+		end
 		p:DockMargin(6, 6, 6, 2)
 		p.Paint = function(self, w, h)
-			local text = language.GetPhrase(st.text) or "???"
-			DrawWrappedText(self, text, w - 20, w * 0.5, nil, true)
+			local text = GetDisplayText() or "???"
+			DrawWrappedText(self, text, self:GetWide(), w * 0.5, nil, true, "UVMostWantedLeaderboardFont", "UVMostWantedLeaderboardFont")
 		end
 
 		if st.desc then
@@ -544,7 +550,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		p:DockMargin(6, 6, 6, 2)
 		p:SetPaintBackground(false)
 
-		local padding = 10
+		local padding = UV.ScaleH(10)
 		local y = padding
 
 		for _, entry in ipairs(st.entries or {}) do
@@ -794,7 +800,9 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 		wrap.Paint = function(self, w, h)
 			local text = language.GetPhrase(GetDisplayText()) or "???"
-			DrawWrappedText(self, text, w * 0.75, 10)
+			DrawWrappedText(self, text, w * 0.425, 10)
+			
+			-- draw.RoundedBox(4, 0, 0, w * 0.425, h, Color(255, 255, 255))
 		end
 
 		local function PushDesc()
@@ -828,7 +836,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local slider = vgui.Create("DNumSlider", wrap)
 		slider:Dock(RIGHT)
-		slider:SetWide(UV.ScaleW(350))
+		slider:SetWide(UV.ScaleW(250))
 		slider:DockMargin(26, 0, 6, 0)
 		slider:SetContentAlignment(5)
 		slider:SetMin(st.min or 0)
@@ -1925,8 +1933,8 @@ function UV.BuildSetting(parent, st, descPanel)
 	if st.type == "voiceprofile" then
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
-		panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(st.voicevar and UV.ScaleH(240) or UV.ScaleH(70))
+		panel:DockMargin(8, 4, 8, UV.ScaleH(1))
+		panel:SetTall(st.voicevar and UV.ScaleH(240) or UV.ScaleH(90))
 		panel.Paint = nil
 
 		local voiceCVar = st.voicevar and GetConVar(st.voicevar)
@@ -1951,7 +1959,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		-- Profile combo
 		local profileCombo = vgui.Create("UVCombo", right)
 		profileCombo:Dock(TOP)
-		profileCombo:SetTall(22)
+		profileCombo:SetTall(UV.ScaleH(22))
 		profileCombo.Paint = function(self, w, h)
 			local hovered = self.Button:IsHovered()
 			local default = Color( 
@@ -2009,7 +2017,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					local btn = scroll:Add("DButton")
 					btn:Dock(TOP)
 					btn:DockMargin(0, 0, 0, 4)
-					btn:SetTall(24)
+					btn:SetTall(UV.ScaleH(24))
 					btn:SetText("")
 
 					btn.Selected = selected[folder]
@@ -2269,7 +2277,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		--panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(500)
+		panel:SetTall(UV.ScaleH(500))
 
 		panel.Paint = function(self, w, h)
 			local a = self:GetAlpha()
@@ -2292,7 +2300,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			local btn = scroll:Add("DButton")
 			btn:Dock(TOP)
 			btn:DockMargin(0, 0, 0, 4)
-			btn:SetTall(40)
+			btn:SetTall(UV.ScaleH(40))
 			btn:SetText("")
 
 			btn.Paint = function(self, w, h)
@@ -2319,31 +2327,46 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			btn.DoClick = function(self)
 				if st.preset == 'units' then
-					--UVMenu.CloseCurrentMenu()
-					UVMenu.CurrentMenu = UVMenu:Open({
-						Name = " ",
-						Width  = UV.ScaleW(870),
-						Height = UV.ScaleH(260),
-						HideCloseButton = true,
-						UnfocusClose = false,
-						Tabs = {
-							{ TabName = "#uv.hm.presets.warning", 
-								{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ), centered = true },
-								{ type = "button", text = "#openurl.yes", func = 
-								function(self2)
-									UVUnitManagerLoadPresetV2(name, preset)
-									UVMenu.OpenMenu(UVMenu.HeatManager, true)
-								end
-								},
-								{ type = "button", text = "#openurl.nope", func = 
-								function(self2)
-									UVMenu.OpenMenu(UVMenu.HeatManager, true)
-								end
-								},
-							}
+					UVMenu.CloseCurrentMenu(true)
+					UVMenu.PlaySFX("clickopen")
+					timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
+						UVMenu.PlaySFX("menuopen") -- This shouldn't be necessary but ah well
+						UVMenu.CurrentMenu = UVMenu:Open({
+							Name = " ",
+							Width  = UV.ScaleW(800),
+							Height = UV.ScaleH(400),
+							DynamicHeight = true,
+							HideCloseButton = true,
+							UnfocusClose = false,
+							Tabs = {
+								{ TabName = "#uv.hm.presets.warning", 
+									{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ) },
+									{ type = "button", text = "#openurl.yes", func = 
+									function(self2)
+										UVUnitManagerLoadPresetV2(name, preset)
+										UVMenu.PlaySFX("clickopen")
+										UVMenu.CloseCurrentMenu(true)
+										timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
+											UVMenu.PlaySFX("menuopen") -- This shouldn't be necessary but ah well
+											UVMenu.OpenMenu(UVMenu.HeatManager, true)
+										end)
+									end
+									},
+									{ type = "button", text = "#openurl.nope", func = 
+									function(self2)
+										UVMenu.PlaySFX("clickback")
+										UVMenu.CloseCurrentMenu(true)
+										timer.Simple(tonumber(GetConVar("uvmenu_close_speed"):GetString()) or 0.2, function()
+											UVMenu.PlaySFX("menuopen") -- This shouldn't be necessary but ah well
+											UVMenu.OpenMenu(UVMenu.HeatManager, true)
+										end)
+									end
+									},
+								}
 
-						}
-					})
+							}
+						})
+					end)
 				end
 			end
 
@@ -2894,6 +2917,60 @@ function UVMenu.PlaySFX(name, overrideSet)
     surface.PlaySound(snd)
 end
 
+function UVMenu.EstimateTabHeight(tab, availableWidth)
+	local h = 0
+
+	if tab.TabName and tab.TabName ~= "" then
+		local text = language.GetPhrase(tab.TabName)
+		local base = math.max(UV.ScaleH(48), GetDynamicTall(text, availableWidth - 44, "UVFont5") )
+
+		h = h + base
+	end
+
+	for _, st in ipairs(tab) do
+		if istable(st) and st.type and UV.ShouldDrawSetting(st) then
+			local base
+			local text = language.GetPhrase(st.text)
+
+			if st.type == "infosimple" then
+				base = math.max(UV.ScaleH(23), GetDynamicTall(text, availableWidth))
+			elseif st.type == "info_flags" then
+				base = UV.ScaleH(10) * 2 + (#st.entries * 24)
+			elseif st.type == "image" then
+				base = math.floor((availableWidth / 16) * 9)
+			elseif st.type == "label" then
+				base = math.max( UV.ScaleH(36), GetDynamicTall(language.GetPhrase(text), availableWidth * 0.8) )
+			elseif st.type == "slider" then
+				base = math.max( UV.ScaleH(30), GetDynamicTall(language.GetPhrase(text), availableWidth * 0.4) )
+			elseif st.type == "combo" then
+				base = math.max( UV.ScaleH(30), GetDynamicTall(language.GetPhrase(text), availableWidth - UV.ScaleH(330) - 20) )
+			elseif st.type == "button" or st.type == "buttonsw" then
+				base = math.max( UV.ScaleH(30), GetDynamicTall(language.GetPhrase(text), availableWidth * 0.95) )
+			elseif st.type == "color" or st.type == "coloralpha" then
+				base = math.max( UV.ScaleH(120), GetDynamicTall(language.GetPhrase(text), availableWidth - UV.ScaleW(440)) )
+			elseif st.type == "keybind" then
+				base = math.max( UV.ScaleH(30), GetDynamicTall(language.GetPhrase(text), availableWidth * 0.5) )
+			elseif st.type == "timer" then
+				base = UV.ScaleH(36)
+			elseif st.type == "vehicleoverride" then
+				base = UV.ScaleH(220)
+			elseif st.type == "voiceprofile" then
+				base = st.voicevar and UV.ScaleH(240) or UV.ScaleH(90)
+			elseif st.type == "presets" then
+				base = UV.ScaleH(500)
+			elseif st.type == "unitselect" then
+				base = UV.ScaleH(300)
+			else
+				base = UV.ScaleH(30)
+			end
+
+			h = h + base + UV.ScaleH(12)
+		end
+	end
+
+	return h
+end
+
 -- Helper to open menus safely
 function UVMenu.OpenMenu(menuFunc, dontsave)
     if not dontsave and menuFunc then
@@ -2949,6 +3026,25 @@ function UVMenu:Open(menu)
 	local BaseMenuW = 1400
 	local BaseMenuH = 900
 	local Width = CurrentMenu.Width or math.min( UV.ScaleW(BaseMenuW), ScrW() * 0.92 )
+	
+	if CurrentMenu.DynamicHeight and CurrentMenu.Tabs and #CurrentMenu.Tabs == 1 then
+		local SCROLL_SAFETY = math.max(UV.ScaleH(14), UV.ScaleH(1))
+		
+		local tab = CurrentMenu.Tabs[1]
+		local contentH = UVMenu.EstimateTabHeight(tab, CurrentMenu.Width)
+
+		local chromePadding = UV.ScaleH(140)
+
+		local maxH = ScrH() * 0.92
+		local desiredH = contentH + chromePadding
+
+		if desiredH >= maxH then
+			CurrentMenu.Height = maxH - SCROLL_SAFETY
+		else
+			CurrentMenu.Height = desiredH
+		end
+	end
+
 	local Height = CurrentMenu.Height or math.min( UV.ScaleH(BaseMenuH), ScrH() * 0.92 )
 
     local ShowDesc = CurrentMenu.Description == true and not GetConVar("uvmenu_hide_description"):GetBool()
@@ -3134,7 +3230,6 @@ function UVMenu:Open(menu)
         title:SetText("")
         title:Dock(TOP)
         title:DockMargin(6, 6, 6, 12)
-        -- title:SetTall(UV.ScaleH(48))
 		function title:PerformLayout()
 			local text = language.GetPhrase(tab.TabName)
 			local w = self:GetWide()
@@ -3144,8 +3239,6 @@ function UVMenu:Open(menu)
 		end
 
         title.Paint = function(self, w, h)
-            -- draw.SimpleText(tab.TabName or ("Tab " .. tostring(tabIndex)), "UVFont5", w * 0.5, h * 0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			
 			DrawWrappedText(self, language.GetPhrase(tab.TabName) or ("Tab " .. tostring(tabIndex)), w - 44, w*0.5, nil, true, "UVFont5")
         end
 
@@ -3400,7 +3493,7 @@ function UVMenu:Open(menu)
 						if paragraph == "" then
 							table.insert(wrappedLines, "")
 						else
-							local wrapped = UV_WrapText(paragraph, baseFont, w - (w * 0.15) * 2)
+							local wrapped = UV_WrapText(paragraph, baseFont, w - ((tab.Icon and w * 0.15 or w * 0.085)) * 2)
 							for _, line in ipairs(wrapped) do
 								table.insert(wrappedLines, line)
 							end
@@ -3433,6 +3526,9 @@ function UVMenu:Open(menu)
 						draw.DrawText(line, multiFont, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
 						yOffset = yOffset + lineHeight
 					end
+					
+					-- draw.RoundedBox(4, xPadding, 0, w - ((tab.Icon and w * 0.15 or w * 0.085)) * 2, h, Color(30,30,30,200))
+					
 				end
             end
 

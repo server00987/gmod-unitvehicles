@@ -1799,7 +1799,7 @@ local function carbon_pursuit_main( ... )
         ResourceText = "⛊"
         
         surface.SetDrawColor(0, 0, 0, 200) -- Milestone BG
-        surface.DrawRect(w * 0.79, h * 0.35, w * 0.19, h * 0.03)
+        surface.DrawRect(UV_UI.X(w * 0.79), h * 0.35, UV_UI.W(w * 0.19), h * 0.03)
 
         local cname = "#uv.unit.commander"
         if IsValid(UVHUDCommander) then
