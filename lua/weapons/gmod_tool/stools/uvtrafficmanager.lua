@@ -401,41 +401,6 @@ if CLIENT then
 			file.CreateDir( "unitvehicles/prop_vehicle_jeep/traffic" )
 			print("Created a Default Vehicle Base data file for the Traffic Vehicles!")
 		end
-		
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "traffic",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-		
-		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("#spawnmenu.savechanges")
-		applysettings.DoClick = function()
-			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
-				return
-			end
-			
-			local convar_table = {}
-			
-			convar_table['unitvehicle_traffic_vehiclebase'] = GetConVar('uvtrafficmanager_vehiclebase'):GetInt()
-			convar_table['unitvehicle_traffic_spawncondition'] = GetConVar('uvtrafficmanager_spawncondition'):GetInt()
-			convar_table['unitvehicle_traffic_maxtraffic'] = GetConVar('uvtrafficmanager_maxtraffic'):GetInt()
-
-			net.Start("UVUpdateSettings")
-			net.WriteTable(convar_table)
-			net.SendToServer()
-			
-			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-			-- Msg( "#tool.uvtrafficmanager.applied" )
-			
-		end
-		CPanel:AddItem(applysettings)
 
 		-- Unified Vehicle Base UI
 		local vehicleBases = {
@@ -444,14 +409,7 @@ if CLIENT then
 			{ id = 3, name = "Glide", func = UVTrafficManagerGetSavesGlide, path = "unitvehicles/glide/traffic/", type = "json" }
 		}
 
-		-- local vehicleBaseCombo = vgui.Create("DComboBox")
-		-- vehicleBaseCombo:SetSize(280, 20)
-		-- vehicleBaseCombo:SetTooltip("#tool.uvtrafficmanager.settings.base.desc")
-		-- local currentBaseId = GetConVar("uvtrafficmanager_vehiclebase"):GetInt()
-		-- vehicleBaseCombo:SetValue(vehicleBases[currentBaseId].name)
-		-- for _, base in ipairs(vehicleBases) do
-			-- vehicleBaseCombo:AddChoice(base.name, base.id)
-		-- end
+		CPanel:AddControl("Label", { Text = "#tool.uvtrafficmanager.settings.desc" })
 
 		-- Scroll Panel
 		local FrameListPanel = vgui.Create("DFrame")
@@ -608,14 +566,6 @@ if CLIENT then
 			UVMenu.PlaySFX("menuopen")
 		end
 		CPanel:AddItem(OpenMenu)
-	
-		-- Sync dropdown and slider
-		-- vehicleBaseCombo.OnSelect = function(self, index, value, data)
-			-- local baseId = tonumber(data)
-			-- if not baseId then return end
-			-- RunConsoleCommand("uvtrafficmanager_vehiclebase", baseId)
-			-- UVTrafficManagerTool.PopulateVehicleList(baseId)
-		-- end
 	end
 end
 

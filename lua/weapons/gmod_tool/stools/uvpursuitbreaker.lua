@@ -172,7 +172,7 @@ if CLIENT then
 				local c_ = (selecteditem == self.printname) and c_selected or (self:IsHovered() and c_hovered or c_normal)
 				
 				draw.RoundedBox( 5, 1, 1, w - 2, h - 1, c_ )
-			end
+			end			
 			Button.DoClick = function( self )
 				selecteditem = self.printname
 				if isstring(selecteditem) then
@@ -194,51 +194,12 @@ if CLIENT then
 	end
 
 	function TOOL.BuildCPanel(CPanel)
+		local lang = language.GetPhrase
+		
 		if not file.Exists( "unitvehicles/pursuitbreakers/"..game.GetMap(), "DATA" ) then
 			file.CreateDir( "unitvehicles/pursuitbreakers/"..game.GetMap() )
 			print("Created a Pursuit Breaker data file for "..game.GetMap().."!")
 		end
-
-		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("#spawnmenu.savechanges")
-		applysettings.DoClick = function()
-			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
-				return
-			end
-
-			--Run Console Command
-			local convar_table = {}
-
-			convar_table['unitvehicle_pursuitbreaker_maxpb'] = GetConVar("uvpursuitbreaker_maxpb"):GetInt()
-			convar_table['unitvehicle_pursuitbreaker_spawncondition'] = GetConVar("uvpursuitbreaker_spawncondition"):GetInt()
-			convar_table['unitvehicle_pursuitbreaker_pbcooldown'] = GetConVar("uvpursuitbreaker_pbcooldown"):GetInt()
-			-- RunConsoleCommand("unitvehicle_pursuitbreaker_maxpb", GetConVar("uvpursuitbreaker_maxpb"):GetInt())
-			-- RunConsoleCommand("unitvehicle_pursuitbreaker_pbcooldown", GetConVar("uvpursuitbreaker_pbcooldown"):GetInt())
-
-			net.Start("UVUpdateSettings")
-			net.WriteTable(convar_table)
-			net.SendToServer()
-
-			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-			-- Msg( "#uv.tool.applied" )
-		end
-		CPanel:AddItem(applysettings)
-	
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "pursuitbreakers",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-	
-		CPanel:AddControl("Label", {
-			Text = "#uv.clickapply",
-		})
 
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvpursuitbreaker.settings.desc",
@@ -257,8 +218,8 @@ if CLIENT then
 		CPanel:AddItem(Frame)
 
 		UVPursuitBreakerScrollPanel = vgui.Create( "DScrollPanel", Frame )
-		UVPursuitBreakerScrollPanel:SetSize( 280, 320 )
-		UVPursuitBreakerScrollPanel:SetPos( 0, 0 )
+		UVPursuitBreakerScrollPanel:DockMargin(0, -25, 0, 0)
+		UVPursuitBreakerScrollPanel:Dock(FILL)
 		
 		UVPursuitBreakerGetSaves( UVPursuitBreakerScrollPanel )
 
@@ -318,37 +279,17 @@ if CLIENT then
 		end
 		CPanel:AddItem(Delete)
 
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvpursuitbreaker.settings",
-		})
+		CPanel:AddControl("Label", { Text = "" }) -- General Settings
+		CPanel:AddControl("Label", { Text = "#uv.tweakinmenu" })
+		local OpenMenu = vgui.Create("DButton")
+		OpenMenu:SetText("#uv.tweakinmenu.open")
+		OpenMenu:SetSize(280, 20)
+		OpenMenu.DoClick = function()
+			UVMenu.OpenMenu(UVMenu.Settings)
+			UVMenu.PlaySFX("menuopen")
+		end
+		CPanel:AddItem(OpenMenu)
 
-		local MaxPB = vgui.Create( "DNumSlider", CPanel )
-		MaxPB:SetText( "#tool.uvpursuitbreaker.settings.maxnr" )
-		MaxPB:SetTooltip( "#tool.uvpursuitbreaker.settings.maxnr.desc" )
-		MaxPB:SetMin( 0 )
-		MaxPB:SetMax( 10 )
-		MaxPB:SetDecimals( 0 )
-		MaxPB:SetConVar( "uvpursuitbreaker_maxpb" )
-		CPanel:AddItem(MaxPB)
-
-		local spawncondition = vgui.Create("DNumSlider")
-		spawncondition:SetText("#tool.uvpursuitbreaker.settings.spawncondition")
-		spawncondition:SetTooltip("#tool.uvpursuitbreaker.settings.spawncondition.desc")
-		spawncondition:SetMinMax(1, 3)
-		spawncondition:SetDecimals(0)
-		spawncondition:SetValue(GetConVar("uvpursuitbreaker_spawncondition"))
-		spawncondition:SetConVar("uvpursuitbreaker_spawncondition")
-		CPanel:AddItem(spawncondition)
-
-		local PBCooldown = vgui.Create( "DNumSlider", CPanel )
-		PBCooldown:SetText( "#tool.uvpursuitbreaker.settings.cooldown" )
-		PBCooldown:SetTooltip( "#tool.uvpursuitbreaker.settings.cooldown.desc" )
-		PBCooldown:SetMin( 1 )
-		PBCooldown:SetMax( 600 )
-		PBCooldown:SetDecimals( 0 )
-		PBCooldown:SetConVar( "uvpursuitbreaker_pbcooldown" )
-		CPanel:AddItem(PBCooldown)
-			
 	end
 
 end
