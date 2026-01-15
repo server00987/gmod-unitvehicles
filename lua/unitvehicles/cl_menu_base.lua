@@ -2190,7 +2190,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				net.Start("UVUpdateSettings")
 				net.WriteTable({ [st.voicevar] = "" })
 				net.SendToServer()
-			else
+			elseif st.voicevar then
 				GetConVar(st.voicevar):SetString( "" )
 			end
 			
