@@ -19,8 +19,16 @@ Mark your calendars, it's almost time to **Race, Chase or Escape**!
 - Added the *UVPD Rhino Truck*
 - Added the *Heat Level Manager* to the *Pursuit Manager* UV Menu Tab
  |-- This replaces the *Manager: Units* settings.
+- Added a Race Countdown to the NFS: ProStreet HUD
 
 **Changes**
+- UV Menu: All convars in the menu now control their correct server convars
+ |-- This means that the "Apply Settings" buttons will be removed across the board
+- Moved the "Creator: Pursuit Breaker" and "Creator: Roadblocks" settings to the UV Menu
+ |-- Roadblocks: UV Menu > Settings > Pursuit Settings
+ |-- Pursuit Breakers: UV Menu > Settings > Pursuit Breakers
+- Renamed the "Manager: Units" tool to "Creator: Units"
+- Removed all settings from all Creator tools
 - Removed "Relentless" AI option and replaced it with a dynamic behaviour system
  |-- Patrol and Support Units are never relentless
  |-- Pursuit, Interceptor and Air Units have a random chance to become relentless
@@ -28,14 +36,10 @@ Mark your calendars, it's almost time to **Race, Chase or Escape**!
 - Improved AI Unit pursuit tactics
 - Removed some default cop chatter and updated others
 - Air Unit's wreck callout will now have priority over all others
-- Added a Race Countdown to the NFS: ProStreet HUD
-- Renamed the "Manager: Units" tool to "Creator: Units"
 
 **Fixes**
 - Fixed that Repair Shops repaired less health than it should've when Infinite Durability is enabled
 - Fixed that "Evade" and "Busted" meters could fill up at the same time on rare instances
-- Fixed that the "Apply Settings" buttons in the AI Manager and Traffic Manager UV Menu tabs both cleared traffic
-- Fixed that the "Apply Settings" button in the AI Manager UV Menu tab applied Traffic Manager settings
 ]],
 },
 
