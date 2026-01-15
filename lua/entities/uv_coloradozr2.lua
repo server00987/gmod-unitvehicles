@@ -75,63 +75,124 @@ if CLIENT then
         { type = "reverse", offset = Vector(-120.49,35.11,34.48), dir = Vector( -1, 0, 0 ),size = 30 },
         { type = "reverse", offset = Vector(-120.49,-35.11,34.48), dir = Vector( -1, 0, 0 ),size = 30 },
     }
+	
+	function ENT:GenerateSirenLights(coplights, timings, defaultSpriteMaterial, coplightsize)
+		local SirenLights = {}
 
-    ENT.SirenLights = {
+		local colorMap = {
+			red = Color(255, 100, 100),
+			blue = Color(0, 150, 255),
+			white1 = Color(255, 255, 255),
+			white2 = Color(255, 255, 255),
+		}
 
-        { bodygroup = 9, time = 0.5, duration = 0.5 },
-        { bodygroup = 10, time = 0, duration = 0.5 },
+		local lightRadiusMap = {
+			red = 100,
+			blue = 100,
+			white1 = 0,
+			white2 = 0,
+		}
 
-	-- RED
-    
-        { offset = Vector(-5.56,-22.52,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,-22.52,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,-16.12,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,-16.12,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,22.52,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,22.52,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,16.12,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-5.56,16.12,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,-22.52,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,-22.52,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,-16.12,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,-16.12,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,22.52,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,22.52,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,16.12,70.34), time = 0,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,16.12,70.34), time = 0.25,size = 30, color = Color(255,30,0,175), },
-        { offset = Vector(-13.7,-22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-13.7,-22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-13.7,22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-13.7,22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-5.56,-22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-5.56,-22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-5.56,22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
-        { offset = Vector(-5.56,22.52,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
+		-- Size multiplier
+		local sizeMultiplier = 1
+		if coplightsize == "small" then
+			sizeMultiplier = 0.5
+		elseif coplightsize == "vsmall" then
+			sizeMultiplier = 0.25
+		end
 
-	-- BLUE
+		for colorName, lights in pairs(coplights) do
+			local lightColor = colorMap[colorName]
+			local timeList = timings[colorName] or {0}
+			local lightRadiusVal = lightRadiusMap[colorName]
 
-        { offset = Vector(-5.56,-9.76,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,-9.76,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,9.76,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,9.76,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,-3.35,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,-3.35,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,3.35,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,3.35,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,-9.76,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,-9.76,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,9.76,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,9.76,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,-3.35,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,-3.35,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,3.35,70.34), time = 0.5,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,3.35,70.34), time = 0.75,size = 30, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,0,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.5,size = 180, color = Color(0,115,255,175), },
-        { offset = Vector(-5.56,0,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.75,size = 180, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,0,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.5,size = 180, color = Color(0,115,255,175), },
-        { offset = Vector(-13.7,0,70.34),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.75,size = 180, color = Color(0,115,255,175), },
+			for i, lightData in ipairs(lights) do
+				for _, t in ipairs(timeList) do
+					local lightEntry = {
+						offset = lightData.offset,
+						dir = lightData.dir,
+						spriteMaterial = lightData.spriteMaterial or defaultSpriteMaterial or Material("mokanfsw/universal/textures/lights/headlightflareouter"),
+						time = t,
+						duration = lightData.duration or 0.05,
+						lightRadius = lightData.lightRadius or lightRadiusVal,
+						size = (lightData.size or 80) * sizeMultiplier,
+						color = lightData.color or lightColor,
+						bodygroup = lightData.bodygroup,
+						ifBodygroupId = lightData.ifBodygroupId,
+						ifSubModelId = lightData.ifSubModelId,
+					}
 
-    }
+					table.insert(SirenLights, lightEntry)
+				end
+			end
+		end
+
+		return SirenLights
+	end
+
+	local coplights = {
+		red = {
+			-- Red lightbar lights
+			{ offset = Vector(-5.56,-22.52,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-5.56,-16.12,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-5.56,22.52,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-5.56,16.12,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-13.7,-22.52,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-13.7,-16.12,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-13.7,22.52,70.34), size = 30, color = Color(255,30,0,175) },
+			{ offset = Vector(-13.7,16.12,70.34), size = 30, color = Color(255,30,0,175) },
+
+			-- Red sprite lights
+			{ offset = Vector(-13.7,-22.52,70.34), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+			{ offset = Vector(-13.7,22.52,70.34), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+			{ offset = Vector(-5.56,-22.52,70.34), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+			{ offset = Vector(-5.56,22.52,70.34), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+		},
+
+		blue = {
+			-- Blue lightbar lights
+			{ offset = Vector(-5.56,-9.76,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-5.56,9.76,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-5.56,-3.35,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-5.56,3.35,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-13.7,-9.76,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-13.7,9.76,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-13.7,-3.35,70.34), size = 30, color = Color(0,115,255,175) },
+			{ offset = Vector(-13.7,3.35,70.34), size = 30, color = Color(0,115,255,175) },
+
+			-- Blue sprite lights
+			{ offset = Vector(-5.56,0,70.34), size = 180, color = Color(0,115,255,175), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+			{ offset = Vector(-13.7,0,70.34), size = 180, color = Color(0,115,255,175), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
+		},
+	}
+
+	local coplightstimings = {
+		blue = {0, 0.125, 0.25, 0.375},
+		red = {0.5, 0.625, 0.75, 0.875},
+		white1 = {0, 0.166, 0.332},
+		white2 = {0.498, 0.664, 0.83},
+	}
+
+	local lightBodygroups = {
+		{ bodygroup = 9, time = 0, duration = 0.05 },
+		{ bodygroup = 9, time = 0.125, duration = 0.05 },
+		{ bodygroup = 9, time = 0.25, duration = 0.05 },
+		{ bodygroup = 9, time = 0.375, duration = 0.05 },
+		
+		{ bodygroup = 10, time = 0.5, duration = 0.05 },
+		{ bodygroup = 10, time = 0.625, duration = 0.05 },
+		{ bodygroup = 10, time = 0.75, duration = 0.05 },
+		{ bodygroup = 10, time = 0.875, duration = 0.05 },
+	}
+
+	ENT.SirenLights = {}
+	for _, bg in ipairs(lightBodygroups) do
+		table.insert(ENT.SirenLights, bg)
+	end
+	local generatedLights = ENT:GenerateSirenLights(coplights, coplightstimings)
+	for _, light in ipairs(generatedLights) do
+		table.insert(ENT.SirenLights, light)
+	end
 
     function ENT:OnCreateEngineStream( stream )
         stream:LoadPreset( "uvcoloradozr2engine" )
