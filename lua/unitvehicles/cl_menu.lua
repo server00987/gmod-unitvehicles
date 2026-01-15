@@ -152,9 +152,7 @@ UVMenu.Main = function()
 				end,
 			},
 			
-			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png", -- Pursuit Manager
-				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
-				
+			{ TabName = "#uv.pm", Icon = "unitvehicles/icons/milestone_911.png", -- Pursuit Manager				
 				{ type = "combo", text = "#uv.tool.base.title", desc = "uv.tool.base.desc", convar = "unitvehicle_unit_vehiclebase", sv = true, content = {
 						{ "HL2 Jeep", 1 } ,
 						{ "Simfphys", 2 } ,
@@ -182,10 +180,11 @@ UVMenu.Main = function()
 				{ type = "button", text = "#uv.pm.pursuit.start", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.stop", convar = "uv_stoppursuit", sv = true },
 				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", command = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-
-				{ type = "label", text = "#uv.pm.misc", sv = true },
-				{ type = "button", text = "#uv.pm.clearbounty", convar = "uv_clearbounty", sv = true },
+				{ type = "button", text = "#uv.pm.clearbounty", desc = "uv.pm.clearbounty.desc", convar = "uv_clearbounty", sv = true },
 				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
+
+				{ type = "label", text = "#uv.hm", sv = true },
+				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
 			},
 			
 			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", sv = true, -- AI Racer Manager
@@ -347,12 +346,32 @@ UVMenu.Settings = function()
 				{ type = "slider", text = "#uv.pursuit.bustedtime", desc = "uv.pursuit.bustedtime.desc", convar = "unitvehicle_bustedtimer", min = 0, max = 10, decimals = 1, sv = true },
 				{ type = "slider", text = "#uv.pursuit.respawntime", desc = "uv.pursuit.respawntime.desc", convar = "unitvehicle_spawncooldown", min = 0, max = 120, decimals = 0, sv = true },
 				{ type = "slider", text = "#uv.pursuit.spikeduration", desc = "uv.pursuit.spikeduration.desc", convar = "unitvehicle_spikestripduration", min = 0, max = 120, decimals = 0, sv = true },
+				
+				{ type = "label", text = "#uv.pursuit.roadblocks", sv = true },
+				{ type = "slider", text = "#uv.pursuit.roadblocks.maxnr", desc = "uv.pursuit.roadblocks.maxnr.desc", convar = "unitvehicle_roadblock_maxrb", min = 0, max = 10, sv = true },
+				{ type = "combo", text = "#uv.pursuit.roadblocks.alwaysjoinpursuit", desc = "uv.pursuit.roadblocks.alwaysjoinpursuit.desc", convar = "unitvehicle_roadblock_override", sv = true, content = {
+						{ "#uv.pursuit.roadblocks.alwaysjoinpursuit.off", 0 },
+						{ "#uv.pursuit.roadblocks.alwaysjoinpursuit.always", 1 },
+						{ "#uv.pursuit.roadblocks.alwaysjoinpursuit.never", 2 },
+					},
+				},
 			},
 			{ TabName = "#uv.ptech", Icon = "unitvehicles/icons_carbon/wingman_target.png", sv = true,
 				{ type = "label", text = "#uv.settings.general", sv = true },
 				{ type = "bool", text = "#uv.ptech.racer", desc = "uv.ptech.racer.desc", convar = "unitvehicle_racerpursuittech", sv = true },
 				{ type = "bool", text = "#uv.ptech.friendlyfire", desc = "uv.ptech.friendlyfire.desc", convar = "unitvehicle_racerfriendlyfire", sv = true },
 				{ type = "bool", text = "#uv.ptech.roadblockfriendlyfire", desc = "uv.ptech.roadblockfriendlyfire.desc", convar = "unitvehicle_spikestriproadblockfriendlyfire", sv = true },
+			},
+			{ TabName = "#uv.pb", Icon = "unitvehicles/icons/minimap_icon_pursuit_breaker.png", sv = true,
+				{ type = "label", text = "#uv.settings.general", sv = true },
+				{ type = "slider", text = "#uv.pb.maxnr", desc = "uv.pb.maxnr.desc", convar = "unitvehicle_pursuitbreaker_maxpb", min = 0, max = 10, sv = true },
+				{ type = "combo", text = "#uv.tool.spawncondition", desc = "uv.tool.spawncondition.pb.desc", convar = "unitvehicle_pursuitbreaker_spawncondition", sv = true, content = {
+						{ "#uv.tool.spawncondition.never", 0 },
+						{ "#uv.tool.spawncondition.driving", 1 },
+						{ "#uv.tool.spawncondition.always", 2 },
+					},
+				},
+				{ type = "slider", text = "#uv.pb.cooldown", desc = "uv.pb.cooldown.desc", convar = "unitvehicle_pursuitbreaker_pbcooldown", min = 10, max = 600, sv = true },
 			},
 			{ TabName = "#uv.ai.title", Icon = "unitvehicles/icons/cops_icon.png", sv = true,
 				{ type = "label", text = "#uv.ailogic", sv = true },
@@ -503,25 +522,13 @@ UV.Credits = {
 **TalonSolid**
 **ET7970**
 ]],
-["TranslationsRaw"] = [[
-[flag_se] **Moka**
-[flag_el] **TalonSolid**
-[flag_ru] **WladZ**
-[flag_cz] **Despe**
-[flag_es] **Dami**
-[flag_br] **Raiden_Gm**
-[flag_cn] **Pathfinder_FUFU**
-[flag_th] **Takis036**
-[flag_ua] **Mr.Negative & Renegade_Glitch**
-[flag_pl] **TheSilent1**
-]],
 ["Translations"] = {
 		{ flag = "se", desc = "Svenska - Swedish", name = "Moka" },
 		{ flag = "gr", desc = "Ελληνικά - Greek", name = "TalonSolid" },
 		{ flag = "ru", desc = "Русский - Russian", name = "WladZ" },
 		{ flag = "cz", desc = "Čeština - Czech", name = "Despe" },
 		{ flag = "es", desc = "Español - Spanish", name = "Dami" },
-		{ flag = "br", desc = "Português Brasileiro - Brazilian Portuguese", name = "Raiden_Gm" },
+		-- { flag = "br", desc = "Português Brasileiro - Brazilian Portuguese", name = "Raiden_Gm" },
 		{ flag = "cn", desc = "简体中文 - Simplified Chinese", name = "Pathfinder_FUFU" },
 		{ flag = "th", desc = "แบบไทย - Thai", name = "Takis036" },
 		{ flag = "ua", desc = "Українська - Ukrainian", name = "Mr.Negative & Renegade_Glitch" },
@@ -828,6 +835,16 @@ end
 function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 	local menuEntries = {}
 
+	-- Back button
+	table.insert(menuEntries, {
+		type = "button",
+		text = "#uv.back",
+		playsfx = "clickback",
+		func = function()
+			UVMenu.OpenMenu(UVMenu.Main)
+		end
+	})
+
 	for classIndex, unitsString in ipairs(unittable) do
 		-- split units list
 		local available = {}
@@ -865,16 +882,6 @@ function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 			end
 		end
 	end
-
-	-- Back button
-	table.insert(menuEntries, {
-		type = "button",
-		text = "#uv.back",
-		playsfx = "clickback",
-		func = function()
-			UVMenu.OpenMenu(UVMenu.Main)
-		end
-	})
 
 	-- Open the menu with fully prebuilt entries
 	UVMenu.CurrentMenu = UVMenu:Open({

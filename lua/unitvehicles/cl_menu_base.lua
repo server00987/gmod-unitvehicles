@@ -401,6 +401,63 @@ local function GetDynamicTall(text, maxWidth, baseFont, altFont)
     return (#lines * lineHeight) + padding
 end
 
+	
+local function ResolveKeybind(token)
+	if token:sub(1, 1) == "+" then
+		local key = input.LookupBinding(token, true)
+		return key and string.upper(key) or "???"
+	end
+
+	local cv = GetConVar(token)
+	if cv then
+		return string.upper(input.GetKeyName(cv:GetInt()) or "???")
+	end
+
+	return "???"
+end
+
+local function ReplaceKeybinds(str)
+	str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
+		return "<color=255,255,0>" .. ResolveKeybind(cmd) .. "</color>"
+	end)
+
+	str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
+		return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
+	end)
+
+	str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+		return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
+	end)
+
+	return str
+end
+
+local function ReplaceKeybindsNoCol(str)
+	str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
+		return ResolveKeybind(cmd)
+	end)
+
+	str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
+		return ResolveKeybind(cvar)
+	end)
+
+	str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+		return language.GetPhrase(locstring)
+	end)
+
+	return str
+end
+
+local function ConvertDiscordFormatting(str)
+	str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
+	str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
+	str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
+	str = str:gsub("__(.-)__", "[u]%1[/u]")
+	str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
+	str = str:gsub("\n#%s*(.-)\n", "\n<font=UVSettingsFontBig>%1</font>\n")
+	return str
+end
+
 -- Build one setting (label / bool / slider / combo / button)
 function UV.BuildSetting(parent, st, descPanel)
 	local function GetDisplayText()
@@ -417,49 +474,9 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		return prefix .. language.GetPhrase(st.text)
 	end
-		
+
 	-- if st is an information panel
 	if st.type == "info" then
-		local function ResolveKeybind(token)
-			if token:sub(1, 1) == "+" then
-				local key = input.LookupBinding(token, true)
-				return key and string.upper(key) or "???"
-			end
-
-			local cv = GetConVar(token)
-			if cv then
-				return string.upper(input.GetKeyName(cv:GetInt()) or "???")
-			end
-
-			return "???"
-		end
-
-		local function ReplaceKeybinds(str)
-			str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
-				return "<color=255,255,0>" .. ResolveKeybind(cmd) .. "</color>"
-			end)
-
-			str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
-				return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
-			end)
-
-			str = str:gsub("%[string:([^%]]+)%]", function(locstring)
-				return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
-			end)
-
-			return str
-		end
-
-		local function ConvertDiscordFormatting(str)
-			str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
-			str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
-			str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
-			str = str:gsub("__(.-)__", "[u]%1[/u]")
-			str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
-			str = str:gsub("\n#%s*(.-)\n", "\n<font=UVSettingsFontBig>%1</font>\n")
-			return str
-		end
-
 		local p = vgui.Create("DPanel", parent)
 		p:Dock(TOP)
 		p:DockMargin(6, 6, 6, 2)
@@ -2289,7 +2306,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		--panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(UV.ScaleH(500))
+		panel:SetTall(UV.ScaleH(600))
 
 		panel.Paint = function(self, w, h)
 			local a = self:GetAlpha()
@@ -2311,8 +2328,8 @@ function UV.BuildSetting(parent, st, descPanel)
 			local preset = presetArray[name]
 			local btn = scroll:Add("DButton")
 			btn:Dock(TOP)
-			btn:DockMargin(0, 0, 0, 4)
-			btn:SetTall(UV.ScaleH(40))
+			btn:DockMargin(0, 0, 6, 6)
+			btn:SetTall(UV.ScaleH(30))
 			btn:SetText("")
 
 			btn.Paint = function(self, w, h)
@@ -2351,7 +2368,7 @@ function UV.BuildSetting(parent, st, descPanel)
 							HideCloseButton = true,
 							UnfocusClose = false,
 							Tabs = {
-								{ TabName = "#uv.hm.presets.warning", 
+								{ TabName = "#uv.hm.presets.warning", Icon = "unitvehicles/icons/generic_alert.png", ShowIcon = true, 
 									{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ) },
 									{ type = "button", text = "#openurl.yes", func = 
 									function(self2)
@@ -2436,12 +2453,15 @@ function UV.BuildSetting(parent, st, descPanel)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
 			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.export"), w * 0.95, w*0.5, nil, true)
 		end
+		
+		exportPanel.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.export.desc" end end
+		exportPanel.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
 
 		exportPanel.DoClick = function(self)
 			if string.Trim(presetName) ~= "" then
 				UVUnitManagerExportPreset(presetName)
 			else
-				notification.AddLegacy("Preset name is required!", NOTIFY_UNDO, 5)
+				notification.AddLegacy("#uv.hm.presets.presetname.require", NOTIFY_UNDO, 5)
 			end
 		end
 
@@ -2472,7 +2492,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			self2:DrawTextEntryText(color_white, Color(58,193,0), color_white)
 			if not self2:IsEditing() and self2:GetText() == "" then
 				draw.SimpleText(
-					"#uv.hm.presets.presetname",
+					ReplaceKeybindsNoCol(language.GetPhrase("uv.hm.presets.presetname")),
 					self2:GetFont(),
 					8,
 					h / 2,
@@ -2508,7 +2528,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local saveBtn = vgui.Create("DButton", panelBottom)
 		saveBtn:Dock(RIGHT)
 		saveBtn:DockMargin(6, 6, 6, 6)
-		saveBtn:SetWide(UV.ScaleW(300))
+		saveBtn:SetWide(UV.ScaleW(400))
 		saveBtn:SetTall(UV.ScaleH(35))
 		saveBtn:SetText(" ")
 
@@ -2530,12 +2550,15 @@ function UV.BuildSetting(parent, st, descPanel)
 					presets.Add(st.preset, presetName, data)
 					presetArray[presetName] = data
 					refreshButtons()
-					notification.AddLegacy("Preset saved successfully!", NOTIFY_UNDO, 5)
+					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.saved"), presetName), NOTIFY_UNDO, 5)
 				else
-					notification.AddLegacy("Preset name is required!", NOTIFY_UNDO, 5)
+					notification.AddLegacy("#uv.hm.presets.presetname.require", NOTIFY_UNDO, 5)
 				end
 			end
 		end
+		
+		saveBtn.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.save.desc" end end
+		saveBtn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
 
 		saveBtn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
@@ -2561,7 +2584,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local deleteBtn = vgui.Create("DButton", panelBottom)
 		deleteBtn:Dock(LEFT)
 		deleteBtn:DockMargin(6, 6, 6, 6)
-		deleteBtn:SetWide(UV.ScaleW(300))
+		deleteBtn:SetWide(UV.ScaleW(400))
 		deleteBtn:SetTall(UV.ScaleH(35))
 		deleteBtn:SetText(" ")
 
@@ -2570,7 +2593,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				if presets.Exists(st.preset, presetName) then 
 					presets.Remove(st.preset, presetName)
 					presetArray[presetName] = nil
-					notification.AddLegacy("Preset deleted successfully!", NOTIFY_UNDO, 5)
+					notification.AddLegacy(string.format(language.GetPhrase("uv.tool.deleted"), presetName), NOTIFY_UNDO, 5)
 				end			
 			end
 		end
@@ -2593,6 +2616,9 @@ function UV.BuildSetting(parent, st, descPanel)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
 			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.delete"), w * 0.95, w*0.5, nil, true)
 		end
+		
+		deleteBtn.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.delete.desc" end end
+		deleteBtn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
 
 		return panel
 	end
@@ -2650,8 +2676,8 @@ function UV.BuildSetting(parent, st, descPanel)
 		
 		local filterBar = vgui.Create("DPanel", body)
 		filterBar:Dock(TOP)
-		filterBar:SetTall(15)
-		filterBar:DockMargin(6, 0, 6, 6)
+		filterBar:SetTall(UV.ScaleH(20))
+		filterBar:DockMargin(UV.ScaleW(6), 0, UV.ScaleW(6), UV.ScaleW(6))
 		filterBar.Paint = nil
 		
 		-- Bottom warning panel
@@ -2757,7 +2783,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				local btn = parentList:Add("DButton")
 				btn:Dock(TOP)
 				btn:DockMargin(0, 0, 0, 4)
-				btn:SetTall(24)
+				btn:SetTall(UV.ScaleH(24))
 				btn:SetText("")
 				btn.Selected = isSelected
 
@@ -2814,7 +2840,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local function addFilterButton(text, baseId)
 			local btn = vgui.Create("DButton", filterBar)
 			btn:Dock(LEFT)
-			btn:DockMargin(0, 0, 6, 0)
+			btn:DockMargin(0, 0, 0, 0)
 			btn:SetWide(UV.ScaleW(80))
 			btn:SetText(text)
 
@@ -2942,12 +2968,12 @@ function UVMenu.EstimateTabHeight(tab, availableWidth)
 	for _, st in ipairs(tab) do
 		if istable(st) and st.type and UV.ShouldDrawSetting(st) then
 			local base
-			local text = language.GetPhrase(st.text)
+			local text = st.text or ""
 
 			if st.type == "infosimple" then
 				base = math.max(UV.ScaleH(23), GetDynamicTall(text, availableWidth))
 			elseif st.type == "info_flags" then
-				base = UV.ScaleH(10) * 2 + (#st.entries * 24)
+				base = UV.ScaleH(20) * 2 + (#st.entries * 24)
 			elseif st.type == "image" then
 				base = math.floor((availableWidth / 16) * 9)
 			elseif st.type == "label" then
@@ -3131,7 +3157,7 @@ function UVMenu:Open(menu)
                 local yOffset = yPadding
 
                 surface.SetFont(font)
-                local desc = language.GetPhrase(self.Desc or "") or ""
+                local desc = ReplaceKeybindsNoCol(language.GetPhrase(self.Desc or "") or "")
 
                 local paragraphs = string.Split(desc, "\n")
                 for _, paragraph in ipairs(paragraphs) do
@@ -3252,6 +3278,18 @@ function UVMenu:Open(menu)
 
         title.Paint = function(self, w, h)
 			DrawWrappedText(self, language.GetPhrase(tab.TabName) or ("Tab " .. tostring(tabIndex)), w - 44, w*0.5, nil, true, "UVFont5")
+
+			if tab.Icon and tab.ShowIcon then
+				local mat = Material(tab.Icon, "smooth")
+				local iconSize = tab.IconSize or UV.ScaleW(40)
+				local iconX = 0
+				local iconX2 = title:GetWide() - iconSize
+				local iconY = (h - iconSize) / 2
+				surface.SetDrawColor(255, 255, 255, self:GetAlpha())
+				surface.SetMaterial(mat)
+				surface.DrawTexturedRect(iconX, iconY, iconSize, iconSize)
+				surface.DrawTexturedRect(iconX2, iconY, iconSize, iconSize)
+			end
         end
 
         watchedConvars = {} -- reset

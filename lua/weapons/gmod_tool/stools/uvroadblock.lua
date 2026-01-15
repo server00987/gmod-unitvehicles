@@ -220,51 +220,12 @@ if CLIENT then
 	end
 
 	function TOOL.BuildCPanel(CPanel)
+		local lang = language.GetPhrase
+		
 		if not file.Exists( "unitvehicles/roadblocks/"..game.GetMap(), "DATA" ) then
 			file.CreateDir( "unitvehicles/roadblocks/"..game.GetMap() )
 			print("Created a Roadblock data file for "..game.GetMap().."!")
 		end
-
-		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("#spawnmenu.savechanges")
-		applysettings.DoClick = function()
-			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#uv.superadmin", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
-				return
-			end
-
-			--Run Console Command
-			RunConsoleCommand("unitvehicle_roadblock_maxrb", GetConVar("uvroadblock_maxrb"):GetInt())
-			RunConsoleCommand("unitvehicle_roadblock_override", GetConVar("uvroadblock_override"):GetInt())
-
-			local convar_table = {}
-
-			convar_table['unitvehicle_roadblock_maxrb'] = GetConVar("uvroadblock_maxrb"):GetInt()
-			convar_table['unitvehicle_roadblock_override'] = GetConVar("uvroadblock_override"):GetInt()
-
-			net.Start("UVUpdateSettings")
-			net.WriteTable(convar_table)
-			net.SendToServer()
-
-			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-			-- Msg( "#uv.tool.applied" )
-		end
-		CPanel:AddItem(applysettings)
-	
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "roadblocks",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-	
-		CPanel:AddControl("Label", {
-			Text = "#uv.clickapply",
-		})
 
 		CPanel:AddControl("Label", {
 			Text = "#tool.uvroadblock.settings.roadblocks",
@@ -344,32 +305,17 @@ if CLIENT then
 		end
 		CPanel:AddItem(Delete)
 
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvroadblock.settings",
-		})
+		CPanel:AddControl("Label", { Text = "" }) -- General Settings
+		CPanel:AddControl("Label", { Text = "#uv.tweakinmenu" })
+		local OpenMenu = vgui.Create("DButton")
+		OpenMenu:SetText("#uv.tweakinmenu.open")
+		OpenMenu:SetSize(280, 20)
+		OpenMenu.DoClick = function()
+			UVMenu.OpenMenu(UVMenu.Settings)
+			UVMenu.PlaySFX("menuopen")
+		end
+		CPanel:AddItem(OpenMenu)
 
-		local MaxRB = vgui.Create( "DNumSlider", CPanel )
-		MaxRB:SetText( "#tool.uvroadblock.settings.maxnr" )
-		MaxRB:SetTooltip( "#tool.uvroadblock.settings.maxnr.desc" )
-		MaxRB:SetMin( 0 )
-		MaxRB:SetMax( 10 )
-		MaxRB:SetDecimals( 0 )
-		MaxRB:SetConVar( "uvroadblock_maxrb" )
-		CPanel:AddItem(MaxRB)
-
-		local Override = vgui.Create( "DNumSlider", CPanel )
-		Override:SetText( "#tool.uvroadblock.settings.alwaysjoinpursuit" )
-		Override:SetTooltip( "#tool.uvroadblock.settings.alwaysjoinpursuit.desc" )
-		Override:SetMin( 0 )
-		Override:SetMax( 2 )
-		Override:SetDecimals( 0 )
-		Override:SetConVar( "uvroadblock_override" )
-		CPanel:AddItem(Override)
-
-		CPanel:AddControl("Label", {
-			Text = "#tool.uvroadblock.settings.alwaysjoinpursuit.desc",
-		})
-			
 	end
 
 	local toolicon = Material( "hud/(8)roadblock.png", "ignorez" )

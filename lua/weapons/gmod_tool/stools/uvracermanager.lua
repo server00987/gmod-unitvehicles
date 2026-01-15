@@ -396,43 +396,6 @@ if CLIENT then
 			file.CreateDir( "unitvehicles/prop_vehicle_jeep/racers" )
 			print("Created a Default Vehicle Base data file for the Racer Vehicles!")
 		end
-		
-		CPanel:AddControl("ComboBox", {
-			MenuButton = 1,
-			Folder = "racers",
-			Options = {
-				["#preset.default"] = conVarsDefault
-			},
-			CVars = table.GetKeys(conVarsDefault)
-		})
-		
-		local applysettings = vgui.Create("DButton")
-		applysettings:SetText("#spawnmenu.savechanges")
-		applysettings.DoClick = function()
-			if not LocalPlayer():IsSuperAdmin() then
-				notification.AddLegacy( "#uv.superadmin.settings", NOTIFY_ERROR, 5 )
-				surface.PlaySound( "buttons/button10.wav" )
-				return
-			end
-			
-			local convar_table = {}
-			
-			convar_table['unitvehicle_racer_vehiclebase'] = GetConVar('uvracermanager_vehiclebase'):GetInt()
-			convar_table['unitvehicle_racer_assignracers'] = GetConVar('uvracermanager_assignracers'):GetInt()
-			convar_table['unitvehicle_racer_racers'] = GetConVar('uvracermanager_racers'):GetString()
-			convar_table['unitvehicle_racer_spawncondition'] = GetConVar('uvracermanager_spawncondition'):GetInt()
-			convar_table['unitvehicle_racer_maxracer'] = GetConVar('uvracermanager_maxracer'):GetInt()
-
-			net.Start("UVUpdateSettings")
-			net.WriteTable(convar_table)
-			net.SendToServer()
-			
-			notification.AddLegacy( "#uv.tool.applied", NOTIFY_UNDO, 5 )
-			surface.PlaySound( "buttons/button15.wav" )
-			-- Msg( "#tool.uvracermanager.applied" )
-			
-		end
-		CPanel:AddItem(applysettings)
 
 		-- Unified Vehicle Base UI
 		local vehicleBases = {
@@ -441,6 +404,8 @@ if CLIENT then
 			{ id = 3, name = "Glide", func = uvracermanagerGetSavesGlide, path = "unitvehicles/glide/racers/", type = "json" }
 		}
 		
+		CPanel:AddControl("Label", { Text = "#tool.uvracermanager.settings.desc" })
+
 		-- Scroll Panel
 		local FrameListPanel = vgui.Create("DFrame")
 		FrameListPanel:SetSize(280, 200)

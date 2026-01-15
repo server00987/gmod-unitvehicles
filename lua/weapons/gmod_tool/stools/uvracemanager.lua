@@ -776,41 +776,9 @@ function TOOL:Reload( trace )
 end
 
 function TOOL.BuildCPanel(panel)
-	panel:AddControl("Header", { Text = "tool.uvracemanager.name"})
-	
-	panel:AddControl("Label", {Text = "#uv.rm.startrace", Description = "Race"})
-	panel:AddControl("Button", {Label = "#uv.rm.startrace", Command = "uvrace_racemenu"})
-	panel:AddControl("Button", {Label = "#uv.rm.stoprace", Command = "uvrace_stop"})
-	panel:AddControl("Button", {Label = "#uv.rm.sendinvite", Command = "uvrace_startinvite"})
-	
-	panel:AddControl("Label", {Text = "#tool.uvracemanager.settings.saveloadrace", Description = "Race"})
 	panel:AddControl("Button",  { Label	= "#uv.rm.loadrace", Command = "uvrace_queryimport" })
 	panel:AddControl("Button",  { Label	= "#tool.uvracemanager.settings.saverace", Command = "uvrace_queryexport" })
 
-	panel:AddControl("Label", {Text = "#uv.rm.options"})
-	local last_lap_value
-	local lap_slider = panel:NumSlider("#uv.rm.options.laps", "uvracemanager_laps", 1, 100, 0)
-
-	local sfxtheme, label = panel:ComboBox( "#uv.rm.options.sfx", "unitvehicle_sfxtheme" )
-	local files, folders = file.Find( "sound/uvracesfx/*", "GAME" )
-	if folders ~= nil then
-		for k, v in pairs(folders) do
-			sfxtheme:AddChoice( v )
-		end
-	end
-	
-	local last_dnftimer_value
-	local dnftimer_slider = panel:NumSlider("#uv.rm.options.dnftimer", "uvracemanager_dnftimer", 0, 90, 0)
-	dnftimer_slider.OnValueChanged = function(self, value)
-		local value = GetConVar("uvracemanager_dnftimer"):GetInt()
-		
-		if last_dnftimer_value ~= value then
-			RunConsoleCommand("uvrace_updatevars", "unitvehicle_racednftimer", value)
-			last_dnftimer_value = value
-		end
-	end
-	panel:AddControl("Label",  { Text	= "#uv.rm.options.dnftimer.desc" })
-	
 	panel:AddControl("Label", {Text = "#uv.rm.startracereate"})
 	local speed_slider = panel:NumSlider("#uv.rm.startracereate.speedlimit", "uvracemanager_speedlimit", 1, 500, 0)
 	local cpheight_slider = panel:NumSlider("#uv.rm.startracereate.cpheight", "unitvehicle_cpheight", 1, 500, 0)
