@@ -30,6 +30,7 @@ UV_SubtitleEnd = 0
 UV_CurrentSubtitleCallsign = ""
 
 UVCounterActive = false -- Is the Race or Pursuit countdown active?
+local ShouldArchive = (SERVER or game.SinglePlayer()) and FCVAR_ARCHIVE or nil
 
 PT_Slots_Replacement_Strings = {
 	[1] = "#uv.ptech.slot.right",
@@ -948,13 +949,15 @@ UVUCommanderRepair = CreateConVar("unitvehicle_unit_commanderrepair", 1, {FCVAR_
 UVUTimeTillNextHeatEnabled = CreateConVar("unitvehicle_unit_timetillnextheatenabled", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Unit Vehicles: If set to 1, Heat Levels will progress automatically based on the time until the next heat level.")
 
 UVTVehicleBase = CreateConVar("unitvehicle_traffic_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
+UVTAssignTraffic = CreateConVar("unitvehicle_traffic_assigntraffic", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Spawns Traffic Vehicles only from the list. Otherwise, spawns a random Traffic Vehicle from the database.")
 UVTSpawnCondition = CreateConVar("unitvehicle_traffic_spawncondition", 2, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
 UVTMaxTraffic = CreateConVar("unitvehicle_traffic_maxtraffic", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Traffic Vehicles roaming.")
+UVTTrafficVehicles = CreateConVar("unitvehicle_traffic_vehicles", "", {ShouldArchive}, "Assigned Traffic Vehicles (for override mode)")
 
 --racer convars
 UVRVehicleBase = CreateConVar("unitvehicle_racer_vehiclebase", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1 = Default Vehicle Base (prop_vehicle_jeep)\n2 = simfphys\n3 = Glide")
 UVRAssignRacers = CreateConVar("unitvehicle_racer_assignracers", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Spawns Racer Vehicles only from the list. Otherwise, spawns a random Racer Vehicle from the database.")
-UVRRacers = CreateConVar("unitvehicle_racer_racers", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Assigned Racer Vehicles")
+UVRRacers = CreateConVar("unitvehicle_racer_racers", "", {ShouldArchive}, "Assigned Racer Vehicles")
 UVRSpawnCondition = CreateConVar("unitvehicle_racer_spawncondition", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "\n1) Never \n2) When driving \n3) Always")
 UVRMaxRacer = CreateConVar("unitvehicle_racer_maxracer", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Max amount of Racer Vehicles roaming.")
 
@@ -995,7 +998,10 @@ local defaultvoicetable = {
 	"air", --Air
 }
 
-local ReplicatedVars = {}
+local ReplicatedVars = {
+	"unitvehicle_racer_racers",
+	"unitvehicle_traffic_vehicles",
+}
 
 for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
 	local lowercaseUnit = string.lower( v )
@@ -1007,8 +1013,6 @@ for _, v in pairs( {'Misc', 'Dispatch'} ) do
 	local lowercaseType = string.lower( v )
 	CreateConVar( "unitvehicle_unit_" .. lowercaseType .. "_voiceprofile", "", {FCVAR_ARCHIVE, FCVAR_REPLICATED})
 end
-
-local ShouldArchive = (SERVER or game.SinglePlayer()) and FCVAR_ARCHIVE or nil
 
 for i = 1, MAX_HEAT_LEVEL do
 	local prevIterator = i - 1

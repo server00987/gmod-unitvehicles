@@ -1705,7 +1705,13 @@ function UV.BuildSetting(parent, st, descPanel)
 
 			local str = table.concat(out, " ")
 			-- RunConsoleCommand(st.convar, str)
-			racerconvar:SetString( str )
+			if st.sv and string.match(st.convar, 'unitvehicle_') then
+				net.Start("UVUpdateSettings")
+				net.WriteTable({ [st.convar] = str })
+				net.SendToServer()
+			else
+				racerconvar:SetString( str )
+			end
 		end
 
 		local classToNode = {} -- lookup so textbox edits update icons
@@ -1878,7 +1884,13 @@ function UV.BuildSetting(parent, st, descPanel)
 		p.OnMousePressed = function(self, mouse)
 			if mouse == MOUSE_MIDDLE then
 				-- RunConsoleCommand(st.convar, "")
-				racerconvar:SetString( "" )
+				if st.sv and string.match(st.convar, 'unitvehicle_') then
+					net.Start("UVUpdateSettings")
+					net.WriteTable({ [st.convar] = "" })
+					net.SendToServer()
+				else
+					racerconvar:SetString( "" )
+				end
 				
 				selectedRacers = {}
 

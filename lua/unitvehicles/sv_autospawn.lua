@@ -1560,6 +1560,79 @@ function UVAutoSpawnTraffic()
 	local vehiclebase = UVTVehicleBase:GetInt()
 	local availabletraffic = {}
 	local MEMORY = {}
+
+	-- Override mode
+	local OverrideEnabled = GetConVar("unitvehicle_traffic_assigntraffic"):GetBool()
+	local OverrideList = string.Trim(GetConVar("unitvehicle_traffic_vehicles"):GetString())
+	local OverrideVehicles = string.Explode(" ", OverrideList)
+
+	if OverrideEnabled and #OverrideVehicles > 0 then
+		local uvnextclasstospawn = "npc_trafficvehicle"
+
+		-- Pick a random vehicle from the override list
+		local class_name = OverrideVehicles[math.random(1, #OverrideVehicles)]
+
+		if vehiclebase == 3 then
+			-- Glide
+			local Ent = ents.Create(class_name)
+			if IsValid(Ent) then
+				Ent:SetPos(uvspawnpoint + Vector(0,0,50))
+				Ent:SetAngles(uvspawnpointangles)
+				Ent:Spawn()
+				Ent:Activate()
+
+				-- Tag for AI
+				Ent.uvclasstospawnon = uvnextclasstospawn
+				table.insert(UVVehicleInitializing, Ent)
+			end
+
+		elseif vehiclebase == 2 then
+			-- Simfphys
+			local VehicleList = list.Get("simfphys_vehicles")
+			local vehicle = VehicleList[class_name]
+
+			if vehicle then
+				local SpawnPos = uvspawnpoint + (vector_up * 50) + (vehicle.SpawnOffset or vector_origin)
+				local SpawnAng = uvspawnpointangles
+				SpawnAng.pitch = 0
+				SpawnAng.yaw = SpawnAng.yaw + 180
+				SpawnAng.roll = 0
+
+				local Ent = simfphys.SpawnVehicle(Entity(1), SpawnPos, SpawnAng, vehicle.Model, vehicle.Class, class_name, vehicle)
+				if IsValid(Ent) then
+					Ent.uvclasstospawnon = uvnextclasstospawn
+					table.insert(UVVehicleInitializing, Ent)
+				end
+			else
+				PrintMessage(HUD_PRINTTALK, "Simfphys vehicle '"..class_name.."' not found!")
+			end
+
+		elseif vehiclebase == 1 then
+			-- HL2 Jeep
+			local Vehicles = list.Get("Vehicles")
+			local vehData = Vehicles[class_name]
+
+			if vehData then
+				local Ent = ents.Create("prop_vehicle_jeep")
+				Ent.VehicleTable = vehData
+				Ent.VehicleName = vehData.PrintName or class_name
+				Ent:SetModel(vehData.Model)
+				Ent:SetPos(uvspawnpoint + Vector(0,0,50))
+				Ent:SetAngles(uvspawnpointangles)
+				Ent:SetKeyValue("vehiclescript", vehData.KeyValues.vehiclescript)
+				Ent:SetVehicleClass(class_name)
+				Ent:Spawn()
+				Ent:Activate()
+
+				Ent.uvclasstospawnon = uvnextclasstospawn
+				table.insert(UVVehicleInitializing, Ent)
+			else
+				PrintMessage(HUD_PRINTTALK, "HL2 Jeep vehicle '"..class_name.."' not found!")
+			end
+		end
+
+		return -- skip the rest of the function
+	end
 	
 	if vehiclebase == 3 then --Glide
 		local saved_vehicles = file.Find("unitvehicles/glide/traffic/*.json", "DATA")
