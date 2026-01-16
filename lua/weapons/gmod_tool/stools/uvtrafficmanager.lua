@@ -55,15 +55,15 @@ if CLIENT then
 		TrafficAdjust:SetTitle("#tool.uvtrafficmanager.create")
 		TrafficAdjust:SetDraggable(false)
 		TrafficAdjust:MakePopup()
-		
+
 		local Intro = vgui.Create( "DLabel", TrafficAdjust )
 		Intro:SetPos( 20, 40 )
-		Intro:SetText( string.format( lang("tool.uvunitmanager.create.base"), UVTrafficTOOLMemory.VehicleBase ) )
+		Intro:SetText( string.format( lang("uv.tool.create.base"), UVTrafficTOOLMemory.VehicleBase ) )
 		Intro:SizeToContents()
 		
 		local Intro2 = vgui.Create( "DLabel", TrafficAdjust )
 		Intro2:SetPos( 20, 60 )
-		Intro2:SetText( string.format( lang("tool.uvunitmanager.create.rawname"), UVTrafficTOOLMemory.SpawnName ) )
+		Intro2:SetText( string.format( lang("uv.tool.create.rawname"), UVTrafficTOOLMemory.SpawnName ) )
 		Intro2:SizeToContents()
 		
 		local Intro3 = vgui.Create( "DLabel", TrafficAdjust )
@@ -372,7 +372,7 @@ if CLIENT then
 
 				btn.DoClick = function()
 					selecteditem = entry.filename
-					SetClipboardText(selecteditem)
+					-- SetClipboardText(selecteditem)
 
 					if entry.base.type == "json" then
 						UVTOOLMemory = util.JSONToTable(
