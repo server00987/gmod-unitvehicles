@@ -87,125 +87,68 @@ if CLIENT then
         { type = "reverse", offset = Vector(-95.64,-18,33.83), size = 30, color = Color(255,255,255),ifBodygroupId = 11, ifSubModelId = 0, dir = Vector( -1, 0, 0 ), }, 
         
     }
-	
-	function ENT:GenerateSirenLights(coplights, timings, defaultSpriteMaterial, coplightsize)
-		local SirenLights = {}
 
-		local colorMap = {
-			red = Color(255, 100, 100),
-			blue = Color(0, 150, 255),
-			white1 = Color(255, 255, 255),
-			white2 = Color(255, 255, 255),
-		}
+    ENT.SirenLights = {
 
-		local lightRadiusMap = {
-			red = 100,
-			blue = 100,
-			white1 = 0,
-			white2 = 0,
-		}
+        { bodygroup = 13, time = 0, duration = 0.5 },
+        { bodygroup = 14, time = 0.5, duration = 0.5 },
 
-		-- Size multiplier
-		local sizeMultiplier = 1
-		if coplightsize == "small" then
-			sizeMultiplier = 0.5
-		elseif coplightsize == "vsmall" then
-			sizeMultiplier = 0.25
-		end
+	-- RED
+    
+        { offset = Vector(-98.38,-10.61,20.18), time = 0,size = 30, color = Color(255,30,0,175), },
+        { offset = Vector(-98.38,-10.61,20.18), time = 0.25,size = 30, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,19.92,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,19.92,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,-19.92,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,-19.92,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,14.26,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,14.26,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,-14.26,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,-14.26,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,19.92,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,19.92,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,-19.92,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,-19.92,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,14.26,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,14.26,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,-14.26,53.04), time = 0,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-14.72,-14.26,53.04), time = 0.25,size = 40, color = Color(255,30,0,175), },
+        { offset = Vector(-22.01,19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-22.01,19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-22.01,-19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-22.01,-19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-14.72,19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-14.72,19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-14.72,-19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0,size = 180, color = Color(255,30,0,125), },
+        { offset = Vector(-14.72,-19.92,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.25,size = 180, color = Color(255,30,0,125), },
 
-		for colorName, lights in pairs(coplights) do
-			local lightColor = colorMap[colorName]
-			local timeList = timings[colorName] or {0}
-			local lightRadiusVal = lightRadiusMap[colorName]
+	-- BLUE
 
-			for i, lightData in ipairs(lights) do
-				for _, t in ipairs(timeList) do
-					local lightEntry = {
-						offset = lightData.offset,
-						dir = lightData.dir,
-						spriteMaterial = lightData.spriteMaterial or defaultSpriteMaterial or Material("mokanfsw/universal/textures/lights/headlightflareouter"),
-						time = t,
-						duration = lightData.duration or 0.05,
-						lightRadius = lightData.lightRadius or lightRadiusVal,
-						size = (lightData.size or 80) * sizeMultiplier,
-						color = lightData.color or lightColor,
-						bodygroup = lightData.bodygroup,
-						ifBodygroupId = lightData.ifBodygroupId,
-						ifSubModelId = lightData.ifSubModelId,
-					}
+        { offset = Vector(-98.38,10.61,20.18), time = 0.5,size = 30, color = Color(0,115,255,175), },
+        { offset = Vector(-98.38,10.61,20.18), time = 0.75,size = 30, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,8.6,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,8.6,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,2.91,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,2.91,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,-8.6,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,-8.6,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,-2.91,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,-2.91,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,8.6,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,8.6,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,2.91,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,2.91,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,-8.6,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,-8.6,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,-2.91,53.04), time = 0.5,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,-2.91,53.04), time = 0.75,size = 90, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,0,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.5,size = 180, color = Color(0,115,255,175), },
+        { offset = Vector(-22.01,0,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.75,size = 180, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,0,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.5,size = 180, color = Color(0,115,255,175), },
+        { offset = Vector(-14.72,0,53.04),spriteMaterial = Material( "models/unitvehiclescars/shared/policesprite" ), time = 0.75,size = 180, color = Color(0,115,255,175), },
 
-					table.insert(SirenLights, lightEntry)
-				end
-			end
-		end
-
-		return SirenLights
-	end
-
-	local coplights = {
-		red = {
-			{ offset = Vector(-98.38,-10.61,20.18), size = 30, color = Color(255,30,0,175) },
-			{ offset = Vector(-22.01,19.92,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-22.01,-19.92,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-22.01,14.26,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-22.01,-14.26,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-14.72,19.92,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-14.72,-19.92,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-14.72,14.26,53.04), size = 40, color = Color(255,30,0,175) },
-			{ offset = Vector(-14.72,-14.26,53.04), size = 40, color = Color(255,30,0,175) },
-
-			-- Red sprite lights
-			{ offset = Vector(-22.01,19.92,53.04), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-			{ offset = Vector(-22.01,-19.92,53.04), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-			{ offset = Vector(-14.72,19.92,53.04), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-			{ offset = Vector(-14.72,-19.92,53.04), size = 180, color = Color(255,30,0,125), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-		},
-
-		blue = {
-			{ offset = Vector(-98.38,10.61,20.18), size = 30, color = Color(0,115,255,175) },
-			{ offset = Vector(-22.01,8.6,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-22.01,2.91,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-22.01,-8.6,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-22.01,-2.91,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-14.72,8.6,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-14.72,2.91,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-14.72,-8.6,53.04), size = 90, color = Color(0,115,255,175) },
-			{ offset = Vector(-14.72,-2.91,53.04), size = 90, color = Color(0,115,255,175) },
-
-			-- Blue sprite lights
-			{ offset = Vector(-22.01,0,53.04), size = 180, color = Color(0,115,255,175), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-			{ offset = Vector(-14.72,0,53.04), size = 180, color = Color(0,115,255,175), spriteMaterial = Material("models/unitvehiclescars/shared/policesprite") },
-		},
-	}
-
-	local coplightstimings = {
-		blue = {0, 0.125, 0.25, 0.375},
-		red = {0.5, 0.625, 0.75, 0.875},
-		white1 = {0, 0.166, 0.332},
-		white2 = {0.498, 0.664, 0.83},
-	}
-
-	local lightBodygroups = {
-		{ bodygroup = 13, time = 0, duration = 0.05 },
-		{ bodygroup = 13, time = 0.125, duration = 0.05 },
-		{ bodygroup = 13, time = 0.25, duration = 0.05 },
-		{ bodygroup = 13, time = 0.375, duration = 0.05 },
-		
-		{ bodygroup = 14, time = 0.5, duration = 0.05 },
-		{ bodygroup = 14, time = 0.625, duration = 0.05 },
-		{ bodygroup = 14, time = 0.75, duration = 0.05 },
-		{ bodygroup = 14, time = 0.875, duration = 0.05 },
-	}
-
-	ENT.SirenLights = {}
-	for _, bg in ipairs(lightBodygroups) do
-		table.insert(ENT.SirenLights, bg)
-	end
-	local generatedLights = ENT:GenerateSirenLights(coplights, coplightstimings)
-	for _, light in ipairs(generatedLights) do
-		table.insert(ENT.SirenLights, light)
-	end
-
+    }
+    
     function ENT:OnCreateEngineStream( stream )
         stream:LoadPreset( "uvcorvettec7engine" )
     end
