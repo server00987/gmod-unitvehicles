@@ -828,7 +828,7 @@ function UV.BuildSetting(parent, st, descPanel)
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
-					descPanel.SelectedCurrent = GetConVar(st.convar):GetFloat() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.convar):GetString() or "?"
 					descPanel.SelectedConVar = st.convar or st.command or "?"
 				elseif st.command then
 					descPanel.SelectedConVar = st.command or "?"
@@ -937,7 +937,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					net.WriteTable({ [st.convar] = val })
 					net.SendToServer()
 				else
-					GetConVar(st.convar):SetInt( tostring(val) )
+					GetConVar(st.convar):SetString( tostring(val) )
 				end
 			elseif st.command then
 				RunConsoleCommand(st.command, tostring(val))
