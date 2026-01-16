@@ -22,13 +22,12 @@ Mark your calendars, it's almost time to **Race, Chase or Escape**!
 - Added a Race Countdown to the NFS: ProStreet HUD
 - Added a new, updated list appearance to the AI Racers, Pursuit Breaker, Roadblocks, Traffic & Units tools
  |-- AI Racers, Traffic and Units also have new base sorting to only list vehicles from a particular base
+- Added Vehicle Override for the Traffic Manager, working identically to the AI Racer one
 
 **Changes**
 - UV Menu: All convars in the menu now control their correct server convars
  |-- This means that the "Apply Settings" buttons will be removed across the board
 - Moved the "Creator: Pursuit Breaker" and "Creator: Roadblocks" settings to the UV Menu
- |-- Roadblocks: UV Menu > Settings > Pursuit Settings
- |-- Pursuit Breakers: UV Menu > Settings > Pursuit Breakers
 - Renamed the "Manager: Units" tool to "Creator: Units"
 - Removed all settings from all Creator tools
 - Removed "Relentless" AI option and replaced it with a dynamic behaviour system
