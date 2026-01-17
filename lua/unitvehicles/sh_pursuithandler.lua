@@ -3422,14 +3422,17 @@ else -- CLIENT Settings | HUD/Options
 			text = string.format( language.GetPhrase("uv.hud.heatlvl"), UVHeatLevel + 1 )
 		})
 
-		if lastHeatlevel <= UVHeatLevel then
-			return
+		if not UVPlayingRace and UVHUDDisplayPursuit then
+			if not PursuitThemePlayRandomHeat:GetBool() or (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() ~= "everyminutes") then
+				UVHeatLevelIncrease = true
+				UVStopSound()
+			end
 		end
 
-		if not UVPlayingRace and (UVHUDDisplayPursuit and not (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes")) then
-			UVHeatLevelIncrease = true
-			UVStopSound()
-		end
+		-- if not UVPlayingRace and (UVHUDDisplayPursuit and not (PursuitThemePlayRandomHeat:GetBool() and PursuitThemePlayRandomHeatType:GetString() == "everyminutes")) then
+		-- 	UVHeatLevelIncrease = true
+		-- 	UVStopSound()
+		-- end
 	end)
 
 	net.Receive("UVHUDPursuitTech", function()

@@ -314,7 +314,7 @@ UVMenu.Settings = function()
 						{ "#uv.audio.pursuittheme.random.minutes", "everyminutes" },
 					},
 				},
-				{ type = "slider", text = "#uv.audio.pursuittheme.random.minutes", desc = "uv.audio.pursuittheme.random.minutes.desc", convar = "unitvehicle_chattervolume", min = 1, max = 10, decimals = 0, requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat" },
+				{ type = "slider", text = "#uv.audio.pursuittheme.random.minutes", desc = "uv.audio.pursuittheme.random.minutes.desc", convar = "unitvehicle_pursuitthemeplayrandomheatminutes", min = 1, max = 10, decimals = 0, requireparentconvar = "unitvehicle_pursuitthemeplayrandomheat" },
 				
 				{ type = "label", text = "#uv.audio.racing" },
 				{ type = "combo", text = "#uv.audio.racing.sfx", desc = "uv.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
