@@ -1099,14 +1099,14 @@ UVMenu.HeatManager = function()
 		{ type = "bool", text = "#uv.ptech.gpsdart", desc = "uv.hm.pt.spawnwith.desc", convar = "unitvehicle_unit_pursuittech_gpsdart", requireparentconvar = "unitvehicle_unit_pursuittech", sv = true },
 		
 		{ type = "label", text = "#uv.hm.disablebounty" },
-		{ type = "slider", text = "#uv.unit.patrol", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypatrol", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.support", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountysupport", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.pursuit", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypursuit", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.interceptor", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyinterceptor", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.special", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyspecial", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.commander", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountycommander", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.rhino", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyrhino", min = 1, max = 999999, decimals = 0, sv = true },
-		{ type = "slider", text = "#uv.unit.helicopter", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyair", min = 1, max = 999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.patrol", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypatrol", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.support", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountysupport", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.pursuit", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountypursuit", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.interceptor", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyinterceptor", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.special", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyspecial", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.commander", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountycommander", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.rhino", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyrhino", min = 1, max = 9999999, decimals = 0, sv = true },
+		{ type = "slider", text = "#uv.unit.helicopter", desc = "uv.hm.disablebounty.desc", convar = "unitvehicle_unit_bountyair", min = 1, max = 9999999, decimals = 0, sv = true },
     })
 
     -- Voice profile tab
@@ -1136,11 +1136,11 @@ UVMenu.HeatManager = function()
 			table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.heatlvl.time", desc = "uv.hm.heat.heatlvl.time.desc", convar = "unitvehicle_unit_timetillnextheat" .. i, min = 20, max = 600, decimals = 0, sv = true })
 		end
 
-		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.minbounty", desc = "uv.hm.heat.minbounty.desc", convar = "unitvehicle_unit_heatminimumbounty" .. i, min = 1, max = 10000000, decimals = 0, sv = true })
-		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.maxunits", desc = "uv.hm.heat.maxunits.desc", convar = "unitvehicle_unit_maxunits" .. i, min = 1, max = 20, decimals = 0, sv = true })
-		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.avaunits", desc = "uv.hm.heat.avaunits.desc", convar = "unitvehicle_unit_unitsavailable" .. i, min = 1, max = 150, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.minbounty", desc = "uv.hm.heat.minbounty.desc", convar = "unitvehicle_unit_heatminimumbounty" .. i, min = 1, max = 999999999, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.maxunits", desc = "uv.hm.heat.maxunits.desc", convar = "unitvehicle_unit_maxunits" .. i, min = 1, max = 40, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.avaunits", desc = "uv.hm.heat.avaunits.desc", convar = "unitvehicle_unit_unitsavailable" .. i, min = 1, max = 1000, decimals = 0, sv = true })
 		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.backuptime", desc = "uv.hm.heat.backuptime.desc", convar = "unitvehicle_unit_backuptimer" .. i, min = 1, max = 600, decimals = 0, sv = true })
-		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.bustspeed", desc = "uv.hm.heat.bustspeed.desc", convar = "unitvehicle_unit_bustspeed" .. i, min = 1, max = 100, decimals = 0, sv = true })
+		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.bustspeed", desc = "uv.hm.heat.bustspeed.desc", convar = "unitvehicle_unit_bustspeed" .. i, min = 1, max = 200, decimals = 0, sv = true })
 		table.insert(heatTab, { type = "slider", text = "#uv.hm.heat.cooldowntime", desc = "uv.hm.heat.cooldowntime.desc", convar = "unitvehicle_unit_cooldowntimer" .. i, min = 1, max = 600, decimals = 0, sv = true })
 		table.insert(heatTab, { type = "bool", text = "#uv.hm.heat.roadblocks", desc = "uv.hm.heat.roadblocks.desc", convar = "unitvehicle_unit_roadblocks" .. i, sv = true })
 		table.insert(heatTab, { type = "bool", text = "#uv.hm.heat.helicopter", desc = "uv.hm.heat.helicopter.desc", convar = "unitvehicle_unit_helicopters" .. i, sv = true })
