@@ -266,7 +266,7 @@ if SERVER then
 		if not self.v then
 			return
 		end
-		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), filter = self.v, mask = MASK_ALL}).Fraction ~= 1
+		local tr = util.TraceLine({start = self.v:WorldSpaceCenter(), endpos = (self.v:WorldSpaceCenter()+(self.v:GetVelocity()*2)), filter = {self.v, 'glide_wheel'}, mask = MASK_ALL}).Fraction ~= 1
 		return tobool(tr)
 	end
 
@@ -299,8 +299,8 @@ if SERVER then
 			rightstart:Rotate(Angle(0, -90, 0))
 		end
 		
-		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,25)), filter = self.v, mask = MASK_ALL}).Fraction
-		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,25)), filter = self.v, mask = MASK_ALL}).Fraction
+		local trleft = util.TraceLine({start = self.v:LocalToWorld(leftstart), endpos = (self.v:LocalToWorld(left)+Vector(0,0,25)), filter = {self.v, 'glide_wheel'}, mask = MASK_ALL}).Fraction
+		local trright = util.TraceLine({start = self.v:LocalToWorld(rightstart), endpos = (self.v:LocalToWorld(right)+Vector(0,0,25)), filter = {self.v, 'glide_wheel'}, mask = MASK_ALL}).Fraction
 
 		if trleft > trright then
 			return turnleft
