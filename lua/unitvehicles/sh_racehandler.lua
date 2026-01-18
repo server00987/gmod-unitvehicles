@@ -680,6 +680,353 @@ if SERVER then
 	dvd.OverwriteWaypoints = OverwriteWaypoints
 	dvd.WriteWaypoint = WriteWaypoint
 
+	local function KillCheckpoints(ply)
+		if not ply:IsSuperAdmin() then return end
+		for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killcps", KillCheckpoints)
+	
+	local function KillSpawns(ply)
+		if not ply:IsSuperAdmin() then return end
+		for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killspawns", KillSpawns)
+	
+	local function KillAll(ply)
+		if not ply:IsSuperAdmin() then return end
+		for _, ent in ipairs(ents.FindByClass("uvrace_*")) do
+			ent:Remove()
+		end
+	end
+	concommand.Add("uvrace_killall", KillAll)
+	
+	local function StopRace(ply, cmd, args)
+		if not ply:IsSuperAdmin() then return end
+		UVRaceEnd()
+		UVCounterActive = false
+		
+		net.Start( "uvrace_end" )
+		net.Broadcast()
+		
+	end
+	concommand.Add("uvrace_stop", StopRace)
+	
+	local function ProcessVehiclesInBatches(vehicles, batchSize, delay, callback, doneCallback)
+		batchSize = batchSize or 12
+		delay = delay or 0.1
+
+		local batchesProcessed = 0
+		local totalBatches = math.ceil(#vehicles / batchSize)
+
+		for i = 1, #vehicles, batchSize do
+			local startIndex = i  -- capture i locally for timer closure
+			timer.Simple(delay * ((startIndex-1)/batchSize), function()
+				local batch = {}
+				for j = startIndex, math.min(startIndex + batchSize - 1, #vehicles) do
+					table.insert(batch, vehicles[j])
+				end
+
+				-- Chat feedback
+				-- PrintMessage(HUD_PRINTTALK, "Batch-moved " .. #batch .. " vehicles.")
+
+				-- Move this batch
+				callback(batch)
+
+				-- Track completion
+				batchesProcessed = batchesProcessed + 1
+				if batchesProcessed == totalBatches and doneCallback then
+					doneCallback()
+				end
+			end)
+		end
+	end
+
+	local function StartRace(ply, cmd, args)
+		if not ply:IsSuperAdmin() then return end
+		if UVRaceInEffect then return end
+
+		if UVCounterActive then
+			net.Start("uvrace_decline")
+			net.WriteString("uv.race.start.error.startingpursuit")
+			net.Send(ply)
+			return
+		end
+
+		if UVTargeting then
+			net.Start("uvrace_decline")
+			net.WriteString("uv.race.start.error.chased")
+			net.Send(ply)
+			return
+		end
+
+		RunConsoleCommand("uv_despawnvehicles")
+
+		-- Add player vehicle if not already a participant
+		for _, v in ents.Iterator() do
+			if not table.HasValue(UVRaceCurrentParticipants, v) then
+				if (v.IsGlideVehicle or v.IsSimfphyscar or v:GetClass() == "prop_vehicle_jeep") and not v.wrecked and not v.UnitVehicle then
+					local driver = v:GetDriver()
+					if IsValid(driver) and driver:IsPlayer() and driver == ply then
+						UVRaceAddParticipant(v, nil, true)
+					end
+				end
+			end
+		end
+
+		-- Randomize starting order
+		table.Shuffle(UVRaceCurrentParticipants)
+
+		local ready_drivers = 0
+		local batchSize = 12
+		local delay = 0.025
+		local participantsToProcess = table.Copy(UVRaceCurrentParticipants)
+
+		local function processBatch(batch)
+			for _, v in ipairs(batch) do
+				local driver = v:GetDriver()
+
+				if cffunctions then 
+					CFtoggleNitrous(v, false)
+					CFtoggleSpeedbreaker(v, false)
+				end
+
+				local ent = UVMoveToGridSlot(v, not (driver and driver:IsPlayer()))
+				if ent then
+					ready_drivers = ready_drivers + 1
+				else
+					UVRaceRemoveParticipant(v)
+					table.RemoveByValue(participantsToProcess, v)
+				end
+			end
+		end
+
+		local function doneAllBatches()
+			if ready_drivers <= 0 then
+				return
+			end
+
+			-- Start the race
+			UVRacePrep = true
+			UVRaceInEffect = true
+
+			UVRaceMakeCheckpoints(tonumber(args[1]))
+			net.Start("UVRace_HideRacersList")
+			net.Broadcast()
+
+			timer.Simple(2, function()
+				UVRacePrep = false
+			end)
+		end
+
+		-- Process all vehicles in batches
+		ProcessVehiclesInBatches(participantsToProcess, batchSize, delay, processBatch, doneAllBatches)
+	end
+	concommand.Add("uvrace_startrace", StartRace)
+	
+	local function StartRaceInvite(ply, cmd, args)
+		if not ply:IsSuperAdmin() then return end
+		if UVRaceInEffect then return end
+		
+		if UVTargeting then
+			net.Start("uvrace_decline")
+			net.WriteString("uv.race.invite.error.chased")
+			net.Send(ply)
+			return
+		end
+		
+		local invited_racers = {}
+		
+		for _, v in ents.Iterator() do
+			if not table.HasValue(UVRaceCurrentParticipants, v) then
+				if v:IsVehicle() and (v.IsGlideVehicle or v.IsSimfphyscar or v:GetClass() == "prop_vehicle_jeep") and not v.wrecked and not v.UnitVehicle and not v.uvbusted then
+
+					local driver = v:GetDriver()
+					local is_player = IsValid(driver) and driver:IsPlayer()
+					
+					if not v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
+						
+						table.insert(invited_racers, (is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex()))
+						v.raceinvited = true
+						v.lastraceinv = CurTime()
+						
+						local name = (is_player and driver:Nick()) or (v.racer or "Racer " .. v:EntIndex())
+
+						UVSetInviteByVehicle(v, name, "Invited")
+
+						if is_player then
+							net.Start("uvrace_invite")
+							net.Send(driver)
+						end
+						
+						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10.25, 1, function()
+							v.raceinvited = false
+						end)
+					end
+				end
+			end
+		end
+		
+		
+		if #invited_racers > 0 then
+			net.Start("uvrace_racerinvited")
+			net.WriteTable(invited_racers)
+			net.Send(ply)
+		end
+	end
+	concommand.Add("uvrace_startinvite", StartRaceInvite)
+	concommand.Add("uvrace_spawnai", function()
+		UVAutoSpawnRacer()
+	end)
+	
+	local function Import(ply, cmd, args)
+		if not ply:IsSuperAdmin() then return end
+		local filename = "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1]
+		if not file.Exists(filename, "DATA") then return end
+
+		if UVRace_LoadedWaypoints then
+			--dvd.Waypoints = {}
+			--concommand.Run("dv_route_load")
+			dvd.LoadWaypoints( 'decentvehicle/' .. game.GetMap() )
+			UVRace_LoadedWaypoints = false
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedEntities[entityId] = nil
+		end
+
+		for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+			if IsValid( entityObject ) then entityObject:Remove() end
+			UVRace_LoadedConstraints[entityId] = nil
+		end
+
+		local jsonfilename = string.Replace( "unitvehicles/races/" .. game.GetMap() .. "/" .. args[1], ".txt", ".json" )
+		if file.Exists(jsonfilename, "DATA") then 
+			UVLoadRace( file.Read(jsonfilename) )
+		end
+		
+		timer.Simple(0.2, function()
+			local entList = file.Read(filename, "DATA"):Split("\n")
+
+			local metaLine = entList[1]
+			local trackName, author = "UNKNOWN", "UNKNOWN"
+
+			if metaLine then
+				local nameExtracted, authorExtracted = metaLine:match("^name%s+(.+)%s+'(.+)'$")
+				if nameExtracted then trackName = nameExtracted end
+				if authorExtracted then author = authorExtracted end
+			end
+
+			if UVRaceInEffect then
+				UVRaceEnd()
+			end
+
+			--Delete all checkpoints and spawns
+			for _, ent in ipairs(ents.FindByClass("uvrace_brush*")) do
+				ent:Remove()
+			end
+			for _, ent in ipairs(ents.FindByClass("uvrace_checkpoint")) do
+				ent:Remove()
+			end
+			for _, ent in ipairs(ents.FindByClass("uvrace_spawn")) do
+				ent:Remove()
+			end
+
+			undo.Create("UVRaceEnt")
+			undo.SetPlayer(ply)
+
+			for _, data in ipairs(entList) do
+				local params = data:Split(" ")
+
+				local cid = tonumber(params[1])
+				if cid then
+					local check = ents.Create("uvrace_checkpoint")
+
+					local speedlimit = tonumber(params[8]) or 0
+					local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+					local mx, my, mz = tonumber(params[5]), tonumber(params[6]), tonumber(params[7])
+
+					--print(posx, posy, posz, mx, my, mz)
+
+					local localposx, localposy, localposz = tonumber(params[9]), tonumber(params[10]), tonumber(params[11])
+					local localmx, localmy, localmz = tonumber(params[12]), tonumber(params[13]), tonumber(params[14])
+					local chunkx, chunky, chunkz = tonumber(params[15]), tonumber(params[16]), tonumber(params[17])
+					local chunkmx, chunkmy, chunkmz = tonumber(params[18]), tonumber(params[19]), tonumber(params[20])
+
+					local pos = Vector(posx, posy, posz)
+					check:SetPos(pos)
+					check:SetMaxPos(Vector(mx, my, mz))
+					check:SetID(cid)
+					check:SetSpeedLimit(speedlimit)
+					if InfMap then
+						check:SetLocalPos(Vector(localposx, localposy, localposz))
+						check:SetLocalMaxPos(Vector(localmx, localmy, localmz))
+						check:SetChunk(Vector(chunkx, chunky, chunkz))
+						check:SetChunkMax(Vector(chunkmx, chunkmy, chunkmz))
+					end
+					check:Spawn()
+
+					undo.AddEntity(check)
+					ply:AddCleanup("uvrace_ents", check)
+				elseif params[1] == "spawn" then
+					local spawn = ents.Create("uvrace_spawn")
+
+					local posx, posy, posz = tonumber(params[2]), tonumber(params[3]), tonumber(params[4])
+					spawn:SetPos(Vector(posx, posy, posz))
+
+					local angy = tonumber(params[5])
+					spawn:SetAngles(Angle(0, angy, 0))
+
+					spawn:SetGridSlot(tonumber(params[6]))
+
+					spawn:Spawn()
+
+					undo.AddEntity(spawn)
+					ply:AddCleanup("uvrace_ents", spawn)
+				end
+			end
+
+			undo.AddFunction(function(undoTable, ent)
+				if UVRace_LoadedWaypoints then
+					--concommand.Run()
+					dvd.LoadWaypoints( 'decentvehicle/' .. game.GetMap() )
+					UVRace_LoadedWaypoints = false
+				end
+
+				for entityId, entityObject in pairs( UVRace_LoadedEntities ) do
+					if IsValid( entityObject ) then entityObject:Remove() end
+					UVRace_LoadedEntities[entityId] = nil
+				end
+		
+				for entityId, entityObject in pairs( UVRace_LoadedConstraints ) do
+					if IsValid( entityObject ) then entityObject:Remove() end
+					UVRace_LoadedConstraints[entityId] = nil
+				end
+
+				net.Start("UVRace_TrackReady")
+					net.WriteString("?")
+					net.WriteString("?")
+				net.Broadcast()
+			end)
+
+			undo.Finish()
+
+			local tname = args[1]:Split(".")[2]
+
+			net.Start("UVRace_TrackReady")
+			net.WriteString(trackName:Replace("_", " "))
+			net.WriteString(author)
+			net.WriteString(ply:Nick())
+			net.Broadcast()
+		end)
+	end
+	concommand.Add("uvrace_import", Import)
+	
+
 else -- CLIENT stuff
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
 	UVHUDGlobalBestLapHolder = UVHUDGlobalBestLapHolder or nil
