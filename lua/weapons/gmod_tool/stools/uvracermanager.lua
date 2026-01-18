@@ -1365,38 +1365,3 @@ function TOOL:GetVehicleData( ent, ply )
 	net.Send( ply )
 	
 end
-
-if SERVER then
-    util.AddNetworkString("RequestGlideVehicles")
-    util.AddNetworkString("GlideVehiclesTable")
-
-    net.Receive("RequestGlideVehicles", function(len, ply)
-        if not ply:IsSuperAdmin() then return end
-		if not GlideRequestCooldown or CurTime() - GlideRequestCooldown > 1 then
-			GlideRequestCooldown = CurTime()
-		else
-			return
-		end
-
-        local glideVehicles = {}
-
-        for className, scripted in pairs(scripted_ents.GetList() or {}) do
-            if scripted.Base == "base_glide_car" and istable(scripted.t) and scripted.t.GlideCategory then
-                local cat = scripted.t.GlideCategory or "Default"
-                glideVehicles[cat] = glideVehicles[cat] or {}
-                table.insert(glideVehicles[cat], {
-                    name  = scripted.t.PrintName or className,
-                    class = className -- Use key directly, guaranteed valid
-                })
-            end
-        end
-
-        local totalCategories = table.Count(glideVehicles)
-
-		for category, vehicles in pairs(glideVehicles) do
-			net.Start("GlideVehiclesTable")
-			net.WriteTable({ [category] = vehicles })
-			net.Send(ply)
-		end
-    end)
-end

@@ -267,6 +267,10 @@ NETWORK_STRINGS = {
 
 	-- Headlights
 	"UVToggleHeadlights",
+	
+	-- Glide Nodes
+	"RequestGlideVehicles",
+	"GlideVehiclesTable",
 }
 
 for _, v in pairs( NETWORK_STRINGS ) do
@@ -3462,4 +3466,64 @@ net.Receive("UVToggleHeadlights", function(len, ply)
             NPC.v:VC_setRunningLights( false )
         end
 	end
+end)
+
+-- net.Receive("RequestGlideVehicles", function(len, ply)
+	-- if not ply:IsSuperAdmin() then return end
+	-- if not GlideRequestCooldown or CurTime() - GlideRequestCooldown > 1 then
+		-- GlideRequestCooldown = CurTime()
+	-- else
+		-- return
+	-- end
+
+	-- local glideVehicles = {}
+
+	-- for className, scripted in pairs(scripted_ents.GetList() or {}) do
+		-- if scripted.Base == "base_glide_car" and istable(scripted.t) and scripted.t.GlideCategory then
+			-- local cat = scripted.t.GlideCategory or "Default"
+			-- glideVehicles[cat] = glideVehicles[cat] or {}
+			-- table.insert(glideVehicles[cat], {
+				-- name  = scripted.t.PrintName or className,
+				-- class = className -- Use key directly, guaranteed valid
+			-- })
+		-- end
+	-- end
+
+	-- local totalCategories = table.Count(glideVehicles)
+
+	-- for category, vehicles in pairs(glideVehicles) do
+		-- net.Start("GlideVehiclesTable")
+		-- net.WriteTable({ [category] = vehicles })
+		-- net.Send(ply)
+	-- end
+-- end)
+
+net.Receive("RequestGlideVehicles", function(len, ply)
+	if not ply:IsSuperAdmin() then return end
+
+	-- Simple cooldown
+	if not GlideRequestCooldown or CurTime() - GlideRequestCooldown > 1 then
+		GlideRequestCooldown = CurTime()
+	else
+		return
+	end
+
+	local glideVehicles = {}
+
+	-- Collect all Glide vehicles into categories
+	for className, scripted in pairs(scripted_ents.GetList() or {}) do
+		if scripted.Base == "base_glide_car" and istable(scripted.t) and scripted.t.GlideCategory then
+			local cat = scripted.t.GlideCategory or "Default"
+			glideVehicles[cat] = glideVehicles[cat] or {}
+			table.insert(glideVehicles[cat], {
+				name  = scripted.t.PrintName or className,
+				class = className
+			})
+		end
+	end
+
+	-- Send the *entire* table in a single message
+	net.Start("GlideVehiclesTable")
+	net.WriteTable(glideVehicles)
+	net.Send(ply)
 end)
