@@ -549,6 +549,16 @@ UV_UI.pursuit.original.events = {
 			end)
 		end
     end,
+
+    onPullOverRequest = function(...)
+        local ply = LocalPlayer()
+		ply:PrintMessage(HUD_PRINTCENTER, language.GetPhrase("uv.hud.fine.pullover"))
+	end,
+
+	onFined = function( finenr )
+        local ply = LocalPlayer()
+		ply:PrintMessage(HUD_PRINTCENTER, string.format( language.GetPhrase("uv.hud.fine.fined"), finenr))
+	end,
 }
 
 local function original_racing_main( ... )
@@ -838,12 +848,10 @@ local function original_pursuit_main( ... )
             surface.SetDrawColor(Color(255,0,0))
         end
 
+        UVResourcePointsColor = Color( 255, 255, 255)
+
         local num = UVBackupTimerSeconds or 0
-        if num > 10 then
-			UVResourcePointsColor = Color( 255, 255, 255)
-		elseif math.floor(num)==math.Round(num) then
-			UVResourcePointsColor = Color( 255, 255, 255)
-		else
+        if UVHUDDisplayBackupTimer and num <= 10 and math.floor(num)~=math.Round(num) then
 			UVResourcePointsColor = Color( 255, 255, 0)
 		end
         
