@@ -239,16 +239,18 @@ UV_UI.racing.underground2.events = {
             
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-            
-            local conttext = "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
-            local conttextl = string.len(conttext)
-            local conttexts = (w * 0.0065 * conttextl)
-            
+
+			local conttext = "<color=255,255,255><font=UVFont4>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			
             surface.SetDrawColor(255, 255, 255, math.floor(200 * fadeAlpha) )
             surface.SetMaterial(UVMaterials["RESULTS_UG2_BUTTON"])
             surface.DrawTexturedRect( w*0.775, h*0.84, w * 0.15, h*0.0425)
-            draw.DrawText( "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue"), "UVFont4", w*0.85, h*0.8475, Color( 255, 255, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_CENTER )
-            
+
+			surface.SetAlphaMultiplier(math.floor(255 * fadeAlpha) / 255)
+			mk:Draw(w * 0.85, h * 0.8475, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
+			
             draw.DrawText( string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) ), "UVFont", w*0.05, h*0.85, Color( 196, 208, 151, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_LEFT )
             
             if autoCloseRemaining <= 0 then
@@ -288,7 +290,7 @@ UV_UI.racing.underground2.events = {
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glidetext = UVReplaceKeybinds( string.format( language.GetPhrase("uv.race.finished.viewstats"),"[key:unitvehicle_keybind_raceresults]") )
         local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------

@@ -199,23 +199,27 @@ UV_UI.racing.underground.events = {
             
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
-            
-            local conttext = "[" .. UVBindButton("+jump") .. "] " .. language.GetPhrase("uv.results.continue")
-            local conttextl = string.len(conttext)
-            local conttexts = (w * 0.0065 * conttextl)
-            
-            local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
-            local autotextl = string.len(autotext)
-            local autotexts = (w * 0.00575 * autotextl)
-            
-            surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha) )
-            
-            surface.DrawRect( w*0.6975 - conttexts, h*0.9, conttexts, h*0.025)
-            draw.DrawText( conttext, "UVFont4", w*0.6945, h*0.9005, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
-            
-            surface.DrawRect( w*0.6975 - autotexts, h*0.925, autotexts, h*0.025)
-            draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
-            
+
+			local conttext = "<color=104,172,255><font=UVFont4>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			local conttextl = mk:GetWidth()
+
+			local conttexts = conttextl + (w * 0.005)
+			
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
+			local autotextl = surface.GetTextSize(autotext)
+			local autotexts = autotextl + (w * 0.005)
+			
+			surface.SetDrawColor(38, 93, 160, math.floor(200 * fadeAlpha) )
+			surface.DrawRect( w*0.6975 - conttexts, h*0.9, conttexts, h*0.025)
+			
+			surface.SetAlphaMultiplier(math.floor(255 * fadeAlpha) / 255)
+			mk:Draw(w * 0.6945, h * 0.9005, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
+			
+			surface.DrawRect( w*0.6975 - autotexts, h*0.925, autotexts, h*0.025)
+			draw.DrawText( autotext, "UVFont4", w*0.6945, h*0.9255, Color( 104, 172, 255, math.floor(255 * fadeAlpha) ), TEXT_ALIGN_RIGHT )
+	
             if autoCloseRemaining <= 0 then
                 hook.Remove("CreateMove", "JumpKeyCloseResults")
                 if not closing then
@@ -252,7 +256,7 @@ UV_UI.racing.underground.events = {
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glidetext = UVReplaceKeybinds( string.format( language.GetPhrase("uv.race.finished.viewstats"),"[key:unitvehicle_keybind_raceresults]") )
         local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------
@@ -360,7 +364,7 @@ local function underground_racing_main( ... )
     local checkpoint_count = #my_array["Checkpoints"]
     
     ------------------------------------
-    
+
     -- Timer
     surface.SetDrawColor(0, 0, 0, 200)
     surface.DrawRect(UV_UI.X(w * 0.02), h * 0.175, UV_UI.W(w * 0.175), h * 0.0225)

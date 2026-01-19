@@ -459,9 +459,12 @@ UV_UI.racing.undercover.events = {
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
 
-			local conttext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+			local conttext = "<font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font>"
 			local mk = markup.Parse(conttext)
+			
+			surface.SetAlphaMultiplier(textAlpha / 255)
 			mk:Draw( w*0.5, h*0.755, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
 			
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.815, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
@@ -494,7 +497,7 @@ UV_UI.racing.undercover.events = {
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glidetext = UVReplaceKeybinds( string.format( language.GetPhrase("uv.race.finished.viewstats"),"[key:unitvehicle_keybind_raceresults]") )
         local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------
@@ -949,18 +952,23 @@ UV_UI.pursuit.undercover.events = {
 			
 			local cy, cx, cc = w*0.5, h*0.6525, TEXT_ALIGN_CENTER
 			
-			local conttext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+			local conttext = "<font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font>"
 			local mk = markup.Parse(conttext)
 
-			local spawntext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font></color>"
+			local spawntext = "<font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font>"
 			local mk2 = markup.Parse(spawntext)
 
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
 				cy, cx, cc = w*0.6575, h*0.6375, TEXT_ALIGN_RIGHT
+
+				surface.SetAlphaMultiplier(textAlpha / 255)
 				mk2:Draw( w*0.6575, h*0.665, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+				surface.SetAlphaMultiplier(1)
 			end
 
+			surface.SetAlphaMultiplier(textAlpha / 255)
 			mk:Draw( cy, cx, cc, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
 			
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.71, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             				

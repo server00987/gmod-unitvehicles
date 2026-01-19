@@ -476,12 +476,14 @@ UV_UI.racing.prostreet.events = {
             autoCloseTimer = elapsed
             autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
 
-			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
-			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
-			
+			local conttext = "<color=255,255,255><font=UVCarbonLeaderboardFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			local conttextw = mk:GetWidth()
+
 			surface.SetFont("UVCarbonLeaderboardFont")
-			local conttextw = surface.GetTextSize(conttext)
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
 			local autotextw = surface.GetTextSize(autotext)
+			
 			local wdist = w * 0.000565
 
 			surface.SetDrawColor( 100, 100, 100, 200 )
@@ -491,8 +493,8 @@ UV_UI.racing.prostreet.events = {
 			surface.SetDrawColor( 0, 0, 0, 255 )
 			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
 			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
-
-			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			
+			mk:Draw( w * 0.2585, h * 0.905, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
             cam.PopModelMatrix()
@@ -533,7 +535,7 @@ UV_UI.racing.prostreet.events = {
     onRaceEnd = function( sortedRacers, stringArray )
         local triggerTime = CurTime()
         local duration = 10
-        local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+        local glidetext = UVReplaceKeybinds( string.format( language.GetPhrase("uv.race.finished.viewstats"),"[key:unitvehicle_keybind_raceresults]") )
         local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
         
         -----------------------------------------
