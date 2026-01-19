@@ -584,8 +584,8 @@ if SERVER then
 				enemy_nearest_waypoint = dvd.GetNearestWaypoint( vectors )
 				friendly_nearest_waypoint = dvd.GetNearestWaypoint( friendly_position )
 
-				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
-				local enemy_waypoint_position = enemy_nearest_waypoint and enemy_nearest_waypoint.Target + ( vector_up * 20 ) or vector_origin
+				local friendly_waypoint_position = friendly_nearest_waypoint and friendly_nearest_waypoint.Target + ( vector_up * 50 ) or vector_origin
+				local enemy_waypoint_position = enemy_nearest_waypoint and enemy_nearest_waypoint.Target + ( vector_up * 50 ) or vector_origin
 
 				if enemy_nearest_waypoint then
 					local friendly_waypoint_distance = friendly_nearest_waypoint and friendly_waypoint_position:DistToSqr( friendly_position ) or math.huge
@@ -752,7 +752,7 @@ if SERVER then
 			end
 		end
 		
-		return bestWaypoint
+		return bestWaypoint + (vector_up * 50)
 	end
 		
 	function ENT:FindPatrol()
