@@ -2025,7 +2025,7 @@ else -- CLIENT stuff
 		end
 
 		local currentWidth = Lerp(barProgress, 0, w)
-		local barHeight = h * 0.1
+		local barHeight = h * 0.075
 		local barX = (w - currentWidth) / 2
 		local barY = h - barHeight
 
@@ -2071,8 +2071,8 @@ else -- CLIENT stuff
 				-- Outline alpha fades in as colorVal returns to black
 				local outlineAlpha = math.Clamp(255 - colorVal, 0, 255)
 
-				draw.SimpleTextOutlined( labelToken, "UVFont5", w * 0.5, h * 0.9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
-				draw.SimpleTextOutlined( timeLeft, "UVFont5", w * 0.5, h * 0.95, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( labelToken, "UVSettingsFontBig", w * 0.5, h * 0.925, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
+				draw.SimpleTextOutlined( timeLeft, "UVSettingsFontBig", w * 0.5, h * 0.96, Color(255, redblink, redblink), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0, outlineAlpha) )
 			end
 		end
 	end

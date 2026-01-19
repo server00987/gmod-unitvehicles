@@ -585,8 +585,15 @@ UV_UI.racing.mostwanted.events = {
                 if scrollOffset < #displaySequence - entriesToShow then
                     draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7625, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
                 end
-                
-                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue"), "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
+
+				if textAlpha > 0 then
+					local conttext = "<color="..debriefcolor.r..","..debriefcolor.g..","..debriefcolor.b..","..textAlpha.."><font=UVFont5UI>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+
+					local success, mk = pcall(markup.Parse, conttext)
+					if success and mk then
+						mk:Draw(w * 0.205, h * 0.77, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+					end
+				end
             end
             
             -- Show/Hide OK button with fade
@@ -613,7 +620,6 @@ UV_UI.racing.mostwanted.events = {
                 autoCloseRemaining = math.max(0, autoCloseDuration - autoCloseTimer)
                 
 				draw.DrawText(string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5", w * 0.79, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
-                -- draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining)), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
             
 				if autoCloseRemaining <= 0 then
 					hook.Remove("CreateMove", "JumpKeyCloseResults")
@@ -627,7 +633,6 @@ UV_UI.racing.mostwanted.events = {
 			else
 				-- Before auto-close timer starts, show the text but no countdown
 				draw.DrawText(string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5", w * 0.79, h * 0.1375, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT)
-				-- draw.DrawText( string.format(language.GetPhrase("uv.results.autoclose"), autoCloseDuration), "UVFont5UI", w * 0.795, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_RIGHT )
 			end
 		if closing then
 			local elapsed = curTime - closeStartTime
@@ -1148,12 +1153,19 @@ UV_UI.pursuit.mostwanted.events = {
                 
                 draw.DrawText(debrieftitletext, "UVFont5", w * 0.5, h * 0.2, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER)
 
-				local ustext = ""
-				if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-					ustext = "  [ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.pm.spawnas")
+				if textAlpha > 0 then
+					local conttext = "<color="..debriefcolor.r..","..debriefcolor.g..","..debriefcolor.b..","..textAlpha.."><font=UVFont5UI>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+
+					local ustext = ""
+					if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
+						conttext = conttext .. "     <color="..debriefcolor.r..","..debriefcolor.g..","..debriefcolor.b..","..textAlpha.."><font=UVFont5UI>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font></color>"
+					end
+
+					local success, mk = pcall(markup.Parse, conttext)
+					if success and mk then
+						mk:Draw(w * 0.205, h * 0.77, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+					end
 				end
-				                
-                draw.DrawText("[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue") .. ustext, "UVFont5UI", w * 0.205, h * 0.77, Color(debriefcolor.r, debriefcolor.g, debriefcolor.b, textAlpha), TEXT_ALIGN_LEFT)
             end
             
             -- Show/Hide OK button with fade

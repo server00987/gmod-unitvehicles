@@ -26,48 +26,6 @@ local RacerTags = GetConVar("unitvehicle_racertags")
 --unit convars
 local UVUHelicopterBusting = GetConVar("unitvehicle_unit_helicopterbusting")
 
--- local UVUMaxUnits1 = GetConVar("unitvehicle_unit_maxunits1")
--- local UVUUnitsAvailable1 = GetConVar("unitvehicle_unit_unitsavailable1")
--- local UVUBackupTimer1 = GetConVar("unitvehicle_unit_backuptimer1")
--- local UVUCooldownTimer1 = GetConVar("unitvehicle_unit_cooldowntimer1")
--- local UVURoadblocks1 = GetConVar("unitvehicle_unit_roadblocks1")
--- local UVUHelicopters1 = GetConVar("unitvehicle_unit_helicopters1")
-
--- local UVUMaxUnits2 = GetConVar("unitvehicle_unit_maxunits2")
--- local UVUUnitsAvailable2 = GetConVar("unitvehicle_unit_unitsavailable2")
--- local UVUBackupTimer2 = GetConVar("unitvehicle_unit_backuptimer2")
--- local UVUCooldownTimer2 = GetConVar("unitvehicle_unit_cooldowntimer2")
--- local UVURoadblocks2 = GetConVar("unitvehicle_unit_roadblocks2")
--- local UVUHelicopters2 = GetConVar("unitvehicle_unit_helicopters2")
-
--- local UVUMaxUnits3 = GetConVar("unitvehicle_unit_maxunits3")
--- local UVUUnitsAvailable3 = GetConVar("unitvehicle_unit_unitsavailable3")
--- local UVUBackupTimer3 = GetConVar("unitvehicle_unit_backuptimer3")
--- local UVUCooldownTimer3 = GetConVar("unitvehicle_unit_cooldowntimer3")
--- local UVURoadblocks3 = GetConVar("unitvehicle_unit_roadblocks3")
--- local UVUHelicopters3 = GetConVar("unitvehicle_unit_helicopters3")
-
--- local UVUMaxUnits4 = GetConVar("unitvehicle_unit_maxunits4")
--- local UVUUnitsAvailable4 = GetConVar("unitvehicle_unit_unitsavailable4")
--- local UVUBackupTimer4 = GetConVar("unitvehicle_unit_backuptimer4")
--- local UVUCooldownTimer4 = GetConVar("unitvehicle_unit_cooldowntimer4")
--- local UVURoadblocks4 = GetConVar("unitvehicle_unit_roadblocks4")
--- local UVUHelicopters4 = GetConVar("unitvehicle_unit_helicopters4")
-
--- local UVUMaxUnits5 = GetConVar("unitvehicle_unit_maxunits5")
--- local UVUUnitsAvailable5 = GetConVar("unitvehicle_unit_unitsavailable5")
--- local UVUBackupTimer5 = GetConVar("unitvehicle_unit_backuptimer5")
--- local UVUCooldownTimer5 = GetConVar("unitvehicle_unit_cooldowntimer5")
--- local UVURoadblocks5 = GetConVar("unitvehicle_unit_roadblocks5")
--- local UVUHelicopters5 = GetConVar("unitvehicle_unit_helicopters5")
-
--- local UVUMaxUnits6 = GetConVar("unitvehicle_unit_maxunits6")
--- local UVUUnitsAvailable6 = GetConVar("unitvehicle_unit_unitsavailable6")
--- local UVUBackupTimer6 = GetConVar("unitvehicle_unit_backuptimer6")
--- local UVUCooldownTimer6 = GetConVar("unitvehicle_unit_cooldowntimer6")
--- local UVURoadblocks6 = GetConVar("unitvehicle_unit_roadblocks6")
--- local UVUHelicopters6 = GetConVar("unitvehicle_unit_helicopters6")
-
 local dvd = DecentVehicleDestination
 
 NETWORK_STRINGS = {

@@ -329,6 +329,10 @@ UVMenu.Settings = function()
 				{ type = "keybind", text = "#uv.keybind.skipsong", desc = "uv.keybind.skipsong.desc", convar = "unitvehicle_keybind_skipsong", slot = 3 },
 				{ type = "keybind", text = "#uv.keybind.resetposition", desc = "uv.keybind.resetposition.desc", convar = "unitvehicle_keybind_resetposition", slot = 4 },
 				{ type = "keybind", text = "#uv.keybind.showresults", desc = "uv.keybind.showresults.desc", convar = "unitvehicle_keybind_raceresults", slot = 5 },
+				
+				{ type = "label", text = "#uv.keybinds.glyphs" },
+				{ type = "bool", text = "#uv.keybinds.glyphs.enable", desc = "uv.keybinds.glyphs.enable.desc", convar = "unitvehicle_glyph_override" },
+				{ type = "bindoverride", text = "#uv.keybinds.glyphs.list.enable", desc = "uv.keybinds.glyphs.list.desc", convar = "unitvehicle_glyph_set", requireparentconvar = "unitvehicle_glyph_override" },
 			},
 			{ TabName = "#uv.pursuit", Icon = "unitvehicles/icons/milestone_pursuit.png", sv = true,
 				{ type = "label", text = "#uv.pursuit.heatlevels", sv = true },

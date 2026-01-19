@@ -217,25 +217,25 @@ UV_UI_Events = {
 }
 
 local BindTextReplace = {
-	KP_INS = "KP 0",
-	KP_END = "KP 1",
-	KP_DOWNARROW = "KP 2",
-	KP_PGDN = "KP 3",
-	KP_LEFTARROW = "KP 4",
-	KP_5 = "KP 5",
-	KP_RIGHTARROW = "KP 6",
-	KP_HOME = "KP 7",
-	KP_UPARROW = "KP 8",
-	KP_PGUP = "KP 9",
-	KP_SLASH = "KP /",
-	KP_MULTIPLY = "KP *",
-	KP_MINUS = "KP -",
-	KP_PLUS = "KP +",
-	KP_ENTER = "KP ↵",
-	KP_DEL = "KP .",
+	-- KP_INS = "KP 0",
+	-- KP_END = "KP 1",
+	-- KP_DOWNARROW = "KP 2",
+	-- KP_PGDN = "KP 3",
+	-- KP_LEFTARROW = "KP 4",
+	-- KP_5 = "KP 5",
+	-- KP_RIGHTARROW = "KP 6",
+	-- KP_HOME = "KP 7",
+	-- KP_UPARROW = "KP 8",
+	-- KP_PGUP = "KP 9",
+	-- KP_SLASH = "KP /",
+	-- KP_MULTIPLY = "KP *",
+	-- KP_MINUS = "KP -",
+	-- KP_PLUS = "KP +",
+	-- KP_ENTER = "KP ↵",
+	-- KP_DEL = "KP .",
 	
-	ENTER = "↵",
-	SPACE = "#uv.button.space",
+	-- ENTER = "↵",
+	-- SPACE = "#uv.button.space",
 }
 
 function UVBindButton(var)
@@ -346,11 +346,16 @@ if CLIENT then
 	-- Settings Fonts
 	surface.CreateFont("UVSettingsFont", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true })
 	surface.CreateFont("UVSettingsFont-Italic", { font = "EurostileBold", size = UV.ScaleH(25), weight = 1000, shadow = true, extended = true, italic = true })
-	surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = UV.ScaleH(35), weight = 500, extended = true })
-	surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = UV.ScaleH(35), weight = 500, extended = true, italic = true })
+	surface.CreateFont("UVSettingsFontBig", { font = "EurostileBold", size = UV.ScaleH(35), weight = 1000, shadow = true, extended = true })
+	surface.CreateFont("UVSettingsFontBig-Italic", { font = "EurostileBold", size = UV.ScaleH(35), weight = 1000, shadow = true, extended = true, italic = true })
 	surface.CreateFont("UVSettingsFontSmall", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true })
 	surface.CreateFont("UVSettingsFontSmall-Italic", { font = "EurostileBold", size = UV.ScaleH(18), weight = 1000, shadow = true, extended = true, italic = true })
 	surface.CreateFont("UVSettingsFontSmall-Bold", { font = "EurostileBold", size = UV.ScaleH(22), weight = 1000, shadow = true, extended = true })
+
+	-- Keybind Fonts
+	surface.CreateFont("UVKeybindFont", { font = "Destiny Keys", size = UV.ScaleH(25), weight = 500, extended = true })
+	surface.CreateFont("UVKeybindFontBig", { font = "Destiny Keys", size = UV.ScaleH(35), weight = 500, extended = true })
+	surface.CreateFont("UVKeybindFontSmall", { font = "Destiny Keys", size = UV.ScaleH(17.5), weight = 500, extended = true })
 
     local isUVFrozen = false
     local effectDuration = 0
@@ -478,32 +483,356 @@ if CLIENT then
 
     end)
 
-    --WIP
-    --[[hook.Add("RenderScreenspaceEffects", "UVRenderScreenspaceEffects", function()
-        if isUVFrozen then
-            local t_elapsed = RealTime() - (UVFreezeTime - effectDuration)
-            local t_norm = t_elapsed / effectDuration
-
-            -- A red flash effect that fades out.
-            local redFlashAlpha = math.sin(t_norm * math.pi) * 150
-            render.SetColorModulation(1, 0.2, 0.2)
-            render.SetBlend(redFlashAlpha / 255)
-            render.DrawScreenQuad()
-            render.SetColorModulation(1, 1, 1)
-            render.SetBlend(1)
-
-            -- A static noise overlay that fades out.
-            local noiseAlpha = (1 - t_norm) * 100
-            surface.SetDrawColor(255, 255, 255, noiseAlpha)
-            surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
-        end
-    end)]]
-
     if not isVehicleValid then
         UVLastVehicleDriven = nil
     end
 	
 	local HUDCountdownTick = nil
+
+	-- Glyph tables
+	UVKeyGlyphs = {}
+
+	-- Keyboard & Mouse
+	UVKeyGlyphs.kb = {
+		["MOUSE1"] = "<color=125,125,255></color>" .. "", 
+		["MOUSE2"] = "<color=125,125,255></color>" .. "", 
+		["MOUSE3"] = "<color=125,125,255></color>" .. "", 
+		["MOUSE4"] = "<color=125,125,255></color>" .. "", 
+		["MOUSE5"] = "<color=125,125,255></color>" .. "", 
+		["MWHEELDOWN"] = "<color=125,125,255></color>" .. "",
+		["MWHEELUP"] = "<color=125,125,255></color>" .. "",
+		
+		["ö"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ä"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ì"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["è"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["é"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ß"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["c"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ò"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["à"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ù"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["a"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["b"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["c"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["d"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["e"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["f"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["g"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["h"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["i"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["j"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["k"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["l"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["m"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["n"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["o"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["p"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["q"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["r"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["s"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["t"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["u"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["v"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["w"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["x"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["y"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["z"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ü"] = "<color=68,68,68><color=255,255,255></color></color>",
+		
+		["0"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["1"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["2"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["3"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["4"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["5"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["6"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["7"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["8"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["9"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["'"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["*"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["+"] = "<color=68,68,68><color=255,255,255></color></color>",
+		[","] = "<color=68,68,68><color=255,255,255></color></color>",
+		["-"] = "<color=68,68,68><color=255,255,255></color></color>",
+		
+		["KP_SLASH"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_MULTIPLY"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_INS"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_END"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_DOWNARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_PGDN"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_LEFTARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_5"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_RIGHTARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_HOME"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_UPARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_PGUP"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_MINUS"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_PLUS"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_ENTER"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["KP_DEL"] = "<color=68,68,68><color=255,255,255></color></color>",
+		
+		["SPACE"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["DEL"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["BACKSPACE"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["TAB"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ENTER"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["SHIFT"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["RSHIFT"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["CTRL"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["ALT"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["RALT"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["UPARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["DOWNARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["LEFTARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["RIGHTARROW"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["INS"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["END"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F1"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F2"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F3"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F4"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F5"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F6"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F7"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F8"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F9"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F10"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F11"] = "<color=68,68,68><color=255,255,255></color></color>",
+		["F12"] = "<color=68,68,68><color=255,255,255></color></color>",
+	}
+
+	-- Unified Xbox controller glyphs
+	UVKeyGlyphs.xbox = {
+		-- Face buttons
+		a = "<color=100,255,100><color=68,68,68></color></color>",
+		b = "<color=255,100,100><color=68,68,68></color></color>",
+		x = "<color=100,255,255><color=68,68,68></color></color>",
+		y = "<color=255,255,0><color=68,68,68></color></color>",
+
+		-- Start / Back
+		start  = "<color=255,255,255><color=68,68,68></color></color>",
+		back   = "<color=255,255,255><color=68,68,68></color></color>",
+		start360 = "<color=50,50,50></color>",
+		back360  = "<color=50,50,50></color>",
+
+		-- Triggers & Bumpers
+		r2 = "<color=255,255,255></color>",
+		r1 = "<color=255,255,255></color>",
+		l2 = "<color=255,255,255></color>",
+		l1 = "<color=255,255,255></color>",
+
+		-- Sticks
+		rs  = "<color=255,255,255></color>",
+		rsc = "<color=255,255,255></color>",
+		ls  = "<color=255,255,255></color>",
+		lsc = "<color=255,255,255></color>",
+
+		-- D-Pad
+		du  = "<color=255,255,255></color>",
+		dr  = "<color=255,255,255></color>",
+		dd  = "<color=255,255,255></color>",
+		dl  = "<color=255,255,255></color>",
+		da  = "<color=255,255,255></color>",
+		dlr = "<color=255,255,255></color>",
+		dud = "<color=255,255,255></color>",
+	}
+
+	-- Unified PlayStation controller glyphs
+	UVKeyGlyphs.ps = {
+		-- Face buttons
+		a = "<color=150,255,255><color=68,68,68></color></color>",
+		b = "<color=255,150,150><color=68,68,68></color></color>",
+		x = "<color=255,150,255><color=68,68,68></color></color>",
+		y = "<color=150,255,150><color=68,68,68></color></color>",
+
+		-- Special buttons
+		share = "<color=255,255,255></color>",
+		start = "<color=255,255,255></color>",
+		pad   = "<color=68,68,68><color=0,0,0></color></color>",
+
+		-- Triggers & Bumpers
+		r1 = "<color=255,255,255></color>",
+		r2 = "<color=255,255,255></color>",
+		l1 = "<color=255,255,255></color>",
+		l2 = "<color=255,255,255></color>",
+
+		-- Sticks
+		rs  = "<color=255,255,255></color>",
+		rsc = "<color=255,255,255></color>",
+		ls  = "<color=255,255,255></color>",
+		lsc = "<color=255,255,255></color>",
+
+		-- D-Pad
+		du  = "<color=255,255,255></color>",
+		dr  = "<color=255,255,255></color>",
+		dd  = "<color=255,255,255></color>",
+		dl  = "<color=255,255,255></color>",
+		da  = "<color=255,255,255></color>",
+		dlr = "<color=255,255,255></color>",
+		dud = "<color=255,255,255></color>",
+	}
+
+	local UVGlyphOverrideTable = {}
+	local lastGlyphUpdate = -1
+
+	local function UpdateGlyphOverrides()
+		if lastGlyphUpdate == FrameNumber() then return end
+		lastGlyphUpdate = FrameNumber()
+
+		table.Empty(UVGlyphOverrideTable)
+
+		if UVGlyphOverride:GetBool() ~= true then return end
+
+		local raw = UVGlyphSet:GetString()
+		if raw == "" then return end
+
+		local lines = string.Split(raw, ", ")
+		for _, line in ipairs(lines) do
+			line = string.Trim(line)
+			if line == "" then continue end
+
+			local parts = string.Split(line, " ")
+			if #parts >= 2 then
+				local token = parts[1]
+				local glyph = parts[2]
+				UVGlyphOverrideTable[token] = glyph
+			end
+		end
+	end
+
+	local function ResolveGlyphOverride(token)
+		UpdateGlyphOverrides()
+		return UVGlyphOverrideTable[token]
+	end
+
+	-- The main functions
+	function UVKeybindIcon(key, size)
+		local font = "UVKeybindFont"  -- default
+		if size == "Big" then
+			font = "UVKeybindFontBig"
+		elseif size == "Small" then
+			font = "UVKeybindFontSmall"
+		end
+		
+		local alpha = alpha or 255
+
+		local wrap = function(str)
+			return "<font=" .. font .. ">" .. str .. "</font>"
+		end
+
+		local parts = string.Split(key, ".")
+		local glyph = "[" .. key .. "]"
+
+		if #parts == 1 then
+			if UVKeyGlyphs.kb[parts[1]] then
+				glyph = UVKeyGlyphs.kb[parts[1]]
+			end
+		elseif #parts == 2 then
+			local family, subkey = parts[1], parts[2]
+			if family == "kb" and UVKeyGlyphs.kb[subkey] then
+				glyph = UVKeyGlyphs.kb[subkey]
+			elseif family == "mouse" and UVKeyGlyphs.mouse[subkey] then
+				glyph = UVKeyGlyphs.mouse[subkey]
+			elseif family == "xbox" and UVKeyGlyphs.xbox[subkey] then
+				glyph = UVKeyGlyphs.xbox[subkey]
+			elseif family == "ps" and UVKeyGlyphs.ps[subkey] then
+				glyph = UVKeyGlyphs.ps[subkey]
+			elseif subkey == "all" then
+				local tbl = UVKeyGlyphs[family]
+				if tbl then
+					local out = {}
+					for _, glyph in pairs(tbl) do
+						out[#out + 1] = glyph
+					end
+					glyph = table.concat(out, "")
+				end
+			end
+		end
+
+		return wrap(glyph)
+	end
+
+	local function ResolveKeybind(token)
+		if token:sub(1, 1) == "+" then -- console command (+use, +jump, etc.)
+			return input.LookupBinding(token, true)
+		end
+
+		local cv = GetConVar(token)
+		if cv then
+			return input.GetKeyName(cv:GetInt())
+		end
+
+		return nil
+	end
+
+	function UVReplaceKeybinds(str, glyphsize)
+		local glyphsize = glyphsize or nil
+
+		-- [+use]
+		str = str:gsub("%[(%+[%w_]+)%]", function(cmd)
+			local override = ResolveGlyphOverride(cmd)
+			if override then
+				return UVKeybindIcon(override, glyphsize)
+			end
+
+			local key = ResolveKeybind(cmd)
+			if not key then return "???" end
+			return UVKeybindIcon(key, glyphsize)
+		end)
+
+		-- [key:convar_name]
+		str = str:gsub("%[key:([%w_]+)%]", function(cvar)
+			local override = ResolveGlyphOverride("key:" .. cvar)
+			if override then
+				return UVKeybindIcon(override, glyphsize)
+			end
+
+			local key = ResolveKeybind(cvar)
+			if not key then return "???" end
+			return UVKeybindIcon(key, glyphsize)
+		end)
+
+		-- [string:phrase]
+		str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+			return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
+		end)
+
+		-- [glyph:phrase]
+		str = str:gsub("%[glyph:([^%]]+)%]", function(glyph)
+			return UVKeybindIcon(glyph, glyphsize)
+		end)
+
+		return str
+	end
+
+	function UVReplaceKeybindsNoCol(str)
+		str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
+			return ResolveKeybind(cmd)
+		end)
+
+		str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
+			return ResolveKeybind(cvar)
+		end)
+
+		str = str:gsub("%[string:([^%]]+)%]", function(locstring)
+			return language.GetPhrase(locstring)
+		end)
+
+		return str
+	end
+
+	function UVDiscordTextFormat(str)
+	str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
+	str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
+	str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
+	str = str:gsub("__(.-)__", "[u]%1[/u]")
+	str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
+	str = str:gsub("\n#%s*(.-)\n", "\n<font=UVSettingsFontBig>%1</font>\n")
+	return str
+end
+
 end
 
 function Carbon_FormatRaceTime(curTime)

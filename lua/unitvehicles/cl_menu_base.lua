@@ -401,63 +401,6 @@ local function GetDynamicTall(text, maxWidth, baseFont, altFont)
     return (#lines * lineHeight) + padding
 end
 
-	
-local function ResolveKeybind(token)
-	if token:sub(1, 1) == "+" then
-		local key = input.LookupBinding(token, true)
-		return key and string.upper(key) or "???"
-	end
-
-	local cv = GetConVar(token)
-	if cv then
-		return string.upper(input.GetKeyName(cv:GetInt()) or "???")
-	end
-
-	return "???"
-end
-
-local function ReplaceKeybinds(str)
-	str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
-		return "<color=255,255,0>" .. ResolveKeybind(cmd) .. "</color>"
-	end)
-
-	str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
-		return "<color=255,255,0>" .. ResolveKeybind(cvar) .. "</color>"
-	end)
-
-	str = str:gsub("%[string:([^%]]+)%]", function(locstring)
-		return "<color=255,255,0>" .. language.GetPhrase(locstring) .. "</color>"
-	end)
-
-	return str
-end
-
-local function ReplaceKeybindsNoCol(str)
-	str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
-		return ResolveKeybind(cmd)
-	end)
-
-	str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
-		return ResolveKeybind(cvar)
-	end)
-
-	str = str:gsub("%[string:([^%]]+)%]", function(locstring)
-		return language.GetPhrase(locstring)
-	end)
-
-	return str
-end
-
-local function ConvertDiscordFormatting(str)
-	str = str:gsub("%*%*(.-)%*%*", "<font=UVSettingsFontSmall-Bold>%1</font>")
-	str = str:gsub("(%s)%*(.-)%*", "<font=UVSettingsFontSmall-Italic> %2 </font>")
-	str = str:gsub("^%*(.-)%*", "[i]%1[/i]")
-	str = str:gsub("__(.-)__", "[u]%1[/u]")
-	str = str:gsub("^#%s*(.-)\n", "<font=UVSettingsFontBig>%1</font>\n")
-	str = str:gsub("\n#%s*(.-)\n", "\n<font=UVSettingsFontBig>%1</font>\n")
-	return str
-end
-
 -- Build one setting (label / bool / slider / combo / button)
 function UV.BuildSetting(parent, st, descPanel)
 	local function GetDisplayText()
@@ -483,8 +426,8 @@ function UV.BuildSetting(parent, st, descPanel)
 		p:SetPaintBackground(false)
 
 		local rawText = language.GetPhrase(st.text or "") or ""
-		rawText = ReplaceKeybinds(rawText)
-		rawText = ConvertDiscordFormatting(rawText)
+		rawText = UVReplaceKeybinds(rawText, "Small")
+		rawText = UVDiscordTextFormat(rawText)
 
 		local mk
 		local lastWidth = 0
@@ -585,11 +528,11 @@ function UV.BuildSetting(parent, st, descPanel)
 			img:SetTooltip(entry.desc or "Tooltip")
 
 			local lbl = vgui.Create("DLabel", row)
-			lbl:SetFont("UVSettingsFontSmall-Bold")
+			lbl:SetFont("UVSettingsFontSmall")
 			lbl:SetText(entry.name)
 			lbl:SetTextColor(color_white)
 			lbl:SizeToContents()
-			lbl:SetPos(20, 0)
+			lbl:SetPos(UV.ScaleW(20), UV.ScaleH(2.5))
 		end
 
 		function p:PerformLayout()
@@ -1246,7 +1189,6 @@ function UV.BuildSetting(parent, st, descPanel)
 			-- background & text
 			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
-			-- draw.SimpleText(GetDisplayText(), "UVMostWantedLeaderboardFont", w*0.5, h*0.5, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			DrawWrappedText(self, GetDisplayText(), w * 0.95, w*0.5, nil, true)
 		end
 		
@@ -1501,7 +1443,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			local text = GetDisplayText()
 			local w = self:GetWide()
 			if w <= 0 then return end
-			local newTall = math.max(UV.ScaleH(30), GetDynamicTall(text, w * 0.5))
+			local newTall = math.max(UV.ScaleH(35), GetDynamicTall(text, w * 0.5))
 			if self:GetTall() ~= newTall then self:SetTall(newTall) end
 		end
 
@@ -1517,6 +1459,15 @@ function UV.BuildSetting(parent, st, descPanel)
 		local function GetDefaultKeyName()
 			if not cv then return "Invalid ConVar!" end
 			return string.upper(input.GetKeyName(cv:GetDefault()) or "-")
+		end
+		
+		local function GetKeyGlyph(cv, size) -- Same, but glyphs!
+			if not cv then return "Invalid ConVar!" end
+
+			local key = input.GetKeyName(cv:GetInt())
+			if not key then key = "-" end
+
+			return UVKeybindIcon(key, size)
 		end
 
 		-- Register with your existing keybind system
@@ -1540,12 +1491,15 @@ function UV.BuildSetting(parent, st, descPanel)
 				)
 
 			-- background & text
-			draw.RoundedBox(6, w*0.5, 0, w*0.5, h, default)
-			if isActive then draw.RoundedBox( 6, w*0.5, 0, w*0.5, h, Color(255, 180, 0, 80 + math.sin(RealTime()*6)*40) ) end
-			if hovered then draw.RoundedBox(6, w*0.5, 0, w*0.5, h, hover) end
+			draw.RoundedBox(6, w*0.66, 0, w*0.33, h, default)
+			if isActive then draw.RoundedBox( 6, w*0.66, 0, w*0.33, h, Color(255, 180, 0, 80 + math.sin(RealTime()*6)*40) ) end
+			if hovered then draw.RoundedBox(6, w*0.66, 0, w*0.33, h, hover) end
 
 			DrawWrappedText(self, GetDisplayText(), w * 0.45, 10, nil)
-			draw.SimpleText( isActive and "#uv.keybinds.anybutton" or GetKeyName(), "UVMostWantedLeaderboardFont", w * 0.75, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			-- draw.SimpleText( isActive and "#uv.keybinds.anybutton" or GetKeyName(), "UVMostWantedLeaderboardFont", w * 0.75, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			local text = isActive and language.GetPhrase("uv.keybinds.anybutton") or GetKeyGlyph(cv, "Big")
+			
+			markup.Parse( "<font=UVMostWantedLeaderboardFont>" .. text .. "</font>", w ):Draw(w * 0.82, h * 0.5, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		wrap.DoClick = function()
@@ -2491,15 +2445,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			draw.RoundedBox(4, 0, 0, w, h, Color(119,119,119,200))
 			self2:DrawTextEntryText(color_white, Color(58,193,0), color_white)
 			if not self2:IsEditing() and self2:GetText() == "" then
-				draw.SimpleText(
-					ReplaceKeybindsNoCol(language.GetPhrase("uv.hm.presets.presetname")),
-					self2:GetFont(),
-					8,
-					h / 2,
-					self2:GetPlaceholderColor(),
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_CENTER
-				)
+				markup.Parse( UVReplaceKeybinds( "<color=255,255,255,100><font=UVSettingsFont>" .. language.GetPhrase("uv.hm.presets.presetname") .. "</font></color>" ), w * 0.95 ):Draw( 8, h * 0.5, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -2876,6 +2822,439 @@ function UV.BuildSetting(parent, st, descPanel)
 		return panel
 	end
 
+	if st.type == "bindoverride" then
+		local panel = vgui.Create("DPanel", parent)
+		panel:Dock(TOP)
+		panel:DockMargin(8, 4, 8, 4)
+		panel:SetTall(UV.ScaleH(250))
+		panel.Paint = nil
+
+		local selectedToken = nil
+		local selectedGlyph = nil
+		local activeGlyphFilter = "all" -- "all", "kb", "xbox", "ps"
+
+		local bodyleft = vgui.Create("DPanel", panel)
+		bodyleft:Dock(LEFT)
+		bodyleft:DockMargin(0, 4, 0, 4)
+		bodyleft:SetWide(UV.ScaleW(260))
+		bodyleft.Paint = function(self, w, h)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, Color(0,0,0,200))
+			DrawWrappedText(self, language.GetPhrase("uv.keybinds.glyphs.action"), w * 0.5, w*0.5, h * 0.0, true)
+		end
+
+		bodyleft.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.keybinds.glyphs.action.desc" end end
+		bodyleft.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+
+		local bodymiddle = vgui.Create("DPanel", panel)
+		bodymiddle:Dock(FILL)
+		bodymiddle:DockMargin(0, 4, 0, 4)
+		bodymiddle.Paint = function(self, w, h)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, Color(0,0,0,200))
+			DrawWrappedText(self, language.GetPhrase("uv.keybinds.glyphs.glyph"), w * 0.5, w*0.5, h * 0.0, true)
+		end
+
+		bodymiddle.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.keybinds.glyphs.glyph.desc" end end
+		bodymiddle.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+
+		local bodyright = vgui.Create("DPanel", panel)
+		bodyright:Dock(RIGHT)
+		bodyright:DockMargin(0, 4, 0, 4)
+		bodyright:SetWide(UV.ScaleW(260))
+		bodyright.Paint = function(self, w, h)
+			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, Color(0,0,0,200))
+			DrawWrappedText(self, language.GetPhrase("uv.keybinds.glyphs.active"), w * 1, w*0.5, h * 0.0, true)
+		end
+
+		bodyright.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.keybinds.glyphs.active.desc" end end
+		bodyright.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+
+		-- Tokens
+		local left = vgui.Create("DScrollPanel", bodyleft)
+		left:Dock(FILL)
+		left:SetWide(UV.ScaleW(260))
+		left:DockMargin(6, 30, 3, 0)
+
+		-- Glyphs
+		local glyphFilterBar = vgui.Create("DPanel", bodymiddle)
+		glyphFilterBar:Dock(TOP)
+		glyphFilterBar:SetTall(UV.ScaleH(26))
+		glyphFilterBar:DockMargin(6, UV.ScaleH(30), 6, 2)
+		glyphFilterBar.Paint = nil
+		
+		local function AddGlyphFilterButton(text, id)
+			local btn = vgui.Create("DButton", glyphFilterBar)
+			btn:Dock(LEFT)
+			btn:DockMargin(0, 0, 6, 0)
+			btn:SetWide(UV.ScaleW(62.5))
+			btn:SetText("")
+
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+
+				local default = Color(
+					GetConVar("uvmenu_col_button_r"):GetInt(),
+					GetConVar("uvmenu_col_button_g"):GetInt(),
+					GetConVar("uvmenu_col_button_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local active = Color(
+					GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local hover = Color(
+					GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_a"):GetInt()
+						* math.abs(math.sin(RealTime() * 4))
+				)
+
+				local col = activeGlyphFilter == id and active or default
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+				end
+
+				DrawWrappedText(self, text, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+			end
+
+			btn.DoClick = function()
+				activeGlyphFilter = id
+				BuildGlyphList()
+			end
+		end
+		
+		AddGlyphFilterButton("#all", "all")
+		AddGlyphFilterButton("KB", "kb")
+		AddGlyphFilterButton("Xbox", "xbox")
+		AddGlyphFilterButton("PS", "ps")
+
+		local mid = vgui.Create("DScrollPanel", bodymiddle)
+		mid:Dock(FILL)
+		mid:DockMargin(6, 3, 3, 0)
+
+		local midLayout = vgui.Create("DIconLayout", mid)
+		midLayout:Dock(FILL)
+		midLayout:SetSpaceX(UV.ScaleW(2))
+		midLayout:SetSpaceY(UV.ScaleH(6))
+
+		-- Selected / Active
+		local right = vgui.Create("DScrollPanel", bodyright)
+		right:Dock(FILL)
+		right:DockMargin(3, 30, 6, 0)
+
+		local tokenButtons = {}
+		local glyphButtons = {}
+
+		local function ClearSelections()
+			selectedToken = nil
+			selectedGlyph = nil
+
+			for btn in pairs(tokenButtons) do btn.selected = false end
+			for btn in pairs(glyphButtons) do btn.selected = false end
+		end
+
+		local function TryCommit()
+			if not selectedToken or not selectedGlyph then return end
+
+			local raw = UVGlyphSet:GetString()
+			local entry = selectedToken .. " " .. selectedGlyph
+			UVGlyphSet:SetString(raw ~= "" and (raw .. ", " .. entry) or entry)
+
+			ClearSelections()
+			RefreshOverrides()
+			BuildTokenList()
+		end
+
+		local PresetTokens = {
+			{ name = language.GetPhrase("uv.ptech") .. " 1", token = "key:unitvehicle_pursuittech_keybindslot_1" },
+			{ name = language.GetPhrase("uv.ptech") .. " 2", token = "key:unitvehicle_pursuittech_keybindslot_2" },
+			{ name = language.GetPhrase("uv.keybind.resetposition"), token = "key:unitvehicle_keybind_resetposition" },
+			{ name = language.GetPhrase("uv.keybind.showresults"), token = "key:unitvehicle_keybind_raceresults" },
+			{ name = language.GetPhrase("uv.keybind.skipsong"), token = "key:unitvehicle_keybind_skipsong" },
+			{ name = "+jump", token = "+jump" },
+			{ name = "+use", token = "+use" },
+			{ name = "+reload", token = "+reload" },
+			{ name = "+attack", token = "+attack" },
+			{ name = "+attack2", token = "+attack2" },
+		}
+		
+		local TokenToName = {}
+
+		for _, entry in ipairs(PresetTokens) do
+			TokenToName[entry.token] = entry.name
+		end
+
+		function BuildTokenList()
+			left:Clear()
+			tokenButtons = {}
+
+			local used = {}
+			for entry in string.gmatch(UVGlyphSet:GetString(), "([^,]+)") do
+				local t = string.Trim(entry):match("^(%S+)")
+				if t then used[t] = true end
+			end
+
+			for _, entry in ipairs(PresetTokens) do
+				if used[entry.token] then continue end
+
+				local btn = left:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(UV.ScaleH(28))
+				function btn:PerformLayout()
+					local text = entry.name
+					local w = self:GetWide()
+					if w <= 0 then return end
+					local newTall = math.max(UV.ScaleH(28), GetDynamicTall(text, w * 0.9, "UVSettingsFontSmall"))
+					if self:GetTall() ~= newTall then self:SetTall(newTall) end
+				end
+				btn:SetText("")
+				btn.selected = false
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local active = Color(
+						GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+						GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
+					)
+
+					local col = self.selected and active or default
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+					end
+
+					DrawWrappedText(self, entry.name, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+				end
+
+				btn.DoClick = function()
+					selectedToken = entry.token
+					for b in pairs(tokenButtons) do b.selected = false end
+					btn.selected = true
+					TryCommit()
+				end
+
+				tokenButtons[btn] = entry
+			end
+		end
+		
+		local function SortedKeys(tbl)
+			local keys = {}
+			for k in pairs(tbl) do
+				keys[#keys + 1] = k
+			end
+
+			table.sort(keys, function(a, b)
+				-- numeric keys first (1, 2, 3...)
+				local na, nb = tonumber(a), tonumber(b)
+				if na and nb then return na < nb end
+				if na then return true end
+				if nb then return false end
+
+				-- F-keys grouped
+				local fa = a:match("^f(%d+)$")
+				local fb = b:match("^f(%d+)$")
+				if fa and fb then return tonumber(fa) < tonumber(fb) end
+				if fa then return true end
+				if fb then return false end
+
+				-- fallback alphabetical
+				return a < b
+			end)
+
+			return keys
+		end
+
+		local GLYPH_COLS = 3
+		
+		local function GetGlyphButtonSize()
+			local w = mid:GetWide()
+			if w <= 0 then return UV.ScaleW(60), UV.ScaleH(36) end
+
+			local totalSpacing = UV.ScaleW(6) * (GLYPH_COLS - 1)
+			local btnW = math.floor((w - totalSpacing - UV.ScaleW(8)) / GLYPH_COLS)
+			return btnW, UV.ScaleH(36)
+		end
+
+		local function AddGlyphButton(code)
+			local btn = midLayout:Add("DButton")
+			local bw, bh = UV.ScaleW(30), UV.ScaleH(30)
+			btn:SetSize(bw, bh)
+			btn:SetText("")
+			btn.selected = false
+
+			local mk = markup.Parse(UVKeybindIcon(code))
+
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+
+				local default = Color(
+					GetConVar("uvmenu_col_button_r"):GetInt(),
+					GetConVar("uvmenu_col_button_g"):GetInt(),
+					GetConVar("uvmenu_col_button_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local active = Color(
+					GetConVar("uvmenu_col_bool_active_r"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_g"):GetInt(),
+					GetConVar("uvmenu_col_bool_active_b"):GetInt(),
+					GetConVar("uvmenu_col_button_a"):GetInt()
+				)
+
+				local hover = Color(
+					GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+					GetConVar("uvmenu_col_button_hover_a"):GetInt()
+						* math.abs(math.sin(RealTime() * 4))
+				)
+
+				local col = self.selected and active or default
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+				end
+
+				mk:Draw(w * 0.5, h * 0.5, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			btn.DoClick = function()
+				selectedGlyph = code
+				for b in pairs(glyphButtons) do b.selected = false end
+				btn.selected = true
+				TryCommit()
+			end
+
+			glyphButtons[btn] = code
+		end
+
+		function BuildGlyphList()
+			midLayout:Clear()
+			glyphButtons = {}
+
+			if activeGlyphFilter == "all" or activeGlyphFilter == "kb" then
+				for _, k in ipairs(SortedKeys(UVKeyGlyphs.kb)) do
+					AddGlyphButton("kb." .. k)
+				end
+			end
+
+			if activeGlyphFilter == "all" or activeGlyphFilter == "xbox" then
+				for _, k in ipairs(SortedKeys(UVKeyGlyphs.xbox)) do
+					AddGlyphButton("xbox." .. k)
+				end
+			end
+
+			if activeGlyphFilter == "all" or activeGlyphFilter == "ps" then
+				for _, k in ipairs(SortedKeys(UVKeyGlyphs.ps)) do
+					AddGlyphButton("ps." .. k)
+				end
+			end
+		end
+		
+		BuildGlyphList()
+
+		function RefreshOverrides()
+			right:Clear()
+
+			for entry in string.gmatch(UVGlyphSet:GetString(), "([^,]+)") do
+				entry = string.Trim(entry)
+
+				local token, glyph = entry:match("^(%S+)%s+(%S+)$")
+				if not token or not glyph then continue end
+
+				-- Resolve display name
+				local displayName = TokenToName[token] or token
+				local glyphMarkup = markup.Parse(UVKeybindIcon(glyph))
+
+				local btn = right:Add("DButton")
+				btn:Dock(TOP)
+				btn:DockMargin(0, 0, 0, 4)
+				btn:SetTall(UV.ScaleH(28))
+				function btn:PerformLayout()
+					local text = displayName
+					local w = self:GetWide()
+					if w <= 0 then return end
+					local newTall = math.max(UV.ScaleH(28), GetDynamicTall(text, w * 0.77, "UVSettingsFontSmall"))
+					if self:GetTall() ~= newTall then self:SetTall(newTall) end
+				end
+				btn:SetText("")
+
+				btn.Paint = function(self, w, h)
+					local hovered = self:IsHovered()
+
+					local default = Color(
+						GetConVar("uvmenu_col_button_r"):GetInt(),
+						GetConVar("uvmenu_col_button_g"):GetInt(),
+						GetConVar("uvmenu_col_button_b"):GetInt(),
+						GetConVar("uvmenu_col_button_a"):GetInt()
+					)
+
+					local hover = Color(
+						GetConVar("uvmenu_col_button_hover_r"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_g"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_b"):GetInt(),
+						GetConVar("uvmenu_col_button_hover_a"):GetInt()
+							* math.abs(math.sin(RealTime() * 4))
+					)
+
+					draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, default)
+					if hovered then
+						draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover)
+					end
+
+					-- LEFT: action name
+					DrawWrappedText( self, displayName, w * 0.77, w * 0.05, h * 0.1, false, "UVSettingsFontSmall" )
+
+					-- RIGHT: glyph
+					glyphMarkup:Draw( w * 0.92, h * 0.5, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+				end
+
+				btn.DoClick = function()
+					local out = {}
+					for e in string.gmatch(UVGlyphSet:GetString(), "([^,]+)") do
+						if string.Trim(e) ~= entry then
+							out[#out + 1] = string.Trim(e)
+						end
+					end
+					UVGlyphSet:SetString(table.concat(out, ", "))
+					RefreshOverrides()
+					BuildTokenList()
+				end
+			end
+		end
+
+		timer.Simple(0, function()
+			BuildTokenList()
+			RefreshOverrides()
+		end)
+
+		return panel
+	end
+
 	-- fallback: do nothing
 	return nil
 end
@@ -3148,29 +3527,42 @@ function UVMenu:Open(menu)
             surface.DrawRect(0, 0, w, h)
 
             if self.Text and a > 5 then
-                local font = "UVMostWantedLeaderboardFont2"
-                local color = Color(255, 255, 255, a)
-                local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
-                local wrapWidth = w - xPadding * 2
-                local yOffset = yPadding
+                -- local font = "UVMostWantedLeaderboardFont2"
+                -- local color = Color(255, 255, 255, a)
+                -- local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
+                -- local wrapWidth = w - xPadding * 2
+                -- local yOffset = yPadding
 
-                surface.SetFont(font)
-                local desc = ReplaceKeybindsNoCol(language.GetPhrase(self.Desc or "") or "")
+                -- surface.SetFont(font)
+                -- local desc = UVReplaceKeybinds(language.GetPhrase(self.Desc or "") or "")
 
-                local paragraphs = string.Split(desc, "\n")
-                for _, paragraph in ipairs(paragraphs) do
-                    if paragraph == "" then
-                        local _, th = surface.GetTextSize("A")
-                        yOffset = yOffset + th
-                    else
-                        local wrapped = UV_WrapText(paragraph, font, wrapWidth)
-                        for _, line in ipairs(wrapped) do
-                            draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
-                            local _, th = surface.GetTextSize(line)
-                            yOffset = yOffset + th
-                        end
-                    end
-                end
+                -- local paragraphs = string.Split(desc, "\n")
+                -- for _, paragraph in ipairs(paragraphs) do
+                    -- if paragraph == "" then
+                        -- local _, th = surface.GetTextSize("A")
+                        -- yOffset = yOffset + th
+                    -- else
+                        -- local wrapped = UV_WrapText(paragraph, font, wrapWidth)
+                        -- for _, line in ipairs(wrapped) do
+                            -- draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
+                            -- local _, th = surface.GetTextSize(line)
+                            -- yOffset = yOffset + th
+                        -- end
+                    -- end
+                -- end
+				local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
+				local wrapWidth = w - xPadding * 2
+
+				local desc = UVReplaceKeybinds(language.GetPhrase(self.Desc) or "")
+
+				local markupText =
+					"<font=UVMostWantedLeaderboardFont2>" ..
+					"<color=255,255,255," .. a .. ">" ..
+					desc ..
+					"</color></font>"
+
+				local mk = markup.Parse(markupText, wrapWidth)
+				mk:Draw(xPadding, yPadding, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
             end
 			if self.SelectedConVar then
 				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

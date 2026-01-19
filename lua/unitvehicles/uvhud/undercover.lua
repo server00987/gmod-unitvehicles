@@ -458,8 +458,11 @@ UV_UI.racing.undercover.events = {
             if scrollOffset < #sortedRacers - entriesToShow then
                 draw.SimpleText("▼", "UVFont5UI", w * 0.5, h * 0.7375, Color(255,255,255,blink), TEXT_ALIGN_CENTER)
             end
-            
-            draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverAccentFont", w*0.5, h*0.755, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+
+			local conttext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			mk:Draw( w*0.5, h*0.755, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.815, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             
             if timeremaining < 1 then
@@ -943,13 +946,21 @@ UV_UI.pursuit.undercover.events = {
             if timeremaining > autoCloseDelay then
                 timeremaining = autoCloseDelay
             end
+			
+			local cy, cx, cc = w*0.5, h*0.6525, TEXT_ALIGN_CENTER
+			
+			local conttext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big") .. "</font></color>"
+			local mk = markup.Parse(conttext)
+
+			local spawntext = "<color=255,255,255" .. textAlpha .. "><font=UVUndercoverAccentFont>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font></color>"
+			local mk2 = markup.Parse(spawntext)
 
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h*0.64, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-				draw.DrawText( language.GetPhrase("uv.pm.spawnas") .. " [" .. UVBindButton("+reload") .. "]", "UVUndercoverLeaderboardFont", w*0.6575, h * 0.67, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_RIGHT )
-			else
-				draw.DrawText( language.GetPhrase("uv.results.continue") .. " [" .. UVBindButton("+jump") .. "]", "UVUndercoverLeaderboardFont", w*0.5, h*0.6525, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
+				cy, cx, cc = w*0.6575, h*0.6375, TEXT_ALIGN_RIGHT
+				mk2:Draw( w*0.6575, h*0.665, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
 			end
+
+			mk:Draw( cy, cx, cc, TEXT_ALIGN_TOP)
 			
             draw.DrawText( string.format( lang("uv.results.autoclose"), math.max(0, timeremaining) ), "UVUndercoverLeaderboardFont", w*0.5, h*0.71, Color( 255, 255, 255, textAlpha ), TEXT_ALIGN_CENTER )
             				

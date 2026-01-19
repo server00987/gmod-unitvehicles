@@ -653,13 +653,16 @@ UV_UI.racing.carbon.events = {
             
             -- Time remaining and closing
             local blink = 255 * math.abs(math.sin(RealTime() * 8))
-			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
-			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
+			
+			local conttext = "<color=255,255,255><font=UVCarbonLeaderboardFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			local conttextw = mk:GetWidth()
 
 			surface.SetFont("UVCarbonLeaderboardFont")
-			local conttextw = surface.GetTextSize(conttext)
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
 			local autotextw = surface.GetTextSize(autotext)
-			local wdist = w * 0.0006
+
+			local wdist = w * 0.000565
 
 			surface.SetDrawColor( 100, 100, 100, 200 )
 			surface.DrawRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
@@ -669,7 +672,7 @@ UV_UI.racing.carbon.events = {
 			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
 			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
 
-			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			mk:Draw( w * 0.2585, h * 0.905, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
             if scrollOffset > 0 then
@@ -1398,14 +1401,18 @@ UV_UI.pursuit.carbon.events = {
             draw.SimpleTextOutlined( spikestripsdodged, "UVCarbonLeaderboardFont", w*0.74, h1 + h*0.24, Color(255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0))
 
             -- Time remaining and closing
-			local conttext = "[ " .. UVBindButton("+jump") .. " ] " .. language.GetPhrase("uv.results.continue")
-			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
-			local uwstext = "[ " .. UVBindButton("+reload") .. " ] " .. language.GetPhrase("uv.pm.spawnas")
+			local conttext = "<color=255,255,255><font=UVCarbonLeaderboardFont>" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font></color>"
+			local mk = markup.Parse(conttext)
+			local conttextw = mk:GetWidth()
 
 			surface.SetFont("UVCarbonLeaderboardFont")
-			local conttextw = surface.GetTextSize(conttext)
+			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.max(0, timeremaining) )
 			local autotextw = surface.GetTextSize(autotext)
-			local uwstextw = surface.GetTextSize(uwstext)
+			
+			local uwstext = "<color=255,255,255><font=UVCarbonLeaderboardFont>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas")) .. "</font></color>"
+			local mk2 = markup.Parse(uwstext)
+			local uwstextw = mk2:GetWidth()
+
 			local wdist = w * 0.000565
 
 			surface.SetDrawColor( 100, 100, 100, 200 )
@@ -1416,7 +1423,7 @@ UV_UI.pursuit.carbon.events = {
 			surface.DrawOutlinedRect( w*0.2565, h*0.9, (wdist * conttextw), h*0.035)
 			surface.DrawOutlinedRect( w*0.2665 + (wdist * conttextw), h*0.9, (wdist * autotextw), h*0.035)
 
-			draw.SimpleTextOutlined( conttext, "UVCarbonLeaderboardFont", w*0.2585, h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+			mk:Draw( w * 0.2585, h * 0.905, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleTextOutlined( autotext, "UVCarbonLeaderboardFont", w*0.2685 + (wdist * conttextw), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
 
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
@@ -1425,8 +1432,8 @@ UV_UI.pursuit.carbon.events = {
 				
 				surface.SetDrawColor( 0, 0, 0, 255 )
 				surface.DrawOutlinedRect( w*0.2765 + (wdist * (conttextw + autotextw)), h*0.9, (wdist * uwstextw), h*0.035)
-				
-				draw.SimpleTextOutlined( uwstext, "UVCarbonLeaderboardFont", w*0.2785 + (wdist * (conttextw + autotextw)), h*0.905, Color( 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1.25, Color(0, 0, 0) )
+
+				mk2:Draw( w*0.2785 + (wdist * (conttextw + autotextw)), h * 0.905, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			end
 
             if not exitStarted and timeremaining < 1 then

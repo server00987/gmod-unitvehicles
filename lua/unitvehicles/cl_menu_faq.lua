@@ -166,7 +166,7 @@ Yes you can! And it's simple:
 ["Pursuit.Respawn"] = [[
 # -- I'm stuck or too far from the suspect(s)! How do I reset?
 
- |-- Press [key:unitvehicle_keybind_resetposition] to open the [string:tool.uvunitmanager.settings.voiceunit.select] menu
+ |-- Press [key:unitvehicle_keybind_resetposition] to open the [string:uv.pm.spawnas] menu
  |-- Pick the vehicle you want to reset as
  |-- Away you go!
  
@@ -264,6 +264,7 @@ Unit Vehicles är ett Sandbox-fokuserat tillägg som tillåter spelare, antingen
 ]],
 ["Requirements"] = [[
 # -- Behöver jag installera andra tillägg för detta?
+
 Ja. *Decent Vehicle - Basic AI* och *Glide // Styled's Vehicle Base* KRÄVS för att Unit Vehicles ska fungera korrekt.
  |-- Decent Vehicles ger waypoints till AI:n att spawna och köra runt på.
  |-- Glide erbjuder fordonen som krävs för standard förinställningen.
@@ -390,7 +391,7 @@ Ja, det kan du! Och simpelt är det:
 ["Pursuit.Respawn"] = [[
 # -- Jag har fastnat eller är för långt bort från dem misstänkta! Hur återställer jag?
 
- |-- Tryck på [key:unitvehicle_keybind_resetposition] för att öppna menyn [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Tryck på [key:unitvehicle_keybind_resetposition] för att öppna menyn [string:uv.pm.spawnas]
  |-- Välj ett fordon du vill återställas som
  |-- Iväg med dig!
  
@@ -615,7 +616,7 @@ Alternativamente, puedes editar el ultimo numero en el archivo "race data".
 ["Pursuit.Respawn"] = [[
 # -- ¡Estoy atascado o muy lejos de el/los sospechoso(s)! ¿Cómo reaparezco?
 
- |-- Presiona [key:unitvehicle_keybind_resetposition] para abrir el menú [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Presiona [key:unitvehicle_keybind_resetposition] para abrir el menú [string:uv.pm.spawnas]
  |-- Elige el vehículo con el que quieras reaparecer
  |-- ¡Y allí vas!
  
@@ -830,6 +831,7 @@ Use the [string:tool.uvracemanager.name] tool:
 
 ["Pursuit.JoinAsUnit"] = [[
 # -- Могу ли я присоединиться к Погоне в качестве Юнита?
+
 Да, ты можешь! И это просто:
  |-- Отправляйся в [string:uv.pm] или [string:uv.menu.welcome]
  |-- Нажми [string:uv.pm.spawnas]
@@ -839,7 +841,7 @@ Use the [string:tool.uvracemanager.name] tool:
 ["Pursuit.Respawn"] = [[
 # -- Я застрял или слишком далеко от подозреваемого(мых)! Как мне вернуться?
 
- |-- Нажми [key:unitvehicle_keybind_resetposition] чтобы открыть меню [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Нажми [key:unitvehicle_keybind_resetposition] чтобы открыть меню [string:uv.pm.spawnas]
  |-- Выбери машину, на которой ты хочешь вернуться
  |-- Поезжай!
  
@@ -1068,7 +1070,7 @@ Tak! To dość proste:
 ["Pursuit.Respawn"] = [[
 # -- Auto utknęło lub jestem zbyt daleko od akcji! Jak je zresetować?
 
- |-- Wciśnij [key:unitvehicle_keybind_resetposition] aby otworzyć okno [string:tool.uvunitmanager.settings.voiceunit.select]
+ |-- Wciśnij [key:unitvehicle_keybind_resetposition] aby otworzyć okno [string:uv.pm.spawnas]
  |-- Wybierz pojazd w którym chcesz się zresetować
  |-- Miłych gonitw!
  

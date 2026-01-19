@@ -378,10 +378,12 @@ UV_UI.racing.ctu.events = {
 				surface.DrawTexturedRect(w * 0.4, h * 0.8, w * 0.2, h * 0.035)
 			end
 
-			local conttext = UVBindButton("+jump") .. "    " .. language.GetPhrase("uv.results.continue")
+			-- local conttext = UVBindButton("+jump") .. "    " .. language.GetPhrase("uv.results.continue")
+			local conttext = UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue"), "Big")
 			local autotext = string.format( language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining) )
 
-			draw.SimpleTextOutlined(conttext, "UVFont4BiggerItalic2", w * 0.4025, h * 0.8, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 255 * fadeAlpha ) )
+			-- draw.SimpleTextOutlined(conttext, "UVFont4BiggerItalic2", w * 0.4025, h * 0.8, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 255 * fadeAlpha ) )
+			markup.Parse( "<color=255,255,255" .. fadeAlpha .. "><font=UVFont4BiggerItalic2>" .. conttext .. "</font></color>", w * 0.95 ):Draw( w * 0.41, h * 0.8, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 			draw.SimpleTextOutlined(autotext, "UVFont4BiggerItalic2", w * 0.5, h * 0.835, Color( 255, 255, 255, 255 * fadeAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 255 * fadeAlpha ) )
 
             if autoCloseRemaining <= 0 then

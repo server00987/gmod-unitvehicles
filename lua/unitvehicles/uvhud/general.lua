@@ -43,7 +43,7 @@ local function uv_general()
             local x = w * xOffset
             local keyX = w * (0.8425 + ((i - 1) * 0.0625))
             local textX = w * (0.8425 + ((i - 1) * 0.0625))
-            local keyY = h * 0.58
+            local keyY = h * 0.57
 
             local bgColor = Color(0, 0, 0, 225)
             local fillOverlayColor = nil
@@ -53,6 +53,12 @@ local function uv_general()
             local keyColor = Color(255, 255, 255, 125)
             local ammoText, techText = " - ", " - "
             local keyText = UVBindButtonName(keyCode)
+			
+			
+            -- local bw, bh = UV_UI.W(w * 0.06), h * 0.06
+            -- local x = UV_UI.X(w * xOffset)
+            -- local keyX = UV_UI.X(w * (0.8425 + ((i - 1) * 0.0625)))
+            -- local textX = UV_UI.X(w * (0.8425 + ((i - 1) * 0.0625)))
 
             if tech then
                 -- Handle key press as before
@@ -124,7 +130,9 @@ local function uv_general()
 
 				draw.SimpleTextOutlined( techText, "UVMostWantedLeaderboardFont", textX, y + (h * 0.0075), textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
 				draw.SimpleTextOutlined( ammoText, "UVMostWantedLeaderboardFont", textX, y + (h * 0.0275), textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
-                draw.SimpleTextOutlined(keyText, "UVMostWantedLeaderboardFont", keyX, keyY, keyColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2, Color(0,0,0))
+
+				local mk = markup.Parse( UVReplaceKeybinds( "[key:unitvehicle_pursuittech_keybindslot_" .. i .. "]", "Big" ), w )
+				mk:Draw(keyX, keyY, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
             end
         end
 	else
