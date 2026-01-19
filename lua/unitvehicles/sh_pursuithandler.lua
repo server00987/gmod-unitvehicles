@@ -2710,7 +2710,7 @@ else -- CLIENT Settings | HUD/Options
 				continue 
 			end
 
-			if not incomingData and GetConVar(key) and not PROTECTED_CONVARS[key] then
+			if not incomingData and GetConVar("unitvehicle_unit_" .. key) and not PROTECTED_CONVARS[key] then
 				_setConVar( key, DEFAULTS[key] or "" )
 			end
 		end
