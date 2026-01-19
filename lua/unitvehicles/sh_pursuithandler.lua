@@ -3732,7 +3732,7 @@ else -- CLIENT Settings | HUD/Options
 		if hudHandler then
 			hudHandler()
 
-			if UV_UI.pursuit.original and UV_UI.pursuit.original.main and hudHandler == UV_UI.pursuit.original.main then -- Displays both racing and pursuit
+			if UV_UI.pursuit.original and UV_UI.pursuit.original.main and hudHandler == UV_UI.pursuit.original.main and UVHUDDisplayPursuit then -- Displays both racing and pursuit
 				displayingracingandpursuit = true
 			end
 		end
@@ -3744,7 +3744,7 @@ else -- CLIENT Settings | HUD/Options
 		local var = UVKeybindResetPosition:GetInt()
 
 		if not displayingracingandpursuit then
-			if not UVHUDCopMode and ((not UVHUDDisplayPursuit  or UVHUDRace) and UVHUDDisplayBusting) then  -- Being fined/busted in a race
+			if not UVHUDCopMode and ((not UVHUDDisplayPursuit or UVHUDRace) and UVHUDDisplayBusting) then  -- Being fined/busted in a race
 				local UVBustTimer = BustedTimer:GetFloat()
 				local finetext = "uv.chase.fining"
 
