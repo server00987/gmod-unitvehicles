@@ -253,6 +253,26 @@ end
 -- Settings
 UVMenu.Settings = function()
 	local mainHUDList, backupHUDList = BuildHUDComboLists()
+	
+	local addonTabRows = {}
+
+	-- Add third-party addon blocks
+	if UVMenu.AddonEntries and #UVMenu.AddonEntries > 0 then
+		for _, block in ipairs(UVMenu.AddonEntries) do
+			-- Optional visual separator
+			table.insert(addonTabRows, { type = "spacer" })
+
+			for _, row in ipairs(block) do
+				table.insert(addonTabRows, row)
+			end
+		end
+	else
+		-- No addons present → default label
+		table.insert(addonTabRows, {
+			type = "infosimple",
+			text = "#uv.addons.none",
+		})
+	end
 
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.settings"),
@@ -404,12 +424,15 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.response.enable", desc = "uv.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
 				{ type = "slider", text = "#uv.response.speedlimit", desc = "uv.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
 			},
+			-- { TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
+				-- { type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
+				-- { type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+				-- { type = "label", text = "Glide // Circular Functions", sv = true },
+				-- { type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+				-- { type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+			-- },
 			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
-				{ type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
-				{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
-				{ type = "label", text = "Glide // Circular Functions", sv = true },
-				{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
-				{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+				unpack(addonTabRows)
 			},
 
 			{ TabName = "#uv.back", playsfx = "clickback", func = function()

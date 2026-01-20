@@ -1155,13 +1155,11 @@ UV_UI.pursuit.mostwanted.events = {
 				
 				local ustext = ""
 				if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-					conttext = conttext .. "     <color="..debriefcolor.r..","..debriefcolor.g..","..debriefcolor.b..","..textAlpha.."><font=UVFont5UI>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font></color>"
+					conttext = conttext .. "     <color="..debriefcolor.r..","..debriefcolor.g..","..debriefcolor.b.."><font=UVFont5UI>" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Big") .. "</font></color>"
 				end
-				
-				conttext = markup.Parse(conttext)
 
 				surface.SetAlphaMultiplier(textAlpha / 255)
-				conttext:Draw(w * 0.205, h * 0.77, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				markup.Parse(conttext):Draw(w * 0.205, h * 0.77, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 				surface.SetAlphaMultiplier(1)
             end
             

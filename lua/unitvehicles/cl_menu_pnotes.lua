@@ -8,6 +8,26 @@ UV = UV or {}
 -- },
 
 UV.PNotes = {
+["v0.43.0"] = {
+Date = "2026/01/22",
+Text = [[
+**New Features**
+- UV Menu: Added the ability for addon creators to have settings added into the UV Menu
+- Added new Glyphs that replace "[ SPC ]" and various other keybind notifications across the addon
+- UV Menu: Added a "Glyph Override" function, allowing you to define not only your own keyboard and mouse glyphs (cosmetically, of course), but also assign Xbox, PlayStation and Switch glyphs
+
+**Changes**
+- UV Menu: "VCMod ELS" and "Circular Functions" sections in the Settings Addon tab now show/hide themselves if depending on if they are installed or not
+- Race participants are now teleported in 12-participant batches
+ |-- This now allows races with more than 24 racers
+- Lowered the size on the "Respawning as" and "Race ends in" notifications
+- Added new elements to the Original HUD style
+
+**Fixes**
+- Fixed that Glide vehicle categories were not sorted correctly in the Vehicle Override lists
+]],
+},
+
 ["v0.42.0"] = {
 Date = "2026/01/16",
 Text = [[
