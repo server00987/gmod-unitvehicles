@@ -1,27 +1,63 @@
-# ///Unit Vehicles (UV) - AI Police Chase Addon///
+# /// RACE /// CHASE /// ESCAPE ///
+
+***Unit Vehicles*** is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police and thrilling races on any map.
 
 "I want every single unit, after the guy." ~ Sergeant Cross
 
-Don't have friends to chase you? No worries! You can now have car chases with AI-controlled vehicles!
+## Requirements
+You'll need two addons for Unit Vehicles to work flawlessly:
 
-This composes of different Police AIs called "Units", with each one of them having its own set of tactics to chase down each suspect!
+- [Decent Vehicles - Basic AI](https://steamcommunity.com/workshop/filedetails/?id=1587455087) - Required for AI pathfinding.
+- [Glide // Styled's Vehicle Base](https://steamcommunity.com/workshop/filedetails/?id=3389728250) - Used by default UVPD vehicles, and highly recommended for the addon.
+
+**Highly recommended**
+- [Unit Vehicles Starter Data Pack](https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556) - Contains lots of data content provided by the UV development team and the community. Contains AI Racer Names, Pursuit Breakers, Races, Roadblocks, the **Rockport PD** Preset and various Decent Vehicle waypoints for plenty of maps.
 
 ## Features
-- Pursuit system (works similarly to NFS games). You can't exit your vehicle whilst being chased!
-- Units that can team up and use pursuit tactics to stop you! They can talk to each other in the chatbox or the radio chatter!
-- Pursuit Breakers! Create your own structure anywhere on the map and save it! During pursuits, smash into them to disable Units!
-- HUD to keep track of pursuit statistics.
-- Spike strip weapon.
-- Tons of customization options via ConVars to tweak most of the above features.
+***/// Racing ///***
+- Participate in Sprint or Circuit racing against your friends or AI!
+- Fight your opponents with various Pursuit Techs!
+- Create your own Races using the **Race Manager** tool!
 
-## Console Commands
-| Command | Description |
+***/// Pursuits ///***
+- Participate in thrilling Pursuits as a Racer or a Unit!
+- Utilize Pursuit Breakers to keep the Units off your back!
+- Fight the Racers or Units with various Pursuit Techs!
+- Up to 10 Heat Levels - the higher the level, the tougher the Units!
+- Create your own Pursuit Breakers, Roadblocks and Units using the **various tools**!
+
+***/// General ///***
+- Easy-to-use custom menu
+- Offers support for Glide, Simfphys, Photon 2 and Base HL2 Jeeps
+- Various UI Styles resembling older NFS titles to choose from
+- Fine-tune every little bit of the addon to fit your preference
+- Localization support:
+
+| Full | Partial | Minimal |
+| --- | --- | --- |
+| English | Czech | Danish |
+| Spanish | German | Finnish |
+| Russian | Greek | French |
+| Swedish | Polish | Hungarian |
+| Simpl. Chinese | Thai | Italian |
+|| Ukrainian | Japanese |
+||| Korean |
+||| Dutch |
+||| Brazilian |
+||| Slovakian |
+||| Trad. Chinese |
+
+## FAQ
+| Question | Answer |
 | --- | --- |
-| `uv_spawnvehicles` | Automatically spawns idle/patrolling Unit Vehicles on the road |
-| `uv_despawnvehicles` | Despawns all Unit Vehicles |
-| `uv_resetallsettings` | Resets ALL server console variables |
-| `uv_startpursuit` | Starts a pursuit with Unit Vehicles chasing you |
-| `uv_stoppursuit` | Stops a pursuit with Unit Vehicles calling off |
-| `uv_racershordestart` | Starts an endless horde of racers |
-| `uv_racershordestop` | Stops an endless horde of racers |
-| `uv_wantedtable` | Prints a list of (potential) wanted suspects to the console |
+| `Where are the races, Pursuit Breakers, Roadblocks, etc.?` | Unit Vehicles does not come prepackaged with any races, Pursuit Breakers or Roadblocks. You can always run using the default Heat Preset. Alternatively, you can utilize the **Starter Data Pack** (linked above) to get you started with a bunch of presets! |
+| `What vehicle bases are supported?` | **Glide** is highly recommended and has the most support, but you can also use **Simfphys**, **Proton 2** or even **Base HL2**. |
+| `Where is my created data stored?` | It is stored in the game's **data** folder. Here you'll find Unit data, Racer Names, Pursuit Breaker data, Race data and Roadblock data. |
+| `I want to assist in development!` | All you need to do is download this Git and start changing. Once you're ready, send us a pull request, and we'll take a look at it. If it's good, we'll implement it! |
+| `I have more questions!` | First you should check the in-game **UV Menu**'s **FAQ**. While in-game, hold your Context key (`C` by default) and click **Unit Vehicles**, then navigate to **FAQ**. |
+
+## Regarding pull requests
+- When you create a fork, ensure your changes are done in its own separate branch. Do not use `main`.
+- If you are aware of bugs in your code, mention them in your PR.
+- Work-in-progress commits are to be published as PR drafts. Also applies if you wish for input from other contributors.
+- Please follow the [CFC style guidelines](https://github.com/CFC-Servers/cfc_glua_style_guidelines) when providing code. Optionally, you can install [glualint](https://github.com/FPtje/GLuaFixer) and its extention to get warnings in your preferred text editor.
