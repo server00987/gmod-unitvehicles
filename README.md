@@ -51,7 +51,7 @@ You'll need two addons for Unit Vehicles to work flawlessly:
 | Question | Answer |
 | --- | --- |
 | `Where are the races, Pursuit Breakers, Roadblocks, etc.?` | Unit Vehicles does not come prepackaged with any races, Pursuit Breakers or Roadblocks. You can always run using the default Heat Preset. Alternatively, you can utilize the **Starter Data Pack** (linked above) to get you started with a bunch of presets! |
-| `What vehicle bases are supported?` | **Glide** is highly recommended and has the most support, but you can also use **Simfphys**, **Proton 2** or even **Base HL2**. |
+| `What vehicle bases are supported?` | **Glide** is highly recommended and has the most support, but you can also use **Simfphys**, **Photon 2** or even **Base HL2**. |
 | `Where is my created data stored?` | It is stored in the game's **data** folder. Here you'll find Unit data, Racer Names, Pursuit Breaker data, Race data and Roadblock data. |
 | `I want to assist in development!` | All you need to do is download this Git and start changing. Once you're ready, send us a pull request, and we'll take a look at it. If it's good, we'll implement it! |
 | `I have more questions!` | First you should check the in-game **UV Menu**'s **FAQ**. While in-game, hold your Context key (`C` by default) and click **Unit Vehicles**, then navigate to **FAQ**. |
