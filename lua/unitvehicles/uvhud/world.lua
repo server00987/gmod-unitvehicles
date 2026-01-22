@@ -284,6 +284,8 @@ UV_UI.racing.world.events = {
             return true -- prevent further processing
         end
 
+		local contMarkup = markup.Parse( "<font=UVWorldFont3"..GetFontSuffixForLanguage()..">" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font>" )
+
 		ResultPanel.Paint = function(self, w, h)
 			local curTime = CurTime()
 			local elapsedAnim = curTime - bgAnimStart
@@ -365,10 +367,14 @@ UV_UI.racing.world.events = {
 				draw.SimpleTextOutlined( "#uv.race.loading", "UVWorldFont6" .. GetFontSuffixForLanguage(), w*0.5, h*0.525, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
 				DrawIcon( UVMaterials["LOADING_WORLD_R"], w*0.5, h*0.5, 0.05, Color( 255, 255, 255, headerAlpha ), { rotation = ( -RealTime() * 360 ) % 360 } )
 				DrawIcon( UVMaterials["LOADING_WORLD_L"], w*0.5, h*0.5, 0.04, Color( 255, 255, 255, headerAlpha ), { rotation = ( RealTime() * 180 ) % 360 } )
-				surface.SetDrawColor( 255, 255, 255, headerAlpha )
+				-- surface.SetDrawColor( 255, 255, 255, headerAlpha )
+				surface.SetDrawColor( 225,225,225, headerAlpha )
 				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
 				surface.DrawTexturedRect( w*0.55, h*0.7, w*0.12, h*0.05 )
-				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.61, h*0.7125, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+
+				surface.SetAlphaMultiplier(headerAlpha / 255)
+				contMarkup:Draw(w * 0.61, h * 0.712, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+				surface.SetAlphaMultiplier(1)
 
 				if curTime - loadingStart >= fakeLoadingDuration then
 					loading = false
@@ -425,16 +431,20 @@ UV_UI.racing.world.events = {
 			-- Next button and auto-close
 			local elapsed = math.max(0, curTime - timestart)
 			local autoCloseRemaining = math.max(0,30 - elapsed)
-			local conttext = language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump")
 			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining))
 
 			surface.SetDrawColor(255,255,255,effectiveAlpha*math.abs(math.sin(RealTime()*3)))
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
 			surface.DrawTexturedRect(w*0.55,h*0.7,w*0.12,h*0.05)
-			surface.SetDrawColor(255,255,255,effectiveAlpha)
+			-- surface.SetDrawColor(255,255,255,effectiveAlpha)
+			surface.SetDrawColor(225,225,225,effectiveAlpha)
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
 			surface.DrawTexturedRect(w*0.55,h*0.7,w*0.12,h*0.05)
-			draw.SimpleTextOutlined(conttext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.61,h*0.7125, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+
+			surface.SetAlphaMultiplier(effectiveAlpha / 255)
+			contMarkup:Draw(w * 0.61, h * 0.712, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
+
 			draw.SimpleTextOutlined(autotext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.335,h*0.725, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
 
 			if autoCloseRemaining <= 0 and not closing then
@@ -465,7 +475,7 @@ UV_UI.racing.world.events = {
 	onRaceEnd = function( sortedRacers, stringArray )
 		local triggerTime = CurTime()
 		local duration = 10
-		local glidetext = string.format( language.GetPhrase("uv.race.finished.viewstats"), '<color=0,162,255>'.. string.upper( input.GetKeyName( UVKeybindShowRaceResults:GetInt() ) ) ..'<color=255,255,255>')
+		local glidetext = UVReplaceKeybinds( string.format( language.GetPhrase("uv.race.finished.viewstats"),"[key:unitvehicle_keybind_raceresults]") )
 		local glideicon = "unitvehicles/icons/INGAME_ICON_LEADERBOARD.png"
 		
 		-----------------------------------------
@@ -882,6 +892,8 @@ UV_UI.pursuit.world.events = {
 		local closeStartTime = 0
 		local playedfadeSound = false
 
+		local contMarkup = markup.Parse( "<font=UVWorldFont3"..GetFontSuffixForLanguage()..">" .. UVReplaceKeybinds("[+jump] " .. language.GetPhrase("uv.results.continue")) .. "</font>" )
+
         ResultPanel.Paint = function(self, w, h)
 			local curTime = CurTime()
 			local elapsedAnim = curTime - bgAnimStart
@@ -967,7 +979,10 @@ UV_UI.pursuit.world.events = {
 				surface.SetDrawColor( 255, 255, 255, headerAlpha )
 				surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_INACTIVE_WORLD"])
 				surface.DrawTexturedRect( w*0.55, h*0.65, w*0.12, h*0.05 )
-				draw.SimpleTextOutlined( language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump"), "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.61, h*0.6625, Color( 200, 200, 200, headerAlpha ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, headerAlpha ) )
+
+				surface.SetAlphaMultiplier(headerAlpha / 255)
+				contMarkup:Draw(w * 0.61, h * 0.661, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+				surface.SetAlphaMultiplier(1)
 
 				if curTime - loadingStart >= fakeLoadingDuration then
 					loading = false
@@ -1006,9 +1021,7 @@ UV_UI.pursuit.world.events = {
 			-- Next button and auto-close
 			local elapsed = math.max(0, curTime - timestart)
 			local autoCloseRemaining = math.max(0,30 - elapsed)
-			local conttext = language.GetPhrase("uv.results.continue").." - "..UVBindButton("+jump")
 			local autotext = string.format(language.GetPhrase("uv.results.autoclose"), math.ceil(autoCloseRemaining))
-			local uwstext = language.GetPhrase("uv.pm.spawnas").." - "..UVBindButton("+reload")
 
 			surface.SetDrawColor(255,255,255,effectiveAlpha*math.abs(math.sin(RealTime()*3)))
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_GLOW_WORLD"])
@@ -1016,11 +1029,18 @@ UV_UI.pursuit.world.events = {
 			surface.SetDrawColor(255,255,255,effectiveAlpha)
 			surface.SetMaterial(UVMaterials["RESULTS_NEXTBTN_WORLD"])
 			surface.DrawTexturedRect(w*0.55,h*0.65,w*0.12,h*0.05)
-			draw.SimpleTextOutlined(conttext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.61,h*0.6625, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
+			
+			surface.SetAlphaMultiplier(effectiveAlpha / 255)
+			contMarkup:Draw(w * 0.61, h * 0.661, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			surface.SetAlphaMultiplier(1)
+
 			draw.SimpleTextOutlined(autotext,"UVWorldFont7" .. GetFontSuffixForLanguage(),w*0.335,h*0.675, Color(200,200,200,effectiveAlpha),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1,Color(0,0,0,effectiveAlpha))
-	
+
 			if debriefunitspawn and (UVHUDWantedSuspects and #UVHUDWantedSuspects > 0) then
-				draw.SimpleTextOutlined( uwstext, "UVWorldFont7" .. GetFontSuffixForLanguage(), w*0.335, h*0.655, Color( 200, 200, 200, effectiveAlpha ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, effectiveAlpha) )
+				local uwMarkup = markup.Parse( "<color=200,200,200><font=UVWorldFont7"..GetFontSuffixForLanguage()..">" .. UVReplaceKeybinds("[+reload] " .. language.GetPhrase("uv.pm.spawnas"), "Small") .. "</font></color>" )
+				surface.SetAlphaMultiplier(effectiveAlpha / 255)
+				uwMarkup:Draw(w * 0.335, h * 0.655, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+				surface.SetAlphaMultiplier(1)
 			end
 			
 			if autoCloseRemaining <= 0 and not closing then

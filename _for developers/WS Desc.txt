@@ -2,10 +2,14 @@
 
 [b]Unit Vehicles[/b] is a Sandbox-oriented addon that allows players, in both Multiplayer with others or Singleplayer with AI, to engage in high-speed pursuits as or against police and thrilling races on any map.
 
-[b][url=https://discord.gg/kQuzmjZaPQ] >>> JOIN OUR DISCORD SERVER <<<[/url][/b]
-
 [h3] Requirements [/h3]
-Before we get started: [b]Decent Vehicle - Basic AI[/b] and [b]Glide // Styled's Vehicle Base[/b] is [b]REQUIRED[/b] for Unit Vehicles to function properly.
+You'll need two addons for Unit Vehicles to work flawlessly:
+
+- [url=https://steamcommunity.com/workshop/filedetails/?id=1587455087]Decent Vehicles - Basic AI[/url] is required for AI pathfinding.
+- [url=https://steamcommunity.com/workshop/filedetails/?id=3389728250]Glide // Styled's Vehicle Base[/url] is used by default UVPD vehicles, and highly recommended for the addon.
+
+[h3] Highly recommended [/h3]
+- The [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556]Unit Vehicles Starter Data Pack[/url] contains lots of data content provided by the UV development team and the community. Contains AI Racer Names, Pursuit Breakers, Races, Roadblocks, the **Rockport PD** Preset and various Decent Vehicle waypoints for plenty of maps.
 
 [hr][/hr]
 [h1] Features [/h1]
@@ -21,24 +25,39 @@ Before we get started: [b]Decent Vehicle - Basic AI[/b] and [b]Glide // Styled's
 	[*] Utilize Pursuit Breakers to keep the Units off your back!
 	[*] Fight the Racers or Units with various Pursuit Techs!
 	[*] Up to 10 Heat Levels - the higher the level, the tougher the Units!
-	[*] Create your own Pursuit Breakers, Roadblocks and Units using the [b]Unit Manager[/b] tool!
+	[*] Create your own Pursuit Breakers, Roadblocks and Units using the various tools!
 [/list]
 [h3] General [/h3]
 [list]
+	[*] Easy-to-use custom menu
 	[*] Offers support for Glide, Simfphys, Photon 2 and Base HL2 Jeeps
 	[*] Various UI Styles resembling older NFS titles to choose from
 	[*] Fine-tune every little bit of the addon to fit your preference
 	[*] Localization support:
 	[table]
 		[tr]
-			[th]Partial[/th]
 			[th]Full[/th]
+			[th]Partial[/th]
+			[th]Minimal[/th]
 		[/tr]
 		[tr]
 			[td]
-			Danish
+			English
+			Spanish
+			Russian
+			Swedish
+			Simplified Chinese
+			[/td]
+			[td]
+			Czech
 			German
 			Greek
+			Polish
+			Thai
+			Ukrainian
+			[/td]
+			[td]
+			Danish
 			Finnish
 			French
 			Hungarian
@@ -46,19 +65,9 @@ Before we get started: [b]Decent Vehicle - Basic AI[/b] and [b]Glide // Styled's
 			Japanese
 			Korean
 			Dutch
-			Polish
+			Brazilian
 			Slovakian
 			Traditional Chinese
-			[/td]
-			[td]
-			English
-			Czech
-			Spanish
-			Brazilian Portuguese
-			Russian
-			Swedish
-			Thai
-			Simplified Chinese
 			[/td]
 		[/tr]
 	[/table]
@@ -74,16 +83,20 @@ And [b]so much more[/b]!
         [th]Answer[/th]
     [/tr]
     [tr]
-        [td]There are no races, Units or anything![/td]
-        [td]You will need to create all of the main assets yourself. Alternatively, you can utilize the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556]Starter Data Pack[/url] to get you started with a bunch of presets![/td]
+        [td]Where are the races, Pursuit Breakers, Roadblocks, etc?[/td]
+        [td]Unit Vehicles does not come prepackaged with any races, Pursuit Breakers or Roadblocks. You can always run using the default Heat Preset. Alternatively, you can utilize the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556]Starter Data Pack[/url] to get you started with a bunch of presets![/td]
     [/tr]
     [tr]
         [td]What vehicle bases are supported?[/td]
-        [td][b]Glide[/b] is highly recommended and has the most support, but you can also use [b]Simfphys[/b], [b]Proton 2[/b] or even [b]Base HL2[/b].[/td]
+        [td][b]Glide[/b] is highly recommended and has the most support, but you can also use [b]Simfphys[/b], [b]Photon 2[/b] or even [b]Base HL2[/b].[/td]
     [/tr]
     [tr]
         [td]Where is my created data stored?[/td]
         [td]It is stored in the game's [b]data[/b] folder. Here you'll find Unit data, Racer Names, Pursuit Breaker data, Race data and Roadblock data.[/td]
+    [/tr]
+    [tr]
+        [td]I have more questions![/td]
+        [td]First you should check out the [b]UV Menu[/b]'s [b]FAQ[/b]. While in-game, hold your Context key ('C' by default) and click [b]Unit Vehicles[/b], then navigate to [b]FAQ[/b].[/td]
     [/tr]
 [/table]
 
@@ -93,7 +106,7 @@ And [b]so much more[/b]!
 [*][b]Roboboy[/b] - Main idea & Coding
 [*][b]AludriX[/b] - Coding
 [*][b]Moka[/b] - Coding & UI Design
-[*][b]TalonSolid[/b] - Misc. Contributions & Tester
+[*][b]TalonSolid[/b] - Model contributions, default Voice Profile handler & Tester
 [/list]
 
 [h1] Translators [/h1]
@@ -103,12 +116,13 @@ And [b]so much more[/b]!
 [*][b]WladZ[/b] - Russian
 [*][b]Despe[/b] - Czech
 [*][b]Dami[/b] - Spanish
-[*][b]Raiden[/b] - Brazilian Portuguese
-[*][b]sting[/b] - Vietnamese
 [*][b]Pathfinder_FUFU[/b] - Simplified Chinese
 [*][b]Tak036[/b] - Thai
+[*][b]Mr.Negative & Renegade_Glitch[/b] - Ukrainian
+[*][b]TheSilent1[/b] - Polish
 [/list]
 
 [url=https://discord.gg/kQuzmjZaPQ][img]https://i.imgur.com/YuahXWO.png[/img][/url]
+[url=https://patreon.com/Roboboy260][img]https://i.imgur.com/f2yCIKT.jpeg[/img][/url]
 [url=https://github.com/Roboboy260/gmod-unitvehicles][img]https://i.imgur.com/kF6Y9Za.jpeg[/img][/url]
 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3515525556][img]https://i.imgur.com/IXEbyKe.jpeg[/img][/url]

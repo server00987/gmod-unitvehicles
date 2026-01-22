@@ -2,6 +2,109 @@ UV = UV or {}
 UVMenu = UVMenu or {}
 UV.SettingsTable = UV.SettingsTable or {}
 
+-- Global API for third-party addons
+UVMenu.AddonEntries = UVMenu.AddonEntries or {}
+
+function UVAddon(rows)
+	if not istable(rows) then return end
+
+	local block = {}
+
+	for _, row in ipairs(rows) do
+		if istable(row) then
+			table.insert(block, row)
+		end
+	end
+
+	if #block > 0 then
+		table.insert(UVMenu.AddonEntries, block)
+	end
+end
+
+--[[ Examples:
+UVAddon({
+	{ 
+	type = "label", <-- Type
+	text = "NAME", <-- Menu String
+	desc = "DESC", <-- Description String
+	convar = "CV", <-- Console Variable
+	sv = true, <-- Server variable (hidden to Clients)
+	},
+})
+
+Types: 
+"info" - Simple information panel.
+
+"infosimple" - Less advanced information panel with centered text.
+
+"info_flags" - Information panel with flags! Uses "entries".
+	∟ "entries" - Set up like this:
+
+entries = {
+	{ flag = "flagcode", desc = "DESC", name = "NAME" }
+}
+
+"image" - Displays an image.
+	∟ "image" - Path to image.
+
+"label" - Inserts a label header with a solid background.
+
+"bool" - Inserts an on/off toggle button.
+
+"slider" - Inserts a numerical slider with a confirmation box.
+	∟ "min" / "max" / "decimals" are required. Full numbers only.
+	∟ "func = function() <Code> end" - Runs the code inside whenever the confirm button is pressed.
+
+"combo" - Inserts a dropdown box with options.
+	∟ "content" - A table of contents, done like this:
+	
+	content = {
+		{ "Option 1", "Variable" },
+		{ "Option 2", "Variable" },
+		{ "Option 3", "Variable" },
+	}
+
+"button" - Inserts a clickable button.
+	∟ "func = function() <Code> end" - Runs the code inside whenever the button is pressed.
+	
+"buttonsw" - Inserts a clickable button which you can manipulate using your Scrollwheel.
+	∟ "min" / "max" / "start" are required. Full numbers only.
+	∟ "func = function() <Code> end" - Runs the code inside whenever the button is pressed.
+	∟ "text" needs to have a "%s" in it to display properly. If a string, use "language.GetPhrase(<string>)". Still works without it, however.
+	
+"color" / "coloralpha" - Inserts a color selector. Supports RGB and alpha.
+	∟ Requires "convar" to have "_r", "_g" and "_b" versions. "_a" is optional for alpha.
+	
+"timer" - Inserts a timer that sends its function when it reaches 0.
+	∟ "duration" - Controls the duration of the timer.
+	∟ "text" needs a "%s" in it to display the timer proprely. Still works without it, however.
+]]--
+
+if vcmod_main then -- VCMod ELS
+	UVAddon({
+		{ type = "label", text = "VCMod ELS", sv = true },
+		{ type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
+	})
+end
+
+if cffunctions then -- Glide // Circular Functions
+	UVAddon({
+		{ type = "label", text = "Glide // Circular Functions", sv = true },
+		{ type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
+		{ type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
+	})
+end
+
+-- if cffunctions then -- Hero's Glide Extras
+	-- UVAddon({
+		-- { type = "label", text = "Hero's Glide Extras", sv = true },
+		-- { type = "bool", 
+		-- text = "Allow Vehicle Exit in Pursuits", 
+		-- desc = "If enabled, allow the user to exit their vehicle while in the middle of Pursuits, even while being busted, fined or in cooldown.\n\nNote: Does not disable Pursuits or Units - only restores the ability to exit vehicles.",
+		-- convar = "unitvehicle_usenitrousracer", sv = true },
+	-- })
+-- end
+
 -- Sounds Table
 UVMenu.Sounds = {
     ["MW"] = {
@@ -427,6 +530,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local rawText = language.GetPhrase(st.text or "") or ""
 		rawText = UVReplaceKeybinds(rawText, "Small")
+		-- rawText = UVReplaceKeybinds(rawText)
 		rawText = UVDiscordTextFormat(rawText)
 
 		local mk
@@ -2831,7 +2935,7 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local selectedToken = nil
 		local selectedGlyph = nil
-		local activeGlyphFilter = "all" -- "all", "kb", "xbox", "ps"
+		local activeGlyphFilter = "kb" -- "kb", "xbox", "ps", "switch"
 
 		local bodyleft = vgui.Create("DPanel", panel)
 		bodyleft:Dock(LEFT)
@@ -2884,8 +2988,8 @@ function UV.BuildSetting(parent, st, descPanel)
 		local function AddGlyphFilterButton(text, id)
 			local btn = vgui.Create("DButton", glyphFilterBar)
 			btn:Dock(LEFT)
-			btn:DockMargin(0, 0, 6, 0)
-			btn:SetWide(UV.ScaleW(62.5))
+			btn:DockMargin(0, 0, 3, 0)
+			btn:SetWide(UV.ScaleW(55))
 			btn:SetText("")
 
 			btn.Paint = function(self, w, h)
@@ -2928,10 +3032,11 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 		
-		AddGlyphFilterButton("#all", "all")
+		-- AddGlyphFilterButton("#all", "all")
 		AddGlyphFilterButton("KB", "kb")
 		AddGlyphFilterButton("Xbox", "xbox")
 		AddGlyphFilterButton("PS", "ps")
+		AddGlyphFilterButton("Switch", "switch")
 
 		local mid = vgui.Create("DScrollPanel", bodymiddle)
 		mid:Dock(FILL)
@@ -3088,20 +3193,9 @@ function UV.BuildSetting(parent, st, descPanel)
 			return keys
 		end
 
-		local GLYPH_COLS = 3
-		
-		local function GetGlyphButtonSize()
-			local w = mid:GetWide()
-			if w <= 0 then return UV.ScaleW(60), UV.ScaleH(36) end
-
-			local totalSpacing = UV.ScaleW(6) * (GLYPH_COLS - 1)
-			local btnW = math.floor((w - totalSpacing - UV.ScaleW(8)) / GLYPH_COLS)
-			return btnW, UV.ScaleH(36)
-		end
-
 		local function AddGlyphButton(code)
 			local btn = midLayout:Add("DButton")
-			local bw, bh = UV.ScaleW(30), UV.ScaleH(30)
+			local bw, bh = UV.ScaleW(35), UV.ScaleH(35)
 			btn:SetSize(bw, bh)
 			btn:SetText("")
 			btn.selected = false
@@ -3148,6 +3242,9 @@ function UV.BuildSetting(parent, st, descPanel)
 				btn.selected = true
 				TryCommit()
 			end
+			
+			btn.OnCursorEntered = function() if descPanel then descPanel.Desc = UVKeybindIcon(code, "Big") end end
+			btn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
 
 			glyphButtons[btn] = code
 		end
@@ -3156,25 +3253,41 @@ function UV.BuildSetting(parent, st, descPanel)
 			midLayout:Clear()
 			glyphButtons = {}
 
-			if activeGlyphFilter == "all" or activeGlyphFilter == "kb" then
+			if activeGlyphFilter == "kb" then
 				for _, k in ipairs(SortedKeys(UVKeyGlyphs.kb)) do
 					AddGlyphButton("kb." .. k)
 				end
 			end
 
-			if activeGlyphFilter == "all" or activeGlyphFilter == "xbox" then
+			if activeGlyphFilter == "xbox" then
 				for _, k in ipairs(SortedKeys(UVKeyGlyphs.xbox)) do
 					AddGlyphButton("xbox." .. k)
 				end
 			end
 
-			if activeGlyphFilter == "all" or activeGlyphFilter == "ps" then
+			if activeGlyphFilter == "ps" then
 				for _, k in ipairs(SortedKeys(UVKeyGlyphs.ps)) do
 					AddGlyphButton("ps." .. k)
 				end
 			end
+
+			if activeGlyphFilter == "switch" then
+				for _, k in ipairs(SortedKeys(UVKeyGlyphs.switch)) do
+					AddGlyphButton("switch." .. k)
+				end
+			end
+
+			midLayout:InvalidateLayout(true)
+			mid:InvalidateLayout(true)
+			mid:PerformLayout()
+
+			local vbar = mid:GetVBar()
+			if IsValid(vbar) then
+				vbar:SetEnabled(true)
+				vbar:SetVisible(true)
+			end
 		end
-		
+
 		BuildGlyphList()
 
 		function RefreshOverrides()
