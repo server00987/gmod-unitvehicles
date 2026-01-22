@@ -47,12 +47,12 @@ You'll need two addons for Unit Vehicles to work flawlessly:
 			Russian
 			Swedish
 			Simplified Chinese
+			Polish
 			[/td]
 			[td]
 			Czech
 			German
 			Greek
-			Polish
 			Thai
 			Ukrainian
 			[/td]

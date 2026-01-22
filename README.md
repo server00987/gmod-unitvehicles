@@ -33,19 +33,19 @@ You'll need two addons for Unit Vehicles to work flawlessly:
 - Fine-tune every little bit of the addon to fit your preference
 - Localization support:
 
-| Full | Partial | Minimal |
+| `Full` | `Partial` | `Minimal` |
 | --- | --- | --- |
 | English | Czech | Danish |
 | Spanish | German | Finnish |
 | Russian | Greek | French |
-| Swedish | Polish | Hungarian |
-| Simpl. Chinese | Thai | Italian |
-|| Ukrainian | Japanese |
-||| Korean |
-||| Dutch |
-||| Brazilian |
-||| Slovakian |
-||| Trad. Chinese |
+| Swedish | Thai | Hungarian |
+| S. Chinese | Ukrainian | Italian |
+| Polish |         | Japanese |
+|         |         | Korean |
+|         |         | Dutch |
+|         |         | Brazilian |
+|         |         | Slovakian |
+|         |         | T. Chinese |
 
 ## FAQ
 | Question | Answer |
@@ -54,6 +54,7 @@ You'll need two addons for Unit Vehicles to work flawlessly:
 | `What vehicle bases are supported?` | **Glide** is highly recommended and has the most support, but you can also use **Simfphys**, **Photon 2** or even **Base HL2**. |
 | `Where is my created data stored?` | It is stored in the game's **data** folder. Here you'll find Unit data, Racer Names, Pursuit Breaker data, Race data and Roadblock data. |
 | `I want to assist in development!` | All you need to do is download this Git and start changing. Once you're ready, send us a pull request, and we'll take a look at it. If it's good, we'll implement it! |
+| `Can I localize Unit Vehicles?` | Yes you can! First check the `Regarding localization pull requests` section at the bottom though. |
 | `I have more questions!` | First you should check the in-game **UV Menu**'s **FAQ**. While in-game, hold your Context key (`C` by default) and click **Unit Vehicles**, then navigate to **FAQ**. |
 
 ## Regarding pull requests
@@ -61,3 +62,12 @@ You'll need two addons for Unit Vehicles to work flawlessly:
 - If you are aware of bugs in your code, mention them in your PR.
 - Work-in-progress commits are to be published as PR drafts. Also applies if you wish for input from other contributors.
 - Please follow the [CFC style guidelines](https://github.com/CFC-Servers/cfc_glua_style_guidelines) when providing code. Optionally, you can install [glualint](https://github.com/FPtje/GLuaFixer) and its extention to get warnings in your preferred text editor.
+
+## Regarding localization pull requests
+- Localizations are stored in `resource/localization` inside `.properties` files. These can be opened in any text editor.
+- Please prioritize translating the `unitvehicles` and `unitvehicles_settings` files above all else. Any `unitvehicles_subtitles` files are optional.
+
+- When contributing to a language that already has a translator (or translators), please be mindful not to change existing strings.
+- Work-in-progress translations are to be published as PR drafts. Also applies if you wish for input from other contributors.
+- Various elements in the texts are to be kept as-is; `%s`, `[+attack]` and so on.
+- When translating the FAQ (located in `lua/unitvehicles/uv_menu_faq`), please add a language identifier above it. For example `-- Polska (Polish) pl`.

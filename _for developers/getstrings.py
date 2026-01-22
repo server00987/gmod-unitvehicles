@@ -4,8 +4,9 @@ from collections import defaultdict
 import tkinter as tk
 from tkinter import simpledialog
 
-OUT_FILE = "unitvehicles_subtitles.properties"
-DEFAULT_EXISTING_FILE = os.path.join("resource", "localization", "en", "unitvehicles_subtitles.properties")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT_FILE = os.path.join(SCRIPT_DIR, "unitvehicles_subtitles.properties")
+DEFAULT_EXISTING_FILE = os.path.join(SCRIPT_DIR, "resource", "localization", "en", "unitvehicles_subtitles.properties")
 
 def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
@@ -68,7 +69,8 @@ def main():
     if not folder_name:
         print("No folder entered. Exiting.")
         return
-    ROOT = os.path.join("sound", "chatter2", folder_name)
+    
+    ROOT = os.path.join(SCRIPT_DIR, "sound", "chatter2", folder_name)
     if not os.path.isdir(ROOT):
         print(f"Folder does not exist: {ROOT}")
         return
