@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import hashlib
 from unidecode import unidecode
 
 # Paths
@@ -35,8 +36,22 @@ def extract_metadata_from_filename(filename):
         title = name_part
     return {"title": title.strip(), "artist": artist.strip()}
 
-def contains_uppercase_non_ascii(s):
-    return any(ord(c) > 127 and c.isupper() for c in s)
+def contains_non_ascii(s):
+    return any(ord(c) > 127 for c in s)
+    
+def safe_ascii_filename(file):
+    name, ext = os.path.splitext(file)
+
+    # Attempt transliteration
+    ascii_name = unidecode(name)
+    ascii_name = re.sub(r'[^a-zA-Z0-9]+', '_', ascii_name).strip('_')
+
+    # Fallback if transliteration fails (CJK, Thai, etc.)
+    if not ascii_name:
+        digest = hashlib.md5(name.encode("utf-8")).hexdigest()[:10]
+        ascii_name = f"track_{digest}"
+
+    return ascii_name.lower() + ext.lower()
 
 def scan_and_process(folder_path):
     folder_name = os.path.normpath(folder_path).split(os.sep)[-2]  # e.g., NFS Unbound
@@ -52,9 +67,8 @@ def scan_and_process(folder_path):
             meta = extract_metadata_from_filename(file)
             new_filename = file
 
-            if contains_uppercase_non_ascii(file):
-                new_filename = unidecode(file)
-                new_filename = re.sub(r'\s+', ' ', new_filename).strip()
+            if contains_non_ascii(file):
+                new_filename = safe_ascii_filename(file)
 
                 suggestion_key = f"{folder_name} - {file}"
                 rename_suggestions.append((suggestion_key, new_filename))
