@@ -1140,6 +1140,13 @@ else -- CLIENT stuff
 		["-!-"] = "\"",
 	}
 
+	local ALLOWED_TRACKFOLDERS = {
+		["race"] = true,
+		["ending"] = true,
+		["intro"] = true,
+		["transition"] = true,
+	}
+
 	cvars.AddChangeCallback("unitvehicle_racetheme", function(_, _, new)
 		UVCurrentPlaylist = UVTraxLoadPlaylist( new ) or UVTraxLoadPlaylist( "default" )
 		if UVPlayingRace then UVStopSound() end
@@ -1193,6 +1200,8 @@ else -- CLIENT stuff
 			UVDefaultPlaylists[themeFolder] = true
 
 			for _, trackFolder in ipairs( trackFolders ) do
+				if not ALLOWED_TRACKFOLDERS[trackFolder] then continue end
+
 				local tracks = file.Find( "sound/uvracemusic/" .. themeFolder .. "/" .. trackFolder .. "/*", "GAME" )
 				if tracks == nil or not next( tracks ) then continue end
 
@@ -1301,12 +1310,9 @@ else -- CLIENT stuff
 
 			for _, track in ipairs(tracks) do
 				if not UVTraxSettings.playlists[playlist] then
-					UVTraxUpdateSettings( "playlists>>" .. playlist , {
-						["race"] = {},
-						["ending"] = {},
-						["intro"] = {},
-						["transition"] = {},
-					} )
+					local array = {}
+					for trackType, _ in pairs( ALLOWED_TRACKFOLDERS ) do array[trackType] = {} end
+					UVTraxUpdateSettings( "playlists>>" .. playlist , array )
 				end
 
 				local isCustomPlaylist = not UVDefaultPlaylists[playlist]
