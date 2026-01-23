@@ -1420,6 +1420,7 @@ else -- CLIENT stuff
 	end
 
 	function UVTraxDisplayTrack( artist, title, folder, path )
+		if title == "" or not title then return end
 		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>"
 
 		if Glide then
@@ -1486,7 +1487,9 @@ else -- CLIENT stuff
 			local hasMultipleLaps = UVHUDRaceLaps > 1
 			local isFinalLap = isVehicleValid and hasMultipleLaps and UVHUDRaceLaps == UVHUDRaceInfo["Participants"][my_vehicle].Lap
 
-			UVTraxPlayNextTrack(isFinalLap and "ending" or "race", 1)
+			if not UVTraxPlayNextTrack(isFinalLap and "ending" or "race", 1) then
+				UVTraxPlayNextTrack("race", 1)
+			end
 		end
 
 		-- local theme = GetConVar("unitvehicle_racetheme"):GetString()
