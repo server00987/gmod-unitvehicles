@@ -320,6 +320,7 @@ UVMenu.Settings = function()
 
 				{ type = "label", text = "#uv.audio.uvtrax" },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
+				{ type = "bool", text = "#uv.audio.uvtrax.shuffle", desc = "uv.audio.uvtrax.shuffle.desc", convar = "unitvehicle_racetheme_shuffle", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.freeroam", desc = "uv.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.pursuits", desc = "uv.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
