@@ -1037,6 +1037,17 @@ else -- CLIENT stuff
 	--UVRacePursuitStop = CreateClientConVar( "unitvehicle_racepursuitstop", 0, true, false, "If a pursuit is active, immediately stop the pursuit when the race ends." )
 	--UVRacePursuitStopDespawn = CreateClientConVar( "unitvehicle_racepursuitstop_despawn", 0, true, false, "If a pursuit is active, despawn all AI units when the race ends." )
 	--UVRaceClearAI = CreateClientConVar( "unitvehicle_raceclearai", 0, true, false, "Removes all AI and their vehicles when the race ends." )
+
+	UVRacingTheme = CreateClientConVar("unitvehicle_racetheme", "carbon - bending light", true, false, "Unit Vehicles: The theme of the current race.")
+	UVRacingThemeShuffle = CreateClientConVar("unitvehicle_racetheme_shuffle", 1, true, false, "Unit Vehicles: If set to 1, the race theme will be shuffled.")
+	UVRacingSFXTheme = CreateClientConVar("unitvehicle_sfxtheme", "unbound", true, false, "Unit Vehicles: The SFX theme of the current race.")
+
+	-- local files, folders = file.Find( "sound/uvracemusic/*", "GAME" )
+	-- if folders ~= nil then
+	-- 	if not table.HasValue( folders, GetConVar("unitvehicle_racetheme"):GetString() ) then
+	-- 		GetConVar("unitvehicle_racetheme"):SetString("default")
+	-- 	end	
+	-- end
 	
 	function UVSoundRacingStop()
 		UVPlayingRace = false
@@ -1121,6 +1132,248 @@ else -- CLIENT stuff
 		return nil
 	end
 
+	local placeholder_map = { -- Used for Official UV Trax Packs
+		[",,"] = ".",
+		[";;"] = "?",
+		["-;-"] = "/",
+		["=="] = ":",
+		["-!-"] = "\"",
+	}
+
+	cvars.AddChangeCallback("unitvehicle_racetheme", function(_, _, new)
+		UVCurrentPlaylist = UVTraxLoadPlaylist( new ) or UVTraxLoadPlaylist( "default" )
+		if UVPlayingRace then UVStopSound() end
+	end, "UVTraxPlaylists")
+
+	cvars.AddChangeCallback("unitvehicle_racetheme_shuffle", function(_, _, new)
+		UVCurrentPlaylist = UVTraxLoadPlaylist( GetConVar("unitvehicle_racetheme"):GetString() ) or UVTraxLoadPlaylist( "default" )
+		if UVPlayingRace then UVStopSound() end
+	end, "UVTraxPlaylists")
+
+	UVDefaultPlaylists = {}
+	UVPlaylists = {}
+
+	if not file.IsDir("unitvehicles/uvtrax", "DATA") then file.CreateDir( "unitvehicles/uvtrax", "DATA" ) end
+	if not file.IsDir("unitvehicles/uvtrax/playlists", "DATA") then file.CreateDir( "unitvehicles/uvtrax/playlists", "DATA" ) end
+	if not file.Exists("unitvehicles/uvtrax/settings.json", "DATA") or util.JSONToTable( file.Read("unitvehicles/uvtrax/settings.json", "DATA") ) == nil then
+		file.Write( "unitvehicles/uvtrax/settings.json", file.Read("data_static/uvtrax_settings.json", "GAME") )
+	end
+
+	UVTraxSettings = util.JSONToTable( file.Read("unitvehicles/uvtrax/settings.json", "DATA") )
+
+	function UVTraxUpdateSettings( key, value )
+		local stack = UVTraxSettings
+		local hay = string.Explode( ">>", key )
+		local needle = hay[#hay]
+
+		for i, v in ipairs( hay ) do
+			if i == #hay then break end
+			if type( stack ) ~= "table" then stack = {} break end
+			if stack[v] == nil then stack[v] = {} end
+			
+			stack = stack[v]
+		end
+
+		stack[needle] = value
+
+		file.Write( "unitvehicles/uvtrax/settings.json", util.TableToJSON(UVTraxSettings, true) )
+	end
+
+	function UVTraxPopulatePlaylists()
+		local _, themeFolders = file.Find( "sound/uvracemusic/*", "GAME" )
+		if themeFolders == nil or not next(themeFolders) then return end
+
+		--local curTime = CurTime()
+
+		for _, themeFolder in ipairs( themeFolders ) do
+			local _, trackFolders = file.Find( "sound/uvracemusic/" .. themeFolder .. "/*", "GAME" )
+			if trackFolders == nil or not next( trackFolders ) then continue end
+
+			UVPlaylists[themeFolder] = {}
+			UVDefaultPlaylists[themeFolder] = true
+
+			for _, trackFolder in ipairs( trackFolders ) do
+				local tracks = file.Find( "sound/uvracemusic/" .. themeFolder .. "/" .. trackFolder .. "/*", "GAME" )
+				if tracks == nil or not next( tracks ) then continue end
+
+				UVPlaylists[themeFolder][trackFolder] = {}
+
+				for _, track in ipairs( tracks ) do
+					local trackPath = "sound/uvracemusic/" .. themeFolder .. "/" .. trackFolder .. "/" .. track
+					local artist, title, folder = lookupTrackInMetadata(trackPath)
+
+					if not artist and not title and not folder then
+						for placeholder, char in pairs(placeholder_map) do
+							track = string.gsub(track, escape_pattern(placeholder), char):gsub("%.mp3", ""):gsub("%.wav", ""):gsub("%.ogg", "")
+						end
+
+						local parts = string.Explode(" - ", track)
+						artist = (#parts == 1) and "Unknown Artist" or parts[1]
+						title = (#parts == 1) and track or parts[2]
+						folder = trackFolder
+					end
+
+					table.insert( UVPlaylists[themeFolder][trackFolder], {
+						path = trackPath,
+						artist = artist,
+						title = title,
+						folder = themeFolder,
+					} )
+				end
+			end
+		end
+
+		local playlists = file.Find( "unitvehicles/uvtrax/playlists/*", "DATA" )
+		for _, playlist in ipairs( playlists ) do
+			local playlistData = util.JSONToTable( file.Read( "unitvehicles/uvtrax/playlists/" .. playlist, "DATA" ) )
+
+			if playlistData then
+				UVPlaylists[playlist:gsub(".json", "")] = playlistData
+			end
+		end
+
+		--print(curTime - CurTime(), "seconds to populate playlists")
+	end
+
+	UVTraxPopulatePlaylists()
+
+	UVTrackPointers = {
+		["race"] = 0,
+		["ending"] = 0,
+		["intro"] = 0,
+		["transition"] = 0,
+	}
+
+	function UVTraxModifyPlaylist( playlist, trackType, trackData )
+		if not UVPlaylists[playlist] then return false end
+		if UVDefaultPlaylists[playlist] then return false end
+
+		for i, track in ipairs(UVPlaylists[playlist][trackType]) do
+			if track.path == trackData.path then
+				table.remove( UVPlaylists[playlist][trackType], i )
+				return true
+			end
+		end
+
+		table.insert( UVPlaylists[playlist][trackType], trackData )
+		file.Write( "unitvehicles/uvtrax/playlists/" .. playlist .. ".json", util.TableToJSON(UVPlaylists[playlist], true) )
+		return true
+	end
+
+	function UVTraxDeletePlaylist( playlist )
+		if not UVPlaylists[playlist] then return false end
+		if UVDefaultPlaylists[playlist] then return false end
+
+		UVPlaylists[playlist] = nil
+		file.Delete( "unitvehicles/uvtrax/playlists/" .. playlist .. ".json" )
+		return true
+	end
+
+	function UVTraxCreatePlaylist( playlist )
+		if UVPlaylists[playlist] then return false end
+
+		for key, _ in pairs( UVDefaultPlaylists ) do
+			if key:lower() == playlist:lower() then
+				return false
+			end
+		end
+
+		local playlistArray = {
+			["race"] = {},
+			["ending"] = {},
+			["intro"] = {},
+			["transition"] = {},
+		}
+
+		UVPlaylists[playlist] = playlistArray
+		file.Write( "unitvehicles/uvtrax/playlists/" .. playlist .. ".json", util.TableToJSON(playlistArray, true) )
+		return playlistArray
+	end
+
+	function UVTraxLoadPlaylist( playlist )
+		if not playlist or not UVPlaylists[playlist] then return false end
+
+		UVCurrentPlaylistString = playlist
+		UVCurrentPlaylist = table.Copy( UVPlaylists[playlist] )
+
+		for trackType, tracks in pairs(UVCurrentPlaylist) do
+			local newTracks = {}
+
+			for _, track in ipairs(tracks) do
+				if not UVTraxSettings.playlists[playlist] then
+					UVTraxUpdateSettings( "playlists>>" .. playlist , {
+						["race"] = {},
+						["ending"] = {},
+						["intro"] = {},
+						["transition"] = {},
+					} )
+				end
+
+				local isCustomPlaylist = not UVDefaultPlaylists[playlist]
+				local isValid = not isCustomPlaylist or file.Exists( track.path, "GAME" )
+
+				if not UVTraxSettings.playlists[playlist][trackType][track.path] and isValid then table.insert( newTracks, track ) end
+			end
+
+			if UVRacingThemeShuffle:GetBool() then
+				table.Shuffle(newTracks)
+			end
+
+			UVCurrentPlaylist[trackType] = newTracks
+		end
+
+		for trackType, _ in pairs( UVTrackPointers ) do UVTrackPointers[trackType] = 0 end
+
+		return UVCurrentPlaylist
+	end
+
+	function UVTraxSetTrackDisabled( playlist, trackType, trackPath, disabled )
+		if not UVTraxSettings.playlists[playlist] then
+			UVTraxUpdateSettings( "playlists>>" .. playlist , {
+				["race"] = {},
+				["ending"] = {},
+				["intro"] = {},
+				["transition"] = {},
+			} )
+		end
+
+		UVTraxUpdateSettings( "playlists>>" .. playlist .. ">>" .. trackType .. ">>" .. trackPath, disabled or nil )
+
+		if UVCurrentPlaylistString == playlist then
+			UVCurrentPlaylist = UVTraxLoadPlaylist( playlist )
+			if UVPlayingRace then UVStopSound() end
+		end
+	end
+
+	--UVCurrentPlaylist = UVTraxLoadPlaylist( "test" )
+
+	UVCurrentPlaylist = UVTraxLoadPlaylist(GetConVar("unitvehicle_racetheme"):GetString()) or UVTraxLoadPlaylist("default")
+	-- print( UVTraxCreatePlaylist( "test" ) )
+	
+	-- local found = false
+	-- for _, v in ipairs(UVPlaylists["test"]["race"]) do
+	-- 	if v.path == "sound/uvracemusic/nightrunners/race/binary.mp3" then
+	-- 		found = true
+	-- 		break
+	-- 	end
+	-- end
+	-- if not found then
+	-- 	UVTraxModifyPlaylist( "test", "race", {
+	-- 		path = "sound/uvracemusic/nightrunners/race/binary.mp3",
+	-- 		artist = "asc",
+	-- 		title = "binary",
+	-- 		folder = "nightrunners",
+	-- 	})
+	-- end
+
+	-- UVTraxModifyPlaylist( "test", "race", {
+	-- 	path = "sound/uvracemusic/nightrunners/race/3c.mp3",
+	-- 	artist = "Carbon",
+	-- 	title = "Bending Light",
+	-- 	folder = "nightrunners",
+	-- })
+	-- UVTraxToggleTrack( UVCurrentPlaylistString, "race", "sound/uvracemusic/nightrunners/race/3c.mp3", true )
+
 	local function PlayRaceMusic(theme, my_vehicle)
 		local track = UVGetRaceMusicPath(theme, my_vehicle)
 		local jsonFiles = file.Find("data_static/music_*.json", "GAME")
@@ -1128,14 +1381,6 @@ else -- CLIENT stuff
 		if track then
 			UVPlaySound(track, true)
 		end
-
-		local placeholder_map = { -- Used for Official UV Trax Packs
-			[",,"] = ".",
-			[";;"] = "?",
-			["-;-"] = "/",
-			["=="] = ":",
-			["-!-"] = "\"",
-		}
 
 		if not string.find(track, "/race/") then return end
 		track = track:gsub("uvracemusic/" .. theme .. "/race/", ""):gsub("%.mp3", ""):gsub("%.wav", ""):gsub("%.ogg", "")
@@ -1174,6 +1419,39 @@ else -- CLIENT stuff
 		end
 	end
 
+	function UVTraxDisplayTrack( artist, title, folder, path )
+		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>"
+
+		if Glide then
+			Glide.Notify({
+				text = notificationText,
+				icon = "unitvehicles/icons/ICON_EA_TRAX.png",
+				lifetime = 3,
+				immediate = true,
+			})
+		else
+			chat.AddText( Color(255, 255, 255), "[", Color(255, 126, 126), language.GetPhrase("uv.race.radio"), Color(255, 255, 255), "] ", Color(255, 255, 0), (artist and title) and (title .. " - " .. artist) or title, Color(255, 255, 255), " (", Color(200, 200, 200), theme, Color(255, 255, 255), ")")
+		end
+	end
+
+	function UVTraxPlayNextTrack( trackType, increment, trackNumber )
+		if not UVCurrentPlaylist[trackType] or #UVCurrentPlaylist[trackType] == 0 then return false end
+		if not UVTrackPointers[trackType] then UVTrackPointers[trackType] = 0 end
+
+		UVTrackPointers[trackType] = ( trackNumber or UVTrackPointers[trackType] + ( increment or 1 ) ) % #UVCurrentPlaylist[trackType]
+		if UVTrackPointers[trackType] == 0 then UVTrackPointers[trackType] = #UVCurrentPlaylist[trackType] end
+
+		UVPlayingRace = true
+
+		local track = UVCurrentPlaylist[trackType][UVTrackPointers[trackType]]
+		local path, artist, title, folder = track.path, track.artist, track.title, track.folder
+
+		local func = function() UVTraxDisplayTrack( artist, title, folder, path ) end
+		UVPlaySound( path:sub(1, 6) == "sound/" and path:gsub( "sound/", "", 1 ) or path, true, nil, nil, nil, func )
+
+		return true
+	end
+
 	function UVSoundRacing(my_vehicle)
 		if not UVTraxFreeroam:GetBool() and not RacingThemeOutsideRace:GetBool() then
 			if not RacingMusic:GetBool() or (RacingMusicPriority:GetBool() and UVHUDDisplayPursuit) then return end
@@ -1191,39 +1469,59 @@ else -- CLIENT stuff
 			timer.Remove("UVPursuitThemeReplay")
 		end
 
-		local theme = GetConVar("unitvehicle_racetheme"):GetString()
+		UVRacePlayMusic = true
 
 		if UVRacePlayIntro then
 			UVRacePlayIntro = false
-			UVPlayingRace = true
-			--UVRacePlayMusic = true
-
-			local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
-			if introTrack then
-				UVPlaySound(introTrack, true)
-			else
-				PlayRaceMusic(theme, my_vehicle)
-				UVRacePlayTransition = true
-			end
+			UVRacePlayTransition = false
+		    UVTraxPlayNextTrack("intro", 1)
 		elseif UVRacePlayTransition then
-			UVRacePlayTransition = false 
-			UVPlayingRace = true
-
-			local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
-
-			if transitionTrack then
-				UVPlaySound(transitionTrack, true)
-			else
-				PlayRaceMusic(theme, my_vehicle)
-				UVRacePlayTransition = true
-			end
+			UVRacePlayTransition = false
+			UVTraxPlayNextTrack("transition", 1)
 		elseif UVRacePlayMusic then
-			UVPlayingRace = true
+			UVRacePlayMusic = false
 			UVRacePlayTransition = true
-			--UVRacePlayMusic = false 
 
-			PlayRaceMusic(theme, my_vehicle)
+			local isVehicleValid = IsValid(my_vehicle)
+			local hasMultipleLaps = UVHUDRaceLaps > 1
+			local isFinalLap = isVehicleValid and hasMultipleLaps and UVHUDRaceLaps == UVHUDRaceInfo["Participants"][my_vehicle].Lap
+
+			UVTraxPlayNextTrack(isFinalLap and "ending" or "race", 1)
 		end
+
+		-- local theme = GetConVar("unitvehicle_racetheme"):GetString()
+
+		-- if UVRacePlayIntro then
+		-- 	UVRacePlayIntro = false
+		-- 	UVPlayingRace = true
+		-- 	--UVRacePlayMusic = true
+
+		-- 	local introTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/intro")
+		-- 	if introTrack then
+		-- 		UVPlaySound(introTrack, true)
+		-- 	else
+		-- 		PlayRaceMusic(theme, my_vehicle)
+		-- 		UVRacePlayTransition = true
+		-- 	end
+		-- elseif UVRacePlayTransition then
+		-- 	UVRacePlayTransition = false 
+		-- 	UVPlayingRace = true
+
+		-- 	local transitionTrack = UVGetRandomSound("uvracemusic/" .. theme .. "/transition")
+
+		-- 	if transitionTrack then
+		-- 		UVPlaySound(transitionTrack, true)
+		-- 	else
+		-- 		PlayRaceMusic(theme, my_vehicle)
+		-- 		UVRacePlayTransition = true
+		-- 	end
+		-- elseif UVRacePlayMusic then
+		-- 	UVPlayingRace = true
+		-- 	UVRacePlayTransition = true
+		-- 	--UVRacePlayMusic = false 
+
+		-- 	PlayRaceMusic(theme, my_vehicle)
+		-- end
 
 		UVPlayingHeat = false
 		UVPlayingBusting = false
