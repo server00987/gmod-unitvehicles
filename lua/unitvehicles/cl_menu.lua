@@ -367,7 +367,7 @@ UVMenu.Settings = function()
 				{ type = "label", text = "#uv.audio.racing" },
 				{ type = "combo", text = "#uv.audio.racing.sfx", desc = "uv.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
 			},
-			{ TabName = "#uv.audio.uvtrax", Icon = "unitvehicles/icons/milestone_outrun_pursuits_won.png",
+			{ TabName = "#uv.audio.uvtrax", Icon = "unitvehicles/icons/ICON_EA_TRAX.png",
 				{ type = "uvtrax", text = "#uv.audio.uvtrax.playlists", desc = "uv.audio.uvtrax.playlists.desc", requireparentconvar = "unitvehicle_racingmusic" },
 			},
 			{ TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
