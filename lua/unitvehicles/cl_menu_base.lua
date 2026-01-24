@@ -1106,6 +1106,18 @@ function UV.BuildSetting(parent, st, descPanel)
 			end
 		end
 
+		if st.convar == "unitvehicle_racetheme" then
+			st.content = {}
+			local keys = {}
+			for k in pairs(UVPlaylists) do
+				table.insert(keys, k)
+			end
+			table.sort(keys)
+			for _, k in ipairs(keys) do
+				table.insert(st.content, { k, k })
+			end
+		end
+
 		local combo = vgui.Create("UVCombo", wrap)
 		combo:Dock(RIGHT)
 		combo:SetWide(UV.ScaleW(330))
@@ -3366,6 +3378,423 @@ function UV.BuildSetting(parent, st, descPanel)
 		end)
 
 		return panel
+	elseif st.type == "uvtrax" then
+		local panel = vgui.Create("DPanel", parent)
+		panel:Dock(TOP)
+		panel:DockMargin(8, 4, 8, 4)
+		panel:SetTall(UV.ScaleH(500))
+		panel.Paint = nil
+
+		local selectedPlaylist = nil
+		local activeTrackType = "race"
+
+		local totalTracks = 0
+		local enabledTracks = 0
+
+		local TRACK_TYPES = { "race", "ending", "intro", "transition" }
+		local TRACK_TYPE_LABELS = {
+			race = "Race",
+			ending = "Ending",
+			intro = "Intro",
+			transition = "Transition",
+		}
+
+		local LIST_BUILD_FUNCTIONS = {}
+
+		local function isTrackDisabled(plist, ttype, path)
+			if not UVTraxSettings or not UVTraxSettings.playlists or not UVTraxSettings.playlists[plist] then return false end
+			return UVTraxSettings.playlists[plist][ttype] and UVTraxSettings.playlists[plist][ttype][path]
+		end
+
+		local function getPlaylistNames()
+			local out = {}
+
+			for name in pairs(UVPlaylists or {}) do
+				table.insert( out, name )
+			end
+
+			table.sort(out)
+			return out
+		end
+
+		local bodyleft = vgui.Create("DPanel", panel)
+		bodyleft:Dock(LEFT)
+		bodyleft:DockMargin(0, 4, 0, 4)
+		bodyleft:SetWide(UV.ScaleW(180))
+
+		bodyleft.Paint = function(self, w, h)
+			draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, Color(0, 0, 0, 200))
+			DrawWrappedText(self, language.GetPhrase("uv.audio.uvtrax.playlists") or "Playlists", w * 0.9, w * 0.5, 4, true)
+		end
+
+		bodyleft.OnCursorEntered = function() if descPanel then descPanel.Desc = st.desc or "" end end
+		bodyleft.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+
+		--
+
+		local bodymid = vgui.Create("DPanel", panel)
+		bodymid:Dock(FILL)
+		bodymid:DockMargin(0, 4, 0, 4)
+
+		bodymid.Paint = function(self, w, h)
+			draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, Color(0, 0, 0, 200))
+			DrawWrappedText(self, (TRACK_TYPE_LABELS[activeTrackType] or activeTrackType) .. " – " .. (language.GetPhrase("uv.audio.uvtrax.tracks") or "Tracks"), w * 0.9, w * 0.5, 4, true)
+		end
+
+		--
+
+		-- local bodyright = vgui.Create("DPanel", panel)
+		-- bodyright:Dock(RIGHT)
+		-- bodyright:DockMargin(0, 4, 0, 4)
+		-- bodyright:SetWide(UV.ScaleW(200))
+		-- bodyright.Paint = function(self, w, h)
+		-- 	draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, Color(0, 0, 0, 200))
+		-- 	DrawWrappedText(self, language.GetPhrase("uv.audio.uvtrax.library") or "Add from library", w * 0.9, w * 0.5, 4, true)
+		-- end
+
+		local left = vgui.Create("DScrollPanel", bodyleft)
+		left:Dock(FILL)
+		left:DockMargin(6, 30, 3, 0)
+
+		local typeBar = vgui.Create("DPanel", bodymid)
+		typeBar:Dock(TOP)
+		typeBar:SetTall(UV.ScaleH(26))
+		typeBar:DockMargin(6, UV.ScaleH(30), 6, 2)
+		typeBar.Paint = nil
+
+		local itemCount = vgui.Create("DPanel", typeBar)
+		itemCount:Dock(RIGHT)
+		itemCount:DockMargin(0, 0, 6, 0)
+		itemCount:SetWide(UV.ScaleW(100))
+		itemCount:SetText("")
+		-- itemCount:SetWide(UV.ScaleW(100))
+		-- itemCount:SetText("")
+		-- itemCount:SetFont("UVSettingsFontSmall")
+		-- itemCount:SetTextColor(Color(255, 255, 255, 255))
+		-- itemCount:SetTextInset(0, 0)
+		-- itemCount:SetText("")
+		
+		itemCount.Paint = function(self, w, h)
+			draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, Color(0, 0, 0, 200))
+			DrawWrappedText(self, enabledTracks .. " / " .. totalTracks, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+		end
+
+		itemCount.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Text = language.GetPhrase("uv.audio.uvtrax.playlists.resettoggle")
+				descPanel.Desc = language.GetPhrase("uv.audio.uvtrax.playlists.resettoggle")
+			end
+		end
+		itemCount.OnCursorExited = function()
+			if descPanel then descPanel.Text = "" end
+			if descPanel then descPanel.Desc = "" end
+		end
+
+		itemCount.OnMousePressed = function(self, code)
+			if code == MOUSE_MIDDLE then
+				if selectedPlaylist and activeTrackType then
+					local playlist = UVPlaylists[selectedPlaylist] and UVPlaylists[selectedPlaylist][activeTrackType]
+					if not playlist then return end
+
+					local disabled = enabledTracks == 0
+
+					for _, track in ipairs(playlist) do
+						UVTraxSetTrackDisabled( selectedPlaylist, activeTrackType, track.path, not disabled )
+					end
+
+					LIST_BUILD_FUNCTIONS.M()
+				end
+			end
+		end
+
+		local function addTypeButton(label, ttype)
+			local btn = vgui.Create("DButton", typeBar)
+			btn:Dock(LEFT)
+			btn:DockMargin(0, 0, 3, 0)
+			btn:SetWide(UV.ScaleW(58))
+			btn:SetText("")
+
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+
+				local default = Color(GetConVar("uvmenu_col_button_r"):GetInt(), GetConVar("uvmenu_col_button_g"):GetInt(), GetConVar("uvmenu_col_button_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local active = Color(GetConVar("uvmenu_col_bool_active_r"):GetInt(), GetConVar("uvmenu_col_bool_active_g"):GetInt(), GetConVar("uvmenu_col_bool_active_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local hover = Color(GetConVar("uvmenu_col_button_hover_r"):GetInt(), GetConVar("uvmenu_col_button_hover_g"):GetInt(), GetConVar("uvmenu_col_button_hover_b"):GetInt(), GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4)))
+
+				local col = activeTrackType == ttype and active or default
+
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover) end
+				DrawWrappedText(self, label, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+			end
+
+			btn.DoClick = function()
+				activeTrackType = ttype
+				timer.Simple(0, function() LIST_BUILD_FUNCTIONS.M() end)
+			end
+		end
+
+		for _, ttype in ipairs(TRACK_TYPES) do
+			addTypeButton(TRACK_TYPE_LABELS[ttype], ttype)
+		end
+
+		local mid = vgui.Create("DScrollPanel", bodymid)
+		mid:Dock(FILL)
+		mid:DockMargin(6, 4, 3, 0)
+
+		-- local right = vgui.Create("DScrollPanel", bodyright)
+		-- right:Dock(FILL)
+		-- right:DockMargin(6, 30, 3, 0)
+		
+
+		local function addPlaylistBtn(name, isSelected, onClick)
+			local btn = vgui.Create("DButton", left)
+			btn:Dock(TOP)
+			btn:DockMargin(0, 0, 0, 4)
+			btn:SetTall(UV.ScaleH(28))
+			btn:SetText("")
+
+			btn.selected = isSelected
+
+			btn.Paint = function(self, w, h)
+				self.selected = selectedPlaylist and selectedPlaylist == name
+				local hovered = self:IsHovered()
+
+				local default = Color(GetConVar("uvmenu_col_button_r"):GetInt(), GetConVar("uvmenu_col_button_g"):GetInt(), GetConVar("uvmenu_col_button_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local active = Color(GetConVar("uvmenu_col_bool_active_r"):GetInt(), GetConVar("uvmenu_col_bool_active_g"):GetInt(), GetConVar("uvmenu_col_bool_active_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local hover = Color(GetConVar("uvmenu_col_button_hover_r"):GetInt(), GetConVar("uvmenu_col_button_hover_g"):GetInt(), GetConVar("uvmenu_col_button_hover_b"):GetInt(), GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4)))
+
+				local col = self.selected and active or default
+
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover) end
+				DrawWrappedText(self, name, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+			end
+
+			btn.DoClick = onClick
+
+			btn.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = name
+					descPanel.Desc = name
+				end
+			end
+			btn.OnCursorExited = function()
+				if descPanel then descPanel.Text = "" end
+				if descPanel then descPanel.Desc = "" end
+			end
+
+			return brn
+		end
+
+		local playlistButtons = {}
+
+		local function BuildLeftList()
+			left:Clear()
+
+			local collection = getPlaylistNames()
+
+			for _, playlistName in ipairs( collection ) do
+				local btn = addPlaylistBtn( playlistName, playlistName == selectedPlaylist, function()
+					selectedPlaylist = playlistName
+					LIST_BUILD_FUNCTIONS.M()
+				end )
+
+				if btn then table.insert( playlistButtons, btn ) end
+			end
+		end LIST_BUILD_FUNCTIONS.L = BuildLeftList
+
+		local trackButtons = {}
+
+		local function updateItemCount()
+			local i = 0
+			local e = 0
+
+			for _, v in pairs(trackButtons) do
+				i = i + 1
+				if not v.disabled then e = e + 1 end
+			end
+			
+			totalTracks = i
+			enabledTracks = e
+		end
+
+		local currentSource = nil
+
+		local function loadPreview( path )
+			if currentSource then
+				currentSource:Stop()
+				currentSource = nil
+				timer.Remove( "UVTraxPreview" )
+			end
+
+			sound.PlayFile( path, "noblock", function(source) 
+				if IsValid(source) then
+					currentSource = source
+					currentSource:Play()
+					currentSource:SetTime( currentSource:GetLength() / 2 )
+
+					timer.Create( "UVTraxPreview", currentSource:GetLength() / 2, 1, function()
+						if IsValid(currentSource) then
+							currentSource:Stop()
+							currentSource = nil
+						end
+					end)
+				end
+			end )
+		end
+
+		local function addTrackBtn( track, playlist, trackType )
+			local btn = vgui.Create( 'DButton', mid )
+			
+			btn:Dock(TOP)
+			btn:DockMargin(0, 0, 0, 4)
+			btn:SetTall(UV.ScaleH(28))
+			btn:SetText("")
+
+			btn.disabled = isTrackDisabled( playlist, trackType, track.path )
+
+			local playing = false
+			local btnText = (track.artist or "Unknown Artist") .. " – " .. (track.title or "Unknown Title")
+			local kaomoji = ""
+			local kaomojiPool = {
+				"ヽ(・∀・)ﾉ",
+				"(´｡• ω •｡`)",
+				"(｡•̀ᴗ-)✧",
+				"＼(＾▽＾)／",
+				"(„• ֊ •„)੭",
+				"✧｡ ( ◡̀_◡́) ✧*｡",
+				"(⌁° ‸ °⌁)"
+			}
+
+			btn.Paint = function(self, w, h)
+				local hovered = self:IsHovered()
+
+				local default = Color(GetConVar("uvmenu_col_button_r"):GetInt(), GetConVar("uvmenu_col_button_g"):GetInt(), GetConVar("uvmenu_col_button_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local active = Color(GetConVar("uvmenu_col_bool_active_r"):GetInt(), GetConVar("uvmenu_col_bool_active_g"):GetInt(), GetConVar("uvmenu_col_bool_active_b"):GetInt(), GetConVar("uvmenu_col_button_a"):GetInt())
+				local hover = Color(GetConVar("uvmenu_col_button_hover_r"):GetInt(), GetConVar("uvmenu_col_button_hover_g"):GetInt(), GetConVar("uvmenu_col_button_hover_b"):GetInt(), GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime() * 4)))
+				local playingColor = Color( 102, 0, 255 )
+				local playingHover = Color( 102, 0, 255, 0 * math.abs( math.sin(RealTime() * 4) ) )
+
+				local col = self.disabled and default or active
+
+				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
+				if hovered then draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, (playing and playingColor) or hover) end
+				local animStr = ""
+				if playing then
+					local t = CurTime()
+					local frames = {
+						"♩ ♪ ♫ ♬ ", 
+						"♪ ♫ ♬ ♩ ", 
+						"♫ ♬ ♩ ♪ ",
+						"♬ ♩ ♪ ♫ ",
+					}
+					local idx = math.floor( t * 6 ) % #frames + 1
+					animStr = frames[idx]
+				end
+				DrawWrappedText(self, playing and (animStr .. " " .. btnText .. " " .. kaomoji) or btnText, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+			end
+
+			-- btn.DoClick = function()
+			-- 	btn.disabled = not btn.disabled
+
+			-- 	UVTraxSetTrackDisabled( playlist, trackType, track.path, btn.disabled )
+			-- 	updateItemCount()
+			-- end
+
+			btn.OnMousePressed = function(self, code)
+				if code == MOUSE_MIDDLE then
+					if currentSource then
+						currentSource:Stop()
+						currentSource = nil
+						timer.Remove( "UVTraxPreview" )
+						playing = false
+						return
+					end
+
+					local luck = math.random(1, 4)
+					if luck == 1 then kaomoji = kaomojiPool[math.random(1, #kaomojiPool)] else kaomoji = "" end
+					playing = true
+					loadPreview( track.path )
+				elseif code == MOUSE_LEFT then
+					btn.disabled = not btn.disabled
+
+					UVTraxSetTrackDisabled( playlist, trackType, track.path, btn.disabled )
+					updateItemCount()
+				end
+			end
+
+			btn.OnCursorEntered = function()
+				if currentSource then
+					currentSource:Stop()
+					currentSource = nil
+					timer.Remove( "UVTraxPreview" )
+				end
+
+				if descPanel then
+					descPanel.Text = btnText .. "\n\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.preview")
+					descPanel.Desc = btnText .. "\n\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.preview")
+				end
+			end
+			btn.OnCursorExited = function()
+				if currentSource then
+					currentSource:Stop()
+					currentSource = nil
+					timer.Remove( "UVTraxPreview" )
+				end
+
+				playing = false
+
+				if descPanel then descPanel.Text = "" end
+				if descPanel then descPanel.Desc = "" end
+			end
+
+			return btn
+		end
+
+		local function BuildMidList()
+			mid:Clear()
+
+			if not selectedPlaylist then return false end
+			if not activeTrackType then return false end
+
+			local playlist = UVPlaylists[selectedPlaylist]
+			if not playlist then return false end
+
+			local tracks = playlist[activeTrackType] or {}
+
+			trackButtons = {}
+			for _, track in ipairs(tracks) do table.insert( trackButtons, addTrackBtn( track, selectedPlaylist, activeTrackType ) ) end
+			updateItemCount()
+		end LIST_BUILD_FUNCTIONS.M = BuildMidList
+
+		timer.Simple(0, function()
+			if not IsValid(left) then return end
+			if not selectedPlaylist and UVPlaylists then
+				local names = getPlaylistNames()
+				selectedPlaylist = names[1]
+			end
+			BuildLeftList()
+			BuildMidList()
+			--BuildRightList()
+		end)
+
+		if st.text then
+			panel.OnCursorEntered = function()
+				if descPanel then
+					descPanel.Text = st.text
+					descPanel.Desc = st.desc or ""
+				end
+			end
+			panel.OnCursorExited = function()
+				if descPanel then
+					descPanel.Text = ""
+					descPanel.Desc = ""
+				end
+			end
+		end
+
+		return panel
 	end
 
 	-- fallback: do nothing
@@ -3488,6 +3917,8 @@ function UVMenu.EstimateTabHeight(tab, availableWidth)
 				base = UV.ScaleH(500)
 			elseif st.type == "unitselect" then
 				base = UV.ScaleH(300)
+			elseif st.type == "uvtrax" then
+				base = UV.ScaleH(500)
 			else
 				base = UV.ScaleH(30)
 			end

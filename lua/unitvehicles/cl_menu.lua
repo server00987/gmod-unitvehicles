@@ -26,14 +26,14 @@ concommand.Add("unitvehicles_menu", function()
 end)
 
 -- UVTrax
-local uvtraxfiles, uvtraxfolders = file.Find("sound/uvracemusic/*", "GAME")
-local uvtraxcontent = {}
+-- local uvtraxfiles, uvtraxfolders = file.Find("sound/uvracemusic/*", "GAME")
+-- local uvtraxcontent = {}
 
-if uvtraxfolders then
-	for _, v in ipairs(uvtraxfolders) do
-		uvtraxcontent[#uvtraxcontent + 1] = { v, v }
-	end
-end
+-- if UVPlaylists then
+-- 	for _, v in pairs(UVPlaylists) do
+-- 		uvtraxcontent[#uvtraxcontent + 1] = { k, k }
+-- 	end
+-- end
 
 -- Pursuit Themes
 local pursuitfiles, pursuitfolders = file.Find("sound/uvpursuitmusic/*", "GAME")
@@ -129,7 +129,7 @@ UVMenu.Main = function()
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
-				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
@@ -324,6 +324,7 @@ UVMenu.Settings = function()
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.freeroam", desc = "uv.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.pursuits", desc = "uv.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
+				--{ type = "uvtrax", text = "#uv.audio.uvtrax.playlists", desc = "uv.audio.uvtrax.playlists.desc", requireparentconvar = "unitvehicle_racingmusic" },
 
 				{ type = "label", text = "#uv.audio.pursuit" },
 				{ type = "bool", text = "#uv.audio.pursuit.enable", desc = "uv.audio.pursuit.desc", convar = "unitvehicle_playmusic" },
@@ -339,6 +340,9 @@ UVMenu.Settings = function()
 				
 				{ type = "label", text = "#uv.audio.racing" },
 				{ type = "combo", text = "#uv.audio.racing.sfx", desc = "uv.audio.racing.sfx.desc", convar = "unitvehicle_sfxtheme", content = racesfxcontent },
+			},
+			{ TabName = "#uv.audio.uvtrax", Icon = "unitvehicles/icons/milestone_outrun_pursuits_won.png",
+				{ type = "uvtrax", text = "#uv.audio.uvtrax.playlists", desc = "uv.audio.uvtrax.playlists.desc", requireparentconvar = "unitvehicle_racingmusic" },
 			},
 			{ TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
 
