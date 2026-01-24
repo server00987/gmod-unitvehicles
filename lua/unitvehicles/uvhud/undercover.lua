@@ -535,8 +535,24 @@ UV_UI.racing.undercover.events = {
         end)
     end,
 
-	onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+	onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final, local_finished, user_finished, suppress_lap_ui )
 		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local cps = GetGlobalInt("uvrace_checkpoints")
+		local participant_count = UVHUDRaceInfo.Participants and table.Count(UVHUDRaceInfo.Participants) or 0
+
+		local finishtext = (participant_count > 1 and cps > 1) and 
+		language.GetPhrase("uv.race.finished") .. "\n" .. string.format( language.GetPhrase("uv.race.finishspot"), UVHUDRaceCurrentPos, language.GetPhrase("uv.race.pos." .. UVHUDRaceCurrentPos) )
+		or "#uv.race.finished"
+
+		if local_finished then 
+			UV_UI.racing.undercover.events.CenterNotification({
+				text = finishtext,
+			})
+			return
+		end
+	
+		if suppress_lap_ui then return end
 
 		if is_global_best then
 			UV_UI.racing.undercover.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )

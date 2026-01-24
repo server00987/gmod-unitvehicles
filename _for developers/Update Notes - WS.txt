@@ -1,8 +1,14 @@
-<------- January 16 ------->
+<------- January 26 ------->
 - Added a new UVPD vehicle
 - Added the Heat Level Manager menu
 - Tool appearance restructure
 - Some other stuff
+
+More detailed patch notes available in-game.
+
+<------- January 16 ------->
+- Final preps for full release
+- Bug fixes and other stuff
 
 More detailed patch notes available in-game.
 

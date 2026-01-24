@@ -247,12 +247,14 @@ if SERVER then
 		end
 
 		local checkpoints = ents.FindByClass( "uvrace_brushpoint" )
+		local dragrace = false
 		if #checkpoints == 0 then
 			UVRaceEnd()
 			PrintMessage( HUD_PRINTTALK, "No checkpoints found!" )
 			return
 		elseif #checkpoints == 1 then --If theres only 1 checkpoint, assume its a drag race
-			UVRaceLaps:SetInt( 1 )
+			-- UVRaceLaps:SetInt( 1 ) -- Why?
+			dragrace = true
 		end
 
 		local spawns = ents.FindByClass( "uvrace_spawn" )
@@ -272,7 +274,7 @@ if SERVER then
 		UVRaceTable['Info'] = {
 			['Started'] = false,
 			['VisibleCheckpoints'] = UVRaceVisibleCheckpoints:GetBool(),
-			['Laps'] = laps or UVRaceLaps:GetInt(),
+			['Laps'] = dragrace and 1 or laps or UVRaceLaps:GetInt(),
 			['Racers'] = 0,
 			['Time'] = 0
 		}
@@ -1038,7 +1040,7 @@ else -- CLIENT stuff
 	--UVRacePursuitStopDespawn = CreateClientConVar( "unitvehicle_racepursuitstop_despawn", 0, true, false, "If a pursuit is active, despawn all AI units when the race ends." )
 	--UVRaceClearAI = CreateClientConVar( "unitvehicle_raceclearai", 0, true, false, "Removes all AI and their vehicles when the race ends." )
 
-	UVRacingTheme = CreateClientConVar("unitvehicle_racetheme", "carbon - bending light", true, false, "Unit Vehicles: The theme of the current race.")
+	UVRacingTheme = CreateClientConVar("unitvehicle_racetheme", "default", true, false, "Unit Vehicles: The theme of the current race.")
 	UVRacingThemeShuffle = CreateClientConVar("unitvehicle_racetheme_shuffle", 1, true, false, "Unit Vehicles: If set to 1, the race theme will be shuffled.")
 	UVRacingSFXTheme = CreateClientConVar("unitvehicle_sfxtheme", "unbound", true, false, "Unit Vehicles: The SFX theme of the current race.")
 
@@ -1427,7 +1429,7 @@ else -- CLIENT stuff
 
 	function UVTraxDisplayTrack( artist, title, folder, path )
 		if title == "" or not title then return end
-		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>"
+		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>\n\n" .. UVReplaceKeybinds( string.format( "%s " .. language.GetPhrase("uv.keybind.skipsong"),"[key:unitvehicle_keybind_skipsong]") )
 
 		if Glide then
 			Glide.Notify({
@@ -1437,7 +1439,7 @@ else -- CLIENT stuff
 				immediate = true,
 			})
 		else
-			chat.AddText( Color(255, 255, 255), "[", Color(255, 126, 126), language.GetPhrase("uv.race.radio"), Color(255, 255, 255), "] ", Color(255, 255, 0), (artist and title) and (title .. " - " .. artist) or title, Color(255, 255, 255), " (", Color(200, 200, 200), theme, Color(255, 255, 255), ")")
+			chat.AddText( Color(255, 255, 255), "[", Color(255, 126, 126), language.GetPhrase("uv.race.radio"), Color(255, 255, 255),"] ", Color(255, 255, 0), (artist and title) and (title .. " - " .. artist) or title, Color(255, 255, 255), " (", Color(200, 200, 200), folder, Color(255, 255, 255), ")")
 		end
 	end
 
@@ -2217,19 +2219,29 @@ else -- CLIENT stuff
 		end
 
 		local is_local_player = IsValid(participant) and participant:GetDriver() == LocalPlayer()
+		local total_laps = UVHUDRaceInfo.Info and UVHUDRaceInfo.Info.Laps or 0
+		local num_participants = (UVHUDRaceInfo and UVHUDRaceInfo.Participants) and table.Count(UVHUDRaceInfo.Participants) or 0
 
-		local total_laps = UVHUDRaceInfo['Info'] and UVHUDRaceInfo['Info'].Laps or 0
-
-		if (total_laps <= 1 or new_lap > total_laps) and not is_global_best then
-			return
+		if num_participants <= 1 then
+			is_global_best = false
 		end
 
-		local lap_final = false
-		if (total_laps > 1 and new_lap == total_laps) then 
-			lap_final = true
+		local local_finished = false
+		local user_finished = false
+
+		if total_laps > 0 and old_lap == total_laps then
+			user_finished = true             -- anyone crossing final lap
+			if is_local_player then
+				local_finished = true       -- only local player
+			end
 		end
 
-		hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final )
+		local lap_final = (total_laps > 1 and new_lap == total_laps)
+
+		-- Decide if notification should be suppressed
+		local suppress_lap_ui = (total_laps <= 1 or new_lap > total_laps) and not is_global_best
+
+		hook.Run( 'UIEventHook', 'racing', 'onLapComplete', participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final, local_finished, user_finished, suppress_lap_ui )
 	end)
 	
 	net.Receive("UVRace_HideRacersList", function()

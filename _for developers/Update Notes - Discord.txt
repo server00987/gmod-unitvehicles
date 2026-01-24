@@ -1,3 +1,26 @@
+<------- January 26 ------->
+# New Features
+- UV Menu: Added the ability for addon creators to have settings added into the UV Menu
+- Added new Glyphs that replace "[ SPC ]" and various other keybind notifications across the addon
+- UV Menu: Added a "Glyph Override" function, allowing you to define not only your own keyboard and mouse glyphs (cosmetically, of course), but also assign Xbox, PlayStation and Switch glyphs
+- Added a new UVTrax Manager; Choose exactly which songs from which playlist to play, or shuffle them randomly!
+- Added a "Default" preset for the Heat Level Manager
+
+# Changes
+- UV Menu: "VCMod ELS" and "Circular Functions" sections in the Settings Addon tab now show/hide themselves if depending on if they are installed or not
+- Race participants are now teleported in 12-participant batches
+> - This now allows races with more than 24 racers
+- Lowered the size on the "Respawning as" and "Race ends in" notifications
+- Added new elements to the Original HUD style
+- Added full Polish translations
+- Added a "You finished [place]!" notification for whenever you finish a race on most HUD types
+- Added a "Skip Song" button display on the UVTrax pop-up
+
+# Fixes
+- Fixed that Glide vehicle categories were not sorted correctly in the Vehicle Override lists
+- Fixed that the "READY" banner on the NFS World HUD type remained on-screen if you swapped HUD types after it appeared and when the race countdown started, but before the race began
+- Fixed that when you start a one-checkpoint race, the "Nr. of Laps" variable was always set to 1
+
 <------- January 16 ------->
 # Almost there!
 Unit Vehicles is getting closer and closer to its v1.0 release on *January 29th*!

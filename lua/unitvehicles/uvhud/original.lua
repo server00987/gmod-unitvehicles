@@ -19,7 +19,7 @@ UV_UI.racing.original.states = {
 }
 
 UV_UI.racing.original.events = {
-    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+    onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final, local_finished, user_finished, suppress_lap_ui )
 		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
         local laptimeprefixcolor = Color(255, 255, 255)
         local laptimeprefix = string.format(language.GetPhrase("uv.race.laptime.original"), old_lap, name)

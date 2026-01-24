@@ -2,7 +2,34 @@ UV = UV or {}
 UVMenu = UVMenu or {}
 
 -- Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.42.0" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v0.43.0" --MAJOR.MINOR.PATCH
+
+-- Credits List
+UV.Credits = {
+["UVTeam"] = [[
+Roboboy
+Aux
+Moka
+ET7970]],
+["Translations"] = {
+		{ flag = "se", desc = "Svenska - Swedish", name = "Moka" },
+		{ flag = "gr", desc = "Ελληνικά - Greek", name = "TalonSolid" },
+		{ flag = "ru", desc = "Русский - Russian", name = "WladZ" },
+		{ flag = "cz", desc = "Čeština - Czech", name = "Despe" },
+		{ flag = "es", desc = "Español - Spanish", name = "Dami" },
+		-- { flag = "br", desc = "Português Brasileiro - Brazilian Portuguese", name = "Raiden_Gm" },
+		{ flag = "cn", desc = "简体中文 - Simplified Chinese", name = "Pathfinder_FUFU" },
+		{ flag = "th", desc = "แบบไทย - Thai", name = "Takis036" },
+		{ flag = "ua", desc = "Українська - Ukrainian", name = "Mr.Negative & Renegade_Glitch" },
+		{ flag = "pl", desc = "Polski - Polish", name = "TheSilent1" },
+		{ flag = "de", desc = "Deutsch - German", name = "Marig" },
+	},
+["Contributors"] = [[
+TalonSolid
+dr. drehow315
+CoreFan19
+]],
+}
 
 if CLIENT then
 	list.Set("DesktopWindows", "UnitVehiclesMenu", {
@@ -320,7 +347,6 @@ UVMenu.Settings = function()
 
 				{ type = "label", text = "#uv.audio.uvtrax" },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
-				{ type = "bool", text = "#uv.audio.uvtrax.shuffle", desc = "uv.audio.uvtrax.shuffle.desc", convar = "unitvehicle_racetheme_shuffle", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", content = uvtraxcontent, requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.freeroam", desc = "uv.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.pursuits", desc = "uv.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
@@ -545,29 +571,6 @@ UVMenu.FAQ = function()
 	})
 end
 
--- Credits List
-UV.Credits = {
-["UVTeam"] = [[
-**Roboboy**
-**Aux**
-**Moka**
-**TalonSolid**
-**ET7970**
-]],
-["Translations"] = {
-		{ flag = "se", desc = "Svenska - Swedish", name = "Moka" },
-		{ flag = "gr", desc = "Ελληνικά - Greek", name = "TalonSolid" },
-		{ flag = "ru", desc = "Русский - Russian", name = "WladZ" },
-		{ flag = "cz", desc = "Čeština - Czech", name = "Despe" },
-		{ flag = "es", desc = "Español - Spanish", name = "Dami" },
-		-- { flag = "br", desc = "Português Brasileiro - Brazilian Portuguese", name = "Raiden_Gm" },
-		{ flag = "cn", desc = "简体中文 - Simplified Chinese", name = "Pathfinder_FUFU" },
-		{ flag = "th", desc = "แบบไทย - Thai", name = "Takis036" },
-		{ flag = "ua", desc = "Українська - Ukrainian", name = "Mr.Negative & Renegade_Glitch" },
-		{ flag = "pl", desc = "Polski - Polish", name = "TheSilent1" },
-	},
-}
-
 -- Credits Menu
 UVMenu.Credits = function()
 	UVMenu.CurrentMenu = UVMenu:Open({
@@ -582,10 +585,11 @@ UVMenu.Credits = function()
 					func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
 				},
 				{ type = "label", text = "#uv.credits.uvteam" },
-				{ type = "info", text = UV.Credits["UVTeam"] },
+				{ type = "infosimple", text = UV.Credits["UVTeam"] },
 				{ type = "label", text = "#uv.credits.translations" },
-				-- { type = "info", text = UV.Credits["Translations"] },
 				{ type = "info_flags", entries = UV.Credits["Translations"] },
+				{ type = "label", text = "#uv.credits.contributors" },
+				{ type = "info", text = UV.Credits["Contributors"] },
 			},
 		}
 	})
