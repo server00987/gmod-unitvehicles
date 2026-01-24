@@ -675,7 +675,7 @@ function UVPlaySound( FileName, Loop, StopLoop, Timeout, applyMusicVolume, func 
 
 	if UVLoadedSounds ~= FileName or (not UVSoundLoop) then
 		sound.PlayFile("sound/"..FileName, "noblock", function(source, err, errname)
-			if source then func() end
+			if func and source then func() end
 			UVInitSound(source, Loop, StopLoop, Timeout, applyMusicVolume)
 		end)
 	end

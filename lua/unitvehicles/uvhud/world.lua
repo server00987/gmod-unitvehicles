@@ -513,8 +513,26 @@ UV_UI.racing.world.events = {
 		end)
 	end,
 
-	onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best )
+	onLapComplete = function( participant, new_lap, old_lap, lap_time, lap_time_cur, is_local_player, is_global_best, lap_final, local_finished, user_finished, suppress_lap_ui )
 		local name = UVHUDRaceInfo.Participants[participant] and UVHUDRaceInfo.Participants[participant].Name or "Unknown"
+		
+		local cps = GetGlobalInt("uvrace_checkpoints")
+		local participant_count = UVHUDRaceInfo.Participants and table.Count(UVHUDRaceInfo.Participants) or 0
+
+		local finishtext = (participant_count > 1 and cps > 1) and 
+		language.GetPhrase("uv.race.finished") .. "\n" .. string.format( language.GetPhrase("uv.race.finishspot"), UVHUDRaceCurrentPos, language.GetPhrase("uv.race.pos." .. UVHUDRaceCurrentPos) )
+		or "#uv.race.finished"
+
+		if local_finished then 
+			UV_UI.racing.world.events.CenterNotification({
+				text = finishtext,
+				color = Color( 137, 242, 248 ),
+				colorbg = Color(66, 194, 222, 50),
+			})
+			return
+		end
+	
+		if suppress_lap_ui then return end
 
 		if is_global_best then
 			UV_UI.racing.world.states.LapCompleteText = string.format(language.GetPhrase("uv.race.fastest.laptime"), name, Carbon_FormatRaceTime( lap_time ) )
@@ -586,6 +604,9 @@ UV_UI.racing.world.events = {
 
 		local READY_TEXT = noready and " " or "#uv.race.getready"
 		
+		local tickStart = CurTime()
+		local lifetime  = DISPLAY_TOTAL + 0.75
+
 		if starttime > 4 then
 			UVWorldCountdown.label = READY_TEXT
 		else
@@ -605,6 +626,11 @@ UV_UI.racing.world.events = {
 		hook.Add("HUDPaint", "UV_Countdown_World", function()
 			if not UVWorldCountdown or not UVWorldCountdown.starttime then return end
 			local vs = UVWorldCountdown
+
+			if CurTime() > tickStart + lifetime then
+				hook.Remove("HUDPaint", "UV_Countdown_World")
+				return
+			end
 
 			-- cleanup after finished
 			if vs.starttime == 0 then
