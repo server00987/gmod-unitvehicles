@@ -643,7 +643,7 @@ if SERVER then
                 return
             end
             
-            if car.UVBustingProgress and car.UVBustingProgress > 0 then
+            if car.UVHUDBusting then
                 timer.Remove(key)
                 net.Start("uvrace_resetfailed")
                 net.WriteString("uv.race.resetbusting")
@@ -669,7 +669,7 @@ if SERVER then
                     return
                 end
                 
-                if car.UVBustingProgress and car.UVBustingProgress > 0 then
+                if car.UVHUDBusting then
                     timer.Remove(key)
                     net.Start("uvrace_resetfailed")
                     net.WriteString("uv.race.resetbusting")
