@@ -1709,7 +1709,7 @@ if SERVER then
 						if UVCalm or UVEnemyEscaping or not self.aggressive or self.v.rhino then
 							self.shram = CurTime() 
 						end
-						if self.shram ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking then
+						if self.shram ~= CurTime() and pttimeout > 0 and PursuitTech:GetBool() and not self.v.roadblocking and not self.e.UVHUDBusting then
 							UVDeployWeapon(self.v, i)
 							self.shram = CurTime()
 						end
