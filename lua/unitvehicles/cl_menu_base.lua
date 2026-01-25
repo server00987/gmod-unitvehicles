@@ -3754,7 +3754,7 @@ function UV.BuildSetting(parent, st, descPanel, promptBar)
 				if IsValid(source) then
 					currentSource = source
 					currentSource:Play()
-					currentSource:SetTime( currentSource:GetLength() / 2 )
+					currentSource:SetTime( currentSource:GetLength() / 2, true )
 
 					timer.Create( "UVTraxPreview", currentSource:GetLength() / 2, 1, function()
 						if IsValid(currentSource) then
