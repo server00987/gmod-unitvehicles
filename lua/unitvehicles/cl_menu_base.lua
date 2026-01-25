@@ -160,6 +160,7 @@ CreateClientConVar("uvmenu_sound_set", "MW", true, false)
 
 -- Background
 CreateClientConVar("uvmenu_hide_description", 0, true, false)
+CreateClientConVar("uvmenu_hide_prompts", 0, true, false)
 
 CreateClientConVar("uvmenu_open_speed", 0.25, true, false)
 CreateClientConVar("uvmenu_close_speed", 0.25, true, false)
@@ -481,13 +482,13 @@ function UVTextSplit(text, maxWidth, baseFont, altFont)
 end
 
 -- Helper to draw wrapped text inside a panel
-local function DrawWrappedText(panel, text, maxWidth, x, y, center, altfont, altsmallfont)
+local function DrawWrappedText(panel, text, maxWidth, x, y, center, altfont, altsmallfont, textcol)
     local wrappedLines, font = UVTextSplit(text, maxWidth, altfont or nil, altsmallfont or nil)
     surface.SetFont(font)
     local _, lineHeight = surface.GetTextSize("A")
     local totalHeight = lineHeight * #wrappedLines
     local startY = y or (panel:GetTall() - totalHeight) / 2
-    local color = Color(255, 255, 255, panel:GetAlpha() or 255)
+    local color = textcol or Color(255, 255, 255, panel:GetAlpha() or 255)
 	local center = center and TEXT_ALIGN_CENTER or TEXT_ALIGN_LEFT
 
     for i, line in ipairs(wrappedLines) do
@@ -505,7 +506,7 @@ local function GetDynamicTall(text, maxWidth, baseFont, altFont)
 end
 
 -- Build one setting (label / bool / slider / combo / button)
-function UV.BuildSetting(parent, st, descPanel)
+function UV.BuildSetting(parent, st, descPanel, promptBar)
 	local function GetDisplayText()
 		local prefix = ""
 
@@ -770,7 +771,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap.OnCursorEntered = function()
 			-- UVMenu.PlaySFX("hover")
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
@@ -778,17 +778,18 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.toggle", "uv.prompt.reset" } end
 		end
 
 		wrap.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedDefault = ""
 					descPanel.SelectedCurrent = ""
 					descPanel.SelectedConVar = ""
 				end
+				if promptBar then promptBar.Prompts = nil end
 			end
 		end
 
@@ -827,7 +828,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 		
 		wrap.OnMousePressed = function(self, mc)
-			if mc == MOUSE_MIDDLE and st.convar then
+			if mc == MOUSE_RIGHT and st.convar then
 				local cv = GetConVar(st.convar)
 				if cv then
 					if st.sv and string.match(st.convar, 'unitvehicle_') then
@@ -871,7 +872,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		local function PushDesc()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
@@ -881,10 +881,10 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.command or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.reset" } end
 		end
 		local function PopDesc()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedDefault = ""
@@ -894,6 +894,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 		wrap.OnCursorEntered = PushDesc
 		wrap.OnCursorExited  = PopDesc
@@ -927,7 +928,19 @@ function UV.BuildSetting(parent, st, descPanel)
 			draw.RoundedBox(4, 0, 0, w, h, Color(30,30,30,200))
 			self2:DrawTextEntryText(color_white, Color(58,193,0), color_white)
 		end
-		valBox.OnCursorEntered = PushDesc
+		valBox.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.convar):GetString() or "?"
+					descPanel.SelectedConVar = st.convar or st.command or "?"
+				elseif st.command then
+					descPanel.SelectedConVar = st.command or "?"
+				end
+			end
+			-- if promptBar then promptBar.Prompts = { "uv.prompt.confirm" } end
+		end
 		valBox.OnCursorExited  = PopDesc
 
 		-- Only validate on enter/apply, allow free typing
@@ -948,7 +961,19 @@ function UV.BuildSetting(parent, st, descPanel)
 			draw.RoundedBox(4,0,0,w,h,self2:IsHovered() and Color(60,180,60) or Color(45,140,45))
 			draw.SimpleText("✔", "UVMostWantedLeaderboardFont2", w/2,h/2,color_white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
-		applyBtn.OnCursorEntered = PushDesc
+		applyBtn.OnCursorEntered = function()
+			if descPanel then
+				descPanel.Desc = st.desc or ""
+				if st.convar then
+					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
+					descPanel.SelectedCurrent = GetConVar(st.convar):GetString() or "?"
+					descPanel.SelectedConVar = st.convar or st.command or "?"
+				elseif st.command then
+					descPanel.SelectedConVar = st.command or "?"
+				end
+			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.confirm" } end
+		end
 		applyBtn.OnCursorExited  = PopDesc
 
 		-- Vertically center value box and button
@@ -1062,7 +1087,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 
 		wrap.OnMousePressed = function(self, mc)
-			if mc == MOUSE_MIDDLE and st.convar then
+			if mc == MOUSE_RIGHT and st.convar then
 				local cv = GetConVar(st.convar)
 				if cv then
 					local def = tonumber(cv:GetDefault()) or st.min or 0
@@ -1084,7 +1109,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		wrap:DockMargin(6, 4, 6, 4)
 		wrap.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedDefault = GetConVar(st.convar):GetDefault() or "?"
@@ -1092,11 +1116,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.reset" } end
 		end
 
 		wrap.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedDefault = ""
@@ -1104,6 +1128,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		if st.convar == "unitvehicle_racetheme" then
@@ -1215,7 +1240,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		combo.Button.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					local cv = GetConVar(st.convar)
@@ -1224,11 +1248,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.open", "uv.prompt.reset" } end
 		end
 
 		combo.Button.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedDefault = ""
@@ -1236,10 +1260,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		wrap.OnMousePressed = function(self, mc)
-			if mc == MOUSE_MIDDLE and st.convar then
+			if mc == MOUSE_RIGHT and st.convar then
 				local cv = GetConVar(st.convar)
 				if not cv then return end
 
@@ -1317,21 +1342,21 @@ function UV.BuildSetting(parent, st, descPanel)
 		end
 		btn.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = st.prompts or nil end
 		end
 		btn.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		return btn
@@ -1393,22 +1418,22 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		btn.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedConVar = st.convar or "?"
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.confirm", "uv.prompt.incdec" } end
 		end
 
 		btn.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		return btn
@@ -1469,7 +1494,6 @@ function UV.BuildSetting(parent, st, descPanel)
 		p.OnCursorEntered = function()
 			-- UVMenu.PlaySFX("hover")
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedConVar = st.convar .. "_r/" .. "_g/" .. "_b/" .. (allowAlpha and "_a/" or "")
@@ -1477,11 +1501,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedDefault = cv_r:GetDefault() .. ", " .. cv_g:GetDefault() .. ", " .. cv_b:GetDefault() .. (allowAlpha and ", " .. cv_r:GetDefault() or "")
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.reset" } end
 		end
 
 		p.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedConVar = ""
@@ -1489,11 +1513,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedDefault = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		mixer.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if st.convar then
 					descPanel.SelectedConVar = st.convar .. "_r/" .. "_g/" .. "_b/" .. (allowAlpha and "_a/" or "")
@@ -1501,11 +1525,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedDefault = cv_r:GetDefault() .. ", " .. cv_g:GetDefault() .. ", " .. cv_b:GetDefault() .. (allowAlpha and ", " .. cv_r:GetDefault() or "")
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.reset" } end
 		end
 
 		mixer.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.convar then
 					descPanel.SelectedConVar = ""
@@ -1513,10 +1537,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedDefault = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 		
 		p.OnMousePressed = function(self, mc)
-			if mc == MOUSE_MIDDLE then
+			if mc == MOUSE_RIGHT then
 				if cv_r and cv_g and cv_b then
 					local r = tonumber(cv_r:GetDefault())
 					local g = tonumber(cv_g:GetDefault())
@@ -1642,7 +1667,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		wrap.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				if cv then
 					descPanel.SelectedDefault = GetDefaultKeyName()
@@ -1650,16 +1674,17 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.convar
 				end
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.keybind" } end
 		end
 
 		wrap.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				descPanel.SelectedDefault = ""
 				descPanel.SelectedCurrent = ""
 				descPanel.SelectedConVar = ""
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		return wrap
@@ -1864,7 +1889,12 @@ function UV.BuildSetting(parent, st, descPanel)
 				else
 					node:SetIcon("icon16/car.png")
 				end
-
+				
+				if promptBar then 
+					parentNode.OnCursorEntered = function() promptBar.Prompts = { "uv.prompt.reset" } end
+					parentNode.OnCursorExited = function() promptBar.Prompts = nil end
+				end
+			
 				node:SetTooltip("#uv.airacer.overridelist.desc")
 
 				function node:DoRightClick()
@@ -1969,7 +1999,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		-- /// End of Vehicle Override Code /// --
 		
 		p.OnMousePressed = function(self, mouse)
-			if mouse == MOUSE_MIDDLE then
+			if mouse == MOUSE_RIGHT then
 				-- RunConsoleCommand(st.convar, "")
 				if st.sv and string.match(st.convar, 'unitvehicle_') then
 					net.Start("UVUpdateSettings")
@@ -2025,7 +2055,15 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 			end
 		end
-
+		
+		if promptBar then 
+			p.OnCursorEntered = function() promptBar.Prompts = { "uv.prompt.clear.list" } end
+			p.OnCursorExited = function() promptBar.Prompts = nil end
+			
+			-- vehicleTree.OnCursorEntered = function() promptBar.Prompts = { "uv.prompt.reset" } end
+			-- vehicleTree.OnCursorExited = function() promptBar.Prompts = nil end
+		end
+		
 		return p
 	end
 
@@ -2195,6 +2233,8 @@ function UV.BuildSetting(parent, st, descPanel)
 								descPanel.SelectedConVar = st.voicevar or "?"
 							end
 						end
+						
+						if promptBar then promptBar.Prompts = { "uv.prompt.toggle" } end
 					end
 
 					btn.OnCursorExited = function()
@@ -2207,6 +2247,7 @@ function UV.BuildSetting(parent, st, descPanel)
 								descPanel.SelectedConVar = ""
 							end
 						end
+						if promptBar then promptBar.Prompts = nil end
 					end
 				end
 			end
@@ -2271,7 +2312,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		left.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				
 				if st.profilevar then
@@ -2284,7 +2324,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		left.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.profilevar then
 					descPanel.SelectedDefault = ""
@@ -2296,7 +2335,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		right.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				
 				if st.profilevar then
@@ -2309,7 +2347,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		right.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				if st.profilevar then
 					descPanel.SelectedDefault = ""
@@ -2321,7 +2358,6 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		profileCombo.Button.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = st.text
 				descPanel.Desc = st.desc or ""
 				
 				if st.profilevar then
@@ -2330,11 +2366,11 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = st.profilevar or "?"
 				end
 			end
+			if promptBar and st.profilevar then promptBar.Prompts = { "uv.prompt.open" } end
 		end
 
 		profileCombo.Button.OnCursorExited = function()
 			if descPanel then
-				descPanel.Text = ""
 				descPanel.Desc = ""
 				
 				if st.profilevar then
@@ -2343,6 +2379,7 @@ function UV.BuildSetting(parent, st, descPanel)
 					descPanel.SelectedConVar = ""
 				end
 			end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		-- Init
@@ -2440,7 +2477,7 @@ function UV.BuildSetting(parent, st, descPanel)
 							Tabs = {
 								{ TabName = "#uv.hm.presets.warning", Icon = "unitvehicles/icons/generic_alert.png", ShowIcon = true, 
 									{ type = "infosimple", text = string.format( language.GetPhrase("uv.hm.presets.confirm"), name ) },
-									{ type = "button", text = "#openurl.yes", func = 
+									{ type = "button", text = "#openurl.yes", prompts = {"uv.prompt.confirm"}, func = 
 									function(self2)
 										UVUnitManagerLoadPresetV2(name, preset)
 										UVMenu.PlaySFX("clickopen")
@@ -2451,7 +2488,7 @@ function UV.BuildSetting(parent, st, descPanel)
 										end)
 									end
 									},
-									{ type = "button", text = "#openurl.nope", func = 
+									{ type = "button", text = "#openurl.nope", prompts = {"uv.prompt.return"}, func = 
 									function(self2)
 										UVMenu.PlaySFX("clickback")
 										UVMenu.CloseCurrentMenu(true)
@@ -2473,6 +2510,9 @@ function UV.BuildSetting(parent, st, descPanel)
 				textbox:SetValue(name)
 				presetName = name
 			end
+					
+			btn.OnCursorEntered = function() if promptBar then promptBar.Prompts = { "uv.prompt.presetl", "uv.prompt.presetr" } end end
+			btn.OnCursorExited = function() if promptBar then promptBar.Prompts = nil end end
 		end
 
 		local function refreshButtons()
@@ -2511,22 +2551,30 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar("uvmenu_col_button_r"):GetInt(),
 				GetConVar("uvmenu_col_button_g"):GetInt(),
 				GetConVar("uvmenu_col_button_b"):GetInt(),
-				GetConVar("uvmenu_col_button_a"):GetInt()
+				GetConVar("uvmenu_col_button_a"):GetInt() * (presetName == "" and 0.1 or 1)
 			)
 			local hover = Color( 
 				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
-				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4)) * (presetName == "" and 0.1 or 1)
 			)
 			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
-			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.export"), w * 0.95, w*0.5, nil, true)
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.export"), w * 0.95, w*0.5, nil, true, nil, nil, 
+			presetName == "" and Color(255,255,255,50) or nil)
+		end
+
+		exportPanel.OnCursorEntered = function()
+			if descPanel then descPanel.Desc = "uv.hm.presets.export.desc" end
+			if promptBar and presetName ~= "" then promptBar.Prompts = { "uv.prompt.export" } end
 		end
 		
-		exportPanel.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.export.desc" end end
-		exportPanel.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
-
+		exportPanel.OnCursorExited = function()
+			if descPanel then descPanel.Desc = "" end
+			if promptBar then promptBar.Prompts = nil end
+		end
+		
 		exportPanel.DoClick = function(self)
 			if string.Trim(presetName) ~= "" then
 				UVUnitManagerExportPreset(presetName)
@@ -2618,27 +2666,37 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 			end
 		end
-		
-		saveBtn.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.save.desc" end end
-		saveBtn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
 
+		saveBtn.OnCursorEntered = function()
+			if descPanel then descPanel.Desc = "uv.hm.presets.save.desc" end
+			if promptBar and presetName ~= "" then promptBar.Prompts = { "uv.prompt.presets" } end
+		end
+		
+		saveBtn.OnCursorExited = function()
+			if descPanel then descPanel.Desc = "" end
+			if promptBar then promptBar.Prompts = nil end
+		end
+		
 		saveBtn.Paint = function(self, w, h)
 			local hovered = self:IsHovered()
+
 			local default = Color( 
 				GetConVar("uvmenu_col_button_r"):GetInt(),
 				GetConVar("uvmenu_col_button_g"):GetInt(),
 				GetConVar("uvmenu_col_button_b"):GetInt(),
-				GetConVar("uvmenu_col_button_a"):GetInt()
+				GetConVar("uvmenu_col_button_a"):GetInt() * (presetName == "" and 0.1 or 1)
 			)
 			local hover = Color( 
 				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
-				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4)) * (presetName == "" and 0.1 or 1)
 			)
+			
 			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
-			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.save"), w * 0.95, w*0.5, nil, true)
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.save"), w * 0.95, w*0.5, nil, true, nil, nil, 
+			presetName == "" and Color(255,255,255,50) or nil)
 		end
 
 		--
@@ -2666,21 +2724,29 @@ function UV.BuildSetting(parent, st, descPanel)
 				GetConVar("uvmenu_col_button_r"):GetInt(),
 				GetConVar("uvmenu_col_button_g"):GetInt(),
 				GetConVar("uvmenu_col_button_b"):GetInt(),
-				GetConVar("uvmenu_col_button_a"):GetInt()
+				GetConVar("uvmenu_col_button_a"):GetInt() * (presetName == "" and 0.1 or 1)
 			)
 			local hover = Color( 
 				GetConVar("uvmenu_col_button_hover_r"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_g"):GetInt(),
 				GetConVar("uvmenu_col_button_hover_b"):GetInt(),
-				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4))
+				GetConVar("uvmenu_col_button_hover_a"):GetInt() * math.abs(math.sin(RealTime()*4)) * (presetName == "" and 0.1 or 1)
 			)
 			draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, default)
 			if hovered then draw.RoundedBox(12, w*0.0125, 0, w*0.9875, h, hover) end
-			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.delete"), w * 0.95, w*0.5, nil, true)
+			DrawWrappedText(self, language.GetPhrase("uv.hm.presets.delete"), w * 0.95, w*0.5, nil, true, nil, nil, 
+			presetName == "" and Color(255,255,255,50) or nil)
 		end
 		
-		deleteBtn.OnCursorEntered = function() if descPanel then descPanel.Desc = "uv.hm.presets.delete.desc" end end
-		deleteBtn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+		deleteBtn.OnCursorEntered = function()
+			if descPanel then descPanel.Desc = "uv.hm.presets.delete.desc" end
+			if promptBar and presetName ~= "" then promptBar.Prompts = { "uv.prompt.presetd" } end
+		end
+		
+		deleteBtn.OnCursorExited = function()
+			if descPanel then descPanel.Desc = "" end
+			if promptBar then promptBar.Prompts = nil end
+		end
 
 		return panel
 	end
@@ -2894,6 +2960,14 @@ function UV.BuildSetting(parent, st, descPanel)
 					btn.Selected = selected[entry.filename]
 					refreshLists()
 				end
+				
+				btn.OnCursorEntered = function()
+					if promptBar then promptBar.Prompts = { "uv.prompt.unitselect" } end
+				end
+				
+				btn.OnCursorExited = function()
+					if promptBar then promptBar.Prompts = nil end
+				end
 			end
 		end
 
@@ -3042,6 +3116,14 @@ function UV.BuildSetting(parent, st, descPanel)
 				activeGlyphFilter = id
 				BuildGlyphList()
 			end
+			
+			btn.OnCursorEntered = function()
+				if promptBar then promptBar.Prompts = { "uv.prompt.filter" } end
+			end
+			
+			btn.OnCursorExited = function()
+				if promptBar then promptBar.Prompts = nil end
+			end
 		end
 		
 		-- AddGlyphFilterButton("#all", "all")
@@ -3098,6 +3180,8 @@ function UV.BuildSetting(parent, st, descPanel)
 			{ name = "+reload", token = "+reload" },
 			{ name = "+attack", token = "+attack" },
 			{ name = "+attack2", token = "+attack2" },
+			{ name = "invnext", token = "invnext" },
+			{ name = "invprev", token = "invprev" },
 		}
 		
 		local TokenToName = {}
@@ -3173,7 +3257,15 @@ function UV.BuildSetting(parent, st, descPanel)
 					btn.selected = true
 					TryCommit()
 				end
-
+			
+				btn.OnCursorEntered = function()
+					if promptBar then promptBar.Prompts = { "uv.prompt.select" } end
+				end
+				
+				btn.OnCursorExited = function()
+					if promptBar then promptBar.Prompts = nil end
+				end
+				
 				tokenButtons[btn] = entry
 			end
 		end
@@ -3254,9 +3346,16 @@ function UV.BuildSetting(parent, st, descPanel)
 				btn.selected = true
 				TryCommit()
 			end
+
+			btn.OnCursorEntered = function()
+				if descPanel then descPanel.Desc = UVKeybindIcon(code, "Big") end
+				if promptBar then promptBar.Prompts = { "uv.prompt.select" } end
+			end
 			
-			btn.OnCursorEntered = function() if descPanel then descPanel.Desc = UVKeybindIcon(code, "Big") end end
-			btn.OnCursorExited = function() if descPanel then descPanel.Desc = "" end end
+			btn.OnCursorExited = function()
+				if descPanel then descPanel.Desc = "" end
+				if promptBar then promptBar.Prompts = nil end
+			end
 
 			glyphButtons[btn] = code
 		end
@@ -3369,6 +3468,14 @@ function UV.BuildSetting(parent, st, descPanel)
 					RefreshOverrides()
 					BuildTokenList()
 				end
+							
+				btn.OnCursorEntered = function()
+					if promptBar then promptBar.Prompts = { "uv.prompt.remove" } end
+				end
+				
+				btn.OnCursorExited = function()
+					if promptBar then promptBar.Prompts = nil end
+				end
 			end
 		end
 
@@ -3382,7 +3489,7 @@ function UV.BuildSetting(parent, st, descPanel)
 		local panel = vgui.Create("DPanel", parent)
 		panel:Dock(TOP)
 		panel:DockMargin(8, 4, 8, 4)
-		panel:SetTall(UV.ScaleH(500))
+		panel:SetTall(UV.ScaleH(400))
 		panel.Paint = nil
 
 		local selectedPlaylist = nil
@@ -3424,7 +3531,8 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		bodyleft.Paint = function(self, w, h)
 			draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, Color(0, 0, 0, 200))
-			DrawWrappedText(self, language.GetPhrase("uv.audio.uvtrax.playlists") or "Playlists", w * 0.9, w * 0.5, 4, true)
+			-- DrawWrappedText(self, language.GetPhrase("uv.audio.uvtrax.playlists") or "Playlists", w * 0.9, w * 0.5, 4, true)
+			DrawWrappedText(self, language.GetPhrase("uv.audio.uvtrax.profiles"), w * 0.9, w * 0.5, 4, true)
 		end
 
 		bodyleft.OnCursorEntered = function() if descPanel then descPanel.Desc = st.desc or "" end end
@@ -3481,17 +3589,18 @@ function UV.BuildSetting(parent, st, descPanel)
 
 		itemCount.OnCursorEntered = function()
 			if descPanel then
-				descPanel.Text = language.GetPhrase("uv.audio.uvtrax.playlists.resettoggle")
-				descPanel.Desc = language.GetPhrase("uv.audio.uvtrax.playlists.resettoggle")
+				-- descPanel.Desc = language.GetPhrase("uv.audio.uvtrax.profiles.resettoggle")
+				descPanel.Desc = language.GetPhrase("uv.audio.uvtrax.profiles.loaded")
 			end
+			if promptBar then promptBar.Prompts = { "uv.prompt.toggletracks" } end
 		end
 		itemCount.OnCursorExited = function()
-			if descPanel then descPanel.Text = "" end
 			if descPanel then descPanel.Desc = "" end
+			if promptBar then promptBar.Prompts = nil end
 		end
 
 		itemCount.OnMousePressed = function(self, code)
-			if code == MOUSE_MIDDLE then
+			if code == MOUSE_RIGHT then
 				if selectedPlaylist and activeTrackType then
 					local playlist = UVPlaylists[selectedPlaylist] and UVPlaylists[selectedPlaylist][activeTrackType]
 					if not playlist then return end
@@ -3511,7 +3620,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			local btn = vgui.Create("DButton", typeBar)
 			btn:Dock(LEFT)
 			btn:DockMargin(0, 0, 3, 0)
-			btn:SetWide(UV.ScaleW(58))
+			btn:SetWide(UV.ScaleW(90))
 			btn:SetText("")
 
 			btn.Paint = function(self, w, h)
@@ -3532,6 +3641,14 @@ function UV.BuildSetting(parent, st, descPanel)
 				activeTrackType = ttype
 				timer.Simple(0, function() LIST_BUILD_FUNCTIONS.M() end)
 			end
+
+			btn.OnCursorEntered = function()
+				if promptBar then promptBar.Prompts = { "uv.prompt.filter" } end
+			end
+			
+			btn.OnCursorExited = function()
+				if promptBar then promptBar.Prompts = nil end
+			end
 		end
 
 		for _, ttype in ipairs(TRACK_TYPES) do
@@ -3551,7 +3668,14 @@ function UV.BuildSetting(parent, st, descPanel)
 			local btn = vgui.Create("DButton", left)
 			btn:Dock(TOP)
 			btn:DockMargin(0, 0, 0, 4)
-			btn:SetTall(UV.ScaleH(28))
+			-- btn:SetTall(UV.ScaleH(28))
+			function btn:PerformLayout()
+				local text = name
+				local w = self:GetWide()
+				if w <= 0 then return end
+				local newTall = math.max(UV.ScaleH(24), GetDynamicTall(text, w * 0.9, "UVSettingsFontSmall", "UVSettingsFontSmall"))
+				if self:GetTall() ~= newTall then self:SetTall(newTall) end
+			end
 			btn:SetText("")
 
 			btn.selected = isSelected
@@ -3568,20 +3692,18 @@ function UV.BuildSetting(parent, st, descPanel)
 
 				draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, col)
 				if hovered then draw.RoundedBox(12, w * 0.0125, 0, w * 0.9875, h, hover) end
-				DrawWrappedText(self, name, w * 0.9, w * 0.5, h * 0.1, true, "UVSettingsFontSmall")
+				DrawWrappedText(self, name, w * 0.9, w * 0.5, h * 0.0, true, "UVSettingsFontSmall")
 			end
 
 			btn.DoClick = onClick
 
 			btn.OnCursorEntered = function()
-				if descPanel then
-					descPanel.Text = name
-					descPanel.Desc = name
-				end
+				if descPanel then descPanel.Desc = name end
+				if promptBar then promptBar.Prompts = { "uv.prompt.select" } end
 			end
 			btn.OnCursorExited = function()
-				if descPanel then descPanel.Text = "" end
 				if descPanel then descPanel.Desc = "" end
+				if promptBar then promptBar.Prompts = nil end
 			end
 
 			return brn
@@ -3703,7 +3825,7 @@ function UV.BuildSetting(parent, st, descPanel)
 			-- end
 
 			btn.OnMousePressed = function(self, code)
-				if code == MOUSE_MIDDLE then
+				if code == MOUSE_RIGHT then
 					if currentSource then
 						currentSource:Stop()
 						currentSource = nil
@@ -3732,9 +3854,10 @@ function UV.BuildSetting(parent, st, descPanel)
 				end
 
 				if descPanel then
-					descPanel.Text = btnText .. "\n\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.preview")
-					descPanel.Desc = btnText .. "\n\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.preview")
+					-- descPanel.Desc = btnText .. "\n\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.toggle") .. "\n" .. language.GetPhrase("uv.audio.uvtrax.tracks.preview")
+					descPanel.Desc = btnText
 				end
+				if promptBar then promptBar.Prompts = { "uv.prompt.toggle", "uv.prompt.previewtrack" } end
 			end
 			btn.OnCursorExited = function()
 				if currentSource then
@@ -3745,8 +3868,8 @@ function UV.BuildSetting(parent, st, descPanel)
 
 				playing = false
 
-				if descPanel then descPanel.Text = "" end
 				if descPanel then descPanel.Desc = "" end
+				if promptBar then promptBar.Prompts = nil end
 			end
 
 			return btn
@@ -4010,6 +4133,7 @@ function UVMenu:Open(menu)
     local Tabs = CurrentMenu.Tabs or {}
     local UnfocusClose = CurrentMenu.UnfocusClose == true
 	local HideCloseButton = CurrentMenu.HideCloseButton == true
+	local HidePrompts = GetConVar("uvmenu_hide_prompts"):GetBool()
 	
 	if CurrentMenu.Description == true and GetConVar("uvmenu_hide_description"):GetBool() then
 		Width = math.max(
@@ -4070,54 +4194,27 @@ function UVMenu:Open(menu)
             surface.SetDrawColor( GetConVar("uvmenu_col_desc_r"):GetInt(), GetConVar("uvmenu_col_desc_g"):GetInt(), GetConVar("uvmenu_col_desc_b"):GetInt(), math.floor(GetConVar("uvmenu_col_desc_a"):GetInt() * (a / 255)) )
             surface.DrawRect(0, 0, w, h)
 
+			if self.SelectedConVar then
+				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			if self.SelectedDefault and self.SelectedDefault ~= "" then
+				draw.SimpleText( string.format( language.GetPhrase("uv.settings.default"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98 - 20, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			if self.SelectedCurrent and self.SelectedCurrent ~= "" then
+				draw.SimpleText(string.format( language.GetPhrase("uv.settings.current"), self.SelectedCurrent ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+			
             if self.Text and a > 5 then
-                -- local font = "UVMostWantedLeaderboardFont2"
-                -- local color = Color(255, 255, 255, a)
-                -- local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
-                -- local wrapWidth = w - xPadding * 2
-                -- local yOffset = yPadding
-
-                -- surface.SetFont(font)
-                -- local desc = UVReplaceKeybinds(language.GetPhrase(self.Desc or "") or "")
-
-                -- local paragraphs = string.Split(desc, "\n")
-                -- for _, paragraph in ipairs(paragraphs) do
-                    -- if paragraph == "" then
-                        -- local _, th = surface.GetTextSize("A")
-                        -- yOffset = yOffset + th
-                    -- else
-                        -- local wrapped = UV_WrapText(paragraph, font, wrapWidth)
-                        -- for _, line in ipairs(wrapped) do
-                            -- draw.DrawText(line, font, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
-                            -- local _, th = surface.GetTextSize(line)
-                            -- yOffset = yOffset + th
-                        -- end
-                    -- end
-                -- end
 				local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(10)
 				local wrapWidth = w - xPadding * 2
 
 				local desc = UVReplaceKeybinds(language.GetPhrase(self.Desc) or "")
 
-				local markupText =
-					"<font=UVMostWantedLeaderboardFont2>" ..
-					"<color=255,255,255," .. a .. ">" ..
-					desc ..
-					"</color></font>"
+				local markupText = "<font=UVMostWantedLeaderboardFont2>" .. "<color=255,255,255," .. a .. ">" .. desc .. "</color></font>"
 
 				local mk = markup.Parse(markupText, wrapWidth)
 				mk:Draw(xPadding, yPadding, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
             end
-			if self.SelectedConVar then
-				draw.SimpleText(self.SelectedConVar, "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			if self.SelectedDefault and self.SelectedDefault ~= "" then
-				-- draw.SimpleText( "#uv.settings.resetbind", "UVMostWantedLeaderboardFont2", w * 0.5, h * 0.98 - 40, Color(255, 255, 255, a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				draw.SimpleText( string.format( language.GetPhrase("uv.settings.default"), self.SelectedDefault ), "UVMostWantedLeaderboardFont2", 10, h * 0.98 - 20, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-			if self.SelectedCurrent and self.SelectedCurrent ~= ""then
-				draw.SimpleText(string.format( language.GetPhrase("uv.settings.current"), self.SelectedCurrent ), "UVMostWantedLeaderboardFont2", 10, h * 0.98, Color(175, 175, 175, a), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
         end
 
         descPanel.Text = ""
@@ -4150,8 +4247,48 @@ function UVMenu:Open(menu)
 			)
 			surface.DrawRect(0, 0, w, h)
 		end
+
         tabsPanel:SetAlpha(0)
     end
+	
+	-- Bottom input prompt bar
+	local promptBar = vgui.Create("DPanel", frame)
+	if not HidePrompts then
+		promptBar:Dock(BOTTOM)
+		promptBar:SetTall(UV.ScaleH(32.5))
+		promptBar:DockMargin(8, 0, 8, 8)
+		promptBar:SetAlpha(0)
+
+		promptBar.Prompts = nil
+
+		promptBar.Paint = function(self, w, h)
+			local a = self:GetAlpha()
+			if a <= 5 then return end
+			if not self.Prompts or #self.Prompts == 0 then return end
+
+			local xPadding, yPadding = UV.ScaleW(10), UV.ScaleH(5)
+			local wrapWidth = w - xPadding * 2
+
+			local resolved = {}
+
+			for _, prompt in ipairs(self.Prompts) do
+				local phrase = language.GetPhrase(prompt)
+				table.insert(resolved, phrase)
+			end
+
+			local text = table.concat(resolved, "      ")
+			text = UVReplaceKeybinds(text)
+
+			local markupText =
+				"<font=UVSettingsFont>" ..
+				"<color=255,255,255," .. a .. ">" ..
+				text ..
+				"</color></font>"
+
+			local mk = markup.Parse(markupText, wrapWidth)
+			mk:Draw(xPadding, yPadding, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		end
+	end
 
     local closeBtn = vgui.Create("DButton", frame)
     closeBtn:SetSize(20, 20)
@@ -4183,6 +4320,7 @@ function UVMenu:Open(menu)
     local secondaryGroup = {center}
     if tabsPanel then table.insert(secondaryGroup, tabsPanel) end
     if descPanel then table.insert(secondaryGroup, descPanel) end
+	if promptBar then table.insert(secondaryGroup, promptBar) end
 
     local CURRENT_TAB = 1
 
@@ -4236,7 +4374,7 @@ function UVMenu:Open(menu)
 
         for k2, entry in ipairs(tab) do
             if istable(entry) and entry.type then
-                local pnl = UV.BuildSetting(center, entry, descPanel)
+                local pnl = UV.BuildSetting(center, entry, descPanel, promptBar)
                 if IsValid(pnl) then
                     pnl:SetVisible(UV.ShouldDrawSetting(entry))
                     pnl:SetAlpha(0)
@@ -4528,7 +4666,15 @@ function UVMenu:Open(menu)
 					-- UVMenu.PlaySFX("hovertab")
 				-- end
 			-- end
-
+		
+			btn.OnCursorEntered = function()
+				if promptBar then promptBar.Prompts = tab.Prompts or { "uv.prompt.tab" } end
+			end
+			
+			btn.OnCursorExited = function()
+				if promptBar then promptBar.Prompts = nil end
+			end
+		
             btn.DoClick = function()
 				if tab.playsfx then UVMenu.PlaySFX(tab.playsfx) end
 				if tab.func then tab.func(self) return end
