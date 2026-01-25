@@ -3666,6 +3666,12 @@ function UV.BuildSetting(parent, st, descPanel)
 				"✧｡ ( ◡̀_◡́) ✧*｡",
 				"(⌁° ‸ °⌁)"
 			}
+			local frames = {
+				"♩ ♪ ♫ ♬ ", 
+				"♪ ♫ ♬ ♩ ", 
+				"♫ ♬ ♩ ♪ ",
+				"♬ ♩ ♪ ♫ ",
+			}
 
 			btn.Paint = function(self, w, h)
 				local hovered = self:IsHovered()
@@ -3683,12 +3689,6 @@ function UV.BuildSetting(parent, st, descPanel)
 				local animStr = ""
 				if playing then
 					local t = CurTime()
-					local frames = {
-						"♩ ♪ ♫ ♬ ", 
-						"♪ ♫ ♬ ♩ ", 
-						"♫ ♬ ♩ ♪ ",
-						"♬ ♩ ♪ ♫ ",
-					}
 					local idx = math.floor( t * 6 ) % #frames + 1
 					animStr = frames[idx]
 				end
