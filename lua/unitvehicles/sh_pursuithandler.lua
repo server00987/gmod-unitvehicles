@@ -4629,7 +4629,7 @@ else -- CLIENT Settings | HUD/Options
 
 	net.Receive('UV_Sound', function()
 		local array = net.ReadTable()
-		if not PursuitSFX:GetBool() then return end
+		if not PursuitSFX:GetBool() and not string.match( array.FileName, "spottedfreezecam" ) then return end
 
 		local audio_file = "sound/"..array.FileName
 		local parameters = array.Parameter
