@@ -157,7 +157,7 @@ UVMenu.Main = function()
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
 				{ type = "combo", text = "#uv.audio.uvtrax.profile", desc = "uv.audio.uvtrax.profile.desc", convar = "unitvehicle_racetheme", requireparentconvar = "unitvehicle_racingmusic" },
-				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
+				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", prompts = {"uv.prompt.open.menu"}, func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
 					UVMenu.PlaySFX("clickopen")
@@ -171,10 +171,10 @@ UVMenu.Main = function()
 				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
 				
 				{ type = "info", text = UV.PNotes[UV.CurVersion].Text },
-				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
+				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", prompts = {"uv.prompt.open.menu"}, func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
 			},
 			
-			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", func = function()
+			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", Prompts = { "uv.prompt.open.menu" }, func = function()
 					UVMenu.OpenMenu(UVMenu.RaceManager) -- Race Manager
 				end,
 			},
@@ -186,7 +186,7 @@ UVMenu.Main = function()
 						{ "Glide", 3 } ,
 					},
 				},
-				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", func = 
+				{ type = "button", text = "#uv.pm.spawnas", desc = "uv.pm.spawnas.desc", convar = "uv_spawn_as_unit", prompts = {"uv.prompt.open.menu"}, func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu(true)
 					UVMenu.PlaySFX("clickopen")
@@ -200,18 +200,18 @@ UVMenu.Main = function()
 						SpawnAI(amount, nil, true)
 					end,
 				},
-				{ type = "button", text = "#uv.pm.clearai", desc = "uv.pm.clearai.desc", convar = "uv_despawnvehicles", sv = true },
+				{ type = "button", text = "#uv.pm.clearai", desc = "uv.pm.clearai.desc", convar = "uv_despawnvehicles", prompts = {"uv.prompt.confirm"}, sv = true },
 				
 				{ type = "label", text = "#uv.pursuit", sv = true },
 				-- { type = "button", text = "#uv.pm.pursuit.toggle", desc = "uv.pm.pursuit.toggle.desc", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.start", convar = "uv_startpursuit", sv = true },
 				{ type = "button", text = "#uv.pm.pursuit.stop", convar = "uv_stoppursuit", sv = true },
 				{ type = "slider", text = "#uv.pm.heatlevel", desc = "uv.pm.heatlevel.desc", command = "uv_setheat", min = 1, max = MAX_HEAT_LEVEL, decimals = 0, sv = true },
-				{ type = "button", text = "#uv.pm.clearbounty", desc = "uv.pm.clearbounty.desc", convar = "uv_clearbounty", sv = true },
-				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", sv = true },
+				{ type = "button", text = "#uv.pm.clearbounty", desc = "uv.pm.clearbounty.desc", convar = "uv_clearbounty", prompts = {"uv.prompt.confirm"}, sv = true },
+				{ type = "button", text = "#uv.pm.wantedtable", convar = "uv_wantedtable", prompts = {"uv.prompt.confirm"}, sv = true },
 
 				{ type = "label", text = "#uv.hm", sv = true },
-				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
+				{ type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", prompts = {"uv.prompt.open.menu"}, func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
 			},
 			
 			{ TabName = "#uv.airacer", Icon = "unitvehicles/icons/(9)T_UI_PlayerRacer_Large_Icon.png", sv = true, -- AI Racer Manager
@@ -231,7 +231,7 @@ UVMenu.Main = function()
 
 				-- { type = "button", text = "#uv.airacer.spawnai", desc = "uv.airacer.spawnai.desc", convar = "uvrace_spawnai", sv = true }, -- Single one - redundant?
 				{ type = "buttonsw", text = language.GetPhrase("uv.airacer.spawnai.val"), desc = "uv.airacer.spawnai.val.desc", convar = "uvrace_spawnai", sv = true, min = 1, max = 20, start = 1, func = function(self2, amount) SpawnAI(amount) end, },
-				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", sv = true },
+				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", prompts = {"uv.prompt.confirm"}, sv = true },
 				
 				{ type = "bool", text = "#uv.airacer.override", desc = "uv.airacer.override.desc", convar = "unitvehicle_racer_assignracers", sv = true },
 				{ type = "vehicleoverride", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "unitvehicle_racer_racers", sv = true, parentconvar = "unitvehicle_racer_assignracers" },
@@ -252,23 +252,23 @@ UVMenu.Main = function()
 				},
 				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "unitvehicle_traffic_maxtraffic", min = 0, max = 20, decimals = 0, sv = true },
 
-				{ type = "button", text = "#uv.tm.clear", desc = "uv.tm.clear.desc", convar = "uv_cleartraffic", sv = true },
+				{ type = "button", text = "#uv.tm.clear", desc = "uv.tm.clear.desc", convar = "uv_cleartraffic", prompts = {"uv.prompt.confirm"}, sv = true },
 
 				{ type = "bool", text = "#uv.airacer.override", desc = "uv.tm.override.desc", convar = "unitvehicle_traffic_assigntraffic", sv = true },
 				{ type = "vehicleoverride", text = "#uv.airacer.overridelist", desc = "uv.airacer.overridelist.desc", convar = "unitvehicle_traffic_vehicles", sv = true, parentconvar = "unitvehicle_traffic_assigntraffic" },
 			},
 
-			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", func = function()
+			{ TabName = "#uv.settings", Icon = "unitvehicles/icons_settings/options.png", playsfx = "clickopen", Prompts = { "uv.prompt.open.menu" }, func = function()
 					UVMenu.OpenMenu(UVMenu.Settings) -- Settings Menu
 				end,
 			},
 
-			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", func = function()
+			{ TabName = "#uv.faq", Icon = "unitvehicles/icons_settings/question.png", playsfx = "clickopen", Prompts = { "uv.prompt.open.menu" }, func = function()
 					UVMenu.OpenMenu(UVMenu.FAQ, true) -- FAQ
 				end,
 			},
 
-			{ TabName = "#uv.credits", Icon = "unitvehicles/icons/milestone_outrun_pursuits_won.png", playsfx = "clickopen", func = function()
+			{ TabName = "#uv.credits", Icon = "unitvehicles/icons/milestone_outrun_pursuits_won.png", playsfx = "clickopen", Prompts = { "uv.prompt.open.menu" }, func = function()
 					UVMenu.OpenMenu(UVMenu.Credits, true) -- Credits
 				end,
 			},
@@ -328,9 +328,10 @@ UVMenu.Settings = function()
 
 				{ type = "label", text = "#uv.ui.menu", desc = "uv.ui.menu.desc" },
 				{ type = "bool", text = "#uv.ui.menu.hidedesc", desc = "uv.ui.menu.hidedesc.desc", convar = "uvmenu_hide_description" },
+				{ type = "bool", text = "#uv.ui.menu.hideprompts", desc = "uv.ui.menu.hideprompts.desc", convar = "uvmenu_hide_prompts" },
 				{ type = "slider", text = "#uv.ui.menu.openspeed", desc = "uv.ui.menu.openspeed.desc", convar = "uvmenu_open_speed", min = 0.1, max = 1, decimals = 2 },
 				{ type = "slider", text = "#uv.ui.menu.closespeed", desc = "uv.ui.menu.closespeed.desc", convar = "uvmenu_close_speed", min = 0.1, max = 1, decimals = 2 },
-				{ type = "button", text = "#uv.ui.menu.custcol", desc = "uv.ui.menu.custcol.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.SettingsCol, true) end },
+				{ type = "button", text = "#uv.ui.menu.custcol", desc = "uv.ui.menu.custcol.desc", playsfx = "clickopen", prompts = {"uv.prompt.open.menu"}, func = function() UVMenu.OpenMenu(UVMenu.SettingsCol, true) end },
 			},
 			{ TabName = "#uv.audio.title", Icon = "unitvehicles/icons_settings/audio.png",
 
@@ -370,9 +371,10 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.audio.uvtrax.freeroam", desc = "uv.audio.uvtrax.freeroam.desc", convar = "unitvehicle_uvtraxinfreeroam", requireparentconvar = "unitvehicle_racingmusic" },
 				{ type = "bool", text = "#uv.audio.uvtrax.pursuits", desc = "uv.audio.uvtrax.pursuits.desc", convar = "unitvehicle_racingmusicoutsideraces", requireparentconvar = "unitvehicle_racingmusic" },
 
-				{ type = "uvtrax", text = "#uv.audio.uvtrax.playlists", desc = "uv.audio.uvtrax.playlists.desc" },
+				{ type = "label", text = "#uv.audio.uvtrax.editor", requireparentconvar = "unitvehicle_racingmusic" },
+				{ type = "uvtrax", text = "#uv.audio.uvtrax.profiles", desc = "uv.audio.uvtrax.profiles.desc", requireparentconvar = "unitvehicle_racingmusic" },
 			},
-			{ TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png", -- Can't get it to work - oh well.
+			{ TabName = "#uv.keybinds", Icon = "unitvehicles/icons_settings/controls.png",
 
 				{ type = "label", text = "#uv.keybinds.pt" },
 				{ type = "keybind", text = "#uv.keybind.slot1", desc = "uv.keybind.slot1.desc", convar = "unitvehicle_pursuittech_keybindslot_1", slot = 1 },
@@ -457,18 +459,11 @@ UVMenu.Settings = function()
 				{ type = "bool", text = "#uv.response.enable", desc = "uv.response.enable.desc", convar = "unitvehicle_callresponse", sv = true },
 				{ type = "slider", text = "#uv.response.speedlimit", desc = "uv.response.speedlimit.desc", convar = "unitvehicle_speedlimit", min = 0, max = 100, decimals = 0, sv = true },
 			},
-			-- { TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
-				-- { type = "label", text = "#uv.addons.builtin", desc = "uv.addons.builtin.desc", sv = true },
-				-- { type = "bool", text = "#uv.addons.vcmod.els", desc = "uv.addons.vcmod.els.desc", convar = "unitvehicle_vcmodelspriority", sv = true },
-				-- { type = "label", text = "Glide // Circular Functions", sv = true },
-				-- { type = "bool", text = "#uv.ailogic.usenitrousracer", desc = "uv.ailogic.usenitrousracer.desc", convar = "unitvehicle_usenitrousracer", sv = true },
-				-- { type = "bool", text = "#uv.ailogic.usenitrousunit", desc = "uv.ailogic.usenitrousunit.desc", convar = "unitvehicle_usenitrousunit", sv = true },
-			-- },
 			{ TabName = "#uv.addons", Icon = "unitvehicles/icons/generic_cart.png", sv = true,
 				unpack(addonTabRows)
 			},
 
-			{ TabName = "#uv.back", playsfx = "clickback", func = function()
+			{ TabName = "#uv.back", playsfx = "clickback", Prompts = { "uv.prompt.return" }, func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
 			},
@@ -487,7 +482,7 @@ UVMenu.SettingsCol = function()
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.ui.menu.custcol",
-				{ type = "button", text = "#uv.back", playsfx = "clickback",
+				{ type = "button", text = "#uv.back", playsfx = "clickback", prompts = {"uv.prompt.return"},
 						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
 				},
 				{ type = "label", text = "#uv.ui.menu.col.bg" },
@@ -513,7 +508,7 @@ UVMenu.SettingsCol = function()
 				{ type = "coloralpha", text = "#uv.ui.menu.col", desc = "uv.ui.menu.col.desc", convar = "uvmenu_col_button" },
 				{ type = "coloralpha", text = "#uv.ui.menu.col.hover", desc = "uv.ui.menu.col.hover.desc", convar = "uvmenu_col_button_hover" },
 
-				{ type = "button", text = "#uv.back", playsfx = "clickback",
+				{ type = "button", text = "#uv.back", playsfx = "clickback", prompts = {"uv.prompt.return"},
 						func = function(self2) UVMenu.OpenMenu(UVMenu.Settings) end
 				},
 			},
@@ -565,7 +560,7 @@ UVMenu.FAQ = function()
 				{ type = "info", text = UVGetFAQText("Other.DataFolder"), sv = true },
 			},
 
-			{ TabName = "#uv.back", playsfx = "clickback", func = function()
+			{ TabName = "#uv.back", playsfx = "clickback", Prompts = { "uv.prompt.return" }, func = function()
 					UVMenu.OpenMenu(UVMenu.Main)
 				end,
 			},
@@ -583,7 +578,7 @@ UVMenu.Credits = function()
 		UnfocusClose = true,
 		Tabs = {
 			{ TabName = "#uv.credits", Icon = "unitvehicles/icons_settings/info.png",
-				{ type = "button", text = "#uv.back", playsfx = "clickback",
+				{ type = "button", text = "#uv.back", playsfx = "clickback", prompts = {"uv.prompt.return"},
 					func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
 				},
 				{ type = "label", text = "#uv.credits.uvteam" },
@@ -608,39 +603,39 @@ UVMenu.RaceManager = function()
 		Tabs = {
 			{ TabName = "#uv.rm",
 				-- No track loaded, none active
-				{ type = "button", text = "#uv.rm.loadrace", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.loadrace", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.open.menu"},
 					cond = function() return #ents.FindByClass( "uvrace_spawn" ) == 0 end,
 					func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 				},
 				
 				-- Track loaded, race not started
-				{ type = "button", text = "#uv.rm.startrace", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.startrace", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.open.menu"},
 					cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 					func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerStartRace, true) end
 				},
-				{ type = "button", text = "#uv.rm.sendinvite", sv = true, convar = "uvrace_startinvite", playsfx = "confirm",
+				{ type = "button", text = "#uv.rm.sendinvite", sv = true, convar = "uvrace_startinvite", playsfx = "confirm", prompts = {"uv.prompt.confirm"},
 					cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 				},
-				{ type = "button", text = "#uv.rm.changerace", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.changerace", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.open.menu"},
 					cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 					func = function(self2) RunConsoleCommand("uvrace_queryimport") end
 				},
-				{ type = "button", text = "#uv.rm.cancelrace", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.cancelrace", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.confirm"},
 					cond = function() return #ents.FindByClass( "uvrace_spawn" ) > 0 and not (UVRaceStarting or UVHUDDisplayRacing) end,
 					func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 				},
 				
 				-- Race active
-				{ type = "button", text = "#uv.rm.stoprace", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.stoprace", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.confirm"},
 					cond = function() return UVRaceStarting or UVHUDDisplayRacing end,
 					func = function(self2) RunConsoleCommand("uvrace_stop") UVMenu.OpenMenu(UVMenu.RaceManager) end
 				},
 
 				-- Always active
-				{ type = "button", text = "#uv.rm.options", sv = true, playsfx = "clickopen",
+				{ type = "button", text = "#uv.rm.options", sv = true, playsfx = "clickopen", prompts = {"uv.prompt.open.menu"},
 					func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManagerSettings, true) end
 				},
-				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
+				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback", prompts = {"uv.prompt.return"},
 					func = function(self2) UVMenu.OpenMenu(UVMenu.Main) end
 				},
 			}
@@ -668,7 +663,7 @@ UVMenu.RaceManagerSettings = function()
 				{ type = "bool", text = "#uv.rm.options.pursuitclear.ai", desc = "uv.rm.options.pursuitclear.ai.desc", convar = "unitvehicle_racepursuitstop_despawn", parentconvar = "unitvehicle_racepursuitstop", sv = true },
 				{ type = "label", text = "#uv.ai.title" },
 				{ type = "bool", text = "#uv.rm.options.clearai", desc = "uv.rm.options.clearai.desc", convar = "unitvehicle_raceclearai", sv = true },
-				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback",
+				{ type = "button", text = "#uv.back", sv = true, playsfx = "clickback", prompts = {"uv.prompt.return"},
 					func = function(self2) UVMenu.OpenMenu(UVMenu.RaceManager) end
 				},
 			}
@@ -754,6 +749,7 @@ UVMenu.RaceManagerTrackSelect = function()
 				string.format( language.GetPhrase( "uv.rm.checkpoints" ), #rec.checkpoints ) .. "\n" .. 
 				string.format( language.GetPhrase( "uv.rm.startslots" ), #rec.spawns ),
 				playsfx = "clickopen",
+				prompts = {"uv.prompt.load"},
 				func = function()
 					RunConsoleCommand("uvrace_import", rec.filename)
 					UVMenu.CloseCurrentMenu(true)
@@ -771,7 +767,7 @@ UVMenu.RaceManagerTrackSelect = function()
 		table.insert(entriesWithBack, entry)
 	end
 
-	table.insert(entriesWithBack, { type = "button", text = "#uv.back", sv = true, playsfx = "clickback", func = function(self2)
+	table.insert(entriesWithBack, { type = "button", text = "#uv.back", sv = true, playsfx = "clickback", prompts = {"uv.prompt.return"}, func = function(self2)
 			UVMenu.OpenMenu(UVMenu.RaceManager)
 		end
 	})
@@ -838,7 +834,7 @@ UVMenu.RaceManagerStartRace = function()
 		Tabs = {
 			{
 				TabName = "#uv.rm",
-				{ type = "button", text = "#uv.rm.startrace", desc = "uv.rm.startrace.desc", sv = true,
+				{ type = "button", text = "#uv.rm.startrace", desc = "uv.rm.startrace.desc", prompts = {"uv.prompt.confirm"}, sv = true,
 					func = function()
 						RunConsoleCommand("uvrace_startrace", GetConVar("unitvehicle_racelaps"):GetString())
 						UVMenu.CloseCurrentMenu()
@@ -851,14 +847,14 @@ UVMenu.RaceManagerStartRace = function()
 					end,
 					cond = function() return maxSlots > 0 end,
 				},
-				{ type = "button", text = "#uv.rm.startrace.fillai", desc = string.format( language.GetPhrase("uv.rm.startrace.fillai.desc"), maxSlots ), sv   = true,
+				{ type = "button", text = "#uv.rm.startrace.fillai", desc = string.format( language.GetPhrase("uv.rm.startrace.fillai.desc"), maxSlots ), prompts = {"uv.prompt.confirm"}, sv   = true,
 					func = function()
 						FillGridWithAI()
 						UVMenu.CloseCurrentMenu()
 					end,
 					cond = function() return maxSlots > 0 end,
 				},
-				{ type = "button", text = "#uv.back", sv   = true, playsfx = "clickback",
+				{ type = "button", text = "#uv.back", sv = true, prompts = {"uv.prompt.return"}, playsfx = "clickback",
 					func = function()
 						UVMenu.OpenMenu(UVMenu.RaceManager)
 					end
@@ -878,6 +874,7 @@ function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 		type = "button",
 		text = "#uv.back",
 		playsfx = "clickback",
+		prompts = {"uv.prompt.return"},
 		func = function()
 			UVMenu.OpenMenu(UVMenu.Main)
 		end
@@ -902,6 +899,7 @@ function UVMenu.UnitSelect(unittable, unittablename, unittablenpc)
 				table.insert(menuEntries, {
 					type = "button",
 					text = unitName,
+					prompts = {"uv.prompt.confirm"},
 					func = function()
 						local npcClass = unittablenpc[classIndex]
 						local isRhino = (classIndex == 6)
@@ -952,13 +950,13 @@ UVMenu.WreckedDebrief = function()
 			{ TabName = "#uv.chase.wrecked", Icon = "unitvehicles/icons_settings/display.png",
 
 				{ type = "infosimple", text = language.GetPhrase("uv.chase.wrecked.text1") .. "\n" .. language.GetPhrase("uv.chase.wrecked.text2") },
-				{ type = "button", text = "#uv.chase.wrecked.rejoin", playsfx = "clickopen", func = 
+				{ type = "button", text = "#uv.chase.wrecked.rejoin", playsfx = "clickopen", prompts = {"uv.prompt.open"}, func = 
 				function(self2)
 					net.Start("UVHUDRespawnInUVGetInfo")
 					net.SendToServer()
 				end
 				},
-				{ type = "button", text = "#uv.chase.wrecked.abandon", func = 
+				{ type = "button", text = "#uv.chase.wrecked.abandon", prompts = {"uv.prompt.confirm"}, func = 
 				function(self2)
 					UVMenu.CloseCurrentMenu()
 				end
@@ -990,7 +988,7 @@ UVMenu.RaceInvite = function()
 
 				{ type = "infosimple", text = language.GetPhrase("uv.race.invite.desc") .. "\n" .. language.GetPhrase("uv.race.invite.desc2") },
 				{ type = "infosimple", text = string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ) .. "\n" .. string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ) },
-				{ type = "button", text = "#uv.race.invite.accept", func = 
+				{ type = "button", text = "#uv.race.invite.accept", prompts = {"uv.prompt.confirm"}, func = 
 				function(self2)
 					net.Start("uvrace_invite")
 					net.WriteBool(true)
@@ -998,7 +996,7 @@ UVMenu.RaceInvite = function()
 					UVMenu.CloseCurrentMenu()
 				end
 				},
-				{ type = "button", text = "#uv.race.invite.decline", func = 
+				{ type = "button", text = "#uv.race.invite.decline", prompts = {"uv.prompt.close"}, func = 
 				function(self2)
 					net.Start("uvrace_invite")
 					net.WriteBool(false)
@@ -1040,7 +1038,7 @@ local function BuildPatchNoteTabs()
 
         table.insert(tabs, {
             TabName = version,
-            { type = "button", text = "#uv.back", playsfx = "clickback", func = function() UVMenu.OpenMenu(UVMenu.Main) end },
+            { type = "button", text = "#uv.back", playsfx = "clickback", prompts = {"uv.prompt.return"}, func = function() UVMenu.OpenMenu(UVMenu.Main) end },
             { type = "label", text = note.Date },
 			
 			{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. version .. ".png" },
@@ -1080,7 +1078,7 @@ local function BuildPresetTabs(preset)
 	local tabs = {}
 	
 	for name, data in ipairs( presets.GetTable(preset) ) do
-		table.insert(tabs, { type = "button", text = name, func = function() LoadPreset(name, preset, data) end })
+		table.insert(tabs, { type = "button", text = name, prompts = {"uv.prompt.load"}, func = function() LoadPreset(name, preset, data) end })
 	end
 
 	return tabs
@@ -1197,6 +1195,7 @@ UVMenu.HeatManager = function()
     table.insert(tabs, {
         TabName = "#uv.back",
         playsfx = "clickback",
+		Prompts = { "uv.prompt.return" },
         func = function()
             UVMenu.OpenMenu(UVMenu.Main)
         end,

@@ -728,6 +728,13 @@ if CLIENT then
 
 	local UVGlyphOverrideTable = {}
 	local lastGlyphUpdate = -1
+	local UVCommandFallbacks = {
+		invnext = "MWHEELDOWN",  -- default glyph key
+		invprev = "MWHEELUP",
+		slot1   = "1",
+		slot2   = "2",
+		lastinv = "q",
+	}
 
 	local function UpdateGlyphOverrides()
 		if lastGlyphUpdate == FrameNumber() then return end
@@ -821,19 +828,25 @@ if CLIENT then
 		return nil
 	end
 
+	local function ResolveCommandGlyph(cmd)
+		-- Check for user override first
+		local override = ResolveGlyphOverride(cmd)
+		if override then return override end
+
+		local clean = cmd:gsub("^%+", "")
+		-- Check fallback table
+		if UVCommandFallbacks[clean] then return UVCommandFallbacks[clean] end
+
+		-- Fallback to normal keybind
+		return ResolveKeybind(cmd) or "???"
+	end
+
 	function UVReplaceKeybinds(str, glyphsize)
 		local glyphsize = glyphsize or nil
 
-		-- [+use]
-		str = str:gsub("%[(%+[%w_]+)%]", function(cmd)
-			local override = ResolveGlyphOverride(cmd)
-			if override then
-				return UVKeybindIcon(override, glyphsize)
-			end
-
-			local key = ResolveKeybind(cmd)
-			if not key then return "???" end
-			return UVKeybindIcon(key, glyphsize)
+		-- [+use] or [command]
+		str = str:gsub("%[([%+]?[%w_]+)%]", function(cmd)
+			return UVKeybindIcon(ResolveCommandGlyph(cmd), glyphsize)
 		end)
 
 		-- [key:convar_name]
@@ -856,22 +869,6 @@ if CLIENT then
 		-- [glyph:phrase]
 		str = str:gsub("%[glyph:([^%]]+)%]", function(glyph)
 			return UVKeybindIcon(glyph, glyphsize)
-		end)
-
-		return str
-	end
-
-	function UVReplaceKeybindsNoCol(str)
-		str = str:gsub("%[(%+[%w_]+)%]", function(cmd) -- [+use]
-			return ResolveKeybind(cmd)
-		end)
-
-		str = str:gsub("%[key:([%w_]+)%]", function(cvar) -- [key:convar_name]
-			return ResolveKeybind(cvar)
-		end)
-
-		str = str:gsub("%[string:([^%]]+)%]", function(locstring)
-			return language.GetPhrase(locstring)
 		end)
 
 		return str
