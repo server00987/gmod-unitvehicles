@@ -385,7 +385,8 @@ if SERVER then
 		
 		UVRaceInvites = {}
 		UVBroadcastRacerList()
-
+		UVRace_RacerList = {}
+		
 		table.Empty(UVRaceTable)
 
 		for _, vehicle in pairs(UVRaceCurrentParticipants) do
@@ -2715,7 +2716,7 @@ else -- CLIENT stuff
 		end
 	end)
 	
-	local UVRace_RacerList = {}
+	UVRace_RacerList = {}
 
 	net.Receive("UVRace_RacersList", function()
 		local list = net.ReadTable() or {}

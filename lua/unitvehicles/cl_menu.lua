@@ -229,7 +229,6 @@ UVMenu.Main = function()
 				},
 				{ type = "slider", text = "#uv.tool.maxamount", desc = "uv.tool.maxamount.desc", convar = "unitvehicle_racer_maxracer", min = 0, max = 20, decimals = 0, sv = true },
 
-				-- { type = "button", text = "#uv.airacer.spawnai", desc = "uv.airacer.spawnai.desc", convar = "uvrace_spawnai", sv = true }, -- Single one - redundant?
 				{ type = "buttonsw", text = language.GetPhrase("uv.airacer.spawnai.val"), desc = "uv.airacer.spawnai.val.desc", convar = "uvrace_spawnai", sv = true, min = 1, max = 20, start = 1, func = function(self2, amount) SpawnAI(amount) end, },
 				{ type = "button", text = "#uv.airacer.clear", desc = "uv.airacer.clear.desc", convar = "uv_clearracers", prompts = {"uv.prompt.confirm"}, sv = true },
 				
@@ -825,6 +824,25 @@ UVMenu.RaceManagerStartRace = function()
 	local maxSlots = GetAvailableAISlots()
 	local spawnAmountStart = math.Clamp(1, 1, maxSlots)
 
+	local function noaibutton()
+		local air = GetConVar("unitvehicle_racer_assignracers")
+		local airl = GetConVar("unitvehicle_racer_racers")
+		if air:GetBool() then
+			if airl:GetString() == "" then return false end
+		else
+			local aib = GetConVar("unitvehicle_racer_vehiclebase")
+			local vlistglide = file.Find("unitvehicles/glide/racers/*.json", "DATA")
+			local vlistsimfphys = file.Find("unitvehicles/simfphys/racers/*.txt", "DATA")
+			local vlisthl2 = file.Find("unitvehicles/prop_vehicle_jeep/racers/*.txt", "DATA")
+			
+			if aib:GetInt() == 3 and (vlistglide == nil or next(vlistglide) == nil) then return false end
+			if aib:GetInt() == 2 and (vlistsimfphys == nil or next(vlistsimfphys) == nil) then return false end
+			if aib:GetInt() == 1 and (vlisthl2 == nil or next(vlisthl2) == nil) then return false end
+		end
+		
+		return maxSlots > 0
+	end
+
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = " ",
 		Width  = UV.ScaleW(960),
@@ -846,14 +864,14 @@ UVMenu.RaceManagerStartRace = function()
 						SpawnAI(amount, true)
 						UVMenu.CloseCurrentMenu()
 					end,
-					cond = function() return maxSlots > 0 end,
+					cond = noaibutton
 				},
 				{ type = "button", text = "#uv.rm.startrace.fillai", desc = string.format( language.GetPhrase("uv.rm.startrace.fillai.desc"), maxSlots ), prompts = {"uv.prompt.confirm"}, sv   = true,
 					func = function()
 						FillGridWithAI()
 						UVMenu.CloseCurrentMenu()
 					end,
-					cond = function() return maxSlots > 0 end,
+					cond = noaibutton
 				},
 				{ type = "button", text = "#uv.back", sv = true, prompts = {"uv.prompt.return"}, playsfx = "clickback",
 					func = function()
