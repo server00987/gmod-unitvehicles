@@ -350,6 +350,7 @@ UVMenu.Settings = function()
 
 				{ type = "label", text = "#uv.audio.pursuit" },
 				{ type = "bool", text = "#uv.audio.pursuit.enable", desc = "uv.audio.pursuit.desc", convar = "unitvehicle_playmusic" },
+				{ type = "bool", text = "#uv.audio.pursuit.sfx", desc = "uv.audio.pursuit.sfx.desc", convar = "unitvehicle_pursuitsfx" },
 				{ type = "combo", text = "#uv.audio.pursuittheme", desc = "uv.audio.pursuittheme.desc", convar = "unitvehicle_pursuittheme", content = pursuitcontent, requireparentconvar = "unitvehicle_playmusic" },
 				{ type = "bool", text = "#uv.audio.pursuitpriority", desc = "uv.audio.pursuitpriority.desc", convar = "unitvehicle_racingmusicpriority", requireparentconvar = "unitvehicle_playmusic" },
 				{ type = "bool", text = "#uv.audio.pursuittheme.random", desc = "uv.audio.pursuittheme.random.desc", convar = "unitvehicle_pursuitthemeplayrandomheat" },

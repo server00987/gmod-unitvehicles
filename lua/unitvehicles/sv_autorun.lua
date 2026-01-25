@@ -895,7 +895,7 @@ end
 
 function UVPassConVarFilter(v)
 	
-	if not v.uvbusted then
+	if v.uvbusted then
 		return false
 	end
 	

@@ -2417,6 +2417,7 @@ else -- CLIENT Settings | HUD/Options
 	}
 
 	PursuitTheme = CreateClientConVar("unitvehicle_pursuittheme", "", true, false, "Unit Vehicles: Pursuit Theme (string).")
+	PursuitSFX = CreateClientConVar("unitvehicle_pursuitsfx", 1, true, false, "Unit Vehicles: If set to 1, Pursuit SFX will play.")
 	PlayMusic = CreateClientConVar("unitvehicle_playmusic", 1, true, false, "Unit Vehicles: If set to 1, Pursuit themes will play.")
 	PursuitThemePlayRandomHeat = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheat", 0, true, false, "Unit Vehicles: If set to 1, random Heat Level songs will play during pursuits every 10 minutes.")
 	PursuitThemePlayRandomHeatMinutes = CreateClientConVar("unitvehicle_pursuitthemeplayrandomheatminutes", 10, true, false, "Unit Vehicles: If set to 'Every X minutes', all Heat Level songs will play during pursuits every X minutes.")
@@ -4107,7 +4108,9 @@ else -- CLIENT Settings | HUD/Options
 					local botimeout = 10
 					if UVHUDBlipSoundTime < CurTime() and beepfrequency < 1 then
 						UVHUDBlipSoundTime = CurTime() + beepfrequency
-						surface.PlaySound(UVHUDBlipSound)
+						if PursuitSFX:GetBool() then
+							surface.PlaySound(UVHUDBlipSound)
+						end
 						UVHUDBeeping = true
 						timer.Simple(beepfrequency/2, function()
 							UVHUDBeeping = false
@@ -4620,8 +4623,13 @@ else -- CLIENT Settings | HUD/Options
 		racer_vehicle.racer = racer_name
 	end)
 
+	local TOGGLEABLE_SOUNDS = {
+		""
+	}
+
 	net.Receive('UV_Sound', function()
 		local array = net.ReadTable()
+		if not PursuitSFX:GetBool() then return end
 
 		local audio_file = "sound/"..array.FileName
 		local parameters = array.Parameter
