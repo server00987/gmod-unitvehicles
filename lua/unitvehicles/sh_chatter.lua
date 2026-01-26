@@ -113,7 +113,6 @@ Wrecker: Tow truck
 ]]
 
 if SERVER then
-	math.randomseed(os.time() + SysTime()); for i=1, 100 do math.random() end
 	UVClassName = {"POLICE"}
 	
 	file.AsyncRead('data_static/chatter.json', 'GAME', function( _, _, status, data )
@@ -165,11 +164,50 @@ if SERVER then
 		end
 		
 		timer.Remove('UVDelayChatter')
-		timer.Create('UVDelayChatter', seconds - 0.5, 1, function()
+		timer.Create('UVDelayChatter', seconds, 1, function()
 			UVChatterDelayed = false
 		end)
 
 		return seconds
+	end
+	
+	UVChatterQueue = UVChatterQueue or {}
+	UVChatterQueueActive = UVChatterQueueActive or false
+	UVChatterQueueFinishTime = UVChatterQueueFinishTime or 0
+	
+	function UVResetChatterQueue()
+		UVChatterQueue = {}
+		UVChatterQueueActive = false
+		UVChatterQueueFinishTime = 0
+	end
+	
+	local function ProcessChatterQueue()
+		if #UVChatterQueue == 0 then return end
+		if UVChatterQueueActive then return end
+		if UVChatterQueueFinishTime > 0 and CurTime() < UVChatterQueueFinishTime then return end
+		
+		local queueItem = table.remove(UVChatterQueue, 1)
+		if not queueItem then return end
+		
+		UVChatterQueueActive = true
+		UVChatterQueueFinishTime = 0
+		
+		local duration = queueItem.func()
+		
+		if duration and duration ~= 5 and duration > 0 then
+			UVChatterQueueFinishTime = CurTime() + duration
+		else
+			UVChatterQueueFinishTime = CurTime()
+		end
+		
+		UVChatterQueueActive = false
+	end
+	
+	if not UVChatterQueueThinkActive then
+		UVChatterQueueThinkActive = true
+		hook.Add("Think", "UVChatterQueueProcessor", function()
+			ProcessChatterQueue()
+		end)
 	end
 	
 	--return 5 = no sound chatter
@@ -203,7 +241,8 @@ if SERVER then
 		return voiceProfile
 	end
 	
-	function UVSoundChatter(self, voice, chattertype, parameters, ...)
+	-- Internal function that actually plays the chatter
+	local function _PlayUVSoundChatter(self, voice, chattertype, parameters, ...)
 		
 		if not self or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 5 
@@ -318,6 +357,7 @@ if SERVER then
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/"..soundFiles[1]
 			
 			--self:EmitSound(soundFile, 10000, 100, 1, CHAN_STREAM)
+			if not IsValid(self) then return 5 end
 			self:EmitSound(soundFile, 120)
 				-- local bullhorn = CreateSound(self, soundFile, recpFilter)
 				-- bullhorn:SetSoundLevel(120)
@@ -894,6 +934,22 @@ if SERVER then
 		return HandleCallSounds()
 	end
 	
+	function UVSoundChatter(self, voice, chattertype, parameters, ...)
+		if not self or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
+			return 5 
+		end
+		
+		local args = {...}
+		
+		table.insert(UVChatterQueue, {
+			func = function()
+				return _PlayUVSoundChatter(self, voice, chattertype, parameters, unpack(args))
+			end
+		})
+		
+		return 0
+	end
+	
 	
 	-- 	List of variables:
 	-- 	self.callsign = UNIT_CALLSIGN
@@ -1008,6 +1064,7 @@ if SERVER then
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			local randomno = math.random(1,2)
 			if randomno == 1 then
+				UVChatterQueue = {}
 				return UVSoundChatter(self, self.voice, "arrest", nil)
 			-- else
 			-- 	return UVSoundChatter(self, self.voice, "arrest", 2, enemy)
@@ -2122,8 +2179,10 @@ if SERVER then
 	
 	function UVChatterFoundEnemy(self)
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			UVResetChatterQueue()
 			return UVSoundChatter(self, self.voice, "foundenemy", 4)
 		end
+
 		-- UVDelayChatter()
 		
 		local args = {}
@@ -2187,6 +2246,9 @@ if SERVER then
 			local timecheck = 5
 			local airrandomno = math.random(1,2)
 			local airUnits = ents.FindByClass("uvair")
+
+			UVResetChatterQueue()
+			
 			if next(airUnits) ~= nil then
 				local random_entry = math.random(#airUnits)	
 				local unit = airUnits[random_entry]

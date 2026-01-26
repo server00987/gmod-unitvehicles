@@ -1447,8 +1447,6 @@ else -- CLIENT stuff
 	function UVTraxPlayNextTrack( trackType, increment, trackNumber )
 		if not UVCurrentPlaylist[trackType] or #UVCurrentPlaylist[trackType] == 0 then return false end
 		if not UVTrackPointers[trackType] then UVTrackPointers[trackType] = 0 end
-				
-		if UVHUDDisplayPursuit and not GetConVar("unitvehicle_racingmusicoutsideraces"):GetBool() then return false end
 
 		UVTrackPointers[trackType] = ( trackNumber or UVTrackPointers[trackType] + ( increment or 1 ) ) % #UVCurrentPlaylist[trackType]
 		if UVTrackPointers[trackType] == 0 then UVTrackPointers[trackType] = #UVCurrentPlaylist[trackType] end
@@ -1830,6 +1828,7 @@ else -- CLIENT stuff
 			UVSkipDelay = CurTime()
 		else return end
 
+		if not UVPlayingRace then return end
 		UVTraxPlayNextTrack( "race", 1 )
 	end)
 
@@ -1838,6 +1837,7 @@ else -- CLIENT stuff
 			UVPrevDelay = CurTime()
 		else return end
 
+		if not UVPlayingRace then return end
 		UVTraxPlayNextTrack( "race", -1 )
 	end)
 
