@@ -164,7 +164,7 @@ if SERVER then
 		end
 		
 		timer.Remove('UVDelayChatter')
-		timer.Create('UVDelayChatter', seconds, 1, function()
+		timer.Create('UVDelayChatter', seconds - 0.5, 1, function()
 			UVChatterDelayed = false
 		end)
 

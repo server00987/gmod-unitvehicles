@@ -2760,8 +2760,10 @@ function UVCheckIfBeingBusted(enemy)
 				if next(airUnits) ~= nil and randomno == 1 then
 					local random_entry = math.random(#airUnits)	
 					local unit = airUnits[random_entry]
+					UVResetChatterQueue()
 					UVSoundChatter(unit, unit.voice, "arrest", 2)
 				else
+					UVResetChatterQueue()
 					UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
 				end
 			end

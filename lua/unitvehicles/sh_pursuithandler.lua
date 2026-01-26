@@ -2339,7 +2339,7 @@ if SERVER then
 			net.Send( ply )
 		end
 
-		if not game.SinglePlayer() then
+		if not ply:IsListenServerHost() then
 			for _, v in pairs(ReplicatedVars) do
 				net.Start( "UVGetSettings_Local" )
 				net.WriteString(v)
@@ -2366,12 +2366,12 @@ if SERVER then
 					]]
 					convar:SetString(value)
 
-					if not game.SinglePlayer() then
-						if table.HasValue(ReplicatedVars, key) then
+					for _, v in pairs( ents.FindByClass("player") ) do
+						if not v:IsListenServerHost() then
 							net.Start( "UVGetSettings_Local" )
 							net.WriteString(key)
 							net.WriteString(value)
-							net.Broadcast()
+							net.Send(v)
 						end
 					end
 				end
