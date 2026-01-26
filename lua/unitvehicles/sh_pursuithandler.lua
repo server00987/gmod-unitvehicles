@@ -43,6 +43,7 @@ local Control_Strings = {
 	[3] = "#uv.keybind.skipsong",
 	[4] = "#uv.keybind.resetposition",
 	[5] = "#uv.keybind.showresults"
+
 }
 
 local Colors = {
@@ -1299,7 +1300,7 @@ if SERVER then
 						local random_entry = math.random(#units)
 						local unit = units[random_entry]
 						local uvchatter = math.random(1,10)
-						if unit and Chatter:GetBool() and IsValid(unit.v) then
+						if unit and Chatter:GetBool() then
 							UVChatterBackupOnTheWay(unit)
 						end
 					end)
@@ -1351,7 +1352,7 @@ if SERVER then
 						local random_entry = math.random(#units)
 						local unit = units[random_entry]
 						local uvchatter = math.random(1,10)
-						if Chatter:GetBool() and IsValid(unit.v) then
+						if Chatter:GetBool() then
 							UVChatterBackupOnScene(unit)
 						end
 					end
@@ -1633,12 +1634,14 @@ if SERVER then
 		local visible_suspects = {}
 
 		if next(UVUnitVehicles) ~= nil or (UVTargeting and not UVEnemyEscaping) then
+			local newUnits = {}
 			for k, unit in pairs(UVUnitVehicles) do
-				if not IsValid(unit) or not unit.UnitVehicle then
-					table.RemoveByValue(UVUnitVehicles, unit)
-					table.RemoveByValue(UVUnitsChasing, unit)
+				if IsValid(unit) and unit.UnitVehicle then
+					table.insert(newUnits, unit)
 				end
 			end
+			UVUnitVehicles = newUnits
+			
 			if next(UVWantedTableVehicle) ~= nil then
 				for _, v in pairs(UVWantedTableVehicle) do
 					local last_visible_value = v.inunitview
@@ -1660,7 +1663,6 @@ if SERVER then
 
 					if not check then
 						for _, unit in pairs(UVUnitVehicles) do
-							if IsValid(unit) then
 								if UVVisualOnTarget(unit, v) then
 									v.inunitview = true
 									table.insert(visible_suspects, v)
@@ -1669,7 +1671,6 @@ if SERVER then
 										v.inunitview = false 
 									end
 								end
-							end
 						end
 					end
 
@@ -1700,7 +1701,7 @@ if SERVER then
 					local random_entry = math.random(#units)
 					local unit = units[random_entry]
 					local uvchatter = math.random(1,10)
-					if Chatter:GetBool() and IsValid(unit.v) then
+					if Chatter:GetBool() then
 						if uvchatter == 1 then
 							UVChatterDispatchIdleTalk(unit)
 						elseif uvchatter == 2 then
@@ -1744,7 +1745,7 @@ if SERVER then
 						local unit = units[random_entry]
 						UVChatterLosing(unit)
 						timer.Simple(math.random(10,20), function()
-							if UVEnemyEscaping and IsValid(unit) then
+							if UVEnemyEscaping then
 								UVChatterLosingUpdate(unit) 
 							end
 						end)
@@ -1846,7 +1847,7 @@ if SERVER then
 					local units = ents.FindByClass("npc_uv*")
 					local random_entry = math.random(#units)	
 					local unit = units[random_entry]
-					if Chatter:GetBool() and IsValid(unit.v) then
+					if Chatter:GetBool() then
 						UVChatterLost(unit) 
 					end
 				end
@@ -1889,7 +1890,7 @@ if SERVER then
 		if game.SinglePlayer() and SpottedFreezeCam:GetBool() then
 			local ply = Entity(1)
 
-			if IsValid(ply) and ply.isUVFrozen and RealTime() >= ply.isUVFreezeTime then
+			if ply.isUVFrozen and RealTime() >= ply.isUVFreezeTime then
         	    net.Start("UVSpottedUnfreeze")
         	    net.Send(ply)
 
@@ -2466,7 +2467,8 @@ else -- CLIENT Settings | HUD/Options
 	UVKeybindResetPosition = CreateClientConVar("unitvehicle_keybind_resetposition", KEY_M, true, false)
 	UVKeybindShowRaceResults = CreateClientConVar("unitvehicle_keybind_raceresults", KEY_N, true, false)
 
-	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_LBRACKET, true, false)
+	UVKeybindSkipSong = CreateClientConVar("unitvehicle_keybind_skipsong", KEY_RBRACKET, true, false)
+	UVKeybindPrevSong = CreateClientConVar("unitvehicle_keybind_prevsong", KEY_LBRACKET, true, false)
 
 	-- UVPBMax = CreateClientConVar("unitvehicle_pursuitbreaker_maxpb", 2, true, false)
 	-- UVPBCooldown = CreateClientConVar("unitvehicle_pursuitbreaker_pbcooldown", 60, true, false)
@@ -3561,11 +3563,14 @@ else -- CLIENT Settings | HUD/Options
 
 		local localPlayer = LocalPlayer()
 		local vehicle = localPlayer:GetVehicle()
+		local isValidVehicle = IsValid( vehicle )
 
 		local var = UVKeybindSkipSong:GetInt()
+		local varprev = UVKeybindPrevSong:GetInt()
 
-		if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then
-			localPlayer:ConCommand('uv_skipsong')
+		if isValidVehicle then
+			if input.IsKeyDown(var) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then localPlayer:ConCommand('uv_skipsong') end
+			if input.IsKeyDown(varprev) and not gui.IsGameUIVisible() and vgui.GetKeyboardFocus() == nil then localPlayer:ConCommand('uv_prevsong') end
 		end
 
 		for i, v in pairs( EntityQueue ) do

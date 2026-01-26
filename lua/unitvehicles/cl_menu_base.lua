@@ -3175,6 +3175,7 @@ function UV.BuildSetting(parent, st, descPanel, promptBar)
 			{ name = language.GetPhrase("uv.keybind.resetposition"), token = "key:unitvehicle_keybind_resetposition" },
 			{ name = language.GetPhrase("uv.keybind.showresults"), token = "key:unitvehicle_keybind_raceresults" },
 			{ name = language.GetPhrase("uv.keybind.skipsong"), token = "key:unitvehicle_keybind_skipsong" },
+			{ name = language.GetPhrase("uv.keybind.prevsong"), token = "key:unitvehicle_keybind_prevsong" },
 			{ name = "+jump", token = "+jump" },
 			{ name = "+use", token = "+use" },
 			{ name = "+reload", token = "+reload" },

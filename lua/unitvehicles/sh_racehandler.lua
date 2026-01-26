@@ -1430,7 +1430,7 @@ else -- CLIENT stuff
 
 	function UVTraxDisplayTrack( artist, title, folder, path )
 		if title == "" or not title then return end
-		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>\n\n" .. UVReplaceKeybinds( string.format( "%s " .. language.GetPhrase("uv.keybind.skipsong"),"[key:unitvehicle_keybind_skipsong]") )
+		local notificationText = "<color=255,126,126>" .. language.GetPhrase("uv.race.radio") .. "</color>\n" .. title .. "\n" .. "<color=200,200,200>" .. artist .. "\n" .. folder .. "</color>\n\n" .. UVReplaceKeybinds( string.format( "%s " .. language.GetPhrase("uv.keybind.prevsong"),"[key:unitvehicle_keybind_prevsong]") ) .. "\n" .. UVReplaceKeybinds( string.format( "%s " .. language.GetPhrase("uv.keybind.skipsong"),"[key:unitvehicle_keybind_skipsong]") )
 
 		if Glide then
 			Glide.Notify({
@@ -1828,7 +1828,15 @@ else -- CLIENT stuff
 			UVSkipDelay = CurTime()
 		else return end
 
-		UVStopSound()
+		UVTraxPlayNextTrack( "race", 1 )
+	end)
+
+	concommand.Add( "uv_prevsong", function()
+		if (not UVPrevDelay) or (CurTime() - UVPrevDelay > 1) then
+			UVPrevDelay = CurTime()
+		else return end
+
+		UVTraxPlayNextTrack( "race", -1 )
 	end)
 
 	net.Receive( "uvrace_notification", function()

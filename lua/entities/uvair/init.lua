@@ -211,7 +211,10 @@ end
 
 function ENT:Think()
 
-	if IsValid(self:GetTarget()) and self:IsSeeTarget() and not self.Downed and not self.disengaging then
+	local target = self:GetTarget()
+	local isValidTarget = IsValid(target)
+
+	if isValidTarget and self:IsSeeTarget() and not self.Downed and not self.disengaging then
 		if not table.HasValue(UVUnitsChasing, self) then
 			table.insert(UVUnitsChasing, self)
 		end
@@ -221,7 +224,7 @@ function ENT:Think()
 		end
 	end
 
-	if IsValid(self:GetTarget()) then
+	if isValidTarget then
 		
 		if self.CloseToTarget and self:IsSeeTarget() and not self.spotted then
 			self.spotted = true
@@ -232,7 +235,7 @@ function ENT:Think()
 				UVTargeting = true
 			end
 
-			if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+			if Chatter:GetBool() and not (self.crashing or self.disengaging) then
 				UVChatterSpottedEnemy(self) 
 			end
 		end
@@ -258,20 +261,20 @@ function ENT:Think()
 					constraint.NoCollide(self,spikes,0,0)
 
 					local phspikes = spikes:GetPhysicsObject()
-					phspikes:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*2)
+					phspikes:SetVelocity(target:GetPhysicsObject():GetVelocity()*2)
 					phspikes:SetMass(100)
 
 					timer.Simple((math.random(5,10)), function() self.cooldown = nil end)
 					timer.Simple(10, function() 
 						if IsValid(spikes) then 
 							spikes:Remove() 
-							if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+							if Chatter:GetBool() and not (self.crashing or self.disengaging) then
 								UVChatterSpikeStripMiss(self) 
 							end
 						end 
 					end)
 
-					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) then
 						UVChatterSpikeStripDeployed(self) 
 					end
 				elseif self.WeaponChoice == 'barrels' then
@@ -286,7 +289,7 @@ function ENT:Think()
 					bomb:GetPhysicsObject():EnableMotion(true)
 
 					local phbomb = bomb:GetPhysicsObject()
-					phbomb:SetVelocity(self:GetTarget():GetPhysicsObject():GetVelocity()*2)
+					phbomb:SetVelocity(target:GetPhysicsObject():GetVelocity()*2)
 					phbomb:SetMass(100)
 
 					self:EmitSound( "npc/attack_helicopter/aheli_mine_drop1.wav" )
@@ -298,7 +301,7 @@ function ENT:Think()
 						end 
 					end)
 
-					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) then
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) then
 						UVChatterExplosiveBarrelDeployed(self) 
 					end
 				end
@@ -363,6 +366,9 @@ end
 
 function ENT:PhysicsUpdate()
 
+	local target = self:GetTarget()
+	local isValidTarget = IsValid(target)
+
 	local p = self:GetPos()
 	if math.abs(p.x)>16000 or math.abs(p.y)>16000 or math.abs(p.z)>16000 then
 		if self.disengaging then
@@ -398,7 +404,7 @@ function ENT:PhysicsUpdate()
 			end
 		end
 		
-		if IsValid(self:GetTarget()) then
+		if isValidTarget then
 			self:SetTarget(nil)
 		end
 
@@ -410,13 +416,13 @@ function ENT:PhysicsUpdate()
 			self:StartCrush()
 		end
 		
-		if IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
+		if isValidTarget and self:IsSeeTarget() and UVTargeting then
 			UVLosing = CurTime()
 		end
 		
 		--Bounty
 		local botimeout = 10
-		if CurTime() > self.bountytimer + botimeout and IsValid(self:GetTarget()) and self:IsSeeTarget() and UVTargeting then
+		if CurTime() > self.bountytimer + botimeout and isValidTarget and self:IsSeeTarget() and UVTargeting then
 			UVBounty = UVBounty+(UVBountyTime or 0)
 			self.bountytimer = CurTime()
 			local MathAggressive = math.random(1,10) 
@@ -429,18 +435,18 @@ function ENT:PhysicsUpdate()
 						self.engaging = true
 					end
 
-					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and self:IsSeeTarget() and not UVCalm then
 						UVChatterAggressive(self) 
 					end
 				else
 					self.engaging = nil
 					self.aggressive = nil
-					if Chatter:GetBool() and not (self.crashing or self.disengaging) and IsValid(self) and self:IsSeeTarget() and not UVCalm then
+					if Chatter:GetBool() and not (self.crashing or self.disengaging) and self:IsSeeTarget() and not UVCalm then
 						UVChatterPassive(self) 
 					end
 				end
 			end
-			if IsValid(self:GetTarget()) and Chatter:GetBool() and not (self.crashing or self.disengaging) and self:GetTarget():GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive ~= 1 then
+			if isValidTarget and Chatter:GetBool() and not (self.crashing or self.disengaging) and target:GetVelocity():LengthSqr() > 100000 and self:IsSeeTarget() and MathAggressive ~= 1 then
 				UVChatterCloseToEnemy(self)
 			end
 		end
@@ -460,7 +466,7 @@ function ENT:PhysicsUpdate()
 		end
 
 		local targetpos = vector_origin
-		if IsValid(self:GetTarget()) then
+		if isValidTarget then
 			if self.aggressive and not self.engaging then
 				targetpos = (self:GetTargetPos()+self:GetTarget():GetVelocity())
 			else
@@ -481,7 +487,7 @@ function ENT:PhysicsUpdate()
 		end
 		
 		if UVTargeting then
-			if not IsValid(self:GetTarget()) or self:GetTarget().uvbusted then
+			if not isValidTarget or target.uvbusted then
 				if next(UVWantedTableVehicle) ~= nil then -- Look for remaining suspects
 					local suspecttable = UVWantedTableVehicle
 					for k, v in pairs(suspecttable) do
@@ -496,13 +502,13 @@ function ENT:PhysicsUpdate()
 				self:RotateToTarget(targetpos)
 			end
 		else
-			if IsValid(self:GetTarget()) and self:GetTarget().uvbusted then
+			if isValidTarget and target.uvbusted then
 				self:SetTarget(nil) -- Forget busted suspect
 			end
 		end
 		
-		if IsValid(self:GetTarget()) and not UVEnemyEscaping and not UVJammerDeployed then
-			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((targetpos+self:GetTarget():GetVelocity()))^2) and not (self:DistIgnoreZ(targetpos) <= 500 and self:IsSeeTarget()) then
+		if isValidTarget and not UVEnemyEscaping and not UVJammerDeployed then
+			if self:GetVelocity():LengthSqr() <= (self:DistIgnoreZ((targetpos+target:GetVelocity()))^2) and not (self:DistIgnoreZ(targetpos) <= 500 and self:IsSeeTarget()) then
 				self:FlyTo(targetpos)
 			else
 				if self.engaging then
@@ -579,9 +585,12 @@ function ENT:ApplyAngles()
 end
 
 function ENT:ApplyHeight(height)
+	local target = self:GetTarget()
+	local isValidTarget = IsValid(target)
+	
 	height = height or self:CheckWorldHeight()
 	
-	if (not height or height=="stop") and IsValid(self:GetTarget()) then
+	if (not height or height=="stop") and isValidTarget then
 		local d = self:GetPos().z-self:GetTargetPos().z
 		
 		height = d<(self.StayInAir and 250 or 300) and "up" or d>(self.StayInAir and 1000 or 950) and height~="stop" and "down" or false
@@ -747,14 +756,19 @@ end
 function ENT:IsSeeTarget()
 	if not util.IsInWorld(self:WorldSpaceCenter()) then return end
 
-	local suspect = IsValid(self:GetTarget()) and self:GetTarget() or IsValid(self.potentialtarget) and self.potentialtarget
+	local suspect = self:GetTarget() or self.potentialtarget
+	local isValidSuspect = IsValid(suspect)
 
-	local tr = util.TraceLine({start = self:WorldSpaceCenter(), endpos = suspect:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, suspect}}).Fraction==1
-	if UVHiding then
-		return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 2000
-	else
-		return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 10000
+	if isValidSuspect then
+		local tr = util.TraceLine({start = self:WorldSpaceCenter(), endpos = suspect:WorldSpaceCenter(), mask = MASK_OPAQUE, filter = {self, suspect}}).Fraction==1
+		if UVHiding then
+			return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 2000
+		else
+			return tobool(tr) and self:DistIgnoreZ(self:GetTargetPos()) <= 10000
+		end
 	end
+
+	return false
 end
 
 function ENT:OnTakeDamage(dmg)

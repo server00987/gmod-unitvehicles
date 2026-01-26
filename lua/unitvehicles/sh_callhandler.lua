@@ -256,7 +256,7 @@ else
     
     net.Receive("UVHUDWanted", function()
         local soundfiles = file.Find("sound/ui/pursuit/wanted/*", "GAME" )
-        if not soundfiles or #soundfiles == 0 then return end
+        if not soundfiles or #soundfiles == 0 or not PursuitSFX:GetBool() then return end
         surface.PlaySound("ui/pursuit/wanted/"..soundfiles[math.random(1, #soundfiles)])
         
         if Glide then
