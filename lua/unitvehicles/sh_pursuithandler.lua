@@ -4623,10 +4623,6 @@ else -- CLIENT Settings | HUD/Options
 		racer_vehicle.racer = racer_name
 	end)
 
-	local TOGGLEABLE_SOUNDS = {
-		""
-	}
-
 	net.Receive('UV_Sound', function()
 		local array = net.ReadTable()
 		if not PursuitSFX:GetBool() and not string.match( array.FileName, "spottedfreezecam" ) then return end
