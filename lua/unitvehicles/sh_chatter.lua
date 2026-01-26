@@ -841,9 +841,13 @@ if SERVER then
 			if not brand then brand = 'genericsportscar' end
 
 			local soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
+			if next(soundFiles) == nil then soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/default/*", "GAME" ) end
 			if next(soundFiles) == nil then return UVChatterDispatchCallUnknownDescription(self, vehicle, vehicleModel) end
 			table.Shuffle(soundFiles)
-			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/"..soundFiles[1]
+
+			local color = vehicleColor.name
+			if not file.Exists( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..color, "GAME" ) then color = "default" end
+			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..color.."/"..soundFiles[1]
 
 			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
