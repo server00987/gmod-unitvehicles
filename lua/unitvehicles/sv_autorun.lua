@@ -2251,11 +2251,7 @@ function UVBustEnemy(self, enemy, finearrest)
 				end
 			end
 			if next(UVPlayerUnitTablePlayers) ~= nil then
-				for _, uvdriver in pairs(UVPlayerUnitTablePlayers) do
-					if IsValid(uvdriver) then
-						uvdriver:EmitSound("ui/pursuit/busted.wav", 0, 100, 0.5)
-					end
-				end
+				UVRelaySoundToClients("ui/pursuit/busted.wav", false)
 			end
 			if IsValid(enemyDriver) and enemyDriver:IsPlayer() then
 				net.Start('UVBusted')
@@ -2371,7 +2367,6 @@ function UVBustEnemy(self, enemy, finearrest)
 			if table.HasValue(UVWantedTableDriver, enemyDriver) then
 				table.RemoveByValue(UVWantedTableDriver, enemyDriver)
 			end
-			driver:EmitSound("ui/pursuit/busted.wav", 0, 100, 0.5)
 		end
 		self.chasing = nil
 		UVEnemyBusted = true
