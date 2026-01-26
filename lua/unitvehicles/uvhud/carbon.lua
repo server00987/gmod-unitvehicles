@@ -1701,8 +1701,8 @@ local function carbon_pursuit_main( ... )
     
     local UVHeatBountyMin
     local UVHeatBountyMax
-    states.EvasionColor = Color(0, 255, 0, 100)
-    states.BustedColor = Color(193, 66, 0, 100)
+    states.EvasionColor = Color(47, 77, 20)
+    states.BustedColor = Color(61, 21, 0)
     
     if vehicle == NULL then return end
     
@@ -1734,8 +1734,7 @@ local function carbon_pursuit_main( ... )
                 UVHUDDisplayBusting = true
                 UVBustingProgress = UVClosestSuspect.UVBustingProgress or 0
                 
-                local blink = 255 * math.abs(math.sin(RealTime() * 8))
-                states.BustedColor = Color(255, blink, blink)
+                states.BustedColor = Color(255, 0, 0)
             end
         end
     end
@@ -1751,7 +1750,7 @@ local function carbon_pursuit_main( ... )
         surface.DrawTexturedRect(UV_UI.X(w * 0.8), h * 0.111, UV_UI.W(w * 0.025), h * 0.033)
     else
         surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_SOLID"])
-        surface.SetDrawColor(Color(193, 66, 0))
+        surface.SetDrawColor(Color(194, 68, 0))
         surface.DrawTexturedRect(UV_UI.X(w * 0.795), h * 0.111, UV_UI.W(w * 0.085), h * 0.033)
         
         surface.SetMaterial(UVMaterials["ARROW_CARBON"])
@@ -1888,9 +1887,9 @@ local function carbon_pursuit_main( ... )
     
     -- [ Bottom Info Box ] --
     local middlergb = {
-        r = 255,
-        g = 255,
-        b = 0,
+        r = 227,
+        g = 219,
+        b = 21,
         a = 255
     }
     
@@ -1898,12 +1897,12 @@ local function carbon_pursuit_main( ... )
         -- Evade Box, Backgrounds
 		-- Busted Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED"])
-        surface.SetDrawColor(Color(109, 38, 0))
+        surface.SetDrawColor(Color(61, 21, 0))
         surface.DrawTexturedRect(UV_UI.X(w * 0.782), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
         
 		-- Evade Meter
         surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_INVERTED"])
-        surface.SetDrawColor(Color(0, 105, 0))
+        surface.SetDrawColor(Color(47, 77, 20))
         surface.DrawTexturedRect(UV_UI.X(w * 0.895), h * 0.195, UV_UI.W(w * 0.0935), h * 0.032)
 
         -- Evade Box, Busted Meter
@@ -1912,41 +1911,24 @@ local function carbon_pursuit_main( ... )
                 BustingProgress = CurTime()
             end
             
-            local blink = 255 * math.abs(math.sin(RealTime() * 4))
-            local blink2 = 255 * math.abs(math.sin(RealTime() * 6))
-            local blink3 = 255 * math.abs(math.sin(RealTime() * 8))
-            
             local timeLeft = ((UVHUDDisplayNotification and -1) or (UVBustTimer - UVBustingProgress))
             
             local playbusting = (UVHUDCopMode and UVHUDWantedSuspectsNumber == 1) or not UVHUDCopMode
             
-            if timeLeft >= UVBustTimer * 0.5 then
-                states.BustedColor = Color(193, 66, 0, blink)
-                -- UVSoundBusting()
-            elseif timeLeft >= UVBustTimer * 0.2 then
-                states.BustedColor = Color(193, 66, 0, blink2)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
-            elseif timeLeft >= 0 then
-                states.BustedColor = Color(193, 66, 0, blink3)
-                if playbusting then
-                    --UVSoundBusting(UVHeatLevel)
-                end
-            end
+            states.BustedColor = Color(194, 68, 0)
             
             local T = math.Clamp((UVBustingProgress / UVBustTimer) * (UV_UI.W(w * 0.0935)), 0, UV_UI.W(w * 0.0935))
             T = math.floor(T)
 			surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED"])
-			surface.SetDrawColor(Color(255, 0, 0))
+			surface.SetDrawColor(Color(194, 68, 0))
 			surface.DrawTexturedRectUV(UV_UI.X(w * 0.782) + (UV_UI.W(w * 0.0935) - T), h * 0.195, T, h * 0.032, 1 - (T / (w * 0.0935)), 0, 1, 1)
             middlergb = {
-                r = 175,
-                g = 175,
-                b = 0,
+                r = 92,
+                g = 87,
+                b = 7,
             }
         else
-            UVBustedColor = Color(193, 66, 0, 0)
+            UVBustedColor = Color(194, 68, 0, 0)
             BustingProgress = 0
         end
         
@@ -1961,16 +1943,16 @@ local function carbon_pursuit_main( ... )
             local T = math.Clamp((UVEvadingProgress) * (UV_UI.W(w * 0.0935)), 0, UV_UI.W(w * 0.0935))
 
 			surface.SetMaterial(UVMaterials["BAR_CARBON_FILLED_INVERTED"])
-			surface.SetDrawColor(Color(0, 255, 0))
+			surface.SetDrawColor(Color(147, 247, 69))
 			surface.DrawTexturedRectUV(UV_UI.X(w * 0.895), h * 0.195, T, h * 0.032, 0, 0, T / (UV_UI.W(w * 0.0935)), 1)
 			
             middlergb = {
-                r = 175,
-                g = 175,
-                b = 0,
+                r = 92,
+                g = 87,
+                b = 7,
             }
             
-            states.EvasionColor = Color(0, 255, 0, blink)
+            states.EvasionColor = Color(147, 247, 69)
         else
             EvadingProgress = 0
         end
