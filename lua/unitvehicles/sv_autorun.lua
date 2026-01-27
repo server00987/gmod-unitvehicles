@@ -375,11 +375,11 @@ function UV_StartPursuit(ply, skipCountdown)
 		UVCounterActive = false
 
 		-- Random police unit announcement
-		-- local units = ents.FindByClass("npc_uv*")
-		-- if #units > 0 then
-		-- 	local unit = units[math.random(#units)]
-		-- 	UVChatterPursuitStartAcknowledge(unit)
-		-- end
+		local units = ents.FindByClass("npc_uv*")
+		if #units > 0 then
+			local unit = units[math.random(#units)]
+			UVChatterPursuitStartAcknowledge(unit)
+		end
 		return
 	end
 

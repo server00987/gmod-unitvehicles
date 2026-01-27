@@ -164,7 +164,7 @@ if SERVER then
 		end
 		
 		timer.Remove('UVDelayChatter')
-		timer.Create('UVDelayChatter', seconds - 0.5, 1, function()
+		timer.Create('UVDelayChatter', seconds, 1, function()
 			UVChatterDelayed = false
 		end)
 
@@ -363,7 +363,7 @@ if SERVER then
 				-- bullhorn:SetSoundLevel(120)
 				-- bullhorn:Play()
 
-			return UVDelayChatter((SoundDuration(soundFile) + math.random(1, 2)))
+			return 1
 			
 		elseif parameters == 3 then
 			local callsign = self and self.callsign
@@ -1166,6 +1166,7 @@ if SERVER then
 	function UVChatterWreck(self)
 		if self:GetClass() ~= "uvair" and UVChatterDelayed or not UVTargeting then return end --Air Unit gets priority
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
+			if self:GetClass() == "uvair" then UVResetChatterQueue() end
 			return UVSoundChatter(self, self.voice, "wreck", 3)
 		end
 		-- UVDelayChatter()
