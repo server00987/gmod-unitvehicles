@@ -410,6 +410,7 @@ function UV_StartPursuit(ply, skipCountdown)
 				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_" .. (time - 1) .. ".wav")
 			end
 		else
+			if UVTargeting then return end
 			if IsValid(ply) then
 				ply:EmitSound("ui/pursuit/startingpursuit/chaseresuming_go.wav", 0, 100, 0.5, CHAN_STATIC)
 			end
@@ -2754,19 +2755,19 @@ function UVCheckIfBeingBusted(enemy)
 			-- 	end
 			-- end
 			
-			if Chatter:GetBool() and IsValid(closestunit) and UVTargeting then
-				local randomno = math.random(1,2)
-				local airUnits = ents.FindByClass("uvair")
-				if next(airUnits) ~= nil and randomno == 1 then
-					local random_entry = math.random(#airUnits)	
-					local unit = airUnits[random_entry]
-					UVResetChatterQueue()
-					UVSoundChatter(unit, unit.voice, "arrest", 2)
-				else
-					UVResetChatterQueue()
-					UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
-				end
-			end
+			-- if Chatter:GetBool() and IsValid(closestunit) and UVTargeting then
+			-- 	local randomno = math.random(1,2)
+			-- 	local airUnits = ents.FindByClass("uvair")
+			-- 	if next(airUnits) ~= nil and randomno == 1 then
+			-- 		local random_entry = math.random(#airUnits)	
+			-- 		local unit = airUnits[random_entry]
+			-- 		UVResetChatterQueue()
+			-- 		UVSoundChatter(unit, unit.voice, "arrest", 2)
+			-- 	else
+			-- 		UVResetChatterQueue()
+			-- 		UVSoundChatter(closestunit, closestunit.voice, "arrest", 2)
+			-- 	end
+			-- end
 		end
 		
 		if enemy.PursuitTech and not (enemy:GetDriver() and enemy:GetDriver():IsPlayer()) and enemy.randomptuse < enemy.UVBustingProgress then

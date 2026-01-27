@@ -172,6 +172,7 @@ if SERVER then
 	end
 	
 	UVChatterQueue = UVChatterQueue or {}
+	UVFileFindCache = UVFileFindCache or {}
 	UVChatterQueueActive = UVChatterQueueActive or false
 	UVChatterQueueFinishTime = UVChatterQueueFinishTime or 0
 	
@@ -240,19 +241,29 @@ if SERVER then
 		
 		return voiceProfile
 	end
+
+	local function CachedFileFind(path, searchPath)
+		searchPath = searchPath or "GAME"
+		local key = path
+		if UVFileFindCache[key] == nil then
+			local files, directories = file.Find(path, searchPath)
+			UVFileFindCache[key] = { files, directories }
+		end
+		local cached = UVFileFindCache[key]
+		return cached[1], cached[2]
+	end
 	
-	-- Internal function that actually plays the chatter
 	local function _PlayUVSoundChatter(self, voice, chattertype, parameters, ...)
 		
 		if not IsValid(self) or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
 			return 0
 		end
 
-		if not UVLastPlay then
-			UVLastPlay = CurTime()
-		elseif CurTime() - UVLastPlay < 0.5  then
-			return 5
-		end
+		-- if not UVLastPlay then
+		-- 	UVLastPlay = CurTime()
+		-- elseif CurTime() - UVLastPlay < 0.5  then
+		-- 	return 5
+		-- end
 
 		local initTime = CurTime()
 		
@@ -262,7 +273,7 @@ if SERVER then
 		local miscVoiceProfile = GetUnitVoiceProfile(self, isDispatch, true)
 		
 		if UVJammerDeployed then
-			local staticFiles = file.Find("sound/chatter2/" .. miscVoiceProfile .. "/misc/static/*", "GAME")
+			local staticFiles = CachedFileFind("sound/chatter2/" .. miscVoiceProfile .. "/misc/static/*", "GAME")
 			if next(staticFiles) == nil then return 5 end
 			
 			local soundFile = "chatter2/"..miscVoiceProfile.."/misc/static/"..staticFiles[1]
@@ -277,19 +288,19 @@ if SERVER then
 				unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			end
 
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[1]
 			
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
@@ -308,7 +319,7 @@ if SERVER then
 				end)
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			local chirpGenericFile
 			
 			if radioOnFile then
@@ -352,7 +363,7 @@ if SERVER then
 			return HandleCallSounds(isDispatch, true)
 			
 		elseif parameters == 2 then
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/bullhorn/"..chattertype.."/"..soundFiles[1]
 			
@@ -368,35 +379,35 @@ if SERVER then
 		elseif parameters == 3 then
 			local callsign = self and self.callsign
 
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[1]
 			
 			if not soundFile then return 5 end
 			
-			local staticFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/static/*", "GAME")
+			local staticFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/static/*", "GAME")
 			if next(staticFiles) == nil then return 5 end
 			table.Shuffle(staticFiles)
 			local staticFile = "chatter2/"..miscVoiceProfile.."/misc/static/"..staticFiles[1]
 
 			ChatterLastPlay = initTime
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 			
@@ -433,7 +444,7 @@ if SERVER then
 			return UVDelayChatter(SoundDuration(soundFile or "") + SoundDuration(staticFile or "") + SoundDuration(radioOnFile or "") + (chirpGenericFile and 0.1 or 0) + SoundDuration(radioOffFile or "") + math.random(1, 2))
 			
 		elseif parameters == 4 then
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[1]
@@ -445,21 +456,21 @@ if SERVER then
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
 			local emergencyDuration = SoundDuration(emergencyFile)
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 			
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 			
@@ -493,7 +504,7 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(soundFile or "") + emergencyDuration + SoundDuration(radioOnFile or "") + (chirpGenericFile and 0.1 or 0) + SoundDuration(radioOffFile or "") + math.random(1, 2)))
 			
 		elseif parameters == 5 then
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[1]
@@ -502,26 +513,26 @@ if SERVER then
 
 			ChatterLastPlay = initTime
 			
-			local identifyFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/"..voice.."/identify/*", "GAME")
+			local identifyFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/"..voice.."/identify/*", "GAME")
 			if next(identifyFiles) == nil then return 5 end
 			table.Shuffle(identifyFiles)
 			local identifyFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/identify/"..identifyFiles[1]
 			
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 			
@@ -560,7 +571,7 @@ if SERVER then
 			voice = "dispatch"
 			unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile.."/dispatch/"..chattertype.."/"..soundFiles[1]
@@ -569,7 +580,7 @@ if SERVER then
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
 						
-			local addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..game.GetMap().."/*", "GAME")
+			local addressFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..game.GetMap().."/*", "GAME")
 			table.Shuffle(addressFiles)
 			local chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..game.GetMap().."/"
 
@@ -578,14 +589,14 @@ if SERVER then
 				if mapName:find("_") then
 					mapName = mapName:gsub("^[^_]+_", ""):gsub("(_.+)$", "")
 					-- print("Found no " .. game.GetMap() .. " files - switching to " .. mapName)
-					addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/*", "GAME")
+					addressFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/*", "GAME")
 					chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup_map/"..mapName.."/"
 				end
 			end
 
 			if not addressFiles or #addressFiles == 0 then
 				-- print("Found no alternative files - switching to default")
-				addressFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
+				addressFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/*", "GAME")
 				table.Shuffle(addressFiles)
 				chosenPath = "chatter2/"..unitVoiceProfile.."/dispatch/addressgroup/"
 			end
@@ -595,35 +606,35 @@ if SERVER then
 				addressFile = chosenPath..addressFiles[1]
 			end
 
-			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
+			local locationFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
 			table.Shuffle(locationFiles)
 			local locationFile
 			if locationFiles then
 				locationFile = "chatter2/"..unitVoiceProfile.."/dispatch/d_location/"..locationFiles[1]
 			end
 			
-			local requestFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/*", "GAME")
+			local requestFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/*", "GAME")
 			table.Shuffle(requestFiles)
 			local requestFile
 			if requestFiles then
 				requestFile = "chatter2/"..unitVoiceProfile.."/dispatch/unitrequest/"..requestFiles[1]
 			end
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 						
@@ -683,42 +694,42 @@ if SERVER then
 			unitVoiceProfile = GetConVar("unitvehicle_unit_dispatch_voiceprofile"):GetString()
 			
 			local emergencyFile = "chatter2/"..miscVoiceProfile.."/misc/emergency/copresponse.mp3"
-			local breakawayFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/dispbreakaway/*", "GAME")
+			local breakawayFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/dispbreakaway/*", "GAME")
 			table.Shuffle(breakawayFiles)
 			local breakawayFile
 			if next(breakawayFiles) ~= nil then
 				breakawayFile = "chatter2/"..unitVoiceProfile.."/dispatch/dispbreakaway/"..breakawayFiles[1]
 			end
 			
-			local locationFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
+			local locationFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/d_location/*", "GAME")
 			table.Shuffle(locationFiles)
 			local locationFile
 			if next(locationFiles) ~= nil then
 				locationFile = "chatter2/"..unitVoiceProfile.."/dispatch/d_location/"..locationFiles[1]
 			end
 			
-			local quadrantFiles = file.Find("sound/chatter2/"..unitVoiceProfile.."/dispatch/quadrant/*", "GAME")
+			local quadrantFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile.."/dispatch/quadrant/*", "GAME")
 			table.Shuffle(quadrantFiles)
 			local quadrantFile
 			if next(quadrantFiles) ~= nil then
 				quadrantFile = "chatter2/"..unitVoiceProfile.."/dispatch/quadrant/"..quadrantFiles[1]
 			end
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 			
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 
@@ -772,7 +783,7 @@ if SERVER then
 			return UVDelayChatter((SoundDuration(emergencyFile or "") + SoundDuration(breakawayFile or "") + SoundDuration(locationFile or "") + SoundDuration(quadrantFile or "") + SoundDuration(radioOnFile or "") + SoundDuration(radioOffFile or "") + math.random(1, 2)))
 			
 		elseif parameters == 8 then
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/"..chattertype.."/"..soundFiles[1]
@@ -781,21 +792,21 @@ if SERVER then
 
 			ChatterLastPlay = initTime
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 			
@@ -830,7 +841,7 @@ if SERVER then
 		elseif parameters == 9 then -- in person chatter
 			local players = select(1, ...)
 
-			local soundFiles = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/" ..chattertype.."/*", "GAME")
+			local soundFiles = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/" ..chattertype.."/*", "GAME")
 			if next(soundFiles) == nil then return 5 end
 			table.Shuffle(soundFiles)
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/inperson/"..chattertype.."/"..soundFiles[1]
@@ -849,7 +860,7 @@ if SERVER then
 			local vehicleModel = vehicle.UVVehicleModel or string.Explode( "[ -.]", UVGetVehicleMakeAndModel(vehicle), true )
 			local vehicleColor = ( vehicle.UVVehicleColor and {name = vehicle.UVVehicleColor} ) or UVColor(vehicle)
 
-			local _, vehicleBrands = file.Find("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/*", "GAME")
+			local _, vehicleBrands = CachedFileFind("sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/*", "GAME")
 			if next(vehicleBrands) == nil then return 5 end
 			table.Shuffle(vehicleBrands)
 
@@ -880,8 +891,8 @@ if SERVER then
 
 			if not brand then brand = 'genericsportscar' end
 
-			local soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
-			if next(soundFiles) == nil then soundFiles = file.Find( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/default/*", "GAME" ) end
+			local soundFiles = CachedFileFind( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..vehicleColor.name.."/*", "GAME" )
+			if next(soundFiles) == nil then soundFiles = CachedFileFind( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/default/*", "GAME" ) end
 			if next(soundFiles) == nil then return UVChatterDispatchCallUnknownDescription(self, vehicle, vehicleModel) end
 			table.Shuffle(soundFiles)
 
@@ -889,21 +900,21 @@ if SERVER then
 			if not file.Exists( "sound/chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..color, "GAME" ) then color = "default" end
 			local soundFile = "chatter2/"..unitVoiceProfile..'/'..voice.."/vehicledescription/"..brand.."/"..color.."/"..soundFiles[1]
 
-			local radioOnFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
+			local radioOnFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radioon/*", "GAME")
 			table.Shuffle(radioOnFiles)
 			local radioOnFile
 			if next(radioOnFiles) ~= nil then
 				radioOnFile = "chatter2/"..miscVoiceProfile.."/misc/radioon/"..radioOnFiles[1]
 			end
 			
-			local radioOffFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
+			local radioOffFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/radiooff/*", "GAME")
 			table.Shuffle(radioOffFiles)
 			local radioOffFile
 			if next(radioOffFiles) ~= nil then
 				radioOffFile = "chatter2/"..miscVoiceProfile.."/misc/radiooff/"..radioOffFiles[1]
 			end
 
-			local chirpGenericFiles = file.Find("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
+			local chirpGenericFiles = CachedFileFind("sound/chatter2/"..miscVoiceProfile.."/misc/chirpgeneric/*", "GAME")
 			table.Shuffle(chirpGenericFiles)
 			local chirpGenericFile
 
@@ -1065,9 +1076,11 @@ if SERVER then
 			local randomno = math.random(1,2)
 			if randomno == 1 then
 				UVChatterQueue = {}
-				return UVSoundChatter(self, self.voice, "arrest", nil)
-			-- else
-			-- 	return UVSoundChatter(self, self.voice, "arrest", 2, enemy)
+				local time = UVSoundChatter(self, self.voice, "arrest", nil)
+				return time == 0 and 5 or time
+			else
+				local time = UVSoundChatter(self, self.voice, "arrest", 2, enemy)
+				return time == 0 and 5 or time
 			end
 		end
 		-- UVDelayChatter()
