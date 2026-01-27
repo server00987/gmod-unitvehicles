@@ -1001,8 +1001,8 @@ local defaultvoicetable = {
 }
 
 local ReplicatedVars = {
-	"unitvehicle_racer_racers",
-	"unitvehicle_traffic_vehicles",
+	["unitvehicle_racer_racers"] = true,
+	["unitvehicle_traffic_vehicles"] = true,
 }
 
 for index, v in pairs( {'Patrol', 'Support', 'Pursuit', 'Interceptor', 'Special', 'Commander', 'Rhino', 'Air'} ) do
@@ -1027,7 +1027,7 @@ for i = 1, MAX_HEAT_LEVEL do
 
 		-------------------------------------------
 
-		table.insert(ReplicatedVars, "unitvehicle_unit_" .. conVarKey)
+		ReplicatedVars["unitvehicle_unit_" .. conVarKey] = true
 
 		CreateConVar( "unitvehicle_unit_" .. conVarKey, "", {ShouldArchive})
 		CreateConVar( "unitvehicle_unit_" .. conVarKey .. "_chance", 100, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
@@ -2366,12 +2366,14 @@ if SERVER then
 					]]
 					convar:SetString(value)
 
-					for _, v in pairs( ents.FindByClass("player") ) do
-						if not v:IsListenServerHost() then
-							net.Start( "UVGetSettings_Local" )
-							net.WriteString(key)
-							net.WriteString(value)
-							net.Send(v)
+					if ReplicatedVars[key] then
+						for _, v in pairs( ents.FindByClass("player") ) do
+							if not v:IsListenServerHost() then
+								net.Start( "UVGetSettings_Local" )
+								net.WriteString(key)
+								net.WriteString(value)
+								net.Send(v)
+							end
 						end
 					end
 				end
