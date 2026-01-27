@@ -76,6 +76,27 @@ You can follow us on our Trello page, or our Discord server, both of which you c
 If someone has prepared a race, and they send an invite, you'll receive an on-screen notification inviting you to it, assuming that you are in a vehicle and no pursuit is ongoing.
 ]],
 
+["Racing.SpawnAI"] = [[
+# -- How do I race with AI?
+
+There are two ways of doing that:
+
+**Option 1**
+ |-- 1. Spawn any Glide, Simfphys or HL2 Jeep vehicle.
+ |-- 2. Pull out the [string:tool.uvracermanager.name] tool.
+ |-- 3. Press [+attack2] on the vehicle.
+ |-- 4. Tweak the settings to your liking, then click [string:uv.tool.create].
+ |-- 5. Repeat for every vehicle you want the AI to use.
+ 
+**Option 2 (Recommended)**
+ |-- 1. Open the [string:uv.airacer] tab.
+ |-- 2. Enable [string:uv.airacer.override].
+ |-- 3. In the list below the option, open the menus containing cars and press [+attack2] to add the vehicles to an AI vehicle list
+
+**Notes**
+ |-- Ensure the [string:uv.tool.base.title] variable matches your desired base.
+]],
+
 ["Racing.Resetting"] = [[
 # -- I'm stuck! How do I reset?
 
@@ -299,6 +320,27 @@ Du kan följa oss på vår Trello-sida, eller på vår Discord-server. Du hittar
 # -- Hur går jag med ett race?
 
 Om något har förberett ett race och skickat en inbjudan så får du en notifikation på skärmen som bjuder in dig till den, förutsatt att du är i ett fordon och ingen jakt pågår.
+]],
+
+["Racing.SpawnAI"] = [[
+# -- Hur tävlar jag med AI?
+
+Det finns två sätt att göra det:
+
+**Alternativ 1**
+ |-- 1. Spawna ett Glide-, Simfphys- eller HL2 Jeep-fordon.
+ |-- 2. Ta fram verktyget [string:tool.uvracermanager.name].
+ |-- 3. Tryck på [+attack2] på fordonet.
+ |-- 4. Ändra inställningarna som du vill, och tryck därefter på [string:uv.tool.create]
+ |-- 5. Upprepa med alla fordon du vill att AI:n ska använda.
+ 
+**Alternativ 2 (Rekommenderat)**
+ |-- 1. Öppna [string:uv.airacer]-fliken.
+ |-- 2. Aktivera [string:uv.airacer.override].
+ |-- 3. I listan under alternativet, öppna menyerna som innehåller bilar och tryck på [+attack2] för att lägga till bilarna i AI:ns fordonslista
+
+**Notera**
+ |-- Kolla så att [string:uv.tool.base.title]-variabeln matchar din valda bas.
 ]],
 
 ["Racing.Resetting"] = [[
@@ -526,6 +568,27 @@ Puedes seguirnos en nuestra página de Trello, o en nuestro servidor de Discord,
 Si alguien ya preparó una carrera, y te envian una invitación, recibirás una notificación en pantalla en la que te invitan a ella, asumiendo que estás en un vehículo y no hay ninguna persecución en curso.
 ]],
 
+-- ["Racing.SpawnAI"] = [[
+-- # -- How do I race with AI?
+
+-- There are two ways of doing that:
+
+-- **Option 1**
+ -- |-- 1. Spawn any Glide, Simfphys or HL2 Jeep vehicle.
+ -- |-- 2. Pull out the [string:tool.uvracermanager.name] tool.
+ -- |-- 3. Press [+attack2] on the vehicle.
+ -- |-- 4. Tweak the settings to your liking, then click [string:uv.tool.create].
+ -- |-- 5. Repeat for every vehicle you want the AI to use.
+ 
+-- **Option 2 (Recommended)**
+ -- |-- 1. Open the [string:uv.airacer] tab.
+ -- |-- 2. Enable [string:uv.airacer.override].
+ -- |-- 3. In the list below the option, open the menus containing cars and press [+attack2] to add the vehicles to an AI vehicle list
+
+-- **Notes**
+ -- |-- Ensure the [string:uv.tool.base.title] variable matches your desired base.
+-- ]],
+
 ["Racing.Resetting"] = [[
 # -- ¡Me atasqué! ¿Cómo reaparezco?
 
@@ -751,6 +814,27 @@ Unit Vehicles - это аддон, ориентированный на песо�
 Если кто-то приготовил гонку, а затем отправил приглашение, у тебя появится уведомление на экране, предполагая, что ты в машине и не в погоне.
 ]],
 
+["Racing.SpawnAI"] = [[
+# -- Как мне устроить гонку с ИИ?
+
+Есть два способа сделать это:
+
+**Вариант 1**
+ |-- 1. Разместить любую машину Glide, Simfphys или HL2 Jeep.
+ |-- 2. Использовать инструмент [string:tool.uvracermanager.name].
+ |-- 3. Нажать [+attack2] по машине.
+ |-- 4. Изменить настройки на свой вкус, а затем нажать [string:uv.tool.create].
+ |-- 5. Повторить для каждой машины, которую ты хочешь, чтобы её использовала ИИ.
+ 
+**Вариант 2 (Рекомендуется)**
+ |-- 1. Открыть вкладку [string:uv.airacer].
+ |-- 2. Включить [string:uv.airacer.override].
+ |-- 3. В списке ниже, открой меню, содержащее машины и нажми [+attack2] чтобы добавить машины для списка ИИ машин
+
+**Примечания**
+ |-- Убедись, что значение [string:uv.tool.base.title] соответсвует твоей желаемой базе.
+]],
+
 ["Racing.Resetting"] = [[
 # -- Я застрял! Как мне вернуться?
 
@@ -974,6 +1058,27 @@ Możesz obserwować naszą stronę na Trello lub dołączyć na Discorda. Oba li
 
 Jak gracz przygotuje Wyścig i Cię zaprosi, dostaniesz powiadomienie na ekranie pod warunkiem że znajdujesz się w pojeździe i nie goni Cię policja.
 ]],
+
+-- ["Racing.SpawnAI"] = [[
+-- # -- How do I race with AI?
+
+-- There are two ways of doing that:
+
+-- **Option 1**
+ -- |-- 1. Spawn any Glide, Simfphys or HL2 Jeep vehicle.
+ -- |-- 2. Pull out the [string:tool.uvracermanager.name] tool.
+ -- |-- 3. Press [+attack2] on the vehicle.
+ -- |-- 4. Tweak the settings to your liking, then click [string:uv.tool.create].
+ -- |-- 5. Repeat for every vehicle you want the AI to use.
+ 
+-- **Option 2 (Recommended)**
+ -- |-- 1. Open the [string:uv.airacer] tab.
+ -- |-- 2. Enable [string:uv.airacer.override].
+ -- |-- 3. In the list below the option, open the menus containing cars and press [+attack2] to add the vehicles to an AI vehicle list
+
+-- **Notes**
+ -- |-- Ensure the [string:uv.tool.base.title] variable matches your desired base.
+-- ]],
 
 ["Racing.Resetting"] = [[
 # -- Samochód utknął! Co robić?

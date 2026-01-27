@@ -2,7 +2,7 @@ UV = UV or {}
 UVMenu = UVMenu or {}
 
 -- Current Version -- Change this whenever a new update is releasing!
-UV.CurVersion = "v0.43.0" --MAJOR.MINOR.PATCH
+UV.CurVersion = "v1.0.0" --MAJOR.MINOR.PATCH
 
 -- Credits List
 UV.Credits = {
@@ -51,16 +51,6 @@ concommand.Add("unitvehicles_menu", function()
     end
 	UVMenu.PlaySFX("menuopen")
 end)
-
--- UVTrax
--- local uvtraxfiles, uvtraxfolders = file.Find("sound/uvracemusic/*", "GAME")
--- local uvtraxcontent = {}
-
--- if UVPlaylists then
--- 	for _, v in pairs(UVPlaylists) do
--- 		uvtraxcontent[#uvtraxcontent + 1] = { k, k }
--- 	end
--- end
 
 -- Pursuit Themes
 local pursuitfiles, pursuitfolders = file.Find("sound/uvpursuitmusic/*", "GAME")
@@ -149,10 +139,7 @@ UVMenu.Main = function()
 		Tabs = {
 		
 			{ TabName = "#uv.menu.welcome", Icon = "unitvehicles/icons_settings/info.png", -- Welcome Page
-				-- { type = "label", text = "/// DEBUGGING ///", sv = true },
-				-- { type = "button", text = "#uv.hm.open", desc = "uv.hm.open.desc", playsfx = "clickopen", func = function() UVMenu.OpenMenu(UVMenu.HeatManager, true) end, sv = true },
-				-- { type = "info", text = " \n \n \n", sv = true },
-				
+
 				{ type = "label", text = "#uv.menu.quick", desc = "#uv.menu.quick.desc" },
 				{ type = "combo", text = "#uv.ui.main", desc = "uv.ui.main.desc", convar = "unitvehicle_hudtype_main", content = mainHUDList },
 				{ type = "bool", text = "#uv.audio.uvtrax.enable", desc = "uv.audio.uvtrax.desc", convar = "unitvehicle_racingmusic" },
@@ -168,10 +155,11 @@ UVMenu.Main = function()
 				},
 				
 				{ type = "label", text = "#uv.menu.pnotes" },
+				{ type = "infosimple", text = string.format( language.GetPhrase("uv.menu.lastupdate"), UV.CurVersion, UV.PNotes[UV.CurVersion].Date ) },
 				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
-				
-				{ type = "info", text = UV.PNotes[UV.CurVersion].Text },
 				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", prompts = {"uv.prompt.open.menu"}, func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
+				
+				-- { type = "info", text = UV.PNotes[UV.CurVersion].Text },
 			},
 			
 			{ TabName = "#uv.rm", Icon = "unitvehicles/icons/race_events.png", sv = true, playsfx = "clickopen", Prompts = { "uv.prompt.open.menu" }, func = function()
@@ -534,29 +522,29 @@ UVMenu.FAQ = function()
 			},
 
 			{ TabName = "#uv.faq.racing", Icon = "unitvehicles/icons/race_events.png",
-				{ type = "info", text = UVGetFAQText("Racing.Joining") },
-				{ type = "info", text = UVGetFAQText("Racing.Resetting") },
-				
 				{ type = "info", text = UVGetFAQText("Racing.Starting"), sv = true },
+				{ type = "info", text = UVGetFAQText("Racing.SpawnAI"), sv = true },
 				{ type = "info", text = UVGetFAQText("Racing.Create"), sv = true },
 				{ type = "info", text = UVGetFAQText("Racing.Create.Speedlimit"), sv = true },
+				
+				{ type = "info", text = UVGetFAQText("Racing.Joining") },
+				{ type = "info", text = UVGetFAQText("Racing.Resetting") },
 			},
 
 			{ TabName = "#uv.faq.pursuits", Icon = "unitvehicles/icons/milestone_911.png",
 				{ type = "info", text = UVGetFAQText("Pursuit.Starting"), sv = true },
-				
-				{ type = "info", text = UVGetFAQText("Pursuit.JoinAsUnit") },
-				{ type = "info", text = UVGetFAQText("Pursuit.Respawn") },
-
 				{ type = "info", text = UVGetFAQText("Pursuit.CreateUnits"), sv = true },
 				{ type = "info", text = UVGetFAQText("Pursuit.Roadblocks"), sv = true },
 				{ type = "info", text = UVGetFAQText("Pursuit.Pursuitbreaker"), sv = true },
+				
+				{ type = "info", text = UVGetFAQText("Pursuit.JoinAsUnit") },
+				{ type = "info", text = UVGetFAQText("Pursuit.Respawn") },
 			},
 
 			{ TabName = "#uv.faq.other", Icon = "unitvehicles/icons_settings/info.png",
-				{ type = "info", text = UVGetFAQText("Other.CreateTraffic"), sv = true },
 				{ type = "info", text = UVGetFAQText("Other.PursuitTech") },
 				
+				{ type = "info", text = UVGetFAQText("Other.CreateTraffic"), sv = true },
 				{ type = "info", text = UVGetFAQText("Other.RenameAI"), sv = true },
 				{ type = "info", text = UVGetFAQText("Other.DataFolder"), sv = true },
 			},
@@ -795,7 +783,7 @@ UVMenu.RaceManagerStartRace = function()
 		local racerList = UVRace_RacerList or {}
 		local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
 		local existingAI = #ents.FindByClass("npc_racervehicle") or 0
-		local hostAdjustment = 1
+		local hostAdjustment = 0
 
 		return math.max(spawnCount - (#racerList + existingAI + hostAdjustment), 0)
 	end
@@ -804,7 +792,7 @@ UVMenu.RaceManagerStartRace = function()
 		local racerList = UVRace_RacerList or {}
 		local spawnCount = #ents.FindByClass("uvrace_spawn") or 0
 		local existingAI = #ents.FindByClass("npc_racervehicle") or 0
-		local hostAdjustment = 1
+		local hostAdjustment = 0
 
 		RunConsoleCommand("uvrace_startinvite")
 

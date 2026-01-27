@@ -4265,8 +4265,9 @@ function UVMenu:Open(menu)
     end
 	
 	-- Bottom input prompt bar
-	local promptBar = vgui.Create("DPanel", frame)
+	local promptBar
 	if not HidePrompts then
+		promptBar = vgui.Create("DPanel", frame)
 		promptBar:Dock(BOTTOM)
 		promptBar:SetTall(UV.ScaleH(32.5))
 		promptBar:DockMargin(8, 0, 8, 8)
@@ -4661,30 +4662,16 @@ function UVMenu:Open(menu)
 						draw.DrawText(line, multiFont, xPadding, yOffset, color, TEXT_ALIGN_LEFT)
 						yOffset = yOffset + lineHeight
 					end
-					
-					-- draw.RoundedBox(4, xPadding, 0, w - ((tab.Icon and w * 0.15 or w * 0.085)) * 2, h, Color(30,30,30,200))
-					
 				end
             end
 
-			-- btn.OnCursorEntered = function(self)
-				-- if not IsValid(self) then return end
-				-- if not GetConVar("uvmenu_sound_enabled"):GetBool() then return end
-
-				-- local now = CurTime()
-				-- local key = tostring(self) -- unique-ish key per panel
-				-- local last = uv_tab_hover_last or 0
-				-- if now - last >= 0.025 then           -- 120ms debounce; tweak if needed
-					-- uv_tab_hover_last = now
-					-- UVMenu.PlaySFX("hovertab")
-				-- end
-			-- end
-		
 			btn.OnCursorEntered = function()
+				if tab.Desc and descPanel then descPanel.Desc = tab.Desc or "" end
 				if promptBar then promptBar.Prompts = tab.Prompts or { "uv.prompt.tab" } end
 			end
 			
 			btn.OnCursorExited = function()
+				if descPanel then descPanel.Desc = "" end
 				if promptBar then promptBar.Prompts = nil end
 			end
 		

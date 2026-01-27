@@ -8,31 +8,48 @@ UV = UV or {}
 -- },
 
 UV.PNotes = {
-["v0.43.0"] = {
-Date = "2026/01/26",
+["v1.0.0"] = {
+Date = "2026/01/29",
 Text = [[
+This lists changes that were made after v.0.42.0 and have been applied to v1.0:
+
 **New Features**
 - UV Menu: Added button prompts at the bottom of the menu to display which button does what on the highlighted setting; Can be toggled on/off in the UI Settings
 - UV Menu: Added the ability for addon creators to have settings added into the UV Menu
+- Several UVTrax additions:
+ |-- Added a song manager where you can choose which songs play and which don't
+ |-- Added the ability to shuffle the UVTrax playlist, or play them in alphabetical order
+ |-- Added the ability to go to the previously played track
+ |-- Added button prompts on the UVTrax pop-up
 - Added new Glyphs that replace "[ SPC ]" and various other keybind notifications across the addon
 - UV Menu: Added a "Glyph Override" function, allowing you to define not only your own keyboard and mouse glyphs (cosmetically, of course), but also assign Xbox, PlayStation and Switch glyphs
-- Added a new UVTrax Manager; Choose exactly which songs from which playlist to play, or shuffle them randomly!
 - Added a "Default" preset for the Heat Level Manager
 - Added new elements to the Original HUD style
-- Added full Polish translations
 - Added a "You finished {place}!" notification for whenever you finish a race on most HUD types
-- Added a "Skip Song" button display on the UVTrax pop-up
+- Added the option to disable Pursuit SFX
+- UV Menu: Added a new FAQ/Racing entry for racing with AI
 
 **Changes**
 - UV Menu: "VCMod ELS" and "Circular Functions" sections in the Settings Addon tab now show/hide themselves if depending on if they are installed or not
+ |-- Additionally, third-party addons can now use a custom function to integrate their settings into the UV Menu
 - Race participants are now teleported in 12-participant batches
  |-- This now allows races with more than 24 racers
 - Lowered the size on the "Respawning as" and "Race ends in" notifications
+- "Spawn X AI" and "Fill Grid with AI" pre-race buttons no longer appear if AI cannot spawn in any vehicles
+ |-- Either when "Vehicle Override" is enabled but no vehicles are selected, or if it's disabled but no presets exist
+- The Race host will now be added as a proper participant rather than a hidden one
+- The Race host's car will dynamically change if they enter/exit a vehicle
+- Race participants will get auto-removed from the participants list if they decline their invite, or if their vehicle is destroyed before the race starts
+- Pre-race player list now uses the same appearance as the Race Info player list
 
 **Fixes**
 - Fixed that Glide vehicle categories were not sorted correctly in the Vehicle Override lists
 - Fixed that the "READY" banner on the NFS World HUD type remained on-screen if you swapped HUD types after it appeared and when the race countdown started, but before the race began
 - Fixed that when you start a one-checkpoint race, the "Nr. of Laps" variable was always set to 1
+- Fixed that Units sometimes used the *Shock Ram* Pursuit Tech when busting racers
+- Fixed an error that caused Simfphys and default HL2 Jeep vehicles to create Lua errors when the AI turned their headlights on
+- Fixed an error that caused Dispatch to not recognize "default" vehicle colors
+ |-- Fixes that the NFS World and NFS Undercover Glide packs' police cars always played "no make and model" voicelines
 ]],
 },
 

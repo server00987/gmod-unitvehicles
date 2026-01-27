@@ -94,6 +94,25 @@ if SERVER then
 		local list = {}
 		local seen = {}
 
+		-- Inject host dynamically
+		for _, ply in ipairs(player.GetAll()) do
+			if ply:IsSuperAdmin() then
+				local veh = UVGetVehicle(ply)
+				if IsValid(veh) then
+					local id = veh:EntIndex()
+					list[#list + 1] = {
+						id = id,
+						name = ply:Nick(),
+						status = "Host",
+						isAI = false,
+						vehiclename = veh.PrintName or veh.VehicleName or veh:GetClass()
+					}
+					seen[id] = true
+					break -- only one host
+				end
+			end
+		end
+
 		for id, data in pairs(UVRaceInvites) do
 			if not IsValid(data.ent) then
 				UVRaceInvites[id] = nil
@@ -138,6 +157,7 @@ if SERVER then
 	-- Use vehicles as participants
 	function UVRaceAddParticipant( vehicle, driver, sendmsg )
 		if not IsValid(vehicle) then return end
+		if table.HasValue(UVRaceCurrentParticipants, vehicle) then return end
 
 		local id = vehicle:EntIndex()
 		local name = (IsValid(driver) and driver:IsPlayer() and driver:Nick()) 
@@ -383,9 +403,20 @@ if SERVER then
 			net.WriteString("?")
 		net.Broadcast()
 		
+		for _, v in ipairs(ents.GetAll()) do
+			if IsValid(v) and v:IsVehicle() then
+				v.raceinvited = nil
+				v.uvraceparticipant = nil
+				v.racedriver = nil
+				v.racefinished = nil
+				timer.Remove("RaceInviteExpire" .. v:EntIndex())
+			end
+		end
+
 		UVRaceInvites = {}
-		UVBroadcastRacerList()
+		UVRaceCurrentParticipants = {}
 		UVRace_RacerList = {}
+		UVBroadcastRacerList()
 		
 		table.Empty(UVRaceTable)
 
@@ -536,9 +567,91 @@ if SERVER then
 		net.Start( "uvrace_end" )
 		net.Broadcast()
 	end)
+	
+	function UVValidateParticipants()
+		local toRemove = {}
+		local changed = false
+
+		for id, data in pairs(UVRaceInvites) do
+			local veh = data.ent
+
+			if not IsValid(veh) then
+				toRemove[#toRemove + 1] = id
+				continue
+			end
+
+			local driver = veh:GetDriver()
+
+			if not IsValid(driver) then
+				toRemove[#toRemove + 1] = id
+				continue
+			end
+
+			if data.driver ~= driver then
+				data.driver = driver
+				data.name = driver:Nick()
+				changed = true
+			end
+
+			if not data.isAI and not driver:IsPlayer() then
+				toRemove[#toRemove + 1] = id
+				continue
+			end
+
+			if veh.wrecked or veh.uvbusted then
+				toRemove[#toRemove + 1] = id
+				continue
+			end
+		end
+
+		if #toRemove > 0 then
+			for _, id in ipairs(toRemove) do
+				UVRaceInvites[id] = nil
+			end
+			changed = true
+		end
+
+		if changed then
+			UVBroadcastRacerList()
+		end
+	end
+
+	hook.Add("PlayerLeaveVehicle", "UVRaceLeaveVehicle", function(ply, veh) -- Participant leaves vehicle pre-race? Update list!
+		UVBroadcastRacerList()
+	end)
+	
+	hook.Add("PlayerEnteredVehicle", "UVRaceEnteredVehicle", function(ply, veh) -- Participant enters vehicle pre-race? Update list!
+		UVBroadcastRacerList()
+	end)
+	
+	local nextValidate = 0
+
+	hook.Add("Think", "UVRaceValidateParticipants", function()
+		if not UVRaceInEffect or UVRacePrep then return end
+		if CurTime() < nextValidate then return end
+
+		nextValidate = CurTime() + 0.25
+		UVValidateParticipants()
+	end)
+	
+	local lastHostVeh
+
+	hook.Add("Think", "UVRaceHostVehicleWatch", function()
+		if not UVRaceInEffect then return end
+
+		for _, ply in ipairs(player.GetAll()) do
+			if ply:IsSuperAdmin() then
+				local veh = ply:GetVehicle()
+				if IsValid(veh) and veh ~= lastHostVeh then
+					lastHostVeh = veh
+					UVBroadcastRacerList()
+				end
+				break
+			end
+		end
+	end)
 
 	hook.Add( "Think", "UVRacing", function( ply )
-
 		if not UVRaceInEffect then return end
 		if UVRacePrep then return end
 
@@ -579,6 +692,12 @@ if SERVER then
 			car.raceinvited = false;
 			timer.Remove( 'RaceInviteExpire'..car:EntIndex() )
 			entry.status = "Declined"
+			timer.Simple(3, function()
+				if UVRaceInvites[id] and UVRaceInvites[id].status == "Declined" then
+					UVRaceInvites[id] = nil
+					UVBroadcastRacerList()
+				end
+			end)
 		end
 
 		UVBroadcastRacerList()
@@ -735,6 +854,7 @@ if SERVER then
 
 				-- Chat feedback
 				-- PrintMessage(HUD_PRINTTALK, "Batch-moved " .. #batch .. " vehicles.")
+				-- print("Batch-moved", #batch, "vehicles.")
 
 				-- Move this batch
 				callback(batch)
@@ -849,7 +969,7 @@ if SERVER then
 
 					local driver = v:GetDriver()
 					local is_player = IsValid(driver) and driver:IsPlayer()
-					
+
 					if not v.raceinvited and (v.RacerVehicle or (is_player and driver ~= ply)) then
 						
 						table.insert(invited_racers, (is_player and driver:GetName()) or (v.racer or "Racer "..v:EntIndex()))
@@ -864,9 +984,11 @@ if SERVER then
 							net.Start("uvrace_invite")
 							net.Send(driver)
 						end
-						
-						timer.Create("RaceInviteExpire" .. v:EntIndex(), 10.25, 1, function()
+
+						timer.Create("RaceInviteExpire"..v:EntIndex(), 10.25, 1, function()
 							v.raceinvited = false
+							UVRaceInvites[v:EntIndex()] = nil
+							UVBroadcastRacerList()
 						end)
 					end
 				end
@@ -1025,10 +1147,10 @@ if SERVER then
 			net.WriteString(author)
 			net.WriteString(ply:Nick())
 			net.Broadcast()
+			UVBroadcastRacerList()
 		end)
 	end
 	concommand.Add("uvrace_import", Import)
-	
 
 else -- CLIENT stuff
 	UVHUDGlobalBestLapTime = UVHUDGlobalBestLapTime or nil
@@ -2814,6 +2936,8 @@ else -- CLIENT stuff
 		local h, w = ScrH(), ScrW()
 
 		local alpha = 255
+		
+		local slots = ents.FindByClass("uvrace_spawn")
 
 		surface.SetDrawColor(0, 0, 0, alpha)
 		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
@@ -2821,24 +2945,24 @@ else -- CLIENT stuff
 
 		draw.SimpleTextOutlined( "#uv.prerace.details", "UVFont5UI", w * 0.99, h * 0.065, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 
-		draw.SimpleTextOutlined( UVRace_CurrentTrackName, "UVFont5Shadow", w * 0.99, h * 0.095, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.name"), UVRace_CurrentTrackName ), "UVFont5Shadow", w * 0.99, h * 0.095, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 		
-		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		-- draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.race.invite.host"), UVRace_CurrentTrackHost ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		
+		draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.slotsavailable"), #slots - #UVRace_RacerList, #slots ), "UVFont5Shadow", w * 0.99, h * 0.1225, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 
-		local debuglineamount = 24
 		local cardW, cardH = w * 0.15, h * 0.0325
 		local cardsPerColumn = 10
 		local spacing = 2
-		local spawnCount = #ents.FindByClass("uvrace_spawn")
-
 		local blink = 255 * math.abs(math.sin(RealTime() * 3))
 
-		if (#UVRace_RacerList + 1) > spawnCount then
-			draw.SimpleTextOutlined( string.format(language.GetPhrase("uv.race.invite.toomany"), #UVRace_RacerList + 1, spawnCount ), "UVFont5Shadow", w * 0.99, h * 0.5, Color(255, blink, blink, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+		if #UVRace_RacerList > #ents.FindByClass("uvrace_spawn") then
+			draw.SimpleTextOutlined( string.format(language.GetPhrase("uv.race.invite.toomany"), #UVRace_RacerList, #slots ), "UVFont5Shadow", w * 0.99, h * 0.5, Color(255, blink, blink, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
 		end
 
 		if UVRace_RacerList and #UVRace_RacerList > 0 then
 			for i, racer in ipairs(UVRace_RacerList) do
+				if racer.status == "Disqualified" then return end
 				local statusstr = "#uv.race.invite.status.invited"
 				local clr = Color(200,200,200, alpha)
 				local racername = racer.name
@@ -2846,13 +2970,13 @@ else -- CLIENT stuff
 
 				vehname = vehname and string.Trim(language.GetPhrase(vehname), "#") or nil
 
-				if racer.status == "Host" then 
+				if racer.status == "Host" then
 					clr = Color(255,255,0, alpha)
 					statusstr = "#uv.race.invite.status.host"
-				elseif racer.status == "Accepted" then 
+				elseif racer.status == "Accepted" then
 					clr = Color(100,255,100, alpha)
 					statusstr = "#uv.race.invite.status.accepted"
-				elseif racer.status == "Declined" or racer.status == "Disqualified" then 
+				elseif IsValid(racer.ent) and racer.status == "Declined" then
 					clr = Color(255,100,100, alpha)
 					statusstr = "#uv.race.invite.status.declined"
 				end
@@ -2941,7 +3065,6 @@ else -- CLIENT stuff
 		if UVRace_CurrentTrackName then
 			table.insert(squareTexts, string.format(
 				language.GetPhrase("uv.prerace.name"),
-				-- UVRace_CurrentTrackName .. " | " .. UVRace_CurrentTrackAuthor
 				UVRace_CurrentTrackName
 			))
 		end
@@ -3037,42 +3160,96 @@ else -- CLIENT stuff
 		
 		surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED_INVERTED"] )
 		surface.DrawTexturedRect(0, h * 0.15, barWidth, h * 0.05 + ((h * 0.04) * #UVRaceCinematicOverlay.squares))
-				
+
 		if UVHUDRaceInfo and UVHUDRaceInfo.Participants and table.Count(UVHUDRaceInfo.Participants) > 1 then
 			local participants = UVHUDRaceInfo.Participants
-			local numParticipants = table.Count(participants)
-			local numParticipantsCapped = math.min(numParticipants, 16)
-			local partX = w * 0.455
-			local partY = h * 0.215
-			local partlineSpacing = h * 0.04
-
-			surface.SetMaterial( UVMaterials["BACKGROUND_CARBON_FILLED"] )
-			surface.DrawTexturedRect(w - barWidth, h * 0.15, barWidth, h * 0.05 + ((h * 0.04) * numParticipantsCapped))
+			local sorted = UVFormLeaderboard(participants)
+			local localName = IsValid(LocalPlayer()) and LocalPlayer():Nick() or ""
 			
-			draw.SimpleTextOutlined( string.format( language.GetPhrase("uv.prerace.participants"), numParticipants ), font, w - barWidth + partX, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+			local cardsPerRow = 3
+			local maxCards = 30
 
-			local i = 1
-			local sorted, leaderboard = UVFormLeaderboard(UVHUDRaceInfo.Participants)
+			local cardW = w * 0.15
+			local cardH = h * 0.0325
+			local spacing = 2
+
+			local partX = w * 0.455
+			local startX = w - barWidth + partX - (cardW * cardsPerRow + spacing * 3)
+
+			local startY = h * 0.2
+			
+			local font = "UVMostWantedLeaderboardFont2"
+
+			surface.SetFont(font)
+			
+			local numParticipants = math.min(#sorted, maxCards)
+			local rows = math.ceil(numParticipants / cardsPerRow)
+
+			local bgX = w - barWidth
+			local bgY = h * 0.15
+			local bgW = barWidth
+			local bgH = h * 0.05 + (rows * (cardH + spacing)) + (h * 0.01)
+
+			surface.SetMaterial(UVMaterials["BACKGROUND_CARBON_FILLED"])
+			surface.SetDrawColor(0, 0, 0, alpha)
+			surface.DrawTexturedRect(bgX, bgY, bgW, bgH)
+			
+			draw.SimpleTextOutlined( string.format(language.GetPhrase("uv.prerace.participants"), table.Count(UVHUDRaceInfo.Participants)), "UVFont5", w - barWidth + partX, h * 0.175, Color(255, 255, 0, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+
 			for i, v in ipairs(sorted) do
-				if i > 15 then 
-					draw.SimpleTextOutlined( " ... ", font, w - barWidth + partX - (w * 0.025), partY, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-					break
+				if i > maxCards then break end
+
+				local index = i - 1
+				local row = math.floor(index / cardsPerRow)
+				local col = index % cardsPerRow
+
+				local x = startX + col * (cardW + spacing)
+				local y = startY + row * (cardH + spacing)
+
+				local name = v.array.Name or "UNKNOWN"
+				local isLocal = (name == localName)
+
+				local veh = language.GetPhrase(v.array.VehicleName) or "UNKNOWN"
+
+				if v.array.IsAI then
+					name = name .. " (AI)"
 				end
 
-				local array = v.array
-				local displayName = array.Name
-				if array.IsAI then
-					displayName = displayName .. " (AI)"
-				end
+				-- Card background
+				surface.SetDrawColor(0, 0, 0, 200)
+				surface.DrawRect(x, y, cardW, cardH)
 
-				draw.SimpleTextOutlined( displayName .. " | ", font, w - barWidth + partX, partY, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
+				-- Trim name if too wide
+				local maxW = cardW - 8
 				
-				draw.SimpleTextOutlined(i, font, w - barWidth + partX, partY, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, alpha) )
-				partY = partY + partlineSpacing
-				i = i + 1
+				surface.SetFont(font)
+			
+				if surface.GetTextSize(name) > maxW then
+					while surface.GetTextSize(name .. "...") > maxW do
+						name = string.sub(name, 1, -2)
+					end
+					name = name .. "..."
+				end
+					
+				if surface.GetTextSize(veh) > maxW then
+					while surface.GetTextSize(veh .. "...") > maxW do
+						veh = string.sub(veh, 1, -2)
+					end
+					veh = veh .. "..."
+				end
+
+				local textc1, textc2 = Color(255, 255, 255, alpha), Color(200, 200, 200, alpha)
+				
+				if isLocal then
+					textc1, textc2 = Color(255, 255, 0, alpha), Color(200, 200, 0, alpha)
+				end
+
+				-- Name and vehicle
+				draw.SimpleText( name, font, x + 4, y + 2, textc1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
+				draw.SimpleText( veh, font, x + 4, y + 18, textc2, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP )
 			end
 		end
-		
+
 		-- Draw Detail Text
 		if state ~= "slidingOut" and UVRaceCinematicOverlay.squares then
 			draw.SimpleTextOutlined( game.GetMap(), font, w * 0.95, barHeight - (h * 0.05), Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1.25, Color(0, 0, 0, alpha) )
