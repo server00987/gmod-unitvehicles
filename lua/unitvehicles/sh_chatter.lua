@@ -374,7 +374,7 @@ if SERVER then
 				-- bullhorn:SetSoundLevel(120)
 				-- bullhorn:Play()
 
-			return 1
+			return 2
 			
 		elseif parameters == 3 then
 			local callsign = self and self.callsign
