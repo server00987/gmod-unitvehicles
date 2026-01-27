@@ -2340,10 +2340,10 @@ if SERVER then
 		end
 
 		if not ply:IsListenServerHost() then
-			for _, v in pairs(ReplicatedVars) do
+			for convarKey, _ in pairs(ReplicatedVars) do
 				net.Start( "UVGetSettings_Local" )
-				net.WriteString(v)
-				net.WriteString(GetConVar(v):GetString())
+				net.WriteString(convarKey)
+				net.WriteString(GetConVar(convarKey):GetString())
 				net.Send(ply)
 			end
 		end
