@@ -244,8 +244,8 @@ if SERVER then
 	-- Internal function that actually plays the chatter
 	local function _PlayUVSoundChatter(self, voice, chattertype, parameters, ...)
 		
-		if not self or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
-			return 5 
+		if not IsValid(self) or not voice or not (GetConVar("unitvehicle_chatter"):GetBool() and not GetConVar("unitvehicle_chattertext"):GetBool()) then 
+			return 0
 		end
 
 		if not UVLastPlay then
@@ -3766,7 +3766,7 @@ if SERVER then
 	end
 	
 	function UVChatterDoNotDisengage(self, unit)
-		if UVChatterDelayed or not unit.callsign then return end
+		if not unit.callsign then return end
 		if not GetConVar("unitvehicle_chattertext"):GetBool() then
 			return UVSoundChatter(self, self.voice, "donotdisengage")
 		end
