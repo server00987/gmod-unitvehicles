@@ -2668,7 +2668,7 @@ else -- CLIENT stuff
 		end
 
 		UVHUDDisplayRacing = true
-		if not UVHUDDisplayPursuit or (UVHUDDisplayPursuit and not RacingMusicPriority:GetBool()) then
+		if not UVHUDDisplayPursuit or (UVHUDDisplayPursuit and not RacingMusicPriority:GetBool()) and RacingMusic:GetBool() then
 			UVSoundRacing( my_vehicle )
 		end
 

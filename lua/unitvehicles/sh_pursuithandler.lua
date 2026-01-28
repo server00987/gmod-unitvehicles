@@ -3601,13 +3601,15 @@ else -- CLIENT Settings | HUD/Options
 					UVSoundLoop = nil
 				end
 			end
-		elseif (UVHUDDisplayPursuit or UVHUDDisplayRacing) and not PlayMusic:GetBool() and not RacingMusic:GetBool() then
+		elseif (UVHUDDisplayPursuit or UVHUDDisplayRacing) then
 			--if not RacingMusicPriority:GetBool() then
+			if (UVHUDDisplayRacing and not RacingMusic:GetBool() and not UVHUDDisplayPursuit) or (UVHUDDisplayPursuit and not PlayMusic:GetBool()) then
 				UVStopSound()
 				if UVSoundLoop then
 					UVSoundLoop:Stop()
 					UVSoundLoop = nil
 				end
+			end
 			--end
 		end
 		
