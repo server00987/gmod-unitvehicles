@@ -19,6 +19,60 @@ ENT.Modelname = "models/props_lab/huladoll.mdl"
 
 local dvd = DecentVehicleDestination
 
+function ENT:IsPathBlocked()
+    if not IsValid(self.v) then return false end
+
+    -- 1. Direction and Velocity
+    local forward = self.v.IsSimfphyscar and self.v:LocalToWorldAngles(self.v.VehicleData.LocalAngForward):Forward() or self.v:GetForward()
+    local speed = self.v:GetVelocity():Length()
+    
+    -- 2. Find the Front Bumper
+    local obbMax = self.v:OBBMaxs()
+    -- We use the absolute max to ensure we get the front regardless of model orientation
+    local forwardOffset = math.max(obbMax.x, obbMax.y)
+    
+    -- Start at the bumper, raised slightly off the ground
+    local startPos = self.v:LocalToWorld(Vector(forwardOffset, 0, 30)) 
+    
+    -- 3. The Distance to look ahead
+    local lookAheadRange = 490 + (speed * 0.8)
+    local endPos = startPos + (forward * lookAheadRange)
+
+    -- 4. The Hull (The "Bumper" size)
+    -- This defines a box that travels along the trace. 
+    -- Width: 100 total (-50 to 50), Height: 70 total (-20 to 50)
+    local mins = Vector(-10, -50, -20)
+    local maxs = Vector(10, 50, 50)
+
+    local tr = util.TraceHull({
+        start = startPos,
+        endpos = endPos,
+        filter = function(ent) 
+            if ent == self.v or ent == self or ent:GetParent() == self.v then return false end
+            -- Ignore specific small items that shouldn't stop a bus
+            if ent:GetClass() == "predictable_entity" or ent:GetClass() == "path_track" then return false end
+            return true 
+        end,
+        mins = mins,
+        maxs = maxs,
+        mask = MASK_NPCSOLID
+    })
+
+    -- DEBUG: Uncomment to see the detection line in-game
+    -- debugoverlay.Line(startPos, endPos, 0.1, Color(255, 255, 0), true)
+    -- debugoverlay.BoxAngles(endPos, mins, maxs, self.v:GetAngles(), 0.1, Color(255, 0, 0, 100))
+
+    if tr.Hit and IsValid(tr.Entity) then
+        local ent = tr.Entity
+        -- Stop for Players, NPCs, Nextbots, Vehicles, and Physics Props
+        if ent:IsPlayer() or ent:IsNPC() or ent:IsNextBot() or ent:IsVehicle() then
+            return true
+        end
+    end
+
+    return false
+end
+
 if SERVER then	
 	--Setting ConVars.
 	local DetectionRange = GetConVar("unitvehicle_detectionrange")
@@ -386,7 +440,7 @@ if SERVER then
 				throttle = throttle * -1
 			end --Getting unstuck
 			if not self.respondingtocall and (selfvelocity > self.Speeding or selfvelocity > 1115136) then
-				throttle = 0
+				throttle = -1
 			end
 			if GetConVar("unitvehicle_tractioncontrol"):GetBool() and selfvelocity > 10000 and not self.stuck then
 				if self.v.IsSimfphyscar then
@@ -429,14 +483,31 @@ if SERVER then
 					end
 				end
 			end --K turn
-			
-			if self:ObstaclesNearby() or vectdot > 0 and dist:LengthSqr() < (selfvelocity*2) and selfvelocity > 774400 then
-				if self.v:GetClass() == "prop_vehicle_jeep" then
+
+			-- Inside ENT:Patrol
+			local isBlocked = self:IsPathBlocked()
+
+			if isBlocked then
+   			 	-- FORCE IDLE
+   			 	throttle = 0
+  			  	steer = 0
+  			  	self:UVHandbrakeOn() 
+				if not self.LastHonk or CurTime() > self.LastHonk + 2 then
+    			    self:SetHorn(true)
 					throttle = 0
-				else
-					throttle = -1
-				end
-			end --Slow down
+  			  		steer = 0
+  			  		self:UVHandbrakeOn() 
+     				timer.Simple(0.5, function() if IsValid(self) then self:SetHorn(false) end end)
+      			  	self.LastHonk = CurTime()
+    			end
+
+			    -- Prevent the AI from thinking it's stuck because it's waiting
+			    self.moving = CurTime() 
+			else
+			    -- NORMAL DRIVING LOGIC
+			    self:UVHandbrakeOff()
+			    -- (Your waypoint math here)
+			end
 
 			local turn = self:ObstaclesNearbySide()
 			if turn then
@@ -462,20 +533,33 @@ if SERVER then
 				self:SetHorn(false)
 			end
 
-			--When there
-			if dist:LengthSqr() < 250000 and UVStraightToWaypoint(self.v:WorldSpaceCenter(), self.waypointPos) then
-				if self.PatrolWaypoint.Neighbors then
-					local WaypointTable = {}
-					for k, v in pairs(self.PatrolWaypoint.Neighbors) do
-						if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
-							table.insert(WaypointTable, v)
-						end
-					end --Don't turn around
-					self.PreviousPatrolWaypoint = self.PatrolWaypoint
-					self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
-				else
-					self.PatrolWaypoint = nil
-				end
+			-- Modified "When there" block
+			local speedInUnits = self.v:GetVelocity():Length()
+			-- Adjust arrival radius based on speed: 150 units base + (speed * 0.5)
+			-- This creates a "look-ahead" effect so it doesn't oversteer at high speeds.
+			local arrivalThreshold = math.Clamp(150 + (speedInUnits * 0.5), 150, 600)
+
+			if dist:Length() < arrivalThreshold and UVStraightToWaypoint(self.v:WorldSpaceCenter(), self.waypointPos) then
+			    if self.PatrolWaypoint.Neighbors then
+			        local WaypointTable = {}
+			        for k, v in pairs(self.PatrolWaypoint.Neighbors) do
+			            -- Ensure we aren't picking the waypoint we literally just came from
+			            if not self.PreviousPatrolWaypoint or self.PreviousPatrolWaypoint["Target"] ~= dvd.Waypoints[v]["Target"] then
+			                table.insert(WaypointTable, v)
+			            end
+			        end
+				
+			        if #WaypointTable > 0 then
+			            self.PreviousPatrolWaypoint = self.PatrolWaypoint
+			            self.PatrolWaypoint = dvd.Waypoints[WaypointTable[math.random(#WaypointTable)]]
+			            -- Small delay before allowing the next waypoint switch to prevent "bouncing"
+			            self.NextWaypointTime = CurTime() + 0.5 
+			        else
+			            self.PatrolWaypoint = nil
+			        end
+			    else
+			        self.PatrolWaypoint = nil
+			    end
 			end
 
 			--Emergency Stop
