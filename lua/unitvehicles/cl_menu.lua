@@ -287,6 +287,16 @@ UVMenu.Settings = function()
 			text = "#uv.addons.none",
 		})
 	end
+	
+	local function BuildSoundProfileList()
+		local t = {}
+
+		for id, data in SortedPairs(UVMenu.SoundProfiles) do
+			table.insert(t, { data.displayname, id })
+		end
+
+		return t
+	end
 
 	UVMenu.CurrentMenu = UVMenu:Open({
 		Name = language.GetPhrase("uv.unitvehicles") .. " | " .. language.GetPhrase("uv.settings"),
@@ -327,11 +337,7 @@ UVMenu.Settings = function()
 				{ type = "slider", text = "#uv.audio.copchatter", desc = "uv.audio.copchatter.desc", convar = "unitvehicle_chattervolume", min = 0, max = 5, decimals = 1 },
 				{ type = "bool", text = "#uv.audio.mutecp", desc = "uv.audio.mutecp.desc", convar = "unitvehicle_mutecheckpointsfx" },
 				{ type = "bool", text = "#uv.audio.menu.sfx", desc = "uv.audio.menu.sfx.desc", convar = "uvmenu_sound_enabled" },
-				{ type = "combo", text = "#uv.audio.menu.sfx.profile", desc = "uv.audio.menu.sfx.profile.desc", convar = "uvmenu_sound_set", requireparentconvar = "uvmenu_sound_enabled", content = {
-						{ "NFS Most Wanted", "MW" },
-						{ "NFS Carbon", "Carbon" },
-					},
-				},
+				{ type = "combo", text = "#uv.audio.menu.sfx.profile", desc = "uv.audio.menu.sfx.profile.desc", convar = "uvmenu_sound_set", requireparentconvar = "uvmenu_sound_enabled", content = BuildSoundProfileList() },
 
 				--{ type = "uvtrax", text = "#uv.audio.uvtrax.playlists", desc = "uv.audio.uvtrax.playlists.desc", requireparentconvar = "unitvehicle_racingmusic" },
 
