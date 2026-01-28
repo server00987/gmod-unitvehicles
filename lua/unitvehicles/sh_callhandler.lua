@@ -165,6 +165,8 @@ if SERVER then
                 timecheck = UVChatterDispatchCallStreetRacing(UVHeatLevel)
             end
         end
+
+        timecheck = 5
         
         timer.Simple(0.5, function()
             UVApplyHeatLevel()
@@ -187,8 +189,8 @@ if SERVER then
     end
     
     function UVCallReportDescription(suspectvehicle, calllocation)
-        
         if UVTargeting then return end
+
         
         local timecheck = 5
 

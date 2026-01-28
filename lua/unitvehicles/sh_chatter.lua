@@ -958,7 +958,7 @@ if SERVER then
 			end
 		})
 		
-		return 0
+		return 5
 	end
 	
 	
