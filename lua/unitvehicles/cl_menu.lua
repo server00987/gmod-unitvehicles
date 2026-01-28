@@ -126,6 +126,70 @@ end
 
 local mainHUDList, backupHUDList = BuildHUDComboLists()
 
+-- Formats PNote Strings
+local DateFormats = {
+    -- English
+    ["en"]  = "%d/%m/%Y",
+
+    -- European
+    ["fr"] = "%d/%m/%Y", -- French
+    ["de"] = "%d.%m.%Y", -- German
+    ["es-ES"] = "%d/%m/%Y", -- Spanish
+    ["it"] = "%d/%m/%Y", -- Italian
+    ["pt"] = "%d/%m/%Y", -- Portuguese
+    ["pt-BR"] = "%d/%m/%Y", -- Brazilian Portuguese
+    ["nl"] = "%d-%m-%Y", -- Dutch
+    ["pl"] = "%d.%m.%Y", -- Polish
+    ["cs"] = "%d.%m.%Y", -- Czech
+    ["sk"] = "%d.%m.%Y", -- Slovak
+    ["hu"] = "%Y.%m.%d", -- Hungarian
+    ["ro"] = "%d.%m.%Y", -- Romanian
+    ["bg"] = "%d.%m.%Y", -- Bulgarian
+    ["hr"] = "%d.%m.%Y", -- Croatian
+    ["sr"] = "%d.%m.%Y", -- Serbian
+    ["sl"] = "%d.%m.%Y", -- Slovenian
+    ["el"] = "%d/%m/%Y", -- Greek
+    ["sv-SE"] = "%Y-%m-%d", -- Swedish
+    ["fi"] = "%d.%m.%Y", -- Finnish
+    ["da"] = "%d-%m-%Y", -- Danish
+    ["no"] = "%d.%m.%Y", -- Norwegian
+    ["lt"] = "%Y-%m-%d", -- Lithuanian
+    ["lv"] = "%d.%m.%Y", -- Latvian
+    ["et"] = "%d.%m.%Y", -- Estonian
+    ["uk"] = "%d.%m.%Y", -- Ukrainian
+    ["ru"] = "%d.%m.%Y", -- Russian
+
+    -- Asian
+    ["ja"] = "%Y/%m/%d", -- Japanese
+    ["zh-CN"] = "%Y-%m-%d", -- Simplified Chinese
+    ["zh-TW"] = "%Y-%m-%d", -- Traditional Chinese
+    ["ko"] = "%Y-%m-%d", -- Korean
+    ["th"] = "%d/%m/%Y", -- Thai
+    ["vi"] = "%d/%m/%Y", -- Vietnamese
+
+    -- Other
+    ["tr"] = "%d.%m.%Y", -- Turkish
+    ["ar"] = "%d/%m/%Y", -- Arabic
+    ["he"] = "%d/%m/%Y", -- Hebrew
+}
+
+local function FormatPatchDate(dateTbl)
+    local lang = GetConVar("gmod_language"):GetString()
+
+    -- Fallback if language isn't defined
+    local format = DateFormats[lang] or "%Y/%m/%d"
+
+    -- Convert to Unix time
+    local time = os.time({
+        year  = dateTbl.year,
+        month = dateTbl.month,
+        day   = dateTbl.day,
+        hour  = 12 -- avoids DST weirdness
+    })
+
+    return os.date(format, time)
+end
+
 ------- [ Main Menu ]-------
 UVMenu.Main = function()
 	local mainHUDList, backupHUDList = BuildHUDComboLists()
@@ -155,7 +219,7 @@ UVMenu.Main = function()
 				},
 				
 				{ type = "label", text = "#uv.menu.pnotes" },
-				{ type = "infosimple", text = string.format( language.GetPhrase("uv.menu.lastupdate"), UV.CurVersion, UV.PNotes[UV.CurVersion].Date ) },
+				{ type = "infosimple", text = string.format( language.GetPhrase("uv.menu.lastupdate"), UV.CurVersion, FormatPatchDate(UV.PNotes[UV.CurVersion].Date) ) },
 				{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. UV.CurVersion .. ".png" },
 				{ type = "button", text = "#uv.menu.updatehistory", desc = "uv.menu.updatehistory.desc", playsfx = "clickopen", prompts = {"uv.prompt.open.menu"}, func = function() UVMenu.OpenMenu(UVMenu.UpdateHistory, true) end },
 				
@@ -1053,7 +1117,7 @@ local function BuildPatchNoteTabs()
         table.insert(tabs, {
             TabName = version,
             { type = "button", text = "#uv.back", playsfx = "clickback", prompts = {"uv.prompt.return"}, func = function() UVMenu.OpenMenu(UVMenu.Main) end },
-            { type = "label", text = note.Date },
+            { type = "label", text = FormatPatchDate(note.Date) },
 			
 			{ type = "image", image = "unitvehicles/icons_settings/pnotes/" .. version .. ".png" },
             { type = "info", text = note.Text },
